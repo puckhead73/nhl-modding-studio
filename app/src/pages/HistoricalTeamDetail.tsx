@@ -1,20 +1,40 @@
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState, type ReactNode } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
-import { Button, Spinner } from "../components/primitives";
+import { Button, EmptyState, Spinner } from "../components/primitives";
 import { DetailTabs, type DetailTab } from "../components/DetailTabs";
+import { Section } from "../components/FieldProfile";
+import { ReadonlyField } from "../components/EditableField";
+import { HistoricalTeamHeader } from "../components/HistoricalTeamHeader";
+import {
+  HistoricalDepthChart,
+  HistoricalJerseyCaptaincy,
+  Swatch,
+  blockTitle,
+  hockeyAge,
+  seasonLabel,
+} from "../components/HistoricalTeamViews";
 import { useCrumbLabel } from "../lib/breadcrumbs";
 import { useProject } from "../lib/project";
 import { useRosterCart } from "../lib/rosterCart";
 import type { HistoricalTeamBlockDto } from "../bindings/HistoricalTeamBlockDto";
 import type { HistoricalTeamMemberDto } from "../bindings/HistoricalTeamMemberDto";
 import type { HistoricalTeamAffiliateDto } from "../bindings/HistoricalTeamAffiliateDto";
+import { teamLabel } from "../lib/team";
+import { useHistoricalRatings } from "../lib/historicalRatings";
+import { byOverall, ratingKey, type EstimatedRating } from "../lib/rosterSuggestions";
 
-/// Historical Team detail — franchise-consolidated. The `:id` route param is a `kind:key` composite
-/// (`franchise:<id>` or `team:<team_key>`). A per-team season dropdown re-scopes the view; the shown
-/// name is the era-appropriate one. When concurrent clubs co-existed under one franchise that season
-/// (e.g. the Seals + North Stars under the Dallas lineage), every constituent is rendered. Read-only.
+/// Historical Team detail — franchise-consolidated, laid out as a mirror of the EA Game Database
+/// team view: the same banner shape (`HistoricalTeamHeader`) over a page-level subtab strip carrying
+/// the EA tab set the corpus can fill — Team Data, Depth Chart, Roster, Jersey Numbers & Captaincy,
+/// Contracts. (Lines / Strategies / Draft Picks / Uniforms have no historical source, so they're
+/// omitted the way the EA page omits tabs whose surface a title doesn't carry.) Read-only.
+///
+/// The `:id` route param is a `kind~key` composite (`franchise:<id>` or `team:<team_key>`). Because
+/// the historical view is season-scoped, the banner carries a season dropdown; when concurrent clubs
+/// co-existed under one franchise that season (e.g. the Seals + North Stars under the Dallas
+/// lineage) it also carries a club picker, and the tabs below show the picked club.
 export function HistoricalTeamDetail() {
   const { id } = useParams<{ id: string }>();
   const raw = id ?? "";
@@ -24,6 +44,7 @@ export function HistoricalTeamDetail() {
   const key = sep >= 0 ? raw.slice(sep + 1) : raw;
 
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
+  const [selectedClub, setSelectedClub] = useState(0);
 
   const q = useQuery({
     queryKey: ["hist_franchise", kind, key, selectedSeason],
@@ -38,79 +59,193 @@ export function HistoricalTeamDetail() {
   if (!f) return <p className="text-sm text-slate-400">Select a team.</p>;
 
   const season = selectedSeason ?? f.season_year;
-  const seasonLabel = (y: number) => `${y - 1}-${y}`;
+  // A season change can shrink the constituent list out from under the picker — fall back to the
+  // first club rather than blanking the page.
+  const clubIndex = selectedClub < f.constituents.length ? selectedClub : 0;
+  const block = f.constituents[clubIndex] ?? null;
 
-  // With a single constituent (the common case) the club's own era name is the page title, so the
-  // constituent card drops its (duplicate) name heading. With several concurrent constituents the
-  // franchise name titles the page and each card keeps its own name to tell them apart.
-  const single = f.constituents.length === 1;
-  const primary = single ? f.constituents[0] : null;
-  const headerTitle = primary ? blockTitle(f.kind, primary) : f.display_name;
-  const headerAbbr = primary?.abbr ?? f.abbr;
-  const headerLeague = primary?.league_abbr ?? f.league_abbr;
-  // When the era name differs from the modern franchise name, note the lineage for context.
-  const franchiseSub = primary && headerTitle !== f.display_name ? f.display_name : null;
+  // The EA team view's subtab set, in its order (the tabs with no historical source — Lines,
+  // Strategies, Draft Picks, Uniforms — simply drop out), with the historical-only Roster tab
+  // appended after them. Tab keys stay stable across season/club changes so the strip keeps its
+  // selection while you page through a franchise's history.
+  const tabs: DetailTab[] = block
+    ? [
+        {
+          key: "team-data",
+          label: "Team Data",
+          content: <TeamDataTab kind={f.kind} franchiseName={f.display_name} block={block} />,
+        },
+        {
+          key: "depth-chart",
+          label: "Depth Chart",
+          content: (
+            <HistoricalDepthChart
+              roster={block.roster}
+              empty={<EmptyState title="No roster on file for this season." />}
+            />
+          ),
+        },
+        {
+          key: "jerseys-captaincy",
+          label: "Jersey Numbers & Captaincy",
+          content: (
+            <HistoricalJerseyCaptaincy
+              roster={block.roster}
+              seasonYear={block.season_year}
+              empty={<EmptyState title="No players are listed under this club's roster" />}
+            />
+          ),
+        },
+        {
+          key: "contracts",
+          label: "Contracts",
+          badge: block.contracts.length || undefined,
+          content: <ContractsTab block={block} />,
+        },
+        {
+          key: "roster",
+          label: "Roster",
+          badge: block.roster.length,
+          content: <RosterTab block={block} />,
+        },
+      ]
+    : [];
 
   return (
-    <div className="max-w-5xl space-y-5">
-      {/* Franchise header + season selector */}
-      <div className="rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-3">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <h2 className="text-lg font-semibold text-slate-100">{headerTitle}</h2>
-          {headerAbbr && <span className="font-mono text-sm text-teal-300/80">{headerAbbr}</span>}
-          <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
-            {headerLeague ?? "—"}
-          </span>
-          {f.is_defunct && (
-            <span className="rounded bg-rose-900/40 px-1.5 py-0.5 text-[10px] font-medium text-rose-300">
-              defunct
-            </span>
-          )}
-          <div className="ml-auto flex items-center gap-2">
-            <label className="text-[11px] uppercase tracking-wider text-slate-500">Season</label>
-            <select
-              value={season}
-              onChange={(e) => setSelectedSeason(Number(e.target.value))}
-              className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
-            >
-              {f.seasons.map((y) => (
-                <option key={y} value={y}>
-                  {seasonLabel(y)}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {franchiseSub && (
-          <p className="mt-1 text-xs text-slate-500">{franchiseSub} franchise</p>
-        )}
-        {f.notes && <p className="mt-1 text-xs text-slate-500">{f.notes}</p>}
-        {!single && (
-          <p className="mt-2 text-xs text-amber-300/80">
-            {f.constituents.length} clubs iced under this franchise in {seasonLabel(season)}.
-          </p>
-        )}
+    <div className="space-y-3">
+      {/* Header stays capped for readability; each tab caps at max-w-6xl inside DetailTabs. */}
+      <div className="max-w-6xl">
+        <HistoricalTeamHeader
+          franchise={f}
+          block={block}
+          season={season}
+          onSeasonChange={(y) => setSelectedSeason(y)}
+          constituentIndex={clubIndex}
+          onConstituentChange={setSelectedClub}
+        />
       </div>
-
-      {f.constituents.length === 0 && (
-        <p className="text-sm text-slate-400">No club data for {seasonLabel(season)}.</p>
+      {block ? (
+        <DetailTabs tabs={tabs} />
+      ) : (
+        <div className="max-w-6xl">
+          <EmptyState title={`No club data for ${seasonLabel(season)}.`} />
+        </div>
       )}
-      {f.constituents.map((c) => (
-        <ConstituentCard key={c.src_team_id} kind={f.kind} block={c} showName={!single} />
-      ))}
     </div>
   );
 }
 
-/// The page/card title for a club. Franchise era names are already complete ("Minnesota North
-/// Stars"); a standalone team's name is just the city, so its nickname is appended.
-/** Bulk "Send to Builder" for a whole team-season: queue every roster member (that season) into the
- *  Roster Builder cart. Dedups by (person, season), so members already queued are skipped. Gated on an
- *  open EA project. */
-function SendTeamSeason({ block }: { block: HistoricalTeamBlockDto }) {
+/** One read-only cell — the EA Team Data grid's `ReadonlyField`, with a nullable value. */
+function F({ label, value }: { label: string; value: ReactNode }) {
+  return <ReadonlyField label={label}>{value ?? ""}</ReadonlyField>;
+}
+
+// ---------------------------------------------------------------------------
+// Team Data — the EA page's curated section stack (Identity / Classification /
+// Venue / Relations) in the same 4-column grid. The corpus has no venue, so
+// Colours takes that slot: it's the club identity data the historical side
+// actually carries, and it's what the Legends builder reads when it dresses a
+// team's kit.
+// ---------------------------------------------------------------------------
+
+function TeamDataTab({
+  kind,
+  franchiseName,
+  block,
+}: {
+  kind: string;
+  franchiseName: string;
+  block: HistoricalTeamBlockDto;
+}) {
+  const affiliates = block.affiliates.filter((a) => a.relation === "affiliate");
+  const parents = block.affiliates.filter((a) => a.relation === "parent");
+  const name = blockTitle(kind, block);
+
+  return (
+    <div className="space-y-6">
+      <Section title="Identity">
+        <F label="Full Name" value={name} />
+        <F label="Nickname" value={block.nickname} />
+        <F label="Abbreviation" value={block.abbr} />
+        <F label="Franchise" value={franchiseName !== name ? franchiseName : null} />
+        <F label="Season" value={seasonLabel(block.season_year)} />
+        <F label="FHM Team Key" value={block.team_key} />
+      </Section>
+
+      <Section title="Classification">
+        <F label="League" value={block.league_abbr} />
+        <F label="Conference" value={block.conference_name} />
+        <F label="Division" value={block.division_name} />
+      </Section>
+
+      <Section title="Colours">
+        <F label="Primary" value={<Swatch color={block.primary_color} />} />
+        <F label="Secondary" value={<Swatch color={block.secondary_color} />} />
+        <F label="Text" value={<Swatch color={block.text_color} />} />
+      </Section>
+
+      <Section title="Relations">
+        <F label="Parent Club" value={<AffiliateList rows={parents} />} />
+        <F label="Affiliates" value={<AffiliateList rows={affiliates} />} />
+      </Section>
+    </div>
+  );
+}
+
+function AffiliateList({ rows }: { rows: HistoricalTeamAffiliateDto[] }) {
+  if (rows.length === 0) return null;
+  return (
+    <>
+      {rows
+        .map((a) => {
+          const n = a.name ?? `Team ${a.src_team_id}`;
+          const tag = a.league_abbr ?? a.abbr;
+          return tag ? `${n} (${tag})` : n;
+        })
+        .join(", ")}
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Roster — the full club list with the corpus columns the depth chart can't
+// carry (age, nationality, potential), plus the bulk send-to-builder control.
+// ---------------------------------------------------------------------------
+
+function RosterTab({ block }: { block: HistoricalTeamBlockDto }) {
+  const estimates = useHistoricalRatings(block.roster.map(r => ({ personId: r.person_id, seasonYear: block.season_year, position: r.position, isGoalie: r.is_goalie })));
+  const sorted = [...block.roster].sort((a, b) => byOverall(estimates.ratings.get(ratingKey(a.person_id, block.season_year))?.overall, estimates.ratings.get(ratingKey(b.person_id, block.season_year))?.overall) || a.last_name.localeCompare(b.last_name) || a.person_id - b.person_id);
+  if (block.roster.length === 0) {
+    return <EmptyState title="No roster on file for this season." />;
+  }
+  return (
+    <div className="space-y-4">
+      <SendTeamSeason block={{ ...block, roster: sorted }} ratingsReady={estimates.ready} />
+      {!estimates.ready && <p className="text-xs text-amber-300">{estimates.error ? "Couldn’t calculate estimated OVR with the active formula." : "Calculating estimated OVR…"}</p>}
+      <RosterTable title={`Roster (${sorted.length})`} rows={sorted} season={block.season_year} ratings={estimates.ratings} />
+    </div>
+  );
+}
+
+/** Bulk "Send to Builder" for a whole team-season: pick the EA team this historical club is replacing,
+ *  then queue every roster member (that season) into the Roster Builder cart already aimed at that team
+ *  — so a full-team import needs one placement, not one per player. Each member also carries its
+ *  historical jersey number over. Dedups by (person, season), so members already queued are skipped.
+ *  Gated on an open EA project. */
+function SendTeamSeason({ block, ratingsReady }: { block: HistoricalTeamBlockDto; ratingsReady: boolean }) {
+  const navigate = useNavigate();
   const { project } = useProject();
   const cart = useRosterCart();
+  const projectId = project?.project_id ?? null;
   const [added, setAdded] = useState<number | null>(null);
+  const [targetTeamId, setTargetTeamId] = useState<number | null>(null);
+
+  const teams = useQuery({
+    queryKey: ["list_teams", projectId],
+    queryFn: () => call("list_teams", { projectId: projectId! }),
+    enabled: projectId != null,
+  });
+
   if (!project) return null;
 
   // How many members aren't already in the cart for this season.
@@ -123,19 +258,51 @@ function SendTeamSeason({ block }: { block: HistoricalTeamBlockDto }) {
         personId: m.person_id,
         seasonYear: block.season_year,
         personName: `${m.first_name} ${m.last_name}`.trim(),
-        seasonLabel: `${block.season_year - 1}-${block.season_year}`,
+        seasonLabel: seasonLabel(block.season_year),
         position: m.position ?? (m.is_goalie ? "G" : null),
+        targetTeamId,
+        jersey: m.jersey,
       });
       if (ok) n += 1;
     }
     setAdded(n);
+    navigate("/app/historical/builder");
   };
 
+  const selectCls =
+    "rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 focus:border-sky-600 focus:outline-none";
+
+  const teamList = teams.data ?? [];
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Button variant="secondary" onClick={send} disabled={remaining === 0}>
+      <label className="text-[11px] uppercase tracking-wider text-slate-500">Replaces</label>
+      <select
+        className={selectCls}
+        value={targetTeamId ?? ""}
+        onChange={(e) => {
+          setTargetTeamId(e.target.value ? Number(e.target.value) : null);
+          setAdded(null);
+        }}
+        disabled={teams.isLoading || teamList.length === 0}
+      >
+        <option value="">
+          {teams.isLoading ? "Loading teams…" : teamList.length === 0 ? "No teams found" : "Select EA team…"}
+        </option>
+        {teamList.map((t) => (
+          <option key={t.team_id} value={t.team_id}>
+            {teamLabel(t)}
+          </option>
+        ))}
+      </select>
+      <Button variant="secondary" onClick={send} disabled={remaining === 0 || targetTeamId == null || !ratingsReady}>
         {remaining === 0 ? "All queued" : `Send team-season to Builder (${remaining})`}
       </Button>
+      {teams.isError && (
+        <span className="text-xs text-rose-400">Couldn’t load the project’s teams.</span>
+      )}
+      {targetTeamId == null && remaining > 0 && !teams.isError && teamList.length > 0 && (
+        <span className="text-xs text-amber-400">Choose the EA team to place this roster onto.</span>
+      )}
       {added != null && (
         <span className="text-xs text-slate-400">
           {added > 0 ? `Added ${added} player${added === 1 ? "" : "s"} to the cart.` : "Already in the cart."}
@@ -145,133 +312,16 @@ function SendTeamSeason({ block }: { block: HistoricalTeamBlockDto }) {
   );
 }
 
-function blockTitle(kind: string, block: HistoricalTeamBlockDto): string {
-  if (kind === "franchise") return block.name;
-  return block.nickname ? `${block.name} ${block.nickname}` : block.name;
-}
-
-function ConstituentCard({
-  kind,
-  block,
-  showName,
-}: {
-  kind: string;
-  block: HistoricalTeamBlockDto;
-  showName: boolean;
-}) {
-  const skaters = block.roster.filter((r) => !r.is_goalie);
-  const goalies = block.roster.filter((r) => r.is_goalie);
-  // The league already shows in the page header when there's a single constituent; keep it in the
-  // card's meta line only for the multi-constituent case where the card carries its own identity.
-  const meta = [showName ? block.league_abbr : null, block.conference_name, block.division_name]
-    .filter(Boolean)
-    .join(" · ");
-
-  const tabs: DetailTab[] = [
-    {
-      key: "roster",
-      label: "Roster",
-      badge: block.roster.length,
-      content: (
-        <div className="space-y-4">
-          {block.roster.length > 0 && <SendTeamSeason block={block} />}
-          <RosterTable title={`Skaters (${skaters.length})`} rows={skaters} season={block.season_year} />
-          <RosterTable title={`Goalies (${goalies.length})`} rows={goalies} season={block.season_year} />
-          {block.roster.length === 0 && (
-            <p className="text-sm text-slate-500">No roster on file for this season.</p>
-          )}
-        </div>
-      ),
-    },
-  ];
-  if (block.contracts.length > 0) {
-    tabs.push({
-      key: "contracts",
-      label: "Contracts",
-      badge: block.contracts.length,
-      content: <ContractsTable contracts={block.contracts} />,
-    });
-  }
-
-  return (
-    <section className="space-y-4 rounded-lg border border-slate-800 bg-slate-900/30 p-4">
-      {/* Team-season identity + colours */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-        {showName && (
-          <>
-            <span className="text-slate-600">▸</span>
-            <h3 className="text-base font-semibold text-slate-100">{blockTitle(kind, block)}</h3>
-            {block.abbr && <span className="font-mono text-xs text-teal-300/80">{block.abbr}</span>}
-          </>
-        )}
-        <div className={"flex items-center gap-2 " + (showName ? "ml-auto" : "")}>
-          {!showName && (
-            <span className="text-[11px] uppercase tracking-wider text-slate-500">Colours</span>
-          )}
-          <Swatch label="Primary" color={block.primary_color} />
-          <Swatch label="Secondary" color={block.secondary_color} />
-          <Swatch label="Text" color={block.text_color} />
-        </div>
-      </div>
-      {meta && <div className="-mt-2 text-xs text-slate-400">{meta}</div>}
-
-      <AffiliateLine
-        label="Affiliates"
-        rows={block.affiliates.filter((a) => a.relation === "affiliate")}
-      />
-      <AffiliateLine
-        label="Parent club"
-        rows={block.affiliates.filter((a) => a.relation === "parent")}
-      />
-
-      <DetailTabs tabs={tabs} />
-    </section>
-  );
-}
-
-function AffiliateLine({ label, rows }: { label: string; rows: HistoricalTeamAffiliateDto[] }) {
-  if (rows.length === 0) return null;
-  return (
-    <div className="text-xs text-slate-400">
-      <span className="uppercase tracking-wider text-slate-500">{label}: </span>
-      {rows.map((a, i) => (
-        <span key={`${a.relation}-${a.src_team_id}`}>
-          {i > 0 && ", "}
-          {a.name ?? `Team ${a.src_team_id}`}
-          {a.league_abbr ? ` (${a.league_abbr})` : a.abbr ? ` (${a.abbr})` : ""}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function Swatch({ label, color }: { label: string; color: string | null }) {
-  if (!color) return null;
-  return (
-    <span className="flex items-center gap-1" title={`${label}: ${color}`}>
-      <span
-        className="inline-block h-4 w-4 rounded border border-slate-600"
-        style={{ backgroundColor: color }}
-      />
-      <span className="font-mono text-[10px] text-slate-500">{color}</span>
-    </span>
-  );
-}
-
-function hockeyAge(dob: string, season: number): string {
-  const y = Number(dob.slice(0, 4));
-  if (!Number.isFinite(y) || y <= 0) return "—";
-  return String(season - y);
-}
-
 function RosterTable({
   title,
   rows,
   season,
+  ratings,
 }: {
   title: string;
   rows: HistoricalTeamMemberDto[];
   season: number;
+  ratings: Map<string, EstimatedRating>;
 }) {
   if (rows.length === 0) return null;
   return (
@@ -284,6 +334,7 @@ function RosterTable({
               <th className="px-2 py-1 text-right">#</th>
               <th className="px-2 py-1">Name</th>
               <th className="px-2 py-1">Pos</th>
+              <th className="px-2 py-1 text-right">Est. OVR</th>
               <th className="px-2 py-1 text-right">Age</th>
               <th className="px-2 py-1">Nat</th>
               <th className="px-2 py-1 text-right">Ability</th>
@@ -313,6 +364,7 @@ function RosterTable({
                   )}
                 </td>
                 <td className="px-2 py-1 text-slate-300">{r.position ?? "—"}</td>
+                <td className="px-2 py-1 text-right tabular-nums text-sky-300">{ratings.get(ratingKey(r.person_id, season))?.overall ?? "—"}</td>
                 <td className="px-2 py-1 text-right tabular-nums text-slate-400">
                   {hockeyAge(r.dob, season)}
                 </td>
@@ -332,16 +384,19 @@ function RosterTable({
   );
 }
 
+// ---------------------------------------------------------------------------
+// Contracts — the club's cap sheet for the selected season.
+// ---------------------------------------------------------------------------
+
 function fmtSalary(n: number | null): string {
   if (n == null) return "—";
   return `$${n.toLocaleString()}`;
 }
 
-function ContractsTable({
-  contracts,
-}: {
-  contracts: HistoricalTeamBlockDto["contracts"];
-}) {
+function ContractsTab({ block }: { block: HistoricalTeamBlockDto }) {
+  if (block.contracts.length === 0) {
+    return <EmptyState title={`No cap sheet on file for ${seasonLabel(block.season_year)}.`} />;
+  }
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-xs">
@@ -352,27 +407,24 @@ function ContractsTable({
             <th className="px-2 py-1">Clauses</th>
           </tr>
         </thead>
-          <tbody>
-            {contracts.map((c) => {
-              const flags = [
-                c.ntc && "NTC",
-                c.nmc && "NMC",
-                c.elc && "ELC",
-                c.ufa && "UFA",
-              ].filter(Boolean);
-              return (
-                <tr key={c.person_id} className="border-t border-slate-800/60">
-                  <td className="px-2 py-1">
-                    <Link
-                      to={`/app/historical/players/${c.person_id}`}
-                      className="text-sky-400 hover:underline"
-                    >
-                      {c.last_name}, {c.first_name}
-                    </Link>
-                  </td>
-                  <td className="px-2 py-1 text-right tabular-nums text-emerald-300/80">
-                    {fmtSalary(c.avg_salary)}
-                  </td>
+        <tbody>
+          {block.contracts.map((c) => {
+            const flags = [c.ntc && "NTC", c.nmc && "NMC", c.elc && "ELC", c.ufa && "UFA"].filter(
+              Boolean,
+            );
+            return (
+              <tr key={c.person_id} className="border-t border-slate-800/60">
+                <td className="px-2 py-1">
+                  <Link
+                    to={`/app/historical/players/${c.person_id}`}
+                    className="text-sky-400 hover:underline"
+                  >
+                    {c.last_name}, {c.first_name}
+                  </Link>
+                </td>
+                <td className="px-2 py-1 text-right tabular-nums text-emerald-300/80">
+                  {fmtSalary(c.avg_salary)}
+                </td>
                 <td className="px-2 py-1 text-slate-400">{flags.join(" · ") || "—"}</td>
               </tr>
             );

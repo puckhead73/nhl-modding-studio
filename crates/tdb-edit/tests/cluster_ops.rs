@@ -10,11 +10,18 @@ use tdb_enums::EnumRegistry;
 use tdb_relations::{RelationRegistry, RosterModel};
 
 fn anchor(rel: &str) -> Vec<u8> {
-    std::fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../anchors").join(rel)).unwrap()
+    std::fs::read(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../anchors")
+            .join(rel),
+    )
+    .unwrap()
 }
 
 fn defs(sub: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../defs").join(sub)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../defs")
+        .join(sub)
 }
 
 const DB: &str = "ps3/nhllegacy/databases/nhlng.db";
@@ -127,11 +134,7 @@ fn delete_existing_player_is_clean() {
         .slots
         .iter()
         .filter_map(|s| s.player_id)
-        .find(|&id| {
-            model0
-                .player(id)
-                .is_some_and(|p| p.skater_ai.is_some())
-        })
+        .find(|&id| model0.player(id).is_some_and(|p| p.skater_ai.is_some()))
         .unwrap();
     drop(db0);
 
@@ -158,15 +161,32 @@ fn create_places_slot_inside_team_block() {
     let (pid, _) = tx.create_player(team, 2).unwrap();
     let model = tx.model().unwrap();
 
-    let recs: Vec<u32> = model.slots.iter().filter(|s| s.team_id == team).map(|s| s.record).collect();
+    let recs: Vec<u32> = model
+        .slots
+        .iter()
+        .filter(|s| s.team_id == team)
+        .map(|s| s.record)
+        .collect();
     let (min, max, count) = (
         *recs.iter().min().unwrap(),
         *recs.iter().max().unwrap(),
         recs.len() as u32,
     );
-    assert_eq!(max - min + 1, count, "team block stayed contiguous after the insert");
-    let new_rec = model.slots.iter().find(|s| s.player_id == Some(pid)).unwrap().record;
-    assert!((min..=max).contains(&new_rec), "new slot sits inside the team block");
+    assert_eq!(
+        max - min + 1,
+        count,
+        "team block stayed contiguous after the insert"
+    );
+    let new_rec = model
+        .slots
+        .iter()
+        .find(|s| s.player_id == Some(pid))
+        .unwrap()
+        .record;
+    assert!(
+        (min..=max).contains(&new_rec),
+        "new slot sits inside the team block"
+    );
     assert!(new_rec < last_eglu, "not appended at the table tail");
     drop(model);
     assert_write_clean(&tx.commit().unwrap());
@@ -189,12 +209,30 @@ fn create_reuses_vacant_in_block_slot() {
 
     let mut tx = EditTransaction::begin(&bytes).unwrap();
     let (pid, outcome) = tx.create_player(team, 2).unwrap();
-    assert_eq!(outcome.edits, 10, "7 cluster rows + a clean occupant (XSWT + captaincy + jersey)");
+    assert_eq!(
+        outcome.edits, 10,
+        "7 cluster rows + a clean occupant (XSWT + captaincy + jersey)"
+    );
     let model = tx.model().unwrap();
-    assert_eq!(model.slots.len(), slots0, "no eGlu growth — the vacant slot was reused");
-    let slot = model.slots.iter().find(|s| s.player_id == Some(pid)).unwrap();
-    assert_eq!(slot.record, vac_rec, "the vacant slot now carries the new player");
-    assert_eq!(slot.jersey, Some(0), "reused slot's stale jersey was cleared to unassigned");
+    assert_eq!(
+        model.slots.len(),
+        slots0,
+        "no eGlu growth — the vacant slot was reused"
+    );
+    let slot = model
+        .slots
+        .iter()
+        .find(|s| s.player_id == Some(pid))
+        .unwrap();
+    assert_eq!(
+        slot.record, vac_rec,
+        "the vacant slot now carries the new player"
+    );
+    assert_eq!(
+        slot.jersey,
+        Some(0),
+        "reused slot's stale jersey was cleared to unassigned"
+    );
     drop(model);
     assert_write_clean(&tx.commit().unwrap());
 }
@@ -212,10 +250,18 @@ fn clone_deep_copies_bio_and_companions() {
     let src_slot = model0
         .slots
         .iter()
-        .find(|s| s.player_id.is_some_and(|p| model0.player(p).is_some_and(|pl| pl.skater_ai.is_some())))
+        .find(|s| {
+            s.player_id
+                .is_some_and(|p| model0.player(p).is_some_and(|pl| pl.skater_ai.is_some()))
+        })
         .unwrap();
     let (source, src_team) = (src_slot.player_id.unwrap(), src_slot.team_id);
-    let to_team = model0.teams.iter().map(|t| t.team_id).find(|&t| t != src_team).unwrap();
+    let to_team = model0
+        .teams
+        .iter()
+        .map(|t| t.team_id)
+        .find(|&t| t != src_team)
+        .unwrap();
     drop(db0);
 
     let mut tx = EditTransaction::begin(&bytes).unwrap();
@@ -233,9 +279,15 @@ fn clone_deep_copies_bio_and_companions() {
     let src = model.player(source).unwrap();
     assert_eq!(clone.kind, src.kind, "same kind");
     assert_eq!(clone.position, src.position, "position deep-copied");
-    assert!(clone.companions_complete(), "companion pair present on the clone");
     assert!(
-        model.slots.iter().any(|s| s.player_id == Some(new_pid) && s.team_id == to_team),
+        clone.companions_complete(),
+        "companion pair present on the clone"
+    );
+    assert!(
+        model
+            .slots
+            .iter()
+            .any(|s| s.player_id == Some(new_pid) && s.team_id == to_team),
         "the clone's slot is on the target team"
     );
 
@@ -263,10 +315,18 @@ fn clone_goalie_copies_the_goalie_pair() {
     let src_slot = model0
         .slots
         .iter()
-        .find(|s| s.player_id.is_some_and(|p| model0.player(p).is_some_and(|pl| pl.goalie_ai.is_some())))
+        .find(|s| {
+            s.player_id
+                .is_some_and(|p| model0.player(p).is_some_and(|pl| pl.goalie_ai.is_some()))
+        })
         .unwrap();
     let (source, src_team) = (src_slot.player_id.unwrap(), src_slot.team_id);
-    let to_team = model0.teams.iter().map(|t| t.team_id).find(|&t| t != src_team).unwrap();
+    let to_team = model0
+        .teams
+        .iter()
+        .map(|t| t.team_id)
+        .find(|&t| t != src_team)
+        .unwrap();
     drop(db0);
 
     let mut tx = EditTransaction::begin(&bytes).unwrap();
@@ -275,8 +335,14 @@ fn clone_goalie_copies_the_goalie_pair() {
     assert_write_clean(&out);
     let model = RosterModel::build(&TdbFile::parse(&out).unwrap()).unwrap();
     let clone = model.player(new_pid).unwrap();
-    assert!(clone.goalie_ai.is_some() && clone.goalie_equip.is_some(), "goalie companions cloned");
-    assert!(clone.skater_ai.is_none() && clone.skater_equip.is_none(), "no skater companions");
+    assert!(
+        clone.goalie_ai.is_some() && clone.goalie_equip.is_some(),
+        "goalie companions cloned"
+    );
+    assert!(
+        clone.skater_ai.is_none() && clone.skater_equip.is_none(),
+        "no skater companions"
+    );
 }
 
 #[test]
@@ -304,7 +370,10 @@ fn create_rejects_bad_args() {
     let mut tx = EditTransaction::begin(&bytes).unwrap();
     assert!(matches!(
         tx.create_player(0, 9).unwrap_err(),
-        EditError::InvalidValue { what: "position", .. }
+        EditError::InvalidValue {
+            what: "position",
+            ..
+        }
     ));
     assert!(matches!(
         tx.create_player(0xFFFF_FFFF, 0).unwrap_err(),

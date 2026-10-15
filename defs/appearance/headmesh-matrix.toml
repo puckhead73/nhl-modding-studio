@@ -1,0 +1,208 @@
+# Headmesh conversion capability matrix — one [[pair]] per (source, target).
+#
+# The engine refuses any pair not listed here, and refuses `unproven` pairs everywhere
+# except the CLI's --allow-unproven spike escape hatch. Promotion:
+#   unproven → roundtrip_verified   convert + install round-trips pass against fixtures
+#   roundtrip_verified → game_verified   a converted head seen rendering correctly
+#                                        in the target game (manual gate)
+# Every promotion carries `evidence` (docs/audits/... link + date). Never assume an
+# untested pair matches a neighbour.
+#
+# uv_class_source / uv_class_target come from defs/appearance/head-uv-classes.toml once
+# the UV spike (HM-S1) has measured that game. Class equality gates TEXTURE-ONLY
+# transplants (applying a target-native texture to a converted head or vice versa);
+# Path A ships source UVs + source texture together and works across classes (that is
+# exactly the proven NHL24→Legacy recipe). Absent values mean "not yet measured".
+#
+# Keys: installed titles are `<title>-<platform>` (nhllegacy-xbox360); source-only
+# corpora are bare names (nhl24).
+
+schema = "headmesh-matrix/1"
+
+# ---- NHL24 corpus → RW targets (the re-derivation of the proven pipeline) ----
+
+[[pair]]
+source = "nhl24"
+target = "nhllegacy-xbox360"
+path = "authored-weights"
+status = "roundtrip_verified"
+evidence = "docs/audits/nhl24-legacy-patha-roundtrip.md (2026-08-06)"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+notes = "Path A round-trip verified (strict re-parse, exact texlib shape, UV hash matches EA's own PS4 build, palette usage contained). Path B (donor-morph) re-verifies separately at M3; game_verified awaits the manual in-game gate."
+uv_class_source = "kettle-fb"
+uv_class_target = "x360-rw-v2"
+
+[[pair]]
+source = "nhl24"
+target = "nhl15-xbox360"
+path = "both"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+uv_class_source = "kettle-fb"
+uv_class_target = "x360-rw-v2"
+
+[[pair]]
+source = "nhl24"
+target = "nhl14-xbox360"
+path = "both"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad-15bit"
+
+[[pair]]
+source = "nhl24"
+target = "nhl13-xbox360"
+path = "both"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad-15bit"
+
+[[pair]]
+source = "nhl24"
+target = "nhl12-xbox360"
+path = "both"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad-15bit"
+notes = "NHL 12 heads ship per-submesh AnimationSkin copies (re-quantised); pack path must re-emit that layout."
+
+[[pair]]
+source = "nhl24"
+target = "nhl11-xbox360"
+path = "both"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad-15bit"
+notes = "Same multi-skin caveat as NHL 12."
+
+# ---- Authored (non-game) corpora → RW targets ----
+
+[[pair]]
+source = "cc5"
+target = "nhllegacy-xbox360"
+path = "donor-weights"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+uv_class_target = "x360-rw-v2"
+notes = """
+Reallusion Character Creator 5 head exports (Blender glTF I/O). Self-describing: roles \
+come from the Std_* material names and weights ride inline, so there is no sidecar. \
+Two measured CC5 facts drive the dedicated path (dan-suckow.glb, 2026-08-13): \
+(1) the exporter cancels the armature's 0.01 scale against a 100x inverse-bind, so every \
+joint's bind-time skinning matrix is identity and raw POSITION is already in the shared \
+model space — hence frame_adapter = identity, verified per-file rather than assumed; \
+(2) the rig is three coincident joints (hd_neutral_m / rl_boneroot / cc_base_hip), i.e. \
+one rigid transform, so the authored weights carry no articulation and Path A has \
+nothing to retarget. Weights therefore transfer off the donor's rigged surface by \
+closest-point (crate::transfer). The source's eyes/corneas/teeth/tongue are measured (to \
+place and size the donor's eyeballs and mouthbag) and then dropped; RW has no teeth or \
+tongue slot and the donor's own companions are not interchangeable parts.
+
+UV convention (verified in-game 2026-08-13): CC5 UVs are STORED, so Path C applies ZERO \
+flips — the opposite of Path A. glTF 2.0 puts the texture origin at the upper-left and \
+Blender's glTF I/O flips Blender's bottom-left V on export to comply, whereas the NHL24 \
+Frosty exporter emits bottom-left V and needs one flip. Treating CC5 UVs as GlSourced \
+rendered the face upside down on the first in-game test; removing the flip fixed it and \
+the built texlib was confirmed mapping correctly onto the mesh in-game. The convention is \
+therefore a per-exporter fact carried with the data, never inferred from the container.
+
+No UV reprojection is required. Path C ships the source atlas together with the source \
+UVs, which is self-consistent and renders correctly — the same property that makes Path A \
+work across UV classes. uv_class_source stays unset on purpose: a CC5 atlas is \
+per-character rather than a fixed class, so TEXTURE-ONLY transplants remain refused for \
+this pair (that gate is about swapping a foreign texture onto these UVs, which is a \
+different operation and is not what Path C does). Reprojecting CC5 UVs onto the Legacy \
+x360-rw-v2 layout was investigated and dropped: it buys only Legacy-native texture \
+compatibility, and it is not cheap — RW stores UVs per-vertex, so relaying seams means \
+splitting vertices, not copying a UV channel. Revisit only if Legacy-native head textures \
+on a CC5 mesh are actually wanted.
+
+Unproven: mesh, weighting and texture all read acceptably in-game, but the pair stays \
+ungated until a full in-game pass is signed off.
+"""
+
+# ---- RW ↔ RW (M5 — gated on the UV spike) ----
+
+[[pair]]
+source = "nhl15-xbox360"
+target = "nhllegacy-xbox360"
+path = "authored-weights"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+notes = "If rigs + UV classes match this may be near carry-through; verify, never assume."
+uv_class_source = "x360-rw-v2"
+uv_class_target = "x360-rw-v2"
+
+[[pair]]
+source = "nhllegacy-xbox360"
+target = "nhl15-xbox360"
+path = "authored-weights"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+uv_class_source = "x360-rw-v2"
+uv_class_target = "x360-rw-v2"
+
+# ---- PS4 as source (decode exists; rigid geometry until .skel wiring lands) ----
+
+[[pair]]
+source = "nhl15-ps4"
+target = "nhllegacy-xbox360"
+path = "donor-morph"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+notes = "PS4 .mcd decodes rigid today (no .skel joint wiring) — geometry-only source, so Path B."
+uv_class_source = "kettle-fb"
+uv_class_target = "x360-rw-v2"
+
+[[pair]]
+source = "nhl16-ps4"
+target = "nhllegacy-xbox360"
+path = "donor-morph"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+uv_class_source = "kettle-fb"
+uv_class_target = "x360-rw-v2"
+
+# ---- PS4 as target (M6 — blocked on HM-S3a–d: .mcd write, GNF write, head binding) ----
+
+[[pair]]
+source = "nhl24"
+target = "nhl16-ps4"
+path = "donor-morph"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "ps4-slug"
+notes = "Install-side blocked until the PS4 write workstream (HM-S3a–d) passes its gates."
+uv_class_source = "kettle-fb"
+uv_class_target = "kettle-fb"
+
+# ---- Pre-NHL11 (M7 — double-gated: UV classes + per-title layout audits) ----
+
+[[pair]]
+source = "nhl10-xbox360"
+target = "nhllegacy-xbox360"
+path = "donor-morph"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "rw-ppad"
+notes = "NHL 10 as source only; NHL 10 as a target needs its bespoke asset-layout audit first."
+uv_class_source = "x360-rw-v1"
+uv_class_target = "x360-rw-v2"
+
+[[pair]]
+source = "nhllegacy-xbox360"
+target = "nhl10-xbox360"
+path = "donor-morph"
+status = "unproven"
+frame_adapter = "identity"
+id_scheme = "unaudited"
+uv_class_source = "x360-rw-v2"
+uv_class_target = "x360-rw-v1"
+notes = "Blocked: NHL 10 head layout differs from the player_<id>/texlib_<id> scheme and is unaudited."

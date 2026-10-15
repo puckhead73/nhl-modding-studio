@@ -1,0 +1,42 @@
+# SYNTHETIC FIXTURE — every value below is INVENTED.
+#
+# THE BLOCKED CASE. `fixturetwo-synthetic` leaves [audio] `unknown`. A sample rate cannot be checked
+# against a requirement nobody has established, so the record is blocked and names the block. An
+# approval would not change that, and none is offered here: an unknown constraint is not something
+# approval can reach.
+
+schema = "build-mapping-override/1"
+record_version = 1
+synthetic = true
+note = "Synthetic. Unknown blocks; it never defaults."
+
+[source]
+asset_id = "synthetic:arena-audio/horn"
+revision = 1
+hash_algorithm = "sha256"
+hash = "11223344556677889900aabbccddeeff11223344556677889900aabbccddeeff"
+
+[mapping]
+target = "fixturetwo-synthetic"
+family = "assets-arenas"
+mapping_id = "arena-audio/horn"
+revision = 1
+
+[profile]
+family = "assets-arenas"
+schema = "asset-output-profile/3"
+profile_version = 2
+content_digest = "b9c22dde99e39d34e70b680a31149c5408b52ba7ffda078e477493335ca22170"
+
+[proposal]
+resolution = "preset-applied"
+provenance = ["synthetic:fixture"]
+
+[proposal.proposed]
+setting = "audio-sample-rate"
+[proposal.proposed.operand]
+hz = 44100
+
+[proposal.prior]
+absent = true
+reason = "Synthetic. This mapping was created by this Build and carried no sample-rate setting before."

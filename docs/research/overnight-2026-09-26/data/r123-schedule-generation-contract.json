@@ -1,0 +1,2702 @@
+{
+ "note": "R123 - research-only reference validator for grouped / pair-matrix league schedule generation (prompt research-20260926-after-receipt3,\npackage 1). NOT Studio code and not the game's scheduling algorithm: it states the contract a generator's REQUEST and its PROPOSED ROWS\nmust satisfy, as named invariants, and exercises them on fixed vectors and on every shipped league table.\n\nRequest (JSON-like dict):\n  source      {db_sha256, table}                     the loaded database and table\n  slot_map    {fingerprint, members: [slot, ...]}     the CURRENT slot map (slot = league rank by team-table index)\n  mapping_fingerprint                                 the fingerprint the request was built against\n  participants [slot, ...]                            slots that play the generated games; rows touching any other slot are kept verbatim\n  quota       {kind: 'partition', groups, within, across} | {kind: 'matrix', counts: [[...]]}  (matrix indexed by participant order)\n  phases      optional [{round, quota}, ...]          several blocks, each with its own round tag, dated in order (Austrian PS4 18-21 shape)\n  odd_home    'lower_slot' | 'higher_slot' | {\"a,b\": home_slot}   who hosts the extra game of an odd pair count; required if any count is odd\n  stock       optional {db_sha256, fingerprint, two_phase: bool}  present only for the stock-shaped option (R113 contract of this exact source)\n  table       {current_records, kept_rows: [row...], slot_width, has_status}\nRow: {index, month, day, home, away, round, status?}  (stored encoding: month / day 0-based; season order = month >= 8 first)\n\nInvariants (request):  Q1 matrix square over participants, zero diagonal; Q2 integer >= 0; Q3 symmetric; Q4 total (upper-triangle sum over\nall phases) == current_records - len(kept_rows); Q5 partition covers participants exactly once, no empty group; Q6 participants distinct,\n>= 2, all in the current slot map; Q7 every slot < 2**slot_width; Q8 mapping fingerprint == current; Q9 stock option: db hash and fingerprint\nequal the stock contract; Q10 stock option on a two-phase source must be requested as phases (never flattened to one round tag); Q11 odd\ncounts need a declared odd_home rule; Q12 every participant has at least one game.\nInvariants (proposal):  R1 exactly current_records rows; R2 kept rows unchanged (same values, same positions); R3 index == position;\nR4 unordered pair counts == request (zero pairs included), per phase; R5 home / away: even count -> equal split, odd -> the declared side\nhosts one more; R6 no self game, every slot is a participant (generated rows); R7 round == the phase's tag on generated rows; R8 status\nwritten only where the field exists (0); R9 no slot plays twice on one date among generated rows (kept / stock rows: warning); R10 every\nrow of phase k+1 dated after every row of phase k.\nStock replay: each shipped league table is validated as a proposal against a matrix request built from its OWN pair counts, with\nparticipants = members with more than two games (Studio's default rule), odd_home = derived from the stock rows; the stock-only\nanomalies (date order, double bookings, uneven home / away splits incl. 3 / 1) are reported as facts about shipped data, never as corruption.\nUsage: python r123_schedule_generation_contract.py <r113.json> <out.json>\n",
+ "vectors": [
+  {
+   "vector": "V1 valid partition 2x2, within 2 / across 1, odd pairs hosted by the lower slot",
+   "expected": [],
+   "got": [],
+   "ok": true,
+   "messages": [],
+   "warnings": []
+  },
+  {
+   "vector": "V2 valid matrix (3 clubs) with a kept All-Star row; explicit odd hosts",
+   "expected": [],
+   "got": [],
+   "ok": true,
+   "messages": [],
+   "warnings": []
+  },
+  {
+   "vector": "V3 valid two-phase request (round 0 full round robin, round 1 within-group block dated after it)",
+   "expected": [],
+   "got": [],
+   "ok": true,
+   "messages": [],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q1 non-zero diagonal",
+   "expected": [
+    "Q1"
+   ],
+   "got": [
+    "Q1"
+   ],
+   "ok": true,
+   "messages": [
+    "matrix must be square over the participants with a zero diagonal"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q2 negative entry",
+   "expected": [
+    "Q2"
+   ],
+   "got": [
+    "Q2"
+   ],
+   "ok": true,
+   "messages": [
+    "matrix entries must be non-negative integers"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q2 non-integer entry",
+   "expected": [
+    "Q2"
+   ],
+   "got": [
+    "Q2"
+   ],
+   "ok": true,
+   "messages": [
+    "matrix entries must be non-negative integers"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q3 asymmetric",
+   "expected": [
+    "Q3"
+   ],
+   "got": [
+    "Q3"
+   ],
+   "ok": true,
+   "messages": [
+    "matrix must be symmetric"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q4 total != current_records - kept",
+   "expected": [
+    "Q4"
+   ],
+   "got": [
+    "Q4"
+   ],
+   "ok": true,
+   "messages": [
+    "upper-triangle total 4 != current_records - kept rows = 5"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q5 partition misses a participant",
+   "expected": [
+    "Q5"
+   ],
+   "got": [
+    "Q5"
+   ],
+   "ok": true,
+   "messages": [
+    "partition must cover every participant exactly once with no empty group"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q6 participant not in the slot map",
+   "expected": [
+    "Q6"
+   ],
+   "got": [
+    "Q6"
+   ],
+   "ok": true,
+   "messages": [
+    "participants must be distinct, at least two, and members of the current slot map"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q7 slot beyond a 1-bit field",
+   "expected": [
+    "Q7"
+   ],
+   "got": [
+    "Q7"
+   ],
+   "ok": true,
+   "messages": [
+    "a slot does not fit the 1-bit home / away field"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q8 stale mapping",
+   "expected": [
+    "Q8"
+   ],
+   "got": [
+    "Q8"
+   ],
+   "ok": true,
+   "messages": [
+    "stale mapping: the slot map changed since the request was built"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q9 stock option on another source",
+   "expected": [
+    "Q9"
+   ],
+   "got": [
+    "Q9"
+   ],
+   "ok": true,
+   "messages": [
+    "stock-shaped option only for the exact source and slot map of its contract; offer user quotas instead"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q10 two-phase source flattened to one round tag",
+   "expected": [
+    "Q10"
+   ],
+   "got": [
+    "Q10"
+   ],
+   "ok": true,
+   "messages": [
+    "this source ships a round-tagged two-phase table; request the phases explicitly or refuse the stock-shaped option"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q11 odd counts without a host rule",
+   "expected": [
+    "Q11"
+   ],
+   "got": [
+    "Q11"
+   ],
+   "ok": true,
+   "messages": [
+    "odd pair counts need a declared rule for which club hosts the extra game"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-Q12 a participant with no games",
+   "expected": [
+    "Q12"
+   ],
+   "got": [
+    "Q12"
+   ],
+   "ok": true,
+   "messages": [
+    "a participant has no games"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R1 a row missing (necessarily also a pair count, R4)",
+   "expected": [
+    "R1",
+    "R4"
+   ],
+   "got": [
+    "R1",
+    "R4"
+   ],
+   "ok": true,
+   "messages": [
+    "7 rows != current_records 8",
+    "round 0: 1 unordered pairs off the requested count, first [(1, 2)]"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R2 kept row altered",
+   "expected": [
+    "R2"
+   ],
+   "got": [
+    "R2"
+   ],
+   "ok": true,
+   "messages": [
+    "kept row 4 changed or moved"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R3 index != position",
+   "expected": [
+    "R3"
+   ],
+   "got": [
+    "R3"
+   ],
+   "ok": true,
+   "messages": [
+    "index must equal row position"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R4 pair count off (game moved to another pair)",
+   "expected": [
+    "R4"
+   ],
+   "got": [
+    "R4"
+   ],
+   "ok": true,
+   "messages": [
+    "round 0: 2 unordered pairs off the requested count, first [(0, 2), (0, 3)]"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R5 even pair not split",
+   "expected": [
+    "R5"
+   ],
+   "got": [
+    "R5"
+   ],
+   "ok": true,
+   "messages": [
+    "round 0: 1 pairs break the home / away rule, first [(0, 1, 2, 0)]"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R5 odd pair hosted by the undeclared side",
+   "expected": [
+    "R5"
+   ],
+   "got": [
+    "R5"
+   ],
+   "ok": true,
+   "messages": [
+    "round 0: 1 pairs break the home / away rule, first [(0, 2, 0, 1)]"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R6 self game (necessarily also a pair count, R4)",
+   "expected": [
+    "R4",
+    "R6"
+   ],
+   "got": [
+    "R4",
+    "R6"
+   ],
+   "ok": true,
+   "messages": [
+    "generated rows: self game or a non-participant slot",
+    "round 0: 1 unordered pairs off the requested count, first [(0, 1)]"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R7 phase row with the wrong round tag (leaves its phase, R4)",
+   "expected": [
+    "R4",
+    "R7"
+   ],
+   "got": [
+    "R4",
+    "R7"
+   ],
+   "ok": true,
+   "messages": [
+    "a generated row carries a round tag of no requested phase",
+    "round 1: 1 unordered pairs off the requested count, first [(2, 3)]"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R8 status written where the field is absent",
+   "expected": [
+    "R8"
+   ],
+   "got": [
+    "R8"
+   ],
+   "ok": true,
+   "messages": [
+    "status must be written (0) exactly where the field exists"
+   ],
+   "warnings": []
+  },
+  {
+   "vector": "F-R9 generated same-day double booking",
+   "expected": [
+    "R9"
+   ],
+   "got": [
+    "R9"
+   ],
+   "ok": true,
+   "messages": [
+    "2 slot-dates with two games, first [(9, 0, 0), (9, 0, 1)]"
+   ],
+   "warnings": [
+    "rows are not in season-date order (no evidence that order matters at run time)"
+   ]
+  },
+  {
+   "vector": "F-R10 phase 1 dated inside phase 0",
+   "expected": [
+    "R10"
+   ],
+   "got": [
+    "R10"
+   ],
+   "ok": true,
+   "messages": [
+    "phase 1 starts before phase 0 ends"
+   ],
+   "warnings": [
+    "rows are not in season-date order (no evidence that order matters at run time)"
+   ]
+  }
+ ],
+ "vectors_all_ok": true,
+ "stock_replay": [
+  {
+   "source": "xbox360-nhl07",
+   "table": "intldelschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl07",
+   "table": "intlelitserienschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl07",
+   "table": "intlsmliigaschedule",
+   "model": "irregular",
+   "members": 13,
+   "participants": 13,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl10",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl10",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl10",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl10",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl10",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 7 pairs break the home / away rule, first [(1, 2, 0, 2), (5, 14, 2, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 17,
+   "participants": 17,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 7 pairs break the home / away rule, first [(0, 4, 1, 3), (1, 13, 4, 1)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 0, 2), (1, 21, 0, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(6, 13, 3, 1)]"
+    ],
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R9",
+     "21 slot-dates with two games, first [(0, 1, 1), (0, 1, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 2, 0), (1, 5, 2, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 7 pairs break the home / away rule, first [(1, 20, 0, 2), (1, 21, 0, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "finnishschedule",
+   "model": "irregular",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(0, 3, 4, 2)]"
+    ],
+    [
+     "R9",
+     "1 slot-dates with two games, first [(0, 26, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 2, 0), (1, 21, 2, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 0, 2), (1, 5, 0, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "finnishschedule",
+   "model": "irregular",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(0, 3, 4, 2)]"
+    ],
+    [
+     "R9",
+     "1 slot-dates with two games, first [(0, 26, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 2, 0), (1, 21, 2, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 0, 2), (1, 5, 0, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 77 pairs break the home / away rule, first [(0, 5, 0, 2), (0, 6, 2, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 10 pairs break the home / away rule, first [(1, 4, 2, 0), (1, 12, 2, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 87 pairs break the home / away rule, first [(0, 6, 3, 0), (0, 12, 0, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 0, 2), (1, 21, 0, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 58 pairs break the home / away rule, first [(0, 5, 0, 3), (0, 13, 4, 6)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(4, 12, 4, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 11,
+   "participants": 11,
+   "kept_rows": 0,
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 26,
+   "participants": 26,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 6,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 56 pairs break the home / away rule, first [(0, 1, 2, 0), (0, 13, 10, 8)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 11,
+   "participants": 11,
+   "kept_rows": 0,
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 26,
+   "participants": 26,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 6,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 56 pairs break the home / away rule, first [(0, 1, 2, 0), (0, 13, 10, 8)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 58 pairs break the home / away rule, first [(0, 5, 0, 3), (0, 13, 4, 6)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(4, 12, 4, 2)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "finnishschedule",
+   "model": "irregular",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(0, 3, 4, 2)]"
+    ],
+    [
+     "R9",
+     "1 slot-dates with two games, first [(0, 26, 0)]"
+    ]
+   ]
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": []
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 2, 0), (1, 21, 2, 0)]"
+    ]
+   ]
+  }
+ ]
+}

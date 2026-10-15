@@ -1,0 +1,239 @@
+{
+  "schema": "nhlms-game-files/1",
+  "game_id": "nhl08",
+  "platform": "xbox",
+  "source": "NHL 08 Xbox 360 USA original ISO",
+  "region": "USA",
+  "image_sha256": "4cb8f03fa7274d1a3009acac8e619feb7931ad5967f0918bf85bdc5d7c62624b",
+  "files": [
+    {
+      "path": "$SystemUpdate/su20076000_00000000",
+      "size": 7299072,
+      "sha256": "39a492de1d957e767657dfe7fb5ff3b315a22c10aa8e9d4009c524362d851fc8",
+      "kind": "loose",
+      "optional": true
+    },
+    {
+      "path": "audio/speech/pbp_eng.big",
+      "size": 1673444608,
+      "sha256": "4d6419b897f24b76c9cc38aa0e0e6359595fe546a13543068d6b069c4bad59a2",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/rink.big",
+      "size": 115898624,
+      "sha256": "1038c303796953291bdd4015ae9d81efaeae3cb55222eac2549d32015a0d638c",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "audioboot.bh",
+      "size": 240,
+      "sha256": "37426abaffec2a63d19f30ba75e173d45a8b661d12d53bdc8aeb31f6d0e3a617",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audioboot.big",
+      "size": 14841980,
+      "sha256": "0fee4b07769af65481be24b587b00ef0bea9739a91a985d284283ab5d415860d",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "boot.bh",
+      "size": 2224,
+      "sha256": "5a0e0a4e545d1841267aa3a8e4369780855ec378bd5b760bc439810d7d6ec8a3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "boot.big",
+      "size": 2034135,
+      "sha256": "1d8ddcc63597214429204728e875f8d9943451c192d346aa5864af1f7c44f2c4",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data0.bh",
+      "size": 226624,
+      "sha256": "5cbcec64fafccb30882e6f3c64c588a1cd47b372dd8590f296d56a2aab04920a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data0.big",
+      "size": 2000405081,
+      "sha256": "96351a854348559bf352b0025de3e6a5cf3259e66aa7600cbe405336ffdd77e6",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data1.bh",
+      "size": 71136,
+      "sha256": "11805b4717852636eb3348b9c0e65d799fea98ed92f4eae456eb7cf4b360f010",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data1.big",
+      "size": 988405931,
+      "sha256": "3d269ab37e561c3da242892a7c195dda57ca91a463d096aa718bef66d3d54a7c",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "db/nhlng-meta.xml",
+      "size": 243270,
+      "sha256": "d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "db/nhlng.db",
+      "size": 1556560,
+      "sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "default.xex",
+      "size": 13185024,
+      "sha256": "9386dba851e2a826de276c51ffb18708c228ce8f9c420c932734c160905e4658",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/loc/nhl_eng_us-meta.xml",
+      "size": 970,
+      "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/loc/nhl_eng_us.db",
+      "size": 267068,
+      "sha256": "308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/EASPORTSmovie.vp6",
+      "size": 2402488,
+      "sha256": "e130cf60f3e6f129104b4f71e3c652afd48786a86b1e994db1acbf905cb2ac1a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/ESRB-E-nV.vp6",
+      "size": 133584,
+      "sha256": "bf09fab47a82b79271ea0077158ca0e94440430775b504cb63cc021cb05806bc",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/NHL08-Intro-ng.vp6",
+      "size": 67174212,
+      "sha256": "22884ccacd9f38e0841d067219482f612b3a9b33713b2294066ee671dea71e35",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/bootflow.vp6",
+      "size": 10491236,
+      "sha256": "4431faf7c5c08b4cdff1eb55a19f27e552d26e77291d33e5bf639d6507e97357",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/rbkedge.vp6",
+      "size": 62666776,
+      "sha256": "af4acb86e43f47b339efdadea45d4fe811da283d4028939512153cafc1bb3e94",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/tutorial.vp6",
+      "size": 186962384,
+      "sha256": "c76b1efbe9f1a06d40418855f4d7067f936250d606b03399f0db7fbc09badd88",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "gamedata/aidata.bh",
+      "size": 256,
+      "sha256": "6f299b3ac742367c24e61ef162865df33c6b363af385e3168464135d73ed9b0d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "gamedata/aidata.big",
+      "size": 137445,
+      "sha256": "0d0c4d99853fed4202bf7d84283cfeb74e3fcdbec646c0fd1a95f44f9bfde47f",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "gamedata/nis.bh",
+      "size": 6624,
+      "sha256": "d510ef490e7e4598d11eaf8fb30b8df3f69378c043dfbd9105e3228be7f0b3c6",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "gamedata/nis.big",
+      "size": 49573888,
+      "sha256": "c9fe483cb9ccdb6c2115d30d39c8ba375b948f71d3ba8ceee407a3f077ea1c5c",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "options.viv",
+      "size": 284,
+      "sha256": "ca02e234951924f66a9dc748baa7fbf01ff9c2d846f70f9063732e6f96089e21",
+      "kind": "loose",
+      "optional": false
+    }
+  ],
+  "anchors": [
+    {
+      "path": "databases/nhl_eng_us-meta.xml",
+      "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+      "disc_matches": [
+        "fe/loc/nhl_eng_us-meta.xml"
+      ]
+    },
+    {
+      "path": "databases/nhl_eng_us.db",
+      "sha256": "308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4",
+      "disc_matches": [
+        "fe/loc/nhl_eng_us.db"
+      ]
+    },
+    {
+      "path": "databases/nhlng-meta.xml",
+      "sha256": "d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1",
+      "disc_matches": [
+        "db/nhlng-meta.xml"
+      ]
+    },
+    {
+      "path": "databases/nhlng.db",
+      "sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+      "disc_matches": [
+        "db/nhlng.db"
+      ]
+    },
+    {
+      "path": "savefiles/DYNASTY1 20260718064632/DYNASTY1 20260718064632",
+      "sha256": "e0c93382c4ae685bf1ab367b5d212427001af1f132fd4932a289049be4e79a25",
+      "disc_matches": []
+    },
+    {
+      "path": "savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658",
+      "sha256": "b7a378359db02bc4eb5feec12d2c75e2fa6892386cf288dcf5a77980fe035755",
+      "disc_matches": []
+    }
+  ]
+}

@@ -64,9 +64,10 @@ from any other repository.
 
 Rejection is a **structured, actionable error**, never a silently-swallowed `error_count: 1`.
 
-**Coverage note.** NHLViewNG metadata covers **NHL 09–16**; our target is **10–21**. Metadata for
-**17–21** is net-new (ROADMAP Phase 10) and will not come from NHLViewNG's files. The `FieldMetaIndex`
-is keyed per `(title, platform)` precisely so years plug in independently.
+**Coverage note.** NHLViewNG metadata covers **NHL 09–16**; our scope is **NHL 07–21 plus Legacy
+and Legacy Recompiled**. Metadata outside that range (NHL 07–08 and 17–21) did not come from
+NHLViewNG's files and was established here. The `FieldMetaIndex` is keyed per `(title, platform)`
+precisely so years plug in independently.
 
 ---
 
@@ -221,8 +222,9 @@ Three explicit tiers, all sharing predicates with the invariant engine:
 - **Backup + integrity.** Automatic `.bak` before overwrite; CRC/checksum/magic/endian framing owned
   by the container codec.
 - **Container parity (target).** Read/write across plain TDB, PS3 (de/encrypt), Xbox360, and — beyond
-  what the prior studio could do — **v1 (NHL 10/11)** and **PS4**. (PS4 is ROADMAP Phase 9; v1 write
-  is Phase 8.) See [05-save-data.md](05-save-data.md).
+  what the prior studio could do — **v1 (NHL 10/11)** and **PS4**. (Remaining container work is
+  milestone C2 in the [completion roadmap](plans/project-completion-roadmap.md).) See
+  [05-save-data.md](05-save-data.md).
   **Shipped:** `tdb-savedata` reads v1/v2/v4 containers (magic + save-type + variant discriminator),
   extracts the inner TDB (raw, or zlib-inflate for v4), and **repacks v2 (byte-identical) and v4
   (semantic round-trip + edit), recomputing both verified checksums** and preserving any trailing

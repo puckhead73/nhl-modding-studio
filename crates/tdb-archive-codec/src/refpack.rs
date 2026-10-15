@@ -307,7 +307,7 @@ pub fn refpack_compress(payload: &[u8]) -> Vec<u8> {
         let take = std::cmp::min(tail_remaining - (tail_remaining % 4), 112);
         let chunk = &payload[tail_start..tail_start + take];
         let units = (take / 4) as u8;
-        debug_assert!(units >= 1 && units <= 28);
+        debug_assert!((1..=28).contains(&units));
         out.push(0xE0 | (units - 1));
         out.extend_from_slice(chunk);
         tail_start += take;
@@ -347,7 +347,7 @@ fn emit_match_with_lits(out: &mut Vec<u8>, ref_off: usize, ref_len: usize, lits:
 
     // Pick command family based on offset + ref_len.
     let off_minus_1 = ref_off - 1;
-    if off_minus_1 < 1024 && ref_len >= 3 && ref_len <= 10 {
+    if off_minus_1 < 1024 && (3..=10).contains(&ref_len) {
         // Short — 2 bytes.
         let a = (((ref_len - 3) as u8) << 2)
             | ((off_minus_1 >> 8) as u8 & 0x03) << 5
@@ -355,7 +355,7 @@ fn emit_match_with_lits(out: &mut Vec<u8>, ref_off: usize, ref_len: usize, lits:
         let b = (off_minus_1 & 0xFF) as u8;
         out.push(a);
         out.push(b);
-    } else if off_minus_1 < 16_384 && ref_len >= 4 && ref_len <= 67 {
+    } else if off_minus_1 < 16_384 && (4..=67).contains(&ref_len) {
         // Medium — 3 bytes.
         let a = 0x80 | ((ref_len - 4) as u8 & 0x3F);
         let b = ((lit_len as u8 & 0x03) << 6) | (((off_minus_1 >> 8) as u8) & 0x3F);
@@ -363,7 +363,7 @@ fn emit_match_with_lits(out: &mut Vec<u8>, ref_off: usize, ref_len: usize, lits:
         out.push(a);
         out.push(b);
         out.push(c);
-    } else if off_minus_1 < 131_072 && ref_len >= 5 && ref_len <= 1028 {
+    } else if off_minus_1 < 131_072 && (5..=1028).contains(&ref_len) {
         // Long — 4 bytes.
         let len_minus_5 = ref_len - 5;
         let a = 0xC0

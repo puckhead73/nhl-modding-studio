@@ -1,0 +1,13 @@
+[package]
+name = "blender-job"
+description = "Headless-Blender job harness — pinned-version location/managed install, strict request/response contract, timeout + log capture. Consumed by the headmesh Path B (donor morph) pipeline."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[dependencies]
+thiserror = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

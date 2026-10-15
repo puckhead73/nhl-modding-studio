@@ -57,7 +57,11 @@ use tdb_relations::Position;
 /// only here; NHL 14+ use `QgFs` instead. Keyed on the field shape, never the title id.
 pub(crate) fn is_gen6_style_schema(db: &TdbFile) -> bool {
     db.table_canonical("dSvy")
-        .and_then(|t| t.fields.iter().find(|f| f.id.canonical(db.endian) == "mQoE"))
+        .and_then(|t| {
+            t.fields
+                .iter()
+                .find(|f| f.id.canonical(db.endian) == "mQoE")
+        })
         .map(|f| f.bit_width == 3)
         .unwrap_or(false)
 }
@@ -103,38 +107,41 @@ pub(crate) fn restrict_style_options(ratings: &mut [FieldView], position: Positi
 /// game's Origin dropdown is alphabetical and does NOT follow these stored codes, so codes are pinned
 /// from player data, not list order. Code 78 (Belgium, single player Pellegrims) is inferred.
 const GEN6_COUNTRIES: &[(i64, &str)] = &[
-    (0, "Canada"),           // ✓ Crosby, Sakic
-    (14, "United States"),   // ✓ Amonte
-    (66, "Denmark"),         // Christensen/Christiansen
-    (67, "Finland"),         // ✓ Aalto
-    (68, "Norway"),          // Boye/Brathen
-    (69, "Sweden"),          // ✓ Alfredsson
-    (70, "Belarus"),         // Arkatov/Bulakhov
-    (72, "Kazakhstan"),      // ✓ Antropov
-    (73, "Latvia"),          // ✓ user-confirmed (Apsitis)
-    (74, "Lithuania"),       // ✓ user-confirmed (Kasparaitis, Zubrus)
-    (75, "Russia"),          // ✓ user-confirmed (Afinogenov)
-    (76, "Ukraine"),         // ✓ user-confirmed (Bilik, Bobyk)
-    (77, "Austria"),         // ✓ user-confirmed (Divis)
-    (78, "Belgium"),         // inferred (Pellegrims) — unconfirmed
-    (79, "Czech Republic"),  // ✓ user-confirmed (Barinka)
-    (80, "Great Britain"),   // ✓ user-confirmed (Bentley/Blair)
-    (81, "France"),          // ✓ user-confirmed
-    (82, "Germany"),         // ✓ user-confirmed
-    (84, "Italy"),           // ✓ user-confirmed
-    (85, "Northern Ireland"),// Owen Nolan (born Belfast)
-    (86, "Poland"),          // ✓ user-confirmed
-    (88, "Slovakia"),        // ✓ user-confirmed (Bartecko, Bondra)
-    (89, "Switzerland"),     // ✓ user-confirmed
-    (92, "Brazil"),          // Robyn Regehr (born Recife)
-    (96, "Japan"),           // ✓ user-confirmed
-    (100, "South Africa"),   // Olaf Kölzig (born Johannesburg)
-    (101, "South Korea"),    // Richard Park (born Seoul)
+    (0, "Canada"),            // ✓ Crosby, Sakic
+    (14, "United States"),    // ✓ Amonte
+    (66, "Denmark"),          // Christensen/Christiansen
+    (67, "Finland"),          // ✓ Aalto
+    (68, "Norway"),           // Boye/Brathen
+    (69, "Sweden"),           // ✓ Alfredsson
+    (70, "Belarus"),          // Arkatov/Bulakhov
+    (72, "Kazakhstan"),       // ✓ Antropov
+    (73, "Latvia"),           // ✓ user-confirmed (Apsitis)
+    (74, "Lithuania"),        // ✓ user-confirmed (Kasparaitis, Zubrus)
+    (75, "Russia"),           // ✓ user-confirmed (Afinogenov)
+    (76, "Ukraine"),          // ✓ user-confirmed (Bilik, Bobyk)
+    (77, "Austria"),          // ✓ user-confirmed (Divis)
+    (78, "Belgium"),          // inferred (Pellegrims) — unconfirmed
+    (79, "Czech Republic"),   // ✓ user-confirmed (Barinka)
+    (80, "Great Britain"),    // ✓ user-confirmed (Bentley/Blair)
+    (81, "France"),           // ✓ user-confirmed
+    (82, "Germany"),          // ✓ user-confirmed
+    (84, "Italy"),            // ✓ user-confirmed
+    (85, "Northern Ireland"), // Owen Nolan (born Belfast)
+    (86, "Poland"),           // ✓ user-confirmed
+    (88, "Slovakia"),         // ✓ user-confirmed (Bartecko, Bondra)
+    (89, "Switzerland"),      // ✓ user-confirmed
+    (92, "Brazil"),           // Robyn Regehr (born Recife)
+    (96, "Japan"),            // ✓ user-confirmed
+    (100, "South Africa"),    // Olaf Kölzig (born Johannesburg)
+    (101, "South Korea"),     // Richard Park (born Seoul)
 ];
 
 /// NHL07's nationality vocabulary (see [`GEN6_COUNTRIES`]).
 pub(crate) fn gen6_nationality() -> Vec<(i64, String)> {
-    GEN6_COUNTRIES.iter().map(|(r, l)| (*r, l.to_string())).collect()
+    GEN6_COUNTRIES
+        .iter()
+        .map(|(r, l)| (*r, l.to_string()))
+        .collect()
 }
 
 /// The highest NHL07 birth-state code that is a North-American *state/province* (`ubPc.QvxI`): the
@@ -181,13 +188,58 @@ pub(crate) fn apply_gen6_geo_vocab(
     }
 }
 
+/// Why a birth-state ("Origin", `ubPc.QvxI`) country label follows the title's nationality table
+/// (receipt 28): research R120 §7 found the country region (66 and up) moving at exactly the
+/// nationality renumbering boundaries, which is continuity evidence, not a title-owned table.
+pub(crate) const BIRTH_STATE_COUNTRY_NOTE: &str = "Birth state: provinces and states (1–65) keep their established labels. Country codes from 66 up follow this title's nationality numbering — a continuity reading (research R120 §7), not a separate title-owned table — and codes without a national-team label on this title are shown as numbers.";
+
+/// Title-scope the birth-state country region (receipt 28; research C16 / R120 §7). The birth-state
+/// vocabulary (`birth-state.toml`) was established on NHL Legacy; its country codes from 66 up
+/// mirror the nationality codes, which are renumbered before NHL 13. Where the title's nationality
+/// vocabulary is not the Legacy-anchored table (NHL 08 → 12, or an unknown title), the Legacy
+/// country labels are dropped and the title's own nationality labels (national-team evidence) are
+/// used for the country region instead; the North-American region (≤ 65) is preserved. Returns the
+/// provenance note when it applied. NHL 07 keeps its own override ([`apply_gen6_geo_vocab`]).
+pub(crate) fn apply_title_birth_state_countries(
+    studio_table: &str,
+    studio_field: &str,
+    gen6: bool,
+    enums: &tdb_enums::EnumRegistry,
+    options: &mut Vec<(i64, String)>,
+) -> Option<String> {
+    if gen6 || studio_table != "ubPc" || studio_field != "QvxI" || options.is_empty() {
+        return None;
+    }
+    let nationality = enums.for_field("ubPc", "Lelh");
+    // An unscoped nationality def is the Legacy table applied everywhere; no def at all (an unknown
+    // title) leaves the country region without a title-owned numbering.
+    let legacy_family = nationality.is_some_and(|d| {
+        d.scope
+            .as_ref()
+            .is_none_or(|s| s.games.iter().any(|g| g == "nhllegacy"))
+    });
+    if legacy_family {
+        return None;
+    }
+    options.retain(|(r, _)| *r <= GEN6_STATE_MAX);
+    if let Some(def) = nationality {
+        for e in def.entries.iter().filter(|e| e.raw > GEN6_STATE_MAX) {
+            options.push((e.raw, e.label.clone()));
+        }
+    }
+    options.sort_by_key(|(r, _)| *r);
+    Some(BIRTH_STATE_COUNTRY_NOTE.to_string())
+}
+
 /// The player/goalie **style** (archetype) field id across schema variants: `QgFs` on NHL 11→21, or
 /// the gen6 NHL07 companions `mQoE` (skater `p_style`, 0..7) / `wJus` (goalie `g_style`, 0..3).
 pub(crate) const STYLE_FIELD_IDS: &[&str] = &["QgFs", "mQoE", "wJus"];
 
 /// The style [`FieldView`] on a companion's ratings, whichever id this schema carries.
-pub(crate) fn style_field<'a>(ratings: &'a [FieldView]) -> Option<&'a FieldView> {
-    ratings.iter().find(|f| STYLE_FIELD_IDS.contains(&f.studio_field.as_str()))
+pub(crate) fn style_field(ratings: &[FieldView]) -> Option<&FieldView> {
+    ratings
+        .iter()
+        .find(|f| STYLE_FIELD_IDS.contains(&f.studio_field.as_str()))
 }
 
 /// The rating-name suffix of an AI-table metadata name: strips the era prefix — `p_` (skaters
@@ -206,6 +258,58 @@ pub(crate) fn rating_suffix(meta_name: &str) -> Option<&str> {
 /// keeps the 6-bit `potential` out and documents the intent.
 const NON_RATING_SUFFIXES: &[&str] = &["fighting", "style", "paddledown", "potential"];
 
+/// The goalie AI table's `consistency` field (`g_consistency` / `c_consistency`). Not a rating
+/// (26 Sep 2026, coordinator review of packages 23–26 task 1; research R118 §2): it stores only
+/// 0 / 1 / 2 on every measured source whether declared 0..3, 0..63 or 0..99, so a declared six- or
+/// seven-bit range does not make it a 36..99 rating. Scoped to this table and field only —
+/// `floppiness` (NHL 07–10) stays unresolved and is not touched.
+pub(crate) fn is_goalie_consistency(studio_table: &str, meta_name: &str) -> bool {
+    studio_table == "mHuy" && rating_suffix(meta_name) == Some("consistency")
+}
+
+/// The note every goalie `consistency` cell carries: stored value, the stock census, what is open.
+pub(crate) const GOALIE_CONSISTENCY_NOTE: &str = "Stored value, shown as stored. The shipped rosters hold only 0 / 1 / 2 on every measured title (research R118); what the three values mean and whether other values in the declared range act differently in game is not established. Not a 36–99 rating.";
+
+/// Goalie mask columns on the goalie equipment companion (`fMVl`) whose meaning research traced
+/// (R125 = 2026-09-26 handoff 18, observation G1): on NHL 08 / 09 the mask **paint** number is
+/// `maskcolor` (it matches the paint position of the `goaliehelmet_*` files on 99 / 99 and 149 / 149
+/// values) while `maskpattern` and `hascustommask` are 0 on every shipped goalie. Notes only — no
+/// labels, nothing asserts what the game draws.
+pub(crate) fn goalie_mask_note(studio_table: &str, meta_name: &str) -> Option<&'static str> {
+    if studio_table != "fMVl" {
+        return None;
+    }
+    match meta_name {
+        "maskcolor" => Some("Mask paint number (NHL 08 / 09): it matches the paint position of the goalie-helmet texture files on every shipped value (research R125); which mask the game draws is not observed. Stored number, no catalogue."),
+        "maskpattern" => Some("Stored value — 0 on every shipped goalie on NHL 08 / 09 (research R125); the mask paint is `maskcolor`. Meaning not established."),
+        "hascustommask" => Some("Stored flag — 0 on every shipped goalie on NHL 08 / 09 (research R125); its effect is not established."),
+        _ => None,
+    }
+}
+
+/// The offset a **fitted formula** adds to a field's stored value to form its input — the
+/// display offset for genuine ratings, and for goalie `consistency` the offset the goalie Overall
+/// regression was calibrated with before the field was reclassified (+36 on a 0..63 declaration,
+/// +0 on 0..99; `None` on the 0..3 declaration, which never fed the formula). Measured: the NHL 14
+/// PS3 goalie fit reproduces stored Overall (median error 0) with that input, and PS4 NHL 15's
+/// −3.7 bias equals the consistency coefficient × 36 (`tests/overall_formula.rs`). Kept exactly so
+/// the reclassification does not move any derived Overall (`tests/goalie_consistency.rs`).
+pub(crate) fn formula_input_offset(
+    studio_table: &str,
+    meta_name: &str,
+    range_low: Option<i64>,
+    range_high: Option<i64>,
+) -> Option<i64> {
+    if is_goalie_consistency(studio_table, meta_name) {
+        return match (range_low?, range_high?) {
+            (0, 63) => Some(36),
+            (0, 99) => Some(0),
+            _ => None,
+        };
+    }
+    rating_offset(studio_table, meta_name, range_low, range_high)
+}
+
 /// Classify one companion-table field as a rating **from its own metadata** and return the
 /// display/edit offset: `Some(36)` for 6-bit `0..63` storage (PS3/X360 — shows/edits on the 36..99
 /// scale), `Some(0)` for `0..99` storage (PS4 — the stored value *is* the rating), `None` for
@@ -220,7 +324,7 @@ pub(crate) fn rating_offset(
         return None;
     }
     let suffix = rating_suffix(meta_name)?;
-    if NON_RATING_SUFFIXES.contains(&suffix) {
+    if NON_RATING_SUFFIXES.contains(&suffix) || is_goalie_consistency(studio_table, meta_name) {
         return None;
     }
     match (range_low?, range_high?) {
@@ -239,8 +343,14 @@ pub(crate) fn rating_offset(
 pub struct PlayerAttributes {
     /// `"skater"` | `"goalie"`, or `None` when the player has no ratings companion.
     pub kind: Option<&'static str>,
-    /// Overall (`eWUF`, a 6-bit rating).
-    pub overall: Option<AttributeView>,
+    /// Overall as **computed** from this player's ratings by the EA regression (see
+    /// [`derived_overall`]) — the same number the player lists rank on. `None` when the loaded
+    /// schema resolves too few of the formula's inputs to trust it.
+    pub computed_overall: Option<i64>,
+    /// The Overall **stored** in the companion row (`eWUF`), on the display scale. Kept alongside
+    /// the computed value so the UI can show the delta; the field itself stays editable in the raw
+    /// field list (we never hand-edit a derived value into a headline cell).
+    pub stored_overall: Option<i64>,
     /// Player/Goalie Style (`QgFs`, real enum vocabulary).
     pub style: Option<AttributeView>,
     /// Potential Range (`QoMA` = `growthtier`): in-game potential as stars (raw 1=5.0★ … , 0="None").
@@ -254,6 +364,10 @@ pub struct PlayerAttributes {
     /// The full trait vocabulary as toggleable options, each flagged with whether it's currently
     /// active (occupies a slot) — powers the activate/deactivate checkbox menu.
     pub trait_options: Vec<TraitOption>,
+    /// Companion-table fields **not** represented by any cell above — i.e. everything the curated
+    /// list, the headline cells and the trait menu don't already show. This is what the tab's raw
+    /// "other fields" drawer renders, so no field appears twice on the tab.
+    pub other_fields: Vec<FieldView>,
 }
 
 /// One entry in the trait checkbox menu: a dictionary trait plus whether the player currently has it.
@@ -324,6 +438,19 @@ pub(crate) fn synthetic_enum(
     }
 }
 
+/// The roster style cell (`eGlu.QgFs`) on NHL 08 / 09 (27 Sep 2026; research R122 S1): the
+/// skater's roster code equals its `p_style` for 98.7–98.8 % of skaters there, and both follow the
+/// NHL 07 seven-style numbering, so the cell shows the same NHL 07 vocabulary as the player page.
+/// NHL 07's own roster cell agrees only 73 % (meaning unresolved) and NHL 10 has its own nine-style
+/// numbering — both stay numbers. Keyed on the schema shape (gen6 3-bit `p_style`) and family.
+pub(crate) fn gen6_roster_style_options(studio_table: &str, studio_field: &str, gen6_style: bool, family: Option<crate::encoding::SchemaFamily>) -> Option<Vec<(i64, String)>> {
+    let later_gen6 = matches!(family, Some(crate::encoding::SchemaFamily::Gen7Nhl08 | crate::encoding::SchemaFamily::Gen7Nhl09));
+    (studio_table == "eGlu" && studio_field == "QgFs" && gen6_style && later_gen6).then(skater_style_options)
+}
+
+/// The note shown with [`gen6_roster_style_options`].
+pub const GEN6_ROSTER_STYLE_NOTE: &str = "Roster style on NHL 08 / 09: the NHL 07 seven-style vocabulary the player page uses — 98.7 % of skaters store the same code in both places (research R122); inferred for the roster cell, not observed in game. Goalie rows: meaning unresolved (R122 S4).";
+
 /// NHL07 skater `p_style` (`mQoE`, 0..7): defenseman roles 1..=2, forward roles 3..=7. Verified
 /// against named players (DiPenta=Defensive, B.Campbell=Offensive, Drake=Grinder, Weight=Playmaker,
 /// Guerin=Sniper, Tkachuk=Power Forward, Comrie=Dangler).
@@ -365,10 +492,18 @@ fn potential_range_options() -> Vec<(i64, String)> {
 /// Potential Accuracy (`mBef` = `growthletter`) → scouting certainty. Six internal values collapse to
 /// three buckets: `{1,2}=High {3,4}=Medium {5,6}=Low`; `0` = "None" (untracked / grown).
 fn potential_accuracy_options() -> Vec<(i64, String)> {
-    [(0, "None"), (1, "High"), (2, "High"), (3, "Medium"), (4, "Medium"), (5, "Low"), (6, "Low")]
-        .into_iter()
-        .map(|(raw, label)| (raw, label.to_string()))
-        .collect()
+    [
+        (0, "None"),
+        (1, "High"),
+        (2, "High"),
+        (3, "Medium"),
+        (4, "Medium"),
+        (5, "Low"),
+        (6, "Low"),
+    ]
+    .into_iter()
+    .map(|(raw, label)| (raw, label.to_string()))
+    .collect()
 }
 
 // ---------------------------------------------------------------------------
@@ -497,9 +632,28 @@ const GOALIE_LABELS: &[(&str, &str)] = &[
 /// flattened to a single suffix list. Goalies carry no biases. `paddledown`/`fighting` are shown but
 /// classify non-rating (flag / 0..3 frequency), so they render raw and untinted.
 const GOALIE_ORDER: &[&str] = &[
-    "speed", "agility", "aggression", "vision", "positioning", "gsh", "gsl", "ssh", "ssl", "5hole",
-    "reboundcontrol", "shotrecover", "breakaway", "consistency", "passing", "pokecheck",
-    "puckplayfrequency", "paddledown", "poise", "endurance", "durability", "fighting",
+    "speed",
+    "agility",
+    "aggression",
+    "vision",
+    "positioning",
+    "gsh",
+    "gsl",
+    "ssh",
+    "ssl",
+    "5hole",
+    "reboundcontrol",
+    "shotrecover",
+    "breakaway",
+    "consistency",
+    "passing",
+    "pokecheck",
+    "puckplayfrequency",
+    "paddledown",
+    "poise",
+    "endurance",
+    "durability",
+    "fighting",
 ];
 
 fn lookup(map: &[(&'static str, &'static str)], key: &str) -> Option<&'static str> {
@@ -564,8 +718,7 @@ const SKATER_OVERALL_FWD_INTERCEPT: f64 = -78.725;
 
 /// Skater Overall from per-attribute **display** values (36..99), resolved by
 /// `value_for(rating suffix)`. Missing attributes count as 0. Rounded + clamped to 1..99.
-/// `is_defenseman` selects the D regression over the forward weighted-average. (Goalies don't use
-/// a formula — their stored `overall` field is read directly.)
+/// `is_defenseman` selects the D regression over the forward weighted-average.
 pub(crate) fn skater_overall(value_for: impl Fn(&str) -> Option<f64>, is_defenseman: bool) -> i64 {
     let mut acc = 0.0f64;
     for (suffix, coeff, weight) in SKATER_OVERALL_TERMS {
@@ -578,6 +731,93 @@ pub(crate) fn skater_overall(value_for: impl Fn(&str) -> Option<f64>, is_defense
         SKATER_OVERALL_FWD_SCALE * (acc / SKATER_OVERALL_FWD_DIVISOR) + SKATER_OVERALL_FWD_INTERCEPT
     };
     (ovr.round() as i64).clamp(1, 99)
+}
+
+/// Per-attribute terms of the goalie Overall regression, keyed by rating-name **suffix**:
+/// `intercept + Σ coeff·display_value`. Same provenance as the skater terms (regression of stored
+/// `eWUF` on the rating fields in the prior app's `default.db`; the goalie fit reported R²=0.967 /
+/// RMSE 2.2). Ported from the EA-name-keyed copy in `tdb-formula::overall` and re-keyed to our
+/// era-portable suffixes: `Glove/Stick High|Low` → `gsh/gsl/ssh/ssl`, `Angles` → `positioning`,
+/// `Rebounds` → `reboundcontrol`, `Breakaways` → `breakaway`, `Pokechecking` → `pokecheck`,
+/// `Aggressiveness` → `aggression`. `5hole`, `paddledown` and `fighting` carry no term.
+const GOALIE_OVERALL_TERMS: &[(&str, f64)] = &[
+    ("gsl", 0.250060),
+    ("gsh", 0.175273),
+    ("ssl", 0.232873),
+    ("ssh", 0.108138),
+    ("speed", -0.012071),
+    ("agility", 0.068729),
+    ("consistency", 0.099379),
+    ("pokecheck", -0.010799),
+    ("endurance", 0.131290),
+    ("breakaway", 0.089280),
+    ("reboundcontrol", 0.139073),
+    ("shotrecover", 0.172825),
+    ("poise", 0.086183),
+    ("passing", 0.131022),
+    ("positioning", 0.170233),
+    ("puckplayfrequency", 0.033405),
+    ("aggression", 0.024618),
+    ("durability", 0.043238),
+    ("vision", 0.027384),
+];
+const GOALIE_OVERALL_INTERCEPT: f64 = -79.5961;
+
+/// Goalie Overall from per-attribute **display** values, resolved by `value_for(rating suffix)`.
+/// Missing attributes count as 0. Rounded + clamped to 1..99.
+pub(crate) fn goalie_overall(value_for: impl Fn(&str) -> Option<f64>) -> i64 {
+    let mut acc = 0.0f64;
+    for (suffix, coeff) in GOALIE_OVERALL_TERMS {
+        acc += coeff * value_for(suffix).unwrap_or(0.0);
+    }
+    ((GOALIE_OVERALL_INTERCEPT + acc).round() as i64).clamp(1, 99)
+}
+
+/// How many of a formula's inputs the loaded schema must actually resolve before we report the
+/// derived Overall. The regressions treat a missing attribute as 0, which is harmless for a stray
+/// era gap but produces a meaningless number when a title's rating vocabulary barely overlaps ours
+/// — below this bar we surface nothing rather than a confident wrong value.
+const OVERALL_MIN_COVERAGE_NUM: usize = 2;
+const OVERALL_MIN_COVERAGE_DEN: usize = 3;
+
+fn covered_enough(resolved: usize, total: usize) -> bool {
+    resolved * OVERALL_MIN_COVERAGE_DEN >= total * OVERALL_MIN_COVERAGE_NUM
+}
+
+/// True when the loaded ratings vocabulary is the `c_*` one (NHL 14 onward). Both regressions were
+/// fit on that era and reproduce EA's stored Overall to within a point there; on the earlier
+/// `p_*`/`g_*` vocabulary NHL 13 reads a flat ~13 low across the whole population (NHL 10–12 don't
+/// even clear the coverage bar). A uniform offset is harmless for *ranking*, which is why the player
+/// list still computes one, but it's a lie as a displayed rating — so the headline cell reports
+/// nothing outside the calibrated era. See `tests/overall_formula.rs` for the per-anchor numbers.
+fn era_calibrated_for_overall(ratings: &[FieldView]) -> bool {
+    ratings
+        .iter()
+        .filter(|f| rating_suffix(&f.name).is_some())
+        .all(|f| f.name.starts_with("c_"))
+}
+
+/// Derived Overall for either kind, or `None` when the loaded schema resolves too few of the
+/// formula's inputs to trust the result (see [`covered_enough`]).
+pub(crate) fn derived_overall(
+    value_for: impl Fn(&str) -> Option<f64>,
+    is_goalie: bool,
+    is_defenseman: bool,
+) -> Option<i64> {
+    if is_goalie {
+        let resolved = GOALIE_OVERALL_TERMS
+            .iter()
+            .filter(|(s, _)| value_for(s).is_some())
+            .count();
+        covered_enough(resolved, GOALIE_OVERALL_TERMS.len()).then(|| goalie_overall(&value_for))
+    } else {
+        let resolved = SKATER_OVERALL_TERMS
+            .iter()
+            .filter(|(s, ..)| value_for(s).is_some())
+            .count();
+        covered_enough(resolved, SKATER_OVERALL_TERMS.len())
+            .then(|| skater_overall(&value_for, is_defenseman))
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -633,7 +873,11 @@ const GOALIE_TRAITS: &[(i64, &str, &str, &str)] = &[
 ];
 
 fn lookup_trait(is_skater: bool, value: i64) -> Option<(&'static str, &'static str, &'static str)> {
-    let table = if is_skater { SKATER_TRAITS } else { GOALIE_TRAITS };
+    let table = if is_skater {
+        SKATER_TRAITS
+    } else {
+        GOALIE_TRAITS
+    };
     table
         .iter()
         .find(|(v, ..)| *v == value)
@@ -646,8 +890,13 @@ fn lookup_trait(is_skater: bool, value: i64) -> Option<(&'static str, &'static s
 
 /// Assemble the display-ready [`PlayerAttributes`] from a player's ratings companion field views.
 /// `ratings_table` is `"dSvy"` (skater) or `"mHuy"` (goalie); anything else (or empty `ratings`)
-/// yields the `kind: None` empty view.
-pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> PlayerAttributes {
+/// yields the `kind: None` empty view. `is_defenseman` only selects which half of the skater
+/// Overall regression applies (goalies ignore it).
+pub fn build_player_attributes(
+    ratings: &[FieldView],
+    ratings_table: &str,
+    is_defenseman: bool,
+) -> PlayerAttributes {
     let is_skater = ratings_table == "dSvy";
     let is_goalie = ratings_table == "mHuy";
     if ratings.is_empty() || (!is_skater && !is_goalie) {
@@ -665,9 +914,8 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
             .cloned()
     };
     // `is_rating` (tier coloring) comes from the same metadata classification as the +36/raw scale.
-    let cell_is_rating = |f: &FieldView| {
-        rating_offset(ratings_table, &f.name, f.range_low, f.range_high).is_some()
-    };
+    let cell_is_rating =
+        |f: &FieldView| rating_offset(ratings_table, &f.name, f.range_low, f.range_high).is_some();
     // A headline/derived cell (never tier-colored) bound to an existing field.
     let derived = |id: &str, label: &str| {
         find(id).map(|f| AttributeView {
@@ -677,10 +925,24 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
         })
     };
 
-    // Overall (`eWUF`) is intentionally NOT surfaced as an editable cell: it's a derived value we'll
-    // populate from a ratings formula later, not hand-edit. It stays in the raw "all rating fields"
-    // list for inspection.
-    let overall = None;
+    // Overall is a DERIVED value, never an editable headline cell: we recompute it from this
+    // player's own ratings with the EA regression (the same one the player lists rank on) so the tab
+    // always agrees with the roster's OVR column, even right after an edit. The stored `eWUF` field
+    // is reported alongside for the delta and stays hand-editable in the raw field list below.
+    // Formula inputs: genuine ratings on their display scale; goalie consistency on the scale the
+    // fit was calibrated with (`formula_input_offset`), so the reclassification moves no Overall.
+    let rating_display = |suffix: &str| -> Option<f64> {
+        let f = find_rating(suffix)?;
+        let offset = formula_input_offset(ratings_table, &f.name, f.range_low, f.range_high)?;
+        Some((f.decoded? + offset) as f64)
+    };
+    let computed_overall = era_calibrated_for_overall(ratings)
+        .then(|| derived_overall(rating_display, is_goalie, is_defenseman))
+        .flatten();
+    let stored_overall = find_rating("overall").and_then(|f| {
+        let offset = rating_offset(ratings_table, &f.name, f.range_low, f.range_high)?;
+        Some(f.decoded? + offset)
+    });
     // The style/archetype field id varies by schema (`QgFs`, or NHL07's `mQoE`/`wJus`). NHL07 gen6
     // (the 3-bit skater `p_style`) also means: no biases exposed (they're internal AI sliders), so
     // drop them from the list. NHL 10→13 reuse `mQoE` (4-bit) but keep their biases visible.
@@ -688,7 +950,12 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
         .map(|f| f.studio_field == "mQoE" && f.range_high == Some(7))
         .unwrap_or(false);
     let style = style_field(ratings).cloned().map(|f| AttributeView {
-        label: if is_skater { "Player Style" } else { "Goalie Style" }.to_string(),
+        label: if is_skater {
+            "Player Style"
+        } else {
+            "Goalie Style"
+        }
+        .to_string(),
         is_rating: false,
         field: Some(f),
     });
@@ -758,12 +1025,18 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
             continue;
         };
         // `prestige` is NHL07's internal star-power slider, not a player-facing attribute.
-        if suffix == "overall" || suffix == "prestige" || covered.contains(suffix) || !cell_is_rating(f) {
+        if suffix == "overall"
+            || suffix == "prestige"
+            || covered.contains(suffix)
+            || !cell_is_rating(f)
+        {
             continue;
         }
         covered.insert(suffix.to_string());
         flat.push(AttributeView {
-            label: rating_label(ratings_table, suffix).unwrap_or(suffix).to_string(),
+            label: rating_label(ratings_table, suffix)
+                .unwrap_or(suffix)
+                .to_string(),
             is_rating: true,
             field: Some(f.clone()),
         });
@@ -772,15 +1045,37 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
     let traits = build_traits(ratings, is_skater);
     let trait_options = build_trait_options(ratings, is_skater);
 
+    // Everything the tab already shows, by field id: the curated cells, the headline cells, and the
+    // 32 trait slots (owned by the trait checkbox menu). The leftover drawer carries the rest, so a
+    // field is never editable in two places at once.
+    let mut shown: std::collections::HashSet<&str> = TRAIT_SLOT_ORDER.iter().copied().collect();
+    for cell in flat
+        .iter()
+        .chain(style.iter())
+        .chain(potential_range.iter())
+        .chain(potential_accuracy.iter())
+    {
+        if let Some(f) = &cell.field {
+            shown.insert(f.studio_field.as_str());
+        }
+    }
+    let other_fields: Vec<FieldView> = ratings
+        .iter()
+        .filter(|f| !shown.contains(f.studio_field.as_str()))
+        .cloned()
+        .collect();
+
     PlayerAttributes {
         kind: Some(kind),
-        overall,
+        computed_overall,
+        stored_overall,
         style,
         potential_range,
         potential_accuracy,
         flat,
         traits,
         trait_options,
+        other_fields,
     }
 }
 
@@ -843,11 +1138,18 @@ fn active_trait_values(ratings: &[FieldView]) -> std::collections::HashSet<i64> 
 fn build_trait_options(ratings: &[FieldView], is_skater: bool) -> Vec<TraitOption> {
     // No `Trait N` slots in this schema (NHL07 gen6 has no trait system) → no trait menu at all,
     // rather than a dictionary of options that can't be stored anywhere.
-    if !TRAIT_SLOT_ORDER.iter().any(|slot| ratings.iter().any(|f| &f.studio_field == slot)) {
+    if !TRAIT_SLOT_ORDER
+        .iter()
+        .any(|slot| ratings.iter().any(|f| &f.studio_field == slot))
+    {
         return Vec::new();
     }
     let active = active_trait_values(ratings);
-    let dict = if is_skater { SKATER_TRAITS } else { GOALIE_TRAITS };
+    let dict = if is_skater {
+        SKATER_TRAITS
+    } else {
+        GOALIE_TRAITS
+    };
     dict.iter()
         .map(|(value, label, confidence, note)| TraitOption {
             value: *value,

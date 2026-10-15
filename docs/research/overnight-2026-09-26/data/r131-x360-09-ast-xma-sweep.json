@@ -1,0 +1,117 @@
+{
+ "note": "R131 - X360 NHL 09 archive-backed `.ast` streams: full diagnostic XMA decode-count sweep through the UNCHANGED R92 / R100 route (raw\npackets -> RIFF XMA2 -> ffmpeg `xma2`), extending R100's 3 vectors to every stream entry of the seven `.abk` / `.ast` pairs (R98: the\narchive member = the loose copy, byte-identical). Per entry: channel config, loop flag, R98 framing (blocks, Sigma samples, refusal), and\nfor non-loop cc 0 / 1 entries the decoded sample count vs Sigma block samples (the R100 admission rule: the decoder walks frames itself;\nthe NHL 09 packet-header word is not read as a frame count). cc 3 / 5 and loop entries are counted as \"listed only\" (their per-pair /\nstub rules are separate contracts). Decoder = the local research oracle (FFmpeg `xma2`, version recorded), not Studio's helper;\nagreement is decoder acceptance evidence only - nothing listened to; WAVs deleted immediately.\nUsage: python r131_x360_09_ast_xma_sweep.py <out.json> --scratch DIR [--limit N]\n",
+ "ffmpeg_version": "",
+ "inputs": {
+  "data0.big:playercalls.abk": "52fd321b60d0911d75379f9efadb5b58a08f5b42474263a80a2a9b47a6bae31b",
+  "data0.big:playercalls.ast": "372543ad6151d12818ff78cd67d3bf44c20436ad11a815fe609cfdb8de56014d",
+  "audioboot.big:crowds.abk": "f5e8ba1afb24e756cd3cbcab76dc18339dd482455efa62d0fea0f64ece966dd5",
+  "data0.big:crowds.ast": "a963728b686eb5d2cc18e2bff307c2747b1f0e8ba8038f452f43a4baab079ef0",
+  "audioboot.big:sfx.abk": "3275847f8e8b9b31471fdb9c0b9d6023d73f183e157fbab2f0c29b42680b9cc0",
+  "data0.big:sfx.ast": "5e879935f03cad903408222fd536bb8b8cfb4c9c5c88e861c176b7c44254b624",
+  "data0.big:colors1.abk": "a01c11f9bc2884841cb3550e1ea70884eef39790f45deddd86eebc691f0e840d",
+  "data0.big:colors1.ast": "16178401f2e56527cf27276d3bb840df2d86bda2d4bf8c2ad3d022dd90d1e585",
+  "data0.big:colors2.abk": "5cc6f7b9ca5afa39cc24c57e87319627767a0f3c781e1eab26c4d56acb6cf8cd",
+  "data0.big:colors2.ast": "72e3cf7ab12dde4403f3ccfce2b6b79509e2b9d10b54803f7b374e0f5f737bb5",
+  "data0.big:createplayer.abk": "a262fafd2f38df0033621206a4800838ba21e65c8865cd75c52af287d8a138ab",
+  "data0.big:createplayer.ast": "60f881b21923057189ddfb47b787d43fcce8f93f28deb73dbfe0781c928900c1",
+  "data0.big:practicerink.abk": "f7ee5eafc690896b21645fb027d80beb6b8a0abd3538406faed44e332640037d",
+  "data0.big:practicerink.ast": "62d790e4bcbe9b0de4580565f3ea34bf7efb9fe17597e710e1ad52ab222f77a9"
+ },
+ "banks": {
+  "playercalls": {
+   "sources": [
+    "data0.big",
+    "data0.big"
+   ],
+   "entries": 51,
+   "results": {
+    "cc0: exact": 51
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "crowds": {
+   "sources": [
+    "audioboot.big",
+    "data0.big"
+   ],
+   "entries": 22,
+   "results": {
+    "cc3 loop: listed only": 1,
+    "cc1: exact": 21
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "sfx": {
+   "sources": [
+    "audioboot.big",
+    "data0.big"
+   ],
+   "entries": 33,
+   "results": {
+    "cc0: exact": 12,
+    "cc1: exact": 21
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "colors1": {
+   "sources": [
+    "data0.big",
+    "data0.big"
+   ],
+   "entries": 165,
+   "results": {
+    "cc0: exact": 158,
+    "cc1: exact": 7
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "colors2": {
+   "sources": [
+    "data0.big",
+    "data0.big"
+   ],
+   "entries": 165,
+   "results": {
+    "cc0: exact": 164,
+    "cc1: exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "createplayer": {
+   "sources": [
+    "data0.big",
+    "data0.big"
+   ],
+   "entries": 11,
+   "results": {
+    "cc0: exact": 11
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "practicerink": {
+   "sources": [
+    "data0.big",
+    "data0.big"
+   ],
+   "entries": 26,
+   "results": {
+    "cc1 loop: listed only": 1,
+    "cc0: exact": 25
+   },
+   "failures": [],
+   "failure_count": 0
+  }
+ },
+ "totals": {
+  "cc0: exact": 421,
+  "cc3 loop: listed only": 1,
+  "cc1: exact": 50,
+  "cc1 loop: listed only": 1
+ }
+}

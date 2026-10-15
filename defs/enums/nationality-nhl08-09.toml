@@ -1,0 +1,121 @@
+# Title-scoped nationality labels: NHL 08 / 09 (research C16 / R120b, 26 Sep 2026; developer receipt 28).
+#
+# Nationality codes are renumbered between titles as countries are inserted into the game's list. The
+# title-owned evidence is each national team's roster in the international league: its players share
+# one `intlcountry` code (R120b, dominant share 1.00–1.00). Only those 21 codes are labelled here, with the
+# country the national team represents. Every other code (including 127, which NHL 08 / 09 do not use) has no title-owned label
+# source on this title and is shown as a number — no mapping is carried over from NHL Legacy or another
+# title, and none is inferred from how often a code occurs. PS3 copies of these titles are
+# byte-identical to the measured Xbox 360 databases (R120 aliases).
+#
+# Display on NHL 08 / 09: the player page keeps the existing NHL 07 country table
+# (`attributes::apply_gen6_geo_vocab`, applied by schema shape: the 3-bit style field of NHL 07 - 09),
+# which agrees with all 21 national-team codes below; this file is what the registry and the import
+# use, so an import resolves only title-owned codes.
+#
+# Labels never authorise or forbid a write: any in-range code round-trips (range validation lives in
+# the metadata), and the import resolves a corpus country only to a code listed here.
+
+name = "Nationality"
+confidence = "Confirmed"
+notes = """
+Per-title national-team codes, NHL 08 / 09. Source rows: data/r120b-nationality-label-table.json (matrix),
+sources xbox360-nhl08, xbox360-nhl09. Birth-state country codes (66 and up) follow the same numbering by continuity only
+(R120 section 7); Studio applies that in code with its own provenance note.
+"""
+
+[source]
+kind = "research-title-owned"
+description = "national-team rosters of NHL 08 / 09 (research R120b, 26 Sep 2026) â€” used by the registry and the import; the player page shows the existing NHL 07 country table, which agrees on these 21 codes"
+
+[scope]
+games = ["nhl08", "nhl09"]
+
+[[bindings]]
+field_name = "Nationality"
+field_raw_id = "Lelh"
+table_raw_id = "ubPc"
+
+[[entries]]
+raw = 0
+label = "Canada"
+
+[[entries]]
+raw = 14
+label = "United States"
+
+[[entries]]
+raw = 66
+label = "Denmark"
+
+[[entries]]
+raw = 67
+label = "Finland"
+
+[[entries]]
+raw = 68
+label = "Norway"
+
+[[entries]]
+raw = 69
+label = "Sweden"
+
+[[entries]]
+raw = 70
+label = "Belarus"
+
+[[entries]]
+raw = 72
+label = "Kazakhstan"
+
+[[entries]]
+raw = 73
+label = "Latvia"
+
+[[entries]]
+raw = 75
+label = "Russia"
+
+[[entries]]
+raw = 76
+label = "Ukraine"
+
+[[entries]]
+raw = 77
+label = "Austria"
+
+[[entries]]
+raw = 79
+label = "Czech Republic"
+
+[[entries]]
+raw = 80
+label = "Great Britain"
+
+[[entries]]
+raw = 81
+label = "France"
+
+[[entries]]
+raw = 82
+label = "Germany"
+
+[[entries]]
+raw = 84
+label = "Italy"
+
+[[entries]]
+raw = 86
+label = "Poland"
+
+[[entries]]
+raw = 88
+label = "Slovakia"
+
+[[entries]]
+raw = 89
+label = "Switzerland"
+
+[[entries]]
+raw = 96
+label = "Japan"

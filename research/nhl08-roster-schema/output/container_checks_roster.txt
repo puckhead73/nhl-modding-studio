@@ -1,0 +1,49 @@
+$ python research/nhl08-roster-schema/scripts/container_checks.py "anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658" anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml --group rosters
+file anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658
+size 1238480 (0x12e5d0)
+magic 'Rosters'  checksum_a stored 70380061 computed(crc32/ieee [0x1C..EOF]) 70380061 MATCH  version word 3  word@0x18 0
+embedded TDB headers: ['@0x1c size 14780 tables 30']
+bytes between container header and TDB: 0 (zero: 0, nonzero: 0)
+inner TDB @0x1c: version 8 big_endian True db_size 14780 (0x39bc) word@0x0C 0x0 tables 30
+inner CRCs: file header ok; prior_crc ok 30/30; table header_crc ok 30/30; EOF crc stored b2f2be2c computed b2f2be2c ok
+data_alloc_type distribution: {2: 30}
+(word@+0x10, word@+0x18, index_count, u16@+0x1E, word@+0x20) distribution: {(0, 65535, 0, 0, 0): 30}
+records: sum(current) 0  sum(max) 0  tables with cur>0: 0  tables with max>cur: 0  max==cur everywhere: True
+record_len_bits == record_len_bytes*8-1 for every table: True
+tail after inner TDB: 1223672 bytes (0x39d8..0x12e5d0), all zero: True
+table blocks contiguous in directory order: yes ; last block ends at 0x39d4, db_size end 0x39d8 (EOF crc occupies the last 4 bytes: True)
+
+save  role    parent parent name                     recB capacity  capacity source                 bytes
+gKeN  insert  lVMf  exhibitiongoalieequipment         68       60  declared                         4080
+JJDo  update  lVMf  exhibitiongoalieequipment         68      315  -1 (parent max_records)         21420
+hTDj  update  NDEo  customteamequipmenttable          32      600  -1 (parent max_records)         19200
+BlkH  insert  ajmx  exhibitionskaterequipment         12      300  declared                         3600
+MSZu  update  ajmx  exhibitionskaterequipment         12     2647  -1 (parent max_records)         31764
+mASv  update  oYeE  exhibitionteamstrategies           8      138  -1 (parent max_records)          1104
+KjDh  update  Roup  custompalettetable                 4       20  -1 (parent max_records)            80
+sAud  insert  nAUy  stockgoalieequipment             148       60  declared                         8880
+aGgS  delete  nAUy  stockgoalieequipment               4      236  -1 (parent max_records)           944
+VDLc  update  nAUy  stockgoalieequipment             148      236  -1 (parent max_records)         34928
+sAMA  insert  QEoV  exhibitionfreeagents               4      600  declared                         2400
+mGOv  delete  QEoV  exhibitionfreeagents               4      156  -1 (parent max_records)           624
+SREo  update  ttOk  exhibitionteams                  200      138  -1 (parent max_records)         27600
+PPVt  update  Vzjq  customfacetable                    8      180  -1 (parent max_records)          1440
+LZbD  insert  caBZ  exhibitionplayers                  4     1000  declared                         4000
+Frps  delete  caBZ  exhibitionplayers                  4     3257  -1 (parent max_records)         13028
+qWeu  update  caBZ  exhibitionplayers                  4     3257  -1 (parent max_records)         13028
+ibGM  insert  ulGe  exhibitionrostertable             16     1500  declared                        24000
+AtUj  delete  ulGe  exhibitionrostertable              4     2525  -1 (parent max_records)         10100
+vozd  update  ulGe  exhibitionrostertable             16     2525  -1 (parent max_records)         40400
+UHgc  update  vbHh  stockteamequipmenttable           32     8000  -1 (parent max_records)        256000
+PsvH  insert  cPbu  exhibitionplayerbiotable         184      360  declared                        66240
+CvSu  update  cPbu  exhibitionplayerbiotable         184     2962  -1 (parent max_records)        545008
+TUaR  update  OEtS  exhibitionarena                  104      138  -1 (parent max_records)         14352
+kbtS  insert  yvSd  exhibitionskaterai                24      300  declared                         7200
+RosT  update  yvSd  exhibitionskaterai                24     2647  -1 (parent max_records)         63528
+PxTk  insert  yuHm  exhibitiongoalieai                20       60  declared                         1200
+uyGF  update  yuHm  exhibitiongoalieai                20      315  -1 (parent max_records)          6300
+yJYN  insert  sozv  stockteamcolorstable               8       10  declared                           80
+XGls  update  sozv  stockteamcolorstable               8      143  -1 (parent max_records)          1144
+sum(capacity x rec_bytes) = 1223672 ; zero tail = 1223672 ; difference = 0 ; schema(db_size) + capacity = 1238452 ; file - TDB base = 1238452
+parents in save group 'rosters' with no companion in this save: none
+

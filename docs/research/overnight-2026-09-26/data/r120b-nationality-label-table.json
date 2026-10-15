@@ -1,0 +1,3576 @@
+{
+ "note": "R120b - per-title nationality code table from title-owned evidence (R120 national-team rosters: dominant `intlcountry` code of each\nnational team's roster players) compared with Studio's scope-free enum `defs/enums/nationality.toml` (Legacy-anchored, read-only here).\nFor each source and national team abbreviation: dominant code, share, roster size; the label Studio would show for that code; whether\nthat label names the team's country (by a fixed abbreviation -> country-name map for the national-team abbreviations only).\nUsage: python r120b_nationality_label_table.py <r120.json> <nationality.toml> <out.json>\n",
+ "studio_enum": {
+  "0": "Canada",
+  "14": "United States",
+  "67": "Finland",
+  "74": "Latvia",
+  "76": "Russia",
+  "82": "Czech Republic",
+  "66": "Denmark",
+  "68": "Norway",
+  "69": "Sweden",
+  "70": "Belarus",
+  "71": "Estonia",
+  "72": "Kazakhstan",
+  "75": "Lithuania",
+  "77": "Ukraine",
+  "78": "Austria",
+  "81": "Croatia",
+  "83": "England",
+  "84": "France",
+  "85": "Germany",
+  "86": "Hungary",
+  "87": "Italy",
+  "89": "Netherlands",
+  "91": "Poland",
+  "92": "Romania",
+  "93": "Scotland",
+  "95": "Slovakia",
+  "96": "Slovenia",
+  "97": "Switzerland",
+  "98": "Australia",
+  "106": "Fiji",
+  "109": "Japan",
+  "110": "Liberia",
+  "127": "-- N/A --"
+ },
+ "sources": {
+  "xbox360-nhl08": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 79,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": null
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 81,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Croatia",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": false
+    },
+    "GBR": {
+     "code": 80,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": null
+    },
+    "GER": {
+     "code": 82,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": false
+    },
+    "ITA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "France",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": false
+    },
+    "JPN": {
+     "code": 96,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Slovenia",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": false
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 73,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": null
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 86,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Hungary",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": false
+    },
+    "RUS": {
+     "code": 75,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Lithuania",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": false
+    },
+    "SLV": {
+     "code": 88,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": null
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 89,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Netherlands",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": false
+    },
+    "UKR": {
+     "code": 76,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Russia",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": false
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhl09": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 77,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Ukraine",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 79,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": null
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 29,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 81,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Croatia",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": false
+    },
+    "GBR": {
+     "code": 80,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": null
+    },
+    "GER": {
+     "code": 82,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": false
+    },
+    "ITA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "France",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": false
+    },
+    "JPN": {
+     "code": 96,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Slovenia",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": false
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 73,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": null
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 86,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Hungary",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": false
+    },
+    "RUS": {
+     "code": 75,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Lithuania",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": false
+    },
+    "SLV": {
+     "code": 88,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": null,
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": null
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 89,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Netherlands",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": false
+    },
+    "UKR": {
+     "code": 76,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Russia",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": false
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhl10": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 0.964,
+     "players": 28,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 81,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Croatia",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": false
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 83,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "England",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": false
+    },
+    "GBR": {
+     "code": 82,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 84,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "France",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": false
+    },
+    "ITA": {
+     "code": 86,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Hungary",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": false
+    },
+    "JPN": {
+     "code": 105,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": null,
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": null
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 89,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Netherlands",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": false
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 93,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Scotland",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": false
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 95,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Slovakia",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": false
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhl11": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 108,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": null,
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": null
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhl12": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 0.966,
+     "players": 29,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 108,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": null,
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": null
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhl13": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 0.964,
+     "players": 28,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhl14": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 0.964,
+     "players": 28,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhl15": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.903,
+     "players": 31,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 0.97,
+     "players": 33,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 0.973,
+     "players": 37,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 0.912,
+     "players": 34,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 0.958,
+     "players": 24,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 0.962,
+     "players": 26,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "xbox360-nhllegacy": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.783,
+     "players": 23,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 0.962,
+     "players": 26,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl15": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.903,
+     "players": 31,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 33,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 36,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 0.971,
+     "players": 34,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 0.962,
+     "players": 26,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl16": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.783,
+     "players": 23,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 0.962,
+     "players": 26,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl17": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.792,
+     "players": 24,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 0.957,
+     "players": 23,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 0.957,
+     "players": 23,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.958,
+     "players": 24,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl18": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.938,
+     "players": 32,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 0.957,
+     "players": 23,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 0.897,
+     "players": 29,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 0.957,
+     "players": 23,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 0.957,
+     "players": 23,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 0.92,
+     "players": 25,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 29,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl19-base": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.92,
+     "players": 25,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 0.917,
+     "players": 24,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 33,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 28,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 31,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 0.783,
+     "players": 23,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 0.897,
+     "players": 29,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 0.917,
+     "players": 24,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 34,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 0.968,
+     "players": 31,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 0.963,
+     "players": 27,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl21": {
+   "width": 8,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 39,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 33,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 0.962,
+     "players": 26,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 32,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 0.958,
+     "players": 24,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 0.955,
+     "players": 22,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 31,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 29,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 29,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 31,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 1.0,
+     "players": 34,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 39,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl20-real": {
+   "width": 8,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 34,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 27,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 0.958,
+     "players": 24,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 0.905,
+     "players": 21,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 0.955,
+     "players": 22,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 0.966,
+     "players": 29,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 0.952,
+     "players": 21,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 35,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl19-patch56": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 29,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 0.962,
+     "players": 26,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 31,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 0.955,
+     "players": 22,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 31,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 1.0,
+     "players": 31,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  },
+  "ps4-nhl15-patch00": {
+   "width": 7,
+   "teams": {
+    "AUS": {
+     "code": 78,
+     "share": 0.903,
+     "players": 31,
+     "studio_label": "Austria",
+     "abbr_country": "Austria",
+     "studio_label_matches_abbr": null
+    },
+    "BEL": {
+     "code": 70,
+     "share": 1.0,
+     "players": 30,
+     "studio_label": "Belarus",
+     "abbr_country": "Belarus",
+     "studio_label_matches_abbr": null
+    },
+    "CAN": {
+     "code": 0,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Canada",
+     "abbr_country": "Canada",
+     "studio_label_matches_abbr": true
+    },
+    "CZE": {
+     "code": 82,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Czech Republic",
+     "abbr_country": "Czech Republic",
+     "studio_label_matches_abbr": true
+    },
+    "DEN": {
+     "code": 66,
+     "share": 1.0,
+     "players": 33,
+     "studio_label": "Denmark",
+     "abbr_country": "Denmark",
+     "studio_label_matches_abbr": true
+    },
+    "FIN": {
+     "code": 67,
+     "share": 1.0,
+     "players": 23,
+     "studio_label": "Finland",
+     "abbr_country": "Finland",
+     "studio_label_matches_abbr": true
+    },
+    "FRA": {
+     "code": 84,
+     "share": 1.0,
+     "players": 36,
+     "studio_label": "France",
+     "abbr_country": "France",
+     "studio_label_matches_abbr": true
+    },
+    "GBR": {
+     "code": 83,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "England",
+     "abbr_country": "Great Britain",
+     "studio_label_matches_abbr": false
+    },
+    "GER": {
+     "code": 85,
+     "share": 1.0,
+     "players": 20,
+     "studio_label": "Germany",
+     "abbr_country": "Germany",
+     "studio_label_matches_abbr": true
+    },
+    "ITA": {
+     "code": 87,
+     "share": 0.967,
+     "players": 30,
+     "studio_label": "Italy",
+     "abbr_country": "Italy",
+     "studio_label_matches_abbr": true
+    },
+    "JPN": {
+     "code": 109,
+     "share": 1.0,
+     "players": 26,
+     "studio_label": "Japan",
+     "abbr_country": "Japan",
+     "studio_label_matches_abbr": true
+    },
+    "KAZ": {
+     "code": 72,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Kazakhstan",
+     "abbr_country": "Kazakhstan",
+     "studio_label_matches_abbr": true
+    },
+    "LAT": {
+     "code": 74,
+     "share": 0.971,
+     "players": 34,
+     "studio_label": "Latvia",
+     "abbr_country": "Latvia",
+     "studio_label_matches_abbr": true
+    },
+    "NOR": {
+     "code": 68,
+     "share": 1.0,
+     "players": 24,
+     "studio_label": "Norway",
+     "abbr_country": "Norway",
+     "studio_label_matches_abbr": true
+    },
+    "POL": {
+     "code": 91,
+     "share": 0.962,
+     "players": 26,
+     "studio_label": "Poland",
+     "abbr_country": "Poland",
+     "studio_label_matches_abbr": true
+    },
+    "RUS": {
+     "code": 76,
+     "share": 1.0,
+     "players": 22,
+     "studio_label": "Russia",
+     "abbr_country": "Russia",
+     "studio_label_matches_abbr": true
+    },
+    "SLV": {
+     "code": 95,
+     "share": 1.0,
+     "players": 21,
+     "studio_label": "Slovakia",
+     "abbr_country": "Slovakia",
+     "studio_label_matches_abbr": true
+    },
+    "SWE": {
+     "code": 69,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Sweden",
+     "abbr_country": "Sweden",
+     "studio_label_matches_abbr": true
+    },
+    "SWI": {
+     "code": 97,
+     "share": 0.96,
+     "players": 25,
+     "studio_label": "Switzerland",
+     "abbr_country": "Switzerland",
+     "studio_label_matches_abbr": true
+    },
+    "UKR": {
+     "code": 77,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "Ukraine",
+     "abbr_country": "Ukraine",
+     "studio_label_matches_abbr": true
+    },
+    "USA": {
+     "code": 14,
+     "share": 1.0,
+     "players": 25,
+     "studio_label": "United States",
+     "abbr_country": "United States",
+     "studio_label_matches_abbr": true
+    }
+   }
+  }
+ },
+ "matrix": {
+  "AUS": {
+   "xbox360-nhl08": 77,
+   "xbox360-nhl09": 77,
+   "xbox360-nhl10": 78,
+   "xbox360-nhl11": 78,
+   "xbox360-nhl12": 78,
+   "xbox360-nhl13": 78,
+   "xbox360-nhl14": 78,
+   "xbox360-nhl15": 78,
+   "xbox360-nhllegacy": 78,
+   "ps4-nhl15": 78,
+   "ps4-nhl16": 78,
+   "ps4-nhl17": 78,
+   "ps4-nhl18": 78,
+   "ps4-nhl19-base": 78,
+   "ps4-nhl21": 78,
+   "ps4-nhl20-real": 78,
+   "ps4-nhl19-patch56": 78,
+   "ps4-nhl15-patch00": 78
+  },
+  "BEL": {
+   "xbox360-nhl08": 70,
+   "xbox360-nhl09": 70,
+   "xbox360-nhl10": 70,
+   "xbox360-nhl11": 70,
+   "xbox360-nhl12": 70,
+   "xbox360-nhl13": 70,
+   "xbox360-nhl14": 70,
+   "xbox360-nhl15": 70,
+   "xbox360-nhllegacy": 70,
+   "ps4-nhl15": 70,
+   "ps4-nhl16": 70,
+   "ps4-nhl17": 70,
+   "ps4-nhl18": 70,
+   "ps4-nhl19-base": 70,
+   "ps4-nhl21": 70,
+   "ps4-nhl20-real": 70,
+   "ps4-nhl19-patch56": 70,
+   "ps4-nhl15-patch00": 70
+  },
+  "CAN": {
+   "xbox360-nhl08": 0,
+   "xbox360-nhl09": 0,
+   "xbox360-nhl10": 0,
+   "xbox360-nhl11": 0,
+   "xbox360-nhl12": 0,
+   "xbox360-nhl13": 0,
+   "xbox360-nhl14": 0,
+   "xbox360-nhl15": 0,
+   "xbox360-nhllegacy": 0,
+   "ps4-nhl15": 0,
+   "ps4-nhl16": 0,
+   "ps4-nhl17": 0,
+   "ps4-nhl18": 0,
+   "ps4-nhl19-base": 0,
+   "ps4-nhl21": 0,
+   "ps4-nhl20-real": 0,
+   "ps4-nhl19-patch56": 0,
+   "ps4-nhl15-patch00": 0
+  },
+  "CZE": {
+   "xbox360-nhl08": 79,
+   "xbox360-nhl09": 79,
+   "xbox360-nhl10": 81,
+   "xbox360-nhl11": 82,
+   "xbox360-nhl12": 82,
+   "xbox360-nhl13": 82,
+   "xbox360-nhl14": 82,
+   "xbox360-nhl15": 82,
+   "xbox360-nhllegacy": 82,
+   "ps4-nhl15": 82,
+   "ps4-nhl16": 82,
+   "ps4-nhl17": 82,
+   "ps4-nhl18": 82,
+   "ps4-nhl19-base": 82,
+   "ps4-nhl21": 82,
+   "ps4-nhl20-real": 82,
+   "ps4-nhl19-patch56": 82,
+   "ps4-nhl15-patch00": 82
+  },
+  "DEN": {
+   "xbox360-nhl08": 66,
+   "xbox360-nhl09": 66,
+   "xbox360-nhl10": 66,
+   "xbox360-nhl11": 66,
+   "xbox360-nhl12": 66,
+   "xbox360-nhl13": 66,
+   "xbox360-nhl14": 66,
+   "xbox360-nhl15": 66,
+   "xbox360-nhllegacy": 66,
+   "ps4-nhl15": 66,
+   "ps4-nhl16": 66,
+   "ps4-nhl17": 66,
+   "ps4-nhl18": 66,
+   "ps4-nhl19-base": 66,
+   "ps4-nhl21": 66,
+   "ps4-nhl20-real": 66,
+   "ps4-nhl19-patch56": 66,
+   "ps4-nhl15-patch00": 66
+  },
+  "FIN": {
+   "xbox360-nhl08": 67,
+   "xbox360-nhl09": 67,
+   "xbox360-nhl10": 67,
+   "xbox360-nhl11": 67,
+   "xbox360-nhl12": 67,
+   "xbox360-nhl13": 67,
+   "xbox360-nhl14": 67,
+   "xbox360-nhl15": 67,
+   "xbox360-nhllegacy": 67,
+   "ps4-nhl15": 67,
+   "ps4-nhl16": 67,
+   "ps4-nhl17": 67,
+   "ps4-nhl18": 67,
+   "ps4-nhl19-base": 67,
+   "ps4-nhl21": 67,
+   "ps4-nhl20-real": 67,
+   "ps4-nhl19-patch56": 67,
+   "ps4-nhl15-patch00": 67
+  },
+  "FRA": {
+   "xbox360-nhl08": 81,
+   "xbox360-nhl09": 81,
+   "xbox360-nhl10": 83,
+   "xbox360-nhl11": 84,
+   "xbox360-nhl12": 84,
+   "xbox360-nhl13": 84,
+   "xbox360-nhl14": 84,
+   "xbox360-nhl15": 84,
+   "xbox360-nhllegacy": 84,
+   "ps4-nhl15": 84,
+   "ps4-nhl16": 84,
+   "ps4-nhl17": 84,
+   "ps4-nhl18": 84,
+   "ps4-nhl19-base": 84,
+   "ps4-nhl21": 84,
+   "ps4-nhl20-real": 84,
+   "ps4-nhl19-patch56": 84,
+   "ps4-nhl15-patch00": 84
+  },
+  "GBR": {
+   "xbox360-nhl08": 80,
+   "xbox360-nhl09": 80,
+   "xbox360-nhl10": 82,
+   "xbox360-nhl11": 83,
+   "xbox360-nhl12": 83,
+   "xbox360-nhl13": 83,
+   "xbox360-nhl14": 83,
+   "xbox360-nhl15": 83,
+   "xbox360-nhllegacy": 83,
+   "ps4-nhl15": 83,
+   "ps4-nhl16": 83,
+   "ps4-nhl17": 83,
+   "ps4-nhl18": 83,
+   "ps4-nhl19-base": 83,
+   "ps4-nhl21": 83,
+   "ps4-nhl20-real": 83,
+   "ps4-nhl19-patch56": 83,
+   "ps4-nhl15-patch00": 83
+  },
+  "GER": {
+   "xbox360-nhl08": 82,
+   "xbox360-nhl09": 82,
+   "xbox360-nhl10": 84,
+   "xbox360-nhl11": 85,
+   "xbox360-nhl12": 85,
+   "xbox360-nhl13": 85,
+   "xbox360-nhl14": 85,
+   "xbox360-nhl15": 85,
+   "xbox360-nhllegacy": 85,
+   "ps4-nhl15": 85,
+   "ps4-nhl16": 85,
+   "ps4-nhl17": 85,
+   "ps4-nhl18": 85,
+   "ps4-nhl19-base": 85,
+   "ps4-nhl21": 85,
+   "ps4-nhl20-real": 85,
+   "ps4-nhl19-patch56": 85,
+   "ps4-nhl15-patch00": 85
+  },
+  "ITA": {
+   "xbox360-nhl08": 84,
+   "xbox360-nhl09": 84,
+   "xbox360-nhl10": 86,
+   "xbox360-nhl11": 87,
+   "xbox360-nhl12": 87,
+   "xbox360-nhl13": 87,
+   "xbox360-nhl14": 87,
+   "xbox360-nhl15": 87,
+   "xbox360-nhllegacy": 87,
+   "ps4-nhl15": 87,
+   "ps4-nhl16": 87,
+   "ps4-nhl17": 87,
+   "ps4-nhl18": 87,
+   "ps4-nhl19-base": 87,
+   "ps4-nhl21": 87,
+   "ps4-nhl20-real": 87,
+   "ps4-nhl19-patch56": 87,
+   "ps4-nhl15-patch00": 87
+  },
+  "JPN": {
+   "xbox360-nhl08": 96,
+   "xbox360-nhl09": 96,
+   "xbox360-nhl10": 105,
+   "xbox360-nhl11": 108,
+   "xbox360-nhl12": 108,
+   "xbox360-nhl13": 109,
+   "xbox360-nhl14": 109,
+   "xbox360-nhl15": 109,
+   "xbox360-nhllegacy": 109,
+   "ps4-nhl15": 109,
+   "ps4-nhl16": 109,
+   "ps4-nhl17": 109,
+   "ps4-nhl18": 109,
+   "ps4-nhl19-base": 109,
+   "ps4-nhl21": 109,
+   "ps4-nhl20-real": 109,
+   "ps4-nhl19-patch56": 109,
+   "ps4-nhl15-patch00": 109
+  },
+  "KAZ": {
+   "xbox360-nhl08": 72,
+   "xbox360-nhl09": 72,
+   "xbox360-nhl10": 72,
+   "xbox360-nhl11": 72,
+   "xbox360-nhl12": 72,
+   "xbox360-nhl13": 72,
+   "xbox360-nhl14": 72,
+   "xbox360-nhl15": 72,
+   "xbox360-nhllegacy": 72,
+   "ps4-nhl15": 72,
+   "ps4-nhl16": 72,
+   "ps4-nhl17": 72,
+   "ps4-nhl18": 72,
+   "ps4-nhl19-base": 72,
+   "ps4-nhl21": 72,
+   "ps4-nhl20-real": 72,
+   "ps4-nhl19-patch56": 72,
+   "ps4-nhl15-patch00": 72
+  },
+  "LAT": {
+   "xbox360-nhl08": 73,
+   "xbox360-nhl09": 73,
+   "xbox360-nhl10": 74,
+   "xbox360-nhl11": 74,
+   "xbox360-nhl12": 74,
+   "xbox360-nhl13": 74,
+   "xbox360-nhl14": 74,
+   "xbox360-nhl15": 74,
+   "xbox360-nhllegacy": 74,
+   "ps4-nhl15": 74,
+   "ps4-nhl16": 74,
+   "ps4-nhl17": 74,
+   "ps4-nhl18": 74,
+   "ps4-nhl19-base": 74,
+   "ps4-nhl21": 74,
+   "ps4-nhl20-real": 74,
+   "ps4-nhl19-patch56": 74,
+   "ps4-nhl15-patch00": 74
+  },
+  "NOR": {
+   "xbox360-nhl08": 68,
+   "xbox360-nhl09": 68,
+   "xbox360-nhl10": 68,
+   "xbox360-nhl11": 68,
+   "xbox360-nhl12": 68,
+   "xbox360-nhl13": 68,
+   "xbox360-nhl14": 68,
+   "xbox360-nhl15": 68,
+   "xbox360-nhllegacy": 68,
+   "ps4-nhl15": 68,
+   "ps4-nhl16": 68,
+   "ps4-nhl17": 68,
+   "ps4-nhl18": 68,
+   "ps4-nhl19-base": 68,
+   "ps4-nhl21": 68,
+   "ps4-nhl20-real": 68,
+   "ps4-nhl19-patch56": 68,
+   "ps4-nhl15-patch00": 68
+  },
+  "POL": {
+   "xbox360-nhl08": 86,
+   "xbox360-nhl09": 86,
+   "xbox360-nhl10": 89,
+   "xbox360-nhl11": 91,
+   "xbox360-nhl12": 91,
+   "xbox360-nhl13": 91,
+   "xbox360-nhl14": 91,
+   "xbox360-nhl15": 91,
+   "xbox360-nhllegacy": 91,
+   "ps4-nhl15": 91,
+   "ps4-nhl16": 91,
+   "ps4-nhl17": 91,
+   "ps4-nhl18": 91,
+   "ps4-nhl19-base": 91,
+   "ps4-nhl21": 91,
+   "ps4-nhl20-real": 91,
+   "ps4-nhl19-patch56": 91,
+   "ps4-nhl15-patch00": 91
+  },
+  "RUS": {
+   "xbox360-nhl08": 75,
+   "xbox360-nhl09": 75,
+   "xbox360-nhl10": 76,
+   "xbox360-nhl11": 76,
+   "xbox360-nhl12": 76,
+   "xbox360-nhl13": 76,
+   "xbox360-nhl14": 76,
+   "xbox360-nhl15": 76,
+   "xbox360-nhllegacy": 76,
+   "ps4-nhl15": 76,
+   "ps4-nhl16": 76,
+   "ps4-nhl17": 76,
+   "ps4-nhl18": 76,
+   "ps4-nhl19-base": 76,
+   "ps4-nhl21": 76,
+   "ps4-nhl20-real": 76,
+   "ps4-nhl19-patch56": 76,
+   "ps4-nhl15-patch00": 76
+  },
+  "SLV": {
+   "xbox360-nhl08": 88,
+   "xbox360-nhl09": 88,
+   "xbox360-nhl10": 93,
+   "xbox360-nhl11": 95,
+   "xbox360-nhl12": 95,
+   "xbox360-nhl13": 95,
+   "xbox360-nhl14": 95,
+   "xbox360-nhl15": 95,
+   "xbox360-nhllegacy": 95,
+   "ps4-nhl15": 95,
+   "ps4-nhl16": 95,
+   "ps4-nhl17": 95,
+   "ps4-nhl18": 95,
+   "ps4-nhl19-base": 95,
+   "ps4-nhl21": 95,
+   "ps4-nhl20-real": 95,
+   "ps4-nhl19-patch56": 95,
+   "ps4-nhl15-patch00": 95
+  },
+  "SWE": {
+   "xbox360-nhl08": 69,
+   "xbox360-nhl09": 69,
+   "xbox360-nhl10": 69,
+   "xbox360-nhl11": 69,
+   "xbox360-nhl12": 69,
+   "xbox360-nhl13": 69,
+   "xbox360-nhl14": 69,
+   "xbox360-nhl15": 69,
+   "xbox360-nhllegacy": 69,
+   "ps4-nhl15": 69,
+   "ps4-nhl16": 69,
+   "ps4-nhl17": 69,
+   "ps4-nhl18": 69,
+   "ps4-nhl19-base": 69,
+   "ps4-nhl21": 69,
+   "ps4-nhl20-real": 69,
+   "ps4-nhl19-patch56": 69,
+   "ps4-nhl15-patch00": 69
+  },
+  "SWI": {
+   "xbox360-nhl08": 89,
+   "xbox360-nhl09": 89,
+   "xbox360-nhl10": 95,
+   "xbox360-nhl11": 97,
+   "xbox360-nhl12": 97,
+   "xbox360-nhl13": 97,
+   "xbox360-nhl14": 97,
+   "xbox360-nhl15": 97,
+   "xbox360-nhllegacy": 97,
+   "ps4-nhl15": 97,
+   "ps4-nhl16": 97,
+   "ps4-nhl17": 97,
+   "ps4-nhl18": 97,
+   "ps4-nhl19-base": 97,
+   "ps4-nhl21": 97,
+   "ps4-nhl20-real": 97,
+   "ps4-nhl19-patch56": 97,
+   "ps4-nhl15-patch00": 97
+  },
+  "UKR": {
+   "xbox360-nhl08": 76,
+   "xbox360-nhl09": 76,
+   "xbox360-nhl10": 77,
+   "xbox360-nhl11": 77,
+   "xbox360-nhl12": 77,
+   "xbox360-nhl13": 77,
+   "xbox360-nhl14": 77,
+   "xbox360-nhl15": 77,
+   "xbox360-nhllegacy": 77,
+   "ps4-nhl15": 77,
+   "ps4-nhl16": 77,
+   "ps4-nhl17": 77,
+   "ps4-nhl18": 77,
+   "ps4-nhl19-base": 77,
+   "ps4-nhl21": 77,
+   "ps4-nhl20-real": 77,
+   "ps4-nhl19-patch56": 77,
+   "ps4-nhl15-patch00": 77
+  },
+  "USA": {
+   "xbox360-nhl08": 14,
+   "xbox360-nhl09": 14,
+   "xbox360-nhl10": 14,
+   "xbox360-nhl11": 14,
+   "xbox360-nhl12": 14,
+   "xbox360-nhl13": 14,
+   "xbox360-nhl14": 14,
+   "xbox360-nhl15": 14,
+   "xbox360-nhllegacy": 14,
+   "ps4-nhl15": 14,
+   "ps4-nhl16": 14,
+   "ps4-nhl17": 14,
+   "ps4-nhl18": 14,
+   "ps4-nhl19-base": 14,
+   "ps4-nhl21": 14,
+   "ps4-nhl20-real": 14,
+   "ps4-nhl19-patch56": 14,
+   "ps4-nhl15-patch00": 14
+  }
+ }
+}

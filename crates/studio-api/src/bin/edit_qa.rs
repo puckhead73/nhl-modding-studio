@@ -169,7 +169,11 @@ fn roster_container(dir: &Path) -> Option<PathBuf> {
 
 fn discover(args: &Args) -> Vec<Cell> {
     let mut cells = Vec::new();
-    let plat_ok = |d: &str| args.platforms.as_ref().is_none_or(|v| v.iter().any(|p| p == d));
+    let plat_ok = |d: &str| {
+        args.platforms
+            .as_ref()
+            .is_none_or(|v| v.iter().any(|p| p == d))
+    };
     let game_ok = |g: &str| args.games.as_ref().is_none_or(|v| v.iter().any(|x| x == g));
 
     let Ok(plats) = fs::read_dir(&args.anchors_root) else {
@@ -177,11 +181,15 @@ fn discover(args: &Args) -> Vec<Cell> {
     };
     for plat in plats.flatten().filter(|e| e.path().is_dir()) {
         let platform_dir = plat.file_name().to_string_lossy().into_owned();
-        let Some(platform) = platform_of(&platform_dir) else { continue };
+        let Some(platform) = platform_of(&platform_dir) else {
+            continue;
+        };
         if !plat_ok(&platform_dir) {
             continue;
         }
-        let Ok(games) = fs::read_dir(plat.path()) else { continue };
+        let Ok(games) = fs::read_dir(plat.path()) else {
+            continue;
+        };
         for g in games.flatten().filter(|e| e.path().is_dir()) {
             let game = g.file_name().to_string_lossy().into_owned();
             if !game_ok(&game) {
@@ -254,16 +262,36 @@ struct Step {
 
 impl Step {
     fn ok(name: &str, detail: String) -> Self {
-        Self { name: name.into(), status: Status::Ok, detail, technical: None }
+        Self {
+            name: name.into(),
+            status: Status::Ok,
+            detail,
+            technical: None,
+        }
     }
     fn skipped(name: &str, detail: String) -> Self {
-        Self { name: name.into(), status: Status::Skipped, detail, technical: None }
+        Self {
+            name: name.into(),
+            status: Status::Skipped,
+            detail,
+            technical: None,
+        }
     }
     fn rejected(name: &str, detail: String) -> Self {
-        Self { name: name.into(), status: Status::Rejected, detail, technical: None }
+        Self {
+            name: name.into(),
+            status: Status::Rejected,
+            detail,
+            technical: None,
+        }
     }
     fn failed(name: &str, detail: String) -> Self {
-        Self { name: name.into(), status: Status::Failed, detail, technical: None }
+        Self {
+            name: name.into(),
+            status: Status::Failed,
+            detail,
+            technical: None,
+        }
     }
     fn tech(mut self, t: String) -> Self {
         self.technical = Some(t);
@@ -354,7 +382,10 @@ fn run_smoke(reg: &Registry, id: u32) -> Vec<Step> {
         }
     };
     if players.is_empty() {
-        steps.push(Step::skipped("Load players", "no players in this database".into()));
+        steps.push(Step::skipped(
+            "Load players",
+            "no players in this database".into(),
+        ));
         return steps;
     }
 
@@ -384,7 +415,9 @@ fn run_smoke(reg: &Registry, id: u32) -> Vec<Step> {
         .unwrap_or(&players[0]);
     let pid = target.player_id;
     let team = target.team_id;
-    let pname = format!("{} {}", target.first_name, target.last_name).trim().to_string();
+    let pname = format!("{} {}", target.first_name, target.last_name)
+        .trim()
+        .to_string();
 
     let view = reg.player_view(id, pid).ok().flatten();
 
@@ -405,10 +438,16 @@ fn run_smoke(reg: &Registry, id: u32) -> Vec<Step> {
                             "Scalar edit (to max)",
                             format!("{pname} · {}: {} → {after}", p.name, p.display),
                         )
-                        .tech(format!("{}.{}  record {}  = {hi}", p.table, p.field, p.record)),
+                        .tech(format!(
+                            "{}.{}  record {}  = {hi}",
+                            p.table, p.field, p.record
+                        )),
                     );
                 }
-                Err(e) => steps.push(Step::failed("Scalar edit (to max)", format!("{}: {e}", p.name))),
+                Err(e) => steps.push(Step::failed(
+                    "Scalar edit (to max)",
+                    format!("{}: {e}", p.name),
+                )),
             }
             // Rejection probe.
             if let Some(over) = hi.checked_add(1) {
@@ -424,13 +463,22 @@ fn run_smoke(reg: &Registry, id: u32) -> Vec<Step> {
                 }
             }
         } else {
-            steps.push(Step::skipped("Scalar edit (to max)", "no bounded integer field found".into()));
+            steps.push(Step::skipped(
+                "Scalar edit (to max)",
+                "no bounded integer field found".into(),
+            ));
         }
 
         // 2) Inline-string edit.
         if let Some(p) = pick_string_field(view) {
             let before = p.text.clone().unwrap_or_default();
-            match reg.set_field(id, &p.table, p.record, &p.field, FieldValue::Text("QA".into())) {
+            match reg.set_field(
+                id,
+                &p.table,
+                p.record,
+                &p.field,
+                FieldValue::Text("QA".into()),
+            ) {
                 Ok(_) => steps.push(
                     Step::ok(
                         "Inline-string edit",
@@ -438,13 +486,22 @@ fn run_smoke(reg: &Registry, id: u32) -> Vec<Step> {
                     )
                     .tech(format!("{}.{}  record {}", p.table, p.field, p.record)),
                 ),
-                Err(e) => steps.push(Step::failed("Inline-string edit", format!("{}: {e}", p.name))),
+                Err(e) => steps.push(Step::failed(
+                    "Inline-string edit",
+                    format!("{}: {e}", p.name),
+                )),
             }
         } else {
-            steps.push(Step::skipped("Inline-string edit", "no editable string field found".into()));
+            steps.push(Step::skipped(
+                "Inline-string edit",
+                "no editable string field found".into(),
+            ));
         }
     } else {
-        steps.push(Step::skipped("Scalar/string edit", "player detail unavailable".into()));
+        steps.push(Step::skipped(
+            "Scalar/string edit",
+            "player detail unavailable".into(),
+        ));
     }
 
     // 3) Jersey number set (team-scoped).
@@ -465,7 +522,10 @@ fn run_smoke(reg: &Registry, id: u32) -> Vec<Step> {
             Err(e) => steps.push(Step::skipped("Set captaincy", e.to_string())),
         }
     } else {
-        steps.push(Step::skipped("Jersey / captaincy", "target player is not on a team".into()));
+        steps.push(Step::skipped(
+            "Jersey / captaincy",
+            "target player is not on a team".into(),
+        ));
     }
 
     // Free-agent slot ops (last: they move players). Release the target from its team — which
@@ -482,11 +542,15 @@ fn run_smoke(reg: &Registry, id: u32) -> Vec<Step> {
                     .and_then(|v| v.into_iter().find(|p| p.player_id != 0));
                 match fa {
                     Some(fa) => {
-                        let faname = format!("{} {}", fa.first_name, fa.last_name).trim().to_string();
+                        let faname = format!("{} {}", fa.first_name, fa.last_name)
+                            .trim()
+                            .to_string();
                         match reg.sign_from_fa(id, fa.player_id, t) {
                             Ok(_) => steps.push(Step::ok(
                                 "FA release + sign",
-                                format!("released {pname}; signed free agent {faname} into the slot"),
+                                format!(
+                                    "released {pname}; signed free agent {faname} into the slot"
+                                ),
                             )),
                             Err(e) => steps.push(Step::failed(
                                 "FA release + sign",
@@ -520,10 +584,19 @@ fn run_spec(reg: &Registry, id: u32, spec: &serde_json::Value) -> Vec<Step> {
         if let Some(idn) = e.strip_prefix("id:") {
             return idn.trim().parse().ok();
         }
-        let name = e.strip_prefix("player:").unwrap_or(e).trim().to_ascii_lowercase();
+        let name = e
+            .strip_prefix("player:")
+            .unwrap_or(e)
+            .trim()
+            .to_ascii_lowercase();
         players
             .iter()
-            .find(|p| format!("{} {}", p.first_name, p.last_name).trim().to_ascii_lowercase() == name)
+            .find(|p| {
+                format!("{} {}", p.first_name, p.last_name)
+                    .trim()
+                    .to_ascii_lowercase()
+                    == name
+            })
             .map(|p| p.player_id)
     };
     let resolve_team = |e: &str| -> Option<u64> {
@@ -538,7 +611,10 @@ fn run_spec(reg: &Registry, id: u32, spec: &serde_json::Value) -> Vec<Step> {
     };
 
     let Some(ops) = spec.as_array() else {
-        steps.push(Step::failed("Spec", "top-level JSON is not an array of ops".into()));
+        steps.push(Step::failed(
+            "Spec",
+            "top-level JSON is not an array of ops".into(),
+        ));
         return steps;
     };
 
@@ -550,7 +626,10 @@ fn run_spec(reg: &Registry, id: u32, spec: &serde_json::Value) -> Vec<Step> {
                 let entity = op.get("entity").and_then(|v| v.as_str()).unwrap_or("");
                 let fname = op.get("field").and_then(|v| v.as_str()).unwrap_or("");
                 let Some(pid) = resolve_player(entity) else {
-                    steps.push(Step::failed(&label, format!("could not resolve entity {entity:?}")));
+                    steps.push(Step::failed(
+                        &label,
+                        format!("could not resolve entity {entity:?}"),
+                    ));
                     continue;
                 };
                 let Some(view) = reg.player_view(id, pid).ok().flatten() else {
@@ -573,7 +652,10 @@ fn run_spec(reg: &Registry, id: u32, spec: &serde_json::Value) -> Vec<Step> {
                     Some(view.bio_record)
                 };
                 let Some(record) = record else {
-                    steps.push(Step::failed(&label, "no companion record for this field".into()));
+                    steps.push(Step::failed(
+                        &label,
+                        "no companion record for this field".into(),
+                    ));
                     continue;
                 };
                 let value = match op.get("value") {
@@ -588,37 +670,133 @@ fn run_spec(reg: &Registry, id: u32, spec: &serde_json::Value) -> Vec<Step> {
                 let table = field.studio_table.clone();
                 let sfield = field.studio_field.clone();
                 match reg.set_field(id, &table, record, &sfield, value) {
-                    Ok(o) => steps.push(Step::ok(&label, format!("{fname} set ({} edit(s))", o.edits))),
+                    Ok(o) => steps.push(Step::ok(
+                        &label,
+                        format!("{fname} set ({} edit(s))", o.edits),
+                    )),
                     Err(e) => steps.push(Step::failed(&label, e.to_string())),
                 }
             }
             "set_jersey_number" => {
                 let (Some(pid), Some(num)) = (
-                    op.get("entity").and_then(|v| v.as_str()).and_then(&resolve_player),
+                    op.get("entity")
+                        .and_then(|v| v.as_str())
+                        .and_then(&resolve_player),
                     op.get("value").and_then(|v| v.as_u64()),
                 ) else {
                     steps.push(Step::failed(&label, "need entity + numeric value".into()));
                     continue;
                 };
-                let team = players.iter().find(|p| p.player_id == pid).and_then(|p| p.team_id);
+                let team = players
+                    .iter()
+                    .find(|p| p.player_id == pid)
+                    .and_then(|p| p.team_id);
                 match team {
                     Some(t) => match reg.set_jersey_number(id, t, pid, num) {
-                        Ok(o) => steps.push(Step::ok(&label, format!("→ #{num} ({} edit(s))", o.edits))),
+                        Ok(o) => {
+                            steps.push(Step::ok(&label, format!("→ #{num} ({} edit(s))", o.edits)))
+                        }
                         Err(e) => steps.push(Step::failed(&label, e.to_string())),
                     },
                     None => steps.push(Step::failed(&label, "player not on a team".into())),
                 }
             }
             "set_captaincy" => {
-                let pid = op.get("player").and_then(|v| v.as_str()).and_then(&resolve_player);
-                let tid = op.get("team").and_then(|v| v.as_str()).and_then(&resolve_team);
+                let pid = op
+                    .get("player")
+                    .and_then(|v| v.as_str())
+                    .and_then(&resolve_player);
+                let tid = op
+                    .get("team")
+                    .and_then(|v| v.as_str())
+                    .and_then(&resolve_team);
                 let role = op.get("role").and_then(|v| v.as_u64()).unwrap_or(1);
                 match (pid, tid) {
                     (Some(p), Some(t)) => match reg.set_captaincy(id, t, p, role) {
-                        Ok(o) => steps.push(Step::ok(&label, format!("role {role} ({} edit(s))", o.edits))),
+                        Ok(o) => steps.push(Step::ok(
+                            &label,
+                            format!("role {role} ({} edit(s))", o.edits),
+                        )),
                         Err(e) => steps.push(Step::failed(&label, e.to_string())),
                     },
                     _ => steps.push(Step::failed(&label, "could not resolve team/player".into())),
+                }
+            }
+            // League identity edit: the league resolves by its stable native code (`code:8`) or, as
+            // a convenience, by its exact stockleagues name key (`key:Allsvenskan`) — a key that
+            // matches several rows (NHL 21 ships three `CUSTOM_TEAMS`) is rejected as ambiguous.
+            "set_league_field" => {
+                let league = op.get("league").and_then(|v| v.as_str()).unwrap_or("");
+                let fname = op.get("field").and_then(|v| v.as_str()).unwrap_or("");
+                let catalog = match reg.list_leagues(id) {
+                    Ok(c) => c,
+                    Err(e) => {
+                        steps.push(Step::failed(&label, e.to_string()));
+                        continue;
+                    }
+                };
+                let code = if let Some(c) = league.strip_prefix("code:") {
+                    c.trim().parse::<u64>().ok()
+                } else if let Some(k) = league.strip_prefix("key:") {
+                    let hits: Vec<i64> = catalog
+                        .leagues
+                        .iter()
+                        .filter(|l| l.name_key.as_deref() == Some(k.trim()))
+                        .map(|l| l.code)
+                        .collect();
+                    match hits.as_slice() {
+                        [one] => Some(*one as u64),
+                        [] => None,
+                        _ => {
+                            steps.push(Step::failed(
+                                &label,
+                                format!("league key {k:?} is ambiguous: codes {hits:?}"),
+                            ));
+                            continue;
+                        }
+                    }
+                } else {
+                    None
+                };
+                let Some(code) = code else {
+                    steps.push(Step::failed(&label, format!("could not resolve league {league:?}")));
+                    continue;
+                };
+                let Some(view) = reg.league_view(id, code).ok().flatten() else {
+                    steps.push(Step::failed(&label, format!("no league with code {code}")));
+                    continue;
+                };
+                let (Some(record), Some(field)) = (
+                    view.summary.record,
+                    view.fields
+                        .iter()
+                        .find(|f| f.name.eq_ignore_ascii_case(fname) || f.studio_field == fname),
+                ) else {
+                    steps.push(Step::failed(
+                        &label,
+                        view.name_edit_blocker
+                            .clone()
+                            .unwrap_or_else(|| format!("no field named {fname:?}")),
+                    ));
+                    continue;
+                };
+                let value = match op.get("value") {
+                    Some(v) if v.is_string() => FieldValue::Text(v.as_str().unwrap().to_string()),
+                    Some(v) if v.is_i64() => FieldValue::Int(v.as_i64().unwrap()),
+                    Some(v) if v.is_u64() => FieldValue::Int(v.as_u64().unwrap() as i64),
+                    _ => {
+                        steps.push(Step::failed(&label, "missing/invalid \"value\"".into()));
+                        continue;
+                    }
+                };
+                let table = field.studio_table.clone();
+                let sfield = field.studio_field.clone();
+                match reg.set_field(id, &table, record, &sfield, value) {
+                    Ok(o) => steps.push(Step::ok(
+                        &label,
+                        format!("league {code} {fname} set ({} edit(s))", o.edits),
+                    )),
+                    Err(e) => steps.push(Step::failed(&label, e.to_string())),
                 }
             }
             other => steps.push(Step::skipped(&label, format!("unsupported op {other:?}"))),
@@ -686,7 +864,10 @@ fn baseline_identical(reg: &Registry, cell: &Cell, tmp: &Path, defs_root: &Path)
             &defs_root.to_string_lossy(),
         )
         .ok()?;
-    let out = tmp.join(format!("{}-{}-baseline-out.db", cell.platform_dir, cell.game));
+    let out = tmp.join(format!(
+        "{}-{}-baseline-out.db",
+        cell.platform_dir, cell.game
+    ));
     reg.save(summary.project_id, &out.to_string_lossy()).ok()?;
     let written = fs::read(&out).ok()?;
     let _ = fs::remove_file(&work);
@@ -729,10 +910,19 @@ fn verify_ps4(data_path: &Path) -> Verify {
 /// PS4 semantic baseline: open a fresh copy of the anchor `DATA`, save with no edits, and confirm the
 /// re-extracted inner TDB is byte-identical to the original (LZ4 recompression means the *container*
 /// won't be byte-identical, so we compare the inner roster DB instead).
-fn baseline_ps4(reg: &Registry, cell: &Cell, data_anchor: &Path, tmp: &Path, defs_root: &Path) -> Option<bool> {
+fn baseline_ps4(
+    reg: &Registry,
+    cell: &Cell,
+    data_anchor: &Path,
+    tmp: &Path,
+    defs_root: &Path,
+) -> Option<bool> {
     let orig_inner = tdb_savedata::ps4_extract_roster(&fs::read(data_anchor).ok()?).ok()?;
     fs::create_dir_all(tmp).ok()?;
-    let work = tmp.join(format!("{}-{}-ps4-baseline-DATA", cell.platform_dir, cell.game));
+    let work = tmp.join(format!(
+        "{}-{}-ps4-baseline-DATA",
+        cell.platform_dir, cell.game
+    ));
     fs::copy(data_anchor, &work).ok()?;
     let summary = reg
         .open_workspace_from_paths(
@@ -744,7 +934,10 @@ fn baseline_ps4(reg: &Registry, cell: &Cell, data_anchor: &Path, tmp: &Path, def
             &defs_root.to_string_lossy(),
         )
         .ok()?;
-    let out = tmp.join(format!("{}-{}-ps4-baseline-out", cell.platform_dir, cell.game));
+    let out = tmp.join(format!(
+        "{}-{}-ps4-baseline-out",
+        cell.platform_dir, cell.game
+    ));
     reg.save(summary.project_id, &out.to_string_lossy()).ok()?;
     let out_inner = tdb_savedata::ps4_extract_roster(&fs::read(&out).ok()?).ok()?;
     let _ = fs::remove_file(&work);
@@ -776,7 +969,11 @@ fn process_ps4_roster(
     tmp: &Path,
     roster_dir: &Path,
 ) -> Option<CellResult> {
-    let cell_out = args.out.join("artifacts").join(&cell.platform_dir).join(&cell.game);
+    let cell_out = args
+        .out
+        .join("artifacts")
+        .join(&cell.platform_dir)
+        .join(&cell.game);
     let dir_name = roster_dir.file_name()?.to_string_lossy().into_owned();
     let dst_dir = cell_out.join("savefiles").join(&dir_name);
     copy_dir(roster_dir, &dst_dir).ok()?;
@@ -831,7 +1028,8 @@ fn process_ps4_roster(
         Err(e) => result.verify.error = Some(format!("save failed: {e}")),
     }
     if let Some(anchor_data) = roster_container(roster_dir) {
-        result.verify.baseline_identical = baseline_ps4(reg, cell, &anchor_data, tmp, &args.defs_root);
+        result.verify.baseline_identical =
+            baseline_ps4(reg, cell, &anchor_data, tmp, &args.defs_root);
     }
     result.summary = Some(summary);
     Some(result)
@@ -917,7 +1115,10 @@ fn process_cell(reg: &Registry, cell: &Cell, args: &Args, tmp: &Path) -> CellRes
         Some(&cell.game),
         cell.platform,
         &artifact_db.to_string_lossy(),
-        roster_container_out.as_ref().map(|p| p.to_string_lossy().into_owned()).as_deref(),
+        roster_container_out
+            .as_ref()
+            .map(|p| p.to_string_lossy().into_owned())
+            .as_deref(),
         &cell.meta.to_string_lossy(),
         &args.defs_root.to_string_lossy(),
     );
@@ -962,7 +1163,10 @@ fn caps_line(c: &CapabilitiesDto) -> String {
     on.extend(flag(c.arena_link, "arena-link"));
     on.extend(flag(c.player_style, "player-style"));
     on.extend(flag(c.year_ufa, "year-UFA"));
-    on.extend(flag(c.draft_team || c.draft_year || c.draft_round || c.draft_pick, "draft-fields"));
+    on.extend(flag(
+        c.draft_team || c.draft_year || c.draft_round || c.draft_pick,
+        "draft-fields",
+    ));
     on.extend(flag(c.has_skater_equip, "skater-equip"));
     on.extend(flag(c.has_goalie_equip, "goalie-equip"));
     format!(
@@ -1003,7 +1207,11 @@ fn write_cell_report(dir: &Path, r: &CellResult, args: &Args) -> std::io::Result
         ));
         md.push_str(&format!(
             "- Roster save: {} (aligned: {})\n",
-            if s.roster_attached { "attached" } else { "none" },
+            if s.roster_attached {
+                "attached"
+            } else {
+                "none"
+            },
             if s.roster_aligned { "yes" } else { "n/a" }
         ));
         if let Some(note) = &r.roster_note {
@@ -1016,12 +1224,20 @@ fn write_cell_report(dir: &Path, r: &CellResult, args: &Args) -> std::io::Result
                  is unverified (PS4). Confirm in-game before relying on it.\n",
             );
         }
-        md.push_str(&format!("- Capabilities: {}\n\n", caps_line(&s.capabilities)));
+        md.push_str(&format!(
+            "- Capabilities: {}\n\n",
+            caps_line(&s.capabilities)
+        ));
     }
 
     md.push_str("## Edits\n\n");
     for st in &r.steps {
-        md.push_str(&format!("- **{}** {} — {}\n", st.name, st.glyph(), st.detail));
+        md.push_str(&format!(
+            "- **{}** {} — {}\n",
+            st.name,
+            st.glyph(),
+            st.detail
+        ));
         if let Some(t) = &st.technical {
             md.push_str(&format!("  <sub>ids: {t}</sub>\n"));
         }
@@ -1034,14 +1250,19 @@ fn write_cell_report(dir: &Path, r: &CellResult, args: &Args) -> std::io::Result
     }
     md.push_str(&format!(
         "- Files written: {}\n",
-        v.files_written.map(|n| n.to_string()).unwrap_or_else(|| "—".into())
+        v.files_written
+            .map(|n| n.to_string())
+            .unwrap_or_else(|| "—".into())
     ));
     md.push_str(&format!(
         "- Edited main DB: CRC {} · size {}\n",
         tri(v.db_crc_ok),
         tri(v.db_size_ok)
     ));
-    md.push_str(&format!("- Roster container checksums: {}\n", tri(v.roster_checksums_ok)));
+    md.push_str(&format!(
+        "- Roster container checksums: {}\n",
+        tri(v.roster_checksums_ok)
+    ));
     md.push_str(&format!(
         "- Baseline no-op save byte-identical to anchor (main DB): {}\n",
         tri(v.baseline_identical)
@@ -1054,7 +1275,10 @@ fn write_cell_report(dir: &Path, r: &CellResult, args: &Args) -> std::io::Result
             .to_string_lossy()
             .replace('\\', "/")
     };
-    md.push_str(&format!("- Primary edited file: `{}`\n", rel(&r.artifact_db)));
+    md.push_str(&format!(
+        "- Primary edited file: `{}`\n",
+        rel(&r.artifact_db)
+    ));
     if let Some(rp) = &r.artifact_roster {
         md.push_str(&format!("- Mirrored roster save: `{}`\n", rel(rp)));
     }
@@ -1071,7 +1295,9 @@ fn write_cell_report(dir: &Path, r: &CellResult, args: &Args) -> std::io::Result
 fn write_index(dir: &Path, results: &[CellResult]) -> std::io::Result<()> {
     let mut md = String::from("# Edit-QA matrix\n\n");
     md.push_str(&format!("{} cell(s) processed.\n\n", results.len()));
-    md.push_str("| Title | Platform | Opened | Edits ok | Main DB CRC | Baseline == anchor | Report |\n");
+    md.push_str(
+        "| Title | Platform | Opened | Edits ok | Main DB CRC | Baseline == anchor | Report |\n",
+    );
     md.push_str("|---|---|---|---|---|---|---|\n");
     // Stable grouping by platform then title.
     let mut sorted: Vec<&CellResult> = results.iter().collect();
@@ -1080,7 +1306,11 @@ fn write_index(dir: &Path, results: &[CellResult]) -> std::io::Result<()> {
     });
     for r in sorted {
         let opened = if r.open_error.is_some() { "✗" } else { "✓" };
-        let ok = r.steps.iter().filter(|s| matches!(s.status, Status::Ok | Status::Rejected)).count();
+        let ok = r
+            .steps
+            .iter()
+            .filter(|s| matches!(s.status, Status::Ok | Status::Rejected))
+            .count();
         let total = r.steps.len();
         let report = format!("{}-{}.md", r.game, r.platform_dir);
         md.push_str(&format!(

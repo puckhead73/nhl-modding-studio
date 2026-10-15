@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { ratingToneClass } from "../lib/ratingColor";
 import { POS_BADGE } from "../lib/position";
 import type { EaComputedRatingsDto } from "../bindings/EaComputedRatingsDto";
@@ -7,10 +7,32 @@ import type { EaComputedRatingsDto } from "../bindings/EaComputedRatingsDto";
 const GRADE_KEYS = ["G", "LD", "RD", "LW", "C", "RW"];
 
 /// Read-only display of a computed EA rating set (from the formula engine), mirroring the EA-DB
-/// Attributes look: overall/style headline + FHM position-grade pills + tier-coloured EA rating grid
-/// + the raw FHM attributes it was computed from. `compact` hides the raw-attribute disclosure (used
-/// in the Formulas live preview).
-export function ComputedRatings({ data, compact }: { data: EaComputedRatingsDto; compact?: boolean }) {
+/// Attributes look: an optional name header, the overall/style headline + FHM position-grade pills,
+/// the tier-coloured EA rating grid, and the raw FHM attributes it was computed from.
+///
+/// `compact` is the narrow-column mode used by the Formulas live preview: it hides the raw-attribute
+/// disclosure and holds the rating grid at two columns (the wide breakpoints would pack four columns
+/// into the sidebar and shred the labels).
+///
+/// `name`/`meta`/`actions` build the card's header row. The Formulas preview names each card so a
+/// stack of them reads as a comparison; surfaces that already name the player above the card (the
+/// Historical Attributes tab) omit them and the header row disappears.
+export function ComputedRatings({
+  data,
+  compact,
+  name,
+  meta,
+  actions,
+}: {
+  data: EaComputedRatingsDto;
+  compact?: boolean;
+  /** Card title — the player being shown. */
+  name?: ReactNode;
+  /** Small qualifier beside the name (the season or compilation the numbers came from). */
+  meta?: ReactNode;
+  /** Right-aligned controls in the header row (the preview's remove button). */
+  actions?: ReactNode;
+}) {
   const fhm = useMemo(() => new Map(data.fhm_values.map((v) => [v.key, v.value])), [data.fhm_values]);
   const posLabel =
     data.position === "goalie" ? "Goalie" : data.position === "defenseman" ? "Defenseman" : "Forward";
@@ -31,7 +53,15 @@ export function ComputedRatings({ data, compact }: { data: EaComputedRatingsDto;
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-4 rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-3">
+      <div className="rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-3">
+        {(name || actions) && (
+          <div className="mb-3 flex items-center gap-2 border-b border-slate-800 pb-2">
+            <h4 className="min-w-0 truncate text-sm font-semibold text-slate-100">{name}</h4>
+            {meta && <span className="shrink-0 text-[11px] text-slate-500">{meta}</span>}
+            {actions && <div className="ml-auto shrink-0">{actions}</div>}
+          </div>
+        )}
+        <div className="flex flex-wrap items-center gap-4">
         <div>
           <div className="text-[10px] uppercase tracking-wide text-slate-500">Overall</div>
           <div className={"text-3xl font-bold tabular-nums " + ratingToneClass(data.overall)}>
@@ -63,9 +93,15 @@ export function ComputedRatings({ data, compact }: { data: EaComputedRatingsDto;
             </span>
           ))}
         </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 sm:grid-cols-3 lg:grid-cols-4">
+      <div
+        className={
+          "grid gap-y-1.5 " +
+          (compact ? "grid-cols-2 gap-x-4" : "grid-cols-2 gap-x-8 sm:grid-cols-3 lg:grid-cols-4")
+        }
+      >
         {data.ratings.map((r) => {
           const isStd = r.scale_min === 36 && r.scale_max === 99;
           return (

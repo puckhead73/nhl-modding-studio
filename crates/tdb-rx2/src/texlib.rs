@@ -85,7 +85,7 @@ const DESC_WIDTH_VALUE_MASK: u16 = 0x1FFF;
 /// nameplate observed and set on every tiled FE texture. Verified: the pitch field also reproduces
 /// each texture's width (award 16×32 = 512, nameplate 8×32 = 256).
 const DESC_FETCH_DW0_REL: usize = DESC_FIELD_OFF - 5;
-const DESC_FETCH_TILED_BIT: u32 = 0x8000_0000;
+pub const DESC_FETCH_TILED_BIT: u32 = 0x8000_0000;
 
 /// Pixel formats we understand. These map to the Xenos
 /// `GPUTEXTUREFORMAT_*` byte stored at `desc + 35`: the DXT family plus
@@ -167,6 +167,10 @@ pub struct Texture {
     pub height: u32,
     pub format: PixelFormat,
     pub base_mip_linear: Vec<u8>,
+    /// The Xenos fetch-constant `tiled` bit (see [`DESC_FETCH_TILED_BIT`]). DXT slots are always
+    /// tiled; an `Argb8888` slot is tiled for FE art (portraits, awards, NHL 07–11 league logos)
+    /// and linear for the rendering-cache nameplates. The same-size writers mirror it.
+    pub tiled: bool,
     /// Internal: where in the source file this texture's tiled buffer
     /// lives, so the write path can splice replacement bytes back in.
     /// Hidden behind a private field accessor: external callers only
@@ -185,6 +189,12 @@ impl Texture {
     /// Lets callers (e.g. the `rx2tex desc` debug command) re-read the
     /// raw descriptor bytes from `Texlib::original_bytes()` for diffing
     /// or analysis.
+    /// File-table index of this texture's pixel-data entry — the value `DW8`'s upper field
+    /// carries (research 2026-09-21 pm handoff R42 §1); see [`descriptor_data_entry_index`].
+    pub fn data_entry_index(&self) -> u32 {
+        self.slot.tex_data_entry_idx
+    }
+
     pub fn descriptor_offset(&self) -> usize {
         self.slot.desc_off as usize
     }
@@ -194,6 +204,62 @@ impl Texture {
     pub fn data_offset(&self) -> usize {
         self.slot.data_rel_off as usize
     }
+}
+
+/// A level at or below 16 × 16 blocks (64 texels on either axis): the console's **packed tail**,
+/// whose layout Studio's sequential model does not reproduce. The split is the one the mip
+/// placement audit of 22 Sep 2026 (`tests/rw4xb2_mip_placement.rs`) found by content: above it the
+/// sequential offsets decode to the shrunken base on every audited level; at or below it a
+/// substantial share does not. No other measurement is cited for the boundary.
+pub fn is_packed_tail_level(width: u32, height: u32) -> bool {
+    width.div_ceil(4).max(1) <= 16 || height.div_ceil(4).max(1) <= 16
+}
+
+/// The audited population of the mip placement audit (22 Sep 2026), as an **applicability gate**
+/// for rewriting a raster's large levels at the sequential offsets. Everything outside it falls
+/// back to a base-only write — the base level's tiling is validated by every preview Studio draws,
+/// independently of the audit — and says why.
+///
+/// The gate is what the file's own bytes can establish. It does **not** encode the title: the
+/// audit ran on real Xbox 360 trees named in the audit record, and rasters of other titles that
+/// share the same descriptor form pass the gate by form, not by an audit of their own.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum LargeLevelSupport {
+    /// The raster is inside the audited population: tiled 2D `DXT1` / `DXT3` / `DXT5`, both axes
+    /// 256–1024 texels, the NHL 09–Legacy descriptor form (`DW0 = 0x00400003`), two or more
+    /// declared levels. Its large levels (above 16 × 16 blocks) may be rewritten at the sequential
+    /// offsets.
+    LargeLevels {
+        /// Declared levels above the packed-tail split, base excluded.
+        large_levels: u32,
+    },
+    /// Outside the population: only the base level is rewritten; `reason` names the excluded
+    /// property (format, shape, descriptor form, cube, single level).
+    BaseOnly { reason: String },
+}
+
+/// Smallest and largest base dimension the mip placement audit examined (`≥ 256` on both axes;
+/// the largest shipped raster in the audited families is 1 024²).
+pub const AUDITED_MIN_DIM: u32 = 256;
+pub const AUDITED_MAX_DIM: u32 = 1024;
+
+/// What [`Texlib::replace_large_levels_keep_tail`] wrote and what it left alone.
+#[derive(Debug, Clone)]
+pub struct KeepTailWrite {
+    pub bytes: Vec<u8>,
+    /// Which route the gate selected for this raster.
+    pub support: LargeLevelSupport,
+    /// The base plus every large level written (1 on the base-only route, or when the base itself
+    /// is a tail-sized raster).
+    pub levels_written: u32,
+    /// Declared levels below the last written one, kept as shipped.
+    pub tail_levels_kept: u32,
+    /// Slot bytes after the last written level, kept as shipped.
+    pub tail_bytes_kept: usize,
+    /// The **byte-write mask**: every `[start, end)` range of the output file whose bytes were
+    /// written, in file order. Every byte outside these ranges is identical to the input — the
+    /// preservation test asserts it, and a caller can re-check it against its own copy.
+    pub written_ranges: Vec<(usize, usize)>,
 }
 
 /// One mip level for [`Texlib::replace_with_mip_chain`]: linear (untiled,
@@ -232,6 +298,12 @@ pub struct Texlib {
 impl Texlib {
     /// Original (unmodified) container bytes. Useful when the caller
     /// wants a no-op write-back or a baseline for diffing.
+    /// The container's header size: every slot's `data_offset` is relative to it, so
+    /// `header_size() + data_offset()` is the absolute file offset of a slot's tiled buffer.
+    pub fn header_size(&self) -> u32 {
+        self.hdr_size
+    }
+
     pub fn original_bytes(&self) -> &[u8] {
         &self.raw
     }
@@ -361,14 +433,14 @@ impl Texlib {
     ///   their bytes inside the data region and their file-table
     ///   `data_rel_off` entries.
     /// - The header `data_size` field at 0x54 is updated.
-    /// - The target's 56-byte descriptor is rewritten via
-    ///   [`make_descriptor`] with the new (width, height, format,
-    ///   mip_count).
-    ///
-    /// **Empirical caveat:** the descriptor encoding for sizes other
-    /// than the 256 × 256 / 512 × 512 found in `texlib_67.rx2` is
-    /// inferred from a 2-point pattern. See [`make_descriptor`] for the
-    /// unverified bits.
+    /// - The target's 56-byte descriptor is re-derived from its shipped
+    ///   bytes via [`patch_descriptor_for_resize`] (research 2026-09-21
+    ///   handoff 11 §2: pitch, `DW9`, `DW11`, `DW12`, `DW13` recomputed;
+    ///   `DW8`'s slot reference and every constant kept). The rule is
+    ///   censused against every loose Legacy / NHL 11 / NHL 09 raster
+    ///   (`tests/rw4xb2_descriptor_census.rs`); its refusals (NHL 07 /
+    ///   08 layouts, linear rasters, cubes, rasters under 128 texels)
+    ///   are returned as [`TexlibError::ResizeRule`].
     pub fn replace_with_resize(
         &self,
         idx: usize,
@@ -382,10 +454,14 @@ impl Texlib {
                 idx,
                 count: self.textures.len(),
             })?;
-        // Resize regenerates the Xenos DXT descriptor (DW7/DW12 etc.),
-        // which we only understand for DXT. Uncompressed `8_8_8_8` is
-        // same-size only — callers use `replace_same_size` for it.
-        if !new_format.is_dxt() {
+        // Resize regenerates the Xenos descriptor (DW7 / DW9 / DW11–13). DXT: any measured chain.
+        // Uncompressed `8_8_8_8`: only a **single-level, tiled** raster of the same format — the
+        // front-end art (logos, portraits) whose descriptor rule research R132 measured on 6 926 /
+        // 6 926 NHL 08–11 rasters (pitch = align(w, 32) / 32 texel units, DW9 = (w−1) | (h−1) << 13,
+        // payload = align(w, 32) × align(h, 32) × 4, every other byte constant). Linear `8_8_8_8`
+        // (nameplates) and uncompressed chains are refused.
+        let argb_single = matches!(new_format, PixelFormat::Argb8888) && tex.format == new_format && tex.tiled && mips.len() == 1;
+        if !new_format.is_dxt() && !argb_single {
             return Err(TexlibError::ResizeUnsupportedFormat { format: new_format });
         }
         let base = mips.first().ok_or(TexlibError::ReplacementSizeMismatch {
@@ -401,9 +477,49 @@ impl Texlib {
             });
         }
 
-        // Validate every mip's payload size matches its declared dims.
+        // The NHL 07 container form (research R42 §1: file table at EOF, untagged payload entries,
+        // `data_size` 0 and absolute buffer offsets) is parsed with `hdr_size` forced to 0. The
+        // reflow below rewrites the `0x54` data-size word and re-bases every `data_rel_off`
+        // against `hdr_size`, neither of which describes that layout — so the *descriptor* rule now
+        // covers NHL 07 / 08 (`DESC_MEASURED_DW0`) while the *container* writer still refuses this
+        // one, with its own reason instead of a generation refusal.
+        if self.hdr_size == 0 {
+            return Err(TexlibError::ResizeRule(
+                "this container keeps its buffers in the header region with absolute offsets (the NHL 07 table-at-EOF layout); its reflow is not implemented, so a different-size replacement is refused".into(),
+            ));
+        }
+        // The descriptor first (coordinator review R1 F1, 21 Sep 2026): the rule's refusals —
+        // including a size or level count its fields cannot store — happen before any buffer is
+        // built, so an unrepresentable request never reaches the reflow.
+        let mip_count = mips.len() as u32;
+        let desc_off = tex.slot.desc_off as usize;
+        if desc_off + DESCRIPTOR_LEN > self.raw.len() {
+            return Err(TexlibError::TruncatedDescriptor { off: desc_off });
+        }
+        let orig_desc: [u8; DESCRIPTOR_LEN] = self.raw[desc_off..desc_off + DESCRIPTOR_LEN].try_into().expect("bounds checked");
+        // `DW8` is preserved verbatim by the patch (this reflow keeps the file table's membership
+        // and order, so the index it holds stays correct). Research 2026-09-21 pm handoff R42 §1
+        // turned that word from "a slot reference" into an exact join — the file-table index of
+        // this texture's pixel-data entry — so it is now *checked* rather than assumed: a
+        // container whose descriptor points elsewhere is one whose pairing Studio reads
+        // differently, and rewriting it would move a raster's pixels out from under its
+        // descriptor.
+        let dw8_index = descriptor_data_entry_index(&orig_desc);
+        if dw8_index != tex.slot.tex_data_entry_idx {
+            return Err(TexlibError::ResizeRule(
+                DescriptorRuleRefusal::SlotJoinMismatch { dw8_index, data_entry_index: tex.slot.tex_data_entry_idx }.to_string(),
+            ));
+        }
+        let new_desc = patch_descriptor_for_resize(&orig_desc, new_width, new_height, new_format, mip_count).map_err(|e| TexlibError::ResizeRule(e.to_string()))?;
+        debug_assert_eq!(descriptor_data_entry_index(&new_desc), dw8_index, "the patch must preserve DW8's index");
+
+        // Validate every mip's payload size matches its declared dims, and that the chain halves.
         let bpb = new_format.bytes_per_block();
         for (i, mip) in mips.iter().enumerate() {
+            let (ew, eh) = ((new_width >> i).max(1), (new_height >> i).max(1));
+            if (mip.width, mip.height) != (ew, eh) {
+                return Err(TexlibError::ResizeRule(format!("mip level {i} is {}x{}, expected {ew}x{eh} (the chain must halve from {new_width}x{new_height})", mip.width, mip.height)));
+            }
             let expected = base_mip_byte_size(new_format, mip.width, mip.height);
             if mip.linear_dxt.len() != expected {
                 return Err(TexlibError::MipSizeMismatch {
@@ -425,12 +541,22 @@ impl Texlib {
         // buffers.
         let mut new_buf: Vec<u8> = Vec::new();
         for mip in mips {
-            let tiled = tile_dxt(mip.linear_dxt, mip.width, mip.height, bpb);
-            let mut swapped = tiled;
-            swap16_in_place(&mut swapped);
-            new_buf.extend_from_slice(&swapped);
+            if new_format.is_dxt() {
+                let tiled = tile_dxt(mip.linear_dxt, mip.width, mip.height, bpb);
+                let mut swapped = tiled;
+                swap16_in_place(&mut swapped);
+                new_buf.extend_from_slice(&swapped);
+            } else {
+                // `8_8_8_8` FE art: tiled per texel, no byte swap — the same encoding
+                // `replace_same_size` writes (and the parse side reads) for a tiled slot; the
+                // buffer is align(w, 32) × align(h, 32) × 4 bytes (a multiple of 0x1000).
+                new_buf.extend_from_slice(&tile(mip.linear_dxt, mip.width, mip.height, 4));
+            }
         }
         let new_buf_size = (new_buf.len() + 0xFFF) & !0xFFF;
+        if u32::try_from(new_buf_size).is_err() {
+            return Err(TexlibError::DataRegionOverflow);
+        }
         new_buf.resize(new_buf_size, 0);
 
         // Re-read every TAG_TEX_DATA entry from the raw file table so
@@ -451,6 +577,15 @@ impl Texlib {
                     orig_size: buf_size,
                 });
             }
+        }
+        // The raster's pixels must be one of the tagged data entries, or the reflow below would
+        // re-describe a buffer it never writes (some NHL 07 FE-art members carry no tagged payload
+        // entry — research R132d): refuse before building anything.
+        if !data_entries.iter().any(|e| e.entry_idx as u32 == tex.slot.tex_data_entry_idx) {
+            return Err(TexlibError::ResizeRule(format!(
+                "the raster's pixel data (file-table entry {}) is not a tagged data entry; its layout is not read, so a different-size replacement is refused",
+                tex.slot.tex_data_entry_idx
+            )));
         }
         // Reflow the data region in original-offset order so each
         // buffer's bytes only ever move forward/backward by the
@@ -513,30 +648,19 @@ impl Texlib {
         // Patch header data_size at 0x54.
         out[0x54..0x58].copy_from_slice(&new_data_size.to_be_bytes());
 
-        // Rewrite the target's descriptor in place. The descriptor's
-        // base-address field (DW8) must point at the slot's reflowed
-        // data offset, so pull the target's post-reflow `new_off` out of
-        // the layout we just computed.
-        let target_data_off = layout
-            .iter()
-            .find(|(entry, _)| entry.entry_idx as u32 == tex.slot.tex_data_entry_idx)
-            .map(|(_, new_off)| *new_off)
-            .ok_or(TexlibError::DataRegionOverflow)?;
-        let mip_count = mips.len() as u32;
-        let new_desc = make_descriptor(
-            new_width,
-            new_height,
-            new_format,
-            mip_count,
-            target_data_off,
-        );
-        let desc_off = tex.slot.desc_off as usize;
-        if desc_off + new_desc.len() > out.len() {
-            return Err(TexlibError::TruncatedDescriptor { off: desc_off });
-        }
-        out[desc_off..desc_off + new_desc.len()].copy_from_slice(&new_desc);
+        // Rewrite the target's descriptor in place from its shipped bytes: `DW8` is a slot
+        // reference (2 × the descriptor index), not a byte address, so it is kept as is even
+        // though the slot's data offset moved (research 2026-09-21 handoff 11 §2 corrected the
+        // earlier `data_off >> 4` reading, which only ever matched slot 0).
+        out[desc_off..desc_off + DESCRIPTOR_LEN].copy_from_slice(&new_desc);
 
-        Ok(out)
+        // Read the result back: the target must parse at the requested size, format and mip count.
+        let re = parse(&out)?;
+        match re.textures.get(idx) {
+            Some(t) if (t.width, t.height, t.format) == (new_width, new_height, new_format) && descriptor_mip_count(&new_desc) == mip_count => Ok(out),
+            Some(t) => Err(TexlibError::ResizeRule(format!("the rewritten container reads back as {}x{} {:?}, not the requested {new_width}x{new_height} {new_format:?}", t.width, t.height, t.format))),
+            None => Err(TexlibError::ResizeRule(format!("the rewritten container no longer lists texture {idx}"))),
+        }
     }
 
     /// Replace texture `idx`'s base mip with `new_dxt_base` bytes at
@@ -574,9 +698,9 @@ impl Texlib {
             });
         }
 
-        // DXT: tile by 4×4 block + 16-bit-pair swap. Argb8888 texlib is
-        // stored LINEAR (no tiling, no swap) — write the `[A,R,G,B]`
-        // base mip straight back (see the parse-side note).
+        // DXT: tile by 4×4 block + 16-bit-pair swap. Argb8888: mirror the parse side — tiled
+        // per texel (no swap) when the descriptor's tiled bit is set (FE art), else the
+        // `[A,R,G,B]` base mip goes straight back (linear nameplates).
         let swapped = if tex.format.is_dxt() {
             let mut t = tile_dxt(
                 new_dxt_base,
@@ -586,6 +710,8 @@ impl Texlib {
             );
             swap16_in_place(&mut t);
             t
+        } else if tex.tiled {
+            tile(new_dxt_base, tex.width, tex.height, 4)
         } else {
             new_dxt_base.to_vec()
         };
@@ -618,13 +744,172 @@ impl Texlib {
         Ok(out)
     }
 
+    /// The declared mip count of texture `idx` (1 when the descriptor is unreadable).
+    pub fn declared_mip_count(&self, idx: usize) -> u32 {
+        let Some(tex) = self.textures.get(idx) else { return 1 };
+        let desc_off = tex.slot.desc_off as usize;
+        if desc_off + DESCRIPTOR_LEN <= self.raw.len() {
+            let d: [u8; DESCRIPTOR_LEN] = self.raw[desc_off..desc_off + DESCRIPTOR_LEN].try_into().expect("bounds checked");
+            descriptor_mip_count(&d).max(1)
+        } else {
+            1
+        }
+    }
+
+    /// The applicability gate of [`Texlib::replace_large_levels_keep_tail`] for texture `idx`:
+    /// whether its large levels may be rewritten at the sequential offsets (the audited
+    /// population) or only the base (everything else), with the reason. See
+    /// [`LargeLevelSupport`].
+    pub fn large_level_support(&self, idx: usize) -> Result<LargeLevelSupport, TexlibError> {
+        let tex = self
+            .textures
+            .get(idx)
+            .ok_or(TexlibError::TextureIndexOutOfRange {
+                idx,
+                count: self.textures.len(),
+            })?;
+        let base_only = |reason: String| Ok(LargeLevelSupport::BaseOnly { reason });
+        if !tex.format.is_dxt() {
+            return base_only(format!("{:?} is not a DXT format; the audit decoded DXT1 / DXT3 / DXT5 only", tex.format));
+        }
+        if !tex.tiled {
+            return base_only("the raster is stored linear, not tiled; the audit examined tiled rasters only".into());
+        }
+        let desc_off = tex.slot.desc_off as usize;
+        if desc_off + DESCRIPTOR_LEN > self.raw.len() {
+            return base_only("the descriptor is truncated, so the declared level count is unknown".into());
+        }
+        let d: [u8; DESCRIPTOR_LEN] = self.raw[desc_off..desc_off + DESCRIPTOR_LEN].try_into().expect("bounds checked");
+        let dw0 = u32::from_be_bytes([d[0], d[1], d[2], d[3]]);
+        if dw0 != DESC_MEASURED_DW0[0] {
+            return base_only(format!(
+                "descriptor form DW0 = 0x{dw0:08X} is not the NHL 09–Legacy form (0x{:08X}) the audit population carries",
+                DESC_MEASURED_DW0[0]
+            ));
+        }
+        let declared = descriptor_mip_count(&d).max(1);
+        if declared < 2 {
+            return base_only("the raster declares a single level; there are no smaller levels to place".into());
+        }
+        if tex.width < AUDITED_MIN_DIM || tex.height < AUDITED_MIN_DIM || tex.width > AUDITED_MAX_DIM || tex.height > AUDITED_MAX_DIM {
+            return base_only(format!(
+                "{}×{} is outside the audited shapes ({AUDITED_MIN_DIM}–{AUDITED_MAX_DIM} texels on both axes)",
+                tex.width, tex.height
+            ));
+        }
+        let bpb = tex.format.bytes_per_block();
+        let chain: usize = (0..declared).map(|l| tiled_buffer_size((tex.width >> l).max(1), (tex.height >> l).max(1), bpb)).sum();
+        if tex.slot.size as usize >= 6 * chain {
+            return base_only("the slot holds at least six chains (a cube map); the audit excluded cubes".into());
+        }
+        let large_levels = (1..declared).filter(|&l| !is_packed_tail_level((tex.width >> l).max(1), (tex.height >> l).max(1))).count() as u32;
+        Ok(LargeLevelSupport::LargeLevels { large_levels })
+    }
+
+    /// Rewrite the base level and — for a raster inside the audited population
+    /// ([`Texlib::large_level_support`]) — every **large** level of texture `idx` at the offsets
+    /// Studio's sequential model predicts, keeping the shipped **packed tail** (every level at or
+    /// below 16 × 16 blocks, 64 texels on either axis) byte-for-byte. Outside the population only
+    /// the base is rewritten and every other byte of the slot is kept.
+    ///
+    /// Why the split (mip placement audit, 22 Sep 2026, `tests/rw4xb2_mip_placement.rs`, RGB
+    /// content comparison on real Xbox 360 rasters): decoding each shipped level at the model's
+    /// offset and comparing it with a box-downscaled base matches on every audited level above
+    /// 16 blocks and fails to match on a substantial share of the tail levels; Studio's per-level
+    /// 32-block tiling also allocates more than every shipped slot. That is static evidence about
+    /// placement, not a runtime observation. (Historical note, kept as attributed context only: a
+    /// source comment introduced with commit `99ce2a5` recorded an earlier in-game finding, "PR11:
+    /// players rendered debug-blue at gameplay distance" after a full-chain rewrite; its original
+    /// evidence is not in this repository.) Until an independent packed-tail contract exists, this
+    /// writer changes only what the audit covers and leaves the authored tail in place — the kept
+    /// levels then carry the *previous* image's content, which the caller must disclose as a
+    /// partial replacement.
+    ///
+    /// Same base constraints as [`Texlib::replace_with_mip_chain`]; nothing after the last written
+    /// level is zeroed, and [`KeepTailWrite::written_ranges`] is the exact byte-write mask.
+    pub fn replace_large_levels_keep_tail(
+        &self,
+        idx: usize,
+        mips: &[LinearMip<'_>],
+    ) -> Result<KeepTailWrite, TexlibError> {
+        let tex = self
+            .textures
+            .get(idx)
+            .ok_or(TexlibError::TextureIndexOutOfRange {
+                idx,
+                count: self.textures.len(),
+            })?;
+        let expected = base_mip_byte_size(tex.format, tex.width, tex.height);
+        let base = mips.first().ok_or(TexlibError::ReplacementSizeMismatch { expected, have: 0 })?;
+        if base.width != tex.width || base.height != tex.height || base.linear_dxt.len() != expected {
+            return Err(TexlibError::ReplacementSizeMismatch {
+                expected,
+                have: base.linear_dxt.len(),
+            });
+        }
+        let bpb = tex.format.bytes_per_block();
+        let buf_start = self.hdr_size as usize + tex.slot.data_rel_off as usize;
+        let buf_size = tex.slot.size as usize;
+        if buf_start + buf_size > self.raw.len() {
+            return Err(TexlibError::TruncatedBuffer {
+                start: buf_start,
+                end: buf_start + buf_size,
+                file_len: self.raw.len(),
+            });
+        }
+        let declared = self.declared_mip_count(idx);
+        let support = self.large_level_support(idx)?;
+        let write_large = matches!(support, LargeLevelSupport::LargeLevels { .. });
+
+        let mut out = self.raw.clone();
+        let mut cursor = 0usize;
+        let mut levels_written = 0u32;
+        let mut written_ranges: Vec<(usize, usize)> = Vec::new();
+        for (i, mip) in mips.iter().enumerate() {
+            // The base is always written; a smaller level only on the large-level route, while it
+            // is a large level of the declared chain and fits the slot.
+            if i > 0 && (!write_large || i as u32 >= declared || is_packed_tail_level(mip.width, mip.height)) {
+                break;
+            }
+            let (ew, eh) = ((tex.width >> i).max(1), (tex.height >> i).max(1));
+            if (mip.width, mip.height) != (ew, eh) || mip.linear_dxt.len() != base_mip_byte_size(tex.format, ew, eh) {
+                return Err(TexlibError::MipSizeMismatch {
+                    level: i,
+                    width: mip.width,
+                    height: mip.height,
+                    expected: base_mip_byte_size(tex.format, ew, eh),
+                    have: mip.linear_dxt.len(),
+                });
+            }
+            let mut swapped = tile_dxt(mip.linear_dxt, mip.width, mip.height, bpb);
+            swap16_in_place(&mut swapped);
+            if cursor + swapped.len() > buf_size {
+                break;
+            }
+            out[buf_start + cursor..buf_start + cursor + swapped.len()].copy_from_slice(&swapped);
+            written_ranges.push((buf_start + cursor, buf_start + cursor + swapped.len()));
+            cursor += swapped.len();
+            levels_written += 1;
+        }
+        Ok(KeepTailWrite {
+            bytes: out,
+            support,
+            levels_written,
+            tail_levels_kept: declared.saturating_sub(levels_written),
+            tail_bytes_kept: buf_size - cursor,
+            written_ranges,
+        })
+    }
+
     /// Splice a new base mip into texture `idx` and KEEP the original
     /// trailing mip-chain bytes verbatim. The console packed-mip tail
-    /// layout has never been validated for our generated chains
-    /// (PR11 in-game finding: players rendered debug-blue at gameplay
-    /// distance, where the GPU samples the small mips) — the donor's
-    /// authored tail is bit-correct by construction and reads as a
-    /// skin-tone blur at the distances it covers.
+    /// layout is not established for Studio's generated chains (mip
+    /// placement audit, 22 Sep 2026). Historical note, attributed and
+    /// unverified here: this comment originally cited "PR11 in-game
+    /// finding: players rendered debug-blue at gameplay distance"
+    /// (commit `99ce2a5`); the original evidence is not in this
+    /// repository. The donor's authored tail is bit-correct by
+    /// construction; what it looks like at distance is not claimed.
     ///
     /// Same constraints as [`Texlib::replace_same_size`]: the new base
     /// must match the slot's declared dimensions + format.
@@ -656,6 +941,8 @@ impl Texlib {
             );
             swap16_in_place(&mut t);
             t
+        } else if tex.tiled {
+            tile(new_dxt_base, tex.width, tex.height, 4)
         } else {
             new_dxt_base.to_vec()
         };
@@ -744,6 +1031,8 @@ pub enum TexlibError {
     DataRegionOverflow,
     #[error("resize is only supported for DXT formats, not {format:?} (use replace_same_size)")]
     ResizeUnsupportedFormat { format: PixelFormat },
+    #[error("resize refused: {0}")]
+    ResizeRule(String),
 }
 
 /// Parse a texlib RX2 container into [`Texture`]s plus the metadata
@@ -807,6 +1096,30 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
         }
     }
 
+    if no_data_region {
+        // NHL07 mixed mesh/texture containers also have untagged geometry buffers.
+        // DW8 names the pixel entry explicitly (measured R42); ordering/counting all
+        // untagged buffers misclassifies geometry and rejects otherwise valid rasters.
+        let mut referenced = Vec::with_capacity(desc_slots.len());
+        let mut texture_descs = Vec::with_capacity(desc_slots.len());
+        for &(desc_index, ints) in &desc_slots {
+            let off = ints[0] as usize;
+            if off.checked_add(DESC_WIDTH_WORD_REL + 2).is_none_or(|end| end > data.len()) {
+                return Err(TexlibError::TruncatedDescriptor { off });
+            }
+            if PixelFormat::from_byte(data[off + DESC_FORMAT_BYTE_REL]).is_none() {
+                continue;
+            }
+            let pixel_index = (read_u32_be(data, off + 32) >> DESC_DW8_INDEX_SHIFT) as usize;
+            let slot = data_slots.iter().find(|(index, _)| *index == pixel_index)
+                .ok_or(TexlibError::OrphanDescriptor { desc: desc_index })?;
+            referenced.push(*slot);
+            texture_descs.push((desc_index, ints));
+        }
+        data_slots = referenced;
+        desc_slots = texture_descs;
+    }
+
     // Texture names are stored as NUL-terminated ASCII anywhere in the
     // header region. The name table entry points at the first one;
     // names always come in the same order as the data slots.
@@ -845,8 +1158,11 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
             return Err(TexlibError::TruncatedDescriptor { off: desc_off });
         }
         let fmt_byte = data[desc_off + DESC_FORMAT_BYTE_REL];
-        let height_byte = data[desc_off + DESC_HEIGHT_BYTE_REL];
-        let width_word = read_u16_be(data, desc_off + DESC_WIDTH_WORD_REL);
+        // DW9 = `(height − 1) << 13 | (width − 1)`, 13 + 13 bits (research 2026-09-21 handoff 11
+        // §2). The earlier 8-bit height byte read `(h / 8 − 1)` and silently halved every raster
+        // taller than 2 048 (the 512 × 4 096 `effects/lcd_*` strips) — found by the descriptor
+        // census `tests/rw4xb2_descriptor_census.rs`.
+        let dw9 = read_u32_be(data, desc_off + DESC_HEIGHT_BYTE_REL - 1);
         // The Xenos tiled flag (see `DESC_FETCH_TILED_BIT`): set = Xbox-tiled, clear = linear.
         let fetch_dw0 = read_u32_be(data, desc_off + DESC_FETCH_DW0_REL);
         let is_tiled = (fetch_dw0 & DESC_FETCH_TILED_BIT) != 0;
@@ -860,8 +1176,8 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
         let Some(format) = PixelFormat::from_byte(fmt_byte) else {
             continue;
         };
-        let height = (height_byte as u32 + 1) * 8;
-        let width = (width_word.wrapping_add(1) & DESC_WIDTH_VALUE_MASK) as u32;
+        let height = ((dw9 >> 13) & 0x1FFF) + 1;
+        let width = (dw9 & DESC_WIDTH_VALUE_MASK as u32) + 1;
 
         let buf_start = hdr_size as usize + data_rel_off as usize;
         let buf_end =
@@ -889,9 +1205,19 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
         }
         let mut base_tiled = data[buf_start..buf_start + base_size].to_vec();
         let base_mip_linear = if format.is_dxt() {
-            // DXT: 16-bit-pair swap, then untile by 4×4 block.
-            swap16_in_place(&mut base_tiled);
-            untile_dxt(&base_tiled, width, height, format.bytes_per_block())
+            // DXT: 16-bit-pair swap, then untile by 4×4 block. The tiled base level spans the
+            // 32×32-block macro-tile-aligned buffer, which is larger than the linear base when a
+            // dimension is under 32 blocks (a 128×64 DXT5 league logo: 8 192 linear bytes inside a
+            // 16 384-byte tiled span) — read the whole span when the slot holds it, else the
+            // linear-sized slice (the same rule the `Argb8888` branch applies).
+            let tiled_size = tiled_buffer_size(width, height, format.bytes_per_block());
+            let mut span = if (buf_size as usize) >= tiled_size && buf_start + tiled_size <= data.len() {
+                data[buf_start..buf_start + tiled_size].to_vec()
+            } else {
+                std::mem::take(&mut base_tiled)
+            };
+            swap16_in_place(&mut span);
+            untile_dxt(&span, width, height, format.bytes_per_block())
         } else if is_tiled {
             // Argb8888 FE art (portraits, awards, logos) is stored **Xbox-tiled**. Untile at the
             // real dims — `untile` reads through the 32-aligned pitch and crops to width×height, so
@@ -923,6 +1249,7 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
             height,
             format,
             base_mip_linear,
+            tiled: is_tiled,
             slot: BufferSlot {
                 data_rel_off,
                 size: buf_size,
@@ -945,8 +1272,8 @@ pub fn base_mip_byte_size(format: PixelFormat, width: u32, height: u32) -> usize
     if !format.is_dxt() {
         return (width as usize) * (height as usize) * 4;
     }
-    let bw = ((width + 3) / 4).max(1) as usize;
-    let bh = ((height + 3) / 4).max(1) as usize;
+    let bw = width.div_ceil(4).max(1) as usize;
+    let bh = height.div_ceil(4).max(1) as usize;
     bw * bh * format.bytes_per_block()
 }
 
@@ -1078,10 +1405,247 @@ pub fn make_descriptor(
     // DW13 — byte 0x36 = bit_length(max_dim) = log2_max + 1.
     d[52] = 0x08;
     d[53] = 0x00;
-    d[54] = ((log2_max + 1).max(1).min(0xFF)) as u8;
+    d[54] = (log2_max + 1).clamp(1, 0xFF) as u8;
     d[55] = 0x00;
 
     d
+}
+
+/// Why a descriptor cannot be re-derived for a resize (research 2026-09-21 handoff 11 §2: the
+/// exceptions the census lists).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum DescriptorRuleRefusal {
+    /// `DW0` is neither of the two **measured** fetch-constant generations: `0x00400003`
+    /// (NHL 09–Legacy) or `0x00000003` (NHL 07 / 08 — research 2026-09-21 pm handoff R42 §2, where
+    /// every dimension-dependent word obeys the same rules: NHL 07 pitch 10 666 / 10 666 and
+    /// `DW12` 9 554 / 9 555, NHL 08 14 066 / 14 066 after its RefPack wrapper is removed).
+    UnmeasuredGeneration { dw0: u32 },
+    /// The fetch constant's `tiled` bit is clear (a few FE 8_8_8_8 rasters): the tiled-base
+    /// mip-address rule does not describe it.
+    NotTiled,
+    /// Cube maps (`dimension` 3): 6 × the chain; not a 2D resize.
+    CubeMap,
+    /// Below the tiled-base minimum: BCn textures under 128 texels in either dimension pack their
+    /// mips into the base tile (`DW12` = 0 in 75 / 202 tiny cases) and 16-wide strips miss the
+    /// pitch rule; refused rather than guessed.
+    TooSmall { width: u32, height: u32, minimum: u32 },
+    /// The requested output does not fit the descriptor's field (`DW9` 13-bit width / height,
+    /// `DW11` 4-bit mip count, a chain longer than the size halves to): refused, never masked.
+    Unrepresentable { what: &'static str, value: u32, max: u32 },
+    /// `DW8`'s upper field (bits 12+) does not address this texture's pixel-data entry. Research
+    /// 2026-09-21 pm handoff R42 measured that field as the **file-table index of the paired
+    /// data entry** on 100 % of NHL 08–Legacy descriptors and 10 666 / 10 675 on NHL 07, so a
+    /// descriptor that disagrees is either a container whose pairing Studio reads differently or
+    /// a non-texture record — refused rather than rewritten with a word we cannot justify.
+    SlotJoinMismatch { dw8_index: u32, data_entry_index: u32 },
+    /// A descriptor whose format byte is null (`0x00`): the nine `fx/common/texture.xml.rx2`
+    /// records on NHL 07 are not textures (handoff R42 §1) — refused by format.
+    NullFormatDescriptor,
+}
+
+impl std::fmt::Display for DescriptorRuleRefusal {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::UnmeasuredGeneration { dw0 } => write!(f, "descriptor DW0 = {dw0:#010x} is neither measured fetch-constant generation (0x00400003 on NHL 09–Legacy, 0x00000003 on NHL 07 / 08)"),
+            Self::NotTiled => write!(f, "the raster is stored linear (tiled bit clear); the resize rule covers tiled rasters only"),
+            Self::CubeMap => write!(f, "the raster is a cube map; a 2D resize does not apply"),
+            Self::TooSmall { width, height, minimum } => write!(f, "{width}x{height} is below the {minimum}-texel minimum the resize rule covers (tiny rasters pack their mips into the base tile)"),
+            Self::Unrepresentable { what, value, max } => write!(f, "{what} {value} cannot be stored in the descriptor (1–{max})"),
+            Self::SlotJoinMismatch { dw8_index, data_entry_index } => write!(f, "the descriptor's DW8 addresses file-table entry {dw8_index}, not this texture's pixel-data entry {data_entry_index}; the container's descriptor-to-slot join is not the measured one and is not rewritten"),
+            Self::NullFormatDescriptor => write!(f, "the descriptor carries a null format byte: it does not describe a texture (NHL 07 `fx/common/texture.xml.rx2` records)"),
+        }
+    }
+}
+
+/// Re-derive the dimension-dependent fields of an existing 56-byte `RW4xb2` descriptor for a
+/// resize to `width × height` with `mip_count` levels, per research 2026-09-21 handoff 11 §2
+/// (censused on 190 000+ descriptors of NHL 09–Legacy): `DW7` pitch = `ceil(width / 32)` in bits
+/// 22–30; `DW9` = `(height − 1) << 13 | (width − 1)`; `DW11` bits 6–9 = `mips − 1`; `DW12` bits
+/// 12+ = tiled base-mip bytes / 4096 (0 for a single mip); `DW13` byte 2 = mip count. Everything
+/// else — the constants, the colour-key words, **`DW8` (the slot reference, `2 × index`, not a
+/// byte address)**, `DW10`'s per-shape filter word — is kept from `orig`. The format byte of
+/// `DW8` follows `format`.
+pub fn patch_descriptor_for_resize(
+    orig: &[u8; DESCRIPTOR_LEN],
+    width: u32,
+    height: u32,
+    format: PixelFormat,
+    mip_count: u32,
+) -> Result<[u8; DESCRIPTOR_LEN], DescriptorRuleRefusal> {
+    let rd = |i: usize| u32::from_be_bytes(orig[i * 4..i * 4 + 4].try_into().unwrap());
+    let dw0 = rd(0);
+    if !DESC_MEASURED_DW0.contains(&dw0) {
+        return Err(DescriptorRuleRefusal::UnmeasuredGeneration { dw0 });
+    }
+    if orig[DESC_FORMAT_BYTE_REL] == 0 {
+        return Err(DescriptorRuleRefusal::NullFormatDescriptor);
+    }
+    let dw7 = rd(7);
+    if dw7 & DESC_FETCH_TILED_BIT == 0 {
+        return Err(DescriptorRuleRefusal::NotTiled);
+    }
+    // Xenos fetch-constant `dimension` (DW10 bits 9–10 of the public layout sits in the fourth
+    // fetch word; the census keys cubes by the 6× slot): refuse when the original chain is 6 × the
+    // 2D chain is the caller's check; here the `DW12` rule is applied for a 2D raster only.
+    // Xenos fetch-constant `dimension` (bits 9–10 of the fourth word, `DW12` here): 3 = cube.
+    if (rd(12) >> 9) & 3 == 3 {
+        return Err(DescriptorRuleRefusal::CubeMap);
+    }
+    // ---- Validation first; no dimension-dependent arithmetic above this line.
+    //
+    // Representability (coordinator review R1 F1, 21 Sep 2026; **order** corrected under the R2
+    // followup, 22 Sep 2026): `DW9` stores `width − 1` / `height − 1` in 13 bits, `DW11` the mip
+    // count − 1 in 4 bits, and a chain cannot have more levels than the size halves to. A request
+    // outside a field is refused, never masked into another value and never measured first — the
+    // tile-aligned size of an out-of-range request overflows (`u32::MAX` DXT5 panicked inside
+    // `tiled_buffer_size` before this bound was reached). (`DW7`'s 9-bit pitch and `DW12`'s
+    // 20-bit mip page follow from the dimension bound; both are asserted below.)
+    let unrep = |what: &'static str, value: u32, max: u32| DescriptorRuleRefusal::Unrepresentable {
+        what,
+        value,
+        max,
+    };
+    if width > DESC_MAX_DIM {
+        return Err(unrep("width", width, DESC_MAX_DIM));
+    }
+    if height > DESC_MAX_DIM {
+        return Err(unrep("height", height, DESC_MAX_DIM));
+    }
+    if mip_count == 0 || mip_count > DESC_MAX_MIPS {
+        return Err(unrep("mip count", mip_count, DESC_MAX_MIPS));
+    }
+    let (min_dim, tile_texels) = if format.is_dxt() { (128u32, 128u32) } else { (32u32, 32u32) };
+    if width < min_dim || height < min_dim {
+        return Err(DescriptorRuleRefusal::TooSmall { width, height, minimum: min_dim });
+    }
+    let halvings = 32 - width.max(height).leading_zeros();
+    if mip_count > halvings {
+        return Err(unrep("mip count (for this size)", mip_count, halvings));
+    }
+
+    // ---- Dimension-dependent arithmetic, on dimensions now known to be 128 … 8 192 (32 … 8 192
+    // uncompressed). The checked helpers keep that guarantee auditable rather than implicit: a
+    // `None` here would mean the bound above stopped matching the arithmetic, so it refuses
+    // rather than panicking.
+    let tiled_base = if format.is_dxt() {
+        try_tiled_buffer_size(width, height, format.bytes_per_block())
+    } else {
+        try_tiled_buffer_size_texels(width, height, 4)
+    }
+    .ok_or(unrep("tiled buffer bytes", width, DESC_MAX_DIM))?;
+    let mut d = *orig;
+    let wr = |d: &mut [u8; DESCRIPTOR_LEN], i: usize, v: u32| d[i * 4..i * 4 + 4].copy_from_slice(&v.to_be_bytes());
+    // DW7: pitch (bits 22–30, 32-texel units) of the **tile-aligned** width — the shipped
+    // 160-wide rasters carry pitch 8 (256 texels), so the pitch is the padded row, not
+    // `ceil(width / 32)` (the census's "special widths"); tiled bit and the rest kept.
+    let pitch = width.div_ceil(tile_texels) * tile_texels / 32;
+    if pitch > 0x1FF {
+        return Err(unrep("pitch (32-texel units)", pitch, 0x1FF));
+    }
+    wr(&mut d, 7, (dw7 & !(0x1FF << 22)) | (pitch << 22));
+    // DW8: slot reference kept; format byte follows the new format.
+    wr(&mut d, 8, (rd(8) & !0xFF) | format.to_byte() as u32);
+    // DW9: (height − 1) << 13 | (width − 1), 13 + 13 bits; the upper bits kept.
+    wr(&mut d, 9, (rd(9) & !0x03FF_FFFF) | ((height - 1) << 13) | (width - 1));
+    // DW11: mip_max_level bits 6–9 = mips − 1.
+    wr(&mut d, 11, (rd(11) & !(0xF << 6)) | ((mip_count - 1) << 6));
+    // DW12: mip address = tiled base / 4096 in bits 12+ (0 when there is no second level).
+    let mip_addr = if mip_count > 1 {
+        u32::try_from(tiled_base / 4096).ok().filter(|p| *p < (1 << 20)).ok_or(unrep("mip page (tiled base / 4096)", u32::MAX, (1 << 20) - 1))?
+    } else {
+        0
+    };
+    wr(&mut d, 12, (rd(12) & 0xFFF) | (mip_addr << 12));
+    // DW13: byte 2 = mip count.
+    d[54] = mip_count as u8;
+    Ok(d)
+}
+
+/// The fetch-constant `DW0` values whose dimension-dependent words are measured. `0x00400003` is
+/// NHL 09–Legacy; `0x00000003` is NHL 07 / 08, added 22 Sep 2026 on research 2026-09-21 pm handoff
+/// R42 §2 — the pitch, `DW9`, `DW11`, `DW12` and `DW13` rules were re-measured on the full
+/// population of both generations and are identical. The **container** layouts still differ: see
+/// [`Texlib::replace_with_resize`], which refuses NHL 07's table-at-EOF form, and the NHL 08
+/// RefPack wrapper, which the caller removes.
+pub const DESC_MEASURED_DW0: [u32; 2] = [0x0040_0003, 0x0000_0003];
+
+/// `DW8`'s upper field — the file-table index of the texture's pixel-data entry (research
+/// 2026-09-21 pm handoff R42 §1: 100 % on NHL 08–Legacy, 10 666 / 10 675 on NHL 07). The low byte
+/// is the Xenos format code, so the index starts at bit 12.
+pub fn descriptor_data_entry_index(desc: &[u8; DESCRIPTOR_LEN]) -> u32 {
+    u32::from_be_bytes(desc[32..36].try_into().unwrap()) >> DESC_DW8_INDEX_SHIFT
+}
+
+/// Bit position of `DW8`'s pixel-entry index (the "base address" field of the fetch constant).
+const DESC_DW8_INDEX_SHIFT: u32 = 12;
+
+/// The largest width / height a `DW9` field stores (13 bits of `dimension − 1`).
+pub const DESC_MAX_DIM: u32 = 0x2000;
+/// The most mip levels `DW11` declares (4 bits of `mips − 1`).
+pub const DESC_MAX_MIPS: u32 = 16;
+
+/// Build a minimal, single-level **synthetic** `RW4xb2` texlib of tiled DXT rasters — for tests
+/// and fixtures only, never a from-scratch encoder for the game (real containers carry name
+/// tables, colour-key words and per-shape filter words this does not synthesise). Each raster is
+/// `(width, height, format, linear base mip)`; the header region is `0x200` bytes with the file
+/// table at `0x60` (a data / descriptor entry pair per raster) and the shipped-shape NHL 09–Legacy
+/// descriptors (`DW0 = 0x00400003`, tiled, one level) at `0x100 + 0x40 × i`; the tiled slots
+/// follow in order. Round-trips through [`parse`], and the descriptors pass
+/// [`patch_descriptor_for_resize`]'s gate, so the resize route can be exercised without a
+/// private fixture. Panics on a non-DXT format, a zero dimension or more than four rasters.
+pub fn encode_synthetic_texlib(rasters: &[(u32, u32, PixelFormat, &[u8])]) -> Vec<u8> {
+    assert!(!rasters.is_empty() && rasters.len() <= 4, "1–4 rasters");
+    let hdr = 0x200usize;
+    let mut slots: Vec<Vec<u8>> = Vec::new();
+    for (w, h, f, linear) in rasters {
+        assert!(f.is_dxt() && *w > 0 && *h > 0, "DXT rasters with non-zero dimensions");
+        assert_eq!(linear.len(), base_mip_byte_size(*f, *w, *h), "linear base mip size");
+        let mut tiled = tile_dxt(linear, *w, *h, f.bytes_per_block());
+        swap16_in_place(&mut tiled);
+        let padded = (tiled.len() + 0xFFF) & !0xFFF;
+        tiled.resize(padded, 0);
+        slots.push(tiled);
+    }
+    let data_size: usize = slots.iter().map(Vec::len).sum();
+    let mut b = vec![0u8; hdr + data_size];
+    b[..MAGIC.len()].copy_from_slice(MAGIC);
+    let wr = |b: &mut [u8], off: usize, v: u32| b[off..off + 4].copy_from_slice(&v.to_be_bytes());
+    wr(&mut b, HDR_FILE_COUNT_OFF, (rasters.len() * 2) as u32);
+    wr(&mut b, HDR_FILE_TABLE_OFF, 0x60);
+    wr(&mut b, HDR_HDR_SIZE_OFF, hdr as u32);
+    wr(&mut b, HDR_DATA_SIZE_OFF, data_size as u32);
+    let mut rel = 0usize;
+    for (i, ((w, h, f, _), slot)) in rasters.iter().zip(&slots).enumerate() {
+        let desc_off = 0x100 + 0x40 * i;
+        let entries: [([u32; ENTRY_INTS], [u8; 4]); 2] = [
+            ([rel as u32, 0, slot.len() as u32, 0x1000, 1], TAG_TEX_DATA),
+            ([desc_off as u32, 0, DESCRIPTOR_LEN as u32, 4, 0xA], TAG_TEX_DESC),
+        ];
+        for (k, (ints, tag)) in entries.iter().enumerate() {
+            let e = 0x60 + (i * 2 + k) * ENTRY_STRIDE;
+            for (j, v) in ints.iter().enumerate() {
+                wr(&mut b, e + j * 4, *v);
+            }
+            b[e + 20..e + 24].copy_from_slice(tag);
+        }
+        let mut d = [0u8; DESCRIPTOR_LEN];
+        let dw = |d: &mut [u8; DESCRIPTOR_LEN], i: usize, v: u32| d[i * 4..i * 4 + 4].copy_from_slice(&v.to_be_bytes());
+        dw(&mut d, 0, 0x0040_0003);
+        dw(&mut d, 7, DESC_FETCH_TILED_BIT | ((w.div_ceil(128) * 128 / 32) << 22));
+        dw(&mut d, 8, (2 * i as u32) << 8 | f.to_byte() as u32);
+        dw(&mut d, 9, ((h - 1) << 13) | (w - 1));
+        d[54] = 1;
+        b[desc_off..desc_off + DESCRIPTOR_LEN].copy_from_slice(&d);
+        b[hdr + rel..hdr + rel + slot.len()].copy_from_slice(slot);
+        rel += slot.len();
+    }
+    b
+}
+
+/// The mip count a shipped descriptor declares (`DW13` byte 2; research handoff 11 §2:
+/// single-mip rasters carry 1).
+pub fn descriptor_mip_count(desc: &[u8; DESCRIPTOR_LEN]) -> u32 {
+    desc[54] as u32
 }
 
 fn read_u32_be(data: &[u8], off: usize) -> u32 {
@@ -1091,14 +1655,8 @@ fn read_u32_be(data: &[u8], off: usize) -> u32 {
     u32::from_be_bytes(bytes)
 }
 
-fn read_u16_be(data: &[u8], off: usize) -> u16 {
-    let bytes: [u8; 2] = data[off..off + 2]
-        .try_into()
-        .expect("caller already bounds-checked");
-    u16::from_be_bytes(bytes)
-}
 
-fn scan_names(data: &[u8], start: usize) -> Vec<String> {
+pub(crate) fn scan_names(data: &[u8], start: usize) -> Vec<String> {
     let mut out = Vec::new();
     let mut i = start;
     let suffixes: &[&[u8]] = &[b".Raster", b".Texture", b".RasterData", b".RasterTexture"];
@@ -1203,8 +1761,8 @@ pub fn tile(linear: &[u8], grid_w: u32, grid_h: u32, element_pitch: usize) -> Ve
 /// Translate a tiled DXT block stream into a linear one (row-major
 /// block order, top-left to bottom-right).
 pub fn untile_dxt(tiled: &[u8], width: u32, height: u32, bytes_per_block: usize) -> Vec<u8> {
-    let bw = ((width + 3) / 4).max(1);
-    let bh = ((height + 3) / 4).max(1);
+    let bw = width.div_ceil(4).max(1);
+    let bh = height.div_ceil(4).max(1);
     untile(tiled, bw, bh, bytes_per_block)
 }
 
@@ -1217,8 +1775,8 @@ pub fn untile_dxt(tiled: &[u8], width: u32, height: u32, bytes_per_block: usize)
 /// is smaller than a single macro tile. Any positions not covered by
 /// the linear input stay zero.
 pub fn tile_dxt(linear: &[u8], width: u32, height: u32, bytes_per_block: usize) -> Vec<u8> {
-    let bw = ((width + 3) / 4).max(1);
-    let bh = ((height + 3) / 4).max(1);
+    let bw = width.div_ceil(4).max(1);
+    let bh = height.div_ceil(4).max(1);
     let mut out = vec![0u8; tiled_buffer_size(width, height, bytes_per_block)];
     for by in 0..bh {
         for bx in 0..bw {
@@ -1238,11 +1796,22 @@ pub fn tile_dxt(linear: &[u8], width: u32, height: u32, bytes_per_block: usize) 
 /// which is the upper bound the XGAddress2DTiledOffset formula can
 /// address.
 pub fn tiled_buffer_size(width: u32, height: u32, bytes_per_block: usize) -> usize {
-    let bw = ((width + 3) / 4).max(1) as usize;
-    let bh = ((height + 3) / 4).max(1) as usize;
-    let aligned_w = (bw + 31) & !31;
-    let aligned_h = (bh + 31) & !31;
-    aligned_w * aligned_h * bytes_per_block
+    try_tiled_buffer_size(width, height, bytes_per_block)
+        .unwrap_or_else(|| panic!("tiled_buffer_size({width}, {height}, {bytes_per_block}) is not representable; callers with unvalidated dimensions must use try_tiled_buffer_size"))
+}
+
+/// The checked form of [`tiled_buffer_size`]: `None` when the tile-aligned block grid or its
+/// product with the block size does not fit a `usize`. Callers whose dimensions are not already
+/// bounded by the descriptor rule use this (coordinator review R2, 22 Sep 2026: the infallible
+/// form overflowed on `u32::MAX` before `patch_descriptor_for_resize` reached its bound).
+pub fn try_tiled_buffer_size(width: u32, height: u32, bytes_per_block: usize) -> Option<usize> {
+    let bw = width.div_ceil(4).max(1) as usize;
+    let bh = height.div_ceil(4).max(1) as usize;
+    let aligned_w = bw.checked_add(31)? & !31;
+    let aligned_h = bh.checked_add(31)? & !31;
+    aligned_w
+        .checked_mul(aligned_h)?
+        .checked_mul(bytes_per_block)
 }
 
 /// Bytes a tiled buffer must reserve for an *uncompressed* texture
@@ -1251,9 +1820,19 @@ pub fn tiled_buffer_size(width: u32, height: u32, bytes_per_block: usize) -> usi
 /// 32-element macro-tile boundary — the texel-grid analogue of
 /// [`tiled_buffer_size`]'s block-grid alignment.
 pub fn tiled_buffer_size_texels(width: u32, height: u32, element_pitch: usize) -> usize {
-    let w = (width.max(1) as usize + 31) & !31;
-    let h = (height.max(1) as usize + 31) & !31;
-    w * h * element_pitch
+    try_tiled_buffer_size_texels(width, height, element_pitch)
+        .unwrap_or_else(|| panic!("tiled_buffer_size_texels({width}, {height}, {element_pitch}) is not representable; callers with unvalidated dimensions must use try_tiled_buffer_size_texels"))
+}
+
+/// The checked form of [`tiled_buffer_size_texels`] — see [`try_tiled_buffer_size`].
+pub fn try_tiled_buffer_size_texels(
+    width: u32,
+    height: u32,
+    element_pitch: usize,
+) -> Option<usize> {
+    let w = (width.max(1) as usize).checked_add(31)? & !31;
+    let h = (height.max(1) as usize).checked_add(31)? & !31;
+    w.checked_mul(h)?.checked_mul(element_pitch)
 }
 
 /// 16-bit byte-pair swap in place. Xbox 360 stores DXT block bytes
@@ -1270,6 +1849,34 @@ pub fn swap16_in_place(buf: &mut [u8]) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::fixtures::{require, LEGACY_CENTERLOGO, LEGACY_TEXLIB_67};
+
+    #[test]
+    fn nhl07_mixed_container_uses_descriptor_pixel_reference() {
+        let pixels = vec![0x31; base_mip_byte_size(PixelFormat::Dxt1, 128, 128)];
+        let mut bytes = encode_synthetic_texlib(&[(128, 128, PixelFormat::Dxt1, &pixels)]);
+        let pixel_start = read_u32_be(&bytes, 0x60) + 0x200;
+        let geometry_start = bytes.len();
+        bytes.extend_from_slice(&[0xa5; 64]);
+        // Absolute, untagged NHL07 buffers, including a non-texture payload.
+        bytes[0x60..0x64].copy_from_slice(&pixel_start.to_be_bytes());
+        bytes[0x74..0x78].fill(0);
+        bytes[0x90..0x94].copy_from_slice(&(geometry_start as u32).to_be_bytes());
+        bytes[0x98..0x9c].copy_from_slice(&64u32.to_be_bytes());
+        bytes[HDR_FILE_COUNT_OFF..HDR_FILE_COUNT_OFF + 4].copy_from_slice(&3u32.to_be_bytes());
+        bytes[HDR_DATA_SIZE_OFF..HDR_DATA_SIZE_OFF + 4].fill(0);
+        let parsed = parse(&bytes).unwrap();
+        assert_eq!(parsed.textures.len(), 1);
+        assert_eq!(parsed.textures[0].base_mip_linear, pixels);
+        let edited = parsed.replace_same_size(0, &vec![0x42; pixels.len()]).unwrap();
+        assert_eq!(&edited[geometry_start..], &bytes[geometry_start..]);
+        assert_eq!(parse(&edited).unwrap().textures[0].base_mip_linear, vec![0x42; pixels.len()]);
+        // An explicit dangling reference must fail, never fall back to ordinal pairing.
+        let descriptor = read_u32_be(&bytes, 0x78) as usize;
+        let word = read_u32_be(&bytes, descriptor + 32);
+        bytes[descriptor + 32..descriptor + 36].copy_from_slice(&((word & 0xfff) | (9 << 12)).to_be_bytes());
+        assert!(matches!(parse(&bytes), Err(TexlibError::OrphanDescriptor { .. })));
+    }
 
     #[test]
     fn nhl07_award_argb8888_is_xbox_tiled() {
@@ -1278,7 +1885,8 @@ mod tests {
         // case the descriptor's tiled flag (`DESC_FETCH_TILED_BIT`) disambiguates from the LINEAR
         // jersey nameplates, since the two buffers are the same byte length. Regression for the
         // horizontal-banding corruption when a tiled buffer was mistaken for a linear image.
-        let path = r"X:\Games\Emulation\Roms\XBOX360\NHL 07\NHL 07 (USA)\fe\ion\artassets\awards\a0.big";
+        let path =
+            r"X:\Games\Emulation\Roms\XBOX360\NHL 07\NHL 07 (USA)\fe\ion\artassets\awards\a0.big";
         let Ok(bytes) = std::fs::read(path) else {
             eprintln!("skipping: {path} not present");
             return;
@@ -1324,7 +1932,10 @@ mod tests {
         // Top-centre patch: opaque yellow (R,G high, B low). A tiled misread scrambles this.
         let patch = texel(128, 40);
         assert_eq!(patch[0], 255, "patch alpha");
-        assert!(patch[1] > 200 && patch[2] > 200 && patch[3] < 80, "patch not yellow: {patch:?}");
+        assert!(
+            patch[1] > 200 && patch[2] > 200 && patch[3] < 80,
+            "patch not yellow: {patch:?}"
+        );
         // Bottom field is the empty white background.
         let field = texel(128, 230);
         assert_eq!(field, &[255, 255, 255, 255], "field not white");
@@ -1450,16 +2061,13 @@ mod tests {
         );
     }
 
-    /// Live fixture test: requires the operator's real Xbox 360 cache
-    /// at the path below. Skipped silently when absent (CI machines
-    /// won't have the cache mounted).
+    /// Requires the real NHL Legacy `rendering/player/texlib_67.rx2`,
+    /// supplied through the fixture root rather than an operator-specific
+    /// absolute path.
     #[test]
+    #[ignore = "private fixture legacy/texlib_67.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn parses_real_texlib_67() {
-        let path = r"H:\Emulators\games\Decompiled\Original\rendering\player\texlib_67.rx2";
-        let Ok(data) = std::fs::read(path) else {
-            eprintln!("skipping: {path} not present");
-            return;
-        };
+        let data = load_template();
         let parsed = parse(&data).expect("real file must parse");
         assert_eq!(parsed.textures.len(), 2, "texlib_67 carries hair + head");
         let names: Vec<&str> = parsed.textures.iter().map(|t| t.name.as_str()).collect();
@@ -1484,28 +2092,21 @@ mod tests {
         assert_eq!(hair.format, PixelFormat::Dxt3);
     }
 
-    /// Path to the working-assets copy of `texlib_67.rx2`. Bundled in
-    /// the repo so this test runs in CI; the legacy operator cache at
-    /// `H:\\Emulators\\...` is no longer mounted.
-    const TEMPLATE_PATH: &str = r"E:\Repositories\nhl-database-studio\Working Assets\Template Texture\NHL Legacy\texlib_67.rx2";
-
-    fn load_template() -> Option<Vec<u8>> {
-        match std::fs::read(TEMPLATE_PATH) {
-            Ok(b) => Some(b),
-            Err(_) => {
-                eprintln!("skipping: {TEMPLATE_PATH} not present");
-                None
-            }
-        }
+    /// The NHL Legacy `texlib_67.rx2` — hair 256×256 DXT3 plus head
+    /// 512×512 DXT1. Private game data, supplied through the fixture root;
+    /// every case that needs it is `#[ignore]`d — see [`crate::fixtures`].
+    fn load_template() -> Vec<u8> {
+        require(LEGACY_TEXLIB_67)
     }
 
-    /// Real 1024 × 1024 DXT3 reference, pulled from the modded Xbox 360
-    /// cache (`rendering/icesurface/centerlogo_0_cm.rx2`) and bundled so
-    /// the third-resolution descriptor is pinned without depending on the
-    /// H: mount. This is the ground truth that confirmed the DW8 base-
-    /// address and DW12 mip-start-page fixes (see
-    /// `make_descriptor_matches_real_centerlogo_1024`).
-    const CENTERLOGO_1024_PATH: &str = r"E:\Repositories\nhl-database-studio\Working Assets\Template Texture\NHL Legacy\centerlogo_0_cm.rx2";
+    /// Real 1024 × 1024 DXT3 reference (`rendering/icesurface/
+    /// centerlogo_0_cm.rx2`). This is the ground truth that confirmed the
+    /// DW8 base-address and DW12 mip-start-page fixes (see
+    /// `make_descriptor_matches_real_centerlogo_1024`). Private game data,
+    /// supplied through the fixture root.
+    fn load_centerlogo() -> Vec<u8> {
+        require(LEGACY_CENTERLOGO)
+    }
 
     /// **Cross-validation #1.** `make_descriptor(256, 256, DXT3, …)`
     /// must reproduce hair's actual descriptor bytes from
@@ -1513,8 +2114,9 @@ mod tests {
     /// has changed — likely because we added a third reference whose
     /// bits override one of the "unverified" formulas.
     #[test]
+    #[ignore = "private fixture legacy/texlib_67.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn make_descriptor_matches_hair_256_dxt3() {
-        let Some(data) = load_template() else { return };
+        let data = load_template();
         let lib = parse(&data).expect("template must parse");
         let hair = lib
             .textures
@@ -1543,8 +2145,9 @@ mod tests {
     /// **Cross-validation #2.** `make_descriptor(512, 512, DXT1, …)`
     /// must reproduce head's actual descriptor bytes exactly.
     #[test]
+    #[ignore = "private fixture legacy/texlib_67.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn make_descriptor_matches_head_512_dxt1() {
-        let Some(data) = load_template() else { return };
+        let data = load_template();
         let lib = parse(&data).expect("template must parse");
         let head = lib
             .textures
@@ -1578,14 +2181,9 @@ mod tests {
     /// the mip-start page count (1024² DXT3 base = 0x100000 >> 16 = 0x10),
     /// NOT `log2−7`. Both of those were the 2026-05-28 in-game crash.
     #[test]
+    #[ignore = "private fixture legacy/centerlogo_0_cm.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn make_descriptor_matches_real_centerlogo_1024() {
-        let data = match std::fs::read(CENTERLOGO_1024_PATH) {
-            Ok(b) => b,
-            Err(_) => {
-                eprintln!("skipping: {CENTERLOGO_1024_PATH} not present");
-                return;
-            }
-        };
+        let data = load_centerlogo();
         let lib = parse(&data).expect("centerlogo must parse");
         let tex = &lib.textures[0];
         assert_eq!((tex.width, tex.height), (1024, 1024));
@@ -1653,8 +2251,9 @@ mod tests {
     /// a file that re-parses with the same texture metadata, and the
     /// base mip must round-trip through tile/swap/untile.
     #[test]
+    #[ignore = "private fixture legacy/texlib_67.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn replace_with_resize_same_dims_round_trip() {
-        let Some(data) = load_template() else { return };
+        let data = load_template();
         let lib = parse(&data).expect("template must parse");
         let head_idx = lib
             .textures
@@ -1706,8 +2305,9 @@ mod tests {
     /// buffer to shift forward — exercises the file-table patching
     /// path that `replace_with_resize` runs for the non-target slot.
     #[test]
+    #[ignore = "private fixture legacy/texlib_67.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn replace_with_resize_grows_earlier_slot() {
-        let Some(data) = load_template() else { return };
+        let data = load_template();
         let lib = parse(&data).expect("template must parse");
         let hair_idx = lib
             .textures
@@ -1770,12 +2370,9 @@ mod tests {
     /// new base mip to come back exactly. Confirms tile/untile cancel
     /// and that the splice preserves every other byte.
     #[test]
+    #[ignore = "private fixture legacy/texlib_67.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn replace_same_size_round_trip() {
-        let path = r"H:\Emulators\games\Decompiled\Original\rendering\player\texlib_67.rx2";
-        let Ok(data) = std::fs::read(path) else {
-            eprintln!("skipping: {path} not present");
-            return;
-        };
+        let data = load_template();
         let parsed = parse(&data).unwrap();
         // Build a "new" base mip by inverting every byte — distinct
         // from the original, same length.
@@ -1803,5 +2400,271 @@ mod tests {
             parsed.textures[other_idx].base_mip_linear,
             "other texture must be byte-identical after replace"
         );
+    }
+
+    // ------------------------------------------------------------- R1 F1: representability
+
+    /// A shipped-shape NHL 09–Legacy descriptor (`DW0 = 0x00400003`, tiled, `w × h`, `format`,
+    /// `mips`) — the reviewer's 56-byte probe with the words the rule reads populated.
+    fn synthetic_descriptor(w: u32, h: u32, format: PixelFormat, mips: u32) -> [u8; DESCRIPTOR_LEN] {
+        let mut d = [0u8; DESCRIPTOR_LEN];
+        let wr = |d: &mut [u8; DESCRIPTOR_LEN], i: usize, v: u32| d[i * 4..i * 4 + 4].copy_from_slice(&v.to_be_bytes());
+        wr(&mut d, 0, 0x0040_0003);
+        wr(&mut d, 7, DESC_FETCH_TILED_BIT | ((w.div_ceil(128) * 128 / 32) << 22));
+        wr(&mut d, 8, format.to_byte() as u32);
+        wr(&mut d, 9, ((h - 1) << 13) | (w - 1));
+        wr(&mut d, 11, (mips - 1) << 6);
+        d[54] = mips as u8;
+        d
+    }
+
+    /// Mip placement audit (22 Sep 2026): the keep-tail writer rewrites the base and every level
+    /// above 16 blocks at the sequential offsets, leaves every packed-tail level's bytes exactly as
+    /// they were, and reports what it kept.
+    #[test]
+    fn keep_tail_writer_rewrites_only_the_content_verified_levels() {
+        // A 512 × 512 DXT1 raster grown to a 10-level chain (512 → 1) through the resize route, so
+        // the slot holds a full chain with distinctive bytes per level.
+        let bytes = synthetic_texlib(512, 512);
+        let lib = parse(&bytes).unwrap();
+        let chain: Vec<(u32, u32, Vec<u8>)> = (0..10u32)
+            .map(|l| {
+                let (w, h) = ((512u32 >> l).max(1), (512u32 >> l).max(1));
+                (w, h, vec![0x10 + l as u8; base_mip_byte_size(PixelFormat::Dxt1, w, h)])
+            })
+            .collect();
+        let mips: Vec<LinearMip<'_>> = chain.iter().map(|(w, h, d)| LinearMip { width: *w, height: *h, linear_dxt: d }).collect();
+        let grown = lib.replace_with_resize(0, PixelFormat::Dxt1, &mips).unwrap();
+        let lib = parse(&grown).unwrap();
+        let t = &lib.textures[0];
+        assert_eq!(descriptor_mip_count(&grown[t.descriptor_offset()..t.descriptor_offset() + DESCRIPTOR_LEN].try_into().unwrap()), 10);
+        let shipped_slot = lib.slot_buffer_tiled(0).unwrap().to_vec();
+
+        // Levels 512 … 128 are large (> 16 blocks); 64 and below are the packed tail.
+        assert!(!is_packed_tail_level(128, 128) && is_packed_tail_level(64, 64) && is_packed_tail_level(64, 512));
+        let large_bytes: usize = (0..3).map(|l| tiled_buffer_size(512 >> l, 512 >> l, 8)).sum();
+
+        let new_chain: Vec<(u32, u32, Vec<u8>)> = chain.iter().map(|(w, h, d)| (*w, *h, vec![0xA0 | (d[0] & 0xF); d.len()])).collect();
+        let new_mips: Vec<LinearMip<'_>> = new_chain.iter().map(|(w, h, d)| LinearMip { width: *w, height: *h, linear_dxt: d }).collect();
+        assert_eq!(lib.large_level_support(0).unwrap(), LargeLevelSupport::LargeLevels { large_levels: 2 });
+        let w = lib.replace_large_levels_keep_tail(0, &new_mips).unwrap();
+        assert_eq!((w.levels_written, w.tail_levels_kept), (3, 7));
+        assert_eq!(w.tail_bytes_kept, shipped_slot.len() - large_bytes);
+        assert_eq!(w.support, LargeLevelSupport::LargeLevels { large_levels: 2 });
+        // The byte-write mask: exactly the three large levels, contiguous from the slot start, and
+        // every byte outside the mask identical to the input (the independent preservation check).
+        let slot_start = lib.hdr_size as usize + t.data_offset();
+        assert_eq!(w.written_ranges.len(), 3);
+        assert_eq!(w.written_ranges[0].0, slot_start);
+        assert_eq!(w.written_ranges[2].1, slot_start + large_bytes);
+        assert_bytes_preserved_outside(&grown, &w.bytes, &w.written_ranges);
+        let after = parse(&w.bytes).unwrap();
+        let slot = after.slot_buffer_tiled(0).unwrap();
+        // The three large levels carry the new bytes at the model's offsets …
+        let mut off = 0usize;
+        for l in 0..3u32 {
+            let size = tiled_buffer_size(512 >> l, 512 >> l, 8);
+            let mut expect = tile_dxt(&new_chain[l as usize].2, 512 >> l, 512 >> l, 8);
+            swap16_in_place(&mut expect);
+            assert_eq!(&slot[off..off + size], &expect[..], "level {l}");
+            off += size;
+        }
+        // … and every byte after them is exactly what shipped (the tail is not zeroed or rewritten).
+        assert_eq!(&slot[large_bytes..], &shipped_slot[large_bytes..]);
+        assert_eq!(after.textures[0].base_mip_linear, new_chain[0].2, "the base reads back");
+        // Everything outside the slot is untouched.
+        let (a, b) = (&w.bytes, &grown);
+        assert_eq!(a.len(), b.len());
+        let start = lib.hdr_size as usize + t.data_offset();
+        assert_eq!(&a[..start], &b[..start]);
+        assert_eq!(&a[start + shipped_slot.len()..], &b[start + shipped_slot.len()..]);
+
+        // A tail-sized raster writes its base only and keeps everything else.
+        let small = encode_synthetic_texlib(&[(64, 64, PixelFormat::Dxt1, &vec![7u8; base_mip_byte_size(PixelFormat::Dxt1, 64, 64)])]);
+        let lib = parse(&small).unwrap();
+        let base = vec![9u8; base_mip_byte_size(PixelFormat::Dxt1, 64, 64)];
+        let w = lib.replace_large_levels_keep_tail(0, &[LinearMip { width: 64, height: 64, linear_dxt: &base }]).unwrap();
+        assert_eq!((w.levels_written, w.tail_levels_kept), (1, 0));
+        assert!(matches!(w.support, LargeLevelSupport::BaseOnly { ref reason } if reason.contains("single level")), "{:?}", w.support);
+        assert_eq!(w.written_ranges.len(), 1);
+        assert_bytes_preserved_outside(&small, &w.bytes, &w.written_ranges);
+        assert_eq!(parse(&w.bytes).unwrap().textures[0].base_mip_linear, base);
+    }
+
+    /// Every byte of `after` outside `ranges` equals `before` (same length): the preservation
+    /// check behind the byte-write mask.
+    fn assert_bytes_preserved_outside(before: &[u8], after: &[u8], ranges: &[(usize, usize)]) {
+        assert_eq!(before.len(), after.len(), "a masked write never changes the length");
+        let mut cursor = 0usize;
+        for &(start, end) in ranges {
+            assert!(start >= cursor && end >= start && end <= after.len(), "ranges are ordered and in bounds: {ranges:?}");
+            assert_eq!(&before[cursor..start], &after[cursor..start], "bytes before range {start:#x}..{end:#x} changed");
+            cursor = end;
+        }
+        assert_eq!(&before[cursor..], &after[cursor..], "bytes after the last range changed");
+    }
+
+    /// Coordinator review of receipts 10–17 (F2, 22 Sep 2026): the large-level rewrite must not
+    /// inherit coverage the audit did not measure. A mipped raster outside the audited population
+    /// — here a 128 × 128 chain (below the 256-texel floor) and a 512 × 512 chain whose descriptor
+    /// carries the NHL 07 / 08 form (`DW0 = 0x00000003`) — takes the **base-only** route: one
+    /// written range, the gate's reason naming the excluded property, every other byte kept.
+    #[test]
+    fn keep_tail_writer_falls_back_to_base_only_outside_the_audited_population() {
+        // (a) 128 × 128, 8 levels: shape outside the audited floor.
+        let bytes = synthetic_texlib(128, 128);
+        let lib = parse(&bytes).unwrap();
+        let chain: Vec<(u32, u32, Vec<u8>)> = (0..8u32)
+            .map(|l| {
+                let (w, h) = ((128u32 >> l).max(1), (128u32 >> l).max(1));
+                (w, h, vec![0x10 + l as u8; base_mip_byte_size(PixelFormat::Dxt1, w, h)])
+            })
+            .collect();
+        let mips: Vec<LinearMip<'_>> = chain.iter().map(|(w, h, d)| LinearMip { width: *w, height: *h, linear_dxt: d }).collect();
+        let grown = lib.replace_with_resize(0, PixelFormat::Dxt1, &mips).unwrap();
+        let lib = parse(&grown).unwrap();
+        assert_eq!(lib.declared_mip_count(0), 8);
+        match lib.large_level_support(0).unwrap() {
+            LargeLevelSupport::BaseOnly { reason } => assert!(reason.contains("128×128") && reason.contains("outside the audited shapes"), "{reason}"),
+            other => panic!("{other:?}"),
+        }
+        let new_chain: Vec<(u32, u32, Vec<u8>)> = chain.iter().map(|(w, h, d)| (*w, *h, vec![0xA0 | (d[0] & 0xF); d.len()])).collect();
+        let new_mips: Vec<LinearMip<'_>> = new_chain.iter().map(|(w, h, d)| LinearMip { width: *w, height: *h, linear_dxt: d }).collect();
+        let w = lib.replace_large_levels_keep_tail(0, &new_mips).unwrap();
+        assert_eq!((w.levels_written, w.tail_levels_kept), (1, 7));
+        assert_eq!(w.written_ranges.len(), 1);
+        assert_eq!(w.written_ranges[0].1 - w.written_ranges[0].0, tiled_buffer_size(128, 128, 8));
+        assert_bytes_preserved_outside(&grown, &w.bytes, &w.written_ranges);
+        assert_eq!(parse(&w.bytes).unwrap().textures[0].base_mip_linear, new_chain[0].2);
+
+        // (b) 512 × 512, 10 levels, but the NHL 07 / 08 descriptor form.
+        let bytes = synthetic_texlib(512, 512);
+        let lib = parse(&bytes).unwrap();
+        let chain: Vec<(u32, u32, Vec<u8>)> = (0..10u32)
+            .map(|l| {
+                let (w, h) = ((512u32 >> l).max(1), (512u32 >> l).max(1));
+                (w, h, vec![0x10 + l as u8; base_mip_byte_size(PixelFormat::Dxt1, w, h)])
+            })
+            .collect();
+        let mips: Vec<LinearMip<'_>> = chain.iter().map(|(w, h, d)| LinearMip { width: *w, height: *h, linear_dxt: d }).collect();
+        let mut grown = lib.replace_with_resize(0, PixelFormat::Dxt1, &mips).unwrap();
+        let desc_off = parse(&grown).unwrap().textures[0].descriptor_offset();
+        grown[desc_off..desc_off + 4].copy_from_slice(&DESC_MEASURED_DW0[1].to_be_bytes());
+        let lib = parse(&grown).unwrap();
+        match lib.large_level_support(0).unwrap() {
+            LargeLevelSupport::BaseOnly { reason } => assert!(reason.contains("0x00000003") && reason.contains("descriptor form"), "{reason}"),
+            other => panic!("{other:?}"),
+        }
+        let new_chain: Vec<(u32, u32, Vec<u8>)> = chain.iter().map(|(w, h, d)| (*w, *h, vec![0xA0 | (d[0] & 0xF); d.len()])).collect();
+        let new_mips: Vec<LinearMip<'_>> = new_chain.iter().map(|(w, h, d)| LinearMip { width: *w, height: *h, linear_dxt: d }).collect();
+        let w = lib.replace_large_levels_keep_tail(0, &new_mips).unwrap();
+        assert_eq!((w.levels_written, w.tail_levels_kept), (1, 9));
+        assert_eq!(w.written_ranges.len(), 1);
+        assert_bytes_preserved_outside(&grown, &w.bytes, &w.written_ranges);
+    }
+
+    /// Two DXT1 rasters (`w × h` and 128 × 128) through the public synthetic builder.
+    fn synthetic_texlib(w: u32, h: u32) -> Vec<u8> {
+        let a = vec![0u8; base_mip_byte_size(PixelFormat::Dxt1, w, h)];
+        let b: Vec<u8> = (0..base_mip_byte_size(PixelFormat::Dxt1, 128, 128)).map(|i| 0x30 | (i as u8 & 0xF)).collect();
+        encode_synthetic_texlib(&[(w, h, PixelFormat::Dxt1, &a), (128, 128, PixelFormat::Dxt1, &b)])
+    }
+
+    /// `DW9` holds `width − 1` / `height − 1` in 13 bits each (max 8 192), `DW11` bits 6–9 the mip
+    /// count − 1 (max 16). Coordinator review R1 (F1, 21 Sep 2026): a request of 8 196 × 128 was
+    /// masked to width 4 and reported as success. Now: 8 192 on either axis is re-derived and
+    /// reads back exactly; 8 196 / 8 196-high, a zero dimension, zero mips, 17 mips and more mips
+    /// than the size halves to are refused with the field named — never a masked value.
+    #[test]
+    fn patch_descriptor_refuses_unrepresentable_dimensions_instead_of_masking_them() {
+        let orig = synthetic_descriptor(128, 128, PixelFormat::Dxt1, 1);
+        // The reviewer's reproduction: 8 196 × 128 must not become 4 × 128.
+        let err = patch_descriptor_for_resize(&orig, 8196, 128, PixelFormat::Dxt1, 1).expect_err("8 196 wide is not representable in 13 bits");
+        let text = err.to_string();
+        assert!(text.contains("width") && text.contains("8196") && text.contains("8192"), "{text}");
+        for (w, h) in [(8192u32, 128u32), (128, 8192)] {
+            let d = patch_descriptor_for_resize(&orig, w, h, PixelFormat::Dxt1, 1).unwrap_or_else(|e| panic!("{w}x{h}: {e}"));
+            let dw9 = u32::from_be_bytes(d[36..40].try_into().unwrap());
+            assert_eq!(((dw9 & 0x1FFF) + 1, ((dw9 >> 13) & 0x1FFF) + 1), (w, h), "{w}x{h} reads back");
+        }
+        for (w, h, m) in [(8196u32, 128u32, 1u32), (128, 8196, 1), (0, 128, 1), (128, 0, 1), (128, 128, 0), (128, 128, 17), (128, 128, 9)] {
+            let err = patch_descriptor_for_resize(&orig, w, h, PixelFormat::Dxt1, m).expect_err("must be refused");
+            // A zero dimension is caught by the existing minimum-size gate; everything else by the field bound.
+            assert!(matches!(err, DescriptorRuleRefusal::Unrepresentable { .. }) || (w.min(h) == 0 && matches!(err, DescriptorRuleRefusal::TooSmall { .. })), "{w}x{h}/{m}: {err}");
+        }
+        // 128 × 128 affords 8 levels (128 → 1).
+        let d = patch_descriptor_for_resize(&orig, 128, 128, PixelFormat::Dxt1, 8).unwrap();
+        assert_eq!(descriptor_mip_count(&d), 8);
+    }
+
+    /// Coordinator review R1 followup (R2, 22 Sep 2026): the size arithmetic ran **before** the
+    /// dimension bound, so `u32::MAX × u32::MAX` DXT5 panicked on a multiplication overflow inside
+    /// `tiled_buffer_size` instead of returning the refusal. The exact reproduction, plus
+    /// width-only / height-only extremes and the non-DXT (`8_8_8_8`) branch, on both of which the
+    /// tile-aligned product also overflows. Each must return a descriptive refusal naming the
+    /// axis — no panic, no allocation — while the valid maxima keep working.
+    #[test]
+    fn patch_descriptor_refuses_extreme_dimensions_without_overflowing() {
+        let orig = synthetic_descriptor(128, 128, PixelFormat::Dxt1, 1);
+        // The reviewer's reproduction, verbatim.
+        let err = patch_descriptor_for_resize(&orig, u32::MAX, u32::MAX, PixelFormat::Dxt5, 1).expect_err("u32::MAX square must refuse");
+        assert!(matches!(err, DescriptorRuleRefusal::Unrepresentable { what: "width", .. }), "{err}");
+        assert!(err.to_string().contains(&u32::MAX.to_string()) && err.to_string().contains("8192"), "{err}");
+        // One axis at a time, on both branches, over every format the writer accepts. The
+        // tile-aligned block grid of `u32::MAX` overflows `usize` arithmetic on 64-bit too once it
+        // is multiplied by the other axis, so the height-only case matters as much as the width.
+        for format in [PixelFormat::Dxt1, PixelFormat::Dxt3, PixelFormat::Dxt5, PixelFormat::Argb8888] {
+            for (w, h, axis) in [(u32::MAX, 128u32, "width"), (128, u32::MAX, "height"), (u32::MAX, u32::MAX, "width"), (u32::MAX - 1, u32::MAX - 1, "width"), (0x2001, 0x2001, "width")] {
+                let err = patch_descriptor_for_resize(&orig, w, h, format, 1).expect_err("must refuse");
+                assert!(matches!(err, DescriptorRuleRefusal::Unrepresentable { what, .. } if what == axis), "{w}x{h} {format:?}: {err}");
+            }
+            // An extreme mip count alongside an extreme size still refuses on a bound, not a panic.
+            let err = patch_descriptor_for_resize(&orig, u32::MAX, u32::MAX, format, u32::MAX).expect_err("must refuse");
+            assert!(matches!(err, DescriptorRuleRefusal::Unrepresentable { .. }), "{format:?}: {err}");
+        }
+        // The valid maxima are unchanged by the reordering: the largest representable square on
+        // each branch still yields a descriptor, and its `DW9` reads back exactly.
+        for (format, w, h) in [(PixelFormat::Dxt5, DESC_MAX_DIM, DESC_MAX_DIM), (PixelFormat::Dxt1, DESC_MAX_DIM, 128), (PixelFormat::Argb8888, DESC_MAX_DIM, 32)] {
+            let d = patch_descriptor_for_resize(&orig, w, h, format, 1).unwrap_or_else(|e| panic!("{w}x{h} {format:?}: {e}"));
+            let dw9 = u32::from_be_bytes(d[36..40].try_into().unwrap());
+            assert_eq!(((dw9 & 0x1FFF) + 1, ((dw9 >> 13) & 0x1FFF) + 1), (w, h));
+        }
+        // And the tile-size helpers themselves report an unrepresentable product instead of
+        // overflowing, so no other caller can be surprised by one.
+        assert_eq!(try_tiled_buffer_size(u32::MAX, u32::MAX, 16), None);
+        assert_eq!(try_tiled_buffer_size_texels(u32::MAX, u32::MAX, 4), None);
+        assert_eq!(try_tiled_buffer_size(128, 128, 8), Some(tiled_buffer_size(128, 128, 8)));
+        assert_eq!(try_tiled_buffer_size_texels(64, 64, 4), Some(tiled_buffer_size_texels(64, 64, 4)));
+    }
+
+    /// The same request through the container writer: the refusal happens before any buffer is
+    /// built, and a 8 192-wide resize (the boundary) reflows, re-parses at the requested size and
+    /// leaves the other raster byte-identical. The source `Texlib` is never mutated (the writer
+    /// returns a fresh buffer), so the caller's bytes are intact by construction — asserted anyway.
+    #[test]
+    fn replace_with_resize_refuses_before_building_and_round_trips_the_boundary() {
+        let bytes = synthetic_texlib(256, 256);
+        let lib = parse(&bytes).expect("synthetic texlib parses");
+        assert_eq!(lib.textures.len(), 2);
+        assert_eq!((lib.textures[0].width, lib.textures[0].height), (256, 256));
+        let too_wide = vec![0u8; base_mip_byte_size(PixelFormat::Dxt1, 8196, 128)];
+        let err = lib.replace_with_resize(0, PixelFormat::Dxt1, &[LinearMip { width: 8196, height: 128, linear_dxt: &too_wide }]).expect_err("8 196 wide refused");
+        assert!(matches!(err, TexlibError::ResizeRule(_)), "{err}");
+        assert!(err.to_string().contains("8196"), "{err}");
+        assert_eq!(lib.raw, bytes, "the source bytes are intact");
+        // A chain that does not halve is refused too.
+        let l0 = vec![0x5Au8; base_mip_byte_size(PixelFormat::Dxt1, 512, 256)];
+        let l1 = vec![0x5Au8; base_mip_byte_size(PixelFormat::Dxt1, 128, 64)];
+        let err = lib.replace_with_resize(0, PixelFormat::Dxt1, &[LinearMip { width: 512, height: 256, linear_dxt: &l0 }, LinearMip { width: 128, height: 64, linear_dxt: &l1 }]).expect_err("non-halving chain");
+        assert!(matches!(err, TexlibError::ResizeRule(_)), "{err}");
+        // The boundary: 8 192 × 128, one level.
+        let wide: Vec<u8> = (0..base_mip_byte_size(PixelFormat::Dxt1, 8192, 128)).map(|i| (i % 251) as u8).collect();
+        let out = lib.replace_with_resize(0, PixelFormat::Dxt1, &[LinearMip { width: 8192, height: 128, linear_dxt: &wide }]).expect("8 192 wide");
+        let re = parse(&out).expect("re-parses");
+        assert_eq!((re.textures[0].width, re.textures[0].height), (8192, 128));
+        assert_eq!(re.textures[0].base_mip_linear, wide);
+        assert_eq!(re.textures[1].base_mip_linear, lib.textures[1].base_mip_linear, "the other raster is untouched");
+        assert_eq!(re.textures[0].slot.size as usize, (tiled_buffer_size(8192, 128, 8) + 0xFFF) & !0xFFF);
+        assert_eq!(read_u32_be(&out, 0x54) as usize, out.len() - 0x200, "header data size");
     }
 }

@@ -1,0 +1,1883 @@
+{
+ "note": "R139b - the ram segments R139's single-w0 route refuses (w0 >> 2 != segment length): test the hypothesis that such a segment is a chain\nof sub-streams `{u32 w0 (w0 >> 2 = length incl. w0) | XMA packets}` (the per-stream layout research C1 measured inside X360 `.ast` blocks),\none per XMA stream (streams = ceil(channels / 2) for multichannel, or per-channel mono streams). For every refused segment of the loose X360\nNHL 10 -> Legacy banks: chain parse (chunks tile the segment exactly?), stream count vs channel config, and a decode of each chunk through\nthe pinned helper as mono and as stereo; a chunk is `exact` when its decoded count equals the segment's declared samples. Read-only; no\ndecoder output kept. Usage: python r139b_xma_multistream_segments.py <out.json> [--titles ...] [--max N]\n",
+ "titles": {
+  "x360-nhl10": {
+   "results": {
+    "cc 3 loop 0 segs 1: chunks 2 tiles True": 83,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 17,
+    "cc 3 loop 1 segs 1: chunks 2 tiles True": 10,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo": 10,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo": 66,
+    "cc 1 loop 0 segs 1: chunks 1 tiles True": 10,
+    "cc 1 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 10,
+    "cc 1 loop 1 segs 1: chunks 1 tiles True": 16,
+    "cc 1 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 16,
+    "cc 1 loop 1 segs 2: chunks 1 tiles True": 8,
+    "cc 1 loop 1 segs 2: every chunk exact as stereo (T2 bypassed)": 8,
+    "cc 0 loop 0 segs 1: chunks 1 tiles True": 30,
+    "cc 0 loop 0 segs 1: every chunk exact as mono (T2 bypassed)": 30,
+    "cc 5 loop 0 segs 1: chunks 3 tiles True": 6,
+    "cc 5 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 1,
+    "cc 5 loop 0 segs 1: every chunk exact as stereo": 5
+   },
+   "examples": [
+    {
+     "bank": "002_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 266690,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 171257,
+       "mono": 448,
+       "stereo": 266690,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 175445,
+       "mono": 448,
+       "stereo": 266690,
+       "err": [
+        "T2 bypassed: packet 81: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 90452,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 57623,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 61191,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 291540,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 191379,
+       "mono": 1984,
+       "stereo": 291540,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 198336,
+       "mono": 448,
+       "stereo": 291540,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_goal.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 1,
+     "declared": 352323,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 178443,
+       "mono": 448,
+       "stereo": 352323,
+       "err": [
+        "T2 bypassed: packet 87: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 163086,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 102602,
+       "mono": 1472,
+       "stereo": 163086,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 113526,
+       "mono": 448,
+       "stereo": 163086,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 46700,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 28524,
+       "mono": 960,
+       "stereo": 46700,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 31708,
+       "mono": 448,
+       "stereo": 46700,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 219346,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 142649,
+       "mono": 1472,
+       "stereo": 219346,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 147487,
+       "mono": 448,
+       "stereo": 219346,
+       "err": [
+        "T2 bypassed: packet 72: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 189910,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 115508,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 109320,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 87009,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 54663,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 58344,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 295125,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 187002,
+       "mono": 448,
+       "stereo": 295125,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204142,
+       "mono": 448,
+       "stereo": 295125,
+       "err": [
+        "T2 bypassed: packet 41: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    }
+   ]
+  },
+  "x360-nhl11": {
+   "results": {
+    "cc 3 loop 0 segs 1: chunks 2 tiles True": 83,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 18,
+    "cc 3 loop 1 segs 1: chunks 2 tiles True": 10,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo": 10,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo": 65,
+    "cc 1 loop 0 segs 1: chunks 1 tiles True": 8,
+    "cc 1 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 8,
+    "cc 1 loop 1 segs 1: chunks 1 tiles True": 17,
+    "cc 1 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 17,
+    "cc 1 loop 1 segs 2: chunks 1 tiles True": 8,
+    "cc 1 loop 1 segs 2: every chunk exact as stereo (T2 bypassed)": 8,
+    "cc 0 loop 0 segs 1: chunks 1 tiles True": 27,
+    "cc 0 loop 0 segs 1: every chunk exact as mono (T2 bypassed)": 27,
+    "cc 5 loop 0 segs 1: chunks 3 tiles True": 4,
+    "cc 5 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 1,
+    "cc 5 loop 0 segs 1: every chunk exact as stereo": 3
+   },
+   "examples": [
+    {
+     "bank": "002_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 266690,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 171257,
+       "mono": 448,
+       "stereo": 266690,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 175445,
+       "mono": 448,
+       "stereo": 266690,
+       "err": [
+        "T2 bypassed: packet 81: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 90452,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 57623,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 61191,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 291540,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 191379,
+       "mono": 1984,
+       "stereo": 291540,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 198336,
+       "mono": 448,
+       "stereo": 291540,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 163086,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 102602,
+       "mono": 1472,
+       "stereo": 163086,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 113526,
+       "mono": 448,
+       "stereo": 163086,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 46700,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 28524,
+       "mono": 960,
+       "stereo": 46700,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 31708,
+       "mono": 448,
+       "stereo": 46700,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 219346,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 142649,
+       "mono": 1472,
+       "stereo": 219346,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 147487,
+       "mono": 448,
+       "stereo": 219346,
+       "err": [
+        "T2 bypassed: packet 72: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 189910,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 115508,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 109320,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 87009,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 54663,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 58344,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 295125,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 187002,
+       "mono": 448,
+       "stereo": 295125,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204142,
+       "mono": 448,
+       "stereo": 295125,
+       "err": [
+        "T2 bypassed: packet 41: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "010_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 294064,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 193323,
+       "mono": 1472,
+       "stereo": 294064,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204860,
+       "mono": 448,
+       "stereo": 294064,
+       "err": [
+        "T2 bypassed: packet 100: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    }
+   ]
+  },
+  "x360-nhl12": {
+   "results": {
+    "cc 3 loop 0 segs 1: chunks 2 tiles True": 153,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 31,
+    "cc 3 loop 1 segs 1: chunks 2 tiles True": 12,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo": 11,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo": 122,
+    "cc 1 loop 0 segs 1: chunks 1 tiles True": 8,
+    "cc 1 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 8,
+    "cc 1 loop 1 segs 1: chunks 1 tiles True": 15,
+    "cc 1 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 15,
+    "cc 1 loop 1 segs 2: chunks 1 tiles True": 9,
+    "cc 1 loop 1 segs 2: every chunk exact as stereo (T2 bypassed)": 9,
+    "cc 0 loop 0 segs 1: chunks 1 tiles True": 14,
+    "cc 0 loop 0 segs 1: every chunk exact as mono (T2 bypassed)": 14,
+    "cc 5 loop 0 segs 1: chunks 3 tiles True": 4,
+    "cc 5 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 1,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 1,
+    "cc 5 loop 0 segs 1: every chunk exact as stereo": 3
+   },
+   "examples": [
+    {
+     "bank": "002_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 266690,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 171257,
+       "mono": 448,
+       "stereo": 266690,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 175445,
+       "mono": 448,
+       "stereo": 266690,
+       "err": [
+        "T2 bypassed: packet 81: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 90452,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 57623,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 61191,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 291540,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 191379,
+       "mono": 1984,
+       "stereo": 291540,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 198336,
+       "mono": 448,
+       "stereo": 291540,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 163086,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 102602,
+       "mono": 1472,
+       "stereo": 163086,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 113526,
+       "mono": 448,
+       "stereo": 163086,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 46700,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 28524,
+       "mono": 960,
+       "stereo": 46700,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 31708,
+       "mono": 448,
+       "stereo": 46700,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 219346,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 142649,
+       "mono": 1472,
+       "stereo": 219346,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 147487,
+       "mono": 448,
+       "stereo": 219346,
+       "err": [
+        "T2 bypassed: packet 72: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 189910,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 115508,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 109320,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 87009,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 54663,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 58344,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 295125,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 187002,
+       "mono": 448,
+       "stereo": 295125,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204142,
+       "mono": 448,
+       "stereo": 295125,
+       "err": [
+        "T2 bypassed: packet 41: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "010_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 294064,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 193323,
+       "mono": 1472,
+       "stereo": 294064,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204860,
+       "mono": 448,
+       "stereo": 294064,
+       "err": [
+        "T2 bypassed: packet 100: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    }
+   ]
+  },
+  "x360-nhl13": {
+   "results": {
+    "cc 3 loop 0 segs 1: chunks 2 tiles True": 152,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 27,
+    "cc 3 loop 1 segs 1: chunks 2 tiles True": 12,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo": 10,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo": 125,
+    "cc 1 loop 0 segs 1: chunks 1 tiles True": 7,
+    "cc 1 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 7,
+    "cc 1 loop 1 segs 1: chunks 1 tiles True": 15,
+    "cc 1 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 15,
+    "cc 1 loop 1 segs 2: chunks 1 tiles True": 11,
+    "cc 1 loop 1 segs 2: every chunk exact as stereo (T2 bypassed)": 11,
+    "cc 0 loop 0 segs 1: chunks 1 tiles True": 36,
+    "cc 0 loop 0 segs 1: every chunk exact as mono (T2 bypassed)": 36,
+    "cc 5 loop 0 segs 1: chunks 3 tiles True": 1,
+    "cc 5 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 1,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 2
+   },
+   "examples": [
+    {
+     "bank": "002_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 266690,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 171257,
+       "mono": 448,
+       "stereo": 266690,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 175445,
+       "mono": 448,
+       "stereo": 266690,
+       "err": [
+        "T2 bypassed: packet 81: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 90452,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 57623,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 61191,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 291540,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 191379,
+       "mono": 1984,
+       "stereo": 291540,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 198336,
+       "mono": 448,
+       "stereo": 291540,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 163086,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 102602,
+       "mono": 1472,
+       "stereo": 163086,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 113526,
+       "mono": 448,
+       "stereo": 163086,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 46700,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 28524,
+       "mono": 960,
+       "stereo": 46700,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 31708,
+       "mono": 448,
+       "stereo": 46700,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 219346,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 142649,
+       "mono": 1472,
+       "stereo": 219346,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 147487,
+       "mono": 448,
+       "stereo": 219346,
+       "err": [
+        "T2 bypassed: packet 72: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 189910,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 115508,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 109320,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 87009,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 54663,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 58344,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 295125,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 187002,
+       "mono": 448,
+       "stereo": 295125,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204142,
+       "mono": 448,
+       "stereo": 295125,
+       "err": [
+        "T2 bypassed: packet 41: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "010_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 294064,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 193323,
+       "mono": 1472,
+       "stereo": 294064,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204860,
+       "mono": 448,
+       "stereo": 294064,
+       "err": [
+        "T2 bypassed: packet 100: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    }
+   ]
+  },
+  "x360-nhl14": {
+   "results": {
+    "cc 3 loop 0 segs 1: chunks 2 tiles True": 152,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 27,
+    "cc 3 loop 1 segs 1: chunks 2 tiles True": 12,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo": 10,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo": 125,
+    "cc 1 loop 0 segs 1: chunks 1 tiles True": 7,
+    "cc 1 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 7,
+    "cc 1 loop 1 segs 1: chunks 1 tiles True": 15,
+    "cc 1 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 15,
+    "cc 1 loop 1 segs 2: chunks 1 tiles True": 11,
+    "cc 1 loop 1 segs 2: every chunk exact as stereo (T2 bypassed)": 11,
+    "cc 0 loop 0 segs 1: chunks 1 tiles True": 36,
+    "cc 0 loop 0 segs 1: every chunk exact as mono (T2 bypassed)": 36,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 2
+   },
+   "examples": [
+    {
+     "bank": "002_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 266690,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 171257,
+       "mono": 448,
+       "stereo": 266690,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 175445,
+       "mono": 448,
+       "stereo": 266690,
+       "err": [
+        "T2 bypassed: packet 81: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 90452,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 57623,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 61191,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 291540,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 191379,
+       "mono": 1984,
+       "stereo": 291540,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 198336,
+       "mono": 448,
+       "stereo": 291540,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 163086,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 102602,
+       "mono": 1472,
+       "stereo": 163086,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 113526,
+       "mono": 448,
+       "stereo": 163086,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 46700,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 28524,
+       "mono": 960,
+       "stereo": 46700,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 31708,
+       "mono": 448,
+       "stereo": 46700,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 219346,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 142649,
+       "mono": 1472,
+       "stereo": 219346,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 147487,
+       "mono": 448,
+       "stereo": 219346,
+       "err": [
+        "T2 bypassed: packet 72: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 189910,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 115508,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 109320,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 87009,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 54663,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 58344,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 295125,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 187002,
+       "mono": 448,
+       "stereo": 295125,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204142,
+       "mono": 448,
+       "stereo": 295125,
+       "err": [
+        "T2 bypassed: packet 41: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "010_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 294064,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 193323,
+       "mono": 1472,
+       "stereo": 294064,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204860,
+       "mono": 448,
+       "stereo": 294064,
+       "err": [
+        "T2 bypassed: packet 100: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    }
+   ]
+  },
+  "x360-nhl15": {
+   "results": {
+    "cc 3 loop 0 segs 1: chunks 2 tiles True": 152,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 27,
+    "cc 3 loop 1 segs 1: chunks 2 tiles True": 12,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo": 10,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo": 125,
+    "cc 1 loop 0 segs 1: chunks 1 tiles True": 7,
+    "cc 1 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 7,
+    "cc 1 loop 1 segs 1: chunks 1 tiles True": 15,
+    "cc 1 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 15,
+    "cc 1 loop 1 segs 2: chunks 1 tiles True": 12,
+    "cc 1 loop 1 segs 2: every chunk exact as stereo (T2 bypassed)": 12,
+    "cc 0 loop 0 segs 1: chunks 1 tiles True": 36,
+    "cc 0 loop 0 segs 1: every chunk exact as mono (T2 bypassed)": 36,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 2
+   },
+   "examples": [
+    {
+     "bank": "002_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 266690,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 171257,
+       "mono": 448,
+       "stereo": 266690,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 175445,
+       "mono": 448,
+       "stereo": 266690,
+       "err": [
+        "T2 bypassed: packet 81: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 90452,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 57623,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 61191,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 291540,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 191379,
+       "mono": 1984,
+       "stereo": 291540,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 198336,
+       "mono": 448,
+       "stereo": 291540,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 163086,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 102602,
+       "mono": 1472,
+       "stereo": 163086,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 113526,
+       "mono": 448,
+       "stereo": 163086,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 46700,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 28524,
+       "mono": 960,
+       "stereo": 46700,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 31708,
+       "mono": 448,
+       "stereo": 46700,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 219346,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 142649,
+       "mono": 1472,
+       "stereo": 219346,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 147487,
+       "mono": 448,
+       "stereo": 219346,
+       "err": [
+        "T2 bypassed: packet 72: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 189910,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 115508,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 109320,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 87009,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 54663,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 58344,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 295125,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 187002,
+       "mono": 448,
+       "stereo": 295125,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204142,
+       "mono": 448,
+       "stereo": 295125,
+       "err": [
+        "T2 bypassed: packet 41: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "010_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 294064,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 193323,
+       "mono": 1472,
+       "stereo": 294064,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204860,
+       "mono": 448,
+       "stereo": 294064,
+       "err": [
+        "T2 bypassed: packet 100: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    }
+   ]
+  },
+  "x360-legacy": {
+   "results": {
+    "cc 3 loop 0 segs 1: chunks 2 tiles True": 152,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 27,
+    "cc 3 loop 1 segs 1: chunks 2 tiles True": 12,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo": 10,
+    "cc 3 loop 0 segs 1: every chunk exact as stereo": 125,
+    "cc 1 loop 0 segs 1: chunks 1 tiles True": 7,
+    "cc 1 loop 0 segs 1: every chunk exact as stereo (T2 bypassed)": 7,
+    "cc 1 loop 1 segs 1: chunks 1 tiles True": 16,
+    "cc 1 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 16,
+    "cc 1 loop 1 segs 2: chunks 1 tiles True": 8,
+    "cc 1 loop 1 segs 2: every chunk exact as stereo (T2 bypassed)": 8,
+    "cc 0 loop 0 segs 1: chunks 1 tiles True": 36,
+    "cc 0 loop 0 segs 1: every chunk exact as mono (T2 bypassed)": 36,
+    "cc 3 loop 1 segs 1: every chunk exact as stereo (T2 bypassed)": 2
+   },
+   "examples": [
+    {
+     "bank": "002_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 266690,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 171257,
+       "mono": 448,
+       "stereo": 266690,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 175445,
+       "mono": 448,
+       "stereo": 266690,
+       "err": [
+        "T2 bypassed: packet 81: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 90452,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 57623,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 61191,
+       "mono": 448,
+       "stereo": 90452,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "002_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 291540,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 191379,
+       "mono": 1984,
+       "stereo": 291540,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 198336,
+       "mono": 448,
+       "stereo": 291540,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 163086,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 102602,
+       "mono": 1472,
+       "stereo": 163086,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 113526,
+       "mono": 448,
+       "stereo": 163086,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 46700,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 28524,
+       "mono": 960,
+       "stereo": 46700,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 31708,
+       "mono": 448,
+       "stereo": 46700,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "005_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 219346,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 142649,
+       "mono": 1472,
+       "stereo": 219346,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 147487,
+       "mono": 448,
+       "stereo": 219346,
+       "err": [
+        "T2 bypassed: packet 72: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 189910,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 115508,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 109320,
+       "mono": 448,
+       "stereo": 189910,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 1,
+     "segment": 0,
+     "cc": 3,
+     "declared": 87009,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 54663,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 58344,
+       "mono": 448,
+       "stereo": 87009,
+       "err": null
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "008_chant.abk",
+     "entry": 2,
+     "segment": 0,
+     "cc": 3,
+     "declared": 295125,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 187002,
+       "mono": 448,
+       "stereo": 295125,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204142,
+       "mono": 448,
+       "stereo": 295125,
+       "err": [
+        "T2 bypassed: packet 41: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    },
+    {
+     "bank": "010_chant.abk",
+     "entry": 0,
+     "segment": 0,
+     "cc": 3,
+     "declared": 294064,
+     "chunks": [
+      {
+       "chunk": 0,
+       "bytes": 193323,
+       "mono": 1472,
+       "stereo": 294064,
+       "err": null
+      },
+      {
+       "chunk": 1,
+       "bytes": 204860,
+       "mono": 448,
+       "stereo": 294064,
+       "err": [
+        "T2 bypassed: packet 100: header {'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}"
+       ]
+      }
+     ],
+     "tiles": true
+    }
+   ]
+  }
+ }
+}

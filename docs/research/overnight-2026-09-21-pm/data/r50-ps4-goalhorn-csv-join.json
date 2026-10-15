@@ -1,0 +1,2814 @@
+{
+ "note": "R50 \u2014 PS4 goal horns: `exhibitionarena.goalhorn` joined to the shipped `creation_zone_csv/goalhorns.csv` catalogue (NHL 17\u201321) and the\ncatalogue's `audioid` space checked against the SND10 banks (read-only).\n\nPer title: the CSV columns and row classes (premade team horns / generic horns / horn elements / flairs), the DB `goalhorn` value census,\nthe join rules tested \u2014 DB value = CSV `audioid` (direct), = `audioid + 1`, = `index`, = `index + 1` \u2014 scored on the NHL arenas by whether\nthe resolved row's identifier names the arena's NHL club (city + club-name tokens), and on every arena by resolution rate; the `periodhorn`\nand `goalhornelement1..3` / `goalhornflair` columns likewise; then the CSV `audioid` values looked up as `.SID` in every `.sbr` under\n`audio/` (which bank, if any, carries them).\nUsage: python r50_ps4_goalhorn_csv_join.py <out.json>\n",
+ "titles": {
+  "nhl15": {
+   "csv": null
+  },
+  "nhl16": {
+   "csv": null
+  },
+  "nhl17": {
+   "csv": "H:\\Emulators\\ShadPS4\\Games\\CUSA04326\\databigs\\Extracted\\nhl\\data\\common\\gamemodes\\creation_zone_csv\\goalhorns.csv",
+   "rows": 90,
+   "columns": [
+    "index",
+    "identifier",
+    "artid",
+    "audioid",
+    "filter",
+    "name"
+   ],
+   "classes": {
+    "none": 1,
+    "premade_team": 29,
+    "generic": 60
+   },
+   "audioid_min_max": [
+    0,
+    90
+   ],
+   "db": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-20\\probes\\..\\..\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl17\\databases\\nhl_game.db",
+   "arena_rows": 256,
+   "horn_columns": [
+    "periodhorn",
+    "goalhorn"
+   ],
+   "db_census": {
+    "periodhorn": {
+     "0": 139,
+     "32": 35,
+     "61": 16,
+     "45": 14,
+     "27": 9,
+     "16": 3,
+     "1": 2,
+     "4": 2,
+     "11": 2,
+     "20": 2,
+     "25": 2,
+     "2": 1
+    },
+    "goalhorn": {
+     "31": 209,
+     "28": 9,
+     "17": 3,
+     "1": 2,
+     "2": 2,
+     "5": 2,
+     "12": 2,
+     "21": 2,
+     "26": 2,
+     "3": 1,
+     "4": 1,
+     "6": 1
+    }
+   },
+   "join_scores": {
+    "audioid": {
+     "resolves": 254,
+     "nhl_club_named": 0,
+     "nhl_arenas": 32,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "WinnipegJets",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "audioid+1": {
+     "resolves": 46,
+     "nhl_club_named": 30,
+     "nhl_arenas": 32,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "WinnipegJets",
+       true
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    },
+    "index": {
+     "resolves": 255,
+     "nhl_club_named": 0,
+     "nhl_arenas": 32,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "index+1": {
+     "resolves": 255,
+     "nhl_club_named": 22,
+     "nhl_arenas": 32,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    }
+   },
+   "best_rule": "audioid+1",
+   "unresolved_under_best": {
+    "20": 1,
+    "31": 209
+   },
+   "banks_carrying_csv_audioids": [
+    {
+     "bank": "kettle/audio/crowds/crowdgrainbank.sbr",
+     "dset": 0,
+     "records": 21,
+     "csv_audioids_present": 20,
+     "present_min_max": [
+      4,
+      24
+     ],
+     "team_ids_0_30_present": 20,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 1,
+     "records": 19,
+     "csv_audioids_present": 19,
+     "present_min_max": [
+      2,
+      55
+     ],
+     "team_ids_0_30_present": 8,
+     "generic_41_118_present": 7
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 10,
+     "records": 38,
+     "csv_audioids_present": 36,
+     "present_min_max": [
+      2,
+      39
+     ],
+     "team_ids_0_30_present": 27,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 14,
+     "records": 19,
+     "csv_audioids_present": 18,
+     "present_min_max": [
+      73,
+      90
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 18
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 0,
+     "records": 22,
+     "csv_audioids_present": 20,
+     "present_min_max": [
+      16,
+      37
+     ],
+     "team_ids_0_30_present": 13,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 2,
+     "records": 25,
+     "csv_audioids_present": 24,
+     "present_min_max": [
+      2,
+      26
+     ],
+     "team_ids_0_30_present": 24,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/hornbank.sbr",
+     "dset": 0,
+     "records": 91,
+     "csv_audioids_present": 14,
+     "present_min_max": [
+      56,
+      85
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 14
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 20,
+     "records": 20,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      38,
+      68
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/speech/eng/pbp_samples_inxp_and_cb.sbr",
+     "dset": 3644,
+     "records": 17,
+     "csv_audioids_present": 17,
+     "present_min_max": [
+      57,
+      73
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 17
+    },
+    {
+     "bank": "kettle/audio/ui_sfx/fesfxbank.sbr",
+     "dset": 0,
+     "records": 378,
+     "csv_audioids_present": 58,
+     "present_min_max": [
+      7,
+      90
+     ],
+     "team_ids_0_30_present": 21,
+     "generic_41_118_present": 33
+    }
+   ]
+  },
+  "nhl18": {
+   "csv": "H:\\Emulators\\ShadPS4\\Games\\CUSA07569\\databigs\\Extracted\\nhl\\data\\common\\gamemodes\\creation_zone_csv\\goalhorns.csv",
+   "rows": 116,
+   "columns": [
+    "index",
+    "identifier",
+    "artid",
+    "audioid",
+    "filter",
+    "name"
+   ],
+   "classes": {
+    "none": 1,
+    "premade_team": 30,
+    "generic": 85
+   },
+   "audioid_min_max": [
+    0,
+    125
+   ],
+   "db": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-20\\probes\\..\\..\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl18\\databases\\nhl_game.db",
+   "arena_rows": 303,
+   "horn_columns": [
+    "periodhorn",
+    "goalhorn"
+   ],
+   "db_census": {
+    "periodhorn": {
+     "0": 188,
+     "32": 33,
+     "45": 19,
+     "61": 16,
+     "13": 5,
+     "1": 2,
+     "4": 2,
+     "11": 2,
+     "20": 2,
+     "25": 2,
+     "30": 2,
+     "2": 1
+    },
+    "goalhorn": {
+     "41": 253,
+     "31": 8,
+     "14": 5,
+     "2": 2,
+     "5": 2,
+     "7": 2,
+     "12": 2,
+     "25": 2,
+     "26": 2,
+     "29": 2,
+     "1": 1,
+     "3": 1
+    }
+   },
+   "join_scores": {
+    "audioid": {
+     "resolves": 294,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "WinnipegJets",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "audioid+1": {
+     "resolves": 49,
+     "nhl_club_named": 30,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "WinnipegJets",
+       true
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    },
+    "index": {
+     "resolves": 302,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "index+1": {
+     "resolves": 302,
+     "nhl_club_named": 21,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    }
+   },
+   "best_rule": "audioid+1",
+   "unresolved_under_best": {
+    "20": 1,
+    "41": 253
+   },
+   "banks_carrying_csv_audioids": [
+    {
+     "bank": "kettle/audio/crowds/crowdgrainbank.sbr",
+     "dset": 0,
+     "records": 21,
+     "csv_audioids_present": 20,
+     "present_min_max": [
+      4,
+      24
+     ],
+     "team_ids_0_30_present": 20,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 1,
+     "records": 19,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      2,
+      55
+     ],
+     "team_ids_0_30_present": 8,
+     "generic_41_118_present": 7
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 10,
+     "records": 38,
+     "csv_audioids_present": 28,
+     "present_min_max": [
+      2,
+      30
+     ],
+     "team_ids_0_30_present": 28,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 14,
+     "records": 19,
+     "csv_audioids_present": 19,
+     "present_min_max": [
+      73,
+      91
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 19
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 0,
+     "records": 22,
+     "csv_audioids_present": 14,
+     "present_min_max": [
+      16,
+      30
+     ],
+     "team_ids_0_30_present": 14,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 2,
+     "records": 25,
+     "csv_audioids_present": 24,
+     "present_min_max": [
+      2,
+      26
+     ],
+     "team_ids_0_30_present": 24,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/hornbank.sbr",
+     "dset": 0,
+     "records": 118,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      56,
+      85
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 12
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/speech/eng/pbp_samples_inxp.sbr",
+     "dset": 3490,
+     "records": 17,
+     "csv_audioids_present": 17,
+     "present_min_max": [
+      57,
+      73
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 17
+    },
+    {
+     "bank": "kettle/audio/ui_sfx/fesfxbank.sbr",
+     "dset": 0,
+     "records": 410,
+     "csv_audioids_present": 71,
+     "present_min_max": [
+      7,
+      112
+     ],
+     "team_ids_0_30_present": 22,
+     "generic_41_118_present": 49
+    }
+   ]
+  },
+  "nhl19": {
+   "csv": "H:\\Emulators\\ShadPS4\\Games\\CUSA11126\\databigs\\Extracted\\nhl\\data\\common\\gamemodes\\creation_zone_csv\\goalhorns.csv",
+   "rows": 278,
+   "columns": [
+    "index",
+    "identifier",
+    "artid",
+    "audioid",
+    "name",
+    "ispremade",
+    "ishornelement",
+    "isflare"
+   ],
+   "classes": {
+    "none": 3,
+    "premade_team": 30,
+    "generic": 85,
+    "horn_element": 63,
+    "flair": 97
+   },
+   "audioid_min_max": [
+    0,
+    686
+   ],
+   "db": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-20\\probes\\..\\..\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl19\\databases\\nhl_game.db",
+   "arena_rows": 426,
+   "horn_columns": [
+    "goalhornblast1length",
+    "periodhorn",
+    "goalhornelement1",
+    "goalhornblast2length",
+    "goalhorn",
+    "goalhornpause1length",
+    "goalhornpause2length",
+    "goalhorniscustom",
+    "goalhornelement3",
+    "goalhornelement2",
+    "goalhornflair",
+    "goalhornblast3length",
+    "goalhornblastsnum"
+   ],
+   "db_census": {
+    "goalhornblast1length": {
+     "0": 426
+    },
+    "periodhorn": {
+     "0": 416,
+     "1": 9,
+     "2": 1
+    },
+    "goalhornelement1": {
+     "501": 426
+    },
+    "goalhornblast2length": {
+     "0": 426
+    },
+    "goalhorn": {
+     "41": 268,
+     "27": 47,
+     "5": 6,
+     "25": 6,
+     "7": 5,
+     "12": 5,
+     "16": 5,
+     "2": 4,
+     "3": 4,
+     "8": 4,
+     "10": 4,
+     "11": 4
+    },
+    "goalhornpause1length": {
+     "0": 426
+    },
+    "goalhornpause2length": {
+     "0": 426
+    },
+    "goalhorniscustom": {
+     "0": 426
+    },
+    "goalhornelement3": {
+     "0": 426
+    },
+    "goalhornelement2": {
+     "0": 426
+    },
+    "goalhornflair": {
+     "0": 426
+    },
+    "goalhornblast3length": {
+     "0": 426
+    },
+    "goalhornblastsnum": {
+     "1": 426
+    }
+   },
+   "join_scores": {
+    "audioid": {
+     "resolves": 417,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "WinnipegJets",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "audioid+1": {
+     "resolves": 150,
+     "nhl_club_named": 30,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "WinnipegJets",
+       true
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    },
+    "index": {
+     "resolves": 418,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "index+1": {
+     "resolves": 418,
+     "nhl_club_named": 21,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    }
+   },
+   "best_rule": "audioid+1",
+   "unresolved_under_best": {
+    "20": 4,
+    "41": 268,
+    "690": 1,
+    "691": 1,
+    "692": 1,
+    "693": 1
+   },
+   "banks_carrying_csv_audioids": [
+    {
+     "bank": "kettle/audio/crowds/crowdgrainbank.sbr",
+     "dset": 0,
+     "records": 21,
+     "csv_audioids_present": 20,
+     "present_min_max": [
+      4,
+      24
+     ],
+     "team_ids_0_30_present": 20,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 1,
+     "records": 19,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      2,
+      55
+     ],
+     "team_ids_0_30_present": 8,
+     "generic_41_118_present": 7
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 10,
+     "records": 38,
+     "csv_audioids_present": 28,
+     "present_min_max": [
+      2,
+      30
+     ],
+     "team_ids_0_30_present": 28,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 14,
+     "records": 19,
+     "csv_audioids_present": 19,
+     "present_min_max": [
+      73,
+      91
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 19
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 2,
+     "records": 52,
+     "csv_audioids_present": 21,
+     "present_min_max": [
+      4,
+      578
+     ],
+     "team_ids_0_30_present": 19,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 5,
+     "records": 27,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      47,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 14
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 6,
+     "records": 26,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      62,
+      590
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 9
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 8,
+     "records": 26,
+     "csv_audioids_present": 13,
+     "present_min_max": [
+      81,
+      593
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 12
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 9,
+     "records": 25,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      94,
+      104
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 11
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 10,
+     "records": 24,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      105,
+      114
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 10
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 11,
+     "records": 26,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      115,
+      596
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 4
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 61,
+     "records": 31,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      430,
+      439
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 62,
+     "records": 35,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      440,
+      449
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 65,
+     "records": 18,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      450,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 67,
+     "records": 29,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      463,
+      472
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 72,
+     "records": 47,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      490,
+      509
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 0,
+     "records": 22,
+     "csv_audioids_present": 14,
+     "present_min_max": [
+      16,
+      30
+     ],
+     "team_ids_0_30_present": 14,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 2,
+     "records": 25,
+     "csv_audioids_present": 24,
+     "present_min_max": [
+      2,
+      26
+     ],
+     "team_ids_0_30_present": 24,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/hornbank.sbr",
+     "dset": 0,
+     "records": 413,
+     "csv_audioids_present": 160,
+     "present_min_max": [
+      56,
+      686
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 9
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 5,
+     "records": 66,
+     "csv_audioids_present": 38,
+     "present_min_max": [
+      420,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 6,
+     "records": 34,
+     "csv_audioids_present": 34,
+     "present_min_max": [
+      401,
+      434
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 19,
+     "records": 34,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      554,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 20,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      41,
+      557
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 5,
+     "records": 66,
+     "csv_audioids_present": 38,
+     "present_min_max": [
+      420,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 6,
+     "records": 34,
+     "csv_audioids_present": 34,
+     "present_min_max": [
+      401,
+      434
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 17,
+     "records": 34,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      554,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 18,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      41,
+      557
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/speech/eng/pbp_samples.sbr",
+     "dset": 273,
+     "records": 13,
+     "csv_audioids_present": 13,
+     "present_min_max": [
+      434,
+      446
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/speech/eng/pbp_samples_inxp.sbr",
+     "dset": 563,
+     "records": 12,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      447,
+      456
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/speech/eng/pbp_samples_inxp.sbr",
+     "dset": 3845,
+     "records": 18,
+     "csv_audioids_present": 17,
+     "present_min_max": [
+      57,
+      73
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 17
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 66,
+     "records": 42,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      112,
+      599
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 2
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 251,
+     "records": 33,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      472,
+      482
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 272,
+     "records": 13,
+     "csv_audioids_present": 13,
+     "present_min_max": [
+      421,
+      433
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 273,
+     "records": 15,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      406,
+      420
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/ui_sfx/fesfxbank.sbr",
+     "dset": 0,
+     "records": 420,
+     "csv_audioids_present": 158,
+     "present_min_max": [
+      7,
+      596
+     ],
+     "team_ids_0_30_present": 22,
+     "generic_41_118_present": 49
+    }
+   ]
+  },
+  "nhl20": {
+   "csv": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs\\Extracted\\nhl\\data\\common\\gamemodes\\creation_zone_csv\\goalhorns.csv",
+   "rows": 280,
+   "columns": [
+    "index",
+    "identifier",
+    "artid",
+    "audioid",
+    "name",
+    "ispremade",
+    "ishornelement",
+    "isflare",
+    "tone"
+   ],
+   "classes": {
+    "none": 5,
+    "premade_team": 30,
+    "generic": 85,
+    "horn_element": 63,
+    "flair": 97
+   },
+   "audioid_min_max": [
+    0,
+    686
+   ],
+   "db": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs\\inxp_00.big:nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+   "arena_rows": 428,
+   "horn_columns": [
+    "goalhornblast1length",
+    "periodhorn",
+    "goalhornelement1",
+    "goalhornblast2length",
+    "goalhorn",
+    "goalhornpause1length",
+    "goalhornpause2length",
+    "goalhorniscustom",
+    "goalhornelement3",
+    "goalhornelement2",
+    "goalhornflair",
+    "goalhornblast3length",
+    "goalhornblastsnum"
+   ],
+   "db_census": {
+    "goalhornblast1length": {
+     "0": 428
+    },
+    "periodhorn": {
+     "0": 420,
+     "1": 7,
+     "2": 1
+    },
+    "goalhornelement1": {
+     "501": 428
+    },
+    "goalhornblast2length": {
+     "0": 428
+    },
+    "goalhorn": {
+     "41": 281,
+     "26": 47,
+     "690": 10,
+     "25": 6,
+     "28": 5,
+     "2": 4,
+     "5": 4,
+     "7": 4,
+     "8": 4,
+     "14": 4,
+     "16": 4,
+     "29": 4
+    },
+    "goalhornpause1length": {
+     "0": 428
+    },
+    "goalhornpause2length": {
+     "0": 428
+    },
+    "goalhorniscustom": {
+     "0": 428
+    },
+    "goalhornelement3": {
+     "0": 428
+    },
+    "goalhornelement2": {
+     "0": 428
+    },
+    "goalhornflair": {
+     "0": 428
+    },
+    "goalhornblast3length": {
+     "0": 428
+    },
+    "goalhornblastsnum": {
+     "1": 428
+    }
+   },
+   "join_scores": {
+    "audioid": {
+     "resolves": 414,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "WinnipegJets",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "audioid+1": {
+     "resolves": 134,
+     "nhl_club_named": 30,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "WinnipegJets",
+       true
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    },
+    "index": {
+     "resolves": 415,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "index+1": {
+     "resolves": 415,
+     "nhl_club_named": 21,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    }
+   },
+   "best_rule": "audioid+1",
+   "unresolved_under_best": {
+    "20": 3,
+    "41": 281,
+    "690": 10
+   },
+   "banks_carrying_csv_audioids": [
+    {
+     "bank": "kettle/audio/crowds/crowdgrainbank.sbr",
+     "dset": 0,
+     "records": 21,
+     "csv_audioids_present": 20,
+     "present_min_max": [
+      4,
+      24
+     ],
+     "team_ids_0_30_present": 20,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 1,
+     "records": 19,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      2,
+      55
+     ],
+     "team_ids_0_30_present": 8,
+     "generic_41_118_present": 7
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 10,
+     "records": 38,
+     "csv_audioids_present": 28,
+     "present_min_max": [
+      2,
+      30
+     ],
+     "team_ids_0_30_present": 28,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 14,
+     "records": 19,
+     "csv_audioids_present": 19,
+     "present_min_max": [
+      73,
+      91
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 19
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 2,
+     "records": 52,
+     "csv_audioids_present": 21,
+     "present_min_max": [
+      4,
+      578
+     ],
+     "team_ids_0_30_present": 19,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 5,
+     "records": 27,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      47,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 14
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 6,
+     "records": 26,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      62,
+      590
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 9
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 8,
+     "records": 26,
+     "csv_audioids_present": 13,
+     "present_min_max": [
+      81,
+      593
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 12
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 9,
+     "records": 25,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      94,
+      104
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 11
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 10,
+     "records": 24,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      105,
+      114
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 10
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 11,
+     "records": 26,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      115,
+      596
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 4
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 61,
+     "records": 31,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      430,
+      439
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 62,
+     "records": 35,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      440,
+      449
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 65,
+     "records": 18,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      450,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 67,
+     "records": 29,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      463,
+      472
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 72,
+     "records": 47,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      490,
+      509
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples_bank_ones.sbr",
+     "dset": 12,
+     "records": 21,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      469,
+      483
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples_bank_ones.sbr",
+     "dset": 148,
+     "records": 220,
+     "csv_audioids_present": 35,
+     "present_min_max": [
+      438,
+      620
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/music/music_inxp.sbr",
+     "dset": 4,
+     "records": 10,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      44,
+      68
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 10
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 0,
+     "records": 22,
+     "csv_audioids_present": 14,
+     "present_min_max": [
+      16,
+      30
+     ],
+     "team_ids_0_30_present": 14,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 2,
+     "records": 25,
+     "csv_audioids_present": 24,
+     "present_min_max": [
+      2,
+      26
+     ],
+     "team_ids_0_30_present": 24,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/hornbank.sbr",
+     "dset": 0,
+     "records": 413,
+     "csv_audioids_present": 160,
+     "present_min_max": [
+      56,
+      686
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 9
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 5,
+     "records": 66,
+     "csv_audioids_present": 38,
+     "present_min_max": [
+      420,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 6,
+     "records": 34,
+     "csv_audioids_present": 34,
+     "present_min_max": [
+      401,
+      434
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 19,
+     "records": 34,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      554,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 20,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      41,
+      557
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 5,
+     "records": 66,
+     "csv_audioids_present": 38,
+     "present_min_max": [
+      420,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 6,
+     "records": 34,
+     "csv_audioids_present": 34,
+     "present_min_max": [
+      401,
+      434
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 17,
+     "records": 34,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      554,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_gauntlet.sbr",
+     "dset": 18,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      41,
+      557
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 5,
+     "records": 66,
+     "csv_audioids_present": 38,
+     "present_min_max": [
+      420,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 6,
+     "records": 34,
+     "csv_audioids_present": 34,
+     "present_min_max": [
+      401,
+      434
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 17,
+     "records": 34,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      554,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 18,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      41,
+      557
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/speech/eng/pbp_samples_inxp.sbr",
+     "dset": 882,
+     "records": 15,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      71,
+      85
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 15
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 66,
+     "records": 42,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      112,
+      599
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 2
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 268,
+     "records": 71,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      472,
+      482
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 290,
+     "records": 13,
+     "csv_audioids_present": 13,
+     "present_min_max": [
+      421,
+      433
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 291,
+     "records": 15,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      406,
+      420
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/ui_sfx/fesfxbank.sbr",
+     "dset": 0,
+     "records": 491,
+     "csv_audioids_present": 180,
+     "present_min_max": [
+      7,
+      680
+     ],
+     "team_ids_0_30_present": 22,
+     "generic_41_118_present": 49
+    }
+   ]
+  },
+  "nhl21": {
+   "csv": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\data\\common\\gamemodes\\creation_zone_csv\\goalhorns.csv",
+   "rows": 280,
+   "columns": [
+    "index",
+    "identifier",
+    "artid",
+    "audioid",
+    "name",
+    "ispremade",
+    "ishornelement",
+    "isflare",
+    "tone"
+   ],
+   "classes": {
+    "none": 5,
+    "premade_team": 30,
+    "generic": 85,
+    "horn_element": 63,
+    "flair": 97
+   },
+   "audioid_min_max": [
+    0,
+    686
+   ],
+   "db": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-20\\probes\\..\\..\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl21\\databases\\nhl_game.db",
+   "arena_rows": 450,
+   "horn_columns": [
+    "goalhornblast1length",
+    "periodhorn",
+    "goalhornelement1",
+    "goalhornblast2length",
+    "goalhorn",
+    "goalhornpause1length",
+    "goalhornpause2length",
+    "goalhorniscustom",
+    "goalhornelement3",
+    "goalhornelement2",
+    "goalhornflair",
+    "goalhornblast3length",
+    "goalhornblastsnum"
+   ],
+   "db_census": {
+    "goalhornblast1length": {
+     "0": 450
+    },
+    "periodhorn": {
+     "0": 442,
+     "1": 7,
+     "2": 1
+    },
+    "goalhornelement1": {
+     "501": 450
+    },
+    "goalhornblast2length": {
+     "0": 450
+    },
+    "goalhorn": {
+     "41": 286,
+     "25": 60,
+     "690": 11,
+     "14": 6,
+     "26": 6,
+     "1": 5,
+     "28": 5,
+     "2": 4,
+     "5": 4,
+     "7": 4,
+     "8": 4,
+     "16": 4
+    },
+    "goalhornpause1length": {
+     "0": 450
+    },
+    "goalhornpause2length": {
+     "0": 450
+    },
+    "goalhorniscustom": {
+     "0": 450
+    },
+    "goalhornelement3": {
+     "0": 450
+    },
+    "goalhornelement2": {
+     "0": 450
+    },
+    "goalhornflair": {
+     "0": 450
+    },
+    "goalhornblast3length": {
+     "0": 450
+    },
+    "goalhornblastsnum": {
+     "1": 450
+    }
+   },
+   "join_scores": {
+    "audioid": {
+     "resolves": 435,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "WinnipegJets",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "audioid+1": {
+     "resolves": 150,
+     "nhl_club_named": 30,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "WinnipegJets",
+       true
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    },
+    "index": {
+     "resolves": 436,
+     "nhl_club_named": 0,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Winnipeg",
+       2,
+       "BostonBruins",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BuffaloSabres",
+       false
+      ],
+      [
+       "Buffalo",
+       4,
+       "CalgaryFlames",
+       false
+      ]
+     ]
+    },
+    "index+1": {
+     "resolves": 436,
+     "nhl_club_named": 21,
+     "nhl_arenas": 35,
+     "examples": [
+      [
+       "Anaheim",
+       1,
+       "AnaheimDucks",
+       true
+      ],
+      [
+       "Winnipeg",
+       2,
+       "ArizonaCoyotes",
+       false
+      ],
+      [
+       "Boston",
+       3,
+       "BostonBruins",
+       true
+      ],
+      [
+       "Buffalo",
+       4,
+       "BuffaloSabres",
+       true
+      ]
+     ]
+    }
+   },
+   "best_rule": "audioid+1",
+   "unresolved_under_best": {
+    "20": 3,
+    "41": 286,
+    "690": 11
+   },
+   "banks_carrying_csv_audioids": [
+    {
+     "bank": "kettle/audio/crowds/crowdgrainbank.sbr",
+     "dset": 0,
+     "records": 17,
+     "csv_audioids_present": 16,
+     "present_min_max": [
+      4,
+      24
+     ],
+     "team_ids_0_30_present": 16,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 1,
+     "records": 19,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      2,
+      55
+     ],
+     "team_ids_0_30_present": 8,
+     "generic_41_118_present": 7
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 10,
+     "records": 38,
+     "csv_audioids_present": 28,
+     "present_min_max": [
+      2,
+      30
+     ],
+     "team_ids_0_30_present": 28,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/crowds/reactionbank.sbr",
+     "dset": 14,
+     "records": 19,
+     "csv_audioids_present": 19,
+     "present_min_max": [
+      73,
+      91
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 19
+    },
+    {
+     "bank": "kettle/audio/fe_bap_commentary/febap_samples_fe_commentary.sbr",
+     "dset": 0,
+     "records": 1298,
+     "csv_audioids_present": 23,
+     "present_min_max": [
+      611,
+      686
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/fe_bap_commentary/febap_samples_fe_commentary.sbr",
+     "dset": 32,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      84,
+      93
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 10
+    },
+    {
+     "bank": "kettle/audio/fe_bap_commentary/febap_samples_fe_commentary.sbr",
+     "dset": 34,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      94,
+      103
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 10
+    },
+    {
+     "bank": "kettle/audio/fe_bap_commentary/febap_samples_fe_commentary.sbr",
+     "dset": 75,
+     "records": 75,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      114,
+      125
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 5
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 2,
+     "records": 52,
+     "csv_audioids_present": 21,
+     "present_min_max": [
+      4,
+      578
+     ],
+     "team_ids_0_30_present": 19,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 5,
+     "records": 27,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      47,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 14
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 6,
+     "records": 26,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      62,
+      590
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 9
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 8,
+     "records": 26,
+     "csv_audioids_present": 13,
+     "present_min_max": [
+      81,
+      593
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 12
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 9,
+     "records": 25,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      94,
+      104
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 11
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 10,
+     "records": 24,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      105,
+      114
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 10
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 11,
+     "records": 26,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      115,
+      596
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 4
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 61,
+     "records": 31,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      430,
+      439
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 62,
+     "records": 35,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      440,
+      449
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 65,
+     "records": 18,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      450,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 67,
+     "records": 29,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      463,
+      472
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples.sbr",
+     "dset": 72,
+     "records": 47,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      490,
+      509
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples_bank_ones.sbr",
+     "dset": 12,
+     "records": 21,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      469,
+      483
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/gauntlet_commentary/gauntletpbp_samples_bank_ones.sbr",
+     "dset": 149,
+     "records": 220,
+     "csv_audioids_present": 35,
+     "present_min_max": [
+      438,
+      620
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/music/music_inxp.sbr",
+     "dset": 4,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      44,
+      72
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 11
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 0,
+     "records": 22,
+     "csv_audioids_present": 14,
+     "present_min_max": [
+      16,
+      30
+     ],
+     "team_ids_0_30_present": 14,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/ambiancesamplebank.sbr",
+     "dset": 2,
+     "records": 25,
+     "csv_audioids_present": 24,
+     "present_min_max": [
+      2,
+      26
+     ],
+     "team_ids_0_30_present": 24,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/hornbank.sbr",
+     "dset": 0,
+     "records": 413,
+     "csv_audioids_present": 160,
+     "present_min_max": [
+      56,
+      686
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 9
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 5,
+     "records": 66,
+     "csv_audioids_present": 38,
+     "present_min_max": [
+      420,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 6,
+     "records": 34,
+     "csv_audioids_present": 34,
+     "present_min_max": [
+      401,
+      434
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 19,
+     "records": 34,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      554,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank.sbr",
+     "dset": 20,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      41,
+      557
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 0,
+     "records": 11,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      5,
+      24
+     ],
+     "team_ids_0_30_present": 11,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 5,
+     "records": 66,
+     "csv_audioids_present": 38,
+     "present_min_max": [
+      420,
+      460
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 6,
+     "records": 34,
+     "csv_audioids_present": 34,
+     "present_min_max": [
+      401,
+      434
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 17,
+     "records": 34,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      554,
+      587
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/sfx/sfxbank_outdoor.sbr",
+     "dset": 18,
+     "records": 20,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      41,
+      557
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 8
+    },
+    {
+     "bank": "kettle/audio/speech/eng/pbp_samples_inxp.sbr",
+     "dset": 1332,
+     "records": 15,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      71,
+      85
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 15
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 61,
+     "records": 41,
+     "csv_audioids_present": 10,
+     "present_min_max": [
+      112,
+      599
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 2
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 241,
+     "records": 71,
+     "csv_audioids_present": 11,
+     "present_min_max": [
+      472,
+      482
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/threes_commentary/threespbp_samples.sbr",
+     "dset": 263,
+     "records": 15,
+     "csv_audioids_present": 15,
+     "present_min_max": [
+      406,
+      420
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/ui_sfx/be_uisfxbank.sbr",
+     "dset": 0,
+     "records": 62,
+     "csv_audioids_present": 12,
+     "present_min_max": [
+      17,
+      671
+     ],
+     "team_ids_0_30_present": 1,
+     "generic_41_118_present": 0
+    },
+    {
+     "bank": "kettle/audio/ui_sfx/fe_uisfxbank.sbr",
+     "dset": 0,
+     "records": 146,
+     "csv_audioids_present": 35,
+     "present_min_max": [
+      102,
+      677
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 1
+    },
+    {
+     "bank": "kettle/audio/ui_sfx/uisfxbank.sbr",
+     "dset": 0,
+     "records": 83,
+     "csv_audioids_present": 28,
+     "present_min_max": [
+      400,
+      680
+     ],
+     "team_ids_0_30_present": 0,
+     "generic_41_118_present": 0
+    }
+   ]
+  }
+ }
+}

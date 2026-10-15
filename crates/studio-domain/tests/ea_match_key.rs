@@ -24,7 +24,9 @@ use studio_domain::{EditSession, Platform, Project, ProjectRole};
 use tdb_fhm::slug::{normalize_name, person_slug};
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 /// A real NHL/AHL bio is born in this window; a raw-zero date lands at ~1900 and a raw-`0xFF`
@@ -49,7 +51,17 @@ fn matrix() -> Vec<Anchor> {
         db: "anchors/ps3/nhl07/databases/NHL07NG.db",
         meta: "anchors/ps3/nhl07/databases/NHL07NG-meta.xml",
     });
-    for t in ["nhl08", "nhl09", "nhl10", "nhl11", "nhl12", "nhl13", "nhl14", "nhl15", "nhllegacy"] {
+    for t in [
+        "nhl08",
+        "nhl09",
+        "nhl10",
+        "nhl11",
+        "nhl12",
+        "nhl13",
+        "nhl14",
+        "nhl15",
+        "nhllegacy",
+    ] {
         v.push(Anchor {
             title: Box::leak(format!("{t}/ps3").into_boxed_str()),
             platform: Platform::Ps3,
@@ -57,12 +69,16 @@ fn matrix() -> Vec<Anchor> {
             meta: Box::leak(format!("anchors/ps3/{t}/databases/nhlng-meta.xml").into_boxed_str()),
         });
     }
-    for t in ["nhl15", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21"] {
+    for t in [
+        "nhl15", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21",
+    ] {
         v.push(Anchor {
             title: Box::leak(format!("{t}/ps4").into_boxed_str()),
             platform: Platform::Ps4,
             db: Box::leak(format!("anchors/ps4/{t}/databases/nhl_game.db").into_boxed_str()),
-            meta: Box::leak(format!("anchors/ps4/{t}/databases/nhl_game-meta.xml").into_boxed_str()),
+            meta: Box::leak(
+                format!("anchors/ps4/{t}/databases/nhl_game-meta.xml").into_boxed_str(),
+            ),
         });
     }
     v
@@ -87,12 +103,23 @@ fn measure(a: &Anchor) -> Result<Stats, String> {
     if !db_path.exists() {
         return Err("db missing".into());
     }
-    let project = Project::load(&db_path, a.platform, ProjectRole::Nhlng, repo(a.meta), repo("defs"))
-        .map_err(|e| format!("load: {e}"))?;
+    let project = Project::load(
+        &db_path,
+        a.platform,
+        ProjectRole::Nhlng,
+        repo(a.meta),
+        repo("defs"),
+    )
+    .map_err(|e| format!("load: {e}"))?;
     let sess = EditSession::begin(project);
-    let summaries = sess.player_summaries().map_err(|e| format!("summaries: {e}"))?;
+    let summaries = sess
+        .player_summaries()
+        .map_err(|e| format!("summaries: {e}"))?;
 
-    let mut st = Stats { players: summaries.len(), ..Default::default() };
+    let mut st = Stats {
+        players: summaries.len(),
+        ..Default::default()
+    };
     // key -> count, for both the name-only and name+dob folds.
     let mut name_only: HashMap<String, u32> = HashMap::new();
     let mut name_dob: HashMap<String, u32> = HashMap::new();
@@ -105,7 +132,11 @@ fn measure(a: &Anchor) -> Result<Stats, String> {
             .ok()
             .flatten()
             .and_then(|v| v.header.birthdate);
-        let plausible_dob = bd.as_deref().and_then(year_of).filter(|y| (DOB_MIN_YEAR..=DOB_MAX_YEAR).contains(y)).is_some();
+        let plausible_dob = bd
+            .as_deref()
+            .and_then(year_of)
+            .filter(|y| (DOB_MIN_YEAR..=DOB_MAX_YEAR).contains(y))
+            .is_some();
         if let Some(bd) = &bd {
             match year_of(bd) {
                 Some(y) if (DOB_MIN_YEAR..=DOB_MAX_YEAR).contains(&y) => st.dob_plausible += 1,
@@ -114,10 +145,18 @@ fn measure(a: &Anchor) -> Result<Stats, String> {
             }
         }
 
-        let name_key = format!("{}|{}", normalize_name(&s.last_name), normalize_name(&s.first_name));
+        let name_key = format!(
+            "{}|{}",
+            normalize_name(&s.last_name),
+            normalize_name(&s.first_name)
+        );
         // Only fold in DOB when it is plausible; otherwise the key degrades to name-only (the
         // matcher's real fallback), which is exactly what we want to measure.
-        let dob_str = if plausible_dob { bd.unwrap_or_default() } else { String::new() };
+        let dob_str = if plausible_dob {
+            bd.unwrap_or_default()
+        } else {
+            String::new()
+        };
         let full_key = person_slug(&s.last_name, &s.first_name, &dob_str);
 
         *name_only.entry(name_key.clone()).or_insert(0) += 1;

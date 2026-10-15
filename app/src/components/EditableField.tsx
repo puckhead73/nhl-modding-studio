@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
+import { EnumSelect } from "./EnumSelect";
+import { useFieldEdit } from "../lib/useFieldEdit";
 import { clampRaw, friendlySeed, friendlyToRaw, hasPlainBounds } from "../lib/editForm";
 import type { FieldViewDto } from "../bindings/FieldViewDto";
 import type { TeamViewDto } from "../bindings/TeamViewDto";
+import type { ArenaAssignmentPreviewDto } from "../bindings/ArenaAssignmentPreviewDto";
 
 /// Click-to-edit shell (the reference app's pattern): the resolved value renders as plain text
 /// until clicked, then the real control mounts focused. Closes on commit (Enter, a dropdown pick,
@@ -75,7 +78,7 @@ export function ClickToEdit({
 export function EditableField({
   projectId,
   record,
-  field,
+  field: sourceField,
   label,
   tone,
 }: {
@@ -87,23 +90,13 @@ export function EditableField({
    *  displays; enum dropdowns and checkboxes ignore it. */
   tone?: string;
 }) {
-  const qc = useQueryClient();
-  const { update } = useProject();
-  const mut = useMutation({
-    mutationFn: (v: { intValue?: number; textValue?: string }) =>
-      call("set_field", {
-        projectId,
-        table: field.studio_table,
-        record,
-        field: field.studio_field,
-        ...v,
-      }),
-    onSuccess: async () => {
-      await qc.invalidateQueries();
-      update(await call("project_summary", { projectId }));
-    },
-  });
-
+  const [refusal, setRefusal] = useState<string | null>(null);
+  const edit = useFieldEdit(projectId, record, sourceField);
+  const field = edit.field!;
+  const mut = { ...edit, mutate: (value: { intValue?: number; textValue?: string }) => {
+    setRefusal(null);
+    edit.mutate(value);
+  } };
   const isFlag =
     !field.is_string && field.range_low === 0 && field.range_high === 1 && field.enum_options.length === 0;
 
@@ -113,11 +106,12 @@ export function EditableField({
   } else if (field.enum_options.length > 0) {
     control = (
       <ClickToEdit display={field.display}>
-        <Select
-          value={field.decoded ?? 0}
-          options={field.enum_options}
-          onChange={(raw) => mut.mutate({ intValue: raw })}
-        />
+          <EnumSelect
+            label={label}
+            value={field.decoded ?? 0}
+            options={field.enum_options}
+            onChange={(raw) => mut.mutate({ intValue: raw })}
+          />
       </ClickToEdit>
     );
   } else if (isFlag) {
@@ -128,7 +122,7 @@ export function EditableField({
   } else {
     control = (
       <ClickToEdit display={field.display} tone={tone}>
-        <TextNumber field={field} tone={tone} onCommit={(v) => mut.mutate(v)} />
+        <TextNumber field={field} tone={tone} onCommit={(v) => mut.mutate(v)} onRefuse={setRefusal} />
       </ClickToEdit>
     );
   }
@@ -136,6 +130,11 @@ export function EditableField({
   return (
     <Labeled label={label} pending={mut.isPending} error={mut.error}>
       {control}
+      {refusal && (
+        <span className="mt-0.5 block text-[11px] text-rose-300" data-testid="text-too-long">
+          {refusal}
+        </span>
+      )}
     </Labeled>
   );
 }
@@ -150,7 +149,7 @@ type TeamOption = { team_id: number; name: string; abbrev: string };
 export function TeamSelect({
   projectId,
   record,
-  field,
+  field: sourceField,
   teams,
   label,
   noneLabel = "(none — Free Agent)",
@@ -164,23 +163,9 @@ export function TeamSelect({
   noneLabel?: string;
   offset?: number;
 }) {
-  const qc = useQueryClient();
-  const { update } = useProject();
-  const mut = useMutation({
-    mutationFn: (raw: number) =>
-      call("set_field", {
-        projectId,
-        table: field!.studio_table,
-        record,
-        field: field!.studio_field,
-        intValue: raw,
-      }),
-    onSuccess: async () => {
-      await qc.invalidateQueries();
-      update(await call("project_summary", { projectId }));
-    },
-  });
-
+  const edit = useFieldEdit(projectId, record, sourceField);
+  const field = edit.field;
+  const mut = { ...edit, mutate: (raw: number) => edit.mutate({ intValue: raw }) };
   const raw = field?.decoded ?? 0;
   // 1-indexed refs reserve raw 0 for "free agent"; 0-indexed `dXSB` (NHL 09/10) has no such
   // sentinel — every raw value is a real team id.
@@ -222,13 +207,22 @@ export function TeamSelect({
 /// sentinel), so options map 1:1 onto the arena directory. The arena name is a link to its entry in
 /// the Arenas tab; editing goes through the small "change" affordance beside it (the text itself
 /// can't be click-to-edit and a navigation link at the same time).
+/** The team's home-arena cell (Teams 2.2, 24 Sep 2026): a **disclosed two-step assignment**.
+ *  Picking an arena writes nothing; the backend's `arena_assignment_preview` is shown first — the
+ *  exact cell, who already plays at the chosen arena, who stays at the current one or that it
+ *  becomes vacant, or the refusal (same arena, uncatalogued id, no link on this title) — and only
+ *  **Assign** writes, through the ordinary validated `set_field` on the previewed cell with the
+ *  previewed arena id. The candidate and its preview are bound to (project, team, record, field);
+ *  a change of any of those drops them, and a completion landing after such a change is ignored. */
 export function ArenaSelect({
   projectId,
+  teamId,
   record,
   field,
   arena,
 }: {
   projectId: number;
+  teamId: number;
   record: number;
   field: FieldViewDto;
   arena: TeamViewDto["arena"];
@@ -236,38 +230,83 @@ export function ArenaSelect({
   const qc = useQueryClient();
   const { update } = useProject();
   const [editing, setEditing] = useState(false);
+  const [candidate, setCandidate] = useState<number | null>(null);
+  const targetKey = `${projectId}/${teamId}/${field.studio_table}/${record}/${field.studio_field}`;
+  const targetRef = useRef(targetKey);
+  const genRef = useRef(0);
+  useEffect(() => {
+    if (targetRef.current === targetKey) return;
+    targetRef.current = targetKey;
+    genRef.current += 1;
+    setCandidate(null);
+    setEditing(false);
+  }, [targetKey]);
+
   const arenasQ = useQuery({
     queryKey: ["arenas", projectId],
     queryFn: () => call("list_arenas", { projectId }),
   });
   const arenas = arenasQ.data ?? [];
+  const preview = useQuery({
+    queryKey: ["arenaAssignmentPreview", projectId, teamId, record, field.studio_field, candidate],
+    queryFn: () => call("arena_assignment_preview", { projectId, teamId, toArena: candidate! }),
+    enabled: candidate != null,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: "always",
+    retry: false,
+  });
+  const p: ArenaAssignmentPreviewDto | undefined = preview.isSuccess && !preview.isFetching ? preview.data : undefined;
+  const canAssign = !!p && p.allowed && p.table != null && p.record != null && p.field != null;
+
   const mut = useMutation({
-    mutationFn: (arenaId: number) =>
+    mutationFn: (plan: ArenaAssignmentPreviewDto) =>
       call("set_field", {
         projectId,
-        table: field.studio_table,
-        record,
-        field: field.studio_field,
-        intValue: arenaId,
+        table: plan.table!,
+        record: plan.record!,
+        field: plan.field!,
+        intValue: Number(plan.to_raw),
       }),
-    onSuccess: async () => {
+    onSuccess: async (_r, _plan, _ctx) => {
       await qc.invalidateQueries();
       update(await call("project_summary", { projectId }));
-      setEditing(false);
     },
   });
+  // A second click while the write is in flight is ignored (the mutation's pending flag updates
+  // asynchronously, so the guard is a ref).
+  const assigningRef = useRef(false);
+  const assign = () => {
+    if (!canAssign || mut.isPending || assigningRef.current || !p) return;
+    const gen = genRef.current;
+    assigningRef.current = true;
+    mut.mutate(p, {
+      onSuccess: () => {
+        if (gen !== genRef.current) return; // the cell moved to another target meanwhile
+        setCandidate(null);
+        setEditing(false);
+      },
+      onSettled: () => {
+        assigningRef.current = false;
+      },
+    });
+  };
+  const cancel = () => {
+    if (mut.isPending) return;
+    setCandidate(null);
+    setEditing(false);
+  };
 
   // "Honda Center — Anaheim, CA": StEO's cityname already carries "City, ST".
-  const current = arena
-    ? `${arena.name || `Arena ${arena.arena_id}`}${arena.city ? ` — ${arena.city}` : ""}`
-    : field.decoded != null
-      ? `Arena ${field.decoded}`
-      : "—";
+  const label = (a: { name: string; city: string; arena_id: number | bigint } | null | undefined, raw?: number | bigint | null) =>
+    a ? `${a.name || `Arena ${a.arena_id}`}${a.city ? ` — ${a.city}` : ""}` : raw != null ? `Arena ${raw}` : "—";
+  const current = arena ? label(arena) : field.decoded != null ? `Arena ${field.decoded}` : "—";
   const sorted = [...arenas].sort((a, b) => a.name.localeCompare(b.name));
+  const list = (names: string[]) => names.join(", ");
 
   return (
     // Spans two grid columns — "Name — City, ST" doesn't fit a single quarter-width cell.
-    <div className="col-span-2 min-w-0">
+    <div className="col-span-2 min-w-0" data-testid="arena-cell">
       <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-300/80">
         Arena
         {mut.isPending && <span className="ml-1 text-slate-500">…</span>}
@@ -277,19 +316,18 @@ export function ArenaSelect({
           <select
             autoFocus
             className="w-full rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
-            value={field.decoded ?? 0}
+            value={candidate ?? field.decoded ?? 0}
             disabled={mut.isPending}
-            onChange={(e) => mut.mutate(Number(e.target.value))}
-            onBlur={() => !mut.isPending && setEditing(false)}
-            onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
+            onChange={(e) => setCandidate(Number(e.target.value))}
+            onKeyDown={(e) => e.key === "Escape" && cancel()}
+            data-testid="arena-select"
           >
             {field.decoded != null && !arenas.some((a) => a.arena_id === field.decoded) && (
               <option value={field.decoded}>{`(uncatalogued: ${field.decoded})`}</option>
             )}
             {sorted.map((a) => (
               <option key={a.arena_id} value={a.arena_id}>
-                {a.name || `Arena ${a.arena_id}`}
-                {a.city ? ` — ${a.city}` : ""}
+                {label(a)}
               </option>
             ))}
           </select>
@@ -312,6 +350,7 @@ export function ArenaSelect({
                 onClick={() => setEditing(true)}
                 title="Change home arena"
                 className="shrink-0 rounded border border-slate-700 px-1.5 py-px text-[10px] text-slate-500 hover:border-sky-700 hover:text-sky-300"
+                data-testid="arena-change"
               >
                 change
               </button>
@@ -319,8 +358,61 @@ export function ArenaSelect({
           </>
         )}
       </div>
+      {editing && candidate != null && (
+        <div className="mt-1 rounded border border-slate-800 bg-slate-900/60 p-2 text-[11px]" data-testid="arena-disclosure">
+          {preview.isLoading || preview.isFetching ? (
+            <p className="text-slate-400" data-testid="arena-disclosure-loading">Checking who plays there…</p>
+          ) : preview.error ? (
+            <p className="text-amber-300" data-testid="arena-disclosure-error">
+              The check failed ({String(preview.error)}). Nothing is assigned until it answers.
+            </p>
+          ) : p && !p.allowed ? (
+            <p className="text-rose-300" data-testid="arena-disclosure-refusal">{p.refusal}</p>
+          ) : p ? (
+            <div className="space-y-0.5 text-slate-300">
+              <p>
+                <span className="text-slate-100">{p.team_name}</span> moves to{" "}
+                <span className="text-slate-100">{label(p.to, p.to_raw)}</span>.
+              </p>
+              <p data-testid="arena-disclosure-to">
+                {p.to_tenants.length === 0
+                  ? "No other team plays there."
+                  : `${p.to_tenants.length} team${p.to_tenants.length === 1 ? "" : "s"} already play${p.to_tenants.length === 1 ? "s" : ""} there: ${list(p.to_tenants)}.`}
+              </p>
+              <p data-testid="arena-disclosure-from">
+                {p.from || p.from_raw != null
+                  ? p.from_becomes_vacant
+                    ? `${label(p.from, p.from_raw)} will have no home team afterwards.`
+                    : `${label(p.from, p.from_raw)} keeps ${list(p.from_other_tenants)}.`
+                  : "The team has no current arena."}
+              </p>
+              <p className="text-slate-500">Undo restores the previous arena as one step.</p>
+            </div>
+          ) : null}
+          <div className="mt-1.5 flex gap-2">
+            <button
+              type="button"
+              onClick={assign}
+              disabled={!canAssign || mut.isPending}
+              className="rounded border border-sky-800 bg-sky-950/40 px-2 py-0.5 text-[11px] text-sky-200 hover:bg-sky-900/40 disabled:opacity-40"
+              data-testid="arena-assign"
+            >
+              {mut.isPending ? "Assigning…" : "Assign"}
+            </button>
+            <button
+              type="button"
+              onClick={cancel}
+              disabled={mut.isPending}
+              className="rounded border border-slate-700 px-2 py-0.5 text-[11px] text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+              data-testid="arena-cancel"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
       {mut.error != null && (
-        <div className="mt-0.5 text-[10px] text-rose-400">{String(mut.error)}</div>
+        <div className="mt-0.5 text-[10px] text-rose-400" data-testid="arena-assign-error">{String(mut.error)}</div>
       )}
     </div>
   );
@@ -379,29 +471,6 @@ function Labeled({
 const CONTROL =
   "w-full rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-slate-100 focus:border-sky-600 focus:outline-none";
 
-function Select({
-  value,
-  options,
-  onChange,
-}: {
-  value: number;
-  options: { raw: number; label: string }[];
-  onChange: (raw: number) => void;
-}) {
-  // If the current raw isn't in the vocabulary, keep it selectable so we don't silently change it.
-  const known = options.some((o) => o.raw === value);
-  return (
-    <select className={CONTROL} value={value} onChange={(e) => onChange(Number(e.target.value))}>
-      {!known && <option value={value}>{`(uncatalogued: ${value})`}</option>}
-      {options.map((o) => (
-        <option key={o.raw} value={o.raw}>
-          {o.label}
-        </option>
-      ))}
-    </select>
-  );
-}
-
 function Checkbox({ checked, onChange }: { checked: boolean; onChange: (on: boolean) => void }) {
   return (
     <input
@@ -416,20 +485,32 @@ function Checkbox({ checked, onChange }: { checked: boolean; onChange: (on: bool
 function TextNumber({
   field,
   onCommit,
+  onRefuse,
   tone,
 }: {
   field: FieldViewDto;
   onCommit: (v: { intValue?: number; textValue?: string }) => void;
+  /** A pre-write refusal (text over the field's byte width), shown by the owner. */
+  onRefuse?: (message: string) => void;
   tone?: string;
 }) {
   // The input holds the friendly value (2011, 209, 6'1"); commit converts back to the raw encoding.
   const baseline = friendlySeed(field);
   const [draft, setDraft] = useState(baseline);
   useEffect(() => setDraft(baseline), [baseline]);
+  // Inline strings have a fixed byte width; the writer refuses longer text after the fact, so the
+  // editor says so first (UTF-8 bytes, not characters — "Litoměřice" is 12 bytes).
+  const byteLength = (text: string) => new TextEncoder().encode(text).length;
 
   const commit = () => {
     if (draft === baseline) return;
     if (field.is_string) {
+      const max = field.text_max_bytes;
+      if (max != null && byteLength(draft) > max) {
+        onRefuse?.(`${byteLength(draft)} bytes — this field holds at most ${max}; shorten the text (accented letters take two bytes). Nothing was written`);
+        setDraft(baseline);
+        return;
+      }
       onCommit({ textValue: draft });
       return;
     }
@@ -461,6 +542,7 @@ function TextNumber({
         onBlur={commit}
         onKeyDown={(e) => e.key === "Enter" && commit()}
         className={`${CONTROL} ${tone ? `${tone} font-semibold` : ""}`}
+        data-testid="text-number-input"
       />
       {showHint && <span className="shrink-0 text-xs text-slate-400">{field.display}</span>}
     </div>

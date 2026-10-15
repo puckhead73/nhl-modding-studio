@@ -1,0 +1,2570 @@
+{
+ "note": "R101 - which number in the kit / nameplate member names is the team art id (task 12; R99 residual). Data-driven, per title:\n  members : `rendering/jersey/texlib_{x}_{y}_{z}.rx2`, `rendering/pant/texlib_...`, `rendering/sock/sock_{x}_{y}_{z}_cm.rx2`,\n            `rendering/jersey/name_{x}_{y}_{z}_cm.rx2` (X360 / PS3 Legacy and NHL 15 EB archives; PS3 12 / 13 for the sock grammar);\n  database: every integer column of the title's `stockteamjerseys` (+ `customteamjerseys` where present) and `exhibitionteams.artid`.\nFor every name position p in {x, y, z} and every DB column c: |S_p \u2229 V_c| / |S_p| (fraction of the name position's values that occur in\nthe column) and |V_c \u2229 S_p| / |V_c|; the best column per position is reported with both fractions. A position whose value set equals\nthe `teamartid` / `artid` set (both fractions ~ 1) is the art id; equal (x, y, z) tuple sets between two families show they are keyed\nidentically. Measurements, not a grammar proof: an id position is 'established' only when both fractions are 1.00 on every title.\nRead-only over the archives and `anchors/`. Usage: python r101_nameplate_kit_key_positions.py <out.json>\n",
+ "trees": {
+  "x360-legacy": {
+   "db": "anchors\\xbox360\\nhllegacy\\databases\\nhlng.db",
+   "families": {
+    "rink_logo": {
+     "members": 1926,
+     "positions": {
+      "x": {
+       "distinct": 348,
+       "min": 0,
+       "max": 20085,
+       "best_columns": [
+        [
+         "exhibitionteams.artid",
+         0.626,
+         1.0
+        ],
+        [
+         "stockteamjerseys.teamartid",
+         0.624,
+         1.0
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.445,
+         0.698
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "pant": {
+     "members": 959,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 221,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.982,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.982,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.579,
+         0.577
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "sock": {
+     "members": 946,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 221,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.982,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.982,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.579,
+         0.577
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "nameplate": {
+     "members": 904,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 221,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.982,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.982,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.579,
+         0.577
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "jersey": {
+     "members": 905,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 222,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.977,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.977,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.581,
+         0.581
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    }
+   },
+   "tuple_set_equalities": {
+    "rink_logo vs pant": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1913,
+     "only_second": 946
+    },
+    "rink_logo vs sock": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1913,
+     "only_second": 933
+    },
+    "rink_logo vs nameplate": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1913,
+     "only_second": 891
+    },
+    "rink_logo vs jersey": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1913,
+     "only_second": 892
+    },
+    "pant vs sock": {
+     "equal": false,
+     "common": 946,
+     "only_first": 13,
+     "only_second": 0
+    },
+    "pant vs nameplate": {
+     "equal": false,
+     "common": 904,
+     "only_first": 55,
+     "only_second": 0
+    },
+    "pant vs jersey": {
+     "equal": false,
+     "common": 904,
+     "only_first": 55,
+     "only_second": 1
+    },
+    "sock vs nameplate": {
+     "equal": false,
+     "common": 902,
+     "only_first": 44,
+     "only_second": 2
+    },
+    "sock vs jersey": {
+     "equal": false,
+     "common": 902,
+     "only_first": 44,
+     "only_second": 3
+    },
+    "nameplate vs jersey": {
+     "equal": false,
+     "common": 904,
+     "only_first": 0,
+     "only_second": 1
+    }
+   },
+   "stockteamjerseys_columns": [
+    "hastie",
+    "teamartid",
+    "isdefault",
+    "helmetnumbers",
+    "islockable",
+    "style",
+    "variant",
+    "fevariant",
+    "helmetlogo",
+    "teamid",
+    "locstring",
+    "islightcolor",
+    "jerseyindex"
+   ],
+   "db_triple_matching_jersey_names": []
+  },
+  "ps3-legacy": {
+   "db": "anchors\\ps3\\nhllegacy\\databases\\nhlng.db",
+   "families": {
+    "rink_logo": {
+     "members": 1928,
+     "positions": {
+      "x": {
+       "distinct": 348,
+       "min": 0,
+       "max": 20085,
+       "best_columns": [
+        [
+         "exhibitionteams.artid",
+         0.626,
+         1.0
+        ],
+        [
+         "stockteamjerseys.teamartid",
+         0.624,
+         1.0
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.445,
+         0.698
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "pant": {
+     "members": 959,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 221,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.982,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.982,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.579,
+         0.577
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "sock": {
+     "members": 946,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 221,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.982,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.982,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.579,
+         0.577
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "nameplate": {
+     "members": 904,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 221,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.982,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.982,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.579,
+         0.577
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "jersey": {
+     "members": 905,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 222,
+       "min": 0,
+       "max": 421,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.977,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.977,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.581,
+         0.581
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.667,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    }
+   },
+   "tuple_set_equalities": {
+    "rink_logo vs pant": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1915,
+     "only_second": 946
+    },
+    "rink_logo vs sock": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1915,
+     "only_second": 933
+    },
+    "rink_logo vs nameplate": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1915,
+     "only_second": 891
+    },
+    "rink_logo vs jersey": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1915,
+     "only_second": 892
+    },
+    "pant vs sock": {
+     "equal": false,
+     "common": 946,
+     "only_first": 13,
+     "only_second": 0
+    },
+    "pant vs nameplate": {
+     "equal": false,
+     "common": 904,
+     "only_first": 55,
+     "only_second": 0
+    },
+    "pant vs jersey": {
+     "equal": false,
+     "common": 904,
+     "only_first": 55,
+     "only_second": 1
+    },
+    "sock vs nameplate": {
+     "equal": false,
+     "common": 902,
+     "only_first": 44,
+     "only_second": 2
+    },
+    "sock vs jersey": {
+     "equal": false,
+     "common": 902,
+     "only_first": 44,
+     "only_second": 3
+    },
+    "nameplate vs jersey": {
+     "equal": false,
+     "common": 904,
+     "only_first": 0,
+     "only_second": 1
+    }
+   },
+   "stockteamjerseys_columns": [
+    "hastie",
+    "teamartid",
+    "isdefault",
+    "helmetnumbers",
+    "islockable",
+    "style",
+    "variant",
+    "fevariant",
+    "helmetlogo",
+    "teamid",
+    "locstring",
+    "islightcolor",
+    "jerseyindex"
+   ],
+   "db_triple_matching_jersey_names": []
+  },
+  "x360-nhl15": {
+   "db": "anchors\\xbox360\\nhl15\\databases\\nhlng.db",
+   "families": {
+    "rink_logo": {
+     "members": 1784,
+     "positions": {
+      "x": {
+       "distinct": 339,
+       "min": 0,
+       "max": 20085,
+       "best_columns": [
+        [
+         "exhibitionteams.artid",
+         0.611,
+         0.972
+        ],
+        [
+         "stockteamjerseys.teamartid",
+         0.608,
+         0.972
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.422,
+         0.662
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.81,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.81,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "pant": {
+     "members": 684,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    },
+    "sock": {
+     "members": 683,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    },
+    "nameplate": {
+     "members": 683,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    },
+    "jersey": {
+     "members": 683,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    }
+   },
+   "tuple_set_equalities": {
+    "rink_logo vs pant": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1771,
+     "only_second": 671
+    },
+    "rink_logo vs sock": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1771,
+     "only_second": 670
+    },
+    "rink_logo vs nameplate": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1771,
+     "only_second": 670
+    },
+    "rink_logo vs jersey": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1771,
+     "only_second": 670
+    },
+    "pant vs sock": {
+     "equal": false,
+     "common": 683,
+     "only_first": 1,
+     "only_second": 0
+    },
+    "pant vs nameplate": {
+     "equal": false,
+     "common": 683,
+     "only_first": 1,
+     "only_second": 0
+    },
+    "pant vs jersey": {
+     "equal": false,
+     "common": 683,
+     "only_first": 1,
+     "only_second": 0
+    },
+    "sock vs nameplate": {
+     "equal": true,
+     "common": 683,
+     "only_first": 0,
+     "only_second": 0
+    },
+    "sock vs jersey": {
+     "equal": true,
+     "common": 683,
+     "only_first": 0,
+     "only_second": 0
+    },
+    "nameplate vs jersey": {
+     "equal": true,
+     "common": 683,
+     "only_first": 0,
+     "only_second": 0
+    }
+   },
+   "stockteamjerseys_columns": [
+    "hastie",
+    "teamartid",
+    "isdefault",
+    "helmetnumbers",
+    "islockable",
+    "style",
+    "variant",
+    "fevariant",
+    "helmetlogo",
+    "teamid",
+    "locstring",
+    "islightcolor",
+    "jerseyindex"
+   ],
+   "db_triple_matching_jersey_names": [
+    [
+     "style",
+     "teamartid",
+     "variant",
+     657,
+     683,
+     657
+    ],
+    [
+     "style",
+     "teamartid",
+     "fevariant",
+     657,
+     683,
+     657
+    ]
+   ]
+  },
+  "ps3-nhl15": {
+   "db": "anchors\\ps3\\nhl15\\databases\\nhlng.db",
+   "families": {
+    "rink_logo": {
+     "members": 1786,
+     "positions": {
+      "x": {
+       "distinct": 339,
+       "min": 0,
+       "max": 20085,
+       "best_columns": [
+        [
+         "exhibitionteams.artid",
+         0.611,
+         0.972
+        ],
+        [
+         "stockteamjerseys.teamartid",
+         0.608,
+         0.972
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.422,
+         0.662
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.81,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.81,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.619,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "pant": {
+     "members": 684,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    },
+    "sock": {
+     "members": 683,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    },
+    "nameplate": {
+     "members": 683,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    },
+    "jersey": {
+     "members": 683,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 213,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.995,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.995,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 19,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         0.895,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.579,
+         0.846
+        ]
+       ]
+      }
+     }
+    }
+   },
+   "tuple_set_equalities": {
+    "rink_logo vs pant": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1773,
+     "only_second": 671
+    },
+    "rink_logo vs sock": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1773,
+     "only_second": 670
+    },
+    "rink_logo vs nameplate": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1773,
+     "only_second": 670
+    },
+    "rink_logo vs jersey": {
+     "equal": false,
+     "common": 13,
+     "only_first": 1773,
+     "only_second": 670
+    },
+    "pant vs sock": {
+     "equal": false,
+     "common": 683,
+     "only_first": 1,
+     "only_second": 0
+    },
+    "pant vs nameplate": {
+     "equal": false,
+     "common": 683,
+     "only_first": 1,
+     "only_second": 0
+    },
+    "pant vs jersey": {
+     "equal": false,
+     "common": 683,
+     "only_first": 1,
+     "only_second": 0
+    },
+    "sock vs nameplate": {
+     "equal": true,
+     "common": 683,
+     "only_first": 0,
+     "only_second": 0
+    },
+    "sock vs jersey": {
+     "equal": true,
+     "common": 683,
+     "only_first": 0,
+     "only_second": 0
+    },
+    "nameplate vs jersey": {
+     "equal": true,
+     "common": 683,
+     "only_first": 0,
+     "only_second": 0
+    }
+   },
+   "stockteamjerseys_columns": [
+    "hastie",
+    "teamartid",
+    "isdefault",
+    "helmetnumbers",
+    "islockable",
+    "style",
+    "variant",
+    "fevariant",
+    "helmetlogo",
+    "teamid",
+    "locstring",
+    "islightcolor",
+    "jerseyindex"
+   ],
+   "db_triple_matching_jersey_names": [
+    [
+     "style",
+     "teamartid",
+     "variant",
+     657,
+     683,
+     657
+    ],
+    [
+     "style",
+     "teamartid",
+     "fevariant",
+     657,
+     683,
+     657
+    ]
+   ]
+  },
+  "ps3-nhl12": {
+   "db": "anchors\\ps3\\nhl12\\databases\\nhlng.db",
+   "families": {
+    "rink_logo": {
+     "members": 1701,
+     "positions": {
+      "x": {
+       "distinct": 337,
+       "min": 0,
+       "max": 20085,
+       "best_columns": [
+        [
+         "exhibitionteams.artid",
+         0.629,
+         1.0
+        ],
+        [
+         "stockteamjerseys.teamartid",
+         0.626,
+         1.0
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.412,
+         0.653
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islockable",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "pant": {
+     "members": 979,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islockable",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 228,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.925,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.925,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.588,
+         0.629
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "nameplate": {
+     "members": 969,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islockable",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 228,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.925,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.925,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.588,
+         0.629
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "jersey": {
+     "members": 967,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islockable",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 228,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.925,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.925,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.588,
+         0.629
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    }
+   },
+   "tuple_set_equalities": {
+    "rink_logo vs pant": {
+     "equal": false,
+     "common": 16,
+     "only_first": 1685,
+     "only_second": 963
+    },
+    "rink_logo vs nameplate": {
+     "equal": false,
+     "common": 15,
+     "only_first": 1686,
+     "only_second": 954
+    },
+    "rink_logo vs jersey": {
+     "equal": false,
+     "common": 16,
+     "only_first": 1685,
+     "only_second": 951
+    },
+    "pant vs nameplate": {
+     "equal": false,
+     "common": 960,
+     "only_first": 19,
+     "only_second": 9
+    },
+    "pant vs jersey": {
+     "equal": false,
+     "common": 965,
+     "only_first": 14,
+     "only_second": 2
+    },
+    "nameplate vs jersey": {
+     "equal": false,
+     "common": 962,
+     "only_first": 7,
+     "only_second": 5
+    }
+   },
+   "stockteamjerseys_columns": [
+    "hastie",
+    "teamartid",
+    "isdefault",
+    "islockable",
+    "style",
+    "variant",
+    "fevariant",
+    "teamid",
+    "locstring",
+    "islightcolor",
+    "jerseyindex"
+   ],
+   "db_triple_matching_jersey_names": []
+  },
+  "ps3-nhl13": {
+   "db": "anchors\\ps3\\nhl13\\databases\\nhlng.db",
+   "families": {
+    "rink_logo": {
+     "members": 1700,
+     "positions": {
+      "x": {
+       "distinct": 337,
+       "min": 0,
+       "max": 20085,
+       "best_columns": [
+        [
+         "exhibitionteams.artid",
+         0.629,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamartid",
+         0.626,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.427,
+         0.661
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "pant": {
+     "members": 865,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 215,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.986,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.986,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "sock": {
+     "members": 865,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 215,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.986,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.986,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "nameplate": {
+     "members": 843,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 215,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.986,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.986,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    },
+    "jersey": {
+     "members": 865,
+     "positions": {
+      "x": {
+       "distinct": 2,
+       "min": 0,
+       "max": 1,
+       "best_columns": [
+        [
+         "stockteamjerseys.style",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.islightcolor",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.isdefault",
+         1.0,
+         1.0
+        ]
+       ]
+      },
+      "y": {
+       "distinct": 215,
+       "min": 0,
+       "max": 505,
+       "best_columns": [
+        [
+         "stockteamjerseys.teamartid",
+         0.986,
+         1.0
+        ],
+        [
+         "exhibitionteams.artid",
+         0.986,
+         0.995
+        ],
+        [
+         "stockteamjerseys.teamid",
+         0.577,
+         0.569
+        ]
+       ]
+      },
+      "z": {
+       "distinct": 21,
+       "min": 0,
+       "max": 20,
+       "best_columns": [
+        [
+         "stockteamjerseys.variant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.fevariant",
+         1.0,
+         1.0
+        ],
+        [
+         "stockteamjerseys.jerseyindex",
+         0.952,
+         1.0
+        ]
+       ]
+      }
+     }
+    }
+   },
+   "tuple_set_equalities": {
+    "rink_logo vs pant": {
+     "equal": false,
+     "common": 10,
+     "only_first": 1690,
+     "only_second": 855
+    },
+    "rink_logo vs sock": {
+     "equal": false,
+     "common": 10,
+     "only_first": 1690,
+     "only_second": 855
+    },
+    "rink_logo vs nameplate": {
+     "equal": false,
+     "common": 10,
+     "only_first": 1690,
+     "only_second": 833
+    },
+    "rink_logo vs jersey": {
+     "equal": false,
+     "common": 10,
+     "only_first": 1690,
+     "only_second": 855
+    },
+    "pant vs sock": {
+     "equal": false,
+     "common": 864,
+     "only_first": 1,
+     "only_second": 1
+    },
+    "pant vs nameplate": {
+     "equal": false,
+     "common": 841,
+     "only_first": 24,
+     "only_second": 2
+    },
+    "pant vs jersey": {
+     "equal": false,
+     "common": 864,
+     "only_first": 1,
+     "only_second": 1
+    },
+    "sock vs nameplate": {
+     "equal": false,
+     "common": 842,
+     "only_first": 23,
+     "only_second": 1
+    },
+    "sock vs jersey": {
+     "equal": true,
+     "common": 865,
+     "only_first": 0,
+     "only_second": 0
+    },
+    "nameplate vs jersey": {
+     "equal": false,
+     "common": 842,
+     "only_first": 1,
+     "only_second": 23
+    }
+   },
+   "stockteamjerseys_columns": [
+    "hastie",
+    "teamartid",
+    "isdefault",
+    "helmetnumbers",
+    "islockable",
+    "style",
+    "variant",
+    "fevariant",
+    "helmetlogo",
+    "teamid",
+    "locstring",
+    "islightcolor",
+    "jerseyindex"
+   ],
+   "db_triple_matching_jersey_names": []
+  }
+ }
+}

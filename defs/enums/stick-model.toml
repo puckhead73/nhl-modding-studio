@@ -73,6 +73,13 @@ Three Task #61 anchors were refined or corrected by the texture pass:
 kind = "operator-research"
 description = "2026-05-18 Texture Lab pass over USRDIR/rendering/playerstick/texlib_*.rpsgl (NHL Legacy on RPCS3)"
 
+# Title scope (coordinator decision, 25 Sep 2026): these labels were established on NHL Legacy
+# (PS3 textures / catalogue CSVs; Xbox 360 shares the id→file grammar; Recompiled by identity).
+# Studio shows them only on a project opened as NHL Legacy; every other title shows the stored id
+# as a number — a label from here is never borrowed for another title's ids.
+[scope]
+games = ["nhllegacy"]
+
 [[bindings]]
 field_name = "Stick"
 field_raw_id = "wXFx"

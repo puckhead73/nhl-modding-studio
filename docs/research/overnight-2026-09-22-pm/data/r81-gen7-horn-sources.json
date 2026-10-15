@@ -1,0 +1,4196 @@
+{
+ "note": "R81 - gen7 unresolved horn ids (Q-R78-1): where could the non-NHL `goalhorn` / `periodhorn` values (30-136) be served from? Inspects,\nper gen7 tree with a loose audio folder: the loose numbered banks (`<id>_goal.abk`, `<id>_period.abk`), the numbered members of the\naudio archives (`nocache.big`, `audioboot.big`, `data0.big`, `audio.big`, `audiostream.big`), the `horns.abk` bank (S10A entry count),\nthe presence of the horn event module `aemshorn.csi` (loose or archived) and its MOIR handle / parameter names, and the residual DB\nvalues from `r78-gen7-arena-sfx-bank-join.json`. Output per tree: every residual id classed 'absent in inspected sources' (never 'absent\nglobally'), the archive member set vs the loose set (identical / extra / missing), and the candidate alternatives recorded as candidates\n(id 0 = shipped-but-unreferenced default? a synthesised horn from the `aemshorn` module's sustain / gap parameters?). Read-only.\nUsage: python r81_gen7_horn_sources.py <out.json>\n",
+ "trees": {
+  "x360-nhl11": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ]
+   },
+   "archives": {
+    "audioboot.big": {
+     "members": 26,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 295,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ]
+     },
+     "horn_named": []
+    },
+    "audiostream.big": {
+     "members": 17,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 3268,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1236,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "39": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "39": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "x360-nhl12": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 345,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 2,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 3268,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1236,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "x360-nhl13": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 322,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 2,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 3268,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1236,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "x360-nhl14": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 332,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 5,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 3268,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1236,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100,
+     194
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100,
+     194
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "x360-nhl15": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 8895,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 5,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 3268,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1236,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100,
+     194
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100,
+     194
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "x360-legacy": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 9707,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 5,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 3268,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1236,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100,
+     194
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100,
+     194
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "ps3-nhl11": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ]
+   },
+   "archives": {
+    "audioboot.big": {
+     "members": 26,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 263,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ]
+     },
+     "horn_named": []
+    },
+    "audiostream.big": {
+     "members": 21,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 4292,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1832,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "39": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "39": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "ps3-nhl14": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 331,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 5,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 4292,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1832,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100,
+     194
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100,
+     194
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "ps3-nhl15": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 8894,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 5,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 4292,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1832,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100,
+     194
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100,
+     194
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "ps3-legacy": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100,
+     194
+    ]
+   },
+   "archives": {
+    "nocache.big": {
+     "members": 9706,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100,
+       194
+      ]
+     },
+     "horn_named": []
+    },
+    "audioboot.big": {
+     "members": 25,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 5,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 4292,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1832,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornReplaySpeed_snd",
+     "hornReplayState_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100,
+     194
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100,
+     194
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "x360-nhl09": {
+   "loose": {
+    "goal": [],
+    "period": []
+   },
+   "archives": {
+    "audioboot.big": {
+     "members": 22,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/events/aemshorn.csi",
+      "audio/sfx/ram/horns.abk"
+     ]
+    },
+    "data0.big": {
+     "members": 280,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ]
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": null,
+   "aemshorn_csi": null,
+   "residuals": {
+    "goalhorn": "no numbered banks on this tree",
+    "periodhorn": "no numbered banks on this tree"
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": false,
+     "archive_only": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      100
+     ],
+     "loose_only": []
+    },
+    "period": {
+     "identical": false,
+     "archive_only": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      100
+     ],
+     "loose_only": []
+    }
+   }
+  },
+  "x360-nhl10": {
+   "loose": {
+    "goal": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ],
+    "period": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     100
+    ]
+   },
+   "archives": {
+    "audioboot.big": {
+     "members": 27,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": [
+      "audio/sfx/aemshorn.csi"
+     ]
+    },
+    "data0.big": {
+     "members": 65,
+     "numbered": {
+      "goal": [],
+      "period": []
+     },
+     "horn_named": []
+    },
+    "audio.big": {
+     "members": 217,
+     "numbered": {
+      "goal": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ],
+      "period": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       100
+      ]
+     },
+     "horn_named": []
+    }
+   },
+   "horns_abk": {
+    "file_len": 3268,
+    "table": "S10A",
+    "count": 0,
+    "first_entry": null
+   },
+   "aemshorn_csi": {
+    "source": "loose",
+    "size": 1164,
+    "names": [
+     "eighthGap_snd",
+     "eighthSustain_snd",
+     "fifthGap_snd",
+     "fifthSustain_snd",
+     "firstGap_snd",
+     "firstSustain_snd",
+     "fourthGap_snd",
+     "fourthSustain_snd",
+     "goalHornDuckerAmount_snd",
+     "goalHornDuckerValue_snd",
+     "goalHornMasterVolume_snd",
+     "h_ducker",
+     "h_goalHorn",
+     "h_pause",
+     "h_service",
+     "h_stop",
+     "hornDelayTrigger_snd",
+     "hornDryLevel_snd",
+     "hornFxLevel_snd",
+     "hornsDuckerState_snd",
+     "hornsKillDelayTime_snd",
+     "hornsMasterVolume_snd",
+     "hornsPauseDelayTime_snd",
+     "m_goalHorn_v",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "secondGap_snd",
+     "secondSustain_snd",
+     "serviceShutdown_msg",
+     "seventhGap_snd",
+     "seventhSustain_snd",
+     "sixthGap_snd",
+     "sixthSustain_snd",
+     "stop_msg",
+     "thirdGap_snd",
+     "thirdSustain_snd"
+    ]
+   },
+   "residuals": {
+    "goalhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "39": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "goalhorn_files_without_row": [
+     0,
+     100
+    ],
+    "periodhorn": {
+     "30": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "31": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "32": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "33": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "34": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "35": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "36": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "37": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "38": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "39": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "41": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "45": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "61": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     },
+     "136": {
+      "loose": false,
+      "archives": false,
+      "class": "absent in inspected sources"
+     }
+    },
+    "periodhorn_files_without_row": [
+     0,
+     100
+    ]
+   },
+   "archive_vs_loose": {
+    "goal": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    },
+    "period": {
+     "identical": true,
+     "archive_only": [],
+     "loose_only": []
+    }
+   }
+  },
+  "ps3-nhl12": {
+   "missing": "no loose audio/sfx"
+  },
+  "ps3-nhl13": {
+   "missing": "no loose audio/sfx"
+  }
+ }
+}

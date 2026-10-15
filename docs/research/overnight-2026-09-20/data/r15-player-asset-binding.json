@@ -1,0 +1,1929 @@
+{
+ "note": "R15 \u2014 Players (PS4 15\u201321): the head / hair asset binding through the Attrib/VLT vault, decoded to attribute level with the R7\nreader. `ge_nhl_skaterhead` and `ge_nhl_skaterheadtexturepack` records carry an enum attribute of type `SkaterNameAttribute` (key\n0x4028769e, name not resolved) whose value is the database `exhibitionplayerbiotable.headid`; `ge_nhl_skaterhairtexturepack` carries\n`GenericHairStyle` (0x9def4631) = the database `hairid`. Per title: coverage of every DB headid / hairid by the vault values, bespoke\nhead name agreement with the player's name (slug heuristic, mismatches listed), artid == headid count, referenced texture paths for a\nfew witnesses. Read-only. Usage: python r15_player_asset_binding.py <out.json>\n",
+ "titles": {
+  "nhl15": {
+   "title": "nhl15",
+   "vault": {
+    "gccollections.vlt": "d1ec595c56b6d87692ac3c47919de739af41929847252669719f6584e5229c77",
+    "gccollections.bin": "0684ef978cbb8ae1e34ba8abb8c98f09187154544be44de5c647d2b96ec66bd2"
+   },
+   "classes": {
+    "ge_nhl_skaterhead": {
+     "records": 495,
+     "distinct_values": 495,
+     "multi": 0,
+     "attribute_present": 495
+    },
+    "ge_nhl_skaterheadtexturepack": {
+     "records": 495,
+     "distinct_values": 495,
+     "multi": 0
+    },
+    "ge_nhl_skaterhairtexturepack": {
+     "records": 0,
+     "distinct_styles": 0
+    }
+   },
+   "value_bands": {
+    "<8000": 278,
+    "8000-59999": 34,
+    ">=60000": 183
+   },
+   "generic_pool_names": 193,
+   "db": {
+    "source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl15\\databases\\nhl_game.db",
+    "players": 5555,
+    "headid_distinct": 439,
+    "headid_in_vault": 438,
+    "headid_not_in_vault": [
+     10391
+    ],
+    "hairid_distinct": 1,
+    "hairid_in_vault": 0,
+    "hairid_not_in_vault": [
+     null
+    ],
+    "artid_eq_headid_rows": 258,
+    "vault_values_unused_by_db": 57
+   },
+   "bespoke_name_check": {
+    "bespoke_ids_in_db": 257,
+    "slug_in_collection_name": 226,
+    "mismatch": 31,
+    "mismatches": [
+     {
+      "player": "Marc-Edouard Vlasic",
+      "headid": 1299,
+      "collection": "head_marcedouard_vlasic_texpack"
+     },
+     {
+      "player": "Zack Stortini",
+      "headid": 1396,
+      "collection": "head_zach_stortini_texpack"
+     },
+     {
+      "player": "Pierre-Alexandre Parenteau",
+      "headid": 1407,
+      "collection": "head_pa_parenteau_texpack"
+     },
+     {
+      "player": "Ilya Bryzgalov",
+      "headid": 127,
+      "collection": "head_ilja_bryzgalov_texpack"
+     },
+     {
+      "player": "Mike Cammalleri",
+      "headid": 142,
+      "collection": "head_michael_cammalleri_texpack"
+     },
+     {
+      "player": "Patrik Elias",
+      "headid": 243,
+      "collection": "head_patrick_eilas_texpack"
+     },
+     {
+      "player": "Marc-Andre Fleury",
+      "headid": 275,
+      "collection": "head_marcandre_fleury_texpack"
+     },
+     {
+      "player": "Jean-Sebastien Giguere",
+      "headid": 300,
+      "collection": "head_js_giguere_texpack"
+     },
+     {
+      "player": "Marty Havlat",
+      "headid": 349,
+      "collection": "head_martin_havlat_texpack"
+     },
+     {
+      "player": "Mike Komisarek",
+      "headid": 459,
+      "collection": "head_mike_komiserek_texpack"
+     },
+     {
+      "player": "Niklas Kronwall",
+      "headid": 476,
+      "collection": "head_nicklas_kronwall_texpack"
+     },
+     {
+      "player": "David Legwand",
+      "headid": 522,
+      "collection": "head_dave_legwand_texpack"
+     },
+     {
+      "player": "Tomas Plekanec",
+      "headid": 743,
+      "collection": "head_tomas_plekanic_texpack"
+     },
+     {
+      "player": "Martin St. Louis",
+      "headid": 907,
+      "collection": "head_martin_stlouis_texpack"
+     },
+     {
+      "player": "Corey Perry",
+      "headid": 1100,
+      "collection": "head_cory_perry_texpack"
+     },
+     {
+      "player": "Alexander Steen",
+      "headid": 1107,
+      "collection": "head_alex_steen_texpack"
+     },
+     {
+      "player": "R.J. Umberger",
+      "headid": 1139,
+      "collection": "head_rj_umberger_texpack"
+     },
+     {
+      "player": "Kevin Bieksa",
+      "headid": 1152,
+      "collection": "head_kevin_bieska_texpack"
+     },
+     {
+      "player": "Valtteri Filppula",
+      "headid": 1223,
+      "collection": "head_valterri_filppula_texpack"
+     },
+     {
+      "player": "Bryan Little",
+      "headid": 2098,
+      "collection": "head_brian_little_texpack"
+     },
+     {
+      "player": "Derick Brassard",
+      "headid": 2279,
+      "collection": "head_derrick_brassard_texpack"
+     },
+     {
+      "player": "T.J. Oshie",
+      "headid": 4444,
+      "collection": "head_tj_oshie_texpack"
+     },
+     {
+      "player": "Andrei Bykov",
+      "headid": 5498,
+      "collection": "head_andrej_bykov_texpack"
+     },
+     {
+      "player": "Ryan O'Reilly",
+      "headid": 376,
+      "collection": "head_ryan_oreily_texpack"
+     },
+     {
+      "player": "P.K. Subban",
+      "headid": 983,
+      "collection": "head_pk_subban_texpack"
+     },
+     {
+      "player": "Ryan Nugent-Hopkins",
+      "headid": 6083,
+      "collection": "head_ryan_nugenthopkins_texpack"
+     },
+     {
+      "player": "Gabriel Landeskog",
+      "headid": 6422,
+      "collection": "head_gabriel_lendeskog_texpack"
+     },
+     {
+      "player": "Zack Kassian",
+      "headid": 6725,
+      "collection": "head_zach_kassian_texpack"
+     },
+     {
+      "player": "Sven Baertschi",
+      "headid": 7607,
+      "collection": "head_sven_bartschi_texpack"
+     },
+     {
+      "player": "Alex Galchenyuk",
+      "headid": 7832,
+      "collection": "head_alexander_galchenyuk_texpack"
+     },
+     {
+      "player": "Rio Yassin",
+      "headid": 7201,
+      "collection": "head_charity_rio_huculak_texpack"
+     }
+    ]
+   },
+   "witnesses": [
+    {
+     "headid": 10,
+     "key": "85e7ce66",
+     "name": "head_daniel_alfredsson_texpack",
+     "textures": [
+      "rendering\\characters\\player\\common_roughness",
+      "rendering\\characters\\player\\hair_daniel_alfredsson_cm",
+      "rendering\\characters\\player\\head_daniel_alfredsson_am",
+      "rendering\\characters\\player\\head_daniel_alfredsson_cm",
+      "rendering\\characters\\player\\head_daniel_alfredsson_coeff",
+      "rendering\\characters\\player\\head_daniel_alfredsson_nm",
+      "rendering\\characters\\player\\head_daniel_alfredsson_sm"
+     ]
+    },
+    {
+     "headid": 20,
+     "key": "a8db6c64",
+     "name": "head_nik_antropov_texpack",
+     "textures": [
+      "rendering\\characters\\player\\common_roughness",
+      "rendering\\characters\\player\\hair_nik_antropov_cm",
+      "rendering\\characters\\player\\head_nik_antropov_am",
+      "rendering\\characters\\player\\head_nik_antropov_cm",
+      "rendering\\characters\\player\\head_nik_antropov_coeff",
+      "rendering\\characters\\player\\head_nik_antropov_nm",
+      "rendering\\characters\\player\\head_nik_antropov_sm"
+     ]
+    },
+    {
+     "headid": 51,
+     "key": "39b292d3",
+     "name": "head_francois_beauchemin_texpack",
+     "textures": [
+      "rendering\\characters\\player\\common_roughness",
+      "rendering\\characters\\player\\hair_francois_beauchemin_cm",
+      "rendering\\characters\\player\\head_francois_beauchemin_am",
+      "rendering\\characters\\player\\head_francois_beauchemin_cm",
+      "rendering\\characters\\player\\head_francois_beauchemin_coeff",
+      "rendering\\characters\\player\\head_francois_beauchemin_nm",
+      "rendering\\characters\\player\\head_francois_beauchemin_sm"
+     ]
+    },
+    {
+     "headid": 67,
+     "key": "cbabda77",
+     "name": "head_patrice_bergeron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\common_roughness",
+      "rendering\\characters\\player\\hair_patrice_bergeron_cm",
+      "rendering\\characters\\player\\head_patrice_bergeron_am",
+      "rendering\\characters\\player\\head_patrice_bergeron_cm",
+      "rendering\\characters\\player\\head_patrice_bergeron_coeff",
+      "rendering\\characters\\player\\head_patrice_bergeron_nm",
+      "rendering\\characters\\player\\head_patrice_bergeron_sm"
+     ]
+    },
+    {
+     "headid": 71,
+     "key": "d2f0850d",
+     "name": "head_todd_bertuzzi_texpack",
+     "textures": [
+      "rendering\\characters\\player\\common_roughness",
+      "rendering\\characters\\player\\hair_todd_bertuzzi_cm",
+      "rendering\\characters\\player\\head_todd_bertuzzi_am",
+      "rendering\\characters\\player\\head_todd_bertuzzi_cm",
+      "rendering\\characters\\player\\head_todd_bertuzzi_coeff",
+      "rendering\\characters\\player\\head_todd_bertuzzi_nm",
+      "rendering\\characters\\player\\head_todd_bertuzzi_sm"
+     ]
+    },
+    {
+     "headid": 76,
+     "key": "1ad552a3",
+     "name": "head_martin_biron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\common_roughness",
+      "rendering\\characters\\player\\hair_martin_biron_cm",
+      "rendering\\characters\\player\\head_martin_biron_am",
+      "rendering\\characters\\player\\head_martin_biron_cm",
+      "rendering\\characters\\player\\head_martin_biron_coeff",
+      "rendering\\characters\\player\\head_martin_biron_nm",
+      "rendering\\characters\\player\\head_martin_biron_sm"
+     ]
+    }
+   ]
+  },
+  "nhl16": {
+   "title": "nhl16",
+   "vault": {
+    "gccollections.vlt": "202035cfc80f9dbf283ea610cef13262b92a6314cbe1c2fbeb360bbedc394d7e",
+    "gccollections.bin": "b1217f4a536542607b61a49aaa65b31bb74cb95756a90e2dcbe0c1ba9e092571"
+   },
+   "classes": {
+    "ge_nhl_skaterhead": {
+     "records": 544,
+     "distinct_values": 544,
+     "multi": 0,
+     "attribute_present": 544
+    },
+    "ge_nhl_skaterheadtexturepack": {
+     "records": 544,
+     "distinct_values": 544,
+     "multi": 0
+    },
+    "ge_nhl_skaterhairtexturepack": {
+     "records": 0,
+     "distinct_styles": 0
+    }
+   },
+   "value_bands": {
+    "<8000": 288,
+    "8000-59999": 45,
+    ">=60000": 211
+   },
+   "generic_pool_names": 221,
+   "db": {
+    "source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl16\\databases\\nhl_game.db",
+    "players": 5632,
+    "headid_distinct": 448,
+    "headid_in_vault": 448,
+    "headid_not_in_vault": [],
+    "hairid_distinct": 1,
+    "hairid_in_vault": 0,
+    "hairid_not_in_vault": [
+     null
+    ],
+    "artid_eq_headid_rows": 247,
+    "vault_values_unused_by_db": 96
+   },
+   "bespoke_name_check": {
+    "bespoke_ids_in_db": 247,
+    "slug_in_collection_name": 217,
+    "mismatch": 30,
+    "mismatches": [
+     {
+      "player": "Marc-Edouard Vlasic",
+      "headid": 1299,
+      "collection": "head_marcedouard_vlasic_texpack"
+     },
+     {
+      "player": "Zack Stortini",
+      "headid": 1396,
+      "collection": "head_zach_stortini_texpack"
+     },
+     {
+      "player": "Pierre-Alexandre Parenteau",
+      "headid": 1407,
+      "collection": "head_pa_parenteau_texpack"
+     },
+     {
+      "player": "Ilya Bryzgalov",
+      "headid": 127,
+      "collection": "head_ilja_bryzgalov_texpack"
+     },
+     {
+      "player": "Mike Cammalleri",
+      "headid": 142,
+      "collection": "head_michael_cammalleri_texpack"
+     },
+     {
+      "player": "Patrik Elias",
+      "headid": 243,
+      "collection": "head_patrick_eilas_texpack"
+     },
+     {
+      "player": "Toby Enstrom",
+      "headid": 3238,
+      "collection": "head_tobias_enstrom_texpack"
+     },
+     {
+      "player": "Marc-Andre Fleury",
+      "headid": 275,
+      "collection": "head_marcandre_fleury_texpack"
+     },
+     {
+      "player": "Niklas Kronwall",
+      "headid": 476,
+      "collection": "head_nicklas_kronwall_texpack"
+     },
+     {
+      "player": "David Legwand",
+      "headid": 522,
+      "collection": "head_dave_legwand_texpack"
+     },
+     {
+      "player": "Tomas Plekanec",
+      "headid": 743,
+      "collection": "head_tomas_plekanic_texpack"
+     },
+     {
+      "player": "Corey Perry",
+      "headid": 1100,
+      "collection": "head_cory_perry_texpack"
+     },
+     {
+      "player": "Alexander Steen",
+      "headid": 1107,
+      "collection": "head_alex_steen_texpack"
+     },
+     {
+      "player": "R.J. Umberger",
+      "headid": 1139,
+      "collection": "head_rj_umberger_texpack"
+     },
+     {
+      "player": "Kevin Bieksa",
+      "headid": 1152,
+      "collection": "head_kevin_bieska_texpack"
+     },
+     {
+      "player": "Valtteri Filppula",
+      "headid": 1223,
+      "collection": "head_valterri_filppula_texpack"
+     },
+     {
+      "player": "Bryan Little",
+      "headid": 2098,
+      "collection": "head_brian_little_texpack"
+     },
+     {
+      "player": "Derick Brassard",
+      "headid": 2279,
+      "collection": "head_derrick_brassard_texpack"
+     },
+     {
+      "player": "T.J. Oshie",
+      "headid": 4444,
+      "collection": "head_tj_oshie_texpack"
+     },
+     {
+      "player": "Andrei Bykov",
+      "headid": 5498,
+      "collection": "head_andrej_bykov_texpack"
+     },
+     {
+      "player": "Ryan O'Reilly",
+      "headid": 376,
+      "collection": "head_ryan_oreily_texpack"
+     },
+     {
+      "player": "P.K. Subban",
+      "headid": 983,
+      "collection": "head_pk_subban_texpack"
+     },
+     {
+      "player": "Ryan Nugent-Hopkins",
+      "headid": 6083,
+      "collection": "head_ryan_nugenthopkins_texpack"
+     },
+     {
+      "player": "Gabriel Landeskog",
+      "headid": 6422,
+      "collection": "head_gabriel_lendeskog_texpack"
+     },
+     {
+      "player": "Zack Kassian",
+      "headid": 6725,
+      "collection": "head_zach_kassian_texpack"
+     },
+     {
+      "player": "Sven Baertschi",
+      "headid": 7607,
+      "collection": "head_sven_bartschi_texpack"
+     },
+     {
+      "player": "Matt Dumba",
+      "headid": 7633,
+      "collection": "head_mathew_dumba_texpack"
+     },
+     {
+      "player": "Alex Galchenyuk",
+      "headid": 7832,
+      "collection": "head_alexander_galchenyuk_texpack"
+     },
+     {
+      "player": "Ryan Sewell",
+      "headid": 7201,
+      "collection": "head_charity_rio_huculak_texpack"
+     },
+     {
+      "player": "Mitchell Marner",
+      "headid": 10848,
+      "collection": "head_mitch_marner_texpack"
+     }
+    ]
+   },
+   "witnesses": [
+    {
+     "headid": 20,
+     "key": "a8db6c64",
+     "name": "head_nik_antropov_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_nik_antropov_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_nik_antropov_coeff"
+     ]
+    },
+    {
+     "headid": 51,
+     "key": "39b292d3",
+     "name": "head_francois_beauchemin_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_francois_beauchemin_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_francois_beauchemin_coeff"
+     ]
+    },
+    {
+     "headid": 67,
+     "key": "cbabda77",
+     "name": "head_patrice_bergeron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_patrice_bergeron_ab",
+      "rendering\\characters\\player\\hair_patrice_bergeron_cm",
+      "rendering\\characters\\player\\hair_patrice_bergeron_sm",
+      "rendering\\characters\\player\\head_patrice_bergeron_coeff",
+      "rendering\\characters\\player\\head_patrice_bergeron_nm"
+     ]
+    },
+    {
+     "headid": 71,
+     "key": "d2f0850d",
+     "name": "head_todd_bertuzzi_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_todd_bertuzzi_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_todd_bertuzzi_coeff"
+     ]
+    },
+    {
+     "headid": 89,
+     "key": "90f2b740",
+     "name": "head_erik_karlsson_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_erik_karlsson_ab",
+      "rendering\\characters\\player\\hair_erik_karlsson_cm",
+      "rendering\\characters\\player\\hair_erik_karlsson_sm",
+      "rendering\\characters\\player\\head_erik_karlsson_coeff",
+      "rendering\\characters\\player\\head_erik_karlsson_nm"
+     ]
+    },
+    {
+     "headid": 102,
+     "key": "269e0c83",
+     "name": "head_jay_bouwmeester_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jay_bouwmeester_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jay_bouwmeester_coeff"
+     ]
+    }
+   ]
+  },
+  "nhl17": {
+   "title": "nhl17",
+   "vault": {
+    "gccollections.vlt": "df39aeaa7f10a97570d35159d0a031b33f4a66e4ea5f9cef7bf213a2ddf06531",
+    "gccollections.bin": "2da87ee854ea844aac1b1484b9fe1f688e71b622bdee86d0d5a3eddbf5de5811"
+   },
+   "classes": {
+    "ge_nhl_skaterhead": {
+     "records": 608,
+     "distinct_values": 608,
+     "multi": 0,
+     "attribute_present": 608
+    },
+    "ge_nhl_skaterheadtexturepack": {
+     "records": 608,
+     "distinct_values": 608,
+     "multi": 0
+    },
+    "ge_nhl_skaterhairtexturepack": {
+     "records": 71,
+     "distinct_styles": 71
+    }
+   },
+   "value_bands": {
+    "<8000": 310,
+    "8000-59999": 87,
+    ">=60000": 211
+   },
+   "generic_pool_names": 239,
+   "db": {
+    "source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl17\\databases\\nhl_game.db",
+    "players": 6128,
+    "headid_distinct": 483,
+    "headid_in_vault": 483,
+    "headid_not_in_vault": [],
+    "hairid_distinct": 54,
+    "hairid_in_vault": 54,
+    "hairid_not_in_vault": [],
+    "artid_eq_headid_rows": 283,
+    "vault_values_unused_by_db": 125
+   },
+   "bespoke_name_check": {
+    "bespoke_ids_in_db": 283,
+    "slug_in_collection_name": 250,
+    "mismatch": 33,
+    "mismatches": [
+     {
+      "player": "Marc-Edouard Vlasic",
+      "headid": 1299,
+      "collection": "head_marcedouard_vlasic_texpack"
+     },
+     {
+      "player": "Zack Stortini",
+      "headid": 1396,
+      "collection": "head_zach_stortini_texpack"
+     },
+     {
+      "player": "Pierre-Alexandre Parenteau",
+      "headid": 1407,
+      "collection": "head_pa_parenteau_texpack"
+     },
+     {
+      "player": "Ilya Bryzgalov",
+      "headid": 127,
+      "collection": "head_ilja_bryzgalov_texpack"
+     },
+     {
+      "player": "Mike Cammalleri",
+      "headid": 142,
+      "collection": "head_michael_cammalleri_texpack"
+     },
+     {
+      "player": "Patrik Elias",
+      "headid": 243,
+      "collection": "head_patrick_eilas_texpack"
+     },
+     {
+      "player": "Toby Enstrom",
+      "headid": 3238,
+      "collection": "head_tobias_enstrom_texpack"
+     },
+     {
+      "player": "Marc-Andre Fleury",
+      "headid": 275,
+      "collection": "head_marcandre_fleury_texpack"
+     },
+     {
+      "player": "Niklas Kronwall",
+      "headid": 476,
+      "collection": "head_nicklas_kronwall_texpack"
+     },
+     {
+      "player": "David Legwand",
+      "headid": 522,
+      "collection": "head_dave_legwand_texpack"
+     },
+     {
+      "player": "Tomas Plekanec",
+      "headid": 743,
+      "collection": "head_tomas_plekanic_texpack"
+     },
+     {
+      "player": "David V\u00fdborn\u00fd",
+      "headid": 1015,
+      "collection": "head_david_vyborny_texpack"
+     },
+     {
+      "player": "Alex Ovechkin",
+      "headid": 1083,
+      "collection": "head_alexander_ovechkin_texpack"
+     },
+     {
+      "player": "Corey Perry",
+      "headid": 1100,
+      "collection": "head_cory_perry_texpack"
+     },
+     {
+      "player": "Alexander Steen",
+      "headid": 1107,
+      "collection": "head_alex_steen_texpack"
+     },
+     {
+      "player": "R.J. Umberger",
+      "headid": 1139,
+      "collection": "head_rj_umberger_texpack"
+     },
+     {
+      "player": "Kevin Bieksa",
+      "headid": 1152,
+      "collection": "head_kevin_bieska_texpack"
+     },
+     {
+      "player": "Valtteri Filppula",
+      "headid": 1223,
+      "collection": "head_valterri_filppula_texpack"
+     },
+     {
+      "player": "Bryan Little",
+      "headid": 2098,
+      "collection": "head_brian_little_texpack"
+     },
+     {
+      "player": "Derick Brassard",
+      "headid": 2279,
+      "collection": "head_derrick_brassard_texpack"
+     },
+     {
+      "player": "T.J. Oshie",
+      "headid": 4444,
+      "collection": "head_tj_oshie_texpack"
+     },
+     {
+      "player": "Andrei Bykov",
+      "headid": 5498,
+      "collection": "head_andrej_bykov_texpack"
+     },
+     {
+      "player": "Ryan O'Reilly",
+      "headid": 376,
+      "collection": "head_ryan_oreily_texpack"
+     },
+     {
+      "player": "P.K. Subban",
+      "headid": 983,
+      "collection": "head_pk_subban_texpack"
+     },
+     {
+      "player": "Ryan Nugent-Hopkins",
+      "headid": 6083,
+      "collection": "head_ryan_nugenthopkins_texpack"
+     },
+     {
+      "player": "Gabriel Landeskog",
+      "headid": 6422,
+      "collection": "head_gabriel_lendeskog_texpack"
+     },
+     {
+      "player": "Zack Kassian",
+      "headid": 6725,
+      "collection": "head_zach_kassian_texpack"
+     },
+     {
+      "player": "Oliver Ekman-Larsson",
+      "headid": 7503,
+      "collection": "head_oliver_ekmanlarsson_texpack"
+     },
+     {
+      "player": "Matt Dumba",
+      "headid": 7633,
+      "collection": "head_mathew_dumba_texpack"
+     },
+     {
+      "player": "Alex Galchenyuk",
+      "headid": 7832,
+      "collection": "head_alexander_galchenyuk_texpack"
+     },
+     {
+      "player": "Mitchell Marner",
+      "headid": 10848,
+      "collection": "head_mitch_marner_texpack"
+     },
+     {
+      "player": "Jesse Puljuj\u00e4rvi",
+      "headid": 11714,
+      "collection": "head_jesse_puljujarvi_texpack"
+     },
+     {
+      "player": "Artemi Panarin",
+      "headid": 12825,
+      "collection": "head_artemi_parnarin_texpack"
+     }
+    ]
+   },
+   "witnesses": [
+    {
+     "headid": 20,
+     "key": "a8db6c64",
+     "name": "head_nik_antropov_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_nik_antropov_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_nik_antropov_coeff"
+     ]
+    },
+    {
+     "headid": 51,
+     "key": "39b292d3",
+     "name": "head_francois_beauchemin_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_francois_beauchemin_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_francois_beauchemin_coeff"
+     ]
+    },
+    {
+     "headid": 67,
+     "key": "cbabda77",
+     "name": "head_patrice_bergeron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_patrice_bergeron_ab",
+      "rendering\\characters\\player\\hair_patrice_bergeron_cm",
+      "rendering\\characters\\player\\hair_patrice_bergeron_sm",
+      "rendering\\characters\\player\\head_patrice_bergeron_cm",
+      "rendering\\characters\\player\\head_patrice_bergeron_nm"
+     ]
+    },
+    {
+     "headid": 89,
+     "key": "90f2b740",
+     "name": "head_erik_karlsson_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_erik_karlsson_ab",
+      "rendering\\characters\\player\\hair_erik_karlsson_cm",
+      "rendering\\characters\\player\\hair_erik_karlsson_sm",
+      "rendering\\characters\\player\\head_erik_karlsson_cm",
+      "rendering\\characters\\player\\head_erik_karlsson_nm"
+     ]
+    },
+    {
+     "headid": 102,
+     "key": "269e0c83",
+     "name": "head_jay_bouwmeester_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jay_bouwmeester_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jay_bouwmeester_coeff"
+     ]
+    },
+    {
+     "headid": 104,
+     "key": "59f560ba",
+     "name": "head_dan_boyle_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_dan_boyle_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_dan_boyle_coeff"
+     ]
+    }
+   ]
+  },
+  "nhl18": {
+   "title": "nhl18",
+   "vault": {
+    "gccollections.vlt": "0a5e019da94855f20ebc9d389ffec8c538a9d464df2ea8b777c4b34746490fd8",
+    "gccollections.bin": "cf0cfab277acb2f5bb9598384e523f38ddf455c8e1bdee691677e2ce3f23999c"
+   },
+   "classes": {
+    "ge_nhl_skaterhead": {
+     "records": 638,
+     "distinct_values": 638,
+     "multi": 0,
+     "attribute_present": 638
+    },
+    "ge_nhl_skaterheadtexturepack": {
+     "records": 638,
+     "distinct_values": 638,
+     "multi": 0
+    },
+    "ge_nhl_skaterhairtexturepack": {
+     "records": 86,
+     "distinct_styles": 86
+    }
+   },
+   "value_bands": {
+    "<8000": 325,
+    "8000-59999": 102,
+    ">=60000": 211
+   },
+   "generic_pool_names": 239,
+   "db": {
+    "source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl18\\databases\\nhl_game.db",
+    "players": 7236,
+    "headid_distinct": 492,
+    "headid_in_vault": 491,
+    "headid_not_in_vault": [
+     0
+    ],
+    "hairid_distinct": 54,
+    "hairid_in_vault": 54,
+    "hairid_not_in_vault": [],
+    "artid_eq_headid_rows": 339,
+    "vault_values_unused_by_db": 147
+   },
+   "bespoke_name_check": {
+    "bespoke_ids_in_db": 285,
+    "slug_in_collection_name": 255,
+    "mismatch": 30,
+    "mismatches": [
+     {
+      "player": "Marc-Edouard Vlasic",
+      "headid": 1299,
+      "collection": "head_marcedouard_vlasic_texpack"
+     },
+     {
+      "player": "Zack Stortini",
+      "headid": 1396,
+      "collection": "head_zach_stortini_texpack"
+     },
+     {
+      "player": "Pierre-Alexandre Parenteau",
+      "headid": 1407,
+      "collection": "head_pa_parenteau_texpack"
+     },
+     {
+      "player": "Mike Cammalleri",
+      "headid": 142,
+      "collection": "head_michael_cammalleri_texpack"
+     },
+     {
+      "player": "Toby Enstrom",
+      "headid": 3238,
+      "collection": "head_tobias_enstrom_texpack"
+     },
+     {
+      "player": "Marc-Andre Fleury",
+      "headid": 275,
+      "collection": "head_marcandre_fleury_texpack"
+     },
+     {
+      "player": "Jean-Sebastien Giguere",
+      "headid": 300,
+      "collection": "head_js_giguere_texpack"
+     },
+     {
+      "player": "Niklas Kronwall",
+      "headid": 476,
+      "collection": "head_nicklas_kronwall_texpack"
+     },
+     {
+      "player": "Tomas Plekanec",
+      "headid": 743,
+      "collection": "head_tomas_plekanic_texpack"
+     },
+     {
+      "player": "Andres Amb\u00fchl",
+      "headid": 3027,
+      "collection": "head_andres_ambuhl_texpack"
+     },
+     {
+      "player": "Alex Ovechkin",
+      "headid": 1083,
+      "collection": "head_alexander_ovechkin_texpack"
+     },
+     {
+      "player": "Corey Perry",
+      "headid": 1100,
+      "collection": "head_cory_perry_texpack"
+     },
+     {
+      "player": "Alexander Steen",
+      "headid": 1107,
+      "collection": "head_alex_steen_texpack"
+     },
+     {
+      "player": "Kevin Bieksa",
+      "headid": 1152,
+      "collection": "head_kevin_bieska_texpack"
+     },
+     {
+      "player": "Valtteri Filppula",
+      "headid": 1223,
+      "collection": "head_valterri_filppula_texpack"
+     },
+     {
+      "player": "Bryan Little",
+      "headid": 2098,
+      "collection": "head_brian_little_texpack"
+     },
+     {
+      "player": "Derick Brassard",
+      "headid": 2279,
+      "collection": "head_derrick_brassard_texpack"
+     },
+     {
+      "player": "T.J. Oshie",
+      "headid": 4444,
+      "collection": "head_tj_oshie_texpack"
+     },
+     {
+      "player": "Andrei Bykov",
+      "headid": 5498,
+      "collection": "head_andrej_bykov_texpack"
+     },
+     {
+      "player": "Ryan O'Reilly",
+      "headid": 376,
+      "collection": "head_ryan_oreily_texpack"
+     },
+     {
+      "player": "P.K. Subban",
+      "headid": 983,
+      "collection": "head_pk_subban_texpack"
+     },
+     {
+      "player": "Ryan Nugent-Hopkins",
+      "headid": 6083,
+      "collection": "head_ryan_nugenthopkins_texpack"
+     },
+     {
+      "player": "Gabriel Landeskog",
+      "headid": 6422,
+      "collection": "head_gabriel_lendeskog_texpack"
+     },
+     {
+      "player": "Zack Kassian",
+      "headid": 6725,
+      "collection": "head_zach_kassian_texpack"
+     },
+     {
+      "player": "Oliver Ekman-Larsson",
+      "headid": 7503,
+      "collection": "head_oliver_ekmanlarsson_texpack"
+     },
+     {
+      "player": "Matt Dumba",
+      "headid": 7633,
+      "collection": "head_mathew_dumba_texpack"
+     },
+     {
+      "player": "Alex Galchenyuk",
+      "headid": 7832,
+      "collection": "head_alexander_galchenyuk_texpack"
+     },
+     {
+      "player": "Mitchell Marner",
+      "headid": 10848,
+      "collection": "head_mitch_marner_texpack"
+     },
+     {
+      "player": "Jesse Puljuj\u00e4rvi",
+      "headid": 11714,
+      "collection": "head_jesse_puljujarvi_texpack"
+     },
+     {
+      "player": "Artemi Panarin",
+      "headid": 12825,
+      "collection": "head_artemi_parnarin_texpack"
+     }
+    ]
+   },
+   "witnesses": [
+    {
+     "headid": 51,
+     "key": "39b292d3",
+     "name": "head_francois_beauchemin_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_francois_beauchemin_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_francois_beauchemin_cm"
+     ]
+    },
+    {
+     "headid": 67,
+     "key": "cbabda77",
+     "name": "head_patrice_bergeron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_patrice_bergeron_ab",
+      "rendering\\characters\\player\\hair_patrice_bergeron_cm",
+      "rendering\\characters\\player\\hair_patrice_bergeron_sm",
+      "rendering\\characters\\player\\head_patrice_bergeron_cm",
+      "rendering\\characters\\player\\head_patrice_bergeron_nm"
+     ]
+    },
+    {
+     "headid": 89,
+     "key": "90f2b740",
+     "name": "head_erik_karlsson_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_erik_karlsson_ab",
+      "rendering\\characters\\player\\hair_erik_karlsson_cm",
+      "rendering\\characters\\player\\hair_erik_karlsson_sm",
+      "rendering\\characters\\player\\head_erik_karlsson_cm",
+      "rendering\\characters\\player\\head_erik_karlsson_nm"
+     ]
+    },
+    {
+     "headid": 102,
+     "key": "269e0c83",
+     "name": "head_jay_bouwmeester_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jay_bouwmeester_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jay_bouwmeester_cm"
+     ]
+    },
+    {
+     "headid": 104,
+     "key": "59f560ba",
+     "name": "head_dan_boyle_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_dan_boyle_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_dan_boyle_cm"
+     ]
+    },
+    {
+     "headid": 119,
+     "key": "78bc5585",
+     "name": "head_martin_brodeur_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_martin_brodeur_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_martin_brodeur_cm"
+     ]
+    }
+   ]
+  },
+  "nhl19": {
+   "title": "nhl19",
+   "vault": {
+    "gccollections.vlt": "6e537bb7b61f1832a88377757a3769586643f70d6452e9c4b61a76c2568146a1",
+    "gccollections.bin": "aece3f7a24bb26139472c0ec870d26909c3b9883838eef8997a76d32ee4c5a25"
+   },
+   "classes": {
+    "ge_nhl_skaterhead": {
+     "records": 698,
+     "distinct_values": 698,
+     "multi": 0,
+     "attribute_present": 698
+    },
+    "ge_nhl_skaterheadtexturepack": {
+     "records": 698,
+     "distinct_values": 698,
+     "multi": 0
+    },
+    "ge_nhl_skaterhairtexturepack": {
+     "records": 86,
+     "distinct_styles": 86
+    }
+   },
+   "value_bands": {
+    "<8000": 342,
+    "8000-59999": 145,
+    ">=60000": 211
+   },
+   "generic_pool_names": 239,
+   "db": {
+    "source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl19\\databases\\nhl_game.db",
+    "players": 7136,
+    "headid_distinct": 536,
+    "headid_in_vault": 535,
+    "headid_not_in_vault": [
+     0
+    ],
+    "hairid_distinct": 58,
+    "hairid_in_vault": 58,
+    "hairid_not_in_vault": [],
+    "artid_eq_headid_rows": 326,
+    "vault_values_unused_by_db": 163
+   },
+   "bespoke_name_check": {
+    "bespoke_ids_in_db": 326,
+    "slug_in_collection_name": 296,
+    "mismatch": 30,
+    "mismatches": [
+     {
+      "player": "Marc-Edouard Vlasic",
+      "headid": 1299,
+      "collection": "head_marcedouard_vlasic_texpack"
+     },
+     {
+      "player": "Zack Stortini",
+      "headid": 1396,
+      "collection": "head_zach_stortini_texpack"
+     },
+     {
+      "player": "Mike Cammalleri",
+      "headid": 142,
+      "collection": "head_michael_cammalleri_texpack"
+     },
+     {
+      "player": "Toby Enstrom",
+      "headid": 3238,
+      "collection": "head_tobias_enstrom_texpack"
+     },
+     {
+      "player": "Marc-Andre Fleury",
+      "headid": 275,
+      "collection": "head_marcandre_fleury_texpack"
+     },
+     {
+      "player": "Jean-Sebastien Giguere",
+      "headid": 300,
+      "collection": "head_js_giguere_texpack"
+     },
+     {
+      "player": "Niklas Kronwall",
+      "headid": 476,
+      "collection": "head_nicklas_kronwall_texpack"
+     },
+     {
+      "player": "Tomas Plekanec",
+      "headid": 743,
+      "collection": "head_tomas_plekanic_texpack"
+     },
+     {
+      "player": "Andres Amb\u00fchl",
+      "headid": 3027,
+      "collection": "head_andres_ambuhl_texpack"
+     },
+     {
+      "player": "Alex Ovechkin",
+      "headid": 1083,
+      "collection": "head_alexander_ovechkin_texpack"
+     },
+     {
+      "player": "Corey Perry",
+      "headid": 1100,
+      "collection": "head_cory_perry_texpack"
+     },
+     {
+      "player": "Alexander Steen",
+      "headid": 1107,
+      "collection": "head_alex_steen_texpack"
+     },
+     {
+      "player": "R.J. Umberger",
+      "headid": 1139,
+      "collection": "head_rj_umberger_texpack"
+     },
+     {
+      "player": "Kevin Bieksa",
+      "headid": 1152,
+      "collection": "head_kevin_bieska_texpack"
+     },
+     {
+      "player": "Valtteri Filppula",
+      "headid": 1223,
+      "collection": "head_valterri_filppula_texpack"
+     },
+     {
+      "player": "Bryan Little",
+      "headid": 2098,
+      "collection": "head_brian_little_texpack"
+     },
+     {
+      "player": "Derick Brassard",
+      "headid": 2279,
+      "collection": "head_derrick_brassard_texpack"
+     },
+     {
+      "player": "T.J. Oshie",
+      "headid": 4444,
+      "collection": "head_tj_oshie_texpack"
+     },
+     {
+      "player": "Andrei Bykov",
+      "headid": 5498,
+      "collection": "head_andrej_bykov_texpack"
+     },
+     {
+      "player": "Ryan O'Reilly",
+      "headid": 376,
+      "collection": "head_ryan_oreily_texpack"
+     },
+     {
+      "player": "P.K. Subban",
+      "headid": 983,
+      "collection": "head_pk_subban_texpack"
+     },
+     {
+      "player": "Ryan Nugent-Hopkins",
+      "headid": 6083,
+      "collection": "head_ryan_nugenthopkins_texpack"
+     },
+     {
+      "player": "Gabriel Landeskog",
+      "headid": 6422,
+      "collection": "head_gabriel_lendeskog_texpack"
+     },
+     {
+      "player": "Zack Kassian",
+      "headid": 6725,
+      "collection": "head_zach_kassian_texpack"
+     },
+     {
+      "player": "Oliver Ekman-Larsson",
+      "headid": 7503,
+      "collection": "head_oliver_ekmanlarsson_texpack"
+     },
+     {
+      "player": "Matt Dumba",
+      "headid": 7633,
+      "collection": "head_mathew_dumba_texpack"
+     },
+     {
+      "player": "Alex Galchenyuk",
+      "headid": 7832,
+      "collection": "head_alexander_galchenyuk_texpack"
+     },
+     {
+      "player": "Mitchell Marner",
+      "headid": 10848,
+      "collection": "head_mitch_marner_texpack"
+     },
+     {
+      "player": "Oskar Lindblom",
+      "headid": 11691,
+      "collection": "head_oscar_linblom_texpack"
+     },
+     {
+      "player": "Artemi Panarin",
+      "headid": 12825,
+      "collection": "head_artemi_parnarin_texpack"
+     }
+    ]
+   },
+   "witnesses": [
+    {
+     "headid": 25,
+     "key": "a457f38d",
+     "name": "head_jason_arnott_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jason_arnott_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jason_arnott_cm"
+     ]
+    },
+    {
+     "headid": 67,
+     "key": "cbabda77",
+     "name": "head_patrice_bergeron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_patrice_bergeron_ab",
+      "rendering\\characters\\player\\hair_patrice_bergeron_cm",
+      "rendering\\characters\\player\\hair_patrice_bergeron_sm",
+      "rendering\\characters\\player\\head_patrice_bergeron_cm",
+      "rendering\\characters\\player\\head_patrice_bergeron_nm"
+     ]
+    },
+    {
+     "headid": 76,
+     "key": "1ad552a3",
+     "name": "head_martin_biron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_martin_biron_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_martin_biron_cm"
+     ]
+    },
+    {
+     "headid": 89,
+     "key": "90f2b740",
+     "name": "head_erik_karlsson_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_erik_karlsson_ab",
+      "rendering\\characters\\player\\hair_erik_karlsson_cm",
+      "rendering\\characters\\player\\hair_erik_karlsson_sm",
+      "rendering\\characters\\player\\head_erik_karlsson_cm",
+      "rendering\\characters\\player\\head_erik_karlsson_nm"
+     ]
+    },
+    {
+     "headid": 102,
+     "key": "269e0c83",
+     "name": "head_jay_bouwmeester_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jay_bouwmeester_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jay_bouwmeester_cm"
+     ]
+    },
+    {
+     "headid": 123,
+     "key": "3c879661",
+     "name": "head_dustin_brown_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_dustin_brown_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_dustin_brown_cm"
+     ]
+    }
+   ]
+  },
+  "nhl20": {
+   "title": "nhl20",
+   "vault": {
+    "gccollections.vlt": "31a2727f470d32262b9b0462378e1fc1bf907964f1b523ff954f4d49980e5a63",
+    "gccollections.bin": "e5266477c8c158653c4aa40f302a5fa2e782ec30ff48d9d10e8934013f8d3ef8"
+   },
+   "classes": {
+    "ge_nhl_skaterhead": {
+     "records": 743,
+     "distinct_values": 743,
+     "multi": 0,
+     "attribute_present": 743
+    },
+    "ge_nhl_skaterheadtexturepack": {
+     "records": 743,
+     "distinct_values": 743,
+     "multi": 0
+    },
+    "ge_nhl_skaterhairtexturepack": {
+     "records": 86,
+     "distinct_styles": 86
+    }
+   },
+   "value_bands": {
+    "<8000": 350,
+    "8000-59999": 182,
+    ">=60000": 211
+   },
+   "generic_pool_names": 239,
+   "db": {
+    "source": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs\\inxp_00.big:nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "players": 7576,
+    "headid_distinct": 590,
+    "headid_in_vault": 589,
+    "headid_not_in_vault": [
+     0
+    ],
+    "hairid_distinct": 59,
+    "hairid_in_vault": 59,
+    "hairid_not_in_vault": [],
+    "artid_eq_headid_rows": 380,
+    "vault_values_unused_by_db": 154
+   },
+   "bespoke_name_check": {
+    "bespoke_ids_in_db": 380,
+    "slug_in_collection_name": 348,
+    "mismatch": 32,
+    "mismatches": [
+     {
+      "player": "Marc-Edouard Vlasic",
+      "headid": 1299,
+      "collection": "head_marcedouard_vlasic_texpack"
+     },
+     {
+      "player": "Zack Stortini",
+      "headid": 1396,
+      "collection": "head_zach_stortini_texpack"
+     },
+     {
+      "player": "Danny Briere",
+      "headid": 113,
+      "collection": "head_daniel_briere_texpack"
+     },
+     {
+      "player": "Marc-Andre Fleury",
+      "headid": 275,
+      "collection": "head_marcandre_fleury_texpack"
+     },
+     {
+      "player": "Jean-Sebastien Giguere",
+      "headid": 300,
+      "collection": "head_js_giguere_texpack"
+     },
+     {
+      "player": "Niklas Kronwall",
+      "headid": 476,
+      "collection": "head_nicklas_kronwall_texpack"
+     },
+     {
+      "player": "Al MacInnis",
+      "headid": 8168,
+      "collection": "head_al_macInnis_texpack"
+     },
+     {
+      "player": "Tomas Plekanec",
+      "headid": 743,
+      "collection": "head_tomas_plekanic_texpack"
+     },
+     {
+      "player": "Martin St. Louis",
+      "headid": 907,
+      "collection": "head_martin_stlouis_texpack"
+     },
+     {
+      "player": "Andres Amb\u00fchl",
+      "headid": 3027,
+      "collection": "head_andres_ambuhl_texpack"
+     },
+     {
+      "player": "Alex Ovechkin",
+      "headid": 1083,
+      "collection": "head_alexander_ovechkin_texpack"
+     },
+     {
+      "player": "Corey Perry",
+      "headid": 1100,
+      "collection": "head_cory_perry_texpack"
+     },
+     {
+      "player": "Alexander Steen",
+      "headid": 1107,
+      "collection": "head_alex_steen_texpack"
+     },
+     {
+      "player": "R.J. Umberger",
+      "headid": 1139,
+      "collection": "head_rj_umberger_texpack"
+     },
+     {
+      "player": "Kevin Bieksa",
+      "headid": 1152,
+      "collection": "head_kevin_bieska_texpack"
+     },
+     {
+      "player": "Valtteri Filppula",
+      "headid": 1223,
+      "collection": "head_valterri_filppula_texpack"
+     },
+     {
+      "player": "Bryan Little",
+      "headid": 2098,
+      "collection": "head_brian_little_texpack"
+     },
+     {
+      "player": "Derick Brassard",
+      "headid": 2279,
+      "collection": "head_derrick_brassard_texpack"
+     },
+     {
+      "player": "T.J. Oshie",
+      "headid": 4444,
+      "collection": "head_tj_oshie_texpack"
+     },
+     {
+      "player": "Andrei Bykov",
+      "headid": 5498,
+      "collection": "head_andrej_bykov_texpack"
+     },
+     {
+      "player": "Ryan O'Reilly",
+      "headid": 376,
+      "collection": "head_ryan_oreily_texpack"
+     },
+     {
+      "player": "P.K. Subban",
+      "headid": 983,
+      "collection": "head_pk_subban_texpack"
+     },
+     {
+      "player": "Ryan Nugent-Hopkins",
+      "headid": 6083,
+      "collection": "head_ryan_nugenthopkins_texpack"
+     },
+     {
+      "player": "Gabriel Landeskog",
+      "headid": 6422,
+      "collection": "head_gabriel_lendeskog_texpack"
+     },
+     {
+      "player": "Zack Kassian",
+      "headid": 6725,
+      "collection": "head_zach_kassian_texpack"
+     },
+     {
+      "player": "Oliver Ekman-Larsson",
+      "headid": 7503,
+      "collection": "head_oliver_ekmanlarsson_texpack"
+     },
+     {
+      "player": "Matt Dumba",
+      "headid": 7633,
+      "collection": "head_mathew_dumba_texpack"
+     },
+     {
+      "player": "Alex Galchenyuk",
+      "headid": 7832,
+      "collection": "head_alexander_galchenyuk_texpack"
+     },
+     {
+      "player": "Mitchell Marner",
+      "headid": 10848,
+      "collection": "head_mitch_marner_texpack"
+     },
+     {
+      "player": "Oskar Lindblom",
+      "headid": 11691,
+      "collection": "head_oscar_linblom_texpack"
+     },
+     {
+      "player": "Artemi Panarin",
+      "headid": 12825,
+      "collection": "head_artemi_parnarin_texpack"
+     },
+     {
+      "player": "Willie O'Ree",
+      "headid": 17698,
+      "collection": "head_willie_oree_texpack"
+     }
+    ]
+   },
+   "witnesses": [
+    {
+     "headid": 20,
+     "key": "a8db6c64",
+     "name": "head_nik_antropov_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_nik_antropov_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_nik_antropov_cm"
+     ]
+    },
+    {
+     "headid": 25,
+     "key": "a457f38d",
+     "name": "head_jason_arnott_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jason_arnott_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jason_arnott_cm"
+     ]
+    },
+    {
+     "headid": 67,
+     "key": "cbabda77",
+     "name": "head_patrice_bergeron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_patrice_bergeron_ab",
+      "rendering\\characters\\player\\hair_patrice_bergeron_cm",
+      "rendering\\characters\\player\\hair_patrice_bergeron_sm",
+      "rendering\\characters\\player\\head_patrice_bergeron_cm",
+      "rendering\\characters\\player\\head_patrice_bergeron_nm"
+     ]
+    },
+    {
+     "headid": 76,
+     "key": "1ad552a3",
+     "name": "head_martin_biron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_martin_biron_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_martin_biron_cm"
+     ]
+    },
+    {
+     "headid": 89,
+     "key": "90f2b740",
+     "name": "head_erik_karlsson_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_erik_karlsson_ab",
+      "rendering\\characters\\player\\hair_erik_karlsson_cm",
+      "rendering\\characters\\player\\hair_erik_karlsson_sm",
+      "rendering\\characters\\player\\head_erik_karlsson_cm",
+      "rendering\\characters\\player\\head_erik_karlsson_nm"
+     ]
+    },
+    {
+     "headid": 102,
+     "key": "269e0c83",
+     "name": "head_jay_bouwmeester_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jay_bouwmeester_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jay_bouwmeester_cm"
+     ]
+    }
+   ]
+  },
+  "nhl21": {
+   "title": "nhl21",
+   "vault": {
+    "gccollections.vlt": "dd4ceff033fd052a4e3a1e85c964d9b32a81778cd31e24c4f193e8fd54b4ea8d",
+    "gccollections.bin": "d668bbe104dbb441b2868a60fb3644537a3b4489b2bc30bad67f6056b22971db"
+   },
+   "classes": {
+    "ge_nhl_skaterhead": {
+     "records": 766,
+     "distinct_values": 766,
+     "multi": 0,
+     "attribute_present": 766
+    },
+    "ge_nhl_skaterheadtexturepack": {
+     "records": 766,
+     "distinct_values": 766,
+     "multi": 0
+    },
+    "ge_nhl_skaterhairtexturepack": {
+     "records": 86,
+     "distinct_styles": 86
+    }
+   },
+   "value_bands": {
+    "<8000": 352,
+    "8000-59999": 203,
+    ">=60000": 211
+   },
+   "generic_pool_names": 239,
+   "db": {
+    "source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl21\\databases\\nhl_game.db",
+    "players": 7247,
+    "headid_distinct": 605,
+    "headid_in_vault": 604,
+    "headid_not_in_vault": [
+     0
+    ],
+    "hairid_distinct": 58,
+    "hairid_in_vault": 58,
+    "hairid_not_in_vault": [],
+    "artid_eq_headid_rows": 394,
+    "vault_values_unused_by_db": 162
+   },
+   "bespoke_name_check": {
+    "bespoke_ids_in_db": 395,
+    "slug_in_collection_name": 364,
+    "mismatch": 31,
+    "mismatches": [
+     {
+      "player": "Marc-Edouard Vlasic",
+      "headid": 1299,
+      "collection": "head_marcedouard_vlasic_texpack"
+     },
+     {
+      "player": "Marc-Andre Fleury",
+      "headid": 275,
+      "collection": "head_marcandre_fleury_texpack"
+     },
+     {
+      "player": "Jean-Sebastien Giguere",
+      "headid": 300,
+      "collection": "head_js_giguere_texpack"
+     },
+     {
+      "player": "Al MacInnis",
+      "headid": 8168,
+      "collection": "head_al_macInnis_texpack"
+     },
+     {
+      "player": "Martin St. Louis",
+      "headid": 907,
+      "collection": "head_martin_stlouis_texpack"
+     },
+     {
+      "player": "Andres Amb\u00fchl",
+      "headid": 3027,
+      "collection": "head_andres_ambuhl_texpack"
+     },
+     {
+      "player": "Alex Ovechkin",
+      "headid": 1083,
+      "collection": "head_alexander_ovechkin_texpack"
+     },
+     {
+      "player": "Corey Perry",
+      "headid": 1100,
+      "collection": "head_cory_perry_texpack"
+     },
+     {
+      "player": "Alexander Steen",
+      "headid": 1107,
+      "collection": "head_alex_steen_texpack"
+     },
+     {
+      "player": "R.J. Umberger",
+      "headid": 1139,
+      "collection": "head_rj_umberger_texpack"
+     },
+     {
+      "player": "Valtteri Filppula",
+      "headid": 1223,
+      "collection": "head_valterri_filppula_texpack"
+     },
+     {
+      "player": "Bryan Little",
+      "headid": 2098,
+      "collection": "head_brian_little_texpack"
+     },
+     {
+      "player": "Derick Brassard",
+      "headid": 2279,
+      "collection": "head_derrick_brassard_texpack"
+     },
+     {
+      "player": "T.J. Oshie",
+      "headid": 4444,
+      "collection": "head_tj_oshie_texpack"
+     },
+     {
+      "player": "Andrei Bykov",
+      "headid": 5498,
+      "collection": "head_andrej_bykov_texpack"
+     },
+     {
+      "player": "Ryan O'Reilly",
+      "headid": 376,
+      "collection": "head_ryan_oreily_texpack"
+     },
+     {
+      "player": "P.K. Subban",
+      "headid": 983,
+      "collection": "head_pk_subban_texpack"
+     },
+     {
+      "player": "Ryan Nugent-Hopkins",
+      "headid": 6083,
+      "collection": "head_ryan_nugenthopkins_texpack"
+     },
+     {
+      "player": "Gabriel Landeskog",
+      "headid": 6422,
+      "collection": "head_gabriel_lendeskog_texpack"
+     },
+     {
+      "player": "Zack Kassian",
+      "headid": 6725,
+      "collection": "head_zach_kassian_texpack"
+     },
+     {
+      "player": "Oliver Ekman-Larsson",
+      "headid": 7503,
+      "collection": "head_oliver_ekmanlarsson_texpack"
+     },
+     {
+      "player": "Matt Dumba",
+      "headid": 7633,
+      "collection": "head_mathew_dumba_texpack"
+     },
+     {
+      "player": "Alex Galchenyuk",
+      "headid": 7832,
+      "collection": "head_alexander_galchenyuk_texpack"
+     },
+     {
+      "player": "Mitchell Marner",
+      "headid": 10848,
+      "collection": "head_mitch_marner_texpack"
+     },
+     {
+      "player": "Oskar Lindblom",
+      "headid": 11691,
+      "collection": "head_oscar_linblom_texpack"
+     },
+     {
+      "player": "Artemi Panarin",
+      "headid": 12825,
+      "collection": "head_artemi_parnarin_texpack"
+     },
+     {
+      "player": "Gabe Vilardi",
+      "headid": 13182,
+      "collection": "head_gabriel_vilardi_texpack"
+     },
+     {
+      "player": "Lanny McDonald",
+      "headid": 16292,
+      "collection": "head_lanny_macdonald_texpack"
+     },
+     {
+      "player": "Alexis Lafreni\u00e8re",
+      "headid": 16793,
+      "collection": "head_alexis_lafreniere_texpack"
+     },
+     {
+      "player": "Willie O'Ree",
+      "headid": 17698,
+      "collection": "head_willie_oree_texpack"
+     },
+     {
+      "player": "Pete Mahovlich",
+      "headid": 17942,
+      "collection": "head_peter_mahovlich_texpack"
+     }
+    ]
+   },
+   "witnesses": [
+    {
+     "headid": 20,
+     "key": "a8db6c64",
+     "name": "head_nik_antropov_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_nik_antropov_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_nik_antropov_cm"
+     ]
+    },
+    {
+     "headid": 25,
+     "key": "a457f38d",
+     "name": "head_jason_arnott_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_jason_arnott_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_jason_arnott_cm"
+     ]
+    },
+    {
+     "headid": 67,
+     "key": "cbabda77",
+     "name": "head_patrice_bergeron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_patrice_bergeron_ab",
+      "rendering\\characters\\player\\hair_patrice_bergeron_cm",
+      "rendering\\characters\\player\\hair_patrice_bergeron_sm",
+      "rendering\\characters\\player\\head_patrice_bergeron_cm",
+      "rendering\\characters\\player\\head_patrice_bergeron_nm"
+     ]
+    },
+    {
+     "headid": 71,
+     "key": "d2f0850d",
+     "name": "head_todd_bertuzzi_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_todd_bertuzzi_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_todd_bertuzzi_cm"
+     ]
+    },
+    {
+     "headid": 76,
+     "key": "1ad552a3",
+     "name": "head_martin_biron_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_martin_biron_cm",
+      "rendering\\characters\\player\\head_common_normal",
+      "rendering\\characters\\player\\head_martin_biron_cm"
+     ]
+    },
+    {
+     "headid": 89,
+     "key": "90f2b740",
+     "name": "head_erik_karlsson_texpack",
+     "textures": [
+      "rendering\\characters\\player\\hair_erik_karlsson_ab",
+      "rendering\\characters\\player\\hair_erik_karlsson_cm",
+      "rendering\\characters\\player\\hair_erik_karlsson_sm",
+      "rendering\\characters\\player\\head_erik_karlsson_cm",
+      "rendering\\characters\\player\\head_erik_karlsson_nm"
+     ]
+    }
+   ]
+  }
+ }
+}

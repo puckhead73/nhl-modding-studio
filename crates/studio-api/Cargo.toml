@@ -4,20 +4,31 @@ description = "NHL Modding Studio — Tauri command surface, session registry, a
 edition.workspace = true
 rust-version.workspace = true
 publish.workspace = true
+license.workspace = true
 
 [dependencies]
+tdb-frostbite = { path = "../tdb-frostbite" }
+tdb-loc = { path = "../tdb-loc" }
 tauri = { version = "2", features = [] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 ts-rs = "10"
 # Portrait previews cross the Tauri boundary as PNG data URLs.
 base64 = "0.22"
+# The Hockey Shop store normalises imported textures to PNG + reads their dimensions.
+image = { version = "0.25", default-features = false, features = ["png"] }
 studio-domain = { path = "../studio-domain" }
 # The non-blocking Roster Builder import ledger (dedup warnings). Owned by the service layer.
 tdb-instance-registry = { path = "../tdb-instance-registry" }
 # Used by the `edit-qa` headless QA binary to re-parse saved artifacts and verify round-trip/CRC.
 tdb-core = { path = "../tdb-core" }
 tdb-savedata = { path = "../tdb-savedata" }
+# Used by the `competition-groups` table bake/check binary (defs/leagues/groups): witness
+# databases are read with their metadata and identified by SHA-256. See src/bin/competition_groups.rs.
+tdb-defs = { path = "../tdb-defs" }
+sha2 = "0.10"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+tempfile = "3"
 
 # Headless edit-QA runner: drives the Registry seam across the anchor matrix, deposits edited
 # artifacts + markdown reports. See src/bin/edit_qa.rs.
@@ -25,8 +36,34 @@ tdb-savedata = { path = "../tdb-savedata" }
 name = "edit-qa"
 path = "src/bin/edit_qa.rs"
 
+# Explicit TypeScript DTO generation and the non-mutating drift check. Ordinary `cargo test`
+# never writes app/src/bindings; `--write` here is the only installation path. See src/bindings.rs.
+[[bin]]
+name = "export-bindings"
+path = "src/bin/export_bindings.rs"
+
+# ONB-002: generate / check / bundle the baseline inventory (baselines/INVENTORY.json). See
+# src/bin/baseline_inventory.rs for the approval table.
+[[bin]]
+name = "baseline-inventory"
+path = "src/bin/baseline_inventory.rs"
+
+[[bin]]
+name = "competition-groups"
+path = "src/bin/competition_groups.rs"
+
 [dev-dependencies]
 # Build a synthetic FHM corpus file for the Roster Builder import round-trip test (bundled SQLite is
 # already compiled elsewhere in the workspace).
 rusqlite = { version = "0.31", features = ["bundled"] }
 tdb-fhm = { path = "../tdb-fhm" }
+# Build a synthetic GNF target for the texture-import round-trip test.
+tdb-rx2 = { path = "../tdb-rx2" }
+# Build and plan a synthetic EB archive for the S2-C combined (archive + workspace) prepared-service test.
+tdb-archive-big = { path = "../tdb-archive-big" }
+tdb-archive-codec = { path = "../tdb-archive-codec" }
+# Identity check of private-fixture sources (REG-1, tests/league_private_sources.rs).
+sha2 = "0.10"
+# Independent re-read of a rewritten dictionary (LOC-W1, tests/dictionary_rename.rs).
+# Synthetic Xbox 360 disc images for the image route (tests/iso_route.rs).
+tdb-xiso = { path = "../tdb-xiso" }

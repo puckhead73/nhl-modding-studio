@@ -18,8 +18,8 @@
 //!   **streaming** (front tables, then seek + read per entry), because a single
 //!   PS4 archive (`game_90.big`) can be 17 GB — far too large to buffer.
 //!
-//! `chunkzip`-wrapped entries are transparently inflated; `chunklzx` (LZX) entries
-//! are counted and skipped (the codec is not yet implemented) rather than failing
+//! `chunkzip`- and `chunklzx`-wrapped entries are transparently inflated (LZX since 21 Sep 2026);
+//! entries that fail to decode are counted and skipped rather than failing
 //! the whole run. Entry names that would escape the archive's directory (absolute
 //! paths, `..`) are refused — a `.big` never dictates writes outside its own tree.
 
@@ -48,7 +48,7 @@ pub struct ExtractSummary {
     pub files_written: usize,
     /// Total bytes written (decompressed).
     pub bytes_written: u64,
-    /// Entries skipped because they're `chunklzx`-wrapped or failed to decode.
+    /// Entries skipped because they failed to decode (or, before 21 Sep 2026, were `chunklzx`).
     pub skipped_unsupported: usize,
     /// Entries skipped because their name would escape the archive's directory.
     pub skipped_unsafe: usize,
@@ -133,10 +133,11 @@ fn extract_one(archive_path: &Path, base: &Path, summary: &mut ExtractSummary) -
         source,
     })?;
     let mut magic = [0u8; 4];
-    file.read_exact(&mut magic).map_err(|source| DomainError::Io {
-        path: archive_path.to_string_lossy().to_string(),
-        source,
-    })?;
+    file.read_exact(&mut magic)
+        .map_err(|source| DomainError::Io {
+            path: archive_path.to_string_lossy().to_string(),
+            source,
+        })?;
 
     if &magic == eb::MAGIC_EB {
         extract_eb(archive_path, &mut file, base, summary)
@@ -276,7 +277,8 @@ mod tests {
     struct TempTree(PathBuf);
     impl TempTree {
         fn new(tag: &str) -> Self {
-            let dir = std::env::temp_dir().join(format!("nhlms-extract-{tag}-{}", std::process::id()));
+            let dir =
+                std::env::temp_dir().join(format!("nhlms-extract-{tag}-{}", std::process::id()));
             let _ = fs::remove_dir_all(&dir);
             fs::create_dir_all(&dir).unwrap();
             TempTree(dir)
@@ -391,7 +393,11 @@ mod tests {
         let t = TempTree::new("mixed");
         let root = &t.0;
         write_big(&root.join("xbox.big"), &[("db/nhlng.db", b"XBOX")]);
-        write_eb_big(&root.join("ps4.big"), &["db"], &[(0, "nhl_game.db", b"PS4")]);
+        write_eb_big(
+            &root.join("ps4.big"),
+            &["db"],
+            &[(0, "nhl_game.db", b"PS4")],
+        );
 
         let summary = extract_install(root).unwrap();
         assert_eq!(summary.archives, 2);
@@ -415,8 +421,14 @@ mod tests {
         let summary = extract_install(root).unwrap();
         assert_eq!(summary.archives, 1);
         assert_eq!(summary.files_written, 3);
-        assert_eq!(fs::read(root.join("db/nhlng.db")).unwrap(), b"NHLNG-DB-BYTES");
-        assert_eq!(fs::read(root.join("db/nhlng-meta.xml")).unwrap(), b"<meta/>");
+        assert_eq!(
+            fs::read(root.join("db/nhlng.db")).unwrap(),
+            b"NHLNG-DB-BYTES"
+        );
+        assert_eq!(
+            fs::read(root.join("db/nhlng-meta.xml")).unwrap(),
+            b"<meta/>"
+        );
         assert_eq!(fs::read(root.join("readme.txt")).unwrap(), b"hi");
     }
 
@@ -514,7 +526,11 @@ mod tests {
         let Payload::Data(db) = eb::decode_payload(raw).unwrap() else {
             panic!("nhl_game.db payload should decode, not be chunklzx");
         };
-        assert!(db.len() > 1_000_000, "nhl_game.db should be multi-MB, got {}", db.len());
+        assert!(
+            db.len() > 1_000_000,
+            "nhl_game.db should be multi-MB, got {}",
+            db.len()
+        );
     }
 
     #[test]

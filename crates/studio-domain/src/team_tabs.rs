@@ -294,6 +294,32 @@ pub struct TeamJersey {
     pub is_lockable: bool,
 }
 
+/// Every team's jersey **art-id tokens**: the `GDQL` values registered in `xjgw`, grouped by team
+/// (`mCXg`). This is the id space the outfit texture filenames key on — the asset id is
+/// `{cVLR}_{GDQL}_{FccT}` (verified in the reference app) — and it is NOT the team-id space:
+/// e.g. Team Poland's `GDQL` collides with the Portland Pirates' team id, so matching outfit
+/// files by raw team id mis-assigned Poland's jerseys to Portland. Empty when the title ships no
+/// jersey registry (callers then fall back to team-id matching).
+pub fn jersey_art_ids(db: &TdbFile) -> std::collections::HashMap<u64, Vec<u64>> {
+    let mut out: std::collections::HashMap<u64, Vec<u64>> = std::collections::HashMap::new();
+    let Some(t) = table(db, JERSEYS_TABLE) else {
+        return out;
+    };
+    for rec in 0..t.current_records as u32 {
+        let (Some(team), Some(art)) = (
+            read_u64_by_studio(db, t, rec, "mCXg"),
+            read_u64_by_studio(db, t, rec, "GDQL"),
+        ) else {
+            continue;
+        };
+        let v = out.entry(team).or_default();
+        if !v.contains(&art) {
+            v.push(art);
+        }
+    }
+    out
+}
+
 /// Every jersey registered to `team_id` (`mCXg == team_id`), in stored order.
 pub fn team_jerseys(db: &TdbFile, team_id: u64) -> Vec<TeamJersey> {
     let Some(t) = table(db, JERSEYS_TABLE) else {
@@ -324,9 +350,9 @@ pub fn team_jerseys(db: &TdbFile, team_id: u64) -> Vec<TeamJersey> {
 // Equipment — `hHbv` (stockteamequipmenttable)
 // ---------------------------------------------------------------------------
 //
-// `dXSB` here is **1-indexed** (`dXSB - 1 == kOtt.vfEq`). Nine colour zones, each stored as
-// three 8-bit channels in **BGR** field order on disk; we surface RGB plus each channel's studio
-// field id so the UI can edit the raw cells directly.
+// `dXSB` here is **1-indexed** (`dXSB - 1 == kOtt.vfEq`). Earlier schemas have nine zones
+// of three 8-bit channels; NHL17 has fifteen packed 24-bit RGB fields. The packed write
+// target travels with its decoded color so clients do not use missing earlier-title fields.
 
 pub const EQUIPMENT_TABLE: &str = "hHbv";
 
@@ -343,12 +369,14 @@ pub const EQUIPMENT_ZONE_FIELDS: [(&str, &str, &str); 9] = [
     ("CiDJ", "KYzW", "Xtnl"),
 ];
 
-/// One colour zone, decoded to RGB (fields absent from a title's schema read as 0).
+/// One colour zone, decoded to RGB, with its packed write target when applicable.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct EquipmentZone {
     pub red: u8,
     pub green: u8,
     pub blue: u8,
+    /// Later schemas store a single 24-bit RGB value rather than three channel fields.
+    pub packed_field: Option<&'static str>,
 }
 
 /// One stock-equipment row for a team.
@@ -378,14 +406,34 @@ pub fn team_equipment(db: &TdbFile, team_id: u64) -> Vec<TeamEquipment> {
             brand_raw: read(rec, "TKWL"),
             era_raw: read(rec, "VhbR"),
             variant_raw: read(rec, "FccT"),
-            zones: EQUIPMENT_ZONE_FIELDS
-                .iter()
-                .map(|(b, g, r)| EquipmentZone {
-                    red: read(rec, r) as u8,
-                    green: read(rec, g) as u8,
-                    blue: read(rec, b) as u8,
-                })
-                .collect(),
+            zones: if read_u64_by_studio(db, t, rec, "Sgir").is_some() {
+                // stockteamequipmenttable.zone1..zone15 in NHL17's shipped metadata.
+                [
+                    "Sgir", "zZLN", "MSPH", "OeCM", "RdSS", "wkXk", "Pnby", "HwCn",
+                    "IzSx", "aoBK", "prFY", "kygm", "rxws", "ZVln", "qOph",
+                ]
+                    .into_iter()
+                    .map(|field| {
+                        let value = read(rec, field);
+                        EquipmentZone {
+                            red: (value >> 16) as u8,
+                            green: (value >> 8) as u8,
+                            blue: value as u8,
+                            packed_field: Some(field),
+                        }
+                    })
+                    .collect()
+            } else {
+                EQUIPMENT_ZONE_FIELDS
+                    .iter()
+                    .map(|(b, g, r)| EquipmentZone {
+                        red: read(rec, r) as u8,
+                        green: read(rec, g) as u8,
+                        blue: read(rec, b) as u8,
+                        packed_field: None,
+                    })
+                    .collect()
+            },
         })
         .collect()
 }

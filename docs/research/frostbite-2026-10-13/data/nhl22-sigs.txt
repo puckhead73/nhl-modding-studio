@@ -1,0 +1,23 @@
+first-block codec per superbundle:
+   ('Gen4b/contentlaunchsb', '0x00') 4420
+   ('Gen4b/contentlaunchsb', '0x11') 9491
+   ('Gen4b/contentsb', '0x00') 5067
+   ('Gen4b/contentsb', '0x11') 40006
+   ('Gen4b/globals', '0x00') 179
+   ('Gen4b/globals', '0x11') 23673
+   ('Gen4b/globalsfull', '0x00') 654
+   ('Gen4b/globalsfull', '0x11') 37685
+   ('Gen4b/levels/game/game', '0x00') 1422
+   ('Gen4b/levels/game/game', '0x11') 299
+   ('Gen4b/movies', '0x00') 427
+   ('Gen4b/worldssb', '0x00') 13
+   ('Gen4b/worldssb', '0x11') 9235
+signature hits among uncompressed first blocks:
+  SND10 SBle: 69
+      ('Gen4b/globals', '7052e7c10820eebaf85f5d538b003829', '0x0001', 124062, 81304, 81296)
+      ('Gen4b/globals', 'a62e64e517f459fd5b8e1b5ad6641102', '0x0001', 205366, 3453248, 262144)
+      ('Gen4b/globals', '9c38ac3506c2d3b5be4b175c318d36d1', '0x0001', 3659121, 11474016, 262144)
+      ('Gen4b/globals', 'bc8821ff43bde78b1b7084097a30b5df', '0x0001', 15133137, 18344, 18336)
+      ('Gen4b/globals', '3c06259d67cebe256a7880751c899074', '0x0001', 15151988, 3992, 3984)
+      ('Gen4b/globals', '12af3503003c28de75ed8a0f46a16a7b', '0x0001', 15155980, 4091424, 262144)
+most common uncompressed leading words: [('4800000c', 9743), ('50544348', 1108), ('4346580f', 385), ('1a45dfa3', 292), ('43465810', 223), ('4d566864', 107), ('53426c65', 69), ('53543030', 68), ('43465811', 26), ('5b0d0a20', 22), ('4346581c', 20), ('5b7b2255', 14)]

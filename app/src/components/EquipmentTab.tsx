@@ -41,8 +41,8 @@ function matchesCategory(rec: TeamEquipmentDto, c: Category): boolean {
 
 /// The Equipment tab — the team's stock-equipment rows (`hHbv`) in the reference layout: a
 /// category-filtered record list (Gloves and Helmet split out — they're the anchored types) and
-/// the detail pane with Equipment Info + the nine colour zones. Zones are stored as three 8-bit
-/// channels in **BGR** field order on disk; the UI shows RGB with a live swatch and edits each
+/// the detail pane with Equipment Info and this schema's color zones. Zones use split channels
+/// or a packed RGB word; the UI shows RGB with a live swatch and edits each
 /// channel through `set_field`. The reference app's 3D preview needs the bundled glove/helmet
 /// meshes — that arrives with the Production Asset tools.
 export function EquipmentTab({ projectId, teamId }: { projectId: number; teamId: number }) {
@@ -138,7 +138,7 @@ export function EquipmentTab({ projectId, teamId }: { projectId: number; teamId:
   );
 }
 
-function EquipmentDetail({ projectId, record }: { projectId: number; record: TeamEquipmentDto }) {
+export function EquipmentDetail({ projectId, record }: { projectId: number; record: TeamEquipmentDto }) {
   const qc = useQueryClient();
   const { update } = useProject();
   const mut = useMutation({
@@ -211,17 +211,23 @@ function EquipmentDetail({ projectId, record }: { projectId: number; record: Tea
           </h3>
           <span
             className="text-[10px] text-slate-500"
-            title="hHbv stores each zone as three 8-bit fields in BGR order on disk; the UI shows R/G/B. The per-channel field ids are on each input's tooltip."
+            title="Colors use this game's channel fields or packed RGB field. Field ids are on each input's tooltip."
           >
-            Stored BGR · displayed RGB
+            Displayed RGB
           </span>
         </header>
         <div className="grid grid-cols-1 gap-3 px-3 py-3 md:grid-cols-2 xl:grid-cols-3">
           {record.zones.map((zone, idx) => {
-            const name = zoneName(record.equipment_type_raw, idx);
+            const name = zone.packed_field ? `Zone ${idx + 1}` : zoneName(record.equipment_type_raw, idx);
             const hex = rgbToHex(zone.red, zone.green, zone.blue);
             const fg = readableForeground(zone.red, zone.green, zone.blue);
-            const [bField, gField, rField] = EQUIPMENT_ZONE_FIELDS[idx];
+            const [bField, gField, rField] = zone.packed_field
+              ? [zone.packed_field, zone.packed_field, zone.packed_field]
+              : EQUIPMENT_ZONE_FIELDS[idx];
+            const commit = (field: string, channel: "red" | "green" | "blue", value: number) => {
+              const rgb = { ...zone, [channel]: value };
+              mut.mutate({ field, value: zone.packed_field ? (rgb.red << 16) | (rgb.green << 8) | rgb.blue : value });
+            };
             return (
               <div
                 key={idx}
@@ -248,21 +254,21 @@ function EquipmentDetail({ projectId, record }: { projectId: number; record: Tea
                     field={rField}
                     value={zone.red}
                     disabled={mut.isPending}
-                    onCommit={(v) => mut.mutate({ field: rField, value: v })}
+                    onCommit={(v) => commit(rField, "red", v)}
                   />
                   <ChannelCell
                     label="G"
                     field={gField}
                     value={zone.green}
                     disabled={mut.isPending}
-                    onCommit={(v) => mut.mutate({ field: gField, value: v })}
+                    onCommit={(v) => commit(gField, "green", v)}
                   />
                   <ChannelCell
                     label="B"
                     field={bField}
                     value={zone.blue}
                     disabled={mut.isPending}
-                    onCommit={(v) => mut.mutate({ field: bField, value: v })}
+                    onCommit={(v) => commit(bField, "blue", v)}
                   />
                 </div>
               </div>

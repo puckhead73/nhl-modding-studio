@@ -8,6 +8,9 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 
 /** One queued import: a corpus person-season aimed at an EA team, with the create-vs-match decision. */
 export type CartItem = {
+  /** Suggestions run once for a newly queued row or explicitly changed destination. */
+  assignmentPending?: boolean;
+  noPositionSlot?: boolean;
   /** Stable row id (client-side only). */
   id: string;
   personId: number;
@@ -92,6 +95,7 @@ export function RosterCartProvider({ children }: { children: ReactNode }) {
             targetTeamId: null,
             matchEaPlayerId: null,
             jersey: null,
+            assignmentPending: item.matchEaPlayerId == null,
             ...item,
             id: uid(),
           },

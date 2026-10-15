@@ -1,0 +1,1193 @@
+{
+ "note": "R64 \u2014 PS4 arena / ice assets (Teams 2.5, parity with the gen7 handoff 19): the `exhibitionarena` rows of NHL 15\u201321 against the shipped\nvenue directories `nhl/data/kettle/rendering/stadiums/<venue>/...` listed from the install archives. Unlike gen7 (where the venue is named\nby `arenaartid`), the PS4 venues are named directories, so this probe tests the name route: normalise the arena row's `cityname` /\n`arenaname` and the directory names (lowercase, alphanumeric only) and count exact and prefix matches both ways, alongside the numeric\ncandidates (`arenaartid`, `architectureid`, `index`) against any numeric venue directories. Also inventories the `common/` ice families\n(`ice_centerlogo_<id>_cm`, `ice_cline_<id>_cm`, `ice_hotspot_<id>_<n>_cm`, `powerring_<id>_<n>`) and their id spaces.\nRead-only member listings; nothing extracted or decoded.\nUsage: python r64_ps4_arena_asset_join.py <out.json> [--titles nhl21,nhl15]\n",
+ "titles": {
+  "nhl15": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA00561\\databigs",
+   "venue_dirs": 33,
+   "venue_members": 29247,
+   "venue_dirs_top": {
+    "common": 3220,
+    "toronto": 2009,
+    "calgary": 1342,
+    "stlouis": 1184,
+    "nyrangers": 1135,
+    "montreal": 1047,
+    "boston": 992,
+    "dallas": 991,
+    "vancouver": 936,
+    "losangeles": 914,
+    "nashville": 910,
+    "ottawa": 894
+   },
+   "arena_rows": 178,
+   "common_families": {
+    "ice_centerlogo": {
+     "ids": 0,
+     "members": 0,
+     "id_min": null,
+     "id_max": null
+    },
+    "ice_cline": {
+     "ids": 33,
+     "members": 34,
+     "id_min": 0,
+     "id_max": 33
+    },
+    "ice_hotspot": {
+     "ids": 2,
+     "members": 145,
+     "id_min": 0,
+     "id_max": 1
+    },
+    "powerring": {
+     "ids": 31,
+     "members": 228,
+     "id_min": 0,
+     "id_max": 31
+    }
+   },
+   "name_join": {
+    "arenaname": {
+     "rows": 178,
+     "exact": 0,
+     "prefix_only": 4,
+     "dirs_matched": 3,
+     "of_dirs": 33,
+     "unmatched_sample": [
+      "Honda Center",
+      "MTS Centre",
+      "TD Garden",
+      "First Niagara Center",
+      "Scotiabank Saddledome",
+      "Carolina Arena",
+      "Chicago Arena",
+      "Pepsi Center",
+      "Nationwide Arena \u00ae",
+      "American Airlines Center \u00ae",
+      "Joe Louis Arena \u2122",
+      "Rexall Place \u2122",
+      "BB&T Center",
+      "Staples Center \u2122",
+      "Xcel Energy Center \u2120"
+     ]
+    },
+    "cityname": {
+     "rows": 178,
+     "exact": 30,
+     "prefix_only": 2,
+     "dirs_matched": 22,
+     "of_dirs": 33,
+     "unmatched_sample": [
+      "Raleigh, NC",
+      "Denver, CO",
+      "Sunrise, FL",
+      "St. Paul, MN",
+      "Newark, NJ",
+      "Uniondale, NY",
+      "New York, NY",
+      "Kanata, ON",
+      "Glendale, AZ",
+      "Glens Falls, NY",
+      "Albany, NY",
+      "Binghamton, NY",
+      "Bridgeport, CT",
+      "Charlotte, NC",
+      "Grand Rapids, MI"
+     ]
+    }
+   },
+   "numeric_join": {
+    "arenaartid": {
+     "distinct": 32,
+     "min": 0,
+     "max": 51,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 0,
+     "hits_ice_cline": 31
+    },
+    "index": {
+     "distinct": 178,
+     "min": 0,
+     "max": 177,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 0,
+     "hits_ice_cline": 33
+    }
+   },
+   "residuals": {
+    "dirs_without_named_row": [
+     "ahlgeneric",
+     "chicagogeneric",
+     "colorado",
+     "common",
+     "eurogeneric",
+     "florida",
+     "frontend",
+     "minnesota",
+     "newjersey",
+     "nyislanders",
+     "nyrangers",
+     "phoenix"
+    ],
+    "n_dirs_without_named_row": 12
+   }
+  },
+  "nhl16": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA01909\\databigs",
+   "venue_dirs": 44,
+   "venue_members": 36099,
+   "venue_dirs_top": {
+    "common": 3298,
+    "vancouver": 1582,
+    "nashville": 1502,
+    "detroit": 1500,
+    "montreal": 1494,
+    "minnesota": 1484,
+    "philadelphia": 1467,
+    "ottawa": 1463,
+    "columbus": 1423,
+    "nyrangers": 1417,
+    "edmonton": 1357,
+    "losangeles": 1306
+   },
+   "arena_rows": 187,
+   "common_families": {
+    "ice_centerlogo": {
+     "ids": 0,
+     "members": 0,
+     "id_min": null,
+     "id_max": null
+    },
+    "ice_cline": {
+     "ids": 36,
+     "members": 36,
+     "id_min": 0,
+     "id_max": 36
+    },
+    "ice_hotspot": {
+     "ids": 2,
+     "members": 155,
+     "id_min": 0,
+     "id_max": 1
+    },
+    "powerring": {
+     "ids": 32,
+     "members": 222,
+     "id_min": 0,
+     "id_max": 999
+    }
+   },
+   "name_join": {
+    "arenaname": {
+     "rows": 187,
+     "exact": 0,
+     "prefix_only": 3,
+     "dirs_matched": 2,
+     "of_dirs": 44,
+     "unmatched_sample": [
+      "Honda Center",
+      "MTS Centre",
+      "TD Garden",
+      "First Niagara Center",
+      "Scotiabank Saddledome\u2122",
+      "PNC Arena",
+      "Chicago Arena",
+      "Pepsi Center",
+      "Nationwide Arena \u00ae",
+      "American Airlines Center \u00ae",
+      "Joe Louis Arena \u2122",
+      "Rexall Place \u2122",
+      "BB&T Center",
+      "Staples Center \u2122",
+      "Xcel Energy Center \u2120"
+     ]
+    },
+    "cityname": {
+     "rows": 187,
+     "exact": 30,
+     "prefix_only": 2,
+     "dirs_matched": 22,
+     "of_dirs": 44,
+     "unmatched_sample": [
+      "Raleigh, NC",
+      "Denver, CO",
+      "Sunrise, FL",
+      "St. Paul, MN",
+      "Newark, NJ",
+      "Brooklyn, NY",
+      "New York, NY",
+      "Kanata, ON",
+      "Glendale, AZ",
+      "Albany, NY",
+      "Bakersfield, CA",
+      "Binghamton, NY",
+      "Bridgeport, CT",
+      "Charlotte, NC",
+      "Grand Rapids, MI"
+     ]
+    }
+   },
+   "numeric_join": {
+    "arenaartid": {
+     "distinct": 33,
+     "min": 0,
+     "max": 510,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 0,
+     "hits_ice_cline": 31
+    },
+    "index": {
+     "distinct": 187,
+     "min": 0,
+     "max": 186,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 0,
+     "hits_ice_cline": 36
+    }
+   },
+   "residuals": {
+    "dirs_without_named_row": [
+     "ahlgeneric",
+     "carolina",
+     "chicagogeneric",
+     "colorado",
+     "common",
+     "common_boards_international",
+     "common_ice_edmonton",
+     "common_ice_int",
+     "common_ice_nhl",
+     "common_props_roof2",
+     "custom_vancouver",
+     "eashl",
+     "eurogeneric",
+     "florida",
+     "frontend",
+     "illuminating_cjt_colorado",
+     "illuminating_cjt_detroit",
+     "minnesota",
+     "newjersey",
+     "nybarclays",
+     "nyislanders",
+     "nyrangers",
+     "phoenix"
+    ],
+    "n_dirs_without_named_row": 23
+   }
+  },
+  "nhl17": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA04326\\databigs",
+   "venue_dirs": 83,
+   "venue_members": 39193,
+   "venue_dirs_top": {
+    "common": 3899,
+    "frontend": 1152,
+    "edmonton": 995,
+    "boston": 926,
+    "eashl_tier2": 899,
+    "minnesota": 824,
+    "losangeles": 816,
+    "vancouver": 777,
+    "custom_pittsburgh": 774,
+    "custom_vancouver": 763,
+    "nashville": 756,
+    "montreal": 753
+   },
+   "arena_rows": 256,
+   "common_families": {
+    "ice_centerlogo": {
+     "ids": 246,
+     "members": 246,
+     "id_min": 0,
+     "id_max": 701
+    },
+    "ice_cline": {
+     "ids": 76,
+     "members": 76,
+     "id_min": 0,
+     "id_max": 76
+    },
+    "ice_hotspot": {
+     "ids": 2,
+     "members": 155,
+     "id_min": 0,
+     "id_max": 1
+    },
+    "powerring": {
+     "ids": 33,
+     "members": 229,
+     "id_min": 0,
+     "id_max": 999
+    }
+   },
+   "name_join": {
+    "arenaname": {
+     "rows": 256,
+     "exact": 0,
+     "prefix_only": 2,
+     "dirs_matched": 2,
+     "of_dirs": 83,
+     "unmatched_sample": [
+      "Honda Center",
+      "MTS Centre",
+      "TD Garden",
+      "First Niagara Center",
+      "Scotiabank Saddledome\u2122",
+      "PNC Arena",
+      "United Center",
+      "Pepsi Center",
+      "Nationwide Arena \u00ae",
+      "American Airlines Center \u00ae",
+      "Joe Louis Arena \u2122",
+      "Rogers Place",
+      "BB&T Center",
+      "Staples Center \u2122",
+      "Xcel Energy Center \u2120"
+     ]
+    },
+    "cityname": {
+     "rows": 256,
+     "exact": 38,
+     "prefix_only": 0,
+     "dirs_matched": 22,
+     "of_dirs": 83,
+     "unmatched_sample": [
+      "Raleigh, NC",
+      "Denver, CO",
+      "Sunrise, FL",
+      "St. Paul, MN",
+      "Newark, NJ",
+      "Brooklyn, NY",
+      "New York, NY",
+      "Kanata, ON",
+      "Glendale, AZ",
+      "Albany, NY",
+      "Bakersfield, CA",
+      "Binghamton, NY",
+      "Bridgeport, CT",
+      "Charlotte, NC",
+      "Grand Rapids, MI"
+     ]
+    }
+   },
+   "numeric_join": {
+    "arenaartid": {
+     "distinct": 39,
+     "min": 0,
+     "max": 800,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 39,
+     "hits_ice_cline": 240
+    },
+    "architectureid": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 256,
+     "hits_ice_cline": 256
+    },
+    "index": {
+     "distinct": 256,
+     "min": 0,
+     "max": 399,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 123,
+     "hits_ice_cline": 76
+    },
+    "scoreboardid": {
+     "distinct": 2,
+     "min": 1,
+     "max": 2,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 256,
+     "hits_ice_cline": 256
+    },
+    "seatpatternid": {
+     "distinct": 2,
+     "min": 0,
+     "max": 2,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 256,
+     "hits_ice_cline": 256
+    }
+   },
+   "residuals": {
+    "dirs_without_named_row": [
+     "ahlgeneric",
+     "arizona",
+     "carolina",
+     "colorado",
+     "common",
+     "common_boards_international",
+     "common_ice_edmonton",
+     "common_ice_int",
+     "common_ice_nhl",
+     "common_props_roof2",
+     "custom_buffalo",
+     "custom_calgary",
+     "custom_dallas",
+     "custom_detroit",
+     "custom_edmonton",
+     "custom_pittsburgh",
+     "custom_stlouis",
+     "custom_tampa",
+     "custom_toronto",
+     "custom_vancouver",
+     "eashl",
+     "eashl_tier2",
+     "eashl_tier3",
+     "eashl_tier4",
+     "eashl_tier5",
+     "eurogeneric",
+     "euroswissdavos",
+     "euroswissscbern",
+     "euroswisszurich",
+     "florida",
+     "frontend",
+     "lighting_custom_bandit_entrance",
+     "lighting_custom_boston_scoreboard",
+     "lighting_custom_buffalo_entrance",
+     "lighting_custom_bulldog_entrance",
+     "lighting_custom_calgary_scoreboard",
+     "lighting_custom_colorado_scoreboard",
+     "lighting_custom_dallas_scoreboard",
+     "lighting_custom_detroit_scoreboard",
+     "lighting_custom_devil_entrance"
+    ],
+    "n_dirs_without_named_row": 61
+   }
+  },
+  "nhl18": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA07569\\databigs",
+   "venue_dirs": 68,
+   "venue_members": 49823,
+   "venue_dirs_top": {
+    "common": 7689,
+    "frontend": 1152,
+    "boston": 962,
+    "minnesota": 825,
+    "threes_5": 824,
+    "losangeles": 817,
+    "montreal": 815,
+    "nashville": 806,
+    "vegas": 786,
+    "threes_1": 783,
+    "euroswissresega": 780,
+    "washington": 779
+   },
+   "arena_rows": 303,
+   "common_families": {
+    "ice_centerlogo": {
+     "ids": 276,
+     "members": 276,
+     "id_min": 0,
+     "id_max": 701
+    },
+    "ice_cline": {
+     "ids": 105,
+     "members": 105,
+     "id_min": 0,
+     "id_max": 105
+    },
+    "ice_hotspot": {
+     "ids": 2,
+     "members": 178,
+     "id_min": 0,
+     "id_max": 1
+    },
+    "powerring": {
+     "ids": 35,
+     "members": 242,
+     "id_min": 0,
+     "id_max": 999
+    }
+   },
+   "name_join": {
+    "arenaname": {
+     "rows": 303,
+     "exact": 0,
+     "prefix_only": 4,
+     "dirs_matched": 4,
+     "of_dirs": 68,
+     "unmatched_sample": [
+      "Honda Center \u00ae",
+      "Bell MTS Place \u2122",
+      "TD Garden",
+      "KeyBank Center",
+      "Scotiabank Saddledome\u2122",
+      "PNC Arena \u00ae",
+      "United Center",
+      "Pepsi Center \u00ae",
+      "Nationwide Arena \u00ae",
+      "American Airlines Center \u00ae",
+      "Rogers Place",
+      "BB&T Center",
+      "Staples Center \u2122",
+      "Xcel Energy Center \u2120",
+      "Bell Centre \u00ae"
+     ]
+    },
+    "cityname": {
+     "rows": 303,
+     "exact": 33,
+     "prefix_only": 0,
+     "dirs_matched": 22,
+     "of_dirs": 68,
+     "unmatched_sample": [
+      "Raleigh, NC",
+      "Denver, CO",
+      "Sunrise, FL",
+      "St. Paul, MN",
+      "Newark, NJ",
+      "Brooklyn, NY",
+      "New York, NY",
+      "Kanata, ON",
+      "Glendale, AZ",
+      "Las Vegas, NV",
+      "Bakersfield, CA",
+      "Belleville, ON",
+      "Binghamton, NY",
+      "Bridgeport, CT",
+      "Charlotte, NC"
+     ]
+    }
+   },
+   "numeric_join": {
+    "arenaartid": {
+     "distinct": 52,
+     "min": 0,
+     "max": 709,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 51,
+     "hits_ice_cline": 272
+    },
+    "architectureid": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 303,
+     "hits_ice_cline": 303
+    },
+    "index": {
+     "distinct": 303,
+     "min": 0,
+     "max": 399,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 154,
+     "hits_ice_cline": 105
+    },
+    "scoreboardid": {
+     "distinct": 6,
+     "min": 1,
+     "max": 11,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 303,
+     "hits_ice_cline": 303
+    },
+    "seatpatternid": {
+     "distinct": 5,
+     "min": 0,
+     "max": 4,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 303,
+     "hits_ice_cline": 303
+    }
+   },
+   "residuals": {
+    "dirs_without_named_row": [
+     "ahlgeneric",
+     "arizona",
+     "carolina",
+     "colorado",
+     "common",
+     "common_boards_international",
+     "common_ice_int",
+     "common_ice_nhl",
+     "common_props_roof2",
+     "custom_buffalo",
+     "custom_calgary",
+     "custom_dallas",
+     "custom_detroit",
+     "custom_edmonton",
+     "custom_pittsburgh",
+     "custom_stlouis",
+     "custom_tampa",
+     "custom_toronto",
+     "custom_vancouver",
+     "eashl",
+     "eashl_tier2",
+     "eashl_tier3",
+     "eashl_tier4",
+     "eashl_tier5",
+     "eurogeneric",
+     "euroswissbossard",
+     "euroswissdavos",
+     "euroswissresega",
+     "euroswissscbern",
+     "euroswisszurich",
+     "florida",
+     "frontend",
+     "minnesota",
+     "newjersey",
+     "nyislanders",
+     "nyrangers",
+     "threes_1",
+     "threes_2",
+     "threes_3",
+     "threes_4"
+    ],
+    "n_dirs_without_named_row": 46
+   }
+  },
+  "nhl19": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA11126\\databigs",
+   "venue_dirs": 74,
+   "venue_members": 56685,
+   "venue_dirs_top": {
+    "common": 9820,
+    "losangeles": 1317,
+    "boston": 1232,
+    "stlouis": 999,
+    "pittsburgh": 992,
+    "detroit": 925,
+    "vegas": 886,
+    "vancouver": 866,
+    "minnesota": 864,
+    "outdoor_tier3": 854,
+    "philadelphia": 851,
+    "nashville": 851
+   },
+   "arena_rows": 426,
+   "common_families": {
+    "ice_centerlogo": {
+     "ids": 287,
+     "members": 296,
+     "id_min": 0,
+     "id_max": 1005
+    },
+    "ice_cline": {
+     "ids": 120,
+     "members": 126,
+     "id_min": 0,
+     "id_max": 120
+    },
+    "ice_hotspot": {
+     "ids": 2,
+     "members": 205,
+     "id_min": 0,
+     "id_max": 1
+    },
+    "powerring": {
+     "ids": 35,
+     "members": 242,
+     "id_min": 0,
+     "id_max": 999
+    }
+   },
+   "name_join": {
+    "arenaname": {
+     "rows": 426,
+     "exact": 0,
+     "prefix_only": 4,
+     "dirs_matched": 3,
+     "of_dirs": 74,
+     "unmatched_sample": [
+      "Honda Center \u00ae",
+      "Bell MTS Place \u2122",
+      "TD Garden",
+      "KeyBank Center",
+      "Scotiabank Saddledome\u2122",
+      "PNC Arena \u00ae",
+      "United Center",
+      "Pepsi Center \u00ae",
+      "Nationwide Arena \u00ae",
+      "American Airlines Center \u00ae",
+      "Little Caesars Arena\u2122",
+      "Rogers Place",
+      "BB&T Center",
+      "Staples Center \u2122",
+      "Xcel Energy Center \u2120"
+     ]
+    },
+    "cityname": {
+     "rows": 426,
+     "exact": 126,
+     "prefix_only": 0,
+     "dirs_matched": 22,
+     "of_dirs": 74,
+     "unmatched_sample": [
+      "Raleigh, NC",
+      "Denver, CO",
+      "Sunrise, FL",
+      "St. Paul, MN",
+      "Newark, NJ",
+      "Brooklyn, NY",
+      "New York, NY",
+      "Kanata, ON",
+      "Glendale, AZ",
+      "Las Vegas, NV",
+      "Bakersfield, CA",
+      "Belleville, ON",
+      "Binghamton, NY",
+      "Bridgeport, CT",
+      "Charlotte, NC"
+     ]
+    }
+   },
+   "numeric_join": {
+    "arenaartid": {
+     "distinct": 56,
+     "min": 0,
+     "max": 903,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 160,
+     "hits_ice_cline": 393
+    },
+    "architectureid": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 426,
+     "hits_ice_cline": 426
+    },
+    "index": {
+     "distinct": 426,
+     "min": 0,
+     "max": 679,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 187,
+     "hits_ice_cline": 120
+    },
+    "scoreboardid": {
+     "distinct": 6,
+     "min": 1,
+     "max": 11,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 426,
+     "hits_ice_cline": 426
+    },
+    "seatpatternid": {
+     "distinct": 5,
+     "min": 0,
+     "max": 4,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 426,
+     "hits_ice_cline": 426
+    }
+   },
+   "residuals": {
+    "dirs_without_named_row": [
+     "ahlgeneric",
+     "arizona",
+     "carolina",
+     "colorado",
+     "common",
+     "common_boards_international",
+     "common_ice_int",
+     "common_ice_nhl",
+     "common_props_roof2",
+     "custom_buffalo",
+     "custom_calgary",
+     "custom_dallas",
+     "custom_detroit",
+     "custom_edmonton",
+     "custom_pittsburgh",
+     "custom_stlouis",
+     "custom_tampa",
+     "custom_toronto",
+     "custom_vancouver",
+     "eashl",
+     "eashl_tier2",
+     "eashl_tier3",
+     "eashl_tier4",
+     "eashl_tier5",
+     "eurogeneric",
+     "euroswissbossard",
+     "euroswissdavos",
+     "euroswissresega",
+     "euroswissscbern",
+     "euroswisszurich",
+     "florida",
+     "frontend",
+     "minnesota",
+     "newjersey",
+     "nyislanders",
+     "nyrangers",
+     "outdoor_tier0",
+     "outdoor_tier1",
+     "outdoor_tier2",
+     "outdoor_tier3"
+    ],
+    "n_dirs_without_named_row": 52
+   }
+  },
+  "nhl20": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs",
+   "venue_dirs": 78,
+   "venue_members": 54926,
+   "venue_dirs_top": {
+    "common": 7640,
+    "outdoor_farm": 1520,
+    "outdoor_canal": 1161,
+    "detroit": 907,
+    "boston": 873,
+    "minnesota": 862,
+    "losangeles": 849,
+    "nashville": 825,
+    "vegas": 818,
+    "vancouver": 814,
+    "threes_5": 812,
+    "washington": 793
+   },
+   "arena_rows": 426,
+   "common_families": {
+    "ice_centerlogo": {
+     "ids": 274,
+     "members": 274,
+     "id_min": 0,
+     "id_max": 1005
+    },
+    "ice_cline": {
+     "ids": 137,
+     "members": 137,
+     "id_min": 0,
+     "id_max": 137
+    },
+    "ice_hotspot": {
+     "ids": 2,
+     "members": 206,
+     "id_min": 0,
+     "id_max": 1
+    },
+    "powerring": {
+     "ids": 34,
+     "members": 237,
+     "id_min": 0,
+     "id_max": 800
+    }
+   },
+   "name_join": {
+    "arenaname": {
+     "rows": 426,
+     "exact": 0,
+     "prefix_only": 4,
+     "dirs_matched": 3,
+     "of_dirs": 78,
+     "unmatched_sample": [
+      "Honda Center \u00ae",
+      "Bell MTS Place \u2122",
+      "TD Garden",
+      "KeyBank Center",
+      "Scotiabank Saddledome\u2122",
+      "PNC Arena \u00ae",
+      "United Center",
+      "Pepsi Center \u00ae",
+      "Nationwide Arena \u00ae",
+      "American Airlines Center \u00ae",
+      "Little Caesars Arena\u2122",
+      "Rogers Place",
+      "BB&T Center",
+      "Staples Center \u2122",
+      "Xcel Energy Center \u2120"
+     ]
+    },
+    "cityname": {
+     "rows": 426,
+     "exact": 126,
+     "prefix_only": 0,
+     "dirs_matched": 22,
+     "of_dirs": 78,
+     "unmatched_sample": [
+      "Raleigh, NC",
+      "Denver, CO",
+      "Sunrise, FL",
+      "St. Paul, MN",
+      "Newark, NJ",
+      "Brooklyn, NY",
+      "New York, NY",
+      "Kanata, ON",
+      "Glendale, AZ",
+      "Las Vegas, NV",
+      "Bakersfield, CA",
+      "Belleville, ON",
+      "Binghamton, NY",
+      "Bridgeport, CT",
+      "Charlotte, NC"
+     ]
+    }
+   },
+   "numeric_join": {
+    "arenaartid": {
+     "distinct": 56,
+     "min": 0,
+     "max": 903,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 152,
+     "hits_ice_cline": 393
+    },
+    "architectureid": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 426,
+     "hits_ice_cline": 426
+    },
+    "index": {
+     "distinct": 426,
+     "min": 0,
+     "max": 679,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 180,
+     "hits_ice_cline": 137
+    },
+    "scoreboardid": {
+     "distinct": 6,
+     "min": 1,
+     "max": 11,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 426,
+     "hits_ice_cline": 426
+    },
+    "seatpatternid": {
+     "distinct": 5,
+     "min": 0,
+     "max": 4,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 426,
+     "hits_ice_cline": 426
+    }
+   },
+   "residuals": {
+    "dirs_without_named_row": [
+     "ahlgeneric",
+     "arizona",
+     "carolina",
+     "colorado",
+     "common",
+     "common_boards_international",
+     "common_ice_int",
+     "common_ice_nhl",
+     "common_props_roof2",
+     "custom_buffalo",
+     "custom_calgary",
+     "custom_dallas",
+     "custom_detroit",
+     "custom_edmonton",
+     "custom_pittsburgh",
+     "custom_stlouis",
+     "custom_tampa",
+     "custom_toronto",
+     "custom_vancouver",
+     "eashl",
+     "eashl_tier2",
+     "eashl_tier3",
+     "eashl_tier4",
+     "eashl_tier5",
+     "eurogeneric",
+     "euroswissbossard",
+     "euroswissdavos",
+     "euroswissresega",
+     "euroswissscbern",
+     "euroswisszurich",
+     "florida",
+     "frontend",
+     "minnesota",
+     "newjersey",
+     "nyislanders",
+     "nyrangers",
+     "outdoor_canal",
+     "outdoor_farm",
+     "outdoor_peak",
+     "outdoor_tier0"
+    ],
+    "n_dirs_without_named_row": 56
+   }
+  },
+  "nhl21": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs",
+   "venue_dirs": 80,
+   "venue_members": 55237,
+   "venue_dirs_top": {
+    "common": 8296,
+    "outdoor_canal": 1088,
+    "outdoor_farm": 1060,
+    "detroit": 908,
+    "boston": 873,
+    "minnesota": 862,
+    "losangeles": 849,
+    "nashville": 819,
+    "vancouver": 816,
+    "threes_5": 812,
+    "vegas": 786,
+    "washington": 783
+   },
+   "arena_rows": 450,
+   "common_families": {
+    "ice_centerlogo": {
+     "ids": 283,
+     "members": 283,
+     "id_min": 0,
+     "id_max": 1005
+    },
+    "ice_cline": {
+     "ids": 145,
+     "members": 145,
+     "id_min": 0,
+     "id_max": 146
+    },
+    "ice_hotspot": {
+     "ids": 2,
+     "members": 219,
+     "id_min": 0,
+     "id_max": 1
+    },
+    "powerring": {
+     "ids": 34,
+     "members": 237,
+     "id_min": 0,
+     "id_max": 800
+    }
+   },
+   "name_join": {
+    "arenaname": {
+     "rows": 450,
+     "exact": 0,
+     "prefix_only": 7,
+     "dirs_matched": 5,
+     "of_dirs": 80,
+     "unmatched_sample": [
+      "Honda Center\u00ae",
+      "Bell MTS Place\u2122",
+      "TD Garden",
+      "KeyBank Center",
+      "Scotiabank Saddledome\u2122",
+      "PNC Arena\u00ae",
+      "United Center",
+      "Pepsi Center\u00ae",
+      "Nationwide Arena\u2122",
+      "American Airlines Center\u00ae",
+      "Little Caesars Arena\u2122",
+      "Rogers Place",
+      "BB&T Center",
+      "Staples Center\u2122",
+      "Xcel Energy Center\u2120"
+     ]
+    },
+    "cityname": {
+     "rows": 450,
+     "exact": 133,
+     "prefix_only": 0,
+     "dirs_matched": 22,
+     "of_dirs": 80,
+     "unmatched_sample": [
+      "Raleigh, NC",
+      "Denver, CO",
+      "Sunrise, FL",
+      "St. Paul, MN",
+      "Newark, NJ",
+      "Brooklyn, NY",
+      "New York, NY",
+      "Kanata, ON",
+      "Glendale, AZ",
+      "Las Vegas, NV",
+      "Bakersfield, CA",
+      "Belleville, ON",
+      "Binghamton, NY",
+      "Bridgeport, CT",
+      "Charlotte, NC"
+     ]
+    }
+   },
+   "numeric_join": {
+    "arenaartid": {
+     "distinct": 62,
+     "min": 0,
+     "max": 910,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 153,
+     "hits_ice_cline": 406
+    },
+    "architectureid": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 450,
+     "hits_ice_cline": 450
+    },
+    "index": {
+     "distinct": 450,
+     "min": 0,
+     "max": 696,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 193,
+     "hits_ice_cline": 145
+    },
+    "scoreboardid": {
+     "distinct": 7,
+     "min": 1,
+     "max": 11,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 450,
+     "hits_ice_cline": 450
+    },
+    "seatpatternid": {
+     "distinct": 5,
+     "min": 0,
+     "max": 4,
+     "hits_numeric_dirs": 0,
+     "hits_ice_centerlogo": 450,
+     "hits_ice_cline": 450
+    }
+   },
+   "residuals": {
+    "dirs_without_named_row": [
+     "ahlgeneric",
+     "arizona",
+     "carolina",
+     "colorado",
+     "common",
+     "common_boards_international",
+     "common_ice_int",
+     "common_ice_nhl",
+     "common_props_roof2",
+     "custom_buffalo",
+     "custom_calgary",
+     "custom_dallas",
+     "custom_detroit",
+     "custom_edmonton",
+     "custom_pittsburgh",
+     "custom_stlouis",
+     "custom_tampa",
+     "custom_toronto",
+     "custom_vancouver",
+     "eashl",
+     "eashl_tier2",
+     "eashl_tier3",
+     "eashl_tier4",
+     "eashl_tier5",
+     "eurogeneric",
+     "euroswissbossard",
+     "euroswissdavos",
+     "euroswissresega",
+     "euroswissscbern",
+     "euroswisszurich",
+     "florida",
+     "frontend",
+     "frontend_bap",
+     "minnesota",
+     "newjersey",
+     "nyislanders",
+     "nyrangers",
+     "outdoor_canal",
+     "outdoor_farm",
+     "outdoor_peak"
+    ],
+    "n_dirs_without_named_row": 58
+   }
+  }
+ }
+}

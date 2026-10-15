@@ -1,0 +1,1057 @@
+# Target adapter — NHL 17, PlayStation 4 (gen8, little-endian, TDB v6). Schema `target-adapter/2`.
+#
+# Package C0-REG4 (2026-09-15). EVIDENCE-BACKED AND DELIBERATELY PARTIAL: 8 canonical properties
+# over 10 physical fields, every number read from THIS target's committed snapshot
+# (`docs/audits/data/schema/ps4-nhl17.json`) and every non-physical fact cited to an audit row,
+# matrix row, named case or fixture that names NHL 17 on PlayStation 4. The gen7 adapters were
+# STRUCTURAL references only (which blocks exist, in what shape); no value, transform, origin,
+# sentinel rule, companion rule or capacity was carried from any of them — a shared field name or a
+# matching layout is not semantic proof. Where a fact resembles a gen7 title's, the resemblance is
+# measured here, not assumed — and the differences are real: on this anchor the main-team pointer
+# `dXSB` sits at bit 80 and is 8 bits wide (declared -1..254), the ratings are 7-bit 0..99
+# with NO offset, and the main DB itself carries `max_records > current_records`.
+
+#
+# MEASURED DIRECTLY (C0-REG4): the main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b…)
+# parses as a little-endian TDB v6 with 118 tables, header CRC and size valid. Capacities are read
+# from THAT file's own directory (`main-db-max-records`) — the OBSERVED DIRECTORY CAPACITY, which is
+# not a demonstrated runtime limit — and are NOT a substitute for the ROSTER save's own capacity.
+# The ROSTER fixture this title commits (`anchors/ps4/nhl17/savefiles/RosterCustom0/DATA`) decodes through the
+# committed production PS4 codec and its directory is COMPARED with the main anchor's as a separate
+# measurement (`max_records` equal on all eight tables; populations equal); that
+# comparison is recorded in each capacity note and is not the source of any figure.
+#
+# Semantics are measured on this anchor by the named cases in
+# `crates/tdb-canonical/src/target_ps4_tests.rs` (module `nhl17_ps4`), with expected labels taken from EA's
+# metadata names and declared foreign keys — never from the enum or probe under test. Handedness
+# stays blocked (no independently supported label exists here), the main-team parent table stays a
+# candidate (containment plus a name is not a foreign key), and `team.name` is mapped to the field EA names `teamname` (`kOtt.AUsv`).
+#
+# The mapped set is a representative sample over the roster core and the team table; the unmapped
+# remainder is a recorded gap, never an implied identity mapping. Adding this file does not make the
+# target complete, supported or game-verified.
+#
+# Rules this file is validated against (crates/tdb-canonical): see the head of
+# defs/adapters/nhl15-xbox360.toml — identical contract, `target-adapter/2`.
+#
+# Confidence, per fact:
+#   measured — read directly out of committed evidence (the schema snapshot, an audit's table, a
+#              matrix row for `ps4,nhl17`, a named case that lists this anchor or this fixture);
+#   derived  — a measured fact on other material plus a stated argument that it carries here;
+#   asserted — recorded from repository source/prose with a citation, not independently measured.
+
+schema = "target-adapter/2"
+adapter_version = 2
+canonical_schema_version = 1
+target = "nhl17-ps4"
+generation = "gen8"
+endian = "little"
+tdb_version = 6
+physical_snapshot = "docs/audits/data/schema/ps4-nhl17.json"
+
+# 118 tables / 3180 fields exist in the snapshot; 10 physical fields are mapped here (the three
+# birth-date components count individually). The field total is read from this target's own
+# snapshot.
+[coverage_declared]
+tables_total = 118
+fields_total = 3180
+fields_mapped = 10
+note = "Representative sample over the roster core and the team table. The unmapped remainder is UNKNOWN, not identity-mapped."
+
+# --------------------------------------------------------------------------------------------
+# Target tables. Every `table` reference in this file must resolve here.
+# --------------------------------------------------------------------------------------------
+
+[[table]]
+id = "ubPc"
+name = "exhibitionplayerbiotable"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc"]
+
+[[table]]
+id = "ZBac"
+name = "exhibitionplayers"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ZBac"]
+
+[[table]]
+id = "eGlu"
+name = "exhibitionrostertable"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#eGlu"]
+
+[[table]]
+id = "kOtt"
+name = "exhibitionteams"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#kOtt"]
+
+[[table]]
+id = "dSvy"
+name = "exhibitionskaterai"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#dSvy"]
+
+[[table]]
+id = "xmja"
+name = "exhibitionskaterequipment"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#xmja"]
+
+[[table]]
+id = "mHuy"
+name = "exhibitiongoalieai"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#mHuy"]
+
+[[table]]
+id = "fMVl"
+name = "exhibitiongoalieequipment"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#fMVl"]
+
+# --------------------------------------------------------------------------------------------
+# Mappings.
+# --------------------------------------------------------------------------------------------
+
+# --- names: inline fixed-width text, NOT a string pool -----------------------------------------
+# The snapshot records `kind_code = 0` / `meta_type = "string"` with a byte-aligned width, and
+# `tdb_core::TdbFile::read_inline_str` / `set_inline_str` implement exactly that: a fixed-width,
+# NUL-padded, byte-budgeted field inside the record.
+
+[[mapping]]
+canonical = "player.first_name"
+table = "ubPc"
+field = "HdeP"
+read_transform = "inline-string"
+write_transform = "inline-string"
+inverse_verified = false
+confidence = "measured"
+qualification = "implemented"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17,inline-string",
+]
+note = "Identified by the field's metadata name `firstname` on `exhibitionplayerbiotable`, measured in this snapshot. The inline-string codec round-trips on THIS anchor (mutation-matrix row `ps4,nhl17,inline-string,BGwe,vIys`), but no named case exercises this field, so inverse_verified stays false. The record is little-endian on this platform; an inline string is a byte sequence and its bytes are not reordered."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.HdeP"]
+[mapping.storage.value]
+kind = "inline-string"
+bit_offset = 416
+bit_width = 200
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; it runs its matrix over both endiannesses by anchor kind, and mutation-matrix.csv carries 5 rows for `ps4,nhl17` (boolean, unsigned, signed-twos-complement, neg1-sentinel, inline-string), so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.HdeP (kind_code = 0, meta_type = string)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+[mapping.transform.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "200 bits = a 25-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.value]
+storage = "inline-fixed"
+byte_capacity = 25
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block (196 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+[[mapping]]
+canonical = "player.last_name"
+table = "ubPc"
+field = "QbMR"
+read_transform = "inline-string"
+write_transform = "inline-string"
+inverse_verified = false
+confidence = "measured"
+qualification = "implemented"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17,inline-string",
+]
+note = "Identified by the field's metadata name `lastname` on `exhibitionplayerbiotable`, measured in this snapshot. The inline-string codec round-trips on THIS anchor (mutation-matrix row `ps4,nhl17,inline-string,BGwe,vIys`), but no named case exercises this field, so inverse_verified stays false. The record is little-endian on this platform; an inline string is a byte sequence and its bytes are not reordered."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.QbMR"]
+[mapping.storage.value]
+kind = "inline-string"
+bit_offset = 616
+bit_width = 200
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; it runs its matrix over both endiannesses by anchor kind, and mutation-matrix.csv carries 5 rows for `ps4,nhl17` (boolean, unsigned, signed-twos-complement, neg1-sentinel, inline-string), so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.QbMR (kind_code = 0, meta_type = string)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+[mapping.transform.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "200 bits = a 25-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.value]
+storage = "inline-fixed"
+byte_capacity = 25
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block (196 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --- birth date: one canonical value over three target fields ----------------------------------
+# MEASURED ON THIS TARGET. `studio_domain::birthdate_encoding::nhl11_through_21_probe_zero_indexed`
+# lists `anchors/ps4/nhl17/databases/nhl_game.db` by path among the anchors it probes as 0-indexed, and the
+# C0-REG4 case reads the stored value ranges of the three components directly on this anchor
+# (months 0..=11, days 0..=30), so the index origin is a measured fact about this exact file, not a
+# range claim and not a carry from a gen7 title.
+
+[[mapping]]
+canonical = "player.birth_date"
+table = "ubPc"
+read_transform = "index-origin-0"
+write_transform = "index-origin-0"
+inverse_verified = true
+confidence = "measured"
+qualification = "automated-tested"
+automated_case = "studio_domain::birthdate_encoding::nhl11_through_21_probe_zero_indexed"
+provenance = [
+  "crates/studio-domain/tests/birthdate_encoding.rs#nhl11_through_21_probe_zero_indexed",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::birth_date_month_and_day_are_stored_zero_origin_on_this_anchor",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.qFnd",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.JKLp",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.Kswi",
+]
+note = "Month/day are 0-indexed on this anchor (probed from stored values by the named case, which names this file, and measured again by the C0-REG4 case as stored ranges month 0..=11 / day 0..=30), so canonical (1-indexed) maps with a -1 on write and +1 on read. EA's metadata on this anchor declares month 0..11 / day 0..30; a declared range is consistent with a 0-origin store but is not the measurement — the convention is PROBED from stored values, never assumed from the metadata. The year field is a raw 8-bit count (stored 39..100 on this anchor) and is not index-shifted; the index-origin transform applies to the month and day components. NOTE the component offsets are read from THIS snapshot (day 1431, month 1468, year 864); neighbouring titles differ."
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "crates/studio-domain/tests/birthdate_encoding.rs#nhl11_through_21_probe_zero_indexed",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::birth_date_month_and_day_are_stored_zero_origin_on_this_anchor",
+]
+[mapping.transform.value]
+kind = "index-origin"
+index_origin = 0
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.qFnd",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.JKLp",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.Kswi",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for all three component fields. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; it runs its matrix over both endiannesses by anchor kind, and mutation-matrix.csv carries 5 rows for `ps4,nhl17` (boolean, unsigned, signed-twos-complement, neg1-sentinel, inline-string), so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: none of these fields is in a structural class, so `structural = false`. NOT ESTABLISHED: the named case probes the stored index origin; it does not perform an edit on these fields, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block (196 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+[[mapping.component]]
+role = "year"
+field = "qFnd"
+[mapping.component.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.qFnd"]
+[mapping.component.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 864
+bit_width = 8
+signedness = "unsigned"
+range_low = 0
+range_high = 255
+endian = "little"
+
+[[mapping.component]]
+role = "month"
+field = "JKLp"
+[mapping.component.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.JKLp"]
+[mapping.component.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 1468
+bit_width = 4
+signedness = "unsigned"
+range_low = 0
+range_high = 11
+endian = "little"
+
+[[mapping.component]]
+role = "day"
+field = "Kswi"
+[mapping.component.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.Kswi"]
+[mapping.component.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 1431
+bit_width = 5
+signedness = "unsigned"
+range_low = 0
+range_high = 30
+endian = "little"
+
+# --- handedness: identity and layout measured; stored-code meaning NOT established here ---------
+# `defs/enums/handedness.toml` states its anchor as "NHL Legacy default.db" — a file that is not in
+# this repository and, for this adapter, a different title on a different platform and generation. A
+# code assignment confirmed on another file is a candidate here however well the field ids and widths
+# match; no named case confirms the codes against the committed NHL 17 PlayStation 4 anchor. The
+# observed histogram on this anchor is recorded in the candidate note as counts and nothing more.
+
+[[mapping]]
+canonical = "player.shoots"
+table = "ubPc"
+field = "GRkp"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.GRkp"]
+note = "BLOCKER: the handedness stored codes are not established for this target by evidence in this repository. The snapshot measures that `ubPc.GRkp` exists, is named `handedness` and is 1 bit wide with a declared range of 0..1. Which code means `left` is recorded only in `defs/enums/handedness.toml`, whose anchor is a file (`NHL Legacy default.db`) not committed here."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.GRkp"]
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 1472
+bit_width = 1
+signedness = "unsigned"
+range_low = 0
+range_high = 1
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.GRkp",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; it runs its matrix over both endiannesses by anchor kind, and mutation-matrix.csv carries 5 rows for `ps4,nhl17` (boolean, unsigned, signed-twos-complement, neg1-sentinel, inline-string), so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "unknown"
+note = "Unusable while the stored codes are not established on this target."
+[mapping.transform.candidate]
+confidence = "asserted"
+provenance = ["defs/enums/handedness.toml"]
+note = "PROPOSED, NOT OPERATIVE. Promotes together with the enumeration."
+[mapping.transform.candidate.value]
+kind = "enum-code"
+
+[mapping.enumeration]
+state = "unknown"
+note = "The stored codes for handedness are not established on this target by committed evidence."
+[mapping.enumeration.candidate]
+confidence = "asserted"
+provenance = [
+  "defs/enums/handedness.toml#entries",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::handedness_histogram_is_recorded_but_no_label_is_established",
+]
+note = "PROPOSED, NOT OPERATIVE. Operator-confirmed 0=Left / 1=Right against a 22-player anchor set on an `NHL Legacy default.db` (21/22 match) — a file that is not in this repository. OBSERVED on this anchor (C0-REG4, case `nhl17_ps4::handedness_histogram_is_recorded_but_no_label_is_established`): the stored histogram is {0: 4031, 1: 2097}. Those are counts and nothing more — they do not show which code is `left`, and no enum file reports counts for this title to compare with. To promote this, confirm the code against a named player on `anchors/ps4/nhl17/databases/nhl_game.db` whose hand is supported by evidence independent of this enum — none is held in this repository."
+[mapping.enumeration.candidate.value]
+[[mapping.enumeration.candidate.value.entry]]
+code = 0
+canonical = "left"
+[[mapping.enumeration.candidate.value.entry]]
+code = 1
+canonical = "right"
+
+[mapping.null_sentinel]
+state = "unknown"
+note = "Whether this target can encode `absent` for handedness is not established. Export blocks rather than assuming every stored 0 is a genuine left shot."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.GRkp"]
+note = "PROPOSED, NOT OPERATIVE. The field is 1 bit with a declared range of 0..1 and the vocabulary has two values, so no code is left spare. A declared range alone cannot show the game carries no separate absence signal."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block (196 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --- ratings: the skater companion's 7-bit cells — the stored value IS the rating ---------------
+# MEASURED on this anchor (C0-REG4): `dSvy.eWUF` (`c_overall`) and `dSvy.AdEb` (`c_speed`) are 7 bits
+# wide with declared range 0..99; the gen7 6-bit/offset-36 regime is a different storage class and
+# was not carried here. The goalie companion `mHuy` also carries `c_overall`; it is not mapped.
+
+[[mapping]]
+canonical = "player.rating_overall"
+table = "dSvy"
+field = "eWUF"
+read_transform = "identity"
+write_transform = "identity"
+inverse_verified = false
+confidence = "derived"
+qualification = "implemented"
+automated_case = "studio_domain::ratings_write_codec"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/tests/ratings_write_codec.rs#ratings_write_is_inverse_of_read_ps4_direct",
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy.eWUF",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::seven_bit_ratings_store_the_human_value_directly_on_this_anchor",
+]
+note = "That `dSvy.eWUF` is the stored overall rating is DERIVED from the field's EA metadata name `c_overall` in this snapshot (the PS4 skater block names its ratings `c_*`). The field is 7 bits with a declared range of 0..99 and stores 36..99 on this anchor (measured, C0-REG4): the stored value IS the rating, with no offset — the gen7 6-bit/offset-36 regime does not apply here and was not carried here. The named case `ratings_write_is_inverse_of_read_ps4_direct` ran on nhl15/ps4, not on this target, and reads a skater's first rating cell rather than this field specifically, so the mapping is `implemented`, not `automated-tested`, and `inverse_verified` stays false: an identity write is its own inverse by definition, but no case has written this field on this anchor. The human range 0..99 is DERIVED by the validator from the identity transform and the storage range — it is never declared."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#dSvy.eWUF"]
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 64
+bit_width = 7
+signedness = "unsigned"
+range_low = 0
+range_high = 99
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy.eWUF",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; it runs its matrix over both endiannesses by anchor kind, and mutation-matrix.csv carries 5 rows for `ps4,nhl17` (boolean, unsigned, signed-twos-complement, neg1-sentinel, inline-string), so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/src/attributes.rs#rating_offset",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::seven_bit_ratings_store_the_human_value_directly_on_this_anchor",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the field is 7-bit with declared range 0..99 (see [mapping.storage]), and the stored values on this anchor span 36..99 — a stored 99 could not be a 6-bit code and a maximum of 99 leaves no room for a positive offset (C0-REG4 case). (2) MEASURED on this target: the snapshot records generation = gen8, endian = little and db = nhl_game.db — this is a PlayStation 4 database, not a gen7 `nhlng.db`. (3) ESTABLISHED and applicable to this target BY PLATFORM: the ratings-write-codec audit's regime table carries a `PS4 7-bit (value is the rating) | 0..99 | 0` row, naming the platform this target is on, and the engine classifies a `dSvy` rating field with declared range (0, 99) to offset 0 (`attributes::rating_offset`), a rule of the field's own metadata rather than of a title list. CONCLUSION: the transform is the identity — the stored value is the human rating — and the write is trivially its inverse. NOT ESTABLISHED: any write on this anchor: the named case `ratings_write_codec.rs` ran the PS4 regime on nhl15/ps4, not on this target, which is why this is derived and not measured."
+[mapping.transform.value]
+kind = "identity"
+
+[mapping.null_sentinel]
+state = "unknown"
+note = "Whether any stored code on this field is reserved for `absent` is not established on this target."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#dSvy.eWUF"]
+note = "PROPOSED, NOT OPERATIVE. The declared range 0..99 has no gap, and the smallest value stored on this anchor is 36, so no stored code is observed doing sentinel duty. To promote this, show that a stored 0 on this anchor is a real rating rather than an unrated marker — no row stores one."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy.wBIz",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.vjla",
+]
+note = "MEASURED on this anchor (C0-REG4): the bio rows that own a `dSvy` row (one each, keyed by `wBIz`) are exactly the 5527 rows whose position code is in {0, 1, 2, 3}; the 601 rows with code 4 own none. `dSvy` is labelled a skater table by its EA metadata name `exhibitionskaterai`. Established together with [position_discriminator]."
+[mapping.applicability.value]
+kind = "target-predicate"
+table = "ubPc"
+field = "vjla"
+codes = [0, 1, 2, 3]
+
+[[mapping]]
+canonical = "player.rating_speed"
+table = "dSvy"
+field = "AdEb"
+read_transform = "identity"
+write_transform = "identity"
+inverse_verified = false
+confidence = "derived"
+qualification = "implemented"
+automated_case = "studio_domain::ratings_write_codec"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/tests/ratings_write_codec.rs#ratings_write_is_inverse_of_read_ps4_direct",
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy.AdEb",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::seven_bit_ratings_store_the_human_value_directly_on_this_anchor",
+]
+note = "That `dSvy.AdEb` is the stored speed rating is DERIVED from the field's EA metadata name `c_speed` in this snapshot (the PS4 skater block names its ratings `c_*`). The field is 7 bits with a declared range of 0..99 and stores 52..99 on this anchor (measured, C0-REG4): the stored value IS the rating, with no offset — the gen7 6-bit/offset-36 regime does not apply here and was not carried here. The named case `ratings_write_is_inverse_of_read_ps4_direct` ran on nhl15/ps4, not on this target, and reads a skater's first rating cell rather than this field specifically, so the mapping is `implemented`, not `automated-tested`, and `inverse_verified` stays false: an identity write is its own inverse by definition, but no case has written this field on this anchor. The human range 0..99 is DERIVED by the validator from the identity transform and the storage range — it is never declared."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#dSvy.AdEb"]
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 235
+bit_width = 7
+signedness = "unsigned"
+range_low = 0
+range_high = 99
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy.AdEb",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; it runs its matrix over both endiannesses by anchor kind, and mutation-matrix.csv carries 5 rows for `ps4,nhl17` (boolean, unsigned, signed-twos-complement, neg1-sentinel, inline-string), so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/src/attributes.rs#rating_offset",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::seven_bit_ratings_store_the_human_value_directly_on_this_anchor",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the field is 7-bit with declared range 0..99 (see [mapping.storage]), and the stored values on this anchor span 52..99 — a stored 99 could not be a 6-bit code and a maximum of 99 leaves no room for a positive offset (C0-REG4 case). (2) MEASURED on this target: the snapshot records generation = gen8, endian = little and db = nhl_game.db — this is a PlayStation 4 database, not a gen7 `nhlng.db`. (3) ESTABLISHED and applicable to this target BY PLATFORM: the ratings-write-codec audit's regime table carries a `PS4 7-bit (value is the rating) | 0..99 | 0` row, naming the platform this target is on, and the engine classifies a `dSvy` rating field with declared range (0, 99) to offset 0 (`attributes::rating_offset`), a rule of the field's own metadata rather than of a title list. CONCLUSION: the transform is the identity — the stored value is the human rating — and the write is trivially its inverse. NOT ESTABLISHED: any write on this anchor: the named case `ratings_write_codec.rs` ran the PS4 regime on nhl15/ps4, not on this target, which is why this is derived and not measured."
+[mapping.transform.value]
+kind = "identity"
+
+[mapping.null_sentinel]
+state = "unknown"
+note = "Whether any stored code on this field is reserved for `absent` is not established on this target."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#dSvy.AdEb"]
+note = "PROPOSED, NOT OPERATIVE. The declared range 0..99 has no gap, and the smallest value stored on this anchor is 52, so no stored code is observed doing sentinel duty. To promote this, show that a stored 0 on this anchor is a real rating rather than an unrated marker — no row stores one."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy.wBIz",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.vjla",
+]
+note = "MEASURED on this anchor (C0-REG4): the bio rows that own a `dSvy` row (one each, keyed by `wBIz`) are exactly the 5527 rows whose position code is in {0, 1, 2, 3}; the 601 rows with code 4 own none. `dSvy` is labelled a skater table by its EA metadata name `exhibitionskaterai`. Established together with [position_discriminator]."
+[mapping.applicability.value]
+kind = "target-predicate"
+table = "ubPc"
+field = "vjla"
+codes = [0, 1, 2, 3]
+
+# --- main team: identity, bit layout, ENCODING and ABSENCE CODE measured; parent NOT established ---
+# C0-REG4: the named case walks the roster graph through the metadata-declared foreign key
+# `eGlu.XSWT -> exhibitionplayers` and the `playerid` join, and compares every rostered player's slot
+# team code with its bio row: all 5882 store slot team + 1 (exactly one of their slots), none stores 0,
+# 246 of the 246 un-rostered players store 0, and the all-ones pattern is stored nowhere.
+# The field is 8 bits wide on this title (declared -1..254); the width and offset are this snapshot's, not a
+# gen7 title's. What that leaves open is the parent: the field is named `team` and the rostered codes
+# are contained in `kOtt.vfEq`, and by the contract that is a candidate, not a foreign key. The
+# mapping is blocked on it.
+
+[[mapping]]
+canonical = "player.team"
+table = "ubPc"
+field = "dXSB"
+read_transform = "index-origin-0"
+write_transform = "index-origin-0"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.dXSB",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_is_stored_only_on_unrostered_players",
+]
+note = "BLOCKER: the parent table this pointer indexes is not established for this target (see [mapping.foreign_key]). MEASURED (C0-REG4): `ubPc.dXSB` exists, is named `team`, is laid out at offset 80 / width 8 / declared range -1..254, stores the roster slot's team code + 1 for every one of the 5882 rostered players and 0 for 246 of the 246 un-rostered ones. A canonical `player.team` is a reference to a team entity; until the parent is established, that reference cannot be resolved operatively, so the mapping stays blocked. No edit through this field is exercised by any named case, so `inverse_verified` stays false."
+
+[mapping.storage]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.dXSB",
+  "docs/formats/tdb-v6-format.md#field-descriptor-16-bytes--corrected (offset-binary exception, verified 2026-07-02)",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_is_stored_only_on_unrostered_players",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records bit offset 80, width 8 and a declared range of -1..254 for this field. (2) MEASURED on this anchor by the named case: the bit pattern 0 is stored on 246 un-rostered players and on no rostered one; every rostered player stores its roster slot's team code + 1; the all-ones pattern is stored on none of 6128 rows. (3) ESTABLISHED and naming this field: the TDB v6 format record's verified offset-binary exception states that the `+1, raw 0 = none` convention on `[-1..N]` reference fields — `dXSB` among them — is `raw = value - range_low`; the record is little-endian on this platform, which changes byte order within the record and not the bit-field's value regime. CONCLUSION: this field is offset-binary: decoded value = raw + range_low = raw - 1, so pattern 0 decodes to -1 and pattern k decodes to team code k - 1, which is exactly what premise (2) observes. NOT `neg1-sentinel`: under that regime absence would be the all-ones pattern, which this anchor never stores, while pattern 0 would decode to team 0 — contradicting the 246 rows. NOT ESTABLISHED: what the game does with the all-ones pattern (decoded 254), which is unobserved."
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 80
+bit_width = 8
+signedness = "offset-binary"
+range_low = -1
+range_high = 254
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.dXSB",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; it runs its matrix over both endiannesses by anchor kind, and mutation-matrix.csv carries 5 rows for `ps4,nhl17` (boolean, unsigned, signed-twos-complement, neg1-sentinel, inline-string), so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_is_stored_only_on_unrostered_players",
+  "docs/audits/data/schema/ps4-nhl17.json#eGlu.XSWT (fk_parent = exhibitionplayers)",
+  "docs/audits/data/schema/ps4-nhl17.json#ZBac.ykFq (playerid)",
+]
+note = "MEASURED on this anchor (C0-REG4): the stored bit pattern is the roster slot's team code + 1. For each of the 5882 rostered players exactly one of its roster slots (reached through the metadata-declared `eGlu.XSWT -> exhibitionplayers` key and the `playerid` join) carries `team == pattern - 1`. `same` = 4: 4 rostered players also hold a slot whose team code equals the pattern as-is, always alongside the unique `pattern - 1` slot (adjacent team codes). Expressed over the offset-binary DECODED value of [mapping.storage] (pattern - 1), the first team index is 0, hence `index-origin-0`; the +1 lives in the storage decode, not here, so the two blocks are applied once each and never double-shift. The runtime probe's expected label was NOT used: the case compares bytes with bytes."
+[mapping.transform.value]
+kind = "index-origin"
+index_origin = 0
+
+[mapping.null_sentinel]
+state = "established"
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_is_stored_only_on_unrostered_players",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.dXSB",
+]
+note = "MEASURED on this anchor (C0-REG4): pattern 0 is stored on 246 bio rows, every one of which owns no roster slot; no rostered row stores it; and the all-ones pattern is stored on none of the 6128 rows. `raw` is the unsigned STORED BIT PATTERN (contract units for `literal-code` since C0-REG1a-R2): the pattern of 8 zero bits. The sentinel is matched on stored bits BEFORE the offset-binary decode of [mapping.storage] runs, so that decode (which would read pattern 0 as -1 = `range_low`) is never applied to an absent value. NOT ESTABLISHED: what the game would do with an all-ones pattern, which is unobserved."
+[mapping.null_sentinel.value]
+encoding = "literal-code"
+raw = 0
+canonical_meaning = "absent"
+
+[mapping.foreign_key]
+state = "unknown"
+note = "Nothing in the repository establishes the parent this bio-table field points at. The roster-relationships audit that names `eGlu.dXSB -> kOtt.vfEq` was verified over nhl11 -> legacy `nhlng.db` and does not cover this platform."
+[mapping.foreign_key.candidate]
+confidence = "asserted"
+provenance = [
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_is_stored_only_on_unrostered_players",
+  "docs/audits/data/schema/ps4-nhl17.json#kOtt.vfEq",
+]
+note = "PROPOSED, NOT OPERATIVE. OBSERVED on this anchor (C0-REG4, case `nhl17_ps4::main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_is_stored_only_on_unrostered_players`): `ubPc.dXSB - 1` equals a roster slot's team code for every rostered player, and every such code is contained in the `kOtt.vfEq` key set (256 keys); EA's metadata declares no foreign key on either `dXSB`, and `kOtt.vfEq` is 9 bits wide here (largest key 399). Containment plus the name `team` is evidence FOR this parent and is not proof of it, so the parent stays a candidate. `index_origin` is stated over the offset-binary DECODED value (decoded 0 = `vfEq` 0), consistent with [mapping.transform]. To promote this, an independent witness is needed — for example a metadata declaration, or a controlled edit whose effect is observed on the team the code names."
+[mapping.foreign_key.candidate.value]
+parent_table = "kOtt"
+parent_key_field = "vfEq"
+declaration = "implicit-by-name"
+index_origin = 0
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block (196 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --- team name: inline fixed-width text on the team table --------------------------------------
+# Identification is DERIVED from the field's metadata name `teamname` on `exhibitionteams`. The
+# storage, codec and byte budget are measured in this snapshot (offset 1512, 320 bits = 40 bytes on
+# this target; the field id, width and offset all differ across the PS4 titles and from gen7).
+
+[[mapping]]
+canonical = "team.name"
+table = "kOtt"
+field = "AUsv"
+read_transform = "inline-string"
+write_transform = "inline-string"
+inverse_verified = true
+confidence = "derived"
+qualification = "automated-tested"
+automated_case = "tdb_canonical::target_ps4_tests::nhl17_ps4::team_name_edit_round_trips_on_a_disposable_copy"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#kOtt.AUsv",
+  "crates/studio-domain/src/view.rs#team_name_source (reads `fullname`; absent on this target — finding)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "docs/audits/data/mutation-matrix.csv#ps4,nhl17,inline-string",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::team_name_edit_round_trips_on_a_disposable_copy",
+]
+note = "SEMANTICS DERIVED, LAYOUT MEASURED, BEHAVIOUR AUTOMATED-TESTED. That `kOtt.AUsv` is the club's name rests on its metadata name `teamname` (measured here); this team table has NO field named `fullname`. FINDING, not repaired here: the engine's `team_name_source` (`crates/studio-domain/src/view.rs`, at HEAD) resolves a team's display name by the descriptor named `fullname` and reads an empty string where that descriptor is absent, so the engine does NOT read this field on this target today. `nickname` (cXHn) stores byte-identical text on records 0 and 1 of this anchor (`Anaheim Ducks®` / `Winnipeg Jets™`) and `cityname` (bhQD), `artabbr` (rbPR), `abbrname` (xsnn) also exist; none is mapped. The canonical model carries one name and the choice of the field EA names `teamname` is a modelling decision recorded here, not an evidence fact. The named case (C0-REG4) reads the vanilla value of record 0 (`Anaheim Ducks®`), overwrites it through `tdb_core::set_inline_str` on an in-memory copy, recomputes the CRC scopes, reopens and reads it back, shows that only the field span and one CRC word changed, that a second no-op serialization is byte-identical, and that a 41-byte value is refused with nothing written. It exercises THIS field on THIS little-endian anchor and nothing else: no UI path, no save container, no runtime acceptance."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#kOtt.AUsv"]
+[mapping.storage.value]
+kind = "inline-string"
+bit_offset = 1512
+bit_width = 320
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#kOtt.AUsv",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::team_name_edit_round_trips_on_a_disposable_copy",
+]
+note = "MEASURED (C0-REG4): the snapshot records key = false and updatable = true for this field, and the named case writes it as a scalar on an in-memory copy of this anchor and reopens the result with every other byte of every record unchanged."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#kOtt.AUsv (kind_code = 0, meta_type = string)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+[mapping.transform.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl17.json#kOtt.AUsv",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "320 bits = a 40-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.value]
+storage = "inline-fixed"
+byte_capacity = 40
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl17.json#kOtt.record_len_bytes"]
+note = "The table is a fixed-width record block (280 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --------------------------------------------------------------------------------------------
+# Capacity. The GEN8 (PS4) main DB is NOT packed: `nhl_game.db` carries `max_records > current_records`
+# on the seven roster-bearing tables (measured in this snapshot), so the main anchor's own directory
+# exposes a ceiling and every figure below is read from THIS target's committed main anchor
+# (`anchors/ps4/nhl17/databases/nhl_game.db`, sha256 de48b02b…) with `source = "main-db-max-records"` — the OBSERVED
+# DIRECTORY CAPACITY of one file, not a demonstrated runtime limit. A main-DB capacity is NOT a save
+# capacity: the ROSTER save's own directory is a separate measurement, and each note below says
+# whether that measurement was possible on this target's committed fixture (decoded through the
+# committed codec, blocked because the codec does not decode it, or missing because no ROSTER fixture
+# is committed). Nothing here is carried from the roster-capacity audit's table or from another title.
+# --------------------------------------------------------------------------------------------
+
+[[capacity]]
+table = "ubPc"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `ubPc` holds `max_records = 9428` and `current_records = 6128`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 9428
+population_records = 6128
+source = "main-db-max-records"
+
+[[capacity]]
+table = "ZBac"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#ZBac",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `ZBac` holds `max_records = 10935` and `current_records = 6701`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 10935
+population_records = 6701
+source = "main-db-max-records"
+
+[[capacity]]
+table = "eGlu"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#eGlu",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `eGlu` holds `max_records = 11714` and `current_records = 6430`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 11714
+population_records = 6430
+source = "main-db-max-records"
+
+[[capacity]]
+table = "kOtt"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#kOtt",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `kOtt` holds `max_records = 256` and `current_records = 256`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. This table is PACKED in the main anchor (`max_records == current_records`), so the figure carries NO headroom and nothing here shows the game can carry one more row. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 256
+population_records = 256
+source = "main-db-max-records"
+
+[[capacity]]
+table = "dSvy"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `dSvy` holds `max_records = 8236` and `current_records = 5527`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 8236
+population_records = 5527
+source = "main-db-max-records"
+
+[[capacity]]
+table = "xmja"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#xmja",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `xmja` holds `max_records = 8236` and `current_records = 5527`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 8236
+population_records = 5527
+source = "main-db-max-records"
+
+[[capacity]]
+table = "mHuy"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#mHuy",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `mHuy` holds `max_records = 1192` and `current_records = 601`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 1192
+population_records = 601
+source = "main-db-max-records"
+
+[[capacity]]
+table = "fMVl"
+[capacity.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "anchors/ps4/nhl17/databases/nhl_game.db",
+  "docs/audits/data/schema/ps4-nhl17.json#fMVl",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::capacities_are_the_directory_of_the_committed_main_anchor",
+  "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor",
+  "docs/audits/data/save-matrix.csv#ps4,nhl17,savefiles",
+]
+note = "MEASURED on the committed PlayStation 4 NHL 17 main anchor `anchors/ps4/nhl17/databases/nhl_game.db` (sha256 de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff; little-endian TDB v6, 118 tables, header CRC and size valid): the directory of `fMVl` holds `max_records = 1192` and `current_records = 601`. `ceiling_records` is that file's `max_records`: the observed directory capacity of this one file, not a demonstrated runtime limit. `population_records` is that file's `current_records`. SAVE CROSS-CHECK (separate measurement, not the source of this figure): the committed ROSTER fixture `anchors/ps4/nhl17/savefiles/RosterCustom0/DATA` (sha256 70143a1d…, 1448394 bytes) decodes through the committed production PS4 codec (`ps4_extract_roster`, LZ4 frame) to a little-endian TDB of 5603080 bytes (sha256 a4038e0f…, 48 tables, header CRC valid, `size_ok` FALSE — a re-serialized, not pristine, file); in that save this table's `max_records` EQUALS the main anchor's and every table's `current_records` equals the main anchor's (case `nhl17_ps4::the_roster_fixture_decodes_through_the_committed_ps4_codec_and_its_directory_is_compared_with_the_main_anchor`; save-matrix.csv row `ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip`). That the two directories agree is an observation about these two files; this main-DB figure is NOT a substitute for the save's own figure, which the case records and this block does not."
+[capacity.declared.value]
+ceiling_records = 1192
+population_records = 601
+source = "main-db-max-records"
+
+# --------------------------------------------------------------------------------------------
+# Companion / cardinality. A Player is the `ubPc` bio row plus companion rows that SHARE its primary
+# key `wBIz` (measured: `wBIz` — named `game_id` on this platform — is the key field on ubPc and on all
+# four companions in this snapshot, 16 bits wide). MEASURED on this anchor (C0-REG4): each
+# companion table holds one row per key, every key resolves to a bio row, the two tables EA names
+# `exhibitionskater*` hold exactly the same 5527 players, the two it names `exhibitiongoalie*` hold
+# exactly the same 601, the sets are disjoint and together cover all 6128 bio rows. The
+# roster-relationships audit (verified over nhl11 -> legacy `nhlng.db`) does not cover this platform
+# and is not cited; operation-matrix.csv carries create/clone/delete rows for `ps4,nhl17` as
+# corroboration only.
+# --------------------------------------------------------------------------------------------
+
+[[companion_rule]]
+primary_table = "ubPc"
+[companion_rule.declared]
+state = "established"
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy (exhibitionskaterai)",
+  "docs/audits/data/schema/ps4-nhl17.json#xmja (exhibitionskaterequipment)",
+  "docs/audits/data/schema/ps4-nhl17.json#mHuy (exhibitiongoalieai)",
+  "docs/audits/data/schema/ps4-nhl17.json#fMVl (exhibitiongoalieequipment)",
+  "docs/audits/data/operation-matrix.csv#ps4,nhl17",
+]
+note = "MEASURED on this anchor by the named case (C0-REG4); the skater/goalie label of each companion is EA's metadata table name, not an enum file. One-to-one: 5527 distinct keys in dSvy and in xmja, 601 in mHuy and in fMVl, none duplicated, all resolving to a bio row. operation-matrix.csv (create-skater / create-goalie / clone / delete on `ps4,nhl17`) is retained as corroboration; the roster-relationships audit was verified on gen7 anchors only and is not relied on here."
+[companion_rule.declared.value]
+shared_key_field = "wBIz"
+[[companion_rule.declared.value.companion]]
+table = "dSvy"
+cardinality = "one-to-one"
+applies_when = "position-skater"
+[[companion_rule.declared.value.companion]]
+table = "xmja"
+cardinality = "one-to-one"
+applies_when = "position-skater"
+[[companion_rule.declared.value.companion]]
+table = "mHuy"
+cardinality = "one-to-one"
+applies_when = "position-goalie"
+[[companion_rule.declared.value.companion]]
+table = "fMVl"
+cardinality = "one-to-one"
+applies_when = "position-goalie"
+
+# The 3-bit width and 0..7 range are measured in the snapshot. The code ASSIGNMENT is MEASURED on
+# this anchor (C0-REG4): the 601 bio rows that own rows in the metadata-named goalie companion
+# tables all store 4 and nothing else; the 5527 that own skater companion rows store exactly
+# {0, 1, 2, 3} (1312 / 1144 / 1080 / 1991); no row is unassigned. `defs/enums/position.toml` (an uncommitted
+# `NHL Legacy default.db`, five named players) was NOT the source of the expected labels — EA's
+# metadata table names were — and it agrees. What 0..3 mean individually is NOT established here.
+[position_discriminator]
+state = "established"
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl17_ps4::position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
+  "docs/audits/data/schema/ps4-nhl17.json#ubPc.vjla",
+  "docs/audits/data/schema/ps4-nhl17.json#mHuy (exhibitiongoalieai)",
+  "docs/audits/data/schema/ps4-nhl17.json#dSvy (exhibitionskaterai)",
+]
+note = "MEASURED on this anchor: goalie code {4} and skater codes {0, 1, 2, 3} partition the 6128 bio rows exactly as ownership of a row in the EA-named goalie / skater companion tables does. Codes 5..7 of the 3-bit field are stored on no row. The per-code labels of 0..3 (centre, wings, defence) are not established here and are not declared."
+[position_discriminator.value]
+table = "ubPc"
+field = "vjla"
+skater_codes = [0, 1, 2, 3]
+goalie_codes = [4]

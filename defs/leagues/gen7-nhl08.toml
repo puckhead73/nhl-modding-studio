@@ -1,0 +1,69 @@
+# NHL 08 (PS3 / Xbox 360). 3-bit league code with the old 1-bit conference / 3-bit division pair.
+name = "gen7-nhl08"
+description = "NHL 08 team league codes"
+applies_to = ["nhl08"]
+
+[schema]
+league_table = "kOtt"
+league_field = "xMjj"
+league_width = 3
+required_fields = ["kOtt.rasz"]
+forbidden_tables = ["fsLK"]
+
+[source]
+kind = "anchor-measurement"
+description = "L1.1-A cross-tab of kOtt.xMjj against member-team abbreviations, nhlng.db 587204c3...58b9"
+
+# Dictionary keys (LOC-W1, 2026-09-18): `dictionary_key` per code is a HYPOTHESIS — the key family
+# is present in this title's own `nhl_eng_us.db` (verified by hash-resolved lookup on both platform
+# anchors) and the same family is the traced table on NHL Legacy Xbox 360, but no executable of this
+# title was inspected. Codes without a key have no matching key in the dictionary.
+# P1.1-X (2026-09-18): the NHL 08 Xbox 360 executable has no pointer table; its keys are an ordered
+# literal block after FE::CLeagueIonAdapter (VA 0x82072dec) whose order matches codes 0-5 and whose keys
+# all resolve in the dictionary (by hash for AHL/ELITSERIEN/NATIONAL/CUSTOM TEAMS). The consuming code
+# path is untraced, so the binding stays a hypothesis (order-inferred), not traced.
+[[entries]]
+raw = 0
+label = "NHL"
+confidence = "candidate"
+evidence = "32 rows: ANA, ATL, BOS, BUF ..."
+dictionary_key = "NHL"
+key_evidence = "hypothesis"
+
+[[entries]]
+raw = 1
+label = "AHL"
+confidence = "candidate"
+evidence = "29 rows: ALB, BIN, BRP, CHA, GRR, HAM, HAR, HER ..."
+dictionary_key = "AHL"
+key_evidence = "hypothesis"
+
+[[entries]]
+raw = 2
+label = "Elitserien (Sweden)"
+confidence = "candidate"
+evidence = "12 rows: BIF, DIF, FBK, VF, HV, LHC, LHF, MOD ..."
+dictionary_key = "elitserien"
+key_evidence = "hypothesis"
+
+[[entries]]
+raw = 3
+label = "SM-liiga (Finland)"
+confidence = "candidate"
+evidence = "14 rows: ASS, BLU, IFK, HPK, ILV, JOK, JYP, KAL ..."
+dictionary_key = "SMLIIGA"
+key_evidence = "hypothesis"
+
+[[entries]]
+raw = 4
+label = "National Teams"
+confidence = "candidate"
+evidence = "21 rows: AUS, BEL, CAN, CZE, DEN, FIN, FRA, GER ..."
+dictionary_key = "NATIONAL"
+key_evidence = "hypothesis"
+
+[[entries]]
+raw = 5
+label = "Custom Teams"
+confidence = "candidate"
+evidence = "30 rows with empty abbreviations (create-a-team slots)"

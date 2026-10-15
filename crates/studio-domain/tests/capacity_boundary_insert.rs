@@ -20,7 +20,9 @@ use studio_domain::{EditSession, Platform, Project, ProjectRole};
 use tdb_core::TdbFile;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 struct Tmp(PathBuf);
@@ -64,10 +66,18 @@ fn boundary_insert_into_full_block_grows_and_reparses() {
     let (max0, cur0) = table_cap(sess.bytes(), "ubPc");
     let players0 = sess.model().unwrap().players.len();
     // GEN7 main db ships packed: the bio table is full, so the next insert must grow it.
-    assert_eq!(max0, cur0, "nhl14 GEN7 main db is packed (ubPc max == current)");
+    assert_eq!(
+        max0, cur0,
+        "nhl14 GEN7 main db is packed (ubPc max == current)"
+    );
 
     // A real team to place the new player on.
-    let team = sess.team_summaries().unwrap().first().expect("a team").team_id;
+    let team = sess
+        .team_summaries()
+        .unwrap()
+        .first()
+        .expect("a team")
+        .team_id;
 
     // Boundary-insert a new skater (position 1). This hits the grow-on-full branch.
     let (_wbiz, _outcome) = sess.create_player(team, 1).unwrap();
@@ -78,7 +88,11 @@ fn boundary_insert_into_full_block_grows_and_reparses() {
 
     // The grown, shifted db must re-parse into a coherent model with the new player present.
     let model = sess.model().unwrap();
-    assert_eq!(model.players.len(), players0 + 1, "the new player is in the model");
+    assert_eq!(
+        model.players.len(),
+        players0 + 1,
+        "the new player is in the model"
+    );
 
     // And the whole file stays structurally valid (audit runs over a full re-parse).
     assert!(sess.validate().is_ok(), "post-insert db validates");

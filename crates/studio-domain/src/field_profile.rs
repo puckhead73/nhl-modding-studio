@@ -30,12 +30,22 @@ pub enum CellControl {
     Field,
     /// A team foreign-key picker. `offset` is what the raw encodes (`raw - offset` = team id); only
     /// emitted for fields whose FK semantics are verified (see the builders).
-    Team { offset: u8, none_label: Option<String> },
+    Team {
+        offset: u8,
+        none_label: Option<String>,
+    },
     /// The home-arena picker (`kOtt.buDa → StEO`).
     Arena,
     /// A read-only derived value (cap hit, contract status, multi-year, archetype) with no single
     /// backing field to edit — `derived_display` holds the resolved text.
     Derived,
+    /// A team colour (Phase 2.1, C8 overnight 2026-09-20): either one packed 24-bit word
+    /// (`components` = the one field; `(r << 16) | (g << 8) | b` — measured: NHL 16's
+    /// `feprimarycolor_r/g/b` triple `dd 9b 26` for Boston is NHL 17–21's `feprimarycolor`
+    /// `0xdd9b26`, and NHL 15's `primarycolor` triple `ff ad 0f` is NHL 17's `presprimarycolor`
+    /// `0xffad0f`) or three byte fields (`components` = `_r`, `_g`, `_b`, NHL 11–15 / Legacy / PS4
+    /// 15–16). The UI edits the three components as **one** operation (`set_cells_int`).
+    Color,
 }
 
 /// One labelled cell of a curated section.
@@ -54,6 +64,9 @@ pub struct ProfileCell {
     /// When `Some`, this cell's value semantics are not yet ground-truthed for the loaded title —
     /// the UI shows the raw value plus this note (see [`crate::view`] Stage-4 probes).
     pub unverified: Option<String>,
+    /// `Color` cells: the fields that make up the colour, in order — one packed word, or `_r`,
+    /// `_g`, `_b`. Empty for every other control.
+    pub color_components: Vec<FieldView>,
 }
 
 /// A titled group of cells (Biographical, Roster, Contract, …).
@@ -72,18 +85,28 @@ pub struct EntityFieldProfile {
 impl EntityFieldProfile {
     fn push_section(&mut self, title: &str, cells: Vec<ProfileCell>) {
         if !cells.is_empty() {
-            self.sections.push(ProfileSection { title: title.to_string(), cells });
+            self.sections.push(ProfileSection {
+                title: title.to_string(),
+                cells,
+            });
         }
     }
 }
 
 /// Find a field by any of its candidate metadata names (first match wins, in `names` order).
 fn by_names<'a>(fields: &'a [FieldView], names: &[&str]) -> Option<&'a FieldView> {
-    names.iter().find_map(|n| fields.iter().find(|f| f.name == *n))
+    names
+        .iter()
+        .find_map(|n| fields.iter().find(|f| f.name == *n))
 }
 
 /// A plain editable-field cell, emitted iff one of `names` is present in `fields`.
-fn field_cell(fields: &[FieldView], record: u32, label: &str, names: &[&str]) -> Option<ProfileCell> {
+fn field_cell(
+    fields: &[FieldView],
+    record: u32,
+    label: &str,
+    names: &[&str],
+) -> Option<ProfileCell> {
     by_names(fields, names).map(|f| ProfileCell {
         label: label.to_string(),
         control: CellControl::Field,
@@ -91,6 +114,7 @@ fn field_cell(fields: &[FieldView], record: u32, label: &str, names: &[&str]) ->
         record,
         derived_display: None,
         unverified: None,
+        color_components: Vec::new(),
     })
 }
 
@@ -106,11 +130,15 @@ fn team_cell(
 ) -> Option<ProfileCell> {
     by_names(fields, names).map(|f| ProfileCell {
         label: label.to_string(),
-        control: CellControl::Team { offset, none_label: none_label.map(str::to_string) },
+        control: CellControl::Team {
+            offset,
+            none_label: none_label.map(str::to_string),
+        },
         field: Some(f.clone()),
         record,
         derived_display: None,
         unverified: None,
+        color_components: Vec::new(),
     })
 }
 
@@ -129,11 +157,18 @@ fn derived_cell(
         record: 0,
         derived_display: display,
         unverified: None,
+        color_components: Vec::new(),
     })
 }
 
 fn yes_no(b: Option<bool>) -> Option<String> {
-    b.map(|b| if b { "Yes".to_string() } else { "No".to_string() })
+    b.map(|b| {
+        if b {
+            "Yes".to_string()
+        } else {
+            "No".to_string()
+        }
+    })
 }
 
 /// Everything the player profile needs beyond the bio field list, resolved by the caller
@@ -156,7 +191,10 @@ pub struct PlayerProfileCtx<'a> {
 /// emitted only when its backing field is present in `bio_fields`, so absent-schema fields simply
 /// never render (no phantom cells), and gen6-only fields (`yeardrafted`/`positiondrafted`) surface
 /// automatically via the name synonyms.
-pub fn player_field_profile(bio_fields: &[FieldView], ctx: &PlayerProfileCtx) -> EntityFieldProfile {
+pub fn player_field_profile(
+    bio_fields: &[FieldView],
+    ctx: &PlayerProfileCtx,
+) -> EntityFieldProfile {
     let rec = ctx.bio_record;
     let mut p = EntityFieldProfile::default();
 
@@ -183,8 +221,22 @@ pub fn player_field_profile(bio_fields: &[FieldView], ctx: &PlayerProfileCtx) ->
 
     let mut roster = Vec::new();
     roster.extend(field_cell(bio_fields, rec, "Jersey Number", &["jersey"]));
-    roster.extend(team_cell(bio_fields, rec, "Main Team", &["team"], ctx.main_team_offset, None));
-    roster.extend(team_cell(bio_fields, rec, "Junior Team", &["juniorteam"], 1, None));
+    roster.extend(team_cell(
+        bio_fields,
+        rec,
+        "Main Team",
+        &["team"],
+        ctx.main_team_offset,
+        None,
+    ));
+    roster.extend(team_cell(
+        bio_fields,
+        rec,
+        "Junior Team",
+        &["juniorteam"],
+        1,
+        None,
+    ));
     roster.extend(field_cell(bio_fields, rec, "Active", &["active"]));
     if ctx.has_style {
         roster.push(ProfileCell {
@@ -194,6 +246,7 @@ pub fn player_field_profile(bio_fields: &[FieldView], ctx: &PlayerProfileCtx) ->
             record: 0,
             derived_display: ctx.style_label.map(str::to_string),
             unverified: None,
+            color_components: Vec::new(),
         });
     }
     p.push_section("Roster Data", roster);
@@ -201,13 +254,36 @@ pub fn player_field_profile(bio_fields: &[FieldView], ctx: &PlayerProfileCtx) ->
     p.push_section(
         "Contract Data",
         [
-            team_cell(bio_fields, rec, "Pro Team", &["proteam"], 1, Some("(none — No NHL Rights)")),
-            derived_cell(bio_fields, "Cap Hit", &["contractdollars"], ctx.data.cap_hit.clone()),
+            field_cell(bio_fields, rec, "Contract Amount", &["contractdollars"]),
+            team_cell(
+                bio_fields,
+                rec,
+                "Pro Team",
+                &["proteam"],
+                1,
+                Some("(none — No NHL Rights)"),
+            ),
+            derived_cell(
+                bio_fields,
+                "Cap Hit",
+                &["contractdollars"],
+                ctx.data.cap_hit.clone(),
+            ),
             field_cell(bio_fields, rec, "Length Of Contract", &["contractlength"]),
-            derived_cell(bio_fields, "Contract Status", &["contractdollars"], ctx.data.contract_status.clone()),
+            derived_cell(
+                bio_fields,
+                "Contract Status",
+                &["contractdollars"],
+                ctx.data.contract_status.clone(),
+            ),
             field_cell(bio_fields, rec, "Year UFA", &["yearufa"]),
             field_cell(bio_fields, rec, "Two-Way", &["contractis2way"]),
-            derived_cell(bio_fields, "Multi-Year", &["contractlength"], yes_no(ctx.data.is_multi_year)),
+            derived_cell(
+                bio_fields,
+                "Multi-Year",
+                &["contractlength"],
+                yes_no(ctx.data.is_multi_year),
+            ),
         ]
         .into_iter()
         .flatten()
@@ -229,10 +305,22 @@ pub fn player_field_profile(bio_fields: &[FieldView], ctx: &PlayerProfileCtx) ->
     p.push_section(
         "Draft Data",
         [
-            team_cell(bio_fields, rec, "Draft Team", &["draftteam"], 1, Some("(undrafted)")),
+            team_cell(
+                bio_fields,
+                rec,
+                "Draft Team",
+                &["draftteam"],
+                1,
+                Some("(undrafted)"),
+            ),
             field_cell(bio_fields, rec, "Draft Year", &["draftyear", "yeardrafted"]),
             field_cell(bio_fields, rec, "Draft Round", &["draftround"]),
-            field_cell(bio_fields, rec, "Draft Position", &["draftposition", "positiondrafted"]),
+            field_cell(
+                bio_fields,
+                rec,
+                "Draft Position",
+                &["draftposition", "positiondrafted"],
+            ),
         ]
         .into_iter()
         .flatten()
@@ -283,6 +371,7 @@ impl<'a> TeamProfileCtx<'a> {
             record: rec,
             derived_display: None,
             unverified: None,
+            color_components: Vec::new(),
         })
     }
 
@@ -292,7 +381,10 @@ impl<'a> TeamProfileCtx<'a> {
     fn relation(&self, label: &str, names: &[&str]) -> Option<ProfileCell> {
         self.pick(names).map(|(f, rec)| {
             let control = if f.studio_table == tdb_relations::entity::ids::TEAM {
-                CellControl::Team { offset: 1, none_label: Some("(none)".to_string()) }
+                CellControl::Team {
+                    offset: 1,
+                    none_label: Some("(none)".to_string()),
+                }
             } else {
                 CellControl::Field
             };
@@ -303,8 +395,40 @@ impl<'a> TeamProfileCtx<'a> {
                 record: rec,
                 derived_display: None,
                 unverified: None,
+                color_components: Vec::new(),
             }
         })
+    }
+
+    /// A colour cell for `stem` on the raw `kOtt` row: the packed word `<stem>` (PS4 17+) or the
+    /// `<stem>_r/_g/_b` triple (NHL 11–15 / Legacy / PS4 15–16). `None` when the title has neither.
+    fn color(&self, label: &str, stems: &[&str]) -> Option<ProfileCell> {
+        for stem in stems {
+            if let Some(packed) = by_names(self.kott_fields, &[stem]) {
+                return Some(ProfileCell {
+                    label: label.to_string(),
+                    control: CellControl::Color,
+                    field: Some(packed.clone()),
+                    record: self.kott_record,
+                    derived_display: None,
+                    unverified: None,
+                    color_components: vec![packed.clone()],
+                });
+            }
+            let (r, g, b) = (format!("{stem}_r"), format!("{stem}_g"), format!("{stem}_b"));
+            if let (Some(r), Some(g), Some(b)) = (by_names(self.kott_fields, &[&r]), by_names(self.kott_fields, &[&g]), by_names(self.kott_fields, &[&b])) {
+                return Some(ProfileCell {
+                    label: label.to_string(),
+                    control: CellControl::Color,
+                    field: Some(r.clone()),
+                    record: self.kott_record,
+                    derived_display: None,
+                    unverified: None,
+                    color_components: vec![r.clone(), g.clone(), b.clone()],
+                });
+            }
+        }
+        None
     }
 }
 
@@ -318,12 +442,29 @@ pub fn team_field_profile(ctx: &TeamProfileCtx) -> EntityFieldProfile {
         "Identity",
         [
             ctx.field("Full Name", &["fullname"]),
+            // PS4 NHL 17+ split the name: `cityname` + `teamname` (the display name) and a
+            // `nickname` (NHL 16+; commentary/tweets); NHL 16 keeps `shortname` + `nickname`.
+            ctx.field("City", &["cityname"]),
+            ctx.field("Team Name", &["teamname"]),
+            ctx.field("Nickname", &["nickname"]),
             ctx.field("Abbreviation", &["abbrname"]),
             ctx.field("Short Name", &["shortname"]),
             ctx.field("Art Abbr", &["artabbr"]),
             ctx.field("State / Region", &["state", "statename"]),
             ctx.field("Coach ID", &["coachheadid", "coachid"]),
-            ctx.field("Art ID", &["artid"]),
+            // Phase 2.1 (21 Sep 2026): the art id is never edited as a bare cell — its
+            // consumers (jersey / award rows, art files keyed by the number) would dangle. The
+            // supported change is the art-id swap (`team_reid`); the cell is read-only here.
+            ctx.field("Art ID", &["artid"]).map(|mut c| {
+                if let Some(f) = c.field.as_mut() {
+                    // The identity source is the team table (`exhibitionteams`) or NHL 07's
+                    // stock / custom team table — all guarded.
+                    if f.name == "artid" {
+                        f.editable = false;
+                    }
+                }
+                c
+            }),
             ctx.field("Audio ID", &["audioid"]),
             ctx.field("Audio ID 2", &["audioid2"]),
         ]
@@ -335,7 +476,11 @@ pub fn team_field_profile(ctx: &TeamProfileCtx) -> EntityFieldProfile {
     p.push_section(
         "Classification",
         [
-            ctx.field("League", &["leaguegroup", "league"]),
+            // The league identity is the `league` code (a foreign key into `stockleagues` on
+            // PS4, a vocabulary code elsewhere). `leaguegroup` is a separate, unlabelled group-id
+            // namespace and is exposed under its own name, never as "League".
+            ctx.field("League", &["league"]),
+            ctx.field("League group", &["leaguegroup"]),
             ctx.field("Conference", &["conferencegroup", "conference"]),
             ctx.field("Division", &["divisiongroup", "division"]),
             ctx.field("Play Style", &["playstyle"]),
@@ -357,6 +502,7 @@ pub fn team_field_profile(ctx: &TeamProfileCtx) -> EntityFieldProfile {
                     record: ctx.kott_record,
                     derived_display: None,
                     unverified: None,
+                    color_components: Vec::new(),
                 }],
             );
         }
@@ -373,6 +519,31 @@ pub fn team_field_profile(ctx: &TeamProfileCtx) -> EntityFieldProfile {
         .flatten()
         .collect(),
     );
+
+    // Team colours (2.1). Which title carries which shape is measured on the anchors: NHL 08–10
+    // none on the team row; NHL 11–15 / Legacy (Xbox, PS3) and PS4 15 two `_r/_g/_b` triples;
+    // PS4 16 six triples (front-end / presentation / overlay primary + secondary); PS4 17–21 nine
+    // packed words (those plus the tertiaries). Stanchion,
+    // goal-post and visor colours are presentation (2.5) and are not listed here.
+    let colours: Vec<ProfileCell> = [
+        ("Primary", &["primarycolor"][..]),
+        ("Secondary", &["secondarycolor"]),
+        ("Front-end primary", &["feprimarycolor"]),
+        ("Front-end secondary", &["fesecondarycolor"]),
+        ("Front-end tertiary", &["fetertiarycolor"]),
+        ("Presentation primary", &["presprimarycolor"]),
+        ("Presentation secondary", &["pressecondarycolor"]),
+        ("Presentation tertiary", &["prestertiarycolor"]),
+        ("Overlay primary", &["overlayprimarycolor"]),
+        ("Overlay secondary", &["overlaysecondarycolor"]),
+        ("Overlay tertiary", &["overlaytertiarycolor"]),
+    ]
+    .iter()
+    .filter_map(|(label, stems)| ctx.color(label, stems))
+    .collect();
+    if !colours.is_empty() {
+        p.push_section("Colours", colours);
+    }
 
     p
 }

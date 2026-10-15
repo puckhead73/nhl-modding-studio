@@ -11,6 +11,8 @@ import { call } from "../lib/client";
 import { Button, Card, ErrorBanner, PageScroll, Spinner, Stat } from "../components/primitives";
 import { AssetGate, isExportable, usePlayerAssets } from "./PlayerAssets";
 import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
+import type { AssetRootsArgsDto } from "../bindings/AssetRootsArgsDto";
+import type { HeadCatalogSummaryDto } from "../bindings/HeadCatalogSummaryDto";
 import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 
 type Scope = "exportable" | "portrait" | "head";
@@ -117,7 +119,7 @@ export function AssetExportPage() {
                   hint="One file per map — colour, normal, and so on."
                 />
                 <Check
-                  label="Original .rx2 files alongside"
+                  label="Original game files alongside"
                   checked={raw}
                   onChange={setRaw}
                   hint="Archives the untouched source bytes, so later compatibility work never has to re-extract."
@@ -146,8 +148,91 @@ export function AssetExportPage() {
         </Card>
 
         {summary ? <Summary summary={summary} /> : null}
+
+        <CatalogExport projectId={projectId} rootArgs={rootArgs} />
       </div>
     </PageScroll>
+  );
+}
+
+// Appearance catalog — every head + hair + facial hair (players and non-players),
+// written as GLB + PNG with a catalog.json manifest the Appearance Studio reads.
+function CatalogExport({
+  projectId,
+  rootArgs,
+}: {
+  projectId: number;
+  rootArgs: AssetRootsArgsDto;
+}) {
+  const [textures, setTextures] = useState(true);
+  const [summary, setSummary] = useState<HeadCatalogSummaryDto | null>(null);
+
+  const run = useMutation({
+    mutationFn: async () => {
+      const outDir = await openDialog({
+        multiple: false,
+        directory: true,
+        title: "Choose a folder to build the appearance catalog into",
+      });
+      if (typeof outDir !== "string") return null;
+      return call("export_head_catalog", { projectId, roots: rootArgs, outDir, textures });
+    },
+    onSuccess: (s) => s && setSummary(s),
+  });
+
+  return (
+    <Card
+      title="Appearance catalog"
+      subtitle="Every head, hairstyle and facial-hair mesh — players, generics, referees, coaches and trainers — with a catalog.json the Appearance Studio reads to mix any combination."
+    >
+      <div className="space-y-4 text-sm">
+        <Check
+          label="Player-head textures (.png)"
+          checked={textures}
+          onChange={setTextures}
+          hint="Decode each bespoke player's head texlib to PNG alongside the meshes."
+        />
+        <div className="flex items-center gap-3 border-t border-slate-800 pt-3">
+          <Button onClick={() => run.mutate()} disabled={run.isPending}>
+            {run.isPending ? "Building catalog…" : "Build appearance catalog…"}
+          </Button>
+          <p className="text-xs text-slate-500">
+            Captures bespoke, generic and staff heads across the whole install.
+          </p>
+        </div>
+        {run.error ? <ErrorBanner title="Catalog build failed" message={String(run.error)} /> : null}
+
+        {summary ? (
+          <div className="border-t border-slate-800 pt-3">
+            <div className="grid grid-cols-4 gap-2">
+              <Stat label="Heads" value={summary.heads_written} />
+              <Stat label="Hair" value={summary.hair_written} />
+              <Stat label="Facial hair" value={summary.facial_hair_written} />
+              <Stat label="Textures" value={summary.textures_written} />
+            </div>
+            <p className="mt-2 text-xs text-slate-500">
+              {summary.entry_count.toLocaleString()} assets ·{" "}
+              {formatBytes(summary.bytes_written)}
+              {summary.manifest_file ? ` · ${summary.manifest_file}` : ""}
+            </p>
+            {summary.failures.length > 0 ? (
+              <details className="mt-2 text-xs">
+                <summary className="cursor-pointer select-none text-amber-500">
+                  {summary.failures.length} skipped or failed
+                </summary>
+                <ul className="mt-1 max-h-56 space-y-0.5 overflow-y-auto text-slate-400">
+                  {summary.failures.map((f, i) => (
+                    <li key={i}>{f}</li>
+                  ))}
+                </ul>
+              </details>
+            ) : (
+              <p className="mt-2 text-xs text-slate-500">No failures.</p>
+            )}
+          </div>
+        ) : null}
+      </div>
+    </Card>
   );
 }
 
@@ -158,7 +243,7 @@ function Summary({ summary }: { summary: AssetExportSummaryDto }) {
         <Stat label="Portraits" value={summary.portraits_written} />
         <Stat label="Meshes" value={summary.meshes_written} />
         <Stat label="Textures" value={summary.textures_written} />
-        <Stat label="Source .rx2" value={summary.raw_copied} />
+        <Stat label="Original files" value={summary.raw_copied} />
       </div>
       {summary.portraits_skipped_generic > 0 && (
         <p className="mt-2 text-xs text-slate-500">

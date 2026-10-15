@@ -66,6 +66,9 @@ mod tests {
         assert!(!p.goalie.is_empty());
         assert_eq!(p.normalisation_mode, NormalizationMode::Nominal);
         // Speed maps from FHM Speed.
-        assert_eq!(p.components("forward", "Speed"), &[("Speed".to_string(), 1.0)]);
+        assert_eq!(
+            p.components("forward", "Speed"),
+            &[("Speed".to_string(), 1.0)]
+        );
     }
 }

@@ -1,0 +1,233 @@
+# H:/Emulators/ShadPS4/Games/CUSA37933/Patch/layout.toc: wrapper=D1CE01 payload=3595 consumed=3595 root_name=None
+{
+ "superBundles": [
+  {
+   "name": "Gen4b/contentlaunchsb"
+  },
+  {
+   "name": "Gen4b/contentsb"
+  },
+  {
+   "name": "Gen4b/globals"
+  },
+  {
+   "name": "Gen4b/globalsfull"
+  },
+  {
+   "name": "Gen4b/levels/game/game"
+  },
+  {
+   "name": "Gen4b/movies"
+  },
+  {
+   "name": "Gen4b/ui"
+  },
+  {
+   "name": "Gen4b/worldssb"
+  }
+ ],
+ "fs": [
+  "initfs_Gen4b"
+ ],
+ "head": 1023354,
+ "base": 981806,
+ "installManifest": {
+  "installChunks": [
+   {
+    "id": "guid:b361f84889a20da59eda88c5b482cbaa",
+    "name": "superbundlelayout/nhl_installpackage_00",
+    "installBundle": "Gen4b/superbundlelayout/nhl_installpackage_00",
+    "alwaysInstalled": true,
+    "mandatoryDLC": false,
+    "optionalDLC": false,
+    "testDLC": false,
+    "license": "",
+    "estimatedSize": 1487076962,
+    "maxSizeMB": -1,
+    "persistentIndex": 0,
+    "requiredChunks": [],
+    "superbundles": [
+     "Gen4b/globals",
+     "Gen4b/ui"
+    ],
+    "launchOptional": false,
+    "installOptional": false,
+    "exclude": false
+   },
+   {
+    "id": "guid:b361f84889a20ea59eda88c5b482cbaa",
+    "name": "superbundlelayout/nhl_installpackage_01",
+    "installBundle": "Gen4b/superbundlelayout/nhl_installpackage_01",
+    "alwaysInstalled": true,
+    "mandatoryDLC": false,
+    "optionalDLC": false,
+    "testDLC": false,
+    "license": "",
+    "estimatedSize": 1941541178,
+    "maxSizeMB": -1,
+    "persistentIndex": 1,
+    "requiredChunks": [
+     "guid:b361f84889a20da59eda88c5b482cbaa"
+    ],
+    "superbundles": [
+     "Gen4b/levels/game/game"
+    ],
+    "launchOptional": false,
+    "installOptional": false,
+    "exclude": false
+   },
+   {
+    "id": "guid:b361f84889a20fa59eda88c5b482cbaa",
+    "name": "superbundlelayout/nhl_installpackage_02",
+    "installBundle": "Gen4b/superbundlelayout/nhl_installpackage_02",
+    "alwaysInstalled": true,
+    "mandatoryDLC": false,
+    "optionalDLC": false,
+    "testDLC": false,
+    "license": "",
+    "estimatedSize": 10515551675,
+    "maxSizeMB": -1,
+    "persistentIndex": 2,
+    "requiredChunks": [
+     "guid:b361f84889a20da59eda88c5b482cbaa",
+     "guid:b361f84889a20ea59eda88c5b482cbaa"
+    ],
+    "superbundles": [
+     "Gen4b/contentlaunchsb"
+    ],
+    "launchOptional": false,
+    "installOptional": false,
+    "exclude": false
+   },
+   {
+    "id": "guid:b361f84889a200a59eda88c5b482cbaa",
+    "name": "superbundlelayout/nhl_installpackage_03",
+    "installBundle": "Gen4b/superbundlelayout/nhl_installpackage_03",
+    "alwaysInstalled": false,
+    "mandatoryDLC": false,
+    "optionalDLC": false,
+    "testDLC": false,
+    "license": "",
+    "estimatedSize": 4503863381,
+    "maxSizeMB": -1,
+    "persistentIndex": 3,
+    "requiredChunks": [
+     "guid:b361f84889a20da59eda88c5b482cbaa",
+     "guid:b361f84889a20ea59eda88c5b482cbaa",
+     "guid:b361f84889a20fa59eda88c5b482cbaa"
+    ],
+    "superbundles": [
+     "Gen4b/movies"
+    ],
+    "launchOptional": false,
+    "installOptional": false,
+    "exclude": false
+   },
+   {
+    "id": "guid:b361f84889a201a59eda88c5b482cbaa",
+    "name": "superbundlelayout/nhl_installpackage_04",
+    "installBundle": "Gen4b/superbundlelayout/nhl_installpackage_04",
+    "alwaysInstalled": false,
+    "mandatoryDLC": false,
+    "optionalDLC": false,
+    "testDLC": false,
+    "license": "",
+    "estimatedSize": 5204162523,
+    "maxSizeMB": -1,
+    "persistentIndex": 4,
+    "requiredChunks": [
+     "guid:b361f84889a200a59eda88c5b482cbaa",
+     "guid:b361f84889a20da59eda88c5b482cbaa",
+     "guid:b361f84889a20ea59eda88c5b482cbaa",
+     "guid:b361f84889a20fa59eda88c5b482cbaa"
+    ],
+    "superbundles": [
+     "Gen4b/worldssb"
+    ],
+    "launchOptional": false,
+    "installOptional": false,
+    "exclude": false
+   },
+   {
+    "id": "guid:b361f84889a202a59eda88c5b482cbaa",
+    "name": "superbundlelayout/nhl_installpackage_05",
+    "installBundle": "Gen4b/superbundlelayout/nhl_installpackage_05",
+    "alwaysInstalled": false,
+    "mandatoryDLC": false,
+    "optionalDLC": false,
+    "testDLC": false,
+    "license": "",
+    "estimatedSize": 26911006292,
+    "maxSizeMB": -1,
+    "persistentIndex": 5,
+    "requiredChunks": [
+     "guid:b361f84889a200a59eda88c5b482cbaa",
+     "guid:b361f84889a201a59eda88c5b482cbaa",
+     "guid:b361f84889a20da59eda88c5b482cbaa",
+     "guid:b361f84889a20ea59eda88c5b482cbaa",
+     "guid:b361f84889a20fa59eda88c5b482cbaa"
+    ],
+    "superbundles": [
+     "Gen4b/contentsb"
+    ],
+    "launchOptional": false,
+    "installOptional": false,
+    "exclude": false
+   },
+   {
+    "id": "guid:b361f84889a203a59eda88c5b482cbaa",
+    "name": "superbundlelayout/nhl_installpackage_06",
+    "installBundle": "Gen4b/superbundlelayout/nhl_installpackage_06",
+    "alwaysInstalled": false,
+    "mandatoryDLC": false,
+    "optionalDLC": false,
+    "testDLC": false,
+    "license": "",
+    "estimatedSize": 609144302,
+    "maxSizeMB": -1,
+    "persistentIndex": 6,
+    "requiredChunks": [
+     "guid:b361f84889a200a59eda88c5b482cbaa",
+     "guid:b361f84889a201a59eda88c5b482cbaa",
+     "guid:b361f84889a202a59eda88c5b482cbaa",
+     "guid:b361f84889a20da59eda88c5b482cbaa",
+     "guid:b361f84889a20ea59eda88c5b482cbaa",
+     "guid:b361f84889a20fa59eda88c5b482cbaa"
+    ],
+    "superbundles": [
+     "Gen4b/globalsfull"
+    ],
+    "launchOptional": false,
+    "installOptional": false,
+    "exclude": false
+   }
+  ],
+  "installGroups": [
+   {
+    "name": "SuperBundleLayout/NHL_LaunchGroup",
+    "chunks": [
+     "guid:b361f84889a20da59eda88c5b482cbaa",
+     "guid:b361f84889a20ea59eda88c5b482cbaa",
+     "guid:b361f84889a20fa59eda88c5b482cbaa"
+    ]
+   },
+   {
+    "name": "SuperBundleLayout/NHL_FullInstallGroup",
+    "chunks": [
+     "guid:b361f84889a200a59eda88c5b482cbaa",
+     "guid:b361f84889a201a59eda88c5b482cbaa",
+     "guid:b361f84889a202a59eda88c5b482cbaa",
+     "guid:b361f84889a203a59eda88c5b482cbaa"
+    ]
+   }
+  ],
+  "excludedSuperbundles": [],
+  "enableDuplication": true,
+  "totalSizeAsDelta": true,
+  "totalSizeMB": 1024,
+  "enableStoreBmm": true,
+  "settings": {
+   "bundleFormat": 2651454669
+  }
+ }
+}

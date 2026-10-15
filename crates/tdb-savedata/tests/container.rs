@@ -5,7 +5,12 @@ use tdb_core::TdbFile;
 use tdb_savedata::{ContainerVersion, SaveContainer, SaveType};
 
 fn anchor(rel: &str) -> Vec<u8> {
-    std::fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../anchors").join(rel)).unwrap()
+    std::fs::read(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../anchors")
+            .join(rel),
+    )
+    .unwrap()
 }
 
 const V3_ROSTER: &str = "ps3/nhl09/savefiles/BLUS3016802002026 - ROSTER/SYS-DATA";
@@ -32,7 +37,11 @@ fn parses_and_verifies_checksums() {
         let c = SaveContainer::parse(&bytes).unwrap();
         assert_eq!(c.header.save_type, SaveType::Roster, "{rel}");
         assert_eq!(c.header.version, expect_ver, "{rel}");
-        assert!(c.header.magic.contains("RosterFile"), "{rel}: {}", c.header.magic);
+        assert!(
+            c.header.magic.contains("RosterFile"),
+            "{rel}: {}",
+            c.header.magic
+        );
         assert!(
             c.checksums_valid(),
             "{rel}: stored checksums do not match recomputation"
@@ -75,7 +84,11 @@ fn v4_repack_round_trips_semantically() {
     let db = c.extract_db().unwrap();
 
     let repacked = c.repack(&db).unwrap();
-    assert_eq!(repacked.len(), bytes.len(), "v4 keeps the original allocation");
+    assert_eq!(
+        repacked.len(),
+        bytes.len(),
+        "v4 keeps the original allocation"
+    );
 
     let c2 = SaveContainer::parse(&repacked).unwrap();
     assert!(c2.checksums_valid(), "recomputed v4 checksums must verify");
@@ -93,7 +106,11 @@ fn v4_repack_carries_an_edit() {
 
     let repacked = c.repack(&db).unwrap();
     let c2 = SaveContainer::parse(&repacked).unwrap();
-    assert_eq!(c2.extract_db().unwrap(), db, "edited DB round-trips through v4");
+    assert_eq!(
+        c2.extract_db().unwrap(),
+        db,
+        "edited DB round-trips through v4"
+    );
 }
 
 /// Gen6 (NHL07-09 `RawV3`) is uncompressed and tight, so re-injecting the same DB reproduces the
@@ -103,10 +120,16 @@ fn gen6_repack_is_byte_identical() {
     let bytes = anchor(V3_ROSTER);
     let c = SaveContainer::parse(&bytes).unwrap();
     assert_eq!(c.header.version, ContainerVersion::RawV3);
-    assert!(!c.header.version.write_is_experimental(), "gen6 write is fully supported");
+    assert!(
+        !c.header.version.write_is_experimental(),
+        "gen6 write is fully supported"
+    );
     let db = c.extract_db().unwrap();
     let repacked = c.repack(&db).unwrap();
-    assert_eq!(repacked, bytes, "gen6 same-DB repack must be byte-identical");
+    assert_eq!(
+        repacked, bytes,
+        "gen6 same-DB repack must be byte-identical"
+    );
 }
 
 /// An edit survives a gen6 repack and the recomputed `checksum_a` verifies.
@@ -120,8 +143,15 @@ fn gen6_repack_carries_an_edit() {
 
     let repacked = c.repack(&db).unwrap();
     let c2 = SaveContainer::parse(&repacked).unwrap();
-    assert!(c2.checksums_valid(), "recomputed gen6 checksum_a must verify");
-    assert_eq!(c2.extract_db().unwrap(), db, "edited DB round-trips through gen6");
+    assert!(
+        c2.checksums_valid(),
+        "recomputed gen6 checksum_a must verify"
+    );
+    assert_eq!(
+        c2.extract_db().unwrap(),
+        db,
+        "edited DB round-trips through gen6"
+    );
 }
 
 /// v1 (NHL10/11) is now writeable, but **experimentally** — a no-op repack is byte-identical (the
@@ -133,11 +163,17 @@ fn v1_repack_round_trips_experimentally() {
     let bytes = anchor(V1_ROSTER);
     let c = SaveContainer::parse(&bytes).unwrap();
     assert!(c.writeable(), "v1 is now writeable");
-    assert!(c.header.version.write_is_experimental(), "v1 write is experimental (tag_1c)");
+    assert!(
+        c.header.version.write_is_experimental(),
+        "v1 write is experimental (tag_1c)"
+    );
 
     let db = c.extract_db().unwrap();
     let repacked = c.repack(&db).unwrap();
-    assert_eq!(repacked, bytes, "v1 same-DB repack must be byte-identical (tag_1c preserved)");
+    assert_eq!(
+        repacked, bytes,
+        "v1 same-DB repack must be byte-identical (tag_1c preserved)"
+    );
 
     // An edit survives and the recomputed checksum_a verifies (tag_1c stays stale — the caveat).
     let mut edited = db.clone();
@@ -146,5 +182,9 @@ fn v1_repack_round_trips_experimentally() {
     let repacked = c.repack(&edited).unwrap();
     let c2 = SaveContainer::parse(&repacked).unwrap();
     assert!(c2.checksums_valid(), "recomputed v1 checksum_a must verify");
-    assert_eq!(c2.extract_db().unwrap(), edited, "edited DB round-trips through v1");
+    assert_eq!(
+        c2.extract_db().unwrap(),
+        edited,
+        "edited DB round-trips through v1"
+    );
 }

@@ -1,0 +1,2947 @@
+{
+ "note": "R127c - B13 bounded test: do a venue package's material parameter chunks (0xEF0000 / 0xEF0001, 64 each, one per named 0xEF0005\nmaterial) reference a raster? For each named material: the chunk triple candidates (the 0xEF0000 / 0xEF0001 chunks nearest before the\n0xEF0005 chunk in file-table order, and the chunk index the 0xEF0001 header word +4 names), every u32 / u16 in those chunks compared with\n(a) raster descriptor (0x20003) chunk indices, (b) raster payload (0x10031) chunk indices, (c) descriptor / payload chunk offsets and\noffsets relative to the file table, (d) ordinal positions in the raster list. Hits per material class are counted; a binding is claimed only\nif every board-ad material resolves to exactly one raster consistently on both packages. Read-only.\nUsage: python r127c_material_param_blocks.py <out.json> <package.rx2> [<control.rx2>]\n",
+ "packages": [
+  {
+   "package": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\rendering\\stadium\\stadium_1_container_0.rx2",
+   "chunks": 1495,
+   "rasters": 39,
+   "materials": [
+    {
+     "material": "PlasticAmbient_bench_ad_tile_mat1_Clone_137",
+     "chunk": 81,
+     "ef0000": 79,
+     "ef0001": 80,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0xe",
+       "desc_index",
+       6
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_144",
+     "chunk": 84,
+     "ef0000": 82,
+     "ef0001": 83,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_back_boards_dup_mat2_Clone_87",
+     "chunk": 87,
+     "ef0000": 85,
+     "ef0001": 86,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x42",
+       "desc_index",
+       32
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_112",
+     "chunk": 90,
+     "ef0000": 88,
+     "ef0001": 89,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_208",
+     "chunk": 93,
+     "ef0000": 91,
+     "ef0001": 92,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "MetalAmbient_structure_two_mat1_Clone_197",
+     "chunk": 96,
+     "ef0000": 94,
+     "ef0001": 95,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1c",
+       "desc_index",
+       13
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_stair_benches_mat1_Clone_115",
+     "chunk": 99,
+     "ef0000": 97,
+     "ef0001": 98,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x46",
+       "desc_index",
+       34
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_fan_mat1_Clone_72",
+     "chunk": 102,
+     "ef0000": 100,
+     "ef0001": 101,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1e",
+       "desc_index",
+       14
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "concrete_arch70",
+     "chunk": 105,
+     "ef0000": 103,
+     "ef0001": 104,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x6",
+       "desc_index",
+       2
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_back_boards_dup_mat2_Clone_178",
+     "chunk": 108,
+     "ef0000": 106,
+     "ef0001": 107,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x42",
+       "desc_index",
+       32
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_fan_mat1_Clone_204",
+     "chunk": 111,
+     "ef0000": 109,
+     "ef0001": 110,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1e",
+       "desc_index",
+       14
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "powerring_atlanta1",
+     "chunk": 114,
+     "ef0000": 112,
+     "ef0001": 113,
+     "hits": {},
+     "examples": []
+    },
+    {
+     "material": "metalpainted_labels",
+     "chunk": 117,
+     "ef0000": 115,
+     "ef0001": 116,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x34",
+       "desc_index",
+       25
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_109",
+     "chunk": 120,
+     "ef0000": 118,
+     "ef0001": 119,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "BoardAd_plastic_mat1_Clone_237",
+     "chunk": 123,
+     "ef0000": 121,
+     "ef0001": 122,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0x4c",
+       "desc_index",
+       37
+      ]
+     ]
+    },
+    {
+     "material": "BoardAd_plastic_mat1_Clone_96",
+     "chunk": 126,
+     "ef0000": 124,
+     "ef0001": 125,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_cloth_mat1_Clone_134",
+     "chunk": 129,
+     "ef0000": 127,
+     "ef0001": 128,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x48",
+       "desc_index",
+       35
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_143",
+     "chunk": 132,
+     "ef0000": 130,
+     "ef0001": 131,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0x4c",
+       "desc_index",
+       37
+      ]
+     ]
+    },
+    {
+     "material": "concrete_seating_seattiers87",
+     "chunk": 135,
+     "ef0000": 133,
+     "ef0001": 134,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x4e",
+       "desc_index",
+       38
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_02_Clone_252",
+     "chunk": 138,
+     "ef0000": 136,
+     "ef0001": 137,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x36",
+       "desc_index",
+       26
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "concrete_stairs_25",
+     "chunk": 141,
+     "ef0000": 139,
+     "ef0001": 140,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x44",
+       "desc_index",
+       33
+      ]
+     ]
+    },
+    {
+     "material": "BenchAd_ads_lower_one_mat1_Clone_129",
+     "chunk": 144,
+     "ef0000": 142,
+     "ef0001": 143,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x20",
+       "desc_index",
+       15
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "MetalAmbient_structure_two_mat1_Clone_68",
+     "chunk": 147,
+     "ef0000": 145,
+     "ef0001": 146,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1c",
+       "desc_index",
+       13
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "BenchAd_ads_two_mat1_Clone_125",
+     "chunk": 150,
+     "ef0000": 148,
+     "ef0001": 149,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x18",
+       "desc_index",
+       11
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "concrete_arch67_Clone_243",
+     "chunk": 153,
+     "ef0000": 151,
+     "ef0001": 152,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x6",
+       "desc_index",
+       2
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "MetalAmbient_structure_two_mat1_Clone_176",
+     "chunk": 156,
+     "ef0000": 154,
+     "ef0001": 155,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1c",
+       "desc_index",
+       13
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_215",
+     "chunk": 159,
+     "ef0000": 157,
+     "ef0001": 158,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "concrete_exit_atl5",
+     "chunk": 162,
+     "ef0000": 160,
+     "ef0001": 161,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x36",
+       "desc_index",
+       26
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_167",
+     "chunk": 165,
+     "ef0000": 163,
+     "ef0001": 164,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0x4c",
+       "desc_index",
+       37
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_03_Clone_250",
+     "chunk": 168,
+     "ef0000": 166,
+     "ef0001": 167,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x40",
+       "desc_index",
+       31
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "metalbare_trans_roofwindow5",
+     "chunk": 171,
+     "ef0000": 169,
+     "ef0001": 170,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x4a",
+       "desc_index",
+       36
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_mat1_Clone_70",
+     "chunk": 174,
+     "ef0000": 172,
+     "ef0001": 173,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x16",
+       "desc_index",
+       10
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "jumbotron_WPG",
+     "chunk": 177,
+     "ef0000": 175,
+     "ef0001": 176,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1a",
+       "desc_index",
+       12
+      ]
+     ]
+    },
+    {
+     "material": "MetalAmbient_structure_two_mat1_Clone_152",
+     "chunk": 180,
+     "ef0000": 178,
+     "ef0001": 179,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1c",
+       "desc_index",
+       13
+      ],
+      [
+       "ef0001",
+       288,
+       "0x4c",
+       "desc_index",
+       37
+      ]
+     ]
+    },
+    {
+     "material": "Plastic_back_boards_mat1_Clone_189",
+     "chunk": 183,
+     "ef0000": 181,
+     "ef0001": 182,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x16",
+       "desc_index",
+       10
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plasticrbk_mat1_Clone_88",
+     "chunk": 186,
+     "ef0000": 184,
+     "ef0001": 185,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_04",
+     "chunk": 189,
+     "ef0000": 187,
+     "ef0001": 188,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x36",
+       "desc_index",
+       26
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plasticrbk_mat1_Clone_102",
+     "chunk": 192,
+     "ef0000": 190,
+     "ef0001": 191,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_timekeeper_objects_mat1_Clone_119",
+     "chunk": 195,
+     "ef0000": 193,
+     "ef0001": 194,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x10",
+       "desc_index",
+       7
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "adbd_WPG",
+     "chunk": 198,
+     "ef0000": 196,
+     "ef0001": 197,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2c",
+       "desc_index",
+       21
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_01_Clone_253",
+     "chunk": 201,
+     "ef0000": 199,
+     "ef0001": 200,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x6",
+       "desc_index",
+       2
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "cloth_timekeeper_headbody_mat1",
+     "chunk": 204,
+     "ef0000": 202,
+     "ef0001": 203,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x22",
+       "desc_index",
+       16
+      ]
+     ]
+    },
+    {
+     "material": "luxuryBox_01",
+     "chunk": 207,
+     "ef0000": 205,
+     "ef0001": 206,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x6",
+       "desc_index",
+       2
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_timekeeper_objects_mat1_Clone_117",
+     "chunk": 210,
+     "ef0000": 208,
+     "ef0001": 209,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x10",
+       "desc_index",
+       7
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_structure_mat1_Clone_169",
+     "chunk": 213,
+     "ef0000": 211,
+     "ef0001": 212,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x4c",
+       "desc_index",
+       37
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_structure_mat1_Clone_105",
+     "chunk": 216,
+     "ef0000": 214,
+     "ef0001": 215,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_back_boards_dup_mat2_Clone_191",
+     "chunk": 219,
+     "ef0000": 217,
+     "ef0001": 218,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x42",
+       "desc_index",
+       32
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "metal_arch_texturepage_014",
+     "chunk": 222,
+     "ef0000": 220,
+     "ef0001": 221,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x40",
+       "desc_index",
+       31
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_103",
+     "chunk": 225,
+     "ef0000": 223,
+     "ef0001": 224,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ],
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "jumbotronscreenwideone_batch_shader",
+     "chunk": 228,
+     "ef0000": 226,
+     "ef0001": 227,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2a",
+       "desc_index",
+       20
+      ]
+     ]
+    },
+    {
+     "material": "cloth_atl_ban1",
+     "chunk": 231,
+     "ef0000": 229,
+     "ef0001": 230,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x30",
+       "desc_index",
+       23
+      ]
+     ]
+    },
+    {
+     "material": "metalbare_roof_bg3",
+     "chunk": 234,
+     "ef0000": 232,
+     "ef0001": 233,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0xc",
+       "desc_index",
+       5
+      ]
+     ]
+    },
+    {
+     "material": "luxuryBox_02",
+     "chunk": 237,
+     "ef0000": 235,
+     "ef0001": 236,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x3e",
+       "desc_index",
+       30
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_fan_mat1_Clone_190",
+     "chunk": 240,
+     "ef0000": 238,
+     "ef0001": 239,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1e",
+       "desc_index",
+       14
+      ],
+      [
+       "ef0001",
+       288,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "Plastic_ICE_LOD",
+     "chunk": 243,
+     "ef0000": 241,
+     "ef0001": 242,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x14",
+       "desc_index",
+       9
+      ]
+     ]
+    },
+    {
+     "material": "concrete_arch_viptp_la22",
+     "chunk": 246,
+     "ef0000": 244,
+     "ef0001": 245,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x24",
+       "desc_index",
+       17
+      ]
+     ]
+    },
+    {
+     "material": "jumbotronstats_0",
+     "chunk": 249,
+     "ef0000": 247,
+     "ef0001": 248,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x12",
+       "desc_index",
+       8
+      ]
+     ]
+    },
+    {
+     "material": "RinkGlassEnds_SheetsGoal",
+     "chunk": 252,
+     "ef0000": 250,
+     "ef0001": 251,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x3a",
+       "desc_index",
+       28
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3c",
+       "desc_index",
+       29
+      ]
+     ]
+    },
+    {
+     "material": "adbd_22",
+     "chunk": 255,
+     "ef0000": 253,
+     "ef0001": 254,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2c",
+       "desc_index",
+       21
+      ]
+     ]
+    },
+    {
+     "material": "RinkGlassSides_SheetsBench",
+     "chunk": 258,
+     "ef0000": 256,
+     "ef0001": 257,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x3a",
+       "desc_index",
+       28
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3c",
+       "desc_index",
+       29
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_goal_light_mat1_Clone_69",
+     "chunk": 261,
+     "ef0000": 259,
+     "ef0001": 260,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       288,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "jumbotronscreenwidetwo_batch_shader1",
+     "chunk": 264,
+     "ef0000": 262,
+     "ef0001": 263,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2a",
+       "desc_index",
+       20
+      ]
+     ]
+    },
+    {
+     "material": "Plastic_LOD_Boards",
+     "chunk": 267,
+     "ef0000": 265,
+     "ef0001": 266,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x8",
+       "desc_index",
+       3
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1",
+     "chunk": 270,
+     "ef0000": 268,
+     "ef0001": 269,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "package": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\rendering\\stadium\\stadium_2_container_0.rx2",
+   "chunks": 1536,
+   "rasters": 41,
+   "materials": [
+    {
+     "material": "luxuryBox_03",
+     "chunk": 85,
+     "ef0000": 83,
+     "ef0001": 84,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_01_Clone_247",
+     "chunk": 88,
+     "ef0000": 86,
+     "ef0001": 87,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x30",
+       "desc_index",
+       23
+      ],
+      [
+       "ef0001",
+       288,
+       "0x36",
+       "desc_index",
+       26
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plasticrbk_mat1_Clone_90",
+     "chunk": 91,
+     "ef0000": 89,
+     "ef0001": 90,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2a",
+       "desc_index",
+       20
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "Metal_struture_one_mat1_Clone_195",
+     "chunk": 94,
+     "ef0000": 92,
+     "ef0001": 93,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1e",
+       "desc_index",
+       14
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "MetalAmbient_structure_two_mat1_Clone_114",
+     "chunk": 97,
+     "ef0000": 95,
+     "ef0001": 96,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1e",
+       "desc_index",
+       14
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_112",
+     "chunk": 100,
+     "ef0000": 98,
+     "ef0001": 99,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_208",
+     "chunk": 103,
+     "ef0000": 101,
+     "ef0001": 102,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_110",
+     "chunk": 106,
+     "ef0000": 104,
+     "ef0001": 105,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_05",
+     "chunk": 109,
+     "ef0000": 107,
+     "ef0001": 108,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x30",
+       "desc_index",
+       23
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_back_boards_dup_mat2_Clone_178",
+     "chunk": 112,
+     "ef0000": 110,
+     "ef0001": 111,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x42",
+       "desc_index",
+       32
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "adbd_27_Clone_280",
+     "chunk": 115,
+     "ef0000": 113,
+     "ef0001": 114,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2e",
+       "desc_index",
+       22
+      ],
+      [
+       "ef0001",
+       288,
+       "0x36",
+       "desc_index",
+       26
+      ]
+     ]
+    },
+    {
+     "material": "concrete_stairs45_Clone_266",
+     "chunk": 118,
+     "ef0000": 116,
+     "ef0001": 117,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x46",
+       "desc_index",
+       34
+      ],
+      [
+       "ef0001",
+       288,
+       "0x36",
+       "desc_index",
+       26
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_back_boards_dup_mat2_Clone_192",
+     "chunk": 121,
+     "ef0000": 119,
+     "ef0001": 120,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x42",
+       "desc_index",
+       32
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "metal_arch_texturepage5",
+     "chunk": 124,
+     "ef0000": 122,
+     "ef0001": 123,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x40",
+       "desc_index",
+       31
+      ]
+     ]
+    },
+    {
+     "material": "concrete_arch_viptp_bos3",
+     "chunk": 127,
+     "ef0000": 125,
+     "ef0001": 126,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x26",
+       "desc_index",
+       18
+      ]
+     ]
+    },
+    {
+     "material": "metalpainted_labels",
+     "chunk": 130,
+     "ef0000": 128,
+     "ef0001": 129,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x38",
+       "desc_index",
+       27
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_mat1_Clone_77",
+     "chunk": 133,
+     "ef0000": 131,
+     "ef0001": 132,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x18",
+       "desc_index",
+       11
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "BenchAd_ads_lower_one_mat1_Clone_128",
+     "chunk": 136,
+     "ef0000": 134,
+     "ef0001": 135,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x22",
+       "desc_index",
+       16
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_fan_mat1_Clone_104",
+     "chunk": 139,
+     "ef0000": 137,
+     "ef0001": 138,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x20",
+       "desc_index",
+       15
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "BoardAd_plastic_mat1_Clone_198",
+     "chunk": 142,
+     "ef0000": 140,
+     "ef0001": 141,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_200",
+     "chunk": 145,
+     "ef0000": 143,
+     "ef0001": 144,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "luxuryBox_04",
+     "chunk": 148,
+     "ef0000": 146,
+     "ef0001": 147,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x6",
+       "desc_index",
+       2
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_stair_benches_mat1_Clone_120",
+     "chunk": 151,
+     "ef0000": 149,
+     "ef0001": 150,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x48",
+       "desc_index",
+       35
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "MetalAmbient_structure_two_mat1_Clone_176",
+     "chunk": 154,
+     "ef0000": 152,
+     "ef0001": 153,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1e",
+       "desc_index",
+       14
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "BoardAd_plastic_mat1_Clone_240",
+     "chunk": 157,
+     "ef0000": 155,
+     "ef0001": 156,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x50",
+       "desc_index",
+       39
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_bench_ad_tile_mat1_Clone_142",
+     "chunk": 160,
+     "ef0000": 158,
+     "ef0001": 159,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0xe",
+       "desc_index",
+       6
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "metalbare_roof_beams1",
+     "chunk": 163,
+     "ef0000": 161,
+     "ef0001": 162,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x4c",
+       "desc_index",
+       37
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_fan_mat1_Clone_79",
+     "chunk": 166,
+     "ef0000": 164,
+     "ef0001": 165,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x20",
+       "desc_index",
+       15
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_156",
+     "chunk": 169,
+     "ef0000": 167,
+     "ef0001": 168,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x50",
+       "desc_index",
+       39
+      ]
+     ]
+    },
+    {
+     "material": "adbd_27",
+     "chunk": 172,
+     "ef0000": 170,
+     "ef0001": 171,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2e",
+       "desc_index",
+       22
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_back_boards_dup_mat2_Clone_100",
+     "chunk": 175,
+     "ef0000": 173,
+     "ef0001": 174,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x42",
+       "desc_index",
+       32
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "metalbare_trans_roofwindow1",
+     "chunk": 178,
+     "ef0000": 176,
+     "ef0001": 177,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x4e",
+       "desc_index",
+       38
+      ]
+     ]
+    },
+    {
+     "material": "MetalAmbient_structure_two_mat1_Clone_152",
+     "chunk": 181,
+     "ef0000": 179,
+     "ef0001": 180,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1e",
+       "desc_index",
+       14
+      ],
+      [
+       "ef0001",
+       288,
+       "0x50",
+       "desc_index",
+       39
+      ]
+     ]
+    },
+    {
+     "material": "powerring_boston3",
+     "chunk": 184,
+     "ef0000": 182,
+     "ef0001": 183,
+     "hits": {},
+     "examples": []
+    },
+    {
+     "material": "concretepainted_bos_conc3",
+     "chunk": 187,
+     "ef0000": 185,
+     "ef0001": 186,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x34",
+       "desc_index",
+       25
+      ]
+     ]
+    },
+    {
+     "material": "BenchAd_ads_two_mat1_Clone_138",
+     "chunk": 190,
+     "ef0000": 188,
+     "ef0001": 189,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1a",
+       "desc_index",
+       12
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_timekeeper_objects_mat1_Clone_119",
+     "chunk": 193,
+     "ef0000": 191,
+     "ef0001": 192,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x10",
+       "desc_index",
+       7
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_03",
+     "chunk": 196,
+     "ef0000": 194,
+     "ef0001": 195,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x40",
+       "desc_index",
+       31
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_180",
+     "chunk": 199,
+     "ef0000": 197,
+     "ef0001": 198,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x50",
+       "desc_index",
+       39
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_timekeeper_objects_mat1_Clone_123",
+     "chunk": 202,
+     "ef0000": 200,
+     "ef0001": 201,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x10",
+       "desc_index",
+       7
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "concrete_seating_seattiers46",
+     "chunk": 205,
+     "ef0000": 203,
+     "ef0001": 204,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x52",
+       "desc_index",
+       40
+      ]
+     ]
+    },
+    {
+     "material": "cloth_bos_ban1",
+     "chunk": 208,
+     "ef0000": 206,
+     "ef0001": 207,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x44",
+       "desc_index",
+       33
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_02_Clone_298",
+     "chunk": 211,
+     "ef0000": 209,
+     "ef0001": 210,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x6",
+       "desc_index",
+       2
+      ],
+      [
+       "ef0001",
+       288,
+       "0x36",
+       "desc_index",
+       26
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_boards_trim_mat2_Clone_115",
+     "chunk": 214,
+     "ef0000": 212,
+     "ef0001": 213,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "cloth_timekeeper_headbody_mat1",
+     "chunk": 217,
+     "ef0000": 215,
+     "ef0001": 216,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x24",
+       "desc_index",
+       17
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plastic_back_boards_fan_mat1_Clone_210",
+     "chunk": 220,
+     "ef0000": 218,
+     "ef0001": 219,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x20",
+       "desc_index",
+       15
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "concrete_stairs45",
+     "chunk": 223,
+     "ef0000": 221,
+     "ef0001": 222,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x46",
+       "desc_index",
+       34
+      ]
+     ]
+    },
+    {
+     "material": "metalbare_seatingshadow1",
+     "chunk": 226,
+     "ef0000": 224,
+     "ef0001": 225,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0xc",
+       "desc_index",
+       5
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_structure_mat1_Clone_108",
+     "chunk": 229,
+     "ef0000": 227,
+     "ef0001": 228,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2a",
+       "desc_index",
+       20
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_goal_light_mat1_Clone_99",
+     "chunk": 232,
+     "ef0000": 230,
+     "ef0001": 231,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "BoardConcreteAmbient_plasticrbk_mat1_Clone_106",
+     "chunk": 235,
+     "ef0000": 233,
+     "ef0001": 234,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2a",
+       "desc_index",
+       20
+      ],
+      [
+       "ef0001",
+       288,
+       "0xa",
+       "desc_index",
+       4
+      ]
+     ]
+    },
+    {
+     "material": "jumbotronscreenwidetwo_batch_shader",
+     "chunk": 238,
+     "ef0000": 236,
+     "ef0001": 237,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2c",
+       "desc_index",
+       21
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_cloth_mat1_Clone_140",
+     "chunk": 241,
+     "ef0000": 239,
+     "ef0001": 240,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x4a",
+       "desc_index",
+       36
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1_Clone_113",
+     "chunk": 244,
+     "ef0000": 242,
+     "ef0001": 243,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ],
+      [
+       "ef0001",
+       288,
+       "0x32",
+       "desc_index",
+       24
+      ]
+     ]
+    },
+    {
+     "material": "tunnel_03_Clone_297",
+     "chunk": 247,
+     "ef0000": 245,
+     "ef0001": 246,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x40",
+       "desc_index",
+       31
+      ],
+      [
+       "ef0001",
+       288,
+       "0x36",
+       "desc_index",
+       26
+      ]
+     ]
+    },
+    {
+     "material": "concrete_arch_13",
+     "chunk": 250,
+     "ef0000": 248,
+     "ef0001": 249,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x6",
+       "desc_index",
+       2
+      ]
+     ]
+    },
+    {
+     "material": "cloth_boston_banners1",
+     "chunk": 253,
+     "ef0000": 251,
+     "ef0001": 252,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x16",
+       "desc_index",
+       10
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_structure_mat1_Clone_175",
+     "chunk": 256,
+     "ef0000": 254,
+     "ef0001": 255,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x2a",
+       "desc_index",
+       20
+      ],
+      [
+       "ef0001",
+       288,
+       "0x50",
+       "desc_index",
+       39
+      ]
+     ]
+    },
+    {
+     "material": "Plastic_ICE_LOD",
+     "chunk": 259,
+     "ef0000": 257,
+     "ef0001": 258,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x14",
+       "desc_index",
+       9
+      ]
+     ]
+    },
+    {
+     "material": "jumbotronstats_0",
+     "chunk": 262,
+     "ef0000": 260,
+     "ef0001": 261,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x12",
+       "desc_index",
+       8
+      ]
+     ]
+    },
+    {
+     "material": "Plastic_back_boards_mat1_Clone_194",
+     "chunk": 265,
+     "ef0000": 263,
+     "ef0001": 264,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x18",
+       "desc_index",
+       11
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3a",
+       "desc_index",
+       28
+      ]
+     ]
+    },
+    {
+     "material": "RinkGlassEnds_SheetsGoal",
+     "chunk": 268,
+     "ef0000": 266,
+     "ef0001": 267,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x3c",
+       "desc_index",
+       29
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3e",
+       "desc_index",
+       30
+      ]
+     ]
+    },
+    {
+     "material": "RinkGlassSides_SheetsBench",
+     "chunk": 271,
+     "ef0000": 269,
+     "ef0001": 270,
+     "hits": {
+      "ef0001:desc_index": 2
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x3c",
+       "desc_index",
+       29
+      ],
+      [
+       "ef0001",
+       288,
+       "0x3e",
+       "desc_index",
+       30
+      ]
+     ]
+    },
+    {
+     "material": "Plastic_LOD_Boards",
+     "chunk": 274,
+     "ef0000": 272,
+     "ef0001": 273,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x8",
+       "desc_index",
+       3
+      ]
+     ]
+    },
+    {
+     "material": "PlasticAmbient_boards_two_mat1",
+     "chunk": 277,
+     "ef0000": 275,
+     "ef0001": 276,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x28",
+       "desc_index",
+       19
+      ]
+     ]
+    },
+    {
+     "material": "metalpainted_joe",
+     "chunk": 280,
+     "ef0000": 278,
+     "ef0001": 279,
+     "hits": {
+      "ef0001:desc_index": 1
+     },
+     "examples": [
+      [
+       "ef0001",
+       256,
+       "0x1c",
+       "desc_index",
+       13
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "all_packages_rule_check": {
+  "x360-legacy": {
+   "packages": 64,
+   "slot256": {
+    "raster": 4628,
+    "0x400000": 97,
+    "other": 3
+   },
+   "prev": {},
+   "board_ad_raster_dims": {
+    "512x512": 130,
+    "512x1024": 97,
+    "1024x256": 11,
+    "256x512": 3,
+    "512x128": 1,
+    "256x256": 1
+   },
+   "packages_with_board_ad_materials": 64
+  },
+  "x360-nhl13": {
+   "packages": 61,
+   "slot256": {
+    "raster": 4448,
+    "0x400000": 94,
+    "other": 3
+   },
+   "prev": {},
+   "board_ad_raster_dims": {
+    "512x512": 124,
+    "512x1024": 93,
+    "1024x256": 10,
+    "256x512": 3,
+    "512x128": 1,
+    "256x256": 1
+   },
+   "packages_with_board_ad_materials": 61
+  },
+  "x360-nhl10": {
+   "packages": 44,
+   "slot256": {
+    "raster": 2165,
+    "other": 1,
+    "0x400000": 3
+   },
+   "prev": {},
+   "board_ad_raster_dims": {
+    "512x1024": 61,
+    "512x512": 48,
+    "1024x256": 9,
+    "512x256": 4,
+    "1024x1024": 1
+   },
+   "packages_with_board_ad_materials": 44
+  }
+ }
+}

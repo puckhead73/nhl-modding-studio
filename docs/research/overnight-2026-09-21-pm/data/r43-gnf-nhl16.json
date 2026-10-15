@@ -1,0 +1,1539 @@
+{
+ "title": "nhl16",
+ "cusa": "CUSA01909",
+ "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA01909\\databigs\\Extracted",
+ "started": "2026-09-21T18:16:23-0600",
+ "seconds": 56,
+ "gnf_files_walked": 68849,
+ "classes": {
+  "readable": 68083,
+  "predicted_format": 68060,
+  "size_rule_pass": 68060,
+  "cube_or_array": 23,
+  "not_gnf": 766
+ },
+ "checks": {
+  "stream_size_eq_file_size": 68083,
+  "stream_size_eq_file_size_or_streams_tile_file": 68083,
+  "d7_eq_data_bytes": 68083,
+  "contents_size_0xf8": 68083,
+  "tiling_13": 68083,
+  "base_level_0": 68083,
+  "d0_zero": 68083,
+  "pitch_rule_tested": 68083,
+  "pitch_rule_ok": 68083,
+  "pitch_eq_w_minus_1": 64267,
+  "last_level_le_log2_maxdim": 68083,
+  "pitch_block_nonmultiple_tested": 3816,
+  "pitch_block_nonmultiple_ok": 3816
+ },
+ "shipped_maxima": {
+  "w": 4096,
+  "h": 4096,
+  "pitch": 4095,
+  "last_level": 12,
+  "data_bytes": 11187200
+ },
+ "formats": {
+  "BC1": 44256,
+  "BC5": 3696,
+  "BC3": 4182,
+  "BC7": 15949
+ },
+ "tail16_first4": {
+  "00000000": 64809,
+  "55534552": 3257,
+  "04000000": 17
+ },
+ "d5_d6_nonzero": {
+  "(False, False)": 68060,
+  "(True, False)": 23
+ },
+ "pitch_by_nonmultiple_width": {
+  "4": {
+   "31": 71
+  },
+  "8": {
+   "31": 36
+  },
+  "12": {
+   "31": 27
+  },
+  "16": {
+   "31": 73
+  },
+  "20": {
+   "31": 20
+  },
+  "24": {
+   "31": 25
+  },
+  "28": {
+   "31": 32
+  },
+  "36": {
+   "63": 131
+  },
+  "40": {
+   "63": 21
+  },
+  "44": {
+   "63": 30
+  },
+  "48": {
+   "63": 46
+  },
+  "52": {
+   "63": 46
+  },
+  "56": {
+   "63": 63
+  },
+  "60": {
+   "63": 81
+  },
+  "68": {
+   "95": 50
+  },
+  "72": {
+   "95": 45
+  },
+  "76": {
+   "95": 42
+  },
+  "80": {
+   "95": 39
+  },
+  "84": {
+   "95": 11
+  },
+  "88": {
+   "95": 8
+  },
+  "92": {
+   "95": 2
+  },
+  "100": {
+   "127": 62
+  },
+  "104": {
+   "127": 14
+  },
+  "108": {
+   "127": 1
+  },
+  "112": {
+   "127": 28
+  },
+  "116": {
+   "127": 4
+  },
+  "120": {
+   "127": 5
+  },
+  "124": {
+   "127": 21
+  },
+  "132": {
+   "159": 26
+  },
+  "136": {
+   "159": 2
+  },
+  "140": {
+   "159": 80
+  },
+  "144": {
+   "159": 4
+  },
+  "148": {
+   "159": 10
+  },
+  "152": {
+   "159": 29
+  },
+  "156": {
+   "159": 1
+  },
+  "164": {
+   "191": 3
+  },
+  "168": {
+   "191": 5
+  },
+  "172": {
+   "191": 3
+  },
+  "176": {
+   "191": 7
+  },
+  "180": {
+   "191": 2
+  },
+  "184": {
+   "191": 2
+  },
+  "188": {
+   "191": 11
+  },
+  "196": {
+   "223": 17
+  },
+  "200": {
+   "223": 854
+  },
+  "204": {
+   "223": 5
+  },
+  "208": {
+   "223": 2
+  },
+  "212": {
+   "223": 2
+  },
+  "216": {
+   "223": 20
+  },
+  "220": {
+   "223": 3
+  },
+  "228": {
+   "255": 3
+  },
+  "232": {
+   "255": 8
+  },
+  "236": {
+   "255": 6
+  },
+  "240": {
+   "255": 2
+  },
+  "244": {
+   "255": 10
+  },
+  "248": {
+   "255": 147
+  },
+  "252": {
+   "255": 10
+  },
+  "260": {
+   "287": 16
+  },
+  "264": {
+   "287": 8
+  },
+  "268": {
+   "287": 6
+  },
+  "272": {
+   "287": 164
+  },
+  "276": {
+   "287": 4
+  },
+  "280": {
+   "287": 4
+  },
+  "284": {
+   "287": 3
+  },
+  "292": {
+   "319": 8
+  },
+  "296": {
+   "319": 10
+  },
+  "300": {
+   "319": 4
+  },
+  "304": {
+   "319": 3
+  },
+  "312": {
+   "319": 5
+  },
+  "316": {
+   "319": 2
+  },
+  "324": {
+   "351": 363
+  },
+  "328": {
+   "351": 2
+  },
+  "336": {
+   "351": 3
+  },
+  "340": {
+   "351": 1
+  },
+  "344": {
+   "351": 15
+  },
+  "348": {
+   "351": 2
+  },
+  "356": {
+   "383": 3
+  },
+  "360": {
+   "383": 1
+  },
+  "364": {
+   "383": 4
+  },
+  "372": {
+   "383": 2
+  },
+  "380": {
+   "383": 1
+  },
+  "388": {
+   "415": 6
+  },
+  "392": {
+   "415": 3
+  },
+  "396": {
+   "415": 31
+  },
+  "400": {
+   "415": 83
+  },
+  "404": {
+   "415": 12
+  },
+  "408": {
+   "415": 1
+  },
+  "412": {
+   "415": 3
+  },
+  "420": {
+   "447": 2
+  },
+  "424": {
+   "447": 3
+  },
+  "428": {
+   "447": 1
+  },
+  "432": {
+   "447": 4
+  },
+  "436": {
+   "447": 4
+  },
+  "440": {
+   "447": 6
+  },
+  "444": {
+   "447": 2
+  },
+  "460": {
+   "479": 2
+  },
+  "464": {
+   "479": 2
+  },
+  "468": {
+   "479": 91
+  },
+  "472": {
+   "479": 2
+  },
+  "476": {
+   "479": 1
+  },
+  "484": {
+   "511": 1
+  },
+  "488": {
+   "511": 2
+  },
+  "500": {
+   "511": 2
+  },
+  "504": {
+   "511": 5
+  },
+  "516": {
+   "543": 3
+  },
+  "520": {
+   "543": 4
+  },
+  "524": {
+   "543": 5
+  },
+  "528": {
+   "543": 4
+  },
+  "532": {
+   "543": 1
+  },
+  "536": {
+   "543": 3
+  },
+  "540": {
+   "543": 1
+  },
+  "548": {
+   "575": 5
+  },
+  "552": {
+   "575": 1
+  },
+  "556": {
+   "575": 4
+  },
+  "560": {
+   "575": 1
+  },
+  "564": {
+   "575": 5
+  },
+  "568": {
+   "575": 7
+  },
+  "572": {
+   "575": 4
+  },
+  "580": {
+   "607": 2
+  },
+  "584": {
+   "607": 1
+  },
+  "588": {
+   "607": 2
+  },
+  "592": {
+   "607": 1
+  },
+  "600": {
+   "607": 50
+  },
+  "604": {
+   "607": 2
+  },
+  "612": {
+   "639": 3
+  },
+  "616": {
+   "639": 39
+  },
+  "624": {
+   "639": 1
+  },
+  "628": {
+   "639": 2
+  },
+  "632": {
+   "639": 226
+  },
+  "636": {
+   "639": 1
+  },
+  "660": {
+   "671": 2
+  },
+  "664": {
+   "671": 20
+  },
+  "676": {
+   "703": 1
+  },
+  "684": {
+   "703": 5
+  },
+  "700": {
+   "703": 2
+  },
+  "712": {
+   "735": 1
+  },
+  "728": {
+   "735": 8
+  },
+  "732": {
+   "735": 3
+  },
+  "740": {
+   "767": 2
+  },
+  "744": {
+   "767": 3
+  },
+  "748": {
+   "767": 6
+  },
+  "752": {
+   "767": 2
+  },
+  "756": {
+   "767": 1
+  },
+  "760": {
+   "767": 1
+  },
+  "764": {
+   "767": 4
+  },
+  "772": {
+   "799": 20
+  },
+  "776": {
+   "799": 1
+  },
+  "780": {
+   "799": 1
+  },
+  "784": {
+   "799": 1
+  },
+  "788": {
+   "799": 7
+  },
+  "792": {
+   "799": 8
+  },
+  "804": {
+   "831": 2
+  },
+  "808": {
+   "831": 1
+  },
+  "812": {
+   "831": 79
+  },
+  "816": {
+   "831": 1
+  },
+  "820": {
+   "831": 1
+  },
+  "824": {
+   "831": 1
+  },
+  "828": {
+   "831": 2
+  },
+  "836": {
+   "863": 2
+  },
+  "840": {
+   "863": 1
+  },
+  "844": {
+   "863": 1
+  },
+  "848": {
+   "863": 9
+  },
+  "852": {
+   "863": 2
+  },
+  "872": {
+   "895": 2
+  },
+  "876": {
+   "895": 1
+  },
+  "964": {
+   "991": 2
+  },
+  "972": {
+   "991": 3
+  },
+  "1036": {
+   "1055": 1
+  },
+  "1044": {
+   "1055": 1
+  },
+  "1052": {
+   "1055": 1
+  },
+  "1060": {
+   "1087": 1
+  },
+  "1124": {
+   "1151": 3
+  },
+  "1144": {
+   "1151": 3
+  },
+  "1180": {
+   "1183": 2
+  },
+  "1204": {
+   "1215": 1
+  },
+  "1308": {
+   "1311": 1
+  },
+  "1400": {
+   "1407": 1
+  },
+  "1572": {
+   "1599": 1
+  },
+  "1604": {
+   "1631": 2
+  }
+ },
+ "bc6h": {},
+ "shapes_top": [
+  {
+   "shape": [
+    128,
+    128,
+    "BC1",
+    9,
+    7,
+    9
+   ],
+   "count": 24480
+  },
+  {
+   "shape": [
+    512,
+    340,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 9275
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC1",
+    9,
+    9,
+    9
+   ],
+   "count": 4965
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 4166
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC1",
+    9,
+    8,
+    9
+   ],
+   "count": 4106
+  },
+  {
+   "shape": [
+    2048,
+    2048,
+    "BC1",
+    9,
+    11,
+    9
+   ],
+   "count": 2793
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC3",
+    9,
+    10,
+    9
+   ],
+   "count": 2404
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC5",
+    1,
+    10,
+    9
+   ],
+   "count": 1497
+  },
+  {
+   "shape": [
+    320,
+    380,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 1207
+  },
+  {
+   "shape": [
+    2048,
+    1024,
+    "BC1",
+    9,
+    11,
+    9
+   ],
+   "count": 1096
+  },
+  {
+   "shape": [
+    2048,
+    2048,
+    "BC5",
+    1,
+    11,
+    9
+   ],
+   "count": 1017
+  },
+  {
+   "shape": [
+    32,
+    32,
+    "BC1",
+    9,
+    5,
+    9
+   ],
+   "count": 874
+  },
+  {
+   "shape": [
+    200,
+    200,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 817
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC5",
+    1,
+    9,
+    9
+   ],
+   "count": 807
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 399
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC3",
+    9,
+    9,
+    9
+   ],
+   "count": 360
+  },
+  {
+   "shape": [
+    256,
+    1024,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 360
+  },
+  {
+   "shape": [
+    324,
+    464,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 360
+  },
+  {
+   "shape": [
+    1024,
+    512,
+    "BC3",
+    9,
+    10,
+    9
+   ],
+   "count": 324
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 286
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC1",
+    0,
+    10,
+    9
+   ],
+   "count": 271
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 234
+  },
+  {
+   "shape": [
+    632,
+    200,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 225
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC3",
+    9,
+    8,
+    9
+   ],
+   "count": 209
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC1",
+    0,
+    9,
+    9
+   ],
+   "count": 200
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "BC1",
+    9,
+    6,
+    9
+   ],
+   "count": 177
+  },
+  {
+   "shape": [
+    2048,
+    1024,
+    "BC3",
+    9,
+    11,
+    9
+   ],
+   "count": 171
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 169
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC5",
+    1,
+    8,
+    9
+   ],
+   "count": 144
+  },
+  {
+   "shape": [
+    272,
+    212,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 144
+  },
+  {
+   "shape": [
+    248,
+    236,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 131
+  },
+  {
+   "shape": [
+    512,
+    256,
+    "BC3",
+    9,
+    9,
+    9
+   ],
+   "count": 130
+  },
+  {
+   "shape": [
+    2048,
+    1024,
+    "BC3",
+    0,
+    11,
+    9
+   ],
+   "count": 126
+  },
+  {
+   "shape": [
+    1024,
+    256,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 126
+  },
+  {
+   "shape": [
+    512,
+    256,
+    "BC1",
+    9,
+    9,
+    9
+   ],
+   "count": 123
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 123
+  },
+  {
+   "shape": [
+    36,
+    36,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 112
+  },
+  {
+   "shape": [
+    1024,
+    512,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 97
+  },
+  {
+   "shape": [
+    468,
+    656,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 89
+  },
+  {
+   "shape": [
+    256,
+    512,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 86
+  },
+  {
+   "shape": [
+    140,
+    108,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 68
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "BC3",
+    9,
+    7,
+    9
+   ],
+   "count": 67
+  },
+  {
+   "shape": [
+    32,
+    32,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 63
+  },
+  {
+   "shape": [
+    60,
+    60,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 62
+  },
+  {
+   "shape": [
+    1920,
+    1080,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 58
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC3",
+    0,
+    10,
+    9
+   ],
+   "count": 56
+  },
+  {
+   "shape": [
+    256,
+    512,
+    "BC1",
+    9,
+    9,
+    9
+   ],
+   "count": 56
+  },
+  {
+   "shape": [
+    256,
+    512,
+    "BC3",
+    9,
+    9,
+    9
+   ],
+   "count": 55
+  },
+  {
+   "shape": [
+    512,
+    1024,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 52
+  },
+  {
+   "shape": [
+    100,
+    100,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 51
+  },
+  {
+   "shape": [
+    2048,
+    1024,
+    "BC5",
+    1,
+    11,
+    9
+   ],
+   "count": 49
+  },
+  {
+   "shape": [
+    56,
+    56,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 47
+  },
+  {
+   "shape": [
+    812,
+    204,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 42
+  },
+  {
+   "shape": [
+    1024,
+    512,
+    "BC1",
+    0,
+    10,
+    9
+   ],
+   "count": 41
+  },
+  {
+   "shape": [
+    16,
+    16,
+    "BC1",
+    9,
+    4,
+    9
+   ],
+   "count": 40
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC3",
+    0,
+    9,
+    9
+   ],
+   "count": 39
+  },
+  {
+   "shape": [
+    616,
+    204,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 39
+  },
+  {
+   "shape": [
+    64,
+    4096,
+    "BC3",
+    9,
+    12,
+    9
+   ],
+   "count": 36
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "BC3",
+    9,
+    6,
+    9
+   ],
+   "count": 35
+  },
+  {
+   "shape": [
+    1024,
+    128,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 35
+  }
+ ],
+ "shapes_distinct": 894,
+ "families": {
+  "nhl/data/kettle": {
+   "pass": 52111,
+   "cube_or_array": 23
+  }
+ },
+ "failures": {
+  "cube_or_array": [
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/board_glass_cubemap.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/character_common_env_cube_1.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/character_ufc_env_cube_sweat.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/diffuse_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/diff_cubemap_test.gnf",
+    "w": 32,
+    "h": 32,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 6,
+    "data": 49152,
+    "pred_2d": 6144,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/environment_spec_cubemap.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/equipment_cube_map.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/eye_reflection_01.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/face_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/face_specular_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/helmet_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/specular_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/stad_gen_cubemap.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/stad_glass_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/visor_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/indicator/indicator_hint_iconarray.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 13,
+    "depth": 1,
+    "levels": 9,
+    "data": 184320,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_goalie_nineties_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_goalie_rbk_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_skater_nineties_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_skater_rbk_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/effects/ice_spec_cube.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/common_blurred_enviro_cubemap.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 393216,
+    "pred_2d": 65536,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/default_new_cube.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   }
+  ]
+ },
+ "note": "R43 \u2014 PS4 GNF header census, one checkpoint file per title (read-only; headers + file sizes only). Restores the 2026-09-21 handoff 15\npitch-rounding check as a full-population probe (no sample) and separates the coverage classes the R1 review asked for.\n\nPer `.gnf` under `<CUSA>/databigs/Extracted`: the 256-byte GNF header (`GNF ` magic, contentsSize, version/count/alignment, streamSize) and\nthe T# words as Studio's `tdb-rx2::gnf` splits them (width / height 14-bit, dfmt 6-bit, nfmt, base / last level, tiling, type, pitch 14-bit,\ndepth), dword 7 and the 16 bytes after the T#. Classes per file (mutually exclusive, in this order):\n  not_gnf            magic missing / header shorter than 0x40\n  cube_or_array      type != 9 (2D) or depth != 0 or data == 6 x the 2D prediction\n  unknown_format     dfmt not in the block / uncompressed byte tables (BC6H 0x28 stays separate: tested with a 16-byte-block hypothesis)\n  predicted          data-size rule evaluated: pass / fail counted separately\nRules tested on every readable file: streamSize == file size (or the concatenated streams tile the file \u2014 NHL 15 ships 1 115 two-stream files, found 2026-09-21 pm; the size rules are then evaluated on the first stream); d7 == file size - 0x100; pitch == roundup(w, 32) - 1 for block formats\n(and == w - 1 for uncompressed); last_level + 1 <= floor(log2(max(w, h))) + 1; data == sum over levels of 8x8-block micro-tiles (tiling 13).\nField-bound census (representable vs shipped): max width / height / pitch / last_level seen per title.\nUsage: python r43_gnf_header_census_per_title.py <out_dir> --titles nhl20[,nhl15,...] [--max N]\n  -> <out_dir>/r43-gnf-<title>.json per title (a title's file is written only when its walk completes).\n"
+}

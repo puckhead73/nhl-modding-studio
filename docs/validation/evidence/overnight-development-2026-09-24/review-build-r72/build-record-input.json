@@ -1,0 +1,22 @@
+{
+  "candidate": "NHL Modding Studio rc-20261001-r72",
+  "built": "2026-10-01T23:33:23-06:00 .. 2026-10-01T23:36:28-06:00",
+  "command": "CARGO_INCREMENTAL=0 npm run build -- --no-bundle (repo root; tauri build; existing target\\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 1045,
+  "dirty_manifest_sha256": "8af16c1475a31cee318ad05a2b03b4bdd3f3b70b95c02a29f8f1a0f78803aa40",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "13c5786b937d1eb1d8387dc5ff997984ff2f83577e28dbf7c1a3cecb7f0200c4",
+  "exe_bytes": 53929472,
+  "defs_tree_sha256": "20c3b1833a4ce1125a2cc58d1b67a0cda2c6feaaf0b75b2ad0c0f711438fcf8b",
+  "frontend_dist_tree_sha256": "5092dde334d1bf7e3a68ecd7410e60054b2eb163594d145e37032159d6068e46",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "anchors_tree_sha256": "170fcc9a3b8b8cc57a90f71e418d072d0ca51a02a86410afbcbf6f9a815e1fb9",
+  "baseline_inventory_sha256": "a78c50ccd481db8b3ff430f371905ae95284d3eaf2a1e83b85535b48d1892aa7",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "r71 contents (developer receipts through 72) plus 73: ONB-003 r71 coordinator corrections \u2014 package cells bound to row key values (edits schema 2; r71 packages refused), exact file-role routing with explicit roster choice on every platform, the save-index sidecar inside the reviewed plan and the restore step set with per-item recovery (installer and project deployment), Save for assets-only projects, platform-correct asset roots, Xbox 360 \u2194 Recompiled loose textures by registered inheritance.",
+  "tree_sha_definition": "SHA-256 of '<relpath>\\t<sha256>\\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

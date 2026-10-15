@@ -1,0 +1,272 @@
+# Anatomical compatibility scoring — per-metric weights + thresholds.
+#
+# This file is the data-driven decision layer for NHL24 → Legacy donor
+# selection (PR3). The copy at defs/rig-audit-scoring.toml overrides
+# the built-in default at runtime, so weights can be recalibrated from
+# corpus outcomes without a rebuild.
+#
+# Per metric:
+#   weight       relative importance (visible failure zones are high)
+#   normalize    "mm"  → |Δ| in millimeters judged against thresholds
+#                "pct" → |Δ| as % of the donor's value
+#   caution      mismatch at/above which → caution
+#   high         mismatch at/above which → high severity
+#   direction    "both" (default) | "target_larger" | "target_smaller"
+#                — which sign of (target − donor) is the risky one
+#   benign_scale mismatch discount on the benign side of a directional
+#                rule (default 0.5)
+#
+# Initial weights follow the PR2 evidence: the visible failure zones
+# (eye spacing/openings, mouth width + opening, philtrum/upper-lip,
+# lower-lip-to-chin, chin projection) dominate; broad head extents
+# only matter when obviously extreme.
+
+schema = "rigaudit-scoring/1"
+
+# ---- High priority — visible failure zones ----
+
+[[metric]]
+key = "eye_spacing_balls"
+weight = 10.0
+normalize = "mm"
+caution = 2.5
+high = 5.0
+
+[[metric]]
+key = "eye_spacing_openings"
+weight = 8.0
+normalize = "mm"
+caution = 3.0
+high = 6.0
+
+# Eye-opening extents: cross-family comparisons see a known systematic
+# (Legacy = true opening hole, NHL24 = lash-strip lid margin, ~30%
+# wider) — thresholds are deliberately loose enough that only
+# above-systematic mismatch flags.
+
+[[metric]]
+key = "eye_opening_width_l"
+weight = 5.0
+normalize = "pct"
+caution = 25.0
+high = 50.0
+
+[[metric]]
+key = "eye_opening_width_r"
+weight = 5.0
+normalize = "pct"
+caution = 25.0
+high = 50.0
+
+[[metric]]
+key = "eye_opening_height_l"
+weight = 6.0
+normalize = "pct"
+caution = 25.0
+high = 50.0
+
+[[metric]]
+key = "eye_opening_height_r"
+weight = 6.0
+normalize = "pct"
+caution = 25.0
+high = 50.0
+
+# Eye depth (PR6): plane-relative ball depths + corneal-front
+# protrusion. eye_protrusion_front is the bulging-eye axis the PR5
+# Blender gate flagged — plane-relative, so it compares cleanly
+# across families. A target eye MORE protruded than the donor's is
+# the risky direction.
+
+[[metric]]
+key = "eye_protrusion_front_l"
+weight = 6.0
+normalize = "mm"
+caution = 2.0
+high = 4.0
+direction = "target_larger"
+benign_scale = 0.5
+
+[[metric]]
+key = "eye_protrusion_front_r"
+weight = 6.0
+normalize = "mm"
+caution = 2.0
+high = 4.0
+direction = "target_larger"
+benign_scale = 0.5
+
+[[metric]]
+key = "eye_depth_ball_to_opening_plane_l"
+weight = 3.0
+normalize = "mm"
+caution = 3.0
+high = 6.0
+
+[[metric]]
+key = "eye_depth_ball_to_opening_plane_r"
+weight = 3.0
+normalize = "mm"
+caution = 3.0
+high = 6.0
+
+[[metric]]
+key = "eye_depth_ball_to_socket_plane_l"
+weight = 2.0
+normalize = "mm"
+caution = 3.0
+high = 6.0
+
+[[metric]]
+key = "eye_depth_ball_to_socket_plane_r"
+weight = 2.0
+normalize = "mm"
+caution = 3.0
+high = 6.0
+
+# Eyeball-to-opening offset — within-head relation, no cross-family
+# systematic (Alfredsson's 10–12 mm ball offsets live here).
+
+[[metric]]
+key = "eye_ball_to_opening_l"
+weight = 5.0
+normalize = "mm"
+caution = 4.0
+high = 9.0
+
+[[metric]]
+key = "eye_ball_to_opening_r"
+weight = 5.0
+normalize = "mm"
+caution = 4.0
+high = 9.0
+
+[[metric]]
+key = "mouth_width"
+weight = 8.0
+normalize = "pct"
+caution = 8.0
+high = 15.0
+
+# A target mouth opening much SMALLER than the donor's is the
+# mouth-collapse direction (Aho −31.5% vs player_20500).
+[[metric]]
+key = "mouth_opening_height"
+weight = 8.0
+normalize = "pct"
+caution = 15.0
+high = 30.0
+direction = "target_smaller"
+benign_scale = 0.6
+
+[[metric]]
+key = "philtrum_length"
+weight = 6.0
+normalize = "pct"
+caution = 20.0
+high = 40.0
+
+[[metric]]
+key = "upper_lip_to_crease"
+weight = 6.0
+normalize = "pct"
+caution = 25.0
+high = 50.0
+
+[[metric]]
+key = "lower_lip_to_chin"
+weight = 7.0
+normalize = "pct"
+caution = 12.0
+high = 25.0
+
+[[metric]]
+key = "chin_projection"
+weight = 7.0
+normalize = "mm"
+caution = 4.0
+high = 9.0
+
+# ---- Medium priority — facial proportions ----
+
+[[metric]]
+key = "eye_to_mouth_distance"
+weight = 6.0
+normalize = "pct"
+caution = 8.0
+high = 15.0
+
+[[metric]]
+key = "nose_to_mouth_distance"
+weight = 5.0
+normalize = "pct"
+caution = 12.0
+high = 25.0
+
+[[metric]]
+key = "face_height_eyes_to_chin"
+weight = 5.0
+normalize = "pct"
+caution = 8.0
+high = 15.0
+
+[[metric]]
+key = "jaw_width"
+weight = 4.0
+normalize = "pct"
+caution = 10.0
+high = 20.0
+
+[[metric]]
+key = "head_width"
+weight = 3.0
+normalize = "pct"
+caution = 10.0
+high = 20.0
+
+# ---- Low priority — broad extents (only obviously extreme matters;
+# height additionally depends on where the neck cut lands) ----
+
+[[metric]]
+key = "head_height"
+weight = 1.5
+normalize = "pct"
+caution = 15.0
+high = 30.0
+
+[[metric]]
+key = "head_depth"
+weight = 1.5
+normalize = "pct"
+caution = 15.0
+high = 30.0
+
+# ---- Symmetry deltas (always mm — the donor reference is ~0) ----
+
+[[metric]]
+key = "sym_eye_opening_height"
+weight = 3.0
+normalize = "mm"
+caution = 2.0
+high = 4.0
+
+[[metric]]
+key = "sym_eye_opening_dy"
+weight = 3.0
+normalize = "mm"
+caution = 2.5
+high = 5.0
+
+[[metric]]
+key = "sym_mouth_corner_dy"
+weight = 3.0
+normalize = "mm"
+caution = 2.5
+high = 5.0
+
+[[metric]]
+key = "sym_eyeball_dx"
+weight = 2.0
+normalize = "mm"
+caution = 2.5
+high = 5.0

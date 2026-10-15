@@ -1,0 +1,417 @@
+$ python research/nhl07-roster-schema/scripts/roster_group_meta.py anchors/xbox360/nhl07/databases/NHL07NG.db anchors/xbox360/nhl07/databases/NHL07NG-meta.xml anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1 0x1c
+
+== customgoalieai (YzeG)  rec=16B max=0 cur=0  insert=KboR delete=Exae maxinsert=30 maxupdate=30 savegroups=rosters
+   zIBw  game_id                    INTEGER                  depth=8     range=0..255 bit=0 w=8 KEY
+   IOYn  g_toughness                INTEGER                  depth=6     range=0..63 bit=42 w=6 upd
+   jmPC  g_breakaway                INTEGER                  depth=6     range=0..63 bit=80 w=6 upd
+   DOmH  g_paddledown               INTEGER                  depth=2     range=0..3 bit=20 w=2 upd
+   uVsH  g_pokecheck                INTEGER                  depth=6     range=0..63 bit=110 w=6 upd
+   qiGO  g_fighting                 INTEGER                  depth=2     range=0..3 bit=94 w=2 upd
+   GLub  g_endurance                INTEGER                  depth=6     range=0..63 bit=28 w=6 upd
+   MgKo  g_speed                    INTEGER                  depth=6     range=0..63 bit=48 w=6 upd
+   RbJp  g_positioning              INTEGER                  depth=2     range=0..3 bit=60 w=2 upd
+   BSHP  g_reboundcontrol           INTEGER                  depth=6     range=0..63 bit=8 w=6 upd
+   iBQX  g_shotrecover              INTEGER                  depth=6     range=0..63 bit=68 w=6 upd
+   suJw  g_style                    INTEGER                  depth=2     range=0..3 bit=108 w=2 upd
+   soMM  g_passing                  INTEGER                  depth=6     range=0..63 bit=102 w=6 upd
+   Ewap  g_5hole                    INTEGER                  depth=6     range=0..63 bit=22 w=6 upd
+   qTeq  g_floppiness               INTEGER                  depth=2     range=0..3 bit=92 w=2 upd
+   OdSs  g_gsl                      INTEGER                  depth=6     range=0..63 bit=54 w=6 upd
+   nRPv  g_gsh                      INTEGER                  depth=6     range=0..63 bit=86 w=6 upd
+   IBOA  g_consistency              INTEGER                  depth=2     range=0..3 bit=40 w=2 upd
+   BboH  g_agility                  INTEGER                  depth=6     range=0..63 bit=14 w=6 upd
+   GrVN  g_potential                INTEGER                  depth=6     range=0..63 bit=34 w=6 upd
+   aiFP  g_ssl                      INTEGER                  depth=6     range=0..63 bit=62 w=6 upd
+   sVvS  g_intensity                INTEGER                  depth=6     range=0..63 bit=96 w=6 upd
+   jWgU  g_ssh                      INTEGER                  depth=6     range=0..63 bit=74 w=6 upd
+
+== customplayerai (oDHy)  rec=20B max=0 cur=0  insert=KERl delete=wKzK maxinsert=150 maxupdate=150 savegroups=rosters
+   zIBw  game_id                    INTEGER                  depth=8     range=0..255 bit=0 w=8 KEY
+   qQvX  p_deking                   INTEGER                  depth=6     range=0..63 bit=133 w=6 upd
+   kOdX  p_checking                 INTEGER                  depth=6     range=0..63 bit=109 w=6 upd
+   baRY  pass_carrybias             INTEGER                  depth=4     range=0..15 bit=81 w=4 upd
+   NUxf  p_agility                  INTEGER                  depth=6     range=0..63 bit=51 w=6 upd
+   MDFs  p_passing                  INTEGER                  depth=6     range=0..63 bit=45 w=6 upd
+   OHVx  p_injury                   INTEGER                  depth=6     range=0..63 bit=57 w=6 upd
+   uhFJ  p_prestige                 INTEGER                  depth=6     range=0..63 bit=139 w=6 upd
+   Kusi  p_potential                INTEGER                  depth=6     range=0..63 bit=39 w=6 upd
+   cnVI  p_toughness                INTEGER                  depth=6     range=0..63 bit=85 w=6 upd
+   EksY  off_defbias                INTEGER                  depth=4     range=0..15 bit=32 w=4 upd
+   ntSb  p_acceleration             INTEGER                  depth=6     range=0..63 bit=115 w=6 upd
+   pter  p_slapaccuracy             INTEGER                  depth=6     range=0..63 bit=127 w=6 upd
+   hlsv  shoot_passbias             INTEGER                  depth=4     range=0..15 bit=97 w=4 upd
+   CKPw  p_endurance                INTEGER                  depth=6     range=0..63 bit=14 w=6 upd
+   EKlF  p_wristaccuracy            INTEGER                  depth=6     range=0..63 bit=20 w=6 upd
+   kMSG  p_puckcontrol              INTEGER                  depth=6     range=0..63 bit=103 w=6 upd
+   zNcV  p_wristshotpower           INTEGER                  depth=6     range=0..63 bit=145 w=6 upd
+   EoQm  p_style                    INTEGER                  depth=3     range=0..7 bit=36 w=3 upd
+   ZjQo  p_slapshotpower            INTEGER                  depth=6     range=0..63 bit=69 w=6 upd
+   YWPq  p_speed                    INTEGER                  depth=6     range=0..63 bit=63 w=6 upd
+   ZpNt  p_faceoffs                 INTEGER                  depth=6     range=0..63 bit=75 w=6 upd
+   ArKB  p_aggression               INTEGER                  depth=6     range=0..63 bit=8 w=6 upd
+   joMD  p_fighting                 INTEGER                  depth=2     range=0..3 bit=101 w=2 upd
+   EcHG  p_balance                  INTEGER                  depth=6     range=0..63 bit=26 w=6 upd
+   oNkI  p_herorating               INTEGER                  depth=6     range=0..63 bit=121 w=6 upd
+   eodJ  p_penalty                  INTEGER                  depth=6     range=0..63 bit=91 w=6 upd
+
+== customplayerbiotable (MqdK)  rec=508B max=0 cur=0  insert=eUOR delete=oCMe maxinsert=180 maxupdate=180 savegroups=rosters
+   zIBw  game_id                    INTEGER                  depth=8     range=0..255 bit=3856 w=8 KEY
+   vnCd  rookie                     INTEGER                  depth=1     range=0..1 bit=4039 w=1 upd
+   crfg  neckprotector              INTEGER                  depth=1     range=0..1 bit=3957 w=1 upd
+   PQgy  yeardrafted                INTEGER                  depth=6     range=0..63 bit=3928 w=6 upd
+   KfBC  righteyecolorcode          INTEGER                  depth=3     range=0..6 bit=3897 w=3 upd
+   PedH  firstname                  STRING                   depth=1280  range=0..0 bit=1280 w=1280 upd
+   sZqI  helmetrankcode             INTEGER                  depth=2     range=0..2 bit=4025 w=2 upd
+   rnOl  artid                      INTEGER                  depth=14    range=0..16383 bit=4011 w=14 upd
+   GPQs  pantstypecode              INTEGER                  depth=1     range=0..1 bit=3887 w=1 upd
+   WZNs  weight                     INTEGER                  depth=8     range=0..255 bit=3840 w=8 upd
+   RZSz  visortypecode              INTEGER                  depth=2     range=0..2 bit=3943 w=2 upd
+   pkRG  handedness                 INTEGER                  depth=1     range=0..1 bit=4010 w=1 upd
+   LtqK  defaultaudioid             INTEGER                  depth=14    range=0..16383 bit=3900 w=14 
+   jqpY  jerseytuck                 INTEGER                  depth=3     range=0..7 bit=4002 w=3 upd
+   iPGg  hascustompads              INTEGER                  depth=1     range=0..1 bit=3996 w=1 upd
+   TYDh  hascustomtrapper           INTEGER                  depth=1     range=0..1 bit=3946 w=1 upd
+   DaPp  headid                     INTEGER                  depth=14    range=0..16383 bit=3865 w=14 upd
+   xFXw  stick                      INTEGER                  depth=8     range=0..190 bit=3848 w=8 upd
+   iwsK  day                        INTEGER                  depth=5     range=0..31 bit=3997 w=5 upd
+   zxmK  blocker                    INTEGER                  depth=5     range=0..31 bit=4040 w=5 upd
+   QDTK  skincolor                  INTEGER                  depth=4     range=0..10 bit=3939 w=4 upd
+   DVoL  contractis2way             INTEGER                  depth=1     range=0..1 bit=3864 w=1 upd
+   hleL  intlcountry                INTEGER                  depth=7     range=0..127 bit=3985 w=7 upd
+   JzFM  birthplace                 STRING                   depth=1280  range=0..0 bit=0 w=1280 upd
+   RMbQ  lastname                   STRING                   depth=1280  range=0..0 bit=2560 w=1280 upd
+   hruQ  skates                     INTEGER                  depth=4     range=0..9 bit=3992 w=4 upd
+   IxvQ  state                      INTEGER                  depth=7     range=0..127 bit=3889 w=7 upd
+   feiZ  lefteyecolorcode           INTEGER                  depth=3     range=0..6 bit=3973 w=3 upd
+   TJol  sticktapestylecode         INTEGER                  depth=1     range=0..1 bit=3945 w=1 upd
+   fjUo  positiondrafted            INTEGER                  depth=9     range=0..511 bit=3976 w=9 upd
+   dnFq  year                       INTEGER                  depth=6     range=0..63 bit=3967 w=6 upd
+   tRVs  jersey                     INTEGER                  depth=7     range=0..127 bit=4027 w=7 upd
+   QBpy  height                     INTEGER                  depth=5     range=0..31 bit=3934 w=5 upd
+   JoGJ  hascustomblocker           INTEGER                  depth=1     range=0..1 bit=3896 w=1 upd
+   pLKJ  month                      INTEGER                  depth=4     range=0..15 bit=4006 w=4 upd
+   VaWL  skatesocktuckcode          INTEGER                  depth=2     range=0..3 bit=3947 w=2 upd
+   FVaN  helmetbrandorgoaliemask    INTEGER                  depth=5     range=0..31 bit=3879 w=5 upd
+   lXPP  shoulderpadstypecode       INTEGER                  depth=1     range=0..1 bit=4005 w=1 upd
+   bkKW  glovesortrapper            INTEGER                  depth=5     range=0..31 bit=3952 w=5 upd
+   dhKk  contractdollars            INTEGER                  depth=9     range=0..511 bit=3958 w=9 upd
+   IIGk  hascustommask              INTEGER                  depth=1     range=0..1 bit=3888 w=1 upd
+   Nzao  audioid                    INTEGER                  depth=14    range=0..16383 bit=3914 w=14 upd
+   aljv  position                   INTEGER                  depth=3     range=0..7 bit=3949 w=3 upd
+   GDhI  contractlength             INTEGER                  depth=3     range=0..7 bit=3884 w=3 upd
+   vaGO  visorcolororgoaliepads     INTEGER                  depth=5     range=0..31 bit=4034 w=5 upd
+
+== exhibitionarena (OEtS)  rec=4B max=93 cur=93  insert=CTnc delete=None maxinsert=30 maxupdate=None savegroups=rosters
+   qEfv  index                      INTEGER                  depth=7     range=0..127 bit=8 w=7 KEY FK->exhibitionteams
+   aDub  arenaid                    INTEGER                  depth=7     range=0..127 bit=1 w=7 FK->stockarenatable
+   BERR  table                      INTEGER                  depth=1     range=0..1 bit=0 w=1 
+
+== exhibitiondownloadgoalieai (dDrd)  rec=16B max=50 cur=50  insert=None delete=None maxinsert=None maxupdate=-1 savegroups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+   zIBw  game_id                    INTEGER                  depth=13    range=0..8191 bit=108 w=13 KEY
+   IOYn  g_toughness                INTEGER                  depth=6     range=0..63 bit=34 w=6 upd
+   jmPC  g_breakaway                INTEGER                  depth=6     range=0..63 bit=72 w=6 upd
+   DOmH  g_paddledown               INTEGER                  depth=2     range=0..3 bit=12 w=2 upd
+   uVsH  g_pokecheck                INTEGER                  depth=6     range=0..63 bit=102 w=6 upd
+   qiGO  g_fighting                 INTEGER                  depth=2     range=0..3 bit=86 w=2 upd
+   GLub  g_endurance                INTEGER                  depth=6     range=0..63 bit=20 w=6 upd
+   MgKo  g_speed                    INTEGER                  depth=6     range=0..63 bit=40 w=6 upd
+   RbJp  g_positioning              INTEGER                  depth=2     range=0..3 bit=52 w=2 upd
+   BSHP  g_reboundcontrol           INTEGER                  depth=6     range=0..63 bit=0 w=6 upd
+   iBQX  g_shotrecover              INTEGER                  depth=6     range=0..63 bit=60 w=6 upd
+   suJw  g_style                    INTEGER                  depth=2     range=0..3 bit=100 w=2 upd
+   soMM  g_passing                  INTEGER                  depth=6     range=0..63 bit=94 w=6 upd
+   Ewap  g_5hole                    INTEGER                  depth=6     range=0..63 bit=14 w=6 upd
+   qTeq  g_floppiness               INTEGER                  depth=2     range=0..3 bit=84 w=2 upd
+   OdSs  g_gsl                      INTEGER                  depth=6     range=0..63 bit=46 w=6 upd
+   nRPv  g_gsh                      INTEGER                  depth=6     range=0..63 bit=78 w=6 upd
+   IBOA  g_consistency              INTEGER                  depth=2     range=0..3 bit=32 w=2 upd
+   BboH  g_agility                  INTEGER                  depth=6     range=0..63 bit=6 w=6 upd
+   GrVN  g_potential                INTEGER                  depth=6     range=0..63 bit=26 w=6 upd
+   aiFP  g_ssl                      INTEGER                  depth=6     range=0..63 bit=54 w=6 upd
+   sVvS  g_intensity                INTEGER                  depth=6     range=0..63 bit=88 w=6 upd
+   jWgU  g_ssh                      INTEGER                  depth=6     range=0..63 bit=66 w=6 upd
+
+== exhibitiondownloadplayerbio (EhOn)  rec=508B max=200 cur=200  insert=None delete=None maxinsert=None maxupdate=-1 savegroups=rosters,currentrosters,defaultbiosattributes,rosterupdate
+   zIBw  game_id                    INTEGER                  depth=13    range=0..8191 bit=4039 w=13 KEY
+   vnCd  rookie                     INTEGER                  depth=1     range=0..1 bit=4038 w=1 upd
+   crfg  neckprotector              INTEGER                  depth=1     range=0..1 bit=3956 w=1 upd
+   PQgy  yeardrafted                INTEGER                  depth=6     range=0..63 bit=3927 w=6 upd
+   KfBC  righteyecolorcode          INTEGER                  depth=3     range=0..6 bit=3896 w=3 upd
+   PedH  firstname                  STRING                   depth=1280  range=0..0 bit=1280 w=1280 upd
+   sZqI  helmetrankcode             INTEGER                  depth=2     range=0..2 bit=4024 w=2 upd
+   rnOl  artid                      INTEGER                  depth=14    range=0..16383 bit=4010 w=14 
+   GPQs  pantstypecode              INTEGER                  depth=1     range=0..1 bit=3886 w=1 upd
+   WZNs  weight                     INTEGER                  depth=8     range=0..255 bit=3840 w=8 upd
+   RZSz  visortypecode              INTEGER                  depth=2     range=0..2 bit=3942 w=2 upd
+   pkRG  handedness                 INTEGER                  depth=1     range=0..1 bit=4009 w=1 upd
+   LtqK  defaultaudioid             INTEGER                  depth=14    range=0..16383 bit=3899 w=14 
+   jqpY  jerseytuck                 INTEGER                  depth=3     range=0..7 bit=4001 w=3 upd
+   iPGg  hascustompads              INTEGER                  depth=1     range=0..1 bit=3995 w=1 upd
+   TYDh  hascustomtrapper           INTEGER                  depth=1     range=0..1 bit=3945 w=1 upd
+   DaPp  headid                     INTEGER                  depth=14    range=0..16383 bit=3864 w=14 
+   xFXw  stick                      INTEGER                  depth=8     range=0..190 bit=3848 w=8 upd
+   iwsK  day                        INTEGER                  depth=5     range=0..31 bit=3996 w=5 upd
+   zxmK  blocker                    INTEGER                  depth=5     range=0..31 bit=4052 w=5 upd
+   QDTK  skincolor                  INTEGER                  depth=4     range=0..10 bit=3938 w=4 upd
+   DVoL  contractis2way             INTEGER                  depth=1     range=0..1 bit=3863 w=1 upd
+   hleL  intlcountry                INTEGER                  depth=7     range=0..127 bit=3984 w=7 upd
+   JzFM  birthplace                 STRING                   depth=1280  range=0..0 bit=0 w=1280 upd
+   RMbQ  lastname                   STRING                   depth=1280  range=0..0 bit=2560 w=1280 upd
+   hruQ  skates                     INTEGER                  depth=4     range=0..9 bit=3991 w=4 upd
+   IxvQ  state                      INTEGER                  depth=7     range=0..127 bit=3888 w=7 upd
+   feiZ  lefteyecolorcode           INTEGER                  depth=3     range=0..6 bit=3972 w=3 upd
+   TJol  sticktapestylecode         INTEGER                  depth=1     range=0..1 bit=3944 w=1 upd
+   fjUo  positiondrafted            INTEGER                  depth=9     range=0..511 bit=3975 w=9 upd
+   dnFq  year                       INTEGER                  depth=6     range=0..63 bit=3966 w=6 upd
+   tRVs  jersey                     INTEGER                  depth=7     range=0..127 bit=4026 w=7 upd
+   QBpy  height                     INTEGER                  depth=5     range=0..31 bit=3933 w=5 upd
+   JoGJ  hascustomblocker           INTEGER                  depth=1     range=0..1 bit=3895 w=1 upd
+   pLKJ  month                      INTEGER                  depth=4     range=0..15 bit=4005 w=4 upd
+   VaWL  skatesocktuckcode          INTEGER                  depth=2     range=0..3 bit=3946 w=2 upd
+   FVaN  helmetbrandorgoaliemask    INTEGER                  depth=5     range=0..31 bit=3878 w=5 upd
+   lXPP  shoulderpadstypecode       INTEGER                  depth=1     range=0..1 bit=4004 w=1 upd
+   bkKW  glovesortrapper            INTEGER                  depth=5     range=0..31 bit=3951 w=5 upd
+   BSXd  team                       INTEGER                  depth=7     range=0..127 bit=3856 w=7 
+   dhKk  contractdollars            INTEGER                  depth=9     range=0..511 bit=3957 w=9 upd
+   IIGk  hascustommask              INTEGER                  depth=1     range=0..1 bit=3887 w=1 upd
+   Nzao  audioid                    INTEGER                  depth=14    range=0..16383 bit=3913 w=14 upd
+   aljv  position                   INTEGER                  depth=3     range=0..7 bit=3948 w=3 upd
+   GDhI  contractlength             INTEGER                  depth=3     range=0..7 bit=3883 w=3 upd
+   vaGO  visorcolororgoaliepads     INTEGER                  depth=5     range=0..31 bit=4033 w=5 upd
+
+== exhibitiondownloadskaterai (Raym)  rec=20B max=150 cur=150  insert=None delete=None maxinsert=None maxupdate=-1 savegroups=rosters,currentrosters,defaultbiosattributes,rosterupdate
+   zIBw  game_id                    INTEGER                  depth=13    range=0..8191 bit=137 w=13 KEY
+   qQvX  p_deking                   INTEGER                  depth=6     range=0..63 bit=125 w=6 upd
+   kOdX  p_checking                 INTEGER                  depth=6     range=0..63 bit=101 w=6 upd
+   baRY  pass_carrybias             INTEGER                  depth=4     range=0..15 bit=73 w=4 upd
+   NUxf  p_agility                  INTEGER                  depth=6     range=0..63 bit=43 w=6 upd
+   MDFs  p_passing                  INTEGER                  depth=6     range=0..63 bit=37 w=6 upd
+   OHVx  p_injury                   INTEGER                  depth=6     range=0..63 bit=49 w=6 upd
+   uhFJ  p_prestige                 INTEGER                  depth=6     range=0..63 bit=131 w=6 upd
+   Kusi  p_potential                INTEGER                  depth=6     range=0..63 bit=31 w=6 upd
+   cnVI  p_toughness                INTEGER                  depth=6     range=0..63 bit=77 w=6 upd
+   EksY  off_defbias                INTEGER                  depth=4     range=0..15 bit=24 w=4 upd
+   ntSb  p_acceleration             INTEGER                  depth=6     range=0..63 bit=107 w=6 upd
+   pter  p_slapaccuracy             INTEGER                  depth=6     range=0..63 bit=119 w=6 upd
+   hlsv  shoot_passbias             INTEGER                  depth=4     range=0..15 bit=89 w=4 upd
+   CKPw  p_endurance                INTEGER                  depth=6     range=0..63 bit=6 w=6 upd
+   EKlF  p_wristaccuracy            INTEGER                  depth=6     range=0..63 bit=12 w=6 upd
+   kMSG  p_puckcontrol              INTEGER                  depth=6     range=0..63 bit=95 w=6 upd
+   zNcV  p_wristshotpower           INTEGER                  depth=6     range=0..63 bit=150 w=6 upd
+   EoQm  p_style                    INTEGER                  depth=3     range=0..7 bit=28 w=3 upd
+   ZjQo  p_slapshotpower            INTEGER                  depth=6     range=0..63 bit=61 w=6 upd
+   YWPq  p_speed                    INTEGER                  depth=6     range=0..63 bit=55 w=6 upd
+   ZpNt  p_faceoffs                 INTEGER                  depth=6     range=0..63 bit=67 w=6 upd
+   ArKB  p_aggression               INTEGER                  depth=6     range=0..63 bit=0 w=6 upd
+   joMD  p_fighting                 INTEGER                  depth=2     range=0..3 bit=93 w=2 upd
+   EcHG  p_balance                  INTEGER                  depth=6     range=0..63 bit=18 w=6 upd
+   oNkI  p_herorating               INTEGER                  depth=6     range=0..63 bit=113 w=6 upd
+   eodJ  p_penalty                  INTEGER                  depth=6     range=0..63 bit=83 w=6 upd
+
+== exhibitionfreeagents (QEoV)  rec=4B max=74 cur=74  insert=sAMA delete=mGOv maxinsert=200 maxupdate=None savegroups=currentrosters,defaultrosters,rosters,rosterupdate
+   TWSX  playerindex                INTEGER                  depth=13    range=0..8191 bit=0 w=13 KEY FK->exhibitionplayers
+
+== exhibitiongoalieai (yuHm)  rec=16B max=235 cur=235  insert=None delete=None maxinsert=None maxupdate=-1 savegroups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+   zIBw  game_id                    INTEGER                  depth=13    range=0..8191 bit=108 w=13 KEY
+   IOYn  g_toughness                INTEGER                  depth=6     range=0..63 bit=34 w=6 upd
+   jmPC  g_breakaway                INTEGER                  depth=6     range=0..63 bit=72 w=6 upd
+   DOmH  g_paddledown               INTEGER                  depth=2     range=0..3 bit=12 w=2 upd
+   uVsH  g_pokecheck                INTEGER                  depth=6     range=0..63 bit=102 w=6 upd
+   qiGO  g_fighting                 INTEGER                  depth=2     range=0..3 bit=86 w=2 upd
+   GLub  g_endurance                INTEGER                  depth=6     range=0..63 bit=20 w=6 upd
+   MgKo  g_speed                    INTEGER                  depth=6     range=0..63 bit=40 w=6 upd
+   RbJp  g_positioning              INTEGER                  depth=2     range=0..3 bit=52 w=2 upd
+   BSHP  g_reboundcontrol           INTEGER                  depth=6     range=0..63 bit=0 w=6 upd
+   iBQX  g_shotrecover              INTEGER                  depth=6     range=0..63 bit=60 w=6 upd
+   suJw  g_style                    INTEGER                  depth=2     range=0..3 bit=100 w=2 upd
+   soMM  g_passing                  INTEGER                  depth=6     range=0..63 bit=94 w=6 upd
+   Ewap  g_5hole                    INTEGER                  depth=6     range=0..63 bit=14 w=6 upd
+   qTeq  g_floppiness               INTEGER                  depth=2     range=0..3 bit=84 w=2 upd
+   OdSs  g_gsl                      INTEGER                  depth=6     range=0..63 bit=46 w=6 upd
+   nRPv  g_gsh                      INTEGER                  depth=6     range=0..63 bit=78 w=6 upd
+   IBOA  g_consistency              INTEGER                  depth=2     range=0..3 bit=32 w=2 upd
+   BboH  g_agility                  INTEGER                  depth=6     range=0..63 bit=6 w=6 upd
+   GrVN  g_potential                INTEGER                  depth=6     range=0..63 bit=26 w=6 upd
+   aiFP  g_ssl                      INTEGER                  depth=6     range=0..63 bit=54 w=6 upd
+   sVvS  g_intensity                INTEGER                  depth=6     range=0..63 bit=88 w=6 upd
+   jWgU  g_ssh                      INTEGER                  depth=6     range=0..63 bit=66 w=6 upd
+
+== exhibitionplayerbiotable (cPbu)  rec=508B max=2250 cur=2250  insert=None delete=None maxinsert=None maxupdate=-1 savegroups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+   zIBw  game_id                    INTEGER                  depth=13    range=0..8191 bit=4039 w=13 KEY
+   vnCd  rookie                     INTEGER                  depth=1     range=0..1 bit=4038 w=1 upd
+   crfg  neckprotector              INTEGER                  depth=1     range=0..1 bit=3956 w=1 upd
+   PQgy  yeardrafted                INTEGER                  depth=6     range=0..63 bit=3927 w=6 upd
+   KfBC  righteyecolorcode          INTEGER                  depth=3     range=0..6 bit=3896 w=3 upd
+   PedH  firstname                  STRING                   depth=1280  range=0..0 bit=1280 w=1280 upd
+   sZqI  helmetrankcode             INTEGER                  depth=2     range=0..2 bit=4024 w=2 upd
+   rnOl  artid                      INTEGER                  depth=14    range=0..16383 bit=4010 w=14 
+   GPQs  pantstypecode              INTEGER                  depth=1     range=0..1 bit=3886 w=1 upd
+   WZNs  weight                     INTEGER                  depth=8     range=0..255 bit=3840 w=8 upd
+   RZSz  visortypecode              INTEGER                  depth=2     range=0..2 bit=3942 w=2 upd
+   pkRG  handedness                 INTEGER                  depth=1     range=0..1 bit=4009 w=1 upd
+   LtqK  defaultaudioid             INTEGER                  depth=14    range=0..16383 bit=3899 w=14 
+   jqpY  jerseytuck                 INTEGER                  depth=3     range=0..7 bit=4001 w=3 upd
+   iPGg  hascustompads              INTEGER                  depth=1     range=0..1 bit=3995 w=1 upd
+   TYDh  hascustomtrapper           INTEGER                  depth=1     range=0..1 bit=3945 w=1 upd
+   DaPp  headid                     INTEGER                  depth=14    range=0..16383 bit=3864 w=14 
+   xFXw  stick                      INTEGER                  depth=8     range=0..190 bit=3848 w=8 upd
+   iwsK  day                        INTEGER                  depth=5     range=0..31 bit=3996 w=5 upd
+   zxmK  blocker                    INTEGER                  depth=5     range=0..31 bit=4052 w=5 upd
+   QDTK  skincolor                  INTEGER                  depth=4     range=0..10 bit=3938 w=4 upd
+   DVoL  contractis2way             INTEGER                  depth=1     range=0..1 bit=3863 w=1 upd
+   hleL  intlcountry                INTEGER                  depth=7     range=0..127 bit=3984 w=7 upd
+   JzFM  birthplace                 STRING                   depth=1280  range=0..0 bit=0 w=1280 upd
+   RMbQ  lastname                   STRING                   depth=1280  range=0..0 bit=2560 w=1280 upd
+   hruQ  skates                     INTEGER                  depth=4     range=0..9 bit=3991 w=4 upd
+   IxvQ  state                      INTEGER                  depth=7     range=0..127 bit=3888 w=7 upd
+   feiZ  lefteyecolorcode           INTEGER                  depth=3     range=0..6 bit=3972 w=3 upd
+   TJol  sticktapestylecode         INTEGER                  depth=1     range=0..1 bit=3944 w=1 upd
+   fjUo  positiondrafted            INTEGER                  depth=9     range=0..511 bit=3975 w=9 upd
+   dnFq  year                       INTEGER                  depth=6     range=0..63 bit=3966 w=6 upd
+   tRVs  jersey                     INTEGER                  depth=7     range=0..127 bit=4026 w=7 upd
+   QBpy  height                     INTEGER                  depth=5     range=0..31 bit=3933 w=5 upd
+   JoGJ  hascustomblocker           INTEGER                  depth=1     range=0..1 bit=3895 w=1 upd
+   pLKJ  month                      INTEGER                  depth=4     range=0..15 bit=4005 w=4 upd
+   VaWL  skatesocktuckcode          INTEGER                  depth=2     range=0..3 bit=3946 w=2 upd
+   FVaN  helmetbrandorgoaliemask    INTEGER                  depth=5     range=0..31 bit=3878 w=5 upd
+   lXPP  shoulderpadstypecode       INTEGER                  depth=1     range=0..1 bit=4004 w=1 upd
+   bkKW  glovesortrapper            INTEGER                  depth=5     range=0..31 bit=3951 w=5 upd
+   BSXd  team                       INTEGER                  depth=7     range=0..127 bit=3856 w=7 upd
+   dhKk  contractdollars            INTEGER                  depth=9     range=0..511 bit=3957 w=9 upd
+   IIGk  hascustommask              INTEGER                  depth=1     range=0..1 bit=3887 w=1 upd
+   Nzao  audioid                    INTEGER                  depth=14    range=0..16383 bit=3913 w=14 upd
+   aljv  position                   INTEGER                  depth=3     range=0..7 bit=3948 w=3 upd
+   GDhI  contractlength             INTEGER                  depth=3     range=0..7 bit=3883 w=3 upd
+   vaGO  visorcolororgoaliepads     INTEGER                  depth=5     range=0..31 bit=4033 w=5 upd
+
+== exhibitionplayers (caBZ)  rec=4B max=2790 cur=2790  insert=LZbD delete=Frps maxinsert=180 maxupdate=None savegroups=rosters
+   qEfv  index                      INTEGER                  depth=13    range=0..8191 bit=1 w=13 KEY
+   qFky  playerid                   INTEGER                  depth=13    range=0..8191 bit=14 w=13 
+   BERR  table                      INTEGER                  depth=1     range=0..1 bit=0 w=1 
+
+== exhibitionrostertable (ulGe)  rec=16B max=2516 cur=2516  insert=ibGM delete=AtUj maxinsert=3200 maxupdate=-1 savegroups=currentrosters,defaultrosters,rosters,rosterupdate
+   TWSX  playerindex                INTEGER                  depth=13    range=0..8191 bit=33 w=13 KEY FK->exhibitionplayers
+   jZSh  rosterstatus               INTEGER                  depth=2     range=0..3 bit=63 w=2 upd
+   tmxm  pk4_2c                     INTEGER                  depth=1     range=0..1 bit=92 w=1 upd
+   lcCm  captain                    INTEGER                  depth=2     range=0..3 bit=67 w=2 upd
+   VSQu  pk3_2rd                    INTEGER                  depth=1     range=0..1 bit=47 w=1 upd
+   vBOv  s3                         INTEGER                  depth=1     range=0..1 bit=95 w=1 upd
+   Onyv  pp2rd                      INTEGER                  depth=1     range=0..1 bit=27 w=1 upd
+   kQGw  pk3_1rd                    INTEGER                  depth=1     range=0..1 bit=66 w=1 upd
+   jxQx  pp1rd                      INTEGER                  depth=1     range=0..1 bit=65 w=1 upd
+   sNcy  x1                         INTEGER                  depth=1     range=0..1 bit=83 w=1 upd
+   XBWz  pp4_1ld                    INTEGER                  depth=1     range=0..1 bit=51 w=1 upd
+   yoNB  pp4_2c                     INTEGER                  depth=1     range=0..1 bit=97 w=1 upd
+   ajIB  pp4_2ld                    INTEGER                  depth=1     range=0..1 bit=55 w=1 upd
+   OsHB  pp1c                       INTEGER                  depth=1     range=0..1 bit=28 w=1 upd
+   irsI  h4                         INTEGER                  depth=1     range=0..1 bit=62 w=1 upd
+   aRgN  pk4_1c                     INTEGER                  depth=1     range=0..1 bit=54 w=1 upd
+   sFgQ  playerstyle                INTEGER                  depth=3     range=0..7 bit=79 w=3 upd
+   pPkW  pp4_1c                     INTEGER                  depth=1     range=0..1 bit=74 w=1 upd
+   BnOW  pp2c                       INTEGER                  depth=1     range=0..1 bit=13 w=1 upd
+   bSAb  l1rd                       INTEGER                  depth=1     range=0..1 bit=57 w=1 upd
+   Jmcc  l3rd                       INTEGER                  depth=1     range=0..1 bit=23 w=1 upd
+   OQOd  l2rd                       INTEGER                  depth=1     range=0..1 bit=26 w=1 upd
+   Plxr  pp2lw                      INTEGER                  depth=1     range=0..1 bit=30 w=1 upd
+   iXft  pp1lw                      INTEGER                  depth=1     range=0..1 bit=61 w=1 upd
+   Imzy  g2                         INTEGER                  depth=1     range=0..1 bit=22 w=1 upd
+   VvqE  h1                         INTEGER                  depth=1     range=0..1 bit=48 w=1 upd
+   wHvH  h5                         INTEGER                  depth=1     range=0..1 bit=96 w=1 upd
+   pxVU  s2                         INTEGER                  depth=1     range=0..1 bit=76 w=1 upd
+   pOUV  l4lw                       INTEGER                  depth=1     range=0..1 bit=73 w=1 upd
+   aAvX  l1lw                       INTEGER                  depth=1     range=0..1 bit=53 w=1 upd
+   IkTY  l3lw                       INTEGER                  depth=1     range=0..1 bit=21 w=1 upd
+   PGhZ  l2lw                       INTEGER                  depth=1     range=0..1 bit=29 w=1 upd
+   bjni  pk4_1ld                    INTEGER                  depth=1     range=0..1 bit=58 w=1 upd
+   WZZk  pk4_2ld                    INTEGER                  depth=1     range=0..1 bit=50 w=1 upd
+   uklz  x2                         INTEGER                  depth=1     range=0..1 bit=94 w=1 upd
+   AkyJ  s4                         INTEGER                  depth=1     range=0..1 bit=2 w=1 upd
+   MykP  pp2rw                      INTEGER                  depth=1     range=0..1 bit=24 w=1 upd
+   oOKP  pk3_2c                     INTEGER                  depth=1     range=0..1 bit=71 w=1 upd
+   tIqR  pp1rw                      INTEGER                  depth=1     range=0..1 bit=84 w=1 upd
+   FMkb  pp4_1lw                    INTEGER                  depth=1     range=0..1 bit=19 w=1 upd
+   Auad  pp4_2lw                    INTEGER                  depth=1     range=0..1 bit=3 w=1 upd
+   AAai  pk4_1rd                    INTEGER                  depth=1     range=0..1 bit=0 w=1 upd
+   FGkk  pk4_2rd                    INTEGER                  depth=1     range=0..1 bit=18 w=1 upd
+   tRVs  jersey                     INTEGER                  depth=7     range=0..127 bit=85 w=7 upd
+   pfiv  l1rw                       INTEGER                  depth=1     range=0..1 bit=75 w=1 upd
+   TbGw  l3rw                       INTEGER                  depth=1     range=0..1 bit=46 w=1 upd
+   Adsx  l2rw                       INTEGER                  depth=1     range=0..1 bit=1 w=1 upd
+   mxhB  l4rw                       INTEGER                  depth=1     range=0..1 bit=70 w=1 upd
+   lxRC  l4c                        INTEGER                  depth=1     range=0..1 bit=69 w=1 upd
+   bNDE  pk3_1c                     INTEGER                  depth=1     range=0..1 bit=56 w=1 upd
+   dCEG  h3                         INTEGER                  depth=1     range=0..1 bit=60 w=1 upd
+   GtFK  pk3_2ld                    INTEGER                  depth=1     range=0..1 bit=20 w=1 upd
+   NYLL  pp2ld                      INTEGER                  depth=1     range=0..1 bit=25 w=1 upd
+   rrTM  pk3_1ld                    INTEGER                  depth=1     range=0..1 bit=77 w=1 upd
+   sKFN  pp1ld                      INTEGER                  depth=1     range=0..1 bit=82 w=1 upd
+   ctKP  l1c                        INTEGER                  depth=1     range=0..1 bit=59 w=1 upd
+   ryzV  h2                         INTEGER                  depth=1     range=0..1 bit=78 w=1 upd
+   EGLX  pp4_1rd                    INTEGER                  depth=1     range=0..1 bit=16 w=1 upd
+   BcVZ  pp4_2rd                    INTEGER                  depth=1     range=0..1 bit=12 w=1 upd
+   BSXd  team                       INTEGER                  depth=7     range=0..127 bit=4 w=7 upd FK->exhibitionteams
+   WPGf  g1                         INTEGER                  depth=1     range=0..1 bit=49 w=1 upd
+   opNr  l1ld                       INTEGER                  depth=1     range=0..1 bit=72 w=1 upd
+   Sxps  l3ld                       INTEGER                  depth=1     range=0..1 bit=32 w=1 upd
+   BvDt  l2ld                       INTEGER                  depth=1     range=0..1 bit=14 w=1 upd
+   PufE  l2c                        INTEGER                  depth=1     range=0..1 bit=31 w=1 upd
+   BWVK  pk4_1lw                    INTEGER                  depth=1     range=0..1 bit=11 w=1 upd
+   EMLM  pk4_2lw                    INTEGER                  depth=1     range=0..1 bit=17 w=1 upd
+   CLEN  l3c                        INTEGER                  depth=1     range=0..1 bit=15 w=1 upd
+   XUMR  s1                         INTEGER                  depth=1     range=0..1 bit=52 w=1 upd
+   uAxS  s5                         INTEGER                  depth=1     range=0..1 bit=93 w=1 upd
+
+== exhibitionskaterai (yvSd)  rec=20B max=2015 cur=2015  insert=None delete=None maxinsert=None maxupdate=-1 savegroups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+   zIBw  game_id                    INTEGER                  depth=13    range=0..8191 bit=137 w=13 KEY
+   qQvX  p_deking                   INTEGER                  depth=6     range=0..63 bit=125 w=6 upd
+   kOdX  p_checking                 INTEGER                  depth=6     range=0..63 bit=101 w=6 upd
+   baRY  pass_carrybias             INTEGER                  depth=4     range=0..15 bit=73 w=4 upd
+   NUxf  p_agility                  INTEGER                  depth=6     range=0..63 bit=43 w=6 upd
+   MDFs  p_passing                  INTEGER                  depth=6     range=0..63 bit=37 w=6 upd
+   OHVx  p_injury                   INTEGER                  depth=6     range=0..63 bit=49 w=6 upd
+   uhFJ  p_prestige                 INTEGER                  depth=6     range=0..63 bit=131 w=6 upd
+   Kusi  p_potential                INTEGER                  depth=6     range=0..63 bit=31 w=6 upd
+   cnVI  p_toughness                INTEGER                  depth=6     range=0..63 bit=77 w=6 upd
+   EksY  off_defbias                INTEGER                  depth=4     range=0..15 bit=24 w=4 upd
+   ntSb  p_acceleration             INTEGER                  depth=6     range=0..63 bit=107 w=6 upd
+   pter  p_slapaccuracy             INTEGER                  depth=6     range=0..63 bit=119 w=6 upd
+   hlsv  shoot_passbias             INTEGER                  depth=4     range=0..15 bit=89 w=4 upd
+   CKPw  p_endurance                INTEGER                  depth=6     range=0..63 bit=6 w=6 upd
+   EKlF  p_wristaccuracy            INTEGER                  depth=6     range=0..63 bit=12 w=6 upd
+   kMSG  p_puckcontrol              INTEGER                  depth=6     range=0..63 bit=95 w=6 upd
+   zNcV  p_wristshotpower           INTEGER                  depth=6     range=0..63 bit=150 w=6 upd
+   EoQm  p_style                    INTEGER                  depth=3     range=0..7 bit=28 w=3 upd
+   ZjQo  p_slapshotpower            INTEGER                  depth=6     range=0..63 bit=61 w=6 upd
+   YWPq  p_speed                    INTEGER                  depth=6     range=0..63 bit=55 w=6 upd
+   ZpNt  p_faceoffs                 INTEGER                  depth=6     range=0..63 bit=67 w=6 upd
+   ArKB  p_aggression               INTEGER                  depth=6     range=0..63 bit=0 w=6 upd
+   joMD  p_fighting                 INTEGER                  depth=2     range=0..3 bit=93 w=2 upd
+   EcHG  p_balance                  INTEGER                  depth=6     range=0..63 bit=18 w=6 upd
+   oNkI  p_herorating               INTEGER                  depth=6     range=0..63 bit=113 w=6 upd
+   eodJ  p_penalty                  INTEGER                  depth=6     range=0..63 bit=83 w=6 upd
+
+== exhibitionteams (ttOk)  rec=4B max=93 cur=93  insert=fyFF delete=dULq maxinsert=30 maxupdate=None savegroups=rosters
+   qEfv  index                      INTEGER                  depth=7     range=0..127 bit=11 w=7 KEY
+   gXCm  teamid                     INTEGER                  depth=7     range=0..127 bit=4 w=7 FK->stockteamtable
+   Xegx  division                   INTEGER                  depth=3     range=0..7 bit=1 w=3 
+   BERR  table                      INTEGER                  depth=1     range=0..1 bit=0 w=1 
+
+== exhibitionteamstrategies (oYeE)  rec=8B max=93 cur=93  insert=znPC delete=JhBt maxinsert=30 maxupdate=-1 savegroups=rosters
+   qEfv  index                      INTEGER                  depth=7     range=0..127 bit=21 w=7 KEY FK->exhibitionteams
+   OwPC  offense4                   INTEGER                  depth=3     range=0..7 bit=3 w=3 upd
+   yPzN  pk                         INTEGER                  depth=3     range=0..7 bit=34 w=3 upd
+   FIRe  offense1                   INTEGER                  depth=3     range=0..7 bit=0 w=3 upd
+   reKr  defense                    INTEGER                  depth=3     range=0..7 bit=28 w=3 upd
+   vvKx  dpressure                  INTEGER                  depth=3     range=0..7 bit=31 w=3 upd
+   ZBLA  offense3                   INTEGER                  depth=3     range=0..7 bit=9 w=3 upd
+   ZCsF  forecheck                  INTEGER                  depth=3     range=0..7 bit=12 w=3 upd
+   emab  pp                         INTEGER                  depth=3     range=0..7 bit=15 w=3 upd
+   jlIL  offense2                   INTEGER                  depth=3     range=0..7 bit=18 w=3 upd
+   SVTT  opressure                  INTEGER                  depth=3     range=0..7 bit=6 w=3 upd
+
+== rosterversiontable (bZvB)  rec=68B max=1 cur=1  insert=tMYP delete=nGCg maxinsert=1 maxupdate=-1 savegroups=currentrosters,defaultrosters,rosters,rosterupdate
+   qEfv  index                      INTEGER                  depth=1     range=0..1 bit=512 w=1 KEY
+   lIbD  version                    STRING                   depth=512   range=0..0 bit=0 w=512 upd
+
+sum(maxinsert * insert rec_bytes) over save insert tables = 148188
+

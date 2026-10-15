@@ -21,6 +21,13 @@ unobserved and stays unmapped).
 kind = "operator-research"
 description = "Equipment ID catalog CSV (NHL Legacy Edition Modding Tools, Data/Equipment/visorstyle.csv, 2026)"
 
+# Title scope (coordinator decision, 25 Sep 2026): these labels were established on NHL Legacy
+# (PS3 textures / catalogue CSVs; Xbox 360 shares the id→file grammar; Recompiled by identity).
+# Studio shows them only on a project opened as NHL Legacy; every other title shows the stored id
+# as a number — a label from here is never borrowed for another title's ids.
+[scope]
+games = ["nhllegacy"]
+
 [[bindings]]
 field_name = "Visor Style"
 field_raw_id = "cnFB"

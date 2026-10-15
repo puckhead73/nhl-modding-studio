@@ -42,10 +42,19 @@ Each entry, all fields big-endian:
 | +0x00 | 4 | `block`      | data offset in **16-byte units** — real offset = `(block as u64) << 4` |
 | +0x04 | 4 | (zero)       | always 0 in samples |
 | +0x08 | 4 | `stored_size`| bytes on disk (compressed size for `chunkzip` payloads, exact size for raw) |
-| +0x0C | 4 | hash A       | content/name hash — not needed for extraction |
-| +0x10 | 4 | hash B       | content/name hash — not needed for extraction |
+| +0x0C | 4 | sort key     | **path-derived, formula unknown** (measured 2026-09-17 on CUSA18182 `inxp_00.big`, 2 950 rows: the table is sorted by it; siblings differing only in a trailing character share it, e.g. `…_v01.cba`…`_v04.cba`, `3908523078.bin`/`.vlt`; content-identical deduplicated payloads at different paths do not; no simple hash family over the path, basename or stem matched). Preserved verbatim by the S2-A planner on a same-path replacement; an *unresolved* qualification item |
+| +0x10 | 4 | `path_hash`  | **djb2 of the full forward-slash path** (`h = h*33 + byte`, seed 5381) on every row of `boot.big` (7 365), `overlays_21.big` (257) and `inxp_00.big` (2 950) — the same word the 16-byte Legacy rows carry at `+0x0C` |
 
-Entry `i` corresponds 1:1 (same order) to name record `i`. Payload bytes are
+`word_4` (+0x04) is zero on every measured row. Entry `i` corresponds 1:1 (same order) to name record `i`.
+
+**Staged replacement (S2-A planner, `tdb-archive-big::stage`, extended 2026-09-17):** the
+20-byte-row layout (version `0x0011_0400`) binds and plans like the 16-byte one; a same-path
+replacement keeps both hash words verbatim and is verified by re-parse. The `+0x0C` word stays an
+unresolved qualification item, so a staged PS4 archive is never deployable-qualified by structure
+alone. Measured on the real `inxp_00.big`: `nhl/data/common/gamemodes/database/t3db/nhl_game.db`
+is entry 2652, stored **raw** (11 209 672 bytes — the anchor's exact length) at offset 726 230 496,
+not deduplicated; a same-length edited database therefore fits in place with no row change
+(`crates/tdb-archive-big/tests/ps4_real_archives.rs`, env-gated). Payload bytes are
 `[offset, offset + stored_size)`; data blocks are 16-byte aligned but
 `stored_size` is exact (no trailing pad included).
 
@@ -87,6 +96,29 @@ A stored payload is one of:
 
 This is exactly the dispatch `Archive::read_entry_at` already performs, so the
 codec layer is unchanged — only the directory parse is PS4-specific.
+
+## The NHL 15 PS4 variant — version `0x00100400`, 16-byte rows (EB-V1, 2026-09-18)
+
+Characterised on **all 17** archives of the installed NHL 15 (CUSA00561, APP_VER 01.00 /
+VERSION 01.06) before the reader accepted the tag:
+
+| Fact | Measurement |
+|---|---|
+| Header | as above; `0x08` = `0x00100400`; `archive_size` is the u64 at `0x18` (`game30.big`, 11.7 GB, needs it) |
+| File-table rows | **16 bytes** from `0x30`: `[block][word_4][size][path_hash]`; `word_4` = 0 on all 73 998 rows; `+0x0C` = djb2 of the full path on **every** row of every archive |
+| Row order | sorted by the path hash (there is no separate sort key on this layout) |
+| Payloads | 16-byte aligned, no overlaps; dedup exists (`boot.big` 4 shared offsets, `inxp00.big` 1); `nhl_game.db` and `eng_us.db` are raw, unshared (`inxp00.big` #0 / #146, `patch_inxp00.big` #0 / #264) |
+| Header `0x10` | nonzero and **below** the directory-table end on every archive; formula unknown; preserved verbatim (unresolved item, as on the 20-byte layout) |
+| `archive_size` | equals `align16(last entry end)` = the file length on 14 archives; on **`game20.big`, `inxp20.big`, `patch_inxp00.big`** it is smaller than the file length (19 757 056 / 8 445 696 / 178 432 B) while the entries still end exactly at the file length and the bytes past the declared size are live payloads (a `GNF ` texture begins at the declared end) |
+
+Reader/stager behaviour (`tdb-archive-big`): the tag binds with 16-byte rows; a declared
+`archive_size` **below** the length is accepted only when `align16(max entry end) == file length`
+(otherwise `ArchiveSizeInconsistent`), recorded as an *unresolved* qualification item, and
+**preserved verbatim** — a plan that would change the file length on such an archive is refused
+(`LengthChangeOnUnresolvedArchiveSize`); a declared size above the length stays a refusal. Same-length
+raw member replacement of `nhl_game.db` is exercised on the real base and patch archives by the
+env-gated `tests/ps4_real_archives.rs` (`nhl15_*` cases). Which of the two databases the game loads
+(base `inxp00.big` vs the day-one `patch_inxp00.big`) is a runtime question.
 
 ## Memory note
 

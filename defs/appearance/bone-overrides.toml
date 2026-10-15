@@ -1,0 +1,38 @@
+# Bone-mapping override table (Path A weight remap) — the explicit human layer.
+#
+# Resolution order in the engine: override → direct name match → ancestor climb → drop.
+# Targets are TARGET-PALETTE BONE NAMES (resolved through defs/appearance/
+# legacy-bone-names.toml with its prefer/exclude flags), so entries survive a
+# regenerated palette naming.
+#
+# This table exists because the prior pipeline's largest open defect was ancestor
+# collapse being the ONLY fallback: every facial micro-bone collapsed to Head,
+# rigidifying ~330 weight mass of face. Filling this table region-by-region against
+# distortion-QA renders is the M2c workstream (docs/audits/nhl24-legacy-bone-mapping.md
+# will carry the evidence per entry).
+#
+# Known-correct day-one redirects from the prior effort's in-game debugging:
+#   * Neck lands on palette 6 (never garbage slot 5) — handled by prefer/exclude flags
+#     in legacy-bone-names.toml, no override needed.
+#   * Tongue-family mass must reach the jaw/tongue slots actually used by vanilla heads
+#     (palette 20 "Tongue" is excluded as garbage; 21 TongueTip is real).
+#   * Arm-chain mass on head meshes goes to Spine3 (arm palette slots exist but vanilla
+#     heads never reference most of them — the census (M1) re-derives the full exclude
+#     set before more redirects are added here).
+
+schema = "headmesh-bone-overrides/1"
+
+[[override]]
+source = "Tongue"
+target = "Jaw"
+reason = "Prior-app fix: palette slot named Tongue (20) is census-excluded garbage, so base-tongue mass rides Jaw (TongueTip 21 stays for the tip bone's own direct match). Re-verify against the M1 census + distortion QA."
+
+[[override]]
+source = "LeftArm"
+target = "Spine3"
+reason = "Prior-app fix: arm mass on head meshes must stay inside the donor-used set; LeftArm slot 49 is census-excluded garbage."
+
+[[override]]
+source = "RightArm"
+target = "Spine3"
+reason = "Prior-app fix: RightArm slot 80 is census-excluded garbage."

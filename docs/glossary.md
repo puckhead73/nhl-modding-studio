@@ -6,7 +6,8 @@ Domain terminology used across NHL Modding Studio.
   (players, teams, rosters, attributes). Format details vary by year and platform. See
   [03-tdb-format.md](03-tdb-format.md).
 - **NHLViewNG** — the prior community tool this project is the spiritual successor to.
-- **Title** — a specific game in the series (NHL 10 … NHL 21).
+- **Title** — a specific game in the series (NHL 07 … NHL 21, plus NHL Legacy and NHL Legacy
+  Recompiled).
 - **Platform** — the console target: Xbox, PS3, PS4, or the Legacy Recompilation.
 - **NHL Legacy Recompilation** — a recompilation based on the Xbox build of the game; treated as a
   distinct platform target that closely tracks the Xbox data layout.

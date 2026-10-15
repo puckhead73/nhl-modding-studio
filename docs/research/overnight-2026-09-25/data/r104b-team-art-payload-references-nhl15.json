@@ -1,0 +1,1083 @@
+{
+ "note": "R104 - in-payload references of team-art / kit members on NHL Legacy X360 (`.rx2`, `\\x89RW4xb2`) and PS3 (`.rpsgl`, `\\x89RW4ps3`)\n(review 2026-09-25 R97-R101, next task). Read-only. Sources: the loose `rendering/**` files of each Legacy tree (R103b showed nameplate /\nrink-logo loose files byte-identical to the unwrapped archive members; this probe re-checks that identity on a sample of EVERY family\nbefore relying on the loose copy) and `fe/ion/artassets/teamlogos/t{id}.big` (FE crest containers).\n\nParsed reference fields (RW4 container, big-endian; layout decoded on six members and then applied to every member, refusing on mismatch):\n  header      0x00 magic 8 | 0x20 u32 file_count | 0x30 u32 file_table_offset | file table = file_count x 24 B\n              {u32 offset | u32 0 | u32 size | u32 align | u32 type index | u32 type id}; type id 0x10031 / 0x10030 = raw raster payload\n              (offset relative to the header size), 0x20003 = raster descriptor, 0xEC0010 = name dictionary.\n  manifest    `00010004 | u32 n (4) | n x u32 offsets (relative to the manifest)`; sections found by their type word:\n              0x10005 types {u32 count | u32 12 | u32 0 | count x u32 type id}; 0x10006 external arenas {u32 count | u32 dict off |\n              u32 0 | count x u32 arena id | ...}; 0x10007 subreferences {u32 count | u32 dict off | u32 0 | u32 a | u32 b | u32 0};\n              0x10008 atoms {u32 count | ...}. Located by scanning 0x40..0x400 for the manifest word (one hit required).\n  names       0xEC0010: {u32 count | u32 w1 | count x {u32 string abs offset | u32 type id | u32 object index} | NUL strings}\n              (w1 = 0x1505 observed; verified per member: offsets inside the chunk, string order, object index -> a 0x20003 chunk).\nChecks per member: external arena ids (distribution across all members), subreference count, atom count; every dictionary name, its\ntokenised numbers vs the member's own id tuple from its path (self-name) - any name whose numbers name ANOTHER id is a cross-reference\ncandidate; SCOPED search over the non-payload bytes (header, manifest, descriptors, dictionary - raster payloads excluded, where a\n4-byte match is noise): (a) ASCII occurrences of other team-art stems (`texlib_`, `name_`, `sock_`, `logo_`, `centerlogo_`, `puck_`,\n`t<digits>.big`) outside the dictionary strings, (b) djb2 (EB path hash, R99) of every team-art member path of the tree, as a\nbig-endian u32 - hit count against a random expectation. A negative search result is a scoped negative, not proof of absence.\nFE crest `t{id}.big`: container magic, inner member names (BIG4 / EB listing), numbers inside the names vs the crest id.\nUsage: python r104_team_art_payload_references.py <out.json> [--trees x360-legacy,ps3-legacy,x360-nhl15,ps3-nhl15]\n",
+ "trees": {
+  "x360-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15",
+   "members": 4743,
+   "crests": 313,
+   "identity_sample": {
+    "kit_jersey:chunklzx:equal": 12,
+    "nameplate:chunklzx:equal": 12,
+    "kit_pant:chunklzx:equal": 12,
+    "kit_sock:chunklzx:equal": 12,
+    "rink_logo:chunklzx:equal": 12,
+    "center_logo:chunklzx:equal": 12
+   },
+   "refused": [],
+   "external_arenas": {
+    "04000000 ffb00000 04000000": 4743
+   },
+   "subreferences": {
+    "0": 4743
+   },
+   "atoms": {
+    "0": 4743
+   },
+   "types": {
+    "10030 10031 10032 10033 10010 20003 ec0010 10006": 4743
+   },
+   "dict_w1": {
+    "0x1505": 4743
+   },
+   "names_per_member": {
+    "6": 680,
+    "7": 3,
+    "1": 1592,
+    "3": 2440,
+    "5": 28
+   },
+   "name_stems": {
+    "kit_jersey:font_#_#_#_cm.Raster": 683,
+    "kit_jersey:font_#_#_#_nm.Raster": 683,
+    "kit_jersey:font_#_#_#_sm.Raster": 683,
+    "kit_jersey:jersey_#_#_#_cm.Raster": 683,
+    "kit_jersey:jersey_#_#_#_sm.Raster": 683,
+    "kit_jersey:jersey_#_#_#_#_nm.Raster": 686,
+    "nameplate:name_#_#_#_cm.Raster": 683,
+    "kit_pant:pant_#_#_#_cm.Raster": 684,
+    "kit_pant:pant_#_#_#_nm.Raster": 684,
+    "kit_pant:pant_#_#_#_sm.Raster": 684,
+    "kit_pant:pant_#_#_#_rm.Raster": 28,
+    "kit_pant:pant_#_#_#_roughness.Raster": 28,
+    "kit_sock:sock_#_#_#_cm.Raster": 683,
+    "rink_logo:logo_#_#_#_#.Raster": 5352,
+    "center_logo:centerlogo_#_cm.Raster": 226
+   },
+   "self_name": {
+    "kit_jersey:self": 4101,
+    "nameplate:self": 683,
+    "kit_pant:self": 2108,
+    "kit_sock:self": 683,
+    "rink_logo:self": 5352,
+    "center_logo:self": 226
+   },
+   "cross_id_names": [],
+   "ascii_other_stems_outside_dict": [],
+   "hash_hits": [],
+   "nonpayload_bytes": 4839198,
+   "per_family": {
+    "kit_jersey": {
+     "parsed": 683
+    },
+    "nameplate": {
+     "parsed": 683
+    },
+    "kit_pant": {
+     "parsed": 684
+    },
+    "kit_sock": {
+     "parsed": 683
+    },
+    "rink_logo": {
+     "parsed": 1784
+    },
+    "center_logo": {
+     "parsed": 226
+    }
+   },
+   "examples": {
+    "kit_jersey": {
+     "path": "rendering/jersey/texlib_0_0_0.rx2",
+     "sha256": "cbaeaf589cb55ea19ff51defa348be789133efd2e96067e9d27ce4993938b5df",
+     "magic": "\u0089RW4xb2\u0000",
+     "chunks": 13,
+     "chunk_types": {
+      "0x10031": 6,
+      "0x20003": 6,
+      "0xec0010": 1
+     },
+     "manifest_at": 172,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      1232,
+      1232,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 12,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "font_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        },
+        {
+         "name": "font_0_0_0_nm.Raster",
+         "type": "0x20003",
+         "object_index": 3
+        },
+        {
+         "name": "font_0_0_0_sm.Raster",
+         "type": "0x20003",
+         "object_index": 5
+        },
+        {
+         "name": "jersey_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 7
+        },
+        {
+         "name": "jersey_0_0_0_sm.Raster",
+         "type": "0x20003",
+         "object_index": 9
+        },
+        {
+         "name": "jersey_0_0_0_0_nm.Raster",
+         "type": "0x20003",
+         "object_index": 11
+        }
+       ]
+      }
+     ]
+    },
+    "nameplate": {
+     "path": "rendering/jersey/name_0_0_0_cm.rx2",
+     "sha256": "e6d3943193d4985ea8cc355ef6b6ed3a75a5aa306173f6347e8500ecf22982b7",
+     "magic": "\u0089RW4xb2\u0000",
+     "chunks": 3,
+     "chunk_types": {
+      "0x10031": 1,
+      "0x20003": 1,
+      "0xec0010": 1
+     },
+     "manifest_at": 172,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      500,
+      500,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 2,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "name_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        }
+       ]
+      }
+     ]
+    },
+    "kit_pant": {
+     "path": "rendering/pant/texlib_0_0_0.rx2",
+     "sha256": "3543f707df08803ab0e630e47c87d4537a6d524dc3eed025e959a31d49978f01",
+     "magic": "\u0089RW4xb2\u0000",
+     "chunks": 7,
+     "chunk_types": {
+      "0x10031": 3,
+      "0x20003": 3,
+      "0xec0010": 1
+     },
+     "manifest_at": 172,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      788,
+      788,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 6,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "pant_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        },
+        {
+         "name": "pant_0_0_0_nm.Raster",
+         "type": "0x20003",
+         "object_index": 3
+        },
+        {
+         "name": "pant_0_0_0_sm.Raster",
+         "type": "0x20003",
+         "object_index": 5
+        }
+       ]
+      }
+     ]
+    },
+    "kit_sock": {
+     "path": "rendering/sock/sock_0_0_0_cm.rx2",
+     "sha256": "3c8305563c369ea62cf9b32f7bac6bfc83a13e4e5b3db5d7f4e9ec559201ac39",
+     "magic": "\u0089RW4xb2\u0000",
+     "chunks": 3,
+     "chunk_types": {
+      "0x10031": 1,
+      "0x20003": 1,
+      "0xec0010": 1
+     },
+     "manifest_at": 172,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      500,
+      500,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 2,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "sock_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        }
+       ]
+      }
+     ]
+    },
+    "rink_logo": {
+     "path": "rendering/logo/texlib_0_0_0.rx2",
+     "sha256": "f4d91640a2d240d61b60d3c49e445f4753d2a5bd6cb99c0e293728cb4766e345",
+     "magic": "\u0089RW4xb2\u0000",
+     "chunks": 7,
+     "chunk_types": {
+      "0x10031": 3,
+      "0x20003": 3,
+      "0xec0010": 1
+     },
+     "manifest_at": 172,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      784,
+      784,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 6,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "logo_0_0_0_0.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        },
+        {
+         "name": "logo_0_0_0_1.Raster",
+         "type": "0x20003",
+         "object_index": 3
+        },
+        {
+         "name": "logo_0_0_0_2.Raster",
+         "type": "0x20003",
+         "object_index": 5
+        }
+       ]
+      }
+     ]
+    },
+    "center_logo": {
+     "path": "rendering/icesurface/centerlogo_0_cm.rx2",
+     "sha256": "0997f5a54467565d97afe7ecbce7e5bfece5480d5e9b14c7a093ae2774254879",
+     "magic": "\u0089RW4xb2\u0000",
+     "chunks": 3,
+     "chunk_types": {
+      "0x10031": 1,
+      "0x20003": 1,
+      "0xec0010": 1
+     },
+     "manifest_at": 172,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      500,
+      500,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 2,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "centerlogo_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "full_reads": 72,
+   "fe_crests": {
+    "containers": {
+     "BIGF": 313,
+     "inner_names_total": 1878
+    },
+    "inner_examples": [
+     [
+      "t0.big",
+      "0"
+     ],
+     [
+      "t0.big",
+      "3"
+     ],
+     [
+      "t0.big",
+      "sg1"
+     ],
+     [
+      "t0.big",
+      "2"
+     ],
+     [
+      "t0.big",
+      "sg2"
+     ],
+     [
+      "t0.big",
+      "1"
+     ],
+     [
+      "t1.big",
+      "0"
+     ],
+     [
+      "t1.big",
+      "7"
+     ],
+     [
+      "t1.big",
+      "sg1"
+     ],
+     [
+      "t1.big",
+      "6"
+     ],
+     [
+      "t1.big",
+      "sg2"
+     ],
+     [
+      "t1.big",
+      "1"
+     ]
+    ],
+    "inner_name_vocabulary": {
+     "0": 313,
+     "sg1": 313,
+     "sg2": 313,
+     "1": 313,
+     "3": 55,
+     "2": 55,
+     "9": 20,
+     "8": 20,
+     "5": 16,
+     "4": 16,
+     "7": 14,
+     "6": 14,
+     "11": 9,
+     "10": 9,
+     "17": 9,
+     "16": 9,
+     "15": 6,
+     "14": 6,
+     "35": 6,
+     "34": 6,
+     "21": 6,
+     "20": 6,
+     "53": 5,
+     "52": 5,
+     "45": 5,
+     "44": 5,
+     "55": 5,
+     "54": 5,
+     "59": 5,
+     "58": 5,
+     "37": 5,
+     "36": 5,
+     "49": 5,
+     "48": 5,
+     "13": 5,
+     "12": 5,
+     "23": 5,
+     "22": 5,
+     "33": 5,
+     "32": 5
+    },
+    "inner_names_containing_the_crest_id_as_a_token": 0,
+    "note": "inner member names form a fixed vocabulary shared by every crest container (see inner_name_vocabulary); a digit-only inner name is a slot label, not an art id"
+   },
+   "hash_random_expectation": 15.522,
+   "hash_hits_count": 0,
+   "distinct_hashes_searched": 13776
+  },
+  "ps3-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR",
+   "members": 4745,
+   "crests": 313,
+   "identity_sample": {
+    "kit_jersey:chunkzip:equal": 12,
+    "nameplate:chunkzip:equal": 12,
+    "kit_pant:chunkzip:equal": 12,
+    "kit_sock:chunkzip:equal": 12,
+    "rink_logo:chunkzip:equal": 12,
+    "center_logo:chunkzip:equal": 12
+   },
+   "refused": [],
+   "external_arenas": {
+    "04000000 ffb00000 04000000": 4745
+   },
+   "subreferences": {
+    "0": 4745
+   },
+   "atoms": {
+    "0": 4745
+   },
+   "types": {
+    "10030 10031 10032 10033 10034 10010 20003 ec0010 10006": 4745
+   },
+   "dict_w1": {
+    "0x1505": 4745
+   },
+   "names_per_member": {
+    "6": 680,
+    "7": 3,
+    "1": 1592,
+    "3": 2442,
+    "5": 28
+   },
+   "name_stems": {
+    "kit_jersey:font_#_#_#_cm.Raster": 683,
+    "kit_jersey:font_#_#_#_nm.Raster": 683,
+    "kit_jersey:font_#_#_#_sm.Raster": 683,
+    "kit_jersey:jersey_#_#_#_cm.Raster": 683,
+    "kit_jersey:jersey_#_#_#_sm.Raster": 683,
+    "kit_jersey:jersey_#_#_#_#_nm.Raster": 686,
+    "nameplate:name_#_#_#_cm.Raster": 683,
+    "kit_pant:pant_#_#_#_cm.Raster": 684,
+    "kit_pant:pant_#_#_#_nm.Raster": 684,
+    "kit_pant:pant_#_#_#_sm.Raster": 684,
+    "kit_pant:pant_#_#_#_rm.Raster": 28,
+    "kit_pant:pant_#_#_#_roughness.Raster": 28,
+    "kit_sock:sock_#_#_#_cm.Raster": 683,
+    "rink_logo:logo_#_#_#_#.Raster": 5358,
+    "center_logo:centerlogo_#_cm.Raster": 226
+   },
+   "self_name": {
+    "kit_jersey:self": 4101,
+    "nameplate:self": 683,
+    "kit_pant:self": 2108,
+    "kit_sock:self": 683,
+    "rink_logo:self": 5358,
+    "center_logo:self": 226
+   },
+   "cross_id_names": [],
+   "ascii_other_stems_outside_dict": [],
+   "hash_hits": [],
+   "nonpayload_bytes": 4855386,
+   "per_family": {
+    "kit_jersey": {
+     "parsed": 683
+    },
+    "nameplate": {
+     "parsed": 683
+    },
+    "kit_pant": {
+     "parsed": 684
+    },
+    "kit_sock": {
+     "parsed": 683
+    },
+    "rink_logo": {
+     "parsed": 1786
+    },
+    "center_logo": {
+     "parsed": 226
+    }
+   },
+   "examples": {
+    "kit_jersey": {
+     "path": "rendering/jersey/texlib_0_0_0.rpsgl",
+     "sha256": "b16a2835532af772cbe3c81c4dd9bbfa62badb7a0334263996e5bef8f96e4d52",
+     "magic": "\u0089RW4ps3\u0000",
+     "chunks": 13,
+     "chunk_types": {
+      "0x10030": 6,
+      "0x20003": 6,
+      "0xec0010": 1
+     },
+     "manifest_at": 192,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65588,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      1216,
+      1216,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 12,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "font_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        },
+        {
+         "name": "font_0_0_0_nm.Raster",
+         "type": "0x20003",
+         "object_index": 3
+        },
+        {
+         "name": "font_0_0_0_sm.Raster",
+         "type": "0x20003",
+         "object_index": 5
+        },
+        {
+         "name": "jersey_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 7
+        },
+        {
+         "name": "jersey_0_0_0_sm.Raster",
+         "type": "0x20003",
+         "object_index": 9
+        },
+        {
+         "name": "jersey_0_0_0_0_nm.Raster",
+         "type": "0x20003",
+         "object_index": 11
+        }
+       ]
+      }
+     ]
+    },
+    "nameplate": {
+     "path": "rendering/jersey/name_0_0_0_cm.rpsgl",
+     "sha256": "42088edd65963c4265c84e303c48714b5ca53d04acb1b12b9cb219534bc1bedc",
+     "magic": "\u0089RW4ps3\u0000",
+     "chunks": 3,
+     "chunk_types": {
+      "0x10030": 1,
+      "0x20003": 1,
+      "0xec0010": 1
+     },
+     "manifest_at": 192,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65588,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      516,
+      516,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 2,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "name_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        }
+       ]
+      }
+     ]
+    },
+    "kit_pant": {
+     "path": "rendering/pant/texlib_0_0_0.rpsgl",
+     "sha256": "96c47ee3f1742ade97abb9171ae1247710850451b8311788bfd2f01d3afea6ad",
+     "magic": "\u0089RW4ps3\u0000",
+     "chunks": 7,
+     "chunk_types": {
+      "0x10030": 3,
+      "0x20003": 3,
+      "0xec0010": 1
+     },
+     "manifest_at": 192,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65588,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      788,
+      788,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 6,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "pant_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        },
+        {
+         "name": "pant_0_0_0_nm.Raster",
+         "type": "0x20003",
+         "object_index": 3
+        },
+        {
+         "name": "pant_0_0_0_sm.Raster",
+         "type": "0x20003",
+         "object_index": 5
+        }
+       ]
+      }
+     ]
+    },
+    "kit_sock": {
+     "path": "rendering/sock/sock_0_0_0_cm.rpsgl",
+     "sha256": "08bbd924f5cb2c51df55d1454a4351cd2c66afb806b8aec1743eb0091bec34f1",
+     "magic": "\u0089RW4ps3\u0000",
+     "chunks": 3,
+     "chunk_types": {
+      "0x10030": 1,
+      "0x20003": 1,
+      "0xec0010": 1
+     },
+     "manifest_at": 192,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65588,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      516,
+      516,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 2,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "sock_0_0_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        }
+       ]
+      }
+     ]
+    },
+    "rink_logo": {
+     "path": "rendering/logo/texlib_0_0_0.rpsgl",
+     "sha256": "9371d684f53b5cb7540ee24d529a55cbc67443f958eddc098eb51838d142d78f",
+     "magic": "\u0089RW4ps3\u0000",
+     "chunks": 7,
+     "chunk_types": {
+      "0x10030": 3,
+      "0x20003": 3,
+      "0xec0010": 1
+     },
+     "manifest_at": 192,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65588,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      784,
+      784,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 6,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "logo_0_0_0_0.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        },
+        {
+         "name": "logo_0_0_0_1.Raster",
+         "type": "0x20003",
+         "object_index": 3
+        },
+        {
+         "name": "logo_0_0_0_2.Raster",
+         "type": "0x20003",
+         "object_index": 5
+        }
+       ]
+      }
+     ]
+    },
+    "center_logo": {
+     "path": "rendering/icesurface/centerlogo_0_cm.rpsgl",
+     "sha256": "bc1ec5210771751229b1df44e9066a7ae730a85b99c4687245617333b1d4b155",
+     "magic": "\u0089RW4ps3\u0000",
+     "chunks": 3,
+     "chunk_types": {
+      "0x10030": 1,
+      "0x20003": 1,
+      "0xec0010": 1
+     },
+     "manifest_at": 192,
+     "types": [
+      65584,
+      65585,
+      65586,
+      65587,
+      65588,
+      65552,
+      131075,
+      15466512,
+      65542
+     ],
+     "external_arenas": [
+      67108864,
+      4289724416,
+      67108864
+     ],
+     "subreferences": 0,
+     "subref_words": [
+      0,
+      0,
+      0,
+      516,
+      516,
+      0
+     ],
+     "atoms": 0,
+     "names": [
+      {
+       "chunk": 2,
+       "w1": "0x1505",
+       "entries": [
+        {
+         "name": "centerlogo_0_cm.Raster",
+         "type": "0x20003",
+         "object_index": 1
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "full_reads": 72,
+   "fe_crests": {
+    "containers": {
+     "BIGF": 313,
+     "inner_names_total": 1878
+    },
+    "inner_examples": [
+     [
+      "t0.big",
+      "0"
+     ],
+     [
+      "t0.big",
+      "3"
+     ],
+     [
+      "t0.big",
+      "sg1"
+     ],
+     [
+      "t0.big",
+      "2"
+     ],
+     [
+      "t0.big",
+      "sg2"
+     ],
+     [
+      "t0.big",
+      "1"
+     ],
+     [
+      "t1.big",
+      "0"
+     ],
+     [
+      "t1.big",
+      "7"
+     ],
+     [
+      "t1.big",
+      "sg1"
+     ],
+     [
+      "t1.big",
+      "6"
+     ],
+     [
+      "t1.big",
+      "sg2"
+     ],
+     [
+      "t1.big",
+      "1"
+     ]
+    ],
+    "inner_name_vocabulary": {
+     "0": 313,
+     "sg1": 313,
+     "sg2": 313,
+     "1": 313,
+     "3": 55,
+     "2": 55,
+     "9": 20,
+     "8": 20,
+     "5": 16,
+     "4": 16,
+     "7": 14,
+     "6": 14,
+     "11": 9,
+     "10": 9,
+     "17": 9,
+     "16": 9,
+     "15": 6,
+     "14": 6,
+     "35": 6,
+     "34": 6,
+     "21": 6,
+     "20": 6,
+     "53": 5,
+     "52": 5,
+     "45": 5,
+     "44": 5,
+     "55": 5,
+     "54": 5,
+     "59": 5,
+     "58": 5,
+     "37": 5,
+     "36": 5,
+     "49": 5,
+     "48": 5,
+     "13": 5,
+     "12": 5,
+     "23": 5,
+     "22": 5,
+     "33": 5,
+     "32": 5
+    },
+    "inner_names_containing_the_crest_id_as_a_token": 0,
+    "note": "inner member names form a fixed vocabulary shared by every crest container (see inner_name_vocabulary); a digit-only inner name is a slot label, not an art id"
+   },
+   "hash_random_expectation": 15.58,
+   "hash_hits_count": 0,
+   "distinct_hashes_searched": 13782
+  }
+ }
+}

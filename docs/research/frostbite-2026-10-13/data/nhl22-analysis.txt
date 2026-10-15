@@ -1,0 +1,238 @@
+# H:/TEMP/claude/e--Repositories-nhl-modding-studio/43e91664-5e69-4e71-b88d-8b1a81d6c945/scratchpad/fb/out/nhl22-data.jsonl: 205104 distinct ebx names, 43213 bundles
+
+## ebx top-level folders per superbundle
+  Gen4b/contentlaunchsb: content=58746, sound=4415, ui=1578, nhl=123, systems=85, noadata=48, presentation=36, animations=34, __generated=16, effects=16, systemtests=8, levels=5, 8bba9c50-8e1d-4062-9205-c30b7d3323b6_shaderparametervariation=2, 84daf153-1715-4c5b-8fd9-f16a6e97eecd_shaderparametervariation=1
+  Gen4b/contentsb: content=287643, sound=5338, systems=2012, noadata=1513, animations=756, __generated=378, effects=378, presentation=9, nispresentationnispositionerprefab=3
+  Gen4b/globals: content=481, systems=227, online=107, sound=38, nhl=38, globals=23, _examples=14, webbrowser=6, _codegenerated=2, ui=2, default=1, levellistreport=1, levels=1
+  Gen4b/globalsfull: content=1
+  Gen4b/levels/game/game: sound=5331, content=1108, ui=300, levels=37, noadata=36, presentation=13, systems=9, globals=4, af=2, online=1, animations=1, indicator_grid=1, __generated=1, effects=1
+  Gen4b/movies: nhl=1193, systems=87, __generated=29, effects=29, content=6
+  Gen4b/ui: ui=105, content=29
+  Gen4b/worldssb: content=150686, noadata=866, systems=713, presentation=365, ui=190, animations=182, __generated=94, effects=94, 8bba9c50-8e1d-4062-9205-c30b7d3323b6_shaderparametervariation=58, levels=43, 73f1d1d4-af5c-4283-92a7-1d2de30f77cb_shaderparametervariation=7, 3f41d61b-b387-4509-b14f-a7f136cee341_shaderparametervariation=1, sound=1, e159dbca-286e-466f-a246-9fef00935e76_shaderparametervariation=1
+
+## ebx folders (depth 2), top 80
+   172073  content/common
+   165559  content/character
+   120726  content/worlds
+    22876  content/nis
+    14651  sound/speech
+    11203  content/effects
+     3782  content/rigging
+     1909  noadata/accessorgroup
+     1670  ui/assets
+     1527  content/camera
+     1351  nhl/data
+     1036  systems/effect
+      973  animations/antanimations
+      800  content/animation
+      791  systems/render
+      565  systems/emitter
+      534  noadata/nhl_main
+      518  systems/physics
+      518  __generated/effectparameterlist
+      518  effects/globaleffectparameterlist
+      385  presentation/icechannels
+      324  ui/features
+      261  sound/sfx_fb
+      147  ui/fonts
+      141  sound/music_fb
+      112  content/interface
+      107  online/configurations
+       64  systems/client
+       60  8bba9c50-8e1d-4062-9205-c30b7d3323b6_shaderparametervariation
+       59  systems/updatepasses
+       52  systems/terrain
+       47  levels/autotest
+       38  sound/nhlharmony
+       38  levels/game
+       38  content/haptics
+       24  presentation/ar
+       19  noadata/asset_binding
+       18  systems/server
+       15  ui/sound
+       14  _examples/audio
+       14  systems/subscribers
+       14  globals/configs
+       13  sound/system_fb
+        8  systemtests/entity
+        7  73f1d1d4-af5c-4283-92a7-1d2de30f77cb_shaderparametervariation
+        6  ui/test
+        6  systems/textures
+        6  presentation/emchoosers
+        6  sound/afw
+        4  ui/prefabs
+        4  ui/groups
+        4  webbrowser/fonts
+        4  ui/markup
+        4  globals/rendersettings
+        4  content/ui
+        3  presentation/ve
+        3  nispresentationnispositionerprefab
+        3  nhl/ui
+        3  globals/sound
+        3  systems/decal
+        2  systems/swarm
+        2  _codegenerated/audio
+        2  systems/destructionvolume
+        2  sound/reverb
+        2  sound/gauntletcrowds
+        2  af/assets
+        2  sound/ufo
+        2  sound/crowds
+        2  sound/mixers
+        1  ui/fonteffects
+        1  84daf153-1715-4c5b-8fd9-f16a6e97eecd_shaderparametervariation
+        1  ee3a7abd-903f-4eb5-8687-0b37477a676f_shaderparametervariation
+        1  67124138-4289-45c1-9365-d273bffc656d_shaderparametervariation
+        1  levels/whitebox
+        1  webbrowser/webbrowserlocalurlasset
+        1  globals/chunkfilecollectoruicommon
+        1  webbrowser/webbrowserbundleasset
+        1  globals/chunkfilecollectoruikettle
+        1  globals/chunkfilecollector
+        1  globals/chunkfilecollectoruikettle_nhluidata
+
+## res types (count, example)
+  0x6bde20ba  151194  e.g. content/character/crowd/prop/male/hat/textures/licensed/ottawa/crowd_prop_male_hat_ottawa_color
+  0x0e2b02f7   17812  e.g. shaders/bytecode/e2692ec7-d171-efe3-ba65-537ce44ff288
+  0x49b156d4   14538  e.g. content/character/crowd/head/male/average/components/crowd_head_male_average_2_1_swarmmesh_mesh
+  0xb2c465f6   14524  e.g. sound/music_fb/fe/nhl_mus_fe_soundtrack/nhl_mus_fe_soundtrack_wave
+  0x428ec9d4    8326  e.g. content/common/configs/bundlereftable/entrance_prop_brt
+  0x51a3c853     452  e.g. animations/antanimations/content/worlds/stadiums/custombuffalo_700/crowd_gen4b_antstate
+  0x957c32b1     312  e.g. content/worlds/textures/light/light_spotlight_defined_02_cm_color
+  0x70c5cb3e     284  e.g. content/worlds/stadiums/tampa_26/lighting/en_medium_tampa_26_authentic
+  0x85ea8656     141  e.g. content/character/skater/goalie/jersey/adidas/components/goalie_jersey_adidas_notuck_lod1_clothwrappingasset
+  0x85ac783d     141  e.g. content/character/skater/goalie/jersey/adidas/components/cloth/goalie_jersey_adidas_notuck_cloth_lod1
+  0xc6cd3286     138  e.g. content/worlds/stadiums/tampa_26/lighting/fl_medium_tampa_26_authentic
+  0x063994c5     131  e.g. ui/fonts/druk/druk-wide-medium
+  0x3568e2b7      85  e.g. content/character/crowd/prop/male/sign/common/fonts/rough_ttf
+  0x41d57e10      52  e.g. ui/features/ar/textures/rime_ice_area_target
+  0x7dd4cc89      14  e.g. _examples/audio/systemsetup/example_nar_initialization_schematicsclass__destructor_realmex_client_0
+  0x3b9d1688      10  e.g. content/character/psd/common_female/head_common_1_2_0_psd
+  0x36f3f2c0       3  e.g. content/common/configs/bundles/launch_sba/shaderdb
+  0x2fec6526       3  e.g. content/common/configs/bundles/launch_sba_gen4b_shaderstateshaderstateassetid
+  0xbb38846a       1  e.g. systems/render/shaderprogramdb
+  0xb15ad3fd       1  e.g. levels/game/game/enlighten/shaderdatabase_gen4b
+
+## toc-level chunks per superbundle: {'Gen4b/contentlaunchsb': 13911, 'Gen4b/contentsb': 45073, 'Gen4b/globals': 23852, 'Gen4b/globalsfull': 38339, 'Gen4b/levels/game/game': 1721, 'Gen4b/movies': 427, 'Gen4b/worldssb': 9248}
+
+## family probes (distinct ebx names; 8 examples)
+  database/tdb: 41 | top folders: sound/speech=40, sound/gamevars=1
+      sound/gamevars/nhlgamevars
+      sound/speech/commentary/database/commentarydbevents
+      sound/speech/commentary/database/commentarysentencetranscriptioncollection
+      sound/speech/commentary/soundwaves/eng_inxp/ba_bench_return_stats_milestone_career_goals_1_rookie_first_nhl_game
+      sound/speech/commentary/soundwaves/ps_faceoff_setup_hut_star_player_first_game_in_roster
+      sound/speech/fe_bap/database/fe_bap_sentencetranscriptioncollection
+      sound/speech/fe_woc/database/fe_woc_sentencetranscriptioncollection
+      sound/speech/threes/database/threesdb
+  localization: 1 | top folders: content/common=1
+      content/common/configs/mappings/worlds_banner_language_mapping
+  heads/faces: 32168 | top folders: content/character=32160, content/worlds=5, ui/features=2, content/common=1
+      content/character/bench/shared/head/generic/female_0/components/hair_female_0_default_nomask_base
+      content/character/crowd/head/female/average/crowd_head_female_average_1_bandana_item_swarmtextures_assetbp_bpb_4d039a74-cf98-f6c8-5999-79efeacd9a52_bundle
+      content/character/skater/player/casual/facegear/halfmask/basic_one/textures/nhl/player_facegear_unisex_halfmask_basic_one_regular_nhl_14_player_casual_facegear_brt_blueprint
+      content/character/skater/player/casual/headgear/truckerflat/basic_one/textures/nhl/player_headgear_unisex_truckerflat_basic_one_snap_nhl_26_player_casual_headgear_brt
+      content/character/skater/shared/head/generic/male_60200/components/head_male_60200_playerhelmet_placement_player_scaling_brt_blueprint
+      content/character/skater/shared/head/licensed/alexei_ponikarovsky/textures_player_head_brt
+      content/character/skater/shared/head/licensed/jack_hughes/textures_player_head_brt
+      content/character/skater/shared/head/licensed/nico_hischier/components/head_nico_hischier_mesh
+  hair: 9135 | top folders: content/character=8950, content/worlds=165, content/common=18, systems/render=2
+      content/character/bench/shared/head/generic/female_0/components/hair_female_0_default_nomask_base
+      content/character/bench/shared/head/licensed/dion_phaneuf/components/coach_hair_dion_phaneuf_default_nomask_base_coach_brt
+      content/character/crowd/chair/licensed/newjersey/textures/crowd_chair_newjersey_1_color_crowd_brt_blueprint
+      content/character/skater/shared/head/hair/male_13/default_nomask/components/hair_male_13_default_nomask_base_mesh
+      content/character/skater/shared/head/hair/male_40/default_halfmask/components_launch_player_head_brt/meshvariationdb_gen4b
+      content/character/skater/shared/head/hair/male_68/hat_halfmask/components_player_head_brt/meshvariationdb_gen4b
+      content/character/skater/shared/head/licensed/dylan_demelo/components/hair_dylan_demelo_default_nomask_top
+      content/character/skater/shared/head/licensed/miro_heiskanen/textures/hair_miro_heiskanen_color
+  kits/jerseys: 24154 | top folders: content/character=23522, content/worlds=512, content/common=117, animations/antanimations=2, content/animation=1
+      animations/antanimations/content/worlds/stadiums/newjersey_17/crowd_gen4b_antstate
+      content/character/crowd/outfit/male/textures/licensed/elite_finnish/oulun_karpat/crowd_outfit_male_jersey_oulun_karpat_playoff_color_crowd_brt_blueprint
+      content/character/skater/goalie/casual/top/jerseycasual/rbk/components/goalie_top_male_jerseytie_rbk_item_goalie_casual_top_brt_blueprint
+      content/character/skater/league/chl/saskatoon_blades/rbk/home/jersey_rbk_saskatoon_blades_home_coeff
+      content/character/skater/league/echl/cincinnati_cyclones/rbk/home/jersey_rbk_cincinnati_cyclones_home_normal
+      content/character/skater/league/nhl/colorado/rbk/four/jersey_font_placement_rbk_colorado_four_player_team_brt_blueprint
+      content/character/skater/league/shared/textile/weave/nineties/weave_jersey_nineties_default_metal_0_normal_array_player_team_brt
+      content/character/skater/player/casual/top/jerseyhood/basic_one/textures/colorblocking/player_top_unisex_jerseyhood_basic_one_pullover_colorblocking_3_color
+  arena/ice: 15297 | top folders: content/worlds=11439, content/nis=3263, animations/antanimations=288, content/character=114, content/effects=73, content/animation=62
+      animations/antanimations/content/nis/nhl_nis_game_bap_intro_2_stadium0_0/nhl_nis_game_bap_intro_2_stadium0_0_gen4b_antstate
+      content/nis/nhl_nis_game_bap_intro_2_stadium28_0/zm01_zamboni_tunnel_var3(1522)_craftdesign
+      content/nis/nis_bap_pa08_tf_var3_1/pa08_practice_arena_goalie_meet_agent_tf_var3(4810)_event
+      content/worlds/components/structures/zurich/rink_player_bench
+      content/worlds/rink/textures/common/ice_indoor_default_01_height_01_worlds_rink_brt
+      content/worlds/stadiums/arizona_22/threes
+      content/worlds/stadiums/eashltier1_510/environment_replay
+      content/worlds/stadiums/outdoortier1_900/outdoortier1_900_networkregistry_gen4b
+  boards: 5154 | top folders: content/worlds=4619, content/nis=278, sound/speech=174, content/common=29, content/character=22, content/effects=14
+      animations/antanimations/content/nis/nis_bap_br01_boardroom_1_draft_interview_1_var1_1/nis_bap_br01_boardroom_1_draft_interview_1_var1_1_gen4b_antstate
+      content/worlds/components/structures/eashltier3/rink_boards
+      content/worlds/configs/adboards/zurich/worlds_adboards_override_zurich_playnow_international_worlds_adboards_brt_blueprint
+      content/worlds/scoreboard/states/threes/scoreboard_threes_powerring_states
+      content/worlds/scoreboard/textures/toronto/scoreboard_toronto_signs_color
+      content/worlds/textures/boards/boards_ads_decal_puls24_worlds_textures_brt
+      content/worlds/textures/glass/glass_boards_goal_light_worlds_textures_brt
+      content/worlds/textures/scoreboard/scoreboard_metal_nashville_color
+  logos: 18093 | top folders: content/common=13471, content/character=2631, content/worlds=1949, nhl/data=37, presentation/ar=3, online/configurations=2
+      content/character/crowd/outfit/crowd_hoody_logo_placement
+      content/character/skater/league/nhl/vancouver/adidas/away/helmetlogo_adidas_vancouver_away_0_player_team_brt_blueprint
+      content/common/logo/font_collegiate1/font_collegiate1_banner_l/logo_font_collegiate1_banner_l_recolor3
+      content/common/logo/font_collegiate2/font_collegiate2_shield_i/logo_font_collegiate2_shield_i_common_logo_brt_blueprint
+      content/common/logo/font_handscript/font_handscript_wreath_q/logo_font_handscript_wreath_q_coeff
+      content/common/logo/font_vintage/font_vintage_arrow_z/logo_font_vintage_arrow_z_normal
+      content/common/logo/sabretiger/logo_sabretiger_coeff
+      content/common/logo/vancouver/logo_vancouver_common_logo_brt_blueprint
+  portraits: 10 | top folders: content/worlds=3, presentation/ar=3, content/ui=2, sound/speech=2
+      content/ui/bapawayportraitcapturesettings
+      content/ui/baphomeportraitcapturesettings
+      content/worlds/wipes/wipe_player_broadcast/materials/wipe_player_portrait_broadcast_mat
+      content/worlds/wipes/wipe_player_broadcast/meshes/wipe_broadcast_portrait_main
+      content/worlds/wipes/wipe_player_broadcast/meshes/wipe_broadcast_portrait_main_mesh
+      presentation/ar/playerportraitchunkpath
+      presentation/ar/playerportraittemppath
+      presentation/ar/ui_portrait_loader
+  equipment: 103654 | top folders: content/character=100547, content/nis=1526, sound/speech=1003, content/common=297, content/worlds=209, ui/assets=20
+      animations/antanimations/content/nis/nhl_nis_game_bap_intro_2_stadiumseattle_goalie/nhl_nis_game_bap_intro_2_stadiumseattle_goalie_gen4b_antstate
+      content/character/skater/goalie/trapper/nhl/edmonton/textures/goalie_trapper_nhl_edmonton_original_right_goalie_trapper_brt_blueprint
+      content/character/skater/league/chl/sherbrooke_phoenix/rbk/away/jersey_rbk_sherbrooke_phoenix_away_coeff
+      content/character/skater/league/elite_swiss/ev_zug/nineties/home/pant_nineties_ev_zug_home_normal
+      content/character/skater/league/nhl/pittsburgh/nineties/away/pant_nineties_pittsburgh_away_color
+      content/character/skater/player/casual/headgear/toqueslouchy/basic_one/textures/intl/player_headgear_unisex_toqueslouchy_basic_one_unfolded_intl_1_player_casual_headgear_brt
+      content/character/skater/player/skate/intl/czechrepublic/textures/player_skate_intl_czechrepublic_home_color
+      content/character/skater/shared/head/licensed/dale_hawerchuk/textures/hair_dale_hawerchuk_color
+  scorebug/overlay: 2349 | top folders: content/worlds=2098, sound/speech=74, sound/sfx_fb=69, content/character=41, sound/music_fb=33, content/common=19
+      content/camera/debug/camera_lens_debug_truebroadcast
+      content/worlds/scoreboard/customdetroit/scoreboard_customdetroit_prefab
+      content/worlds/scoreboard/textures/arizona/scoreboard_arizona_clap_color_worlds_scoreboards_brt_blueprint
+      content/worlds/scoreboard/textures/lasvegas/scoreboard_lasvegas_make_some_noise_color_worlds_scoreboards_brt
+      content/worlds/scoreboard/textures/toronto/scoreboard_toronto_make_some_noise_color_worlds_scoreboards_brt_blueprint
+      content/worlds/textures/scoreboard/scoreboard_facade03_decal_colorable_recolor1_worlds_textures_brt_blueprint
+      content/worlds/textures/scoreboard/scoreboard_minesota_powerring_normal
+      content/worlds/textures/scoreboard/scoreboard_washington_capitals_logo_normal
+  audio: 12020 | top folders: sound/speech=10281, content/nis=1148, sound/sfx_fb=261, sound/music_fb=122, content/character=84, sound/nhlharmony=38
+      _codegenerated/audio/audioupdatepass
+      sound/sfx_fb/ambience/1_woc/nhl_amb_bigworld_woc_outdoor_siren_wave
+      sound/speech/commentary/soundwaves/ba_replay_save_great_score_tied_critical_moment
+      sound/speech/commentary/soundwaves/bm_txsthe_penalty_explained_minor_slashing
+      sound/speech/commentary/soundwaves/bma_txsthe_goal_ramification_score_tied_prd2_qtr4
+      sound/speech/commentary/soundwaves/eng_inxp/bam_game_over_stats_losing_team_won_more_faceoffs
+      sound/speech/commentary/soundwaves/eng_inxp/bma_cxsend_goal_ramif_winning_3_vs_0_prd3_qtr1_shots_majority
+      sound/speech/commentary/soundwaves/lcu_01
+  fonts: 17750 | top folders: content/character=8964, content/common=8711, ui/fonts=43, content/interface=23, webbrowser/fonts=4, systems/render=2
+      content/character/crowd/prop/male/sign/common/fonts/crowd_prop_male_sign_font_generic_rough_0
+      content/character/skater/league/chl/saskatoon_blades/rbk/three/font_rbk_saskatoon_blades_three_coeff
+      content/character/skater/league/elite_swedish/brynas_if/nineties/away/font_nineties_brynas_if_away_player_team_brt
+      content/character/skater/league/nhl/mascots_east/rbk/home/font_rbk_mascots_east_home_player_team_brt
+      content/character/skater/league/wc/wc_czechrepublic/rbk/home/font_rbk_wc_czechrepublic_home_color
+      content/common/logo/font_collegiate2/font_collegiate2_banner_b/logo_font_collegiate2_banner_b_normal
+      content/common/logo/font_handscript/font_handscript_n/logo_font_handscript_n_coeff
+      content/common/logo/font_modern/font_modern_w/logo_font_modern_w_common_logo_brt
+  ui: 799 | top folders: ui/assets=293, content/worlds=272, ui/features=89, content/character=68, ui/fonts=43, content/interface=9
+      animations/antanimations/content/worlds/stadiums/frontend_bap_101/frontend_bap_101_gen4b_antstate
+      content/worlds/components/structures/frontend_bap/backdrop_nhlawards_mesh
+      content/worlds/stadiums/frontend_bap_101/dressing_room_home_main
+      content/worlds/textures/frontend/fe_fog_plane_worlds_textures_brt_blueprint
+      ui/assets/ar/abilities/super/220_athleticism
+      ui/assets/ar/abilities/zone/active/8_lockdown_defender_active
+      ui/assets/ar/abilities/zone/inuse/21_trick_shots_inuse
+      ui/features/ar/dsub/postgoal_schematic

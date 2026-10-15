@@ -1,0 +1,2913 @@
+{
+ "provenance": "Derived 2026-09-23 from research handoff R73 (docs/research/overnight-2026-09-22-pm/04-ps4-venue-listing-contract.md, data/r73-ps4-venue-listing.json), itself a join of the 2026-09-19 r7 vault decode and the 2026-09-22 r68 directory listing. Vault level records keyed by arenaartid; a listing input only (observed on shipped titles; not a documented selector; no write contract). Studio checks folder presence live against the attached tree.",
+ "titles": {
+  "nhl15": {
+   "arena_rows_measured": 80,
+   "levels": [
+    {
+     "id": 0,
+     "name": "anaheim",
+     "dir": "anaheim",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 0,
+     "center_line": 13,
+     "ice_line": 0
+    },
+    {
+     "id": 1,
+     "name": "winnipeg",
+     "dir": "winnipeg",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 1,
+     "center_line": 25,
+     "ice_line": 0
+    },
+    {
+     "id": 2,
+     "name": "boston",
+     "dir": "boston",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 2,
+     "center_line": 32,
+     "ice_line": 0
+    },
+    {
+     "id": 3,
+     "name": "buffalo",
+     "dir": "buffalo",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 3,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 4,
+     "name": "calgary",
+     "dir": "calgary",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 4,
+     "center_line": 26,
+     "ice_line": 0
+    },
+    {
+     "id": 5,
+     "name": "carolinageneric",
+     "dir": null,
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 5,
+     "center_line": 14,
+     "ice_line": 0
+    },
+    {
+     "id": 6,
+     "name": "chicagogeneric",
+     "dir": "chicagogeneric",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 6,
+     "center_line": 4,
+     "ice_line": 0
+    },
+    {
+     "id": 7,
+     "name": "colorado",
+     "dir": "colorado",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 7,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 8,
+     "name": "columbus",
+     "dir": "columbus",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 8,
+     "center_line": 18,
+     "ice_line": 0
+    },
+    {
+     "id": 9,
+     "name": "dallas",
+     "dir": "dallas",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 21,
+     "ice_line": 0
+    },
+    {
+     "id": 10,
+     "name": "detroit",
+     "dir": "detroit",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 10,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 11,
+     "name": "edmonton",
+     "dir": "edmonton",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 11,
+     "center_line": 6,
+     "ice_line": 0
+    },
+    {
+     "id": 12,
+     "name": "florida",
+     "dir": "florida",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 12,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 13,
+     "name": "losangeles",
+     "dir": "losangeles",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 13,
+     "center_line": 17,
+     "ice_line": 0
+    },
+    {
+     "id": 14,
+     "name": "minnesota",
+     "dir": "minnesota",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 14,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 15,
+     "name": "montreal",
+     "dir": "montreal",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 15,
+     "center_line": 23,
+     "ice_line": 0
+    },
+    {
+     "id": 16,
+     "name": "nashville",
+     "dir": "nashville",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 16,
+     "center_line": 24,
+     "ice_line": 0
+    },
+    {
+     "id": 17,
+     "name": "newjersey",
+     "dir": "newjersey",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 17,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nyislanders",
+     "dir": "nyislanders",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 18,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 19,
+     "name": "nyrangers",
+     "dir": "nyrangers",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 19,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 20,
+     "name": "ottawa",
+     "dir": "ottawa",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 20,
+     "center_line": 27,
+     "ice_line": 0
+    },
+    {
+     "id": 21,
+     "name": "philadelphia",
+     "dir": "philadelphia",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 21,
+     "center_line": 10,
+     "ice_line": 0
+    },
+    {
+     "id": 22,
+     "name": "phoenix",
+     "dir": "phoenix",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 22,
+     "center_line": 28,
+     "ice_line": 0
+    },
+    {
+     "id": 23,
+     "name": "pittsburgh",
+     "dir": "pittsburgh",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 23,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 24,
+     "name": "stlouis",
+     "dir": "stlouis",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 24,
+     "center_line": 16,
+     "ice_line": 0
+    },
+    {
+     "id": 25,
+     "name": "sanjose",
+     "dir": "sanjose",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 25,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 26,
+     "name": "tampa",
+     "dir": "tampa",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 26,
+     "center_line": 7,
+     "ice_line": 0
+    },
+    {
+     "id": 27,
+     "name": "toronto",
+     "dir": "toronto",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 27,
+     "center_line": 15,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "vancouver",
+     "dir": "vancouver",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 28,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 29,
+     "name": "washington",
+     "dir": "washington",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 29,
+     "center_line": 29,
+     "ice_line": 0
+    },
+    {
+     "id": 50,
+     "name": "ahlgeneric",
+     "dir": "ahlgeneric",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 51,
+     "name": "eurogeneric",
+     "dir": "eurogeneric",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    }
+   ],
+   "texpack_misses": {
+    "center_logo": [],
+    "center_line": [],
+    "ice_line": []
+   },
+   "texpack_set_sizes": {
+    "center_logo": 221,
+    "center_line": 33,
+    "ice_line": 4
+   },
+   "typed_refs": {
+    "ge_crowdplacement": 33
+   },
+   "dirs_without_level_name": [
+    "common"
+   ],
+   "level_names_without_dir": [
+    "carolinageneric"
+   ],
+   "shared_ids": {}
+  },
+  "nhl16": {
+   "arena_rows_measured": 80,
+   "levels": [
+    {
+     "id": 0,
+     "name": "anaheim",
+     "dir": "anaheim",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 0,
+     "center_line": 13,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "common_ice_edmonton",
+     "dir": "common_ice_edmonton",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "common_ice_int",
+     "dir": "common_ice_int",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "illuminating_cjt_colorado",
+     "dir": "illuminating_cjt_colorado",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "illuminating_cjt_detroit",
+     "dir": "illuminating_cjt_detroit",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 1,
+     "name": "winnipeg",
+     "dir": "winnipeg",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 1,
+     "center_line": 25,
+     "ice_line": 0
+    },
+    {
+     "id": 2,
+     "name": "boston",
+     "dir": "boston",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 2,
+     "center_line": 32,
+     "ice_line": 0
+    },
+    {
+     "id": 3,
+     "name": "buffalo",
+     "dir": "buffalo",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 3,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 4,
+     "name": "calgary",
+     "dir": "calgary",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 4,
+     "center_line": 26,
+     "ice_line": 0
+    },
+    {
+     "id": 5,
+     "name": "carolina",
+     "dir": "carolina",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 5,
+     "center_line": 14,
+     "ice_line": 0
+    },
+    {
+     "id": 6,
+     "name": "chicagogeneric",
+     "dir": "chicagogeneric",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 6,
+     "center_line": 4,
+     "ice_line": 0
+    },
+    {
+     "id": 7,
+     "name": "colorado",
+     "dir": "colorado",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 7,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 8,
+     "name": "columbus",
+     "dir": "columbus",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 8,
+     "center_line": 18,
+     "ice_line": 0
+    },
+    {
+     "id": 9,
+     "name": "dallas",
+     "dir": "dallas",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 21,
+     "ice_line": 0
+    },
+    {
+     "id": 10,
+     "name": "detroit",
+     "dir": "detroit",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 10,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 11,
+     "name": "edmonton",
+     "dir": "edmonton",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 11,
+     "center_line": 6,
+     "ice_line": 0
+    },
+    {
+     "id": 12,
+     "name": "florida",
+     "dir": "florida",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 12,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 13,
+     "name": "losangeles",
+     "dir": "losangeles",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 13,
+     "center_line": 17,
+     "ice_line": 0
+    },
+    {
+     "id": 14,
+     "name": "minnesota",
+     "dir": "minnesota",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 14,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 15,
+     "name": "montreal",
+     "dir": "montreal",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 15,
+     "center_line": 23,
+     "ice_line": 0
+    },
+    {
+     "id": 16,
+     "name": "nashville",
+     "dir": "nashville",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 16,
+     "center_line": 24,
+     "ice_line": 0
+    },
+    {
+     "id": 17,
+     "name": "newjersey",
+     "dir": "newjersey",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 17,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nybarclays",
+     "dir": "nybarclays",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 18,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nyislanders",
+     "dir": "nyislanders",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 18,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 19,
+     "name": "nyrangers",
+     "dir": "nyrangers",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 19,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 20,
+     "name": "ottawa",
+     "dir": "ottawa",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 20,
+     "center_line": 27,
+     "ice_line": 0
+    },
+    {
+     "id": 21,
+     "name": "philadelphia",
+     "dir": "philadelphia",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 21,
+     "center_line": 10,
+     "ice_line": 0
+    },
+    {
+     "id": 22,
+     "name": "phoenix",
+     "dir": "phoenix",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 22,
+     "center_line": 28,
+     "ice_line": 0
+    },
+    {
+     "id": 23,
+     "name": "pittsburgh",
+     "dir": "pittsburgh",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 23,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 24,
+     "name": "stlouis",
+     "dir": "stlouis",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 24,
+     "center_line": 16,
+     "ice_line": 0
+    },
+    {
+     "id": 25,
+     "name": "sanjose",
+     "dir": "sanjose",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 25,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 26,
+     "name": "tampa",
+     "dir": "tampa",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 26,
+     "center_line": 7,
+     "ice_line": 0
+    },
+    {
+     "id": 27,
+     "name": "toronto",
+     "dir": "toronto",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 27,
+     "center_line": 15,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "custom_vancouver",
+     "dir": "custom_vancouver",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 1001,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "vancouver",
+     "dir": "vancouver",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 28,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 29,
+     "name": "washington",
+     "dir": "washington",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 29,
+     "center_line": 29,
+     "ice_line": 0
+    },
+    {
+     "id": 50,
+     "name": "ahlgeneric",
+     "dir": "ahlgeneric",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 51,
+     "name": "eurogeneric",
+     "dir": "eurogeneric",
+     "arena_id_attr": null,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    }
+   ],
+   "texpack_misses": {
+    "center_logo": [],
+    "center_line": [],
+    "ice_line": []
+   },
+   "texpack_set_sizes": {
+    "center_logo": 236,
+    "center_line": 36,
+    "ice_line": 4
+   },
+   "typed_refs": {
+    "ge_crowdplacement": 40
+   },
+   "dirs_without_level_name": [
+    "common",
+    "common_boards_international",
+    "common_props_roof2"
+   ],
+   "level_names_without_dir": [],
+   "shared_ids": {
+    "18": [
+     "nybarclays",
+     "nyislanders"
+    ],
+    "0": [
+     "anaheim",
+     "common_ice_edmonton",
+     "common_ice_int",
+     "illuminating_cjt_colorado",
+     "illuminating_cjt_detroit"
+    ],
+    "28": [
+     "custom_vancouver",
+     "vancouver"
+    ]
+   }
+  },
+  "nhl17": {
+   "arena_rows_measured": 80,
+   "levels": [
+    {
+     "id": 0,
+     "name": "anaheim",
+     "dir": "anaheim",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 0,
+     "center_line": 13,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "common_ice_int",
+     "dir": "common_ice_int",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_bandit_entrance",
+     "dir": "lighting_custom_bandit_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_boston_scoreboard",
+     "dir": "lighting_custom_boston_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_buffalo_entrance",
+     "dir": "lighting_custom_buffalo_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_bulldog_entrance",
+     "dir": "lighting_custom_bulldog_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_calgary_scoreboard",
+     "dir": "lighting_custom_calgary_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_colorado_scoreboard",
+     "dir": "lighting_custom_colorado_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_dallas_scoreboard",
+     "dir": "lighting_custom_dallas_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_detroit_scoreboard",
+     "dir": "lighting_custom_detroit_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_devil_entrance",
+     "dir": "lighting_custom_devil_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_edmonton_oilderrick_entrance",
+     "dir": "lighting_custom_edmonton_oilderrick_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_florida_scoreboard",
+     "dir": "lighting_custom_florida_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_generic_structure_1_entrance",
+     "dir": "lighting_custom_generic_structure_1_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_generic_structure_2_entrance",
+     "dir": "lighting_custom_generic_structure_2_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_generic_structure_3_entrance",
+     "dir": "lighting_custom_generic_structure_3_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_generic_structure_4_entrance",
+     "dir": "lighting_custom_generic_structure_4_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_knight_chess_entrance",
+     "dir": "lighting_custom_knight_chess_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_knight_entrance",
+     "dir": "lighting_custom_knight_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_montreal_scoreboard",
+     "dir": "lighting_custom_montreal_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_nashville_sabretooth_entrance",
+     "dir": "lighting_custom_nashville_sabretooth_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_nyrangers_scoreboard",
+     "dir": "lighting_custom_nyrangers_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_ogre_entrance",
+     "dir": "lighting_custom_ogre_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_sanjose_shark_entrance",
+     "dir": "lighting_custom_sanjose_shark_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_shark_entrance",
+     "dir": "lighting_custom_shark_entrance",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_stlouis_scoreboard",
+     "dir": "lighting_custom_stlouis_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "lighting_custom_vancouver_scoreboard",
+     "dir": "lighting_custom_vancouver_scoreboard",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 1,
+     "name": "winnipeg",
+     "dir": "winnipeg",
+     "arena_id_attr": 1,
+     "rink_id": null,
+     "center_logo": 1,
+     "center_line": 25,
+     "ice_line": 0
+    },
+    {
+     "id": 2,
+     "name": "boston",
+     "dir": "boston",
+     "arena_id_attr": 2,
+     "rink_id": null,
+     "center_logo": 2,
+     "center_line": 32,
+     "ice_line": 0
+    },
+    {
+     "id": 3,
+     "name": "buffalo",
+     "dir": "buffalo",
+     "arena_id_attr": 3,
+     "rink_id": null,
+     "center_logo": 3,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 4,
+     "name": "calgary",
+     "dir": "calgary",
+     "arena_id_attr": 4,
+     "rink_id": null,
+     "center_logo": 4,
+     "center_line": 26,
+     "ice_line": 0
+    },
+    {
+     "id": 5,
+     "name": "carolina",
+     "dir": "carolina",
+     "arena_id_attr": 5,
+     "rink_id": null,
+     "center_logo": 5,
+     "center_line": 43,
+     "ice_line": 0
+    },
+    {
+     "id": 6,
+     "name": "chicago",
+     "dir": "chicago",
+     "arena_id_attr": 6,
+     "rink_id": null,
+     "center_logo": 6,
+     "center_line": 37,
+     "ice_line": 0
+    },
+    {
+     "id": 7,
+     "name": "colorado",
+     "dir": "colorado",
+     "arena_id_attr": 7,
+     "rink_id": null,
+     "center_logo": 7,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 8,
+     "name": "columbus",
+     "dir": "columbus",
+     "arena_id_attr": 8,
+     "rink_id": null,
+     "center_logo": 8,
+     "center_line": 18,
+     "ice_line": 0
+    },
+    {
+     "id": 9,
+     "name": "dallas",
+     "dir": "dallas",
+     "arena_id_attr": 9,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 38,
+     "ice_line": 0
+    },
+    {
+     "id": 10,
+     "name": "detroit",
+     "dir": "detroit",
+     "arena_id_attr": 10,
+     "rink_id": null,
+     "center_logo": 10,
+     "center_line": 41,
+     "ice_line": 0
+    },
+    {
+     "id": 11,
+     "name": "edmonton",
+     "dir": "edmonton",
+     "arena_id_attr": 11,
+     "rink_id": null,
+     "center_logo": 11,
+     "center_line": 6,
+     "ice_line": 0
+    },
+    {
+     "id": 12,
+     "name": "florida",
+     "dir": "florida",
+     "arena_id_attr": 12,
+     "rink_id": null,
+     "center_logo": 12,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 13,
+     "name": "losangeles",
+     "dir": "losangeles",
+     "arena_id_attr": 13,
+     "rink_id": null,
+     "center_logo": 13,
+     "center_line": 17,
+     "ice_line": 0
+    },
+    {
+     "id": 14,
+     "name": "minnesota",
+     "dir": "minnesota",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 14,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 15,
+     "name": "montreal",
+     "dir": "montreal",
+     "arena_id_attr": 15,
+     "rink_id": null,
+     "center_logo": 15,
+     "center_line": 23,
+     "ice_line": 0
+    },
+    {
+     "id": 16,
+     "name": "nashville",
+     "dir": "nashville",
+     "arena_id_attr": 16,
+     "rink_id": null,
+     "center_logo": 16,
+     "center_line": 24,
+     "ice_line": 0
+    },
+    {
+     "id": 17,
+     "name": "newjersey",
+     "dir": "newjersey",
+     "arena_id_attr": 17,
+     "rink_id": null,
+     "center_logo": 17,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nyislanders",
+     "dir": "nyislanders",
+     "arena_id_attr": 18,
+     "rink_id": null,
+     "center_logo": 18,
+     "center_line": 39,
+     "ice_line": 0
+    },
+    {
+     "id": 19,
+     "name": "nyrangers",
+     "dir": "nyrangers",
+     "arena_id_attr": 19,
+     "rink_id": null,
+     "center_logo": 19,
+     "center_line": 42,
+     "ice_line": 0
+    },
+    {
+     "id": 20,
+     "name": "ottawa",
+     "dir": "ottawa",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 20,
+     "center_line": 27,
+     "ice_line": 0
+    },
+    {
+     "id": 21,
+     "name": "philadelphia",
+     "dir": "philadelphia",
+     "arena_id_attr": 21,
+     "rink_id": null,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 22,
+     "name": "arizona",
+     "dir": "arizona",
+     "arena_id_attr": 22,
+     "rink_id": null,
+     "center_logo": 22,
+     "center_line": 28,
+     "ice_line": 0
+    },
+    {
+     "id": 23,
+     "name": "pittsburgh",
+     "dir": "pittsburgh",
+     "arena_id_attr": 23,
+     "rink_id": null,
+     "center_logo": 23,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 24,
+     "name": "stlouis",
+     "dir": "stlouis",
+     "arena_id_attr": 24,
+     "rink_id": null,
+     "center_logo": 24,
+     "center_line": 16,
+     "ice_line": 0
+    },
+    {
+     "id": 25,
+     "name": "sanjose",
+     "dir": "sanjose",
+     "arena_id_attr": 25,
+     "rink_id": null,
+     "center_logo": 25,
+     "center_line": 44,
+     "ice_line": 0
+    },
+    {
+     "id": 26,
+     "name": "tampa",
+     "dir": "tampa",
+     "arena_id_attr": 26,
+     "rink_id": null,
+     "center_logo": 26,
+     "center_line": 7,
+     "ice_line": 0
+    },
+    {
+     "id": 27,
+     "name": "toronto",
+     "dir": "toronto",
+     "arena_id_attr": 27,
+     "rink_id": null,
+     "center_logo": 27,
+     "center_line": 15,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "vancouver",
+     "dir": "vancouver",
+     "arena_id_attr": 28,
+     "rink_id": null,
+     "center_logo": 28,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 29,
+     "name": "washington",
+     "dir": "washington",
+     "arena_id_attr": 29,
+     "rink_id": null,
+     "center_logo": 29,
+     "center_line": 29,
+     "ice_line": 0
+    },
+    {
+     "id": 50,
+     "name": "ahlgeneric",
+     "dir": "ahlgeneric",
+     "arena_id_attr": 50,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 51,
+     "name": "eurogeneric",
+     "dir": "eurogeneric",
+     "arena_id_attr": 51,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    }
+   ],
+   "texpack_misses": {
+    "center_logo": [
+     1001
+    ],
+    "center_line": [],
+    "ice_line": []
+   },
+   "texpack_set_sizes": {
+    "center_logo": 272,
+    "center_line": 76,
+    "ice_line": 5
+   },
+   "typed_refs": {
+    "ge_crowdplacement": 55
+   },
+   "dirs_without_level_name": [
+    "common",
+    "common_boards_international",
+    "common_ice_edmonton",
+    "common_props_roof2"
+   ],
+   "level_names_without_dir": [],
+   "shared_ids": {
+    "0": [
+     "anaheim",
+     "common_ice_int",
+     "lighting_custom_bandit_entrance",
+     "lighting_custom_boston_scoreboard",
+     "lighting_custom_buffalo_entrance",
+     "lighting_custom_bulldog_entrance",
+     "lighting_custom_calgary_scoreboard",
+     "lighting_custom_colorado_scoreboard",
+     "lighting_custom_dallas_scoreboard",
+     "lighting_custom_detroit_scoreboard",
+     "lighting_custom_devil_entrance",
+     "lighting_custom_edmonton_oilderrick_entrance",
+     "lighting_custom_florida_scoreboard",
+     "lighting_custom_generic_structure_1_entrance",
+     "lighting_custom_generic_structure_2_entrance",
+     "lighting_custom_generic_structure_3_entrance",
+     "lighting_custom_generic_structure_4_entrance",
+     "lighting_custom_knight_chess_entrance",
+     "lighting_custom_knight_entrance",
+     "lighting_custom_montreal_scoreboard",
+     "lighting_custom_nashville_sabretooth_entrance",
+     "lighting_custom_nyrangers_scoreboard",
+     "lighting_custom_ogre_entrance",
+     "lighting_custom_sanjose_shark_entrance",
+     "lighting_custom_shark_entrance",
+     "lighting_custom_stlouis_scoreboard",
+     "lighting_custom_vancouver_scoreboard"
+    ]
+   }
+  },
+  "nhl18": {
+   "arena_rows_measured": 80,
+   "levels": [
+    {
+     "id": 0,
+     "name": "anaheim",
+     "dir": "anaheim",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 0,
+     "center_line": 13,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "common_ice_int",
+     "dir": "common_ice_int",
+     "arena_id_attr": 0,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 1,
+     "name": "winnipeg",
+     "dir": "winnipeg",
+     "arena_id_attr": 1,
+     "rink_id": null,
+     "center_logo": 1,
+     "center_line": 25,
+     "ice_line": 0
+    },
+    {
+     "id": 2,
+     "name": "boston",
+     "dir": "boston",
+     "arena_id_attr": 2,
+     "rink_id": null,
+     "center_logo": 2,
+     "center_line": 32,
+     "ice_line": 0
+    },
+    {
+     "id": 3,
+     "name": "buffalo",
+     "dir": "buffalo",
+     "arena_id_attr": 3,
+     "rink_id": null,
+     "center_logo": 3,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 4,
+     "name": "calgary",
+     "dir": "calgary",
+     "arena_id_attr": 4,
+     "rink_id": null,
+     "center_logo": 4,
+     "center_line": 26,
+     "ice_line": 0
+    },
+    {
+     "id": 5,
+     "name": "carolina",
+     "dir": "carolina",
+     "arena_id_attr": 5,
+     "rink_id": null,
+     "center_logo": 5,
+     "center_line": 43,
+     "ice_line": 0
+    },
+    {
+     "id": 6,
+     "name": "chicago",
+     "dir": "chicago",
+     "arena_id_attr": 6,
+     "rink_id": null,
+     "center_logo": 6,
+     "center_line": 37,
+     "ice_line": 0
+    },
+    {
+     "id": 7,
+     "name": "colorado",
+     "dir": "colorado",
+     "arena_id_attr": 7,
+     "rink_id": null,
+     "center_logo": 7,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 8,
+     "name": "columbus",
+     "dir": "columbus",
+     "arena_id_attr": 8,
+     "rink_id": null,
+     "center_logo": 8,
+     "center_line": 18,
+     "ice_line": 0
+    },
+    {
+     "id": 9,
+     "name": "dallas",
+     "dir": "dallas",
+     "arena_id_attr": 9,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 38,
+     "ice_line": 0
+    },
+    {
+     "id": 10,
+     "name": "detroit",
+     "dir": "detroit",
+     "arena_id_attr": 10,
+     "rink_id": null,
+     "center_logo": 10,
+     "center_line": 41,
+     "ice_line": 0
+    },
+    {
+     "id": 11,
+     "name": "edmonton",
+     "dir": "edmonton",
+     "arena_id_attr": 11,
+     "rink_id": null,
+     "center_logo": 11,
+     "center_line": 6,
+     "ice_line": 0
+    },
+    {
+     "id": 12,
+     "name": "florida",
+     "dir": "florida",
+     "arena_id_attr": 12,
+     "rink_id": null,
+     "center_logo": 12,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 13,
+     "name": "losangeles",
+     "dir": "losangeles",
+     "arena_id_attr": 13,
+     "rink_id": null,
+     "center_logo": 13,
+     "center_line": 17,
+     "ice_line": 0
+    },
+    {
+     "id": 14,
+     "name": "minnesota",
+     "dir": "minnesota",
+     "arena_id_attr": 14,
+     "rink_id": null,
+     "center_logo": 14,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 15,
+     "name": "montreal",
+     "dir": "montreal",
+     "arena_id_attr": 15,
+     "rink_id": null,
+     "center_logo": 15,
+     "center_line": 23,
+     "ice_line": 0
+    },
+    {
+     "id": 16,
+     "name": "nashville",
+     "dir": "nashville",
+     "arena_id_attr": 16,
+     "rink_id": null,
+     "center_logo": 16,
+     "center_line": 24,
+     "ice_line": 0
+    },
+    {
+     "id": 17,
+     "name": "newjersey",
+     "dir": "newjersey",
+     "arena_id_attr": 17,
+     "rink_id": null,
+     "center_logo": 17,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nyislanders",
+     "dir": "nyislanders",
+     "arena_id_attr": 18,
+     "rink_id": null,
+     "center_logo": 18,
+     "center_line": 39,
+     "ice_line": 0
+    },
+    {
+     "id": 19,
+     "name": "nyrangers",
+     "dir": "nyrangers",
+     "arena_id_attr": 19,
+     "rink_id": null,
+     "center_logo": 19,
+     "center_line": 42,
+     "ice_line": 0
+    },
+    {
+     "id": 20,
+     "name": "ottawa",
+     "dir": "ottawa",
+     "arena_id_attr": 20,
+     "rink_id": null,
+     "center_logo": 20,
+     "center_line": 27,
+     "ice_line": 0
+    },
+    {
+     "id": 21,
+     "name": "philadelphia",
+     "dir": "philadelphia",
+     "arena_id_attr": 21,
+     "rink_id": null,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 22,
+     "name": "arizona",
+     "dir": "arizona",
+     "arena_id_attr": 22,
+     "rink_id": null,
+     "center_logo": 22,
+     "center_line": 28,
+     "ice_line": 0
+    },
+    {
+     "id": 23,
+     "name": "pittsburgh",
+     "dir": "pittsburgh",
+     "arena_id_attr": 23,
+     "rink_id": null,
+     "center_logo": 23,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 24,
+     "name": "stlouis",
+     "dir": "stlouis",
+     "arena_id_attr": 24,
+     "rink_id": null,
+     "center_logo": 24,
+     "center_line": 16,
+     "ice_line": 0
+    },
+    {
+     "id": 25,
+     "name": "sanjose",
+     "dir": "sanjose",
+     "arena_id_attr": 25,
+     "rink_id": null,
+     "center_logo": 25,
+     "center_line": 44,
+     "ice_line": 0
+    },
+    {
+     "id": 26,
+     "name": "tampa",
+     "dir": "tampa",
+     "arena_id_attr": 26,
+     "rink_id": null,
+     "center_logo": 26,
+     "center_line": 7,
+     "ice_line": 0
+    },
+    {
+     "id": 27,
+     "name": "toronto",
+     "dir": "toronto",
+     "arena_id_attr": 27,
+     "rink_id": null,
+     "center_logo": 27,
+     "center_line": 15,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "vancouver",
+     "dir": "vancouver",
+     "arena_id_attr": 28,
+     "rink_id": null,
+     "center_logo": 28,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 29,
+     "name": "washington",
+     "dir": "washington",
+     "arena_id_attr": 29,
+     "rink_id": null,
+     "center_logo": 29,
+     "center_line": 29,
+     "ice_line": 0
+    },
+    {
+     "id": 32,
+     "name": "vegas",
+     "dir": "vegas",
+     "arena_id_attr": 32,
+     "rink_id": null,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 50,
+     "name": "ahlgeneric",
+     "dir": "ahlgeneric",
+     "arena_id_attr": 50,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 51,
+     "name": "eurogeneric",
+     "dir": "eurogeneric",
+     "arena_id_attr": 51,
+     "rink_id": null,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    }
+   ],
+   "texpack_misses": {
+    "center_logo": [],
+    "center_line": [],
+    "ice_line": []
+   },
+   "texpack_set_sizes": {
+    "center_logo": 302,
+    "center_line": 105,
+    "ice_line": 7
+   },
+   "typed_refs": {
+    "ge_crowdplacement": 65,
+    "ge_nhl_3v3": 1
+   },
+   "dirs_without_level_name": [
+    "common",
+    "common_boards_international",
+    "common_props_roof2",
+    "unused"
+   ],
+   "level_names_without_dir": [
+    "team_canada_training"
+   ],
+   "shared_ids": {
+    "0": [
+     "anaheim",
+     "common_ice_int"
+    ]
+   }
+  },
+  "nhl19": {
+   "arena_rows_measured": 80,
+   "levels": [
+    {
+     "id": 0,
+     "name": "anaheim",
+     "dir": "anaheim",
+     "arena_id_attr": 0,
+     "rink_id": 0,
+     "center_logo": 0,
+     "center_line": 13,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "common_ice_int",
+     "dir": "common_ice_int",
+     "arena_id_attr": 0,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 1,
+     "name": "winnipeg",
+     "dir": "winnipeg",
+     "arena_id_attr": 1,
+     "rink_id": 0,
+     "center_logo": 1,
+     "center_line": 25,
+     "ice_line": 0
+    },
+    {
+     "id": 2,
+     "name": "boston",
+     "dir": "boston",
+     "arena_id_attr": 2,
+     "rink_id": 0,
+     "center_logo": 2,
+     "center_line": 32,
+     "ice_line": 0
+    },
+    {
+     "id": 3,
+     "name": "buffalo",
+     "dir": "buffalo",
+     "arena_id_attr": 3,
+     "rink_id": 0,
+     "center_logo": 3,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 4,
+     "name": "calgary",
+     "dir": "calgary",
+     "arena_id_attr": 4,
+     "rink_id": 0,
+     "center_logo": 4,
+     "center_line": 26,
+     "ice_line": 0
+    },
+    {
+     "id": 5,
+     "name": "carolina",
+     "dir": "carolina",
+     "arena_id_attr": 5,
+     "rink_id": 0,
+     "center_logo": 5,
+     "center_line": 43,
+     "ice_line": 0
+    },
+    {
+     "id": 6,
+     "name": "chicago",
+     "dir": "chicago",
+     "arena_id_attr": 6,
+     "rink_id": 0,
+     "center_logo": 6,
+     "center_line": 37,
+     "ice_line": 0
+    },
+    {
+     "id": 7,
+     "name": "colorado",
+     "dir": "colorado",
+     "arena_id_attr": 7,
+     "rink_id": 0,
+     "center_logo": 7,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 8,
+     "name": "columbus",
+     "dir": "columbus",
+     "arena_id_attr": 8,
+     "rink_id": 0,
+     "center_logo": 8,
+     "center_line": 18,
+     "ice_line": 0
+    },
+    {
+     "id": 9,
+     "name": "dallas",
+     "dir": "dallas",
+     "arena_id_attr": 9,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 38,
+     "ice_line": 0
+    },
+    {
+     "id": 10,
+     "name": "detroit",
+     "dir": "detroit",
+     "arena_id_attr": 10,
+     "rink_id": 0,
+     "center_logo": 10,
+     "center_line": 41,
+     "ice_line": 0
+    },
+    {
+     "id": 11,
+     "name": "edmonton",
+     "dir": "edmonton",
+     "arena_id_attr": 11,
+     "rink_id": 0,
+     "center_logo": 11,
+     "center_line": 6,
+     "ice_line": 0
+    },
+    {
+     "id": 12,
+     "name": "florida",
+     "dir": "florida",
+     "arena_id_attr": 12,
+     "rink_id": 0,
+     "center_logo": 12,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 13,
+     "name": "losangeles",
+     "dir": "losangeles",
+     "arena_id_attr": 13,
+     "rink_id": 0,
+     "center_logo": 13,
+     "center_line": 17,
+     "ice_line": 0
+    },
+    {
+     "id": 14,
+     "name": "minnesota",
+     "dir": "minnesota",
+     "arena_id_attr": 14,
+     "rink_id": 0,
+     "center_logo": 14,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 15,
+     "name": "montreal",
+     "dir": "montreal",
+     "arena_id_attr": 15,
+     "rink_id": 0,
+     "center_logo": 15,
+     "center_line": 23,
+     "ice_line": 0
+    },
+    {
+     "id": 16,
+     "name": "nashville",
+     "dir": "nashville",
+     "arena_id_attr": 16,
+     "rink_id": 0,
+     "center_logo": 16,
+     "center_line": 24,
+     "ice_line": 0
+    },
+    {
+     "id": 17,
+     "name": "newjersey",
+     "dir": "newjersey",
+     "arena_id_attr": 17,
+     "rink_id": 0,
+     "center_logo": 17,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nyislanders",
+     "dir": "nyislanders",
+     "arena_id_attr": 18,
+     "rink_id": 0,
+     "center_logo": 18,
+     "center_line": 39,
+     "ice_line": 0
+    },
+    {
+     "id": 19,
+     "name": "nyrangers",
+     "dir": "nyrangers",
+     "arena_id_attr": 19,
+     "rink_id": 0,
+     "center_logo": 19,
+     "center_line": 42,
+     "ice_line": 0
+    },
+    {
+     "id": 20,
+     "name": "ottawa",
+     "dir": "ottawa",
+     "arena_id_attr": 20,
+     "rink_id": 0,
+     "center_logo": 20,
+     "center_line": 27,
+     "ice_line": 0
+    },
+    {
+     "id": 21,
+     "name": "philadelphia",
+     "dir": "philadelphia",
+     "arena_id_attr": 21,
+     "rink_id": 0,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 22,
+     "name": "arizona",
+     "dir": "arizona",
+     "arena_id_attr": 22,
+     "rink_id": 0,
+     "center_logo": 22,
+     "center_line": 28,
+     "ice_line": 0
+    },
+    {
+     "id": 23,
+     "name": "pittsburgh",
+     "dir": "pittsburgh",
+     "arena_id_attr": 23,
+     "rink_id": 0,
+     "center_logo": 23,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 24,
+     "name": "stlouis",
+     "dir": "stlouis",
+     "arena_id_attr": 24,
+     "rink_id": 0,
+     "center_logo": 24,
+     "center_line": 16,
+     "ice_line": 0
+    },
+    {
+     "id": 25,
+     "name": "sanjose",
+     "dir": "sanjose",
+     "arena_id_attr": 25,
+     "rink_id": 0,
+     "center_logo": 25,
+     "center_line": 44,
+     "ice_line": 0
+    },
+    {
+     "id": 26,
+     "name": "tampa",
+     "dir": "tampa",
+     "arena_id_attr": 26,
+     "rink_id": 0,
+     "center_logo": 26,
+     "center_line": 7,
+     "ice_line": 0
+    },
+    {
+     "id": 27,
+     "name": "toronto",
+     "dir": "toronto",
+     "arena_id_attr": 27,
+     "rink_id": 0,
+     "center_logo": 27,
+     "center_line": 15,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "vancouver",
+     "dir": "vancouver",
+     "arena_id_attr": 28,
+     "rink_id": 0,
+     "center_logo": 28,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 29,
+     "name": "washington",
+     "dir": "washington",
+     "arena_id_attr": 29,
+     "rink_id": 0,
+     "center_logo": 29,
+     "center_line": 29,
+     "ice_line": 0
+    },
+    {
+     "id": 32,
+     "name": "vegas",
+     "dir": "vegas",
+     "arena_id_attr": 32,
+     "rink_id": 0,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 50,
+     "name": "ahlgeneric",
+     "dir": "ahlgeneric",
+     "arena_id_attr": 50,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 51,
+     "name": "eurogeneric",
+     "dir": "eurogeneric",
+     "arena_id_attr": 51,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    }
+   ],
+   "texpack_misses": {
+    "center_logo": [],
+    "center_line": [],
+    "ice_line": []
+   },
+   "texpack_set_sizes": {
+    "center_logo": 315,
+    "center_line": 119,
+    "ice_line": 8
+   },
+   "typed_refs": {
+    "ge_crowdplacement": 70,
+    "ge_nhl_3v3": 1
+   },
+   "dirs_without_level_name": [
+    "common",
+    "common_boards_international",
+    "common_props_roof2",
+    "unused",
+    "vancouvertest"
+   ],
+   "level_names_without_dir": [
+    "team_canada_training"
+   ],
+   "shared_ids": {
+    "0": [
+     "anaheim",
+     "common_ice_int"
+    ]
+   }
+  },
+  "nhl20": {
+   "arena_rows_measured": 80,
+   "levels": [
+    {
+     "id": 0,
+     "name": "anaheim",
+     "dir": "anaheim",
+     "arena_id_attr": 0,
+     "rink_id": 0,
+     "center_logo": 0,
+     "center_line": 13,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "common_ice_int",
+     "dir": "common_ice_int",
+     "arena_id_attr": 0,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 1,
+     "name": "winnipeg",
+     "dir": "winnipeg",
+     "arena_id_attr": 1,
+     "rink_id": 0,
+     "center_logo": 1,
+     "center_line": 25,
+     "ice_line": 0
+    },
+    {
+     "id": 2,
+     "name": "boston",
+     "dir": "boston",
+     "arena_id_attr": 2,
+     "rink_id": 0,
+     "center_logo": 2,
+     "center_line": 32,
+     "ice_line": 0
+    },
+    {
+     "id": 3,
+     "name": "buffalo",
+     "dir": "buffalo",
+     "arena_id_attr": 3,
+     "rink_id": 0,
+     "center_logo": 3,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 4,
+     "name": "calgary",
+     "dir": "calgary",
+     "arena_id_attr": 4,
+     "rink_id": 0,
+     "center_logo": 4,
+     "center_line": 26,
+     "ice_line": 0
+    },
+    {
+     "id": 5,
+     "name": "carolina",
+     "dir": "carolina",
+     "arena_id_attr": 5,
+     "rink_id": 0,
+     "center_logo": 5,
+     "center_line": 43,
+     "ice_line": 0
+    },
+    {
+     "id": 6,
+     "name": "chicago",
+     "dir": "chicago",
+     "arena_id_attr": 6,
+     "rink_id": 0,
+     "center_logo": 6,
+     "center_line": 37,
+     "ice_line": 0
+    },
+    {
+     "id": 7,
+     "name": "colorado",
+     "dir": "colorado",
+     "arena_id_attr": 7,
+     "rink_id": 0,
+     "center_logo": 7,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 8,
+     "name": "columbus",
+     "dir": "columbus",
+     "arena_id_attr": 8,
+     "rink_id": 0,
+     "center_logo": 8,
+     "center_line": 18,
+     "ice_line": 0
+    },
+    {
+     "id": 9,
+     "name": "dallas",
+     "dir": "dallas",
+     "arena_id_attr": 9,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 38,
+     "ice_line": 0
+    },
+    {
+     "id": 10,
+     "name": "detroit",
+     "dir": "detroit",
+     "arena_id_attr": 10,
+     "rink_id": 0,
+     "center_logo": 10,
+     "center_line": 41,
+     "ice_line": 0
+    },
+    {
+     "id": 11,
+     "name": "edmonton",
+     "dir": "edmonton",
+     "arena_id_attr": 11,
+     "rink_id": 0,
+     "center_logo": 11,
+     "center_line": 6,
+     "ice_line": 0
+    },
+    {
+     "id": 12,
+     "name": "florida",
+     "dir": "florida",
+     "arena_id_attr": 12,
+     "rink_id": 0,
+     "center_logo": 12,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 13,
+     "name": "losangeles",
+     "dir": "losangeles",
+     "arena_id_attr": 13,
+     "rink_id": 0,
+     "center_logo": 13,
+     "center_line": 17,
+     "ice_line": 0
+    },
+    {
+     "id": 14,
+     "name": "minnesota",
+     "dir": "minnesota",
+     "arena_id_attr": 14,
+     "rink_id": 0,
+     "center_logo": 14,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 15,
+     "name": "montreal",
+     "dir": "montreal",
+     "arena_id_attr": 15,
+     "rink_id": 0,
+     "center_logo": 15,
+     "center_line": 23,
+     "ice_line": 0
+    },
+    {
+     "id": 16,
+     "name": "nashville",
+     "dir": "nashville",
+     "arena_id_attr": 16,
+     "rink_id": 0,
+     "center_logo": 16,
+     "center_line": 24,
+     "ice_line": 0
+    },
+    {
+     "id": 17,
+     "name": "newjersey",
+     "dir": "newjersey",
+     "arena_id_attr": 17,
+     "rink_id": 0,
+     "center_logo": 17,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nyislanders",
+     "dir": "nyislanders",
+     "arena_id_attr": 18,
+     "rink_id": 0,
+     "center_logo": 18,
+     "center_line": 39,
+     "ice_line": 0
+    },
+    {
+     "id": 19,
+     "name": "nyrangers",
+     "dir": "nyrangers",
+     "arena_id_attr": 19,
+     "rink_id": 0,
+     "center_logo": 19,
+     "center_line": 42,
+     "ice_line": 0
+    },
+    {
+     "id": 20,
+     "name": "ottawa",
+     "dir": "ottawa",
+     "arena_id_attr": 20,
+     "rink_id": 0,
+     "center_logo": 20,
+     "center_line": 27,
+     "ice_line": 0
+    },
+    {
+     "id": 21,
+     "name": "philadelphia",
+     "dir": "philadelphia",
+     "arena_id_attr": 21,
+     "rink_id": 0,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 22,
+     "name": "arizona",
+     "dir": "arizona",
+     "arena_id_attr": 22,
+     "rink_id": 0,
+     "center_logo": 22,
+     "center_line": 28,
+     "ice_line": 0
+    },
+    {
+     "id": 23,
+     "name": "pittsburgh",
+     "dir": "pittsburgh",
+     "arena_id_attr": 23,
+     "rink_id": 0,
+     "center_logo": 23,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 24,
+     "name": "stlouis",
+     "dir": "stlouis",
+     "arena_id_attr": 24,
+     "rink_id": 0,
+     "center_logo": 24,
+     "center_line": 16,
+     "ice_line": 0
+    },
+    {
+     "id": 25,
+     "name": "sanjose",
+     "dir": "sanjose",
+     "arena_id_attr": 25,
+     "rink_id": 0,
+     "center_logo": 25,
+     "center_line": 44,
+     "ice_line": 0
+    },
+    {
+     "id": 26,
+     "name": "tampa",
+     "dir": "tampa",
+     "arena_id_attr": 26,
+     "rink_id": 0,
+     "center_logo": 26,
+     "center_line": 7,
+     "ice_line": 0
+    },
+    {
+     "id": 27,
+     "name": "toronto",
+     "dir": "toronto",
+     "arena_id_attr": 27,
+     "rink_id": 0,
+     "center_logo": 27,
+     "center_line": 15,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "vancouver",
+     "dir": "vancouver",
+     "arena_id_attr": 28,
+     "rink_id": 0,
+     "center_logo": 28,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 29,
+     "name": "washington",
+     "dir": "washington",
+     "arena_id_attr": 29,
+     "rink_id": 0,
+     "center_logo": 29,
+     "center_line": 29,
+     "ice_line": 0
+    },
+    {
+     "id": 32,
+     "name": "vegas",
+     "dir": "vegas",
+     "arena_id_attr": 32,
+     "rink_id": 0,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 50,
+     "name": "ahlgeneric",
+     "dir": "ahlgeneric",
+     "arena_id_attr": 50,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 51,
+     "name": "eurogeneric",
+     "dir": "eurogeneric",
+     "arena_id_attr": 51,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    }
+   ],
+   "texpack_misses": {
+    "center_logo": [
+     100
+    ],
+    "center_line": [],
+    "ice_line": []
+   },
+   "texpack_set_sizes": {
+    "center_logo": 322,
+    "center_line": 135,
+    "ice_line": 13
+   },
+   "typed_refs": {
+    "ge_crowdplacement": 74,
+    "ge_nhl_3v3": 1
+   },
+   "dirs_without_level_name": [
+    "common",
+    "common_boards_international",
+    "common_props_roof2",
+    "unused",
+    "vancouvertest"
+   ],
+   "level_names_without_dir": [
+    "team_canada_training"
+   ],
+   "shared_ids": {
+    "0": [
+     "anaheim",
+     "common_ice_int"
+    ]
+   }
+  },
+  "nhl21": {
+   "arena_rows_measured": 80,
+   "levels": [
+    {
+     "id": 0,
+     "name": "anaheim",
+     "dir": "anaheim",
+     "arena_id_attr": 0,
+     "rink_id": 0,
+     "center_logo": 0,
+     "center_line": 13,
+     "ice_line": 0
+    },
+    {
+     "id": 0,
+     "name": "common_ice_int",
+     "dir": "common_ice_int",
+     "arena_id_attr": 0,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 1,
+     "name": "winnipeg",
+     "dir": "winnipeg",
+     "arena_id_attr": 1,
+     "rink_id": 0,
+     "center_logo": 1,
+     "center_line": 25,
+     "ice_line": 0
+    },
+    {
+     "id": 2,
+     "name": "boston",
+     "dir": "boston",
+     "arena_id_attr": 2,
+     "rink_id": 0,
+     "center_logo": 2,
+     "center_line": 32,
+     "ice_line": 0
+    },
+    {
+     "id": 3,
+     "name": "buffalo",
+     "dir": "buffalo",
+     "arena_id_attr": 3,
+     "rink_id": 0,
+     "center_logo": 3,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 4,
+     "name": "calgary",
+     "dir": "calgary",
+     "arena_id_attr": 4,
+     "rink_id": 0,
+     "center_logo": 4,
+     "center_line": 26,
+     "ice_line": 0
+    },
+    {
+     "id": 5,
+     "name": "carolina",
+     "dir": "carolina",
+     "arena_id_attr": 5,
+     "rink_id": 0,
+     "center_logo": 5,
+     "center_line": 43,
+     "ice_line": 0
+    },
+    {
+     "id": 6,
+     "name": "chicago",
+     "dir": "chicago",
+     "arena_id_attr": 6,
+     "rink_id": 0,
+     "center_logo": 6,
+     "center_line": 37,
+     "ice_line": 0
+    },
+    {
+     "id": 7,
+     "name": "colorado",
+     "dir": "colorado",
+     "arena_id_attr": 7,
+     "rink_id": 0,
+     "center_logo": 7,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 8,
+     "name": "columbus",
+     "dir": "columbus",
+     "arena_id_attr": 8,
+     "rink_id": 0,
+     "center_logo": 8,
+     "center_line": 18,
+     "ice_line": 0
+    },
+    {
+     "id": 9,
+     "name": "dallas",
+     "dir": "dallas",
+     "arena_id_attr": 9,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 38,
+     "ice_line": 0
+    },
+    {
+     "id": 10,
+     "name": "detroit",
+     "dir": "detroit",
+     "arena_id_attr": 10,
+     "rink_id": 0,
+     "center_logo": 10,
+     "center_line": 41,
+     "ice_line": 0
+    },
+    {
+     "id": 11,
+     "name": "edmonton",
+     "dir": "edmonton",
+     "arena_id_attr": 11,
+     "rink_id": 0,
+     "center_logo": 11,
+     "center_line": 6,
+     "ice_line": 0
+    },
+    {
+     "id": 12,
+     "name": "florida",
+     "dir": "florida",
+     "arena_id_attr": 12,
+     "rink_id": 0,
+     "center_logo": 12,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 13,
+     "name": "losangeles",
+     "dir": "losangeles",
+     "arena_id_attr": 13,
+     "rink_id": 0,
+     "center_logo": 13,
+     "center_line": 17,
+     "ice_line": 0
+    },
+    {
+     "id": 14,
+     "name": "minnesota",
+     "dir": "minnesota",
+     "arena_id_attr": 14,
+     "rink_id": 0,
+     "center_logo": 14,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 15,
+     "name": "montreal",
+     "dir": "montreal",
+     "arena_id_attr": 15,
+     "rink_id": 0,
+     "center_logo": 15,
+     "center_line": 23,
+     "ice_line": 0
+    },
+    {
+     "id": 16,
+     "name": "nashville",
+     "dir": "nashville",
+     "arena_id_attr": 16,
+     "rink_id": 0,
+     "center_logo": 16,
+     "center_line": 24,
+     "ice_line": 0
+    },
+    {
+     "id": 17,
+     "name": "newjersey",
+     "dir": "newjersey",
+     "arena_id_attr": 17,
+     "rink_id": 0,
+     "center_logo": 17,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 18,
+     "name": "nyislanders",
+     "dir": "nyislanders",
+     "arena_id_attr": 18,
+     "rink_id": 0,
+     "center_logo": 18,
+     "center_line": 39,
+     "ice_line": 0
+    },
+    {
+     "id": 19,
+     "name": "nyrangers",
+     "dir": "nyrangers",
+     "arena_id_attr": 19,
+     "rink_id": 0,
+     "center_logo": 19,
+     "center_line": 42,
+     "ice_line": 0
+    },
+    {
+     "id": 20,
+     "name": "ottawa",
+     "dir": "ottawa",
+     "arena_id_attr": 20,
+     "rink_id": 0,
+     "center_logo": 20,
+     "center_line": 27,
+     "ice_line": 0
+    },
+    {
+     "id": 21,
+     "name": "philadelphia",
+     "dir": "philadelphia",
+     "arena_id_attr": 21,
+     "rink_id": 0,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 22,
+     "name": "arizona",
+     "dir": "arizona",
+     "arena_id_attr": 22,
+     "rink_id": 0,
+     "center_logo": 22,
+     "center_line": 28,
+     "ice_line": 0
+    },
+    {
+     "id": 23,
+     "name": "pittsburgh",
+     "dir": "pittsburgh",
+     "arena_id_attr": 23,
+     "rink_id": 0,
+     "center_logo": 23,
+     "center_line": 2,
+     "ice_line": 0
+    },
+    {
+     "id": 24,
+     "name": "stlouis",
+     "dir": "stlouis",
+     "arena_id_attr": 24,
+     "rink_id": 0,
+     "center_logo": 24,
+     "center_line": 16,
+     "ice_line": 0
+    },
+    {
+     "id": 25,
+     "name": "sanjose",
+     "dir": "sanjose",
+     "arena_id_attr": 25,
+     "rink_id": 0,
+     "center_logo": 25,
+     "center_line": 44,
+     "ice_line": 0
+    },
+    {
+     "id": 26,
+     "name": "tampa",
+     "dir": "tampa",
+     "arena_id_attr": 26,
+     "rink_id": 0,
+     "center_logo": 26,
+     "center_line": 7,
+     "ice_line": 0
+    },
+    {
+     "id": 27,
+     "name": "toronto",
+     "dir": "toronto",
+     "arena_id_attr": 27,
+     "rink_id": 0,
+     "center_logo": 27,
+     "center_line": 15,
+     "ice_line": 0
+    },
+    {
+     "id": 28,
+     "name": "vancouver",
+     "dir": "vancouver",
+     "arena_id_attr": 28,
+     "rink_id": 0,
+     "center_logo": 28,
+     "center_line": 11,
+     "ice_line": 0
+    },
+    {
+     "id": 29,
+     "name": "washington",
+     "dir": "washington",
+     "arena_id_attr": 29,
+     "rink_id": 0,
+     "center_logo": 29,
+     "center_line": 29,
+     "ice_line": 0
+    },
+    {
+     "id": 32,
+     "name": "vegas",
+     "dir": "vegas",
+     "arena_id_attr": 32,
+     "rink_id": 0,
+     "center_logo": 21,
+     "center_line": 40,
+     "ice_line": 0
+    },
+    {
+     "id": 50,
+     "name": "ahlgeneric",
+     "dir": "ahlgeneric",
+     "arena_id_attr": 50,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    },
+    {
+     "id": 51,
+     "name": "eurogeneric",
+     "dir": "eurogeneric",
+     "arena_id_attr": 51,
+     "rink_id": 0,
+     "center_logo": 9,
+     "center_line": 0,
+     "ice_line": 0
+    }
+   ],
+   "texpack_misses": {
+    "center_logo": [
+     100
+    ],
+    "center_line": [],
+    "ice_line": []
+   },
+   "texpack_set_sizes": {
+    "center_logo": 342,
+    "center_line": 144,
+    "ice_line": 13
+   },
+   "typed_refs": {
+    "ge_crowdplacement": 76,
+    "ge_nisoverridesgroup": 34,
+    "ge_nhl_3v3": 1
+   },
+   "dirs_without_level_name": [
+    "common",
+    "common_boards_international",
+    "common_props_roof2",
+    "unused",
+    "vancouvertest"
+   ],
+   "level_names_without_dir": [
+    "team_canada_training"
+   ],
+   "shared_ids": {
+    "0": [
+     "anaheim",
+     "common_ice_int"
+    ]
+   }
+  }
+ }
+}

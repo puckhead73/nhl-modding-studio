@@ -38,7 +38,7 @@ typically wrapped in a platform container with its own metadata and integrity pr
 - [ ] Save container layout per platform (header, metadata, payload boundaries).
 - [ ] Integrity/signature scheme per platform and whether/how it can be recomputed.
 - [ ] How the in-save game data relates to the TDB schema (shared structures? subset?).
-- [ ] Per-title differences in save layout across NHL 10–21.
+- [ ] Per-title differences in save layout across NHL 07–21.
 
 ## Design requirements for the `savedata` crate
 

@@ -1,0 +1,76 @@
+{
+ "about": "PS4 NHL 17-21 English dictionary (nhl/data/kettle/loc/eng_us.db) that resolves each title's Creation Zone name keys (research R141, 28 Sep 2026, handoff 08): the last patch-ordered archive copy and the SHA-256 of its bytes. Studio reads it only when it hashes to this value for the open project's title (receipt 57); NHL 15 / 16 ship no Creation Zone lists. Lookup: strip the leading $, exact key, else the stored hash of loc_hash(key) (case-insensitive).",
+ "from": "docs/research/overnight-2026-09-28/data/r141-cz-name-keys-dictionary.json",
+ "from_sha256": "9184bf3ab51e7e5164637241512b934a19b5867dd9b567a1faad726002798542",
+ "titles": {
+  "nhl17": {
+   "archive": "inxp_00.big",
+   "member": "nhl/data/kettle/loc/eng_us.db",
+   "sha256": "035b3b30e34cd2c2f6fe2ef9cb76ef8c0a55d8d92e88898011ab55087b2e0e51",
+   "rows": 30799,
+   "resolved_cells": {
+    "exact": 154,
+    "hash": 19,
+    "unresolved": 0
+   },
+   "unresolved_placeholders": []
+  },
+  "nhl18": {
+   "archive": "inxp_00.big",
+   "member": "nhl/data/kettle/loc/eng_us.db",
+   "sha256": "12f1af46906c064670f3b536ef3876b6fb8921ac620e88785d359ff17ea7159f",
+   "rows": 33396,
+   "resolved_cells": {
+    "exact": 140,
+    "hash": 34,
+    "unresolved": 0
+   },
+   "unresolved_placeholders": []
+  },
+  "nhl19": {
+   "archive": "patch_inxp_56.big",
+   "member": "nhl/data/kettle/loc/eng_us.db",
+   "sha256": "fbb8adcf2f2fd0558a7c1564f3a5bdd3d2acfb83f11e91477163f4935a3613fa",
+   "rows": 38001,
+   "resolved_cells": {
+    "exact": 229,
+    "hash": 49,
+    "unresolved": 20
+   },
+   "unresolved_placeholders": [
+    "GoalieMaskBrandAbbr",
+    "GoalieMaskPattern"
+   ]
+  },
+  "nhl20": {
+   "archive": "inxp_00.big",
+   "member": "nhl/data/kettle/loc/eng_us.db",
+   "sha256": "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad",
+   "rows": 40535,
+   "resolved_cells": {
+    "exact": 363,
+    "hash": 61,
+    "unresolved": 44
+   },
+   "unresolved_placeholders": [
+    "GoalieMaskBrandAbbr",
+    "GoalieMaskPattern"
+   ]
+  },
+  "nhl21": {
+   "archive": "inxp_00.big",
+   "member": "nhl/data/kettle/loc/eng_us.db",
+   "sha256": "24693e2f1ae87bde23066d083458bae2efea9a633269518f4fede2354fbac969",
+   "rows": 55766,
+   "resolved_cells": {
+    "exact": 437,
+    "hash": 64,
+    "unresolved": 50
+   },
+   "unresolved_placeholders": [
+    "GoalieMaskBrandAbbr",
+    "GoalieMaskPattern"
+   ]
+  }
+ }
+}

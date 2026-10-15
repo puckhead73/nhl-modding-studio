@@ -130,6 +130,9 @@ pub enum XprError {
     /// `8_8_8_8` package — only DXT replace is implemented (FE logos
     /// are decode-only for now).
     ReplaceUnsupportedFormat { format: XprFormat },
+    /// An `8_8_8_8` resize to a width whose GPU descriptor template is not measured (64 and 256
+    /// are), or a height that is not a multiple of 8 (the descriptor stores `height / 8 - 1`).
+    ResizeUnmeasured { width: u32, height: u32 },
 }
 
 impl std::fmt::Display for XprError {
@@ -172,6 +175,10 @@ impl std::fmt::Display for XprError {
             XprError::ReplaceUnsupportedFormat { format } => write!(
                 f,
                 "XPR2 replace is only implemented for DXT formats, not {format:?}"
+            ),
+            XprError::ResizeUnmeasured { width, height } => write!(
+                f,
+                "XPR2 resize to {width}x{height} is not offered: the GPU descriptor words are measured for widths 32, 64, 128, 256, 512 and 1024 with heights in multiples of 8 (up to 2048) only"
             ),
         }
     }
@@ -225,7 +232,7 @@ impl Xpr2Texture {
         if pixel_start < 0x14
             || pixel_start
                 .checked_add(data_size)
-                .map_or(true, |end| end > raw.len())
+                .is_none_or(|end| end > raw.len())
         {
             return Err(XprError::PixelRegionOutOfBounds {
                 pixel_start,
@@ -340,6 +347,44 @@ impl Xpr2Texture {
                 len: self.pixel_start,
             });
         }
+        // Geometry words, measured (P1 audit, 21 Sep 2026) on 82 XPR2 members of the private
+        // gen7 logo / imagery / team-logo fixtures (`8_8_8_8` at 32 / 64 / 128 / 256 wide, DXT5 at
+        // 128 wide) and on the three texlib ground truths (DXT3 256, DXT1 512, DXT3 1024):
+        // * DW7 = `0x80 | width / 128` in its first byte and `(2 * width) & 0xFF` in its second
+        //   (the same value `2 * width` across both bytes, format-independent), the rest as stored;
+        // * DW9 = `(height / 8 - 1) << 16 | 0xE000 | (width - 1)` — the parser's own model, exact
+        //   only for heights that are multiples of 8;
+        // * `data_size` = the tiled payload length.
+        // Widths outside the measured powers of two and heights that are not multiples of 8 are
+        // refused rather than encoded by extrapolation.
+        if !matches!(new_width, 32 | 64 | 128 | 256 | 512 | 1024) || new_height % 8 != 0 || new_height == 0 || new_height > 2048 {
+            return Err(XprError::ResizeUnmeasured { width: new_width, height: new_height });
+        }
+        let patch_geometry = |header: &mut [u8], data_size: usize| {
+            header[8..12].copy_from_slice(&(data_size as u32).to_be_bytes());
+            header[self.pixel_start - 0x18] = 0x80 | ((new_width / 128) as u8);
+            header[self.pixel_start - 0x17] = ((2 * new_width) & 0xFF) as u8;
+            let dw9 = self.pixel_start - 0x10;
+            header[dw9] = 0x00;
+            header[dw9 + 1] = ((new_height / 8) - 1) as u8;
+            let width_word: u16 = 0xE000 | ((new_width - 1) as u16 & 0x1FFF);
+            header[dw9 + 2..dw9 + 4].copy_from_slice(&width_word.to_be_bytes());
+        };
+        if self.format == XprFormat::Argb8888 {
+            let expected = (new_width as usize) * (new_height as usize) * ARGB8888_TEXEL;
+            if linear.len() != expected {
+                return Err(XprError::ReplacementSizeMismatch { expected, have: linear.len() });
+            }
+            let new_data_size = tiled_buffer_size_texels(new_width, new_height, ARGB8888_TEXEL);
+            let mut header = self.raw[..self.pixel_start].to_vec();
+            patch_geometry(&mut header, new_data_size);
+            let tiled = tile(linear, new_width, new_height, ARGB8888_TEXEL);
+            if tiled.len() != new_data_size {
+                return Err(XprError::ReplacementSizeMismatch { expected: new_data_size, have: tiled.len() });
+            }
+            header.extend_from_slice(&tiled);
+            return Ok(header);
+        }
         let dxt = self
             .format
             .as_dxt()
@@ -356,19 +401,10 @@ impl Xpr2Texture {
         }
         let new_data_size = tiled_buffer_size(new_width, new_height, bpb);
 
-        // Start from the existing header (identical info layout) and
-        // repatch only the geometry-derived fields.
+        // Start from the existing header (identical info layout) and repatch only the
+        // geometry-derived words.
         let mut header = self.raw[..self.pixel_start].to_vec();
-        // data_size @ 0x08 (BE u32) — the tiled pixel-payload length.
-        header[8..12].copy_from_slice(&(new_data_size as u32).to_be_bytes());
-        // DW7 byte @ pixel_start−0x18 = 0x80 | (width / 128).
-        header[self.pixel_start - 0x18] = 0x80 | ((new_width / 128).min(0x7F) as u8);
-        // DW9 @ pixel_start−0x10: byte[+1] = height/8 − 1; u16[+2] = width word.
-        let dw9 = self.pixel_start - 0x10;
-        header[dw9] = 0x00;
-        header[dw9 + 1] = ((new_height / 8).saturating_sub(1)).min(0xFF) as u8;
-        let width_word: u16 = 0xE000 | ((new_width.saturating_sub(1)) as u16 & 0x1FFF);
-        header[dw9 + 2..dw9 + 4].copy_from_slice(&width_word.to_be_bytes());
+        patch_geometry(&mut header, new_data_size);
 
         let mut tiled = tile_dxt(linear, new_width, new_height, bpb);
         swap16_in_place(&mut tiled);
@@ -435,26 +471,20 @@ impl Xpr2Texture {
 mod tests {
     use super::*;
 
-    /// Load the bundled real portrait XPR2 (a decompressed
-    /// `playerheadssmall/p1512.big` entry). Skips gracefully when the
-    /// fixture isn't checked out.
-    fn load_fixture() -> Option<Vec<u8>> {
-        let p = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("..")
-            .join("..")
-            .join("Working Assets")
-            .join("Template Texture")
-            .join("NHL Legacy")
-            .join("playerheadssmall_p1512.xpr2");
-        p.is_file().then(|| std::fs::read(&p).ok()).flatten()
+    use crate::fixtures::{require, LEGACY_PORTRAIT_XPR2};
+
+    /// The real portrait XPR2 (a decompressed `playerheadssmall/p1512.big`
+    /// entry) is private game data. Every case that needs it is
+    /// `#[ignore]`d and fails loudly when selected without a configured
+    /// fixture root — see [`crate::fixtures`].
+    fn load_fixture() -> Vec<u8> {
+        require(LEGACY_PORTRAIT_XPR2)
     }
 
     #[test]
+    #[ignore = "private fixture legacy/playerheadssmall_p1512.xpr2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn parses_real_portrait_geometry() {
-        let Some(bytes) = load_fixture() else {
-            eprintln!("skipping: playerheadssmall_p1512.xpr2 fixture not present");
-            return;
-        };
+        let bytes = load_fixture();
         let tex = Xpr2Texture::parse(bytes).expect("real FE portrait must parse");
         assert_eq!(tex.width, 256);
         assert_eq!(tex.height, 128);
@@ -468,10 +498,9 @@ mod tests {
     /// for byte. Proves tile∘untile and swap16∘swap16 are exact inverses
     /// at these dims AND that the header/descriptor are preserved.
     #[test]
+    #[ignore = "private fixture legacy/playerheadssmall_p1512.xpr2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn decode_then_replace_is_identity() {
-        let Some(bytes) = load_fixture() else {
-            return;
-        };
+        let bytes = load_fixture();
         let original = bytes.clone();
         let tex = Xpr2Texture::parse(bytes).unwrap();
         let linear = tex.decode_base_mip_linear();
@@ -484,10 +513,9 @@ mod tests {
     /// A different base mip must actually change the pixels but leave
     /// the header/descriptor (everything before `pixel_start`) intact.
     #[test]
+    #[ignore = "private fixture legacy/playerheadssmall_p1512.xpr2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn replace_changes_only_pixels() {
-        let Some(bytes) = load_fixture() else {
-            return;
-        };
+        let bytes = load_fixture();
         let tex = Xpr2Texture::parse(bytes).unwrap();
         let mut linear = tex.decode_base_mip_linear();
         linear[0] ^= 0xFF; // perturb one block
@@ -514,10 +542,9 @@ mod tests {
     /// geometry fields so the result re-parses at the new dims, and the
     /// `data_size` + DW9 height byte must reflect 256×256.
     #[test]
+    #[ignore = "private fixture legacy/playerheadssmall_p1512.xpr2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn resize_repatches_geometry_and_reparses() {
-        let Some(bytes) = load_fixture() else {
-            return;
-        };
+        let bytes = load_fixture();
         let tex = Xpr2Texture::parse(bytes).unwrap();
         assert_eq!((tex.width, tex.height), (256, 128));
         // 256×256 DXT5 base mip = 64×64 blocks × 16 B = 65536.
@@ -545,10 +572,9 @@ mod tests {
     /// bytes exactly — proves the geometry patch writes back the same
     /// values the parser read.
     #[test]
+    #[ignore = "private fixture legacy/playerheadssmall_p1512.xpr2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn resize_to_same_dims_preserves_header() {
-        let Some(bytes) = load_fixture() else {
-            return;
-        };
+        let bytes = load_fixture();
         let original = bytes.clone();
         let tex = Xpr2Texture::parse(bytes).unwrap();
         let linear = tex.decode_base_mip_linear();

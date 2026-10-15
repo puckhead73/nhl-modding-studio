@@ -1,0 +1,57 @@
+# League logo art index for nhl09: the executable's second small table, league code -> logo index,
+# which names the frontend packages `fe/ion/artassets/leaguelogos{,big,small,wide}/l<index>.big`
+# (Xbox 360 and, by identity of the file names, PS3). Baked from research handoff P1.4-X
+# (2026-09-18, docs/research/overnight-2026-09-18/14-phase1-league-logo-assets.md;
+# data/xbox360-league-logo-map.json): u32 BE array at VA 0x82098854 in the nhl09 Xbox 360 default.xex,
+# one entry per league code, located by the unique sequence 0,1,2,3,6,7 and tied to the key table by
+# length. The index is one family-wide enum (PS4 stores it in `stockleagues.artid`). Several codes
+# share one logo on purpose. What each index depicts is the research lane's reading of the decoded
+# Legacy previews — queued for the user's visual check; screen consumers are untraced.
+game = "nhl09"
+applies_to = ["nhl09"]
+
+[witness]
+game = "nhl09"
+platform = "xbox"
+source = "nhl09 default.xex logo-index table at VA 0x82098854 (P1.4-X, league_logo_map.py)"
+
+[[codes]]
+code = 0
+key = "NHL"
+logo_index = 0
+[[codes]]
+code = 1
+key = "AHL"
+logo_index = 1
+[[codes]]
+code = 2
+key = "ELITSERIEN"
+logo_index = 2
+[[codes]]
+code = 3
+key = "SMLIIGA"
+logo_index = 3
+[[codes]]
+code = 4
+key = "DEL"
+logo_index = 6
+[[codes]]
+code = 5
+key = "TXT_LEAGUE_O2_EXTRALIGA"
+logo_index = 7
+[[codes]]
+code = 6
+key = "TXT_LEAGUE_SUPER_LEAGUE"
+logo_index = 8
+[[codes]]
+code = 7
+key = "NATIONAL"
+logo_index = 4
+[[codes]]
+code = 8
+key = "HISTORIC_TEAMS"
+logo_index = 9
+[[codes]]
+code = 9
+key = "CUSTOM_TEAMS"
+logo_index = 5

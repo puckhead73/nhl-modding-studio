@@ -1,0 +1,2546 @@
+{
+ "generated": "2026-09-18T12:28:44",
+ "decoder_identity": {
+  "chunklzx.py": "32b946066d275f43ec59ac082b748baf8559c5017565b4a0a61c577ec5d3f4f4",
+  "xex_image.py": "59bebd1dde7ccaeec225d292a49d2b0d3dfb70831777a127dc6ee7aae344a552",
+  "eb_list.py": "feb25edea28ce6f7ebcf6f880d4baafbd2c93aa4bee1dee0f319c9be839b655b",
+  "chunklzx_vectors.py": "3b24d8ac5bf1016fe30207f8eae8f9c272687d35647270e332e2a20070ad308e"
+ },
+ "window_bits": 17,
+ "archives": {
+  "nhl11/boot.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\boot.big",
+   "size": 8770576,
+   "eb_version": "0x00000400",
+   "file_count": 266,
+   "sha256": "1ff3c46a53c62e34eb8565b17da3d82c82fc478653db22f2f02788b056ffe51b"
+  },
+  "nhl11/rendercache.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\rendercache.big",
+   "size": 921066528,
+   "eb_version": "0x00000400",
+   "file_count": 8401,
+   "sha256": "400cc051b4572c777c248419f6722856481b555f78042665072f24828d089c7a"
+  },
+  "nhl12/boot.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\boot.big",
+   "size": 9791728,
+   "eb_version": "0x00000400",
+   "file_count": 552,
+   "sha256": "bdc313e0521bd4584a5f960a5c8f222d518269a577471c3300a4b6c065326541"
+  },
+  "nhl12/cacherender.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\cacherender.big",
+   "size": 1246859632,
+   "eb_version": "0x00000400",
+   "file_count": 12160,
+   "sha256": "1448b63dab5a4bf49b2aed0293de07315c271117094b3de9400ecf52655af0bc"
+  },
+  "nhl13/boot.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\boot.big",
+   "size": 10435888,
+   "eb_version": "0x00000400",
+   "file_count": 592,
+   "sha256": "120305ee1ed6ca1b0157466d749b16553860cb225d08fcac8050a92bf614ed9f"
+  },
+  "nhl13/cacherender.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\cacherender.big",
+   "size": 1181076176,
+   "eb_version": "0x00000400",
+   "file_count": 10969,
+   "sha256": "ed056dc3d7d7974b92e306ddcfa5a45f704edf23ff7073a3d22318f2cbf39439"
+  },
+  "nhl14/boot.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\boot.big",
+   "size": 11117888,
+   "eb_version": "0x00000400",
+   "file_count": 599,
+   "sha256": "5e212f5b9ca7a30b15e085937d41aeedc1a4b58b4ca135729a5493704f96f99f"
+  },
+  "nhl14/cacherender.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\cacherender.big",
+   "size": 1282754880,
+   "eb_version": "0x00000400",
+   "file_count": 11763,
+   "sha256": "8da1fb74b736ab212e33a9cf90b77237676a94e7ccce04739348b6d873c83052"
+  },
+  "nhl15/boot.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\boot.big",
+   "size": 11267408,
+   "eb_version": "0x00000400",
+   "file_count": 599,
+   "sha256": "b4bb1e6319f1ac7522b6e610d9cc63d8a448b7709928917e2dd59468dee6d681"
+  },
+  "nhl15/cacherender.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\cacherender.big",
+   "size": 1284140496,
+   "eb_version": "0x00000400",
+   "file_count": 11746,
+   "sha256": "859ae3b4738183fdc8d22abd835c1199804acc24c278b4b99c42d7aca3af90c1"
+  },
+  "nhllegacy/boot.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\boot.big",
+   "size": 11184432,
+   "eb_version": "0x00000400",
+   "file_count": 599,
+   "sha256": "6b4b88db2de4014d07875a9995abfc69a18ad4a2a80d6d96b981243a3d70a3dd"
+  },
+  "nhllegacy/cacherender.big": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\cacherender.big",
+   "size": 1458552880,
+   "eb_version": "0x00000400",
+   "file_count": 12845,
+   "sha256": "e05179835ff2099b01a3085c335f6b8d6cb8de52cd5cf7ecee23e948d586d6d2"
+  }
+ },
+ "vectors": [
+  {
+   "title": "nhl11",
+   "archive": "boot.big",
+   "member": "attribdb/renddb.bin",
+   "entry": 116,
+   "offset": 5876192,
+   "stored_size": 21346,
+   "w4": 0,
+   "path_hash": 1007860758,
+   "input_sha256": "3c968c451a71d59c83e058eb7d3a27cfaa6eb7a4b83ddc0182bc123defc4bc60",
+   "magic": "chunklzx",
+   "decode_seconds": 0.053,
+   "header": {
+    "dummy": 2,
+    "fullsize": 243552,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 21298,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 14176,
+     "last_frame_csize": 32,
+     "stream_bytes": 21274,
+     "produced": 243552,
+     "expected": 243552,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 243552,
+   "output_sha256": "b126f8a12eee7258947f34f90c0c3b2bbd2518d399874dccfed19471a3c6cd9c",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\attribdb/renddb.bin",
+    "length": 243552,
+    "sha256": "b126f8a12eee7258947f34f90c0c3b2bbd2518d399874dccfed19471a3c6cd9c",
+    "equal": true
+   },
+   "decoded_first16_hex": "53747245000000306b69742e66780062"
+  },
+  {
+   "title": "nhl11",
+   "archive": "boot.big",
+   "member": "attribdb/feattribdb.vlt",
+   "entry": 107,
+   "offset": 5856544,
+   "stored_size": 11372,
+   "w4": 0,
+   "path_hash": 1111504955,
+   "input_sha256": "635d2d5e918a738d56cebbf242ce33bf1dd5f695ea03d0f94f9013b312ca7fb2",
+   "magic": "chunklzx",
+   "decode_seconds": 0.028,
+   "header": {
+    "dummy": 2,
+    "fullsize": 23360,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 11324,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 23360,
+     "last_frame_csize": 11314,
+     "stream_bytes": 11314,
+     "produced": 23360,
+     "expected": 23360,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 23360,
+   "output_sha256": "701da75f889778ca6280b79a01b91fceb707fcb34484167291031a7672c944bd",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\attribdb/feattribdb.vlt",
+    "length": 23360,
+    "sha256": "701da75f889778ca6280b79a01b91fceb707fcb34484167291031a7672c944bd",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010109842d26ede147e"
+  },
+  {
+   "title": "nhl11",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.vlt",
+   "entry": 105,
+   "offset": 5795008,
+   "stored_size": 59136,
+   "w4": 0,
+   "path_hash": 2379105654,
+   "input_sha256": "b36aa1cf272eca45b18ff2ca28330b13074d2d4a2796aaf7f2bae401190cdf24",
+   "magic": "chunklzx",
+   "decode_seconds": 0.149,
+   "header": {
+    "dummy": 2,
+    "fullsize": 357008,
+    "window": 262144,
+    "n_chunks": 2,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 28848,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 4552,
+     "stream_bytes": 28824,
+     "produced": 262144,
+     "expected": 262144,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "chunk": 1,
+     "header_offset": 28904,
+     "zsize": 30224,
+     "flag": 3,
+     "subframes": 3,
+     "full_frames": 2,
+     "last_frame_usize": 29328,
+     "last_frame_csize": 9010,
+     "stream_bytes": 30210,
+     "produced": 94864,
+     "expected": 94864,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 357008,
+   "output_sha256": "f3bf83a944989698fd73f5fac7af46ed2a90ed95af832e7fa98a37e50d361d44",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\attribdb/crowds.vlt",
+    "length": 357008,
+    "sha256": "f3bf83a944989698fd73f5fac7af46ed2a90ed95af832e7fa98a37e50d361d44",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010840583db69423f3b"
+  },
+  {
+   "title": "nhl11",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.bin",
+   "entry": 104,
+   "offset": 5789616,
+   "stored_size": 5378,
+   "w4": 0,
+   "path_hash": 2379083769,
+   "input_sha256": "69022acbfe42e4755cf9d9f957da266fef04bdc646e120852e8d266989e794d4",
+   "magic": "chunklzx",
+   "decode_seconds": 0.011,
+   "header": {
+    "dummy": 2,
+    "fullsize": 43360,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5330,
+     "flag": 3,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 10592,
+     "last_frame_csize": 992,
+     "stream_bytes": 5318,
+     "produced": 43360,
+     "expected": 43360,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 43360,
+   "output_sha256": "4b5cbaed45b198f419a0348c3f5023c1618107c6c023dd5d9bb30620f98bdf05",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\attribdb/crowds.bin",
+    "length": 43360,
+    "sha256": "4b5cbaed45b198f419a0348c3f5023c1618107c6c023dd5d9bb30620f98bdf05",
+    "equal": true
+   },
+   "decoded_first16_hex": "537472450000a96063726f77645f636f"
+  },
+  {
+   "title": "nhl11",
+   "archive": "boot.big",
+   "member": "attribdb/audioevents.vlt",
+   "entry": 103,
+   "offset": 5787712,
+   "stored_size": 1898,
+   "w4": 0,
+   "path_hash": 4056458571,
+   "input_sha256": "a33682779a9ac8d4f27a35eb335d3f61f090a585985f8abd06a90803c03fec96",
+   "magic": "chunklzx",
+   "decode_seconds": 0.003,
+   "header": {
+    "dummy": 2,
+    "fullsize": 2784,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 1850,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 2784,
+     "last_frame_csize": 1840,
+     "stream_bytes": 1840,
+     "produced": 2784,
+     "expected": 2784,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 2784,
+   "output_sha256": "7c1ea129e45563d1ebfb0a547c32878a8fca20a3384f2f46fdc526f4349b427d",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\attribdb/audioevents.vlt",
+    "length": 2784,
+    "sha256": "7c1ea129e45563d1ebfb0a547c32878a8fca20a3384f2f46fdc526f4349b427d",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010a20650de8a030778"
+  },
+  {
+   "title": "nhl11",
+   "archive": "rendercache.big",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "entry": 2009,
+   "offset": 210278944,
+   "stored_size": 7308,
+   "w4": 0,
+   "path_hash": 259411377,
+   "input_sha256": "b70ac7953704c2a04272039e4234c0cb116db613cccbe92da79efb79a43c3c12",
+   "magic": "chunklzx",
+   "decode_seconds": 0.04,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 7260,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 7238,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "a146d626b70e2da8b90caf1194d340be420530394ac223cca1f922872c054399",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\rendering/logo/texlib_0_0_0.rx2",
+    "length": 200704,
+    "sha256": "a146d626b70e2da8b90caf1194d340be420530394ac223cca1f922872c054399",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl11",
+   "archive": "rendercache.big",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "entry": 2628,
+   "offset": 211776416,
+   "stored_size": 960,
+   "w4": 0,
+   "path_hash": 2128609741,
+   "input_sha256": "6cc6baf8a9e8c7c61eeb93e5aabf36c81a240e15e636e98d43337063e918be2f",
+   "magic": "chunklzx",
+   "decode_seconds": 0.014,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 912,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 6,
+     "stream_bytes": 890,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "9e8b5373812bc62555609fd41a64a9b1e85e31f4ad0afe3e713683f860863641",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\rendering/logo/texlib_27_0_3.rx2",
+    "length": 200704,
+    "sha256": "9e8b5373812bc62555609fd41a64a9b1e85e31f4ad0afe3e713683f860863641",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl11",
+   "archive": "rendercache.big",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "entry": 2625,
+   "offset": 211763408,
+   "stored_size": 4136,
+   "w4": 0,
+   "path_hash": 2125051978,
+   "input_sha256": "eb5d99b3eab924d09106f8b796db0223a51f0e199919301e633f5da549827488",
+   "magic": "chunklzx",
+   "decode_seconds": 0.022,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 4088,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 8,
+     "stream_bytes": 4066,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "a85a31fa0e8f4f92a466394d411e3abbdbecbd47b08c5be10aae443b6544f401",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\rendering/logo/texlib_27_0_0.rx2",
+    "length": 200704,
+    "sha256": "a85a31fa0e8f4f92a466394d411e3abbdbecbd47b08c5be10aae443b6544f401",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl12",
+   "archive": "boot.big",
+   "member": "attribdb/renddb.bin",
+   "entry": 134,
+   "offset": 4144592,
+   "stored_size": 25514,
+   "w4": 0,
+   "path_hash": 1007860758,
+   "input_sha256": "8e91a9bbae76449674bbcef1ddc7864060b01be83a21e1494ba3abe7e61d1d13",
+   "magic": "chunklzx",
+   "decode_seconds": 0.092,
+   "header": {
+    "dummy": 2,
+    "fullsize": 351600,
+    "window": 262144,
+    "n_chunks": 2,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 23862,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 358,
+     "stream_bytes": 23838,
+     "produced": 262144,
+     "expected": 262144,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "chunk": 1,
+     "header_offset": 23912,
+     "zsize": 1594,
+     "flag": 3,
+     "subframes": 3,
+     "full_frames": 2,
+     "last_frame_usize": 23920,
+     "last_frame_csize": 118,
+     "stream_bytes": 1580,
+     "produced": 89456,
+     "expected": 89456,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 351600,
+   "output_sha256": "5a054e24d342a603a25f6f323cf73e5d046c2abdd27fcbd781bfc06c2f40ade6",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\attribdb/renddb.bin",
+    "length": 351600,
+    "sha256": "5a054e24d342a603a25f6f323cf73e5d046c2abdd27fcbd781bfc06c2f40ade6",
+    "equal": true
+   },
+   "decoded_first16_hex": "53747245000000406b69742e66780062"
+  },
+  {
+   "title": "nhl12",
+   "archive": "boot.big",
+   "member": "attribdb/feattribdb.vlt",
+   "entry": 124,
+   "offset": 4125024,
+   "stored_size": 11302,
+   "w4": 0,
+   "path_hash": 1111504955,
+   "input_sha256": "fe1f5e4ddd63c936403c4a442361456c3b1aa440323d83843f4077540565f3c1",
+   "magic": "chunklzx",
+   "decode_seconds": 0.039,
+   "header": {
+    "dummy": 2,
+    "fullsize": 23376,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 11254,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 23376,
+     "last_frame_csize": 11244,
+     "stream_bytes": 11244,
+     "produced": 23376,
+     "expected": 23376,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 23376,
+   "output_sha256": "fba3f42d918e4904cc507a95378cfd7061fbfee6af807a39af1476d965bc1f32",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\attribdb/feattribdb.vlt",
+    "length": 23376,
+    "sha256": "fba3f42d918e4904cc507a95378cfd7061fbfee6af807a39af1476d965bc1f32",
+    "equal": true
+   },
+   "decoded_first16_hex": "56657273000000101c5ef9bbdebc652d"
+  },
+  {
+   "title": "nhl12",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.vlt",
+   "entry": 121,
+   "offset": 4063472,
+   "stored_size": 59134,
+   "w4": 0,
+   "path_hash": 2379105654,
+   "input_sha256": "003def493ff7b38db123fe58dcffb7ab13ceebe5e1590bbc119520304c22d62e",
+   "magic": "chunklzx",
+   "decode_seconds": 0.163,
+   "header": {
+    "dummy": 2,
+    "fullsize": 357024,
+    "window": 262144,
+    "n_chunks": 2,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 28670,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 4548,
+     "stream_bytes": 28646,
+     "produced": 262144,
+     "expected": 262144,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "chunk": 1,
+     "header_offset": 28728,
+     "zsize": 30398,
+     "flag": 3,
+     "subframes": 3,
+     "full_frames": 2,
+     "last_frame_usize": 29344,
+     "last_frame_csize": 9264,
+     "stream_bytes": 30384,
+     "produced": 94880,
+     "expected": 94880,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 357024,
+   "output_sha256": "8fb5732ea947c793d4ae0b3d3aabb2318cbb605f68bbf6eaf82293d64f72131c",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\attribdb/crowds.vlt",
+    "length": 357024,
+    "sha256": "8fb5732ea947c793d4ae0b3d3aabb2318cbb605f68bbf6eaf82293d64f72131c",
+    "equal": true
+   },
+   "decoded_first16_hex": "56657273000000101c5ef9bbdebc652d"
+  },
+  {
+   "title": "nhl12",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.bin",
+   "entry": 120,
+   "offset": 4058080,
+   "stored_size": 5392,
+   "w4": 0,
+   "path_hash": 2379083769,
+   "input_sha256": "4a626c7f79de9250655b241c454fa987b24997244d65ee436f4e8d16af333081",
+   "magic": "chunklzx",
+   "decode_seconds": 0.012,
+   "header": {
+    "dummy": 2,
+    "fullsize": 43376,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5344,
+     "flag": 3,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 10608,
+     "last_frame_csize": 1002,
+     "stream_bytes": 5332,
+     "produced": 43376,
+     "expected": 43376,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 43376,
+   "output_sha256": "0cd3facc7ba3cf5153112afa5a9186f306e820d42ba027c9c11cc70c13fab25d",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\attribdb/crowds.bin",
+    "length": 43376,
+    "sha256": "0cd3facc7ba3cf5153112afa5a9186f306e820d42ba027c9c11cc70c13fab25d",
+    "equal": true
+   },
+   "decoded_first16_hex": "537472450000a96063726f77645f636f"
+  },
+  {
+   "title": "nhl12",
+   "archive": "boot.big",
+   "member": "attribdb/audioevents.vlt",
+   "entry": 119,
+   "offset": 4055888,
+   "stored_size": 2182,
+   "w4": 0,
+   "path_hash": 4056458571,
+   "input_sha256": "82fd24262dfcca4588c66a2a5938df292e4aa9467584db3eb861f679829fe8f4",
+   "magic": "chunklzx",
+   "decode_seconds": 0.006,
+   "header": {
+    "dummy": 2,
+    "fullsize": 3696,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 2134,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 3696,
+     "last_frame_csize": 2124,
+     "stream_bytes": 2124,
+     "produced": 3696,
+     "expected": 3696,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 3696,
+   "output_sha256": "a626d284e0f515846ba0ab588f0de698e174e66029642fc46a0b61817d3e4427",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\attribdb/audioevents.vlt",
+    "length": 3696,
+    "sha256": "a626d284e0f515846ba0ab588f0de698e174e66029642fc46a0b61817d3e4427",
+    "equal": true
+   },
+   "decoded_first16_hex": "566572730000001044a56b5eae035c8d"
+  },
+  {
+   "title": "nhl12",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "entry": 4154,
+   "offset": 469575776,
+   "stored_size": 7290,
+   "w4": 0,
+   "path_hash": 259411377,
+   "input_sha256": "7822ffd3d5c4b08a6e71a35ef377c040fcc7b7e30b74abfbc30d52bb21b38343",
+   "magic": "chunklzx",
+   "decode_seconds": 0.039,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 7242,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 7220,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "7d8f3992363cad06c8ee58f755babc38e307ad328d1cb0ba7f9406b93722f53c",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\rendering/logo/texlib_0_0_0.rx2",
+    "length": 200704,
+    "sha256": "7d8f3992363cad06c8ee58f755babc38e307ad328d1cb0ba7f9406b93722f53c",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl12",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "entry": 4911,
+   "offset": 471373760,
+   "stored_size": 958,
+   "w4": 0,
+   "path_hash": 2128609741,
+   "input_sha256": "a63f80b80442a203e5ae7eebf4ac08ad4004b7fc3295eaf2afb42ea61b5171b2",
+   "magic": "chunklzx",
+   "decode_seconds": 0.014,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 910,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 6,
+     "stream_bytes": 888,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "dd4b7d4a29c2baf6541c8b6269f72d424fed0512aec5ed61ce4fa198d2342d97",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\rendering/logo/texlib_27_0_3.rx2",
+    "length": 200704,
+    "sha256": "dd4b7d4a29c2baf6541c8b6269f72d424fed0512aec5ed61ce4fa198d2342d97",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl12",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "entry": 4908,
+   "offset": 471360672,
+   "stored_size": 4188,
+   "w4": 0,
+   "path_hash": 2125051978,
+   "input_sha256": "77eb0755ae047dcae0ca68c31adb247e61471c3217167573d02112ab334b2dda",
+   "magic": "chunklzx",
+   "decode_seconds": 0.024,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 4140,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 8,
+     "stream_bytes": 4118,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "0ffc95f812fbd0180650b2eb1000cf6efd0a93655652b2bd96cb9475cd1b797e",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\rendering/logo/texlib_27_0_0.rx2",
+    "length": 200704,
+    "sha256": "0ffc95f812fbd0180650b2eb1000cf6efd0a93655652b2bd96cb9475cd1b797e",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl13",
+   "archive": "boot.big",
+   "member": "attribdb/renddb.bin",
+   "entry": 143,
+   "offset": 6311904,
+   "stored_size": 23434,
+   "w4": 0,
+   "path_hash": 1007860758,
+   "input_sha256": "b3746729dde4928a2a162fade1f653583d5edc44812498958e1813d39b8867a2",
+   "magic": "chunklzx",
+   "decode_seconds": 0.089,
+   "header": {
+    "dummy": 2,
+    "fullsize": 93664,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 23386,
+     "flag": 3,
+     "subframes": 3,
+     "full_frames": 2,
+     "last_frame_usize": 28128,
+     "last_frame_csize": 3150,
+     "stream_bytes": 23372,
+     "produced": 93664,
+     "expected": 93664,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 93664,
+   "output_sha256": "adccab5db62d212f0196fbe2023b238ea2ff307db630508efac120ce0b53fa89",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\attribdb/renddb.bin",
+    "length": 93664,
+    "sha256": "adccab5db62d212f0196fbe2023b238ea2ff307db630508efac120ce0b53fa89",
+    "equal": true
+   },
+   "decoded_first16_hex": "53747245000000e05445535444455054"
+  },
+  {
+   "title": "nhl13",
+   "archive": "boot.big",
+   "member": "attribdb/feattribdb.vlt",
+   "entry": 135,
+   "offset": 6292080,
+   "stored_size": 10870,
+   "w4": 0,
+   "path_hash": 1111504955,
+   "input_sha256": "ffd3943a620f07f721c9e56354dcebf2dae2443af194a29f670603431bf37092",
+   "magic": "chunklzx",
+   "decode_seconds": 0.041,
+   "header": {
+    "dummy": 2,
+    "fullsize": 22336,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 10822,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 22336,
+     "last_frame_csize": 10812,
+     "stream_bytes": 10812,
+     "produced": 22336,
+     "expected": 22336,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 22336,
+   "output_sha256": "1418b4f23c7d2eaf0d28f7867dba5311dbb1e1eebf858eb5c79ebe521a733583",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\attribdb/feattribdb.vlt",
+    "length": 22336,
+    "sha256": "1418b4f23c7d2eaf0d28f7867dba5311dbb1e1eebf858eb5c79ebe521a733583",
+    "equal": true
+   },
+   "decoded_first16_hex": "56657273000000101a57d7e83d43ee2a"
+  },
+  {
+   "title": "nhl13",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.vlt",
+   "entry": 132,
+   "offset": 6230512,
+   "stored_size": 59270,
+   "w4": 0,
+   "path_hash": 2379105654,
+   "input_sha256": "4a3bfb12eb532a9b148b7f88e8cbb06a14429c2ab005ff20a12c194eff057772",
+   "magic": "chunklzx",
+   "decode_seconds": 0.21,
+   "header": {
+    "dummy": 2,
+    "fullsize": 357504,
+    "window": 262144,
+    "n_chunks": 2,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 28740,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 4540,
+     "stream_bytes": 28716,
+     "produced": 262144,
+     "expected": 262144,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "chunk": 1,
+     "header_offset": 28792,
+     "zsize": 30470,
+     "flag": 3,
+     "subframes": 3,
+     "full_frames": 2,
+     "last_frame_usize": 29824,
+     "last_frame_csize": 9490,
+     "stream_bytes": 30456,
+     "produced": 95360,
+     "expected": 95360,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 357504,
+   "output_sha256": "5b5c182ef19bc4efcd062e6fc18403c7d57bfb3b9301a75d29b220d7b351d2ae",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\attribdb/crowds.vlt",
+    "length": 357504,
+    "sha256": "5b5c182ef19bc4efcd062e6fc18403c7d57bfb3b9301a75d29b220d7b351d2ae",
+    "equal": true
+   },
+   "decoded_first16_hex": "56657273000000101a57d7e83d43ee2a"
+  },
+  {
+   "title": "nhl13",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.bin",
+   "entry": 131,
+   "offset": 6225104,
+   "stored_size": 5394,
+   "w4": 0,
+   "path_hash": 2379083769,
+   "input_sha256": "4eab16a4bcca01b6f3d4ce0d1461c300643a3a40135f92b3a698427faaffc7e3",
+   "magic": "chunklzx",
+   "decode_seconds": 0.016,
+   "header": {
+    "dummy": 2,
+    "fullsize": 43376,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5346,
+     "flag": 3,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 10608,
+     "last_frame_csize": 996,
+     "stream_bytes": 5334,
+     "produced": 43376,
+     "expected": 43376,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 43376,
+   "output_sha256": "43a920d0619af8f1b45c9c6fc1c8b97364d20dbfa6a88ec757c5d1c6a2796e3e",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\attribdb/crowds.bin",
+    "length": 43376,
+    "sha256": "43a920d0619af8f1b45c9c6fc1c8b97364d20dbfa6a88ec757c5d1c6a2796e3e",
+    "equal": true
+   },
+   "decoded_first16_hex": "537472450000a96063726f77645f636f"
+  },
+  {
+   "title": "nhl13",
+   "archive": "boot.big",
+   "member": "attribdb/audioevents.vlt",
+   "entry": 130,
+   "offset": 6222848,
+   "stored_size": 2242,
+   "w4": 0,
+   "path_hash": 4056458571,
+   "input_sha256": "4d50bdbb377c6d5e43e8af1865bb38a93ff2c74cf258c428ea47bb2e4544560d",
+   "magic": "chunklzx",
+   "decode_seconds": 0.014,
+   "header": {
+    "dummy": 2,
+    "fullsize": 4064,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 2194,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 4064,
+     "last_frame_csize": 2184,
+     "stream_bytes": 2184,
+     "produced": 4064,
+     "expected": 4064,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 4064,
+   "output_sha256": "ea58f6e631f2b7e46db2ed139201611bd0548dd90ee8bc16e530dfb4ab2e87db",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\attribdb/audioevents.vlt",
+    "length": 4064,
+    "sha256": "ea58f6e631f2b7e46db2ed139201611bd0548dd90ee8bc16e530dfb4ab2e87db",
+    "equal": true
+   },
+   "decoded_first16_hex": "56657273000000101a57d7e83d43ee2a"
+  },
+  {
+   "title": "nhl13",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "entry": 4483,
+   "offset": 596609488,
+   "stored_size": 8886,
+   "w4": 0,
+   "path_hash": 259411377,
+   "input_sha256": "18917a0a033255acfd81cf4e3ea82a752b721db48c571c5e75f692b6a38434c5",
+   "magic": "chunklzx",
+   "decode_seconds": 0.047,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 8838,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 8816,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "7b5f27ea479aa4b9c95094af45a549ad77c2b2ce089ece36acc63e69e4a62d96",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\rendering/logo/texlib_0_0_0.rx2",
+    "length": 200704,
+    "sha256": "7b5f27ea479aa4b9c95094af45a549ad77c2b2ce089ece36acc63e69e4a62d96",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl13",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "entry": 5243,
+   "offset": 598777936,
+   "stored_size": 960,
+   "w4": 0,
+   "path_hash": 2128609741,
+   "input_sha256": "f543a0a49c858ff164adeff313fa62ba2eccd1926592911ed25ef7353cffe7a4",
+   "magic": "chunklzx",
+   "decode_seconds": 0.014,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 912,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 6,
+     "stream_bytes": 890,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\rendering/logo/texlib_27_0_3.rx2",
+    "length": 200704,
+    "sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl13",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "entry": 5240,
+   "offset": 598761136,
+   "stored_size": 5050,
+   "w4": 0,
+   "path_hash": 2125051978,
+   "input_sha256": "35a39293f78df8f45ea67c022ca39199245a786ac5577615c029355d45943bdb",
+   "magic": "chunklzx",
+   "decode_seconds": 0.027,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5002,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 4980,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\rendering/logo/texlib_27_0_0.rx2",
+    "length": 200704,
+    "sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl14",
+   "archive": "boot.big",
+   "member": "attribdb/renddb.bin",
+   "entry": 145,
+   "offset": 6595344,
+   "stored_size": 24048,
+   "w4": 0,
+   "path_hash": 1007860758,
+   "input_sha256": "0380661d64596d1570121b843aefcdc0c240310f327a1715218449012ca5d61f",
+   "magic": "chunklzx",
+   "decode_seconds": 0.074,
+   "header": {
+    "dummy": 2,
+    "fullsize": 103792,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 24000,
+     "flag": 3,
+     "subframes": 4,
+     "full_frames": 3,
+     "last_frame_usize": 5488,
+     "last_frame_csize": 416,
+     "stream_bytes": 23984,
+     "produced": 103792,
+     "expected": 103792,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 103792,
+   "output_sha256": "dc01966c28daf3bb6268859115e0fb74fba8c34f2453e7ada4e26cb0801bc2b0",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\attribdb/renddb.bin",
+    "length": 103792,
+    "sha256": "dc01966c28daf3bb6268859115e0fb74fba8c34f2453e7ada4e26cb0801bc2b0",
+    "equal": true
+   },
+   "decoded_first16_hex": "53747245000000e05445535444455054"
+  },
+  {
+   "title": "nhl14",
+   "archive": "boot.big",
+   "member": "attribdb/feattribdb.vlt",
+   "entry": 137,
+   "offset": 6575520,
+   "stored_size": 10870,
+   "w4": 0,
+   "path_hash": 1111504955,
+   "input_sha256": "fee3bad00658b8875803fdf578505cc555351f0ddb2ec5d493b3bc43db467d0e",
+   "magic": "chunklzx",
+   "decode_seconds": 0.03,
+   "header": {
+    "dummy": 2,
+    "fullsize": 22336,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 10822,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 22336,
+     "last_frame_csize": 10812,
+     "stream_bytes": 10812,
+     "produced": 22336,
+     "expected": 22336,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 22336,
+   "output_sha256": "5bc374bf6c620ec78ecf2f970de1bea08043b70e27b9760cc70aba72c76d9767",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\attribdb/feattribdb.vlt",
+    "length": 22336,
+    "sha256": "5bc374bf6c620ec78ecf2f970de1bea08043b70e27b9760cc70aba72c76d9767",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhl14",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.vlt",
+   "entry": 134,
+   "offset": 6512464,
+   "stored_size": 60768,
+   "w4": 0,
+   "path_hash": 2379105654,
+   "input_sha256": "721290d2c01050611722577d1b3bc312d528c5e878b373b07cb52f693279258b",
+   "magic": "chunklzx",
+   "decode_seconds": 0.172,
+   "header": {
+    "dummy": 2,
+    "fullsize": 361152,
+    "window": 262144,
+    "n_chunks": 2,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 29308,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 4824,
+     "stream_bytes": 29284,
+     "produced": 262144,
+     "expected": 262144,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "chunk": 1,
+     "header_offset": 29368,
+     "zsize": 31392,
+     "flag": 3,
+     "subframes": 4,
+     "full_frames": 3,
+     "last_frame_usize": 704,
+     "last_frame_csize": 206,
+     "stream_bytes": 31376,
+     "produced": 99008,
+     "expected": 99008,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 361152,
+   "output_sha256": "faafb52a02f83395b2f19c3e942e189520a524fabcf7e272b2355a6ae8b754f7",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\attribdb/crowds.vlt",
+    "length": 361152,
+    "sha256": "faafb52a02f83395b2f19c3e942e189520a524fabcf7e272b2355a6ae8b754f7",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhl14",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.bin",
+   "entry": 133,
+   "offset": 6507024,
+   "stored_size": 5440,
+   "w4": 0,
+   "path_hash": 2379083769,
+   "input_sha256": "635420e44767fcd5222794a6bd2fb14427a6f2c687bc1b610fcb1f196c99715f",
+   "magic": "chunklzx",
+   "decode_seconds": 0.015,
+   "header": {
+    "dummy": 2,
+    "fullsize": 43664,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5392,
+     "flag": 3,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 10896,
+     "last_frame_csize": 1022,
+     "stream_bytes": 5380,
+     "produced": 43664,
+     "expected": 43664,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 43664,
+   "output_sha256": "24064c5c2af8d93fb623e8297c5e6f3f24e2028c200ee6279fb4d3b8c74d69ae",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\attribdb/crowds.bin",
+    "length": 43664,
+    "sha256": "24064c5c2af8d93fb623e8297c5e6f3f24e2028c200ee6279fb4d3b8c74d69ae",
+    "equal": true
+   },
+   "decoded_first16_hex": "537472450000aa8063726f77645f636f"
+  },
+  {
+   "title": "nhl14",
+   "archive": "boot.big",
+   "member": "attribdb/audioevents.vlt",
+   "entry": 132,
+   "offset": 6504768,
+   "stored_size": 2242,
+   "w4": 0,
+   "path_hash": 4056458571,
+   "input_sha256": "4d50bdbb377c6d5e43e8af1865bb38a93ff2c74cf258c428ea47bb2e4544560d",
+   "magic": "chunklzx",
+   "decode_seconds": 0.008,
+   "header": {
+    "dummy": 2,
+    "fullsize": 4064,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 2194,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 4064,
+     "last_frame_csize": 2184,
+     "stream_bytes": 2184,
+     "produced": 4064,
+     "expected": 4064,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 4064,
+   "output_sha256": "ea58f6e631f2b7e46db2ed139201611bd0548dd90ee8bc16e530dfb4ab2e87db",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\attribdb/audioevents.vlt",
+    "length": 4064,
+    "sha256": "ea58f6e631f2b7e46db2ed139201611bd0548dd90ee8bc16e530dfb4ab2e87db",
+    "equal": true
+   },
+   "decoded_first16_hex": "56657273000000101a57d7e83d43ee2a"
+  },
+  {
+   "title": "nhl14",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "entry": 5397,
+   "offset": 670910608,
+   "stored_size": 8890,
+   "w4": 0,
+   "path_hash": 259411377,
+   "input_sha256": "e1ebb6097dcb5b67c4360198254d7e274181c1c0b92c16fff28b6e261e6c35d9",
+   "magic": "chunklzx",
+   "decode_seconds": 0.032,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 8842,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 8820,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "f4d91640a2d240d61b60d3c49e445f4753d2a5bd6cb99c0e293728cb4766e345",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\rendering/logo/texlib_0_0_0.rx2",
+    "length": 200704,
+    "sha256": "f4d91640a2d240d61b60d3c49e445f4753d2a5bd6cb99c0e293728cb4766e345",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl14",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "entry": 6166,
+   "offset": 673127328,
+   "stored_size": 960,
+   "w4": 0,
+   "path_hash": 2128609741,
+   "input_sha256": "f543a0a49c858ff164adeff313fa62ba2eccd1926592911ed25ef7353cffe7a4",
+   "magic": "chunklzx",
+   "decode_seconds": 0.013,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 912,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 6,
+     "stream_bytes": 890,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\rendering/logo/texlib_27_0_3.rx2",
+    "length": 200704,
+    "sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl14",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "entry": 6163,
+   "offset": 673110528,
+   "stored_size": 5050,
+   "w4": 0,
+   "path_hash": 2125051978,
+   "input_sha256": "35a39293f78df8f45ea67c022ca39199245a786ac5577615c029355d45943bdb",
+   "magic": "chunklzx",
+   "decode_seconds": 0.026,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5002,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 4980,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\rendering/logo/texlib_27_0_0.rx2",
+    "length": 200704,
+    "sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl15",
+   "archive": "boot.big",
+   "member": "attribdb/renddb.bin",
+   "entry": 145,
+   "offset": 6580704,
+   "stored_size": 24050,
+   "w4": 0,
+   "path_hash": 1007860758,
+   "input_sha256": "eda9e1df4eddfdfb5aaeb3826eeb68a6d75c2f76fbc6c54b3cb113e6f7a9a78a",
+   "magic": "chunklzx",
+   "decode_seconds": 0.097,
+   "header": {
+    "dummy": 2,
+    "fullsize": 103792,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 24002,
+     "flag": 3,
+     "subframes": 4,
+     "full_frames": 3,
+     "last_frame_usize": 5488,
+     "last_frame_csize": 424,
+     "stream_bytes": 23986,
+     "produced": 103792,
+     "expected": 103792,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 103792,
+   "output_sha256": "f64330f34f6b71c396e8c84ec1b90e8b7c36d22abe72ee6e1228c84afe5d2e1e",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\attribdb/renddb.bin",
+    "length": 103792,
+    "sha256": "f64330f34f6b71c396e8c84ec1b90e8b7c36d22abe72ee6e1228c84afe5d2e1e",
+    "equal": true
+   },
+   "decoded_first16_hex": "53747245000000e05445535444455054"
+  },
+  {
+   "title": "nhl15",
+   "archive": "boot.big",
+   "member": "attribdb/feattribdb.vlt",
+   "entry": 137,
+   "offset": 6560880,
+   "stored_size": 10868,
+   "w4": 0,
+   "path_hash": 1111504955,
+   "input_sha256": "5f1c9660764bc2a97aa8f9844c8c3fe94f8ab7e5d27c28eda215d96281743104",
+   "magic": "chunklzx",
+   "decode_seconds": 0.035,
+   "header": {
+    "dummy": 2,
+    "fullsize": 22336,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 10820,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 22336,
+     "last_frame_csize": 10810,
+     "stream_bytes": 10810,
+     "produced": 22336,
+     "expected": 22336,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 22336,
+   "output_sha256": "e1ad72be02cd1ee0883c035468e52fd5898972f33401bf187c1e07d47fffc059",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\attribdb/feattribdb.vlt",
+    "length": 22336,
+    "sha256": "e1ad72be02cd1ee0883c035468e52fd5898972f33401bf187c1e07d47fffc059",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhl15",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.vlt",
+   "entry": 134,
+   "offset": 6497824,
+   "stored_size": 60768,
+   "w4": 0,
+   "path_hash": 2379105654,
+   "input_sha256": "721290d2c01050611722577d1b3bc312d528c5e878b373b07cb52f693279258b",
+   "magic": "chunklzx",
+   "decode_seconds": 0.195,
+   "header": {
+    "dummy": 2,
+    "fullsize": 361152,
+    "window": 262144,
+    "n_chunks": 2,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 29308,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 4824,
+     "stream_bytes": 29284,
+     "produced": 262144,
+     "expected": 262144,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "chunk": 1,
+     "header_offset": 29368,
+     "zsize": 31392,
+     "flag": 3,
+     "subframes": 4,
+     "full_frames": 3,
+     "last_frame_usize": 704,
+     "last_frame_csize": 206,
+     "stream_bytes": 31376,
+     "produced": 99008,
+     "expected": 99008,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 361152,
+   "output_sha256": "faafb52a02f83395b2f19c3e942e189520a524fabcf7e272b2355a6ae8b754f7",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\attribdb/crowds.vlt",
+    "length": 361152,
+    "sha256": "faafb52a02f83395b2f19c3e942e189520a524fabcf7e272b2355a6ae8b754f7",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhl15",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.bin",
+   "entry": 133,
+   "offset": 6492384,
+   "stored_size": 5440,
+   "w4": 0,
+   "path_hash": 2379083769,
+   "input_sha256": "635420e44767fcd5222794a6bd2fb14427a6f2c687bc1b610fcb1f196c99715f",
+   "magic": "chunklzx",
+   "decode_seconds": 0.012,
+   "header": {
+    "dummy": 2,
+    "fullsize": 43664,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5392,
+     "flag": 3,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 10896,
+     "last_frame_csize": 1022,
+     "stream_bytes": 5380,
+     "produced": 43664,
+     "expected": 43664,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 43664,
+   "output_sha256": "24064c5c2af8d93fb623e8297c5e6f3f24e2028c200ee6279fb4d3b8c74d69ae",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\attribdb/crowds.bin",
+    "length": 43664,
+    "sha256": "24064c5c2af8d93fb623e8297c5e6f3f24e2028c200ee6279fb4d3b8c74d69ae",
+    "equal": true
+   },
+   "decoded_first16_hex": "537472450000aa8063726f77645f636f"
+  },
+  {
+   "title": "nhl15",
+   "archive": "boot.big",
+   "member": "attribdb/audioevents.vlt",
+   "entry": 132,
+   "offset": 6490128,
+   "stored_size": 2254,
+   "w4": 0,
+   "path_hash": 4056458571,
+   "input_sha256": "935bb5a1f042a3329cee1f3b4ea47d842ad449b1ab92da33bf710cab64b7cd49",
+   "magic": "chunklzx",
+   "decode_seconds": 0.006,
+   "header": {
+    "dummy": 2,
+    "fullsize": 4080,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 2206,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 4080,
+     "last_frame_csize": 2196,
+     "stream_bytes": 2196,
+     "produced": 4080,
+     "expected": 4080,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 4080,
+   "output_sha256": "9ce1200bf16e7d0a5c61165a35674217555522d49cab312fc7200e60c4fce4e5",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\attribdb/audioevents.vlt",
+    "length": 4080,
+    "sha256": "9ce1200bf16e7d0a5c61165a35674217555522d49cab312fc7200e60c4fce4e5",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhl15",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "entry": 5917,
+   "offset": 711238768,
+   "stored_size": 8890,
+   "w4": 0,
+   "path_hash": 259411377,
+   "input_sha256": "e1ebb6097dcb5b67c4360198254d7e274181c1c0b92c16fff28b6e261e6c35d9",
+   "magic": "chunklzx",
+   "decode_seconds": 0.047,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 8842,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 8820,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "f4d91640a2d240d61b60d3c49e445f4753d2a5bd6cb99c0e293728cb4766e345",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\rendering/logo/texlib_0_0_0.rx2",
+    "length": 200704,
+    "sha256": "f4d91640a2d240d61b60d3c49e445f4753d2a5bd6cb99c0e293728cb4766e345",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl15",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "entry": 6704,
+   "offset": 713631984,
+   "stored_size": 960,
+   "w4": 0,
+   "path_hash": 2128609741,
+   "input_sha256": "f543a0a49c858ff164adeff313fa62ba2eccd1926592911ed25ef7353cffe7a4",
+   "magic": "chunklzx",
+   "decode_seconds": 0.018,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 912,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 6,
+     "stream_bytes": 890,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\rendering/logo/texlib_27_0_3.rx2",
+    "length": 200704,
+    "sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl15",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "entry": 6701,
+   "offset": 713615184,
+   "stored_size": 5050,
+   "w4": 0,
+   "path_hash": 2125051978,
+   "input_sha256": "35a39293f78df8f45ea67c022ca39199245a786ac5577615c029355d45943bdb",
+   "magic": "chunklzx",
+   "decode_seconds": 0.035,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5002,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 4980,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\rendering/logo/texlib_27_0_0.rx2",
+    "length": 200704,
+    "sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhl15",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_1_6.rx2",
+   "entry": 6713,
+   "offset": 713668192,
+   "stored_size": 5908,
+   "w4": 0,
+   "path_hash": 3423635473,
+   "input_sha256": "054861e09591d73b93356cc7ec31ec0a56e1b739967bc8aee48f6fa10dfe6dd4",
+   "magic": "chunklzx",
+   "decode_seconds": 0.038,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5860,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 5838,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "e6e012074e5f86accfd0392293f07eba57dc7cfece97d3c94481e27f13d39902",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\rendering/logo/texlib_27_1_6.rx2",
+    "length": 200704,
+    "sha256": "e6e012074e5f86accfd0392293f07eba57dc7cfece97d3c94481e27f13d39902",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "boot.big",
+   "member": "attribdb/renddb.bin",
+   "entry": 145,
+   "offset": 6580704,
+   "stored_size": 24050,
+   "w4": 0,
+   "path_hash": 1007860758,
+   "input_sha256": "eda9e1df4eddfdfb5aaeb3826eeb68a6d75c2f76fbc6c54b3cb113e6f7a9a78a",
+   "magic": "chunklzx",
+   "decode_seconds": 0.095,
+   "header": {
+    "dummy": 2,
+    "fullsize": 103792,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 24002,
+     "flag": 3,
+     "subframes": 4,
+     "full_frames": 3,
+     "last_frame_usize": 5488,
+     "last_frame_csize": 424,
+     "stream_bytes": 23986,
+     "produced": 103792,
+     "expected": 103792,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 103792,
+   "output_sha256": "f64330f34f6b71c396e8c84ec1b90e8b7c36d22abe72ee6e1228c84afe5d2e1e",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\attribdb/renddb.bin",
+    "length": 103792,
+    "sha256": "f64330f34f6b71c396e8c84ec1b90e8b7c36d22abe72ee6e1228c84afe5d2e1e",
+    "equal": true
+   },
+   "decoded_first16_hex": "53747245000000e05445535444455054"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "boot.big",
+   "member": "attribdb/feattribdb.vlt",
+   "entry": 137,
+   "offset": 6560880,
+   "stored_size": 10868,
+   "w4": 0,
+   "path_hash": 1111504955,
+   "input_sha256": "5f1c9660764bc2a97aa8f9844c8c3fe94f8ab7e5d27c28eda215d96281743104",
+   "magic": "chunklzx",
+   "decode_seconds": 0.035,
+   "header": {
+    "dummy": 2,
+    "fullsize": 22336,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 10820,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 22336,
+     "last_frame_csize": 10810,
+     "stream_bytes": 10810,
+     "produced": 22336,
+     "expected": 22336,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 22336,
+   "output_sha256": "e1ad72be02cd1ee0883c035468e52fd5898972f33401bf187c1e07d47fffc059",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\attribdb/feattribdb.vlt",
+    "length": 22336,
+    "sha256": "e1ad72be02cd1ee0883c035468e52fd5898972f33401bf187c1e07d47fffc059",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.vlt",
+   "entry": 134,
+   "offset": 6497824,
+   "stored_size": 60768,
+   "w4": 0,
+   "path_hash": 2379105654,
+   "input_sha256": "721290d2c01050611722577d1b3bc312d528c5e878b373b07cb52f693279258b",
+   "magic": "chunklzx",
+   "decode_seconds": 0.217,
+   "header": {
+    "dummy": 2,
+    "fullsize": 361152,
+    "window": 262144,
+    "n_chunks": 2,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 29308,
+     "flag": 3,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 4824,
+     "stream_bytes": 29284,
+     "produced": 262144,
+     "expected": 262144,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "chunk": 1,
+     "header_offset": 29368,
+     "zsize": 31392,
+     "flag": 3,
+     "subframes": 4,
+     "full_frames": 3,
+     "last_frame_usize": 704,
+     "last_frame_csize": 206,
+     "stream_bytes": 31376,
+     "produced": 99008,
+     "expected": 99008,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 361152,
+   "output_sha256": "faafb52a02f83395b2f19c3e942e189520a524fabcf7e272b2355a6ae8b754f7",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\attribdb/crowds.vlt",
+    "length": 361152,
+    "sha256": "faafb52a02f83395b2f19c3e942e189520a524fabcf7e272b2355a6ae8b754f7",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "boot.big",
+   "member": "attribdb/crowds.bin",
+   "entry": 133,
+   "offset": 6492384,
+   "stored_size": 5440,
+   "w4": 0,
+   "path_hash": 2379083769,
+   "input_sha256": "635420e44767fcd5222794a6bd2fb14427a6f2c687bc1b610fcb1f196c99715f",
+   "magic": "chunklzx",
+   "decode_seconds": 0.017,
+   "header": {
+    "dummy": 2,
+    "fullsize": 43664,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5392,
+     "flag": 3,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 10896,
+     "last_frame_csize": 1022,
+     "stream_bytes": 5380,
+     "produced": 43664,
+     "expected": 43664,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 43664,
+   "output_sha256": "24064c5c2af8d93fb623e8297c5e6f3f24e2028c200ee6279fb4d3b8c74d69ae",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\attribdb/crowds.bin",
+    "length": 43664,
+    "sha256": "24064c5c2af8d93fb623e8297c5e6f3f24e2028c200ee6279fb4d3b8c74d69ae",
+    "equal": true
+   },
+   "decoded_first16_hex": "537472450000aa8063726f77645f636f"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "boot.big",
+   "member": "attribdb/audioevents.vlt",
+   "entry": 132,
+   "offset": 6490128,
+   "stored_size": 2254,
+   "w4": 0,
+   "path_hash": 4056458571,
+   "input_sha256": "935bb5a1f042a3329cee1f3b4ea47d842ad449b1ab92da33bf710cab64b7cd49",
+   "magic": "chunklzx",
+   "decode_seconds": 0.009,
+   "header": {
+    "dummy": 2,
+    "fullsize": 4080,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 2206,
+     "flag": 3,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 4080,
+     "last_frame_csize": 2196,
+     "stream_bytes": 2196,
+     "produced": 4080,
+     "expected": 4080,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 4080,
+   "output_sha256": "9ce1200bf16e7d0a5c61165a35674217555522d49cab312fc7200e60c4fce4e5",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\attribdb/audioevents.vlt",
+    "length": 4080,
+    "sha256": "9ce1200bf16e7d0a5c61165a35674217555522d49cab312fc7200e60c4fce4e5",
+    "equal": true
+   },
+   "decoded_first16_hex": "5665727300000010490e08a9557ab369"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "entry": 6237,
+   "offset": 740334112,
+   "stored_size": 8886,
+   "w4": 0,
+   "path_hash": 259411377,
+   "input_sha256": "18917a0a033255acfd81cf4e3ea82a752b721db48c571c5e75f692b6a38434c5",
+   "magic": "chunklzx",
+   "decode_seconds": 0.046,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 8838,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 8816,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "7b5f27ea479aa4b9c95094af45a549ad77c2b2ce089ece36acc63e69e4a62d96",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\rendering/logo/texlib_0_0_0.rx2",
+    "length": 200704,
+    "sha256": "7b5f27ea479aa4b9c95094af45a549ad77c2b2ce089ece36acc63e69e4a62d96",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "entry": 7095,
+   "offset": 743005232,
+   "stored_size": 960,
+   "w4": 0,
+   "path_hash": 2128609741,
+   "input_sha256": "f543a0a49c858ff164adeff313fa62ba2eccd1926592911ed25ef7353cffe7a4",
+   "magic": "chunklzx",
+   "decode_seconds": 0.012,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 912,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 6,
+     "stream_bytes": 890,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\rendering/logo/texlib_27_0_3.rx2",
+    "length": 200704,
+    "sha256": "c7ba030d47e1ed719e83e7b8c0960da32ce688ce377223fe89b71ef3fe8f1e28",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "entry": 7092,
+   "offset": 742988432,
+   "stored_size": 5050,
+   "w4": 0,
+   "path_hash": 2125051978,
+   "input_sha256": "35a39293f78df8f45ea67c022ca39199245a786ac5577615c029355d45943bdb",
+   "magic": "chunklzx",
+   "decode_seconds": 0.027,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5002,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 4980,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\rendering/logo/texlib_27_0_0.rx2",
+    "length": 200704,
+    "sha256": "e26d4fc6508d3fef5429ccf9896627117dd77ccce8f12af3d4562c224f91a616",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  },
+  {
+   "title": "nhllegacy",
+   "archive": "cacherender.big",
+   "member": "rendering/logo/texlib_27_1_6.rx2",
+   "entry": 7104,
+   "offset": 743041440,
+   "stored_size": 5902,
+   "w4": 0,
+   "path_hash": 3423635473,
+   "input_sha256": "bdedaabb1cc58ce87db305219ed77a47f876200c83ef1453f9474d0be4d1e554",
+   "magic": "chunklzx",
+   "decode_seconds": 0.031,
+   "header": {
+    "dummy": 2,
+    "fullsize": 200704,
+    "window": 262144,
+    "n_chunks": 1,
+    "header_tail_hex": "00000010000000000000000000000000"
+   },
+   "chunks": [
+    {
+     "chunk": 0,
+     "header_offset": 40,
+     "zsize": 5854,
+     "flag": 3,
+     "subframes": 7,
+     "full_frames": 6,
+     "last_frame_usize": 4096,
+     "last_frame_csize": 10,
+     "stream_bytes": 5832,
+     "produced": 200704,
+     "expected": 200704,
+     "trailer_hex": "0000000000"
+    }
+   ],
+   "output_length": 200704,
+   "output_sha256": "e570ade818f5223d8f85d77327710833207504145ae9fc244364699243f19a2b",
+   "zero_padded_bytes": 0,
+   "fullsize_matches_output": true,
+   "plaintext": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\rendering/logo/texlib_27_1_6.rx2",
+    "length": 200704,
+    "sha256": "e570ade818f5223d8f85d77327710833207504145ae9fc244364699243f19a2b",
+    "equal": true
+   },
+   "decoded_first16_hex": "89525734786232000d0a1a0a01200400"
+  }
+ ]
+}

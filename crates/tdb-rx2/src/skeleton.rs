@@ -140,7 +140,7 @@ fn pick_model_pose(data: &[u8], arrays: &[(usize, usize)]) -> Result<usize, Skel
             (tall, off)
         })
         .collect();
-    scored.sort_by(|a, b| b.0.cmp(&a.0));
+    scored.sort_by_key(|s| std::cmp::Reverse(s.0));
     let best = scored[0];
     if scored.len() > 1 && scored[1].0 == best.0 {
         return Err(SkeletonError::AmbiguousModelPose(
@@ -206,10 +206,10 @@ fn find_bytes(haystack: &[u8], needle: &[u8]) -> Option<usize> {
 
 fn read_matrix_le(data: &[u8], offset: usize) -> BoneMatrix {
     let mut m: BoneMatrix = [[0.0; 4]; 4];
-    for row in 0..4 {
-        for col in 0..4 {
+    for (row, cells) in m.iter_mut().enumerate() {
+        for (col, cell) in cells.iter_mut().enumerate() {
             let o = offset + (row * 4 + col) * 4;
-            m[row][col] = f32::from_le_bytes(data[o..o + 4].try_into().unwrap());
+            *cell = f32::from_le_bytes(data[o..o + 4].try_into().unwrap());
         }
     }
     m
@@ -217,10 +217,10 @@ fn read_matrix_le(data: &[u8], offset: usize) -> BoneMatrix {
 
 fn is_identity_like(m: &BoneMatrix) -> bool {
     const EPS: f32 = 1e-4;
-    for row in 0..3 {
-        for col in 0..3 {
+    for (row, cells) in m.iter().enumerate().take(3) {
+        for (col, cell) in cells.iter().enumerate().take(3) {
             let want = if row == col { 1.0 } else { 0.0 };
-            if (m[row][col] - want).abs() > EPS {
+            if (cell - want).abs() > EPS {
                 return false;
             }
         }
@@ -470,9 +470,9 @@ mod tests {
         // Translations must come from the ModelPose array, not the
         // local or inverse ones.
         for (b, want) in skel.bones.iter().zip(&model_trans) {
-            for k in 0..3 {
+            for (k, (got, wanted)) in b.trans.iter().zip(want.iter()).enumerate() {
                 assert!(
-                    (b.trans[k] - want[k]).abs() < 1e-6,
+                    (got - wanted).abs() < 1e-6,
                     "bone {} axis {k}: got {} want {}",
                     b.name,
                     b.trans[k],

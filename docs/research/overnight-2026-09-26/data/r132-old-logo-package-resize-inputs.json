@@ -1,0 +1,3630 @@
+{
+ "note": "R132 - League 1.4 / Teams 2.4 \"different dimensions\" on the older package forms (developer ledger: \"RW4-in-BIGF: whether the loose RW4\ndescriptor rule + the Apt quad rewrite apply inside the 07-11 package form is unmeasured\"). Read-only over the Xbox 360 loose trees.\nPer logo package `fe/ion/artassets/<family>/*.big` (families: team logos, small / wide / dynasty / calendar, league logos, small / wide):\n  wrapper    : whole-file RefPack (NHL 08-10 per receipt 13) or plain BIGF; unwrapped with the 2026-09-21 speech-model decoder;\n  members    : BIGF directory (names, sizes); texture member = the member whose bytes are RW4 (`\\x89RW4`) or XPR2 (largest if several);\n  texture    : RW4xb2 - file-table chunk types, raster count, the primary raster's (w, h, format) decoded as R107 documents; XPR2 - w, h;\n  Apt rule   : Studio's 12 -> Legacy dimension rule (assets.rs rewrite_apt_geometry): member `<n+1>` of 288 bytes whose six vertices at +96\n               (stride 32) are (0,H) (0,0) (W,0) (W,0) (W,H) (0,H) for the texture's (W, H), and member `0` = \"Apt Data:\" whose object table\n               (16 + u32@16) carries W, H as u32 at +20 and as f32 at +96.\nClasses per package: full-texture quad (rule holds) / display-crop quad (record present, vertices differ) / layout absent / not a logo package.\nNHL 12 (XPR2 packages) is run as the control where Studio already resizes. Nothing is written; no member is re-encoded.\nUsage: python r132_old_logo_package_resize_inputs.py <out.json>\n",
+ "trees": {
+  "x360-nhl08": {
+   "teamlogos": {
+    "packages": 136,
+    "wrappers": {
+     "whole-file refpack": 136
+    },
+    "texture_member_wrappers": {
+     "stored": 136
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 136
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 134,
+     "quad ok, member 0 size words differ": 1,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 135
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogossmall": {
+    "packages": 135,
+    "wrappers": {
+     "whole-file refpack": 135
+    },
+    "texture_member_wrappers": {
+     "stored": 135
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 135
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 135
+    },
+    "descriptors_by_size": {
+     "128x64 ARGB8 payload 32768": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100": 135
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoswide": {
+    "packages": 135,
+    "wrappers": {
+     "whole-file refpack": 135
+    },
+    "texture_member_wrappers": {
+     "stored": 135
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 135
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 132,
+     "display-crop quad": 3
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 132
+     },
+     "512x248 ARGB8 payload 524288": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008400000200000086001ee1ff00000c14000000000000020008000100": 3
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogosdynasty": {
+    "packages": 133,
+    "wrappers": {
+     "whole-file refpack": 133
+    },
+    "texture_member_wrappers": {
+     "stored": 133
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 133
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 132,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "128x128 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100": 132
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoscalendar": {
+    "packages": 135,
+    "wrappers": {
+     "whole-file refpack": 135
+    },
+    "texture_member_wrappers": {
+     "stored": 135
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 135
+    },
+    "classes": {
+     "display-crop quad": 135
+    },
+    "descriptors_by_size": {
+     "100x88 ARGB8 payload 49152": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100": 135
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   },
+   "leaguelogos": {
+    "packages": 7,
+    "wrappers": {
+     "whole-file refpack": 7
+    },
+    "texture_member_wrappers": {
+     "stored": 7
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 7
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 6,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "64x64 ARGB8 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100": 6
+     },
+     "112x112 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000d606f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "8",
+       "9"
+      ],
+      "texture_member": "8",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l2.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogossmall": {
+    "packages": 1,
+    "wrappers": {
+     "whole-file refpack": 1
+    },
+    "texture_member_wrappers": {
+     "stored": 1
+    },
+    "texture_forms": {
+     "RW4xb2 1r DXT5": 1
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 1
+    },
+    "descriptors_by_size": {
+     "128x64 DXT5 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "DXT5",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogoswide": {
+    "packages": 2,
+    "wrappers": {
+     "whole-file refpack": 2
+    },
+    "texture_member_wrappers": {
+     "stored": 2
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 2
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 2
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 2
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "8",
+       "9"
+      ],
+      "texture_member": "8",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   }
+  },
+  "x360-nhl09": {
+   "teamlogos": {
+    "packages": 218,
+    "wrappers": {
+     "plain BIGF": 218
+    },
+    "texture_member_wrappers": {
+     "stored": 218
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 218
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 216,
+     "quad ok, member 0 size words differ": 1,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 217
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogossmall": {
+    "packages": 217,
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "texture_member_wrappers": {
+     "stored": 217
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 217
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 217
+    },
+    "descriptors_by_size": {
+     "128x64 ARGB8 payload 32768": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100": 217
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoswide": {
+    "packages": 217,
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "texture_member_wrappers": {
+     "stored": 217
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 217
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 214,
+     "display-crop quad": 3
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 214
+     },
+     "512x248 ARGB8 payload 524288": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008400000200000086001ee1ff00000c14000000000000020008000100": 3
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogosdynasty": {
+    "packages": 216,
+    "wrappers": {
+     "plain BIGF": 216
+    },
+    "texture_member_wrappers": {
+     "stored": 216
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 216
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 215,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "128x128 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100": 215
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoscalendar": {
+    "packages": 217,
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "texture_member_wrappers": {
+     "stored": 217
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 217
+    },
+    "classes": {
+     "display-crop quad": 217
+    },
+    "descriptors_by_size": {
+     "100x88 ARGB8 payload 49152": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100": 217
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   },
+   "leaguelogos": {
+    "packages": 11,
+    "wrappers": {
+     "plain BIGF": 11
+    },
+    "texture_member_wrappers": {
+     "stored": 11
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 11
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 10,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "64x64 ARGB8 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100": 10
+     },
+     "108x112 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000d606b00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "8",
+       "9"
+      ],
+      "texture_member": "8",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l2.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogossmall": {
+    "packages": 1,
+    "wrappers": {
+     "plain BIGF": 1
+    },
+    "texture_member_wrappers": {
+     "stored": 1
+    },
+    "texture_forms": {
+     "RW4xb2 1r DXT5": 1
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 1
+    },
+    "descriptors_by_size": {
+     "128x64 DXT5 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "DXT5",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogoswide": {
+    "packages": 2,
+    "wrappers": {
+     "plain BIGF": 2
+    },
+    "texture_member_wrappers": {
+     "stored": 2
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 2
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 2
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 2
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "8",
+       "9"
+      ],
+      "texture_member": "8",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   }
+  },
+  "x360-nhl10": {
+   "teamlogos": {
+    "packages": 217,
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "texture_member_wrappers": {
+     "stored": 217
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 217
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 215,
+     "quad ok, member 0 size words differ": 1,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 216
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogossmall": {
+    "packages": 216,
+    "wrappers": {
+     "plain BIGF": 216
+    },
+    "texture_member_wrappers": {
+     "stored": 216
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 216
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 216
+    },
+    "descriptors_by_size": {
+     "128x64 ARGB8 payload 32768": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100": 216
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoswide": {
+    "packages": 222,
+    "wrappers": {
+     "plain BIGF": 222
+    },
+    "texture_member_wrappers": {
+     "stored": 222
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 222
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 219,
+     "display-crop quad": 3
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 219
+     },
+     "512x248 ARGB8 payload 524288": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008400000200000086001ee1ff00000c14000000000000020008000100": 3
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogosdynasty": {
+    "packages": 215,
+    "wrappers": {
+     "plain BIGF": 215
+    },
+    "texture_member_wrappers": {
+     "stored": 215
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 215
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 214,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "128x128 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100": 214
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoscalendar": {
+    "packages": 216,
+    "wrappers": {
+     "plain BIGF": 216
+    },
+    "texture_member_wrappers": {
+     "stored": 216
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 216
+    },
+    "classes": {
+     "display-crop quad": 216
+    },
+    "descriptors_by_size": {
+     "100x88 ARGB8 payload 49152": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100": 216
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   },
+   "leaguelogos": {
+    "packages": 12,
+    "wrappers": {
+     "plain BIGF": 12
+    },
+    "texture_member_wrappers": {
+     "stored": 12
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 12
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 11,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "64x64 ARGB8 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100": 11
+     },
+     "108x112 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000d606b00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogossmall": {
+    "packages": 1,
+    "wrappers": {
+     "plain BIGF": 1
+    },
+    "texture_member_wrappers": {
+     "stored": 1
+    },
+    "texture_forms": {
+     "RW4xb2 1r DXT5": 1
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 1
+    },
+    "descriptors_by_size": {
+     "128x64 DXT5 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "DXT5",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogoswide": {
+    "packages": 10,
+    "wrappers": {
+     "plain BIGF": 10
+    },
+    "texture_member_wrappers": {
+     "stored": 10
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 10
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 10
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 10
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   }
+  },
+  "x360-nhl11": {
+   "teamlogos": {
+    "packages": 298,
+    "wrappers": {
+     "plain BIGF": 298
+    },
+    "texture_member_wrappers": {
+     "refpack": 298
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 298
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 297,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 297
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogossmall": {
+    "packages": 297,
+    "wrappers": {
+     "plain BIGF": 297
+    },
+    "texture_member_wrappers": {
+     "refpack": 297
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 297
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 297
+    },
+    "descriptors_by_size": {
+     "128x64 ARGB8 payload 32768": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100": 297
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "156",
+       "157",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "156",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "158",
+       "159",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "158",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "160",
+       "161",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "160",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoswide": {
+    "packages": 297,
+    "wrappers": {
+     "plain BIGF": 297
+    },
+    "texture_member_wrappers": {
+     "refpack": 297
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 297
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 297
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 297
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogosdynasty": {
+    "packages": 298,
+    "wrappers": {
+     "plain BIGF": 298
+    },
+    "texture_member_wrappers": {
+     "refpack": 298
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 298
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 297,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "128x128 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100": 297
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 128,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000fe07f00000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoscalendar": {
+    "packages": 297,
+    "wrappers": {
+     "plain BIGF": 297
+    },
+    "texture_member_wrappers": {
+     "refpack": 297
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 297
+    },
+    "classes": {
+     "display-crop quad": 297
+    },
+    "descriptors_by_size": {
+     "100x88 ARGB8 payload 49152": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100": 297
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "refpack"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "refpack"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "refpack"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   },
+   "leaguelogos": {
+    "packages": 14,
+    "wrappers": {
+     "plain BIGF": 14
+    },
+    "texture_member_wrappers": {
+     "refpack": 14
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 14
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 13,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "64x64 ARGB8 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100": 13
+     },
+     "108x112 ARGB8 payload 65536": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008100000200000086000d606b00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 64,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000080800002000000860007e03f00000c14000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogossmall": {
+    "packages": 12,
+    "wrappers": {
+     "plain BIGF": 12
+    },
+    "texture_member_wrappers": {
+     "refpack": 12
+    },
+    "texture_forms": {
+     "RW4xb2 1r DXT5": 12
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 12
+    },
+    "descriptors_by_size": {
+     "128x64 DXT5 payload 16384": {
+      "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100": 12
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "DXT5",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "12",
+       "13",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "12",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "DXT5",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "14",
+       "15",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "14",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "DXT5",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff000081000002000000540007e07f00000d10000000000000020008000100",
+       "payload_bytes": 16384,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogoswide": {
+    "packages": 14,
+    "wrappers": {
+     "plain BIGF": 14
+    },
+    "texture_member_wrappers": {
+     "refpack": 14
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 14
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 14
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 14
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0040000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "refpack"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   }
+  },
+  "x360-nhl12": {
+   "teamlogos": {
+    "packages": 303,
+    "wrappers": {
+     "plain BIGF": 303
+    },
+    "texture_member_wrappers": {
+     "refpack": 303
+    },
+    "texture_forms": {
+     "XPR2 r ": 303
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 303
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   },
+   "teamlogossmall": {
+    "packages": 302,
+    "wrappers": {
+     "plain BIGF": 302
+    },
+    "texture_member_wrappers": {
+     "refpack": 302
+    },
+    "texture_forms": {
+     "XPR2 r ": 302
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 302
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "156",
+       "157",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "156",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "14",
+       "15",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "14",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "160",
+       "161",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "160",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   },
+   "teamlogoswide": {
+    "packages": 302,
+    "wrappers": {
+     "plain BIGF": 302
+    },
+    "texture_member_wrappers": {
+     "refpack": 302
+    },
+    "texture_forms": {
+     "XPR2 r ": 302
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 302
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "18",
+       "19",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "18",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   },
+   "teamlogosdynasty": {
+    "packages": 303,
+    "wrappers": {
+     "plain BIGF": 303
+    },
+    "texture_member_wrappers": {
+     "refpack": 303
+    },
+    "texture_forms": {
+     "XPR2 r ": 303
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 303
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   },
+   "teamlogoscalendar": {
+    "packages": 302,
+    "wrappers": {
+     "plain BIGF": 302
+    },
+    "texture_member_wrappers": {
+     "refpack": 302
+    },
+    "texture_forms": {
+     "XPR2 r ": 302
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 302
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "10",
+       "11",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "10",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   },
+   "leaguelogos": {
+    "packages": 15,
+    "wrappers": {
+     "plain BIGF": 15
+    },
+    "texture_member_wrappers": {
+     "refpack": 15
+    },
+    "texture_forms": {
+     "XPR2 r ": 15
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 15
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   },
+   "leaguelogossmall": {
+    "packages": 13,
+    "wrappers": {
+     "plain BIGF": 13
+    },
+    "texture_member_wrappers": {
+     "refpack": 13
+    },
+    "texture_forms": {
+     "XPR2 r ": 13
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 13
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "12",
+       "13",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "12",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "14",
+       "15",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "14",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   },
+   "leaguelogoswide": {
+    "packages": 14,
+    "wrappers": {
+     "plain BIGF": 14
+    },
+    "texture_member_wrappers": {
+     "refpack": 14
+    },
+    "texture_forms": {
+     "XPR2 r ": 14
+    },
+    "classes": {
+     "XPR2 (control: Studio route)": 14
+    },
+    "descriptors_by_size": {},
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     },
+     {
+      "file": "l10.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3",
+       "sg1",
+       "sg2"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "XPR2",
+       "w": null,
+       "h": null,
+       "member_wrapper": "refpack"
+      },
+      "class": "XPR2 (control: Studio route)"
+     }
+    ]
+   }
+  }
+ }
+}

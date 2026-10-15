@@ -1,0 +1,110 @@
+$ python research/nhl08-roster-schema/scripts/key_graph.py anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml
+game tables (name, rows, record bytes):
+  AJKN  ahlschedule                         1160 rows    8B
+  Vzjq  customfacetable                      180 rows    8B
+  Roup  custompalettetable                    20 rows    4B
+  NDEo  customteamequipmenttable             600 rows   32B
+  gtua  draftplayersfirstname                240 rows   44B
+  lSMf  draftplayerslastname                1620 rows   44B
+  OEtS  exhibitionarena                      138 rows  104B
+  EClp  exhibitioncontroller                   0 rows    8B
+  WdaS  exhibitiondlc                          1 rows   24B
+  QEoV  exhibitionfreeagents                 156 rows    4B
+  yuHm  exhibitiongoalieai                   315 rows   20B
+  lVMf  exhibitiongoalieequipment            315 rows   68B
+  JLWf  exhibitionoptions                      0 rows  256B
+  cPbu  exhibitionplayerbiotable            2962 rows  184B
+  caBZ  exhibitionplayers                   3257 rows    4B
+  ulGe  exhibitionrostertable               2525 rows   16B
+  FKif  exhibitionrules                        0 rows  256B
+  yvSd  exhibitionskaterai                  2647 rows   24B
+  ajmx  exhibitionskaterequipment           2647 rows   12B
+  FJTs  exhibitionstates                       0 rows    8B
+  ttOk  exhibitionteams                      138 rows  204B
+  oYeE  exhibitionteamstrategies             138 rows    8B
+  PwCR  exhibitiontweaks                       0 rows  256B
+  xZCi  gmdata                                 0 rows  140B
+  PSFv  leaguearena                            0 rows  104B
+  IALy  leagueawardstable                      0 rows   88B
+  FekM  leaguecustomfacetable                  0 rows    8B
+  SsSL  leaguecustompalettetable               0 rows    4B
+  kKzq  leaguecustomplayerremap                0 rows    4B
+  LwGR  leaguecustomteamequipmenttable         0 rows   32B
+  sDbJ  leaguedraftpick                        0 rows    4B
+  uGze  leagueemaildata                        0 rows    8B
+  kGzd  leaguefreeagents                       0 rows    4B
+  kPYO  leaguegamestats                        0 rows   16B
+  xLuM  leaguegmdata                           0 rows  140B
+  kPCA  leaguegoalieai                         0 rows   48B
+  lqNn  leaguegoalieequipment                  0 rows   64B
+  ZXww  leaguenews                             0 rows   32B
+  vHJZ  leagueoptions                          0 rows  256B
+  MMxP  leagueplayerbiotable                   0 rows  188B
+  NFkQ  leagueplayercareerplayoffsstats        0 rows   12B
+  TKKI  leagueplayercareerseasonstats          0 rows   16B
+  juMS  leagueplayerplayoffsstats              0 rows   28B
+  CtBM  leagueplayerseasonstats                0 rows   28B
+  xxMJ  leagueretirementtable                  0 rows   84B
+  sziH  leaguerookiegoalieai                   0 rows   24B
+  ulvZ  leaguerookiegoalieequipment            0 rows   12B
+  XrSd  leaguerookieplayerbiotable             0 rows  140B
+  AebM  leaguerookieskaterai                   0 rows   28B
+  dDxH  leaguerookieskaterequipment            0 rows   12B
+  rgQY  leaguerostertable                      0 rows   16B
+  Icui  leaguerules                            0 rows  256B
+  yvnq  leaguescheduletable                    0 rows    8B
+  wiLv  leagueskaterai                         0 rows   52B
+  CwnF  leagueskaterequipment                  0 rows   12B
+  WRGI  leaguestates                           0 rows    8B
+  HUMb  leaguetasks                            0 rows    8B
+  Ewsk  leagueteamplayoffsstats                0 rows   36B
+  TlmR  leagueteampractice                     0 rows    8B
+  sbGR  leagueteams                            0 rows  208B
+  wFSR  leagueteamseasonstats                  0 rows   36B
+  QfUJ  leagueteamstrategies                   0 rows    8B
+  ubnj  leaguetransactiontable                 0 rows    8B
+  wcLl  leaguetweaks                           0 rows  256B
+  ihmS  nhlschedule                         1231 rows    8B
+  Urkm  stockawardstable                     225 rows   88B
+  pDCn  stockcareerplayoffgoaliestats        222 rows   32B
+  OqAO  stockcareerplayoffplayerstats       2893 rows   28B
+  FfSU  stockcareerseasongoaliestats         655 rows   32B
+  ySst  stockcareerseasonplayerstats        6402 rows   32B
+  nAUy  stockgoalieequipment                 236 rows  148B
+  gBrU  stockintltourneygoaliestats          156 rows   12B
+  bwVx  stockintltourneyplayerstats         1340 rows    8B
+  iZyc  stockplayoffteamstats                 16 rows   12B
+  LScw  stockretirednumbertable              120 rows    4B
+  wBzc  stockseasonteamstats                  30 rows   16B
+  sozv  stockteamcolorstable                 143 rows    8B
+  vbHh  stockteamequipmenttable             8000 rows   32B
+  puAP  stockteamjerseytable                 138 rows    4B
+
+exhibitionplayers: 3257 rows; index 0..5179 unique=True; playerid 0..5179 unique=False; table flag counts {0: 3077, 1: 180}; index==playerid rows 186
+  playerids used by more than one slot: 259 (e.g. [5, 15, 30, 35, 37, 153, 155, 214])
+  index ascending in record order: True; gaps in index sequence: 1923
+exhibitionplayerbiotable: 2962 rows; game_id 0..5179 unique=True; game_id==record index: 107 rows; position counts {0: 708, 3: 900, 1: 521, 2: 518, 4: 315}
+  playerid set vs bio game_id set: slots whose playerid has no bio 0; bios never slotted 0
+  table flag 0: 3077 slots, playerids 0..4164, resolvable in exhibitionplayerbiotable: 3077
+  table flag 1: 180 slots, playerids 5000..5179, resolvable in exhibitionplayerbiotable: 180
+exhibitionrostertable: 2525 rows; key 0..2699 unique=True key==playerindex rows 1 key==record index rows 23; playerindex unique=True all in exhibitionplayers.index=True; team 0..107; rosterstatus counts {1: 2160, 0: 365}
+exhibitionfreeagents: 156 rows; all in exhibitionplayers.index=True; overlap with roster 0; roster+FA cover 2681 of 3257 slots
+  unassigned slots: 576 (first [169, 175, 176, 178, 181, 216, 220, 228, 234, 237])
+exhibitionteams: 138 rows; index 0..137 unique=True index==record index rows 138; league counts {0: 32, 1: 29, 2: 12, 3: 14, 4: 21, 5: 30}; table flag counts {0: 108, 1: 30}; active counts {1: 108, 0: 30}
+  roster.team all in exhibitionteams.index: True; teams with rostered players: 108
+  sample teams: [(0, 'Anaheim Ducks�\x84�'), (1, 'Atlanta Thrashers®'), (2, 'Boston Bruins®'), (3, 'Buffalo Sabres®')] ... [(135, 'Custom Team 27'), (136, 'Custom Team 28'), (137, 'Custom Team 29')]
+exhibitionarena.index == exhibitionteams.index set: True; exhibitionteamstrategies.index == exhibitionteams.index set: True
+bio.team vs roster.team (via slot): mismatches 249 of 2525 (first [(329, 30, 27), (362, 30, 12), (383, 30, 21), (391, 30, 17), (432, 30, 3)])
+bio.jersey vs roster.jersey (via slot): mismatches 489 of 2525
+AI/equipment keyed by game_id: skaterai 2647 unique=True; goalieai 315 unique=True; skaterai+goalieai == bio ids: True (disjoint True)
+  bio.position of goalieai ids: {4: 315} ; of skaterai ids: {0: 708, 3: 900, 1: 521, 2: 518}
+  custom-slot (table=1) ids in skaterai: 150, in goalieai: 30, in skaterequipment: 150, in goalieequipment: 30
+  roster.team values on the bio/roster team mismatches: {89: 25, 90: 25, 104: 25, 107: 25, 92: 24}
+  skaterequipment ids == skaterai ids: True; goalieequipment ids == goalieai ids: True
+  record order aligned (skaterai[i].game_id == skaterequipment[i].game_id): True; goalie: True
+stockgoalieequipment: 236 rows; key 0..235 unique=True; game_id in goalieai ids: 236; game_id==0 rows 0; sample [(0, 150, 'Michael', 'Wall', 43), (1, 151, 'Barry', 'Brust', 45), (2, 152, 'Martin', 'Houle', 50)]
+stockteamequipmenttable: 8000 rows; index unique=True 0..7999; team 0..201 (in exhibitionteams: False); era counts {0: 7875, 2: 119, 1: 6}
+customteamequipmenttable: 600 rows; index 0..599 unique=True; team values {109: 20, 110: 20, 111: 20, 112: 20}
+stockteamcolorstable: 143 rows; index 0..142 unique=True; team 0..60; colorid counts {0: 61, 1: 44, 2: 22, 3: 10, 4: 4, 5: 2}
+customfacetable: 180 rows playerid 5000..5179 unique=True (in bio ids: 180); custompalettetable: 20 rows index 0..19
+

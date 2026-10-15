@@ -10,6 +10,7 @@ import {
 import { NavLink, Outlet } from "react-router-dom";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Spinner } from "./primitives";
+import { SidebarCollapseContext } from "../lib/sidebarCollapse";
 
 const ROW_H = 26; // px — compact rows, matching the old studio's dense list.
 
@@ -78,6 +79,11 @@ export function EntityList<T>({
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const controlled = !!onSearchChange;
 
+  // Collapse the list to a thin rail so the detail view gets the full width. Starts open on every
+  // load and auto-collapses when a row is picked (below); the rail button reopens it. Deliberately
+  // not persisted — a fresh session always begins with the list visible.
+  const [collapsed, setCollapsed] = useState(false);
+
   // Debounce the search box into the server query (via useDeferredValue) when controlled.
   useEffect(() => {
     if (onSearchChange) onSearchChange(dq);
@@ -133,23 +139,70 @@ export function EntityList<T>({
   };
   const arrow = (k: string) => (sortKey === k ? (sortDir === "asc" ? " ↑" : " ↓") : "");
 
+  if (collapsed) {
+    return (
+      <SidebarCollapseContext.Provider value={setCollapsed}>
+      <div className="flex h-full gap-4">
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          title={`Show ${title}`}
+          aria-label={`Show ${title} list`}
+          className="group flex w-9 shrink-0 flex-col items-center gap-3 rounded-md border border-slate-800 bg-slate-900/40 py-2 text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-slate-200"
+        >
+          <span aria-hidden className="text-sm leading-none">
+            »
+          </span>
+          <span className="text-[11px] font-semibold uppercase tracking-wide [writing-mode:vertical-rl]">
+            {title}
+          </span>
+          <span className="text-[10px] tabular-nums text-slate-600 [writing-mode:vertical-rl]">
+            {(total ?? rows.length).toLocaleString()}
+          </span>
+        </button>
+        <section className="min-w-0 flex-1 overflow-auto">
+          <Outlet />
+        </section>
+      </div>
+      </SidebarCollapseContext.Provider>
+    );
+  }
+
   return (
-    <div className="flex h-full gap-4">
+    <SidebarCollapseContext.Provider value={setCollapsed}>
+    <div className="flex h-full min-h-0 gap-4">
       <aside className={"flex shrink-0 flex-col " + (panelWidth ?? "w-80")}>
-        <div className="mb-2 flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-slate-100">{title}</h2>
-          <span className="text-xs text-slate-500">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setCollapsed(true)}
+              title={`Hide ${title}`}
+              aria-label={`Hide ${title} list`}
+              className="shrink-0 rounded p-0.5 text-slate-500 transition-colors hover:bg-slate-800/60 hover:text-slate-200"
+            >
+              <span aria-hidden className="block text-sm leading-none">
+                «
+              </span>
+            </button>
+            <h2 className="truncate text-sm font-semibold text-slate-100">{title}</h2>
+          </div>
+          <span className="shrink-0 text-xs text-slate-500">
             {view.length.toLocaleString()} / {(total ?? rows.length).toLocaleString()}
           </span>
         </div>
 
-        <div className="mb-2 flex gap-2">
+        {/* The toolbar and the search box share a row while they fit; a wide toolbar (the Leagues
+            dictionary controls) pushes the search box onto its own line instead of squeezing it
+            to a sliver — the box never shrinks below a usable width. */}
+        <div className="mb-2 flex flex-wrap gap-2">
           {toolbar}
           <input
+            aria-label={`Search ${title.toLowerCase()}`}
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder={searchPlaceholder}
-            className="min-w-0 flex-1 rounded-md border border-slate-700 bg-slate-950 px-2 py-1.5 text-xs text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none"
+            className="min-w-[8rem] flex-1 rounded-md border border-slate-700 bg-slate-950 px-2 py-1.5 text-xs text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none"
           />
         </div>
 
@@ -164,7 +217,8 @@ export function EntityList<T>({
                 key={c.key}
                 type="button"
                 onClick={() => toggleSort(c.key)}
-                className="text-left hover:text-slate-200"
+                aria-label={`Sort by ${c.label}${sortKey === c.key ? `, currently ${sortDir === "asc" ? "ascending" : "descending"}` : ""}`}
+                className="rounded text-left hover:text-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-400"
               >
                 {c.label}
                 {arrow(c.key)}
@@ -180,8 +234,13 @@ export function EntityList<T>({
 
         <div
           ref={scrollRef}
-          className="flex-1 overflow-auto rounded-b-md border border-t-0 border-slate-800 bg-slate-900/40"
+          className="min-h-0 flex-1 overflow-auto rounded-b-md border border-t-0 border-slate-800 bg-slate-900/40"
         >
+          {!isLoading && !error && view.length === 0 && (
+            <p role="status" className="p-3 text-xs text-slate-400">
+              {dq.trim() ? `No ${title.toLowerCase()} match “${dq.trim()}”. Try another search or clear the filters.` : `No ${title.toLowerCase()} are available with the current filters and project inputs.`}
+            </p>
+          )}
           <div style={{ height: virt.getTotalSize(), position: "relative" }}>
             {virt.getVirtualItems().map((v) => {
               const row = view[v.index];
@@ -190,6 +249,8 @@ export function EntityList<T>({
                 <NavLink
                   key={seg}
                   to={seg}
+                  // Picking an entity hands the width to the detail view — auto-collapse the list.
+                  onClick={() => setCollapsed(true)}
                   style={{
                     ...gridStyle,
                     position: "absolute",
@@ -200,7 +261,7 @@ export function EntityList<T>({
                     transform: `translateY(${v.start}px)`,
                   }}
                   className={({ isActive }) =>
-                    "border-b border-slate-800/50 px-2 text-xs " +
+                    "border-b border-slate-800/50 px-2 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-400 " +
                     (isActive ? "bg-sky-900/30 text-sky-100" : "text-slate-200 hover:bg-slate-800/40")
                   }
                 >
@@ -219,5 +280,6 @@ export function EntityList<T>({
         <Outlet />
       </section>
     </div>
+    </SidebarCollapseContext.Provider>
   );
 }

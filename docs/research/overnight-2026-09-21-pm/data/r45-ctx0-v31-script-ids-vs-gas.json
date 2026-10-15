@@ -1,0 +1,476 @@
+{
+ "note": "R45 \u2014 NHL 11 / 12 `CTX0` v3.1 condition / expression script ids joined to the `.gas` (`CSIS`) blob header id words (read-only).\n\nOn v4.5 (NHL 13\u2013Legacy) every `.gas` blob begins with `u32 id == its ordinal k`, so a context's blob reference is an index (2026-09-20 r22,\n2026-09-21 handoff 01). On v3.1 the ids in the context records exceed the blob count (handoff 16), so the index rule cannot hold. This probe\nreads every `.gas` blob header (`u32 id | w1 w2 w3 | ptr | ...`) of the NHL 11 / 12 sets, builds `id word -> blob ordinal` and joins:\n  * every condition's script id (record -> conditions[].blob) and every expression parameter's script id (item params kind 1),\n  * both directions: context ids without a blob (unresolved references, kept in full) and blobs no context references,\n  * whether the id-word map is injective, whether the ordinal order correlates with the id, and whether blob w1..w3 / ptr shapes\n    distinguish condition blobs from parameter blobs (as the v4.5 disjointness did).\nNothing is assumed from v4.5; unresolved references are listed, not dropped. Trees: X360 NHL 11, PS3 NHL 11, X360 NHL 12 (loose\n`audio/context`); sets `pbp_eng` and `crowds`.\nUsage: python r45_ctx0_v31_script_ids_vs_gas.py <out.json>\n",
+ "trees": {
+  "x360-nhl11": {
+   "pbp_eng": {
+    "ctx_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\context\\pbp_eng_contexts.bin",
+    "ctx_sha256": "738aee53df392d74dc7f6a0a36f360fa30f7d28b634447d7b065e264b0dcad1d",
+    "gas_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\context\\pbp_eng_contextgasscript.gas",
+    "gas_sha256": "450a4ac0c5aca83d96ab23cbe4f2fd2d4fd0f6d958d2ba8cac88f08c4a76a83d",
+    "records": 2833,
+    "gas_blobs": 1739,
+    "gas_empty_blobs": 0,
+    "gas_id_words": {
+     "distinct": 1739,
+     "min": 5,
+     "max": 2250,
+     "injective": true,
+     "sequential": false,
+     "order_inversions": 896
+    },
+    "conditions": {
+     "distinct_ids": 1525,
+     "references": 11702,
+     "resolved_ids": 1525,
+     "resolved_refs": 11702,
+     "unresolved": []
+    },
+    "expressions": {
+     "distinct_ids": 155,
+     "references": 2438,
+     "resolved_ids": 155,
+     "resolved_refs": 2438,
+     "unresolved": []
+    },
+    "ids_shared_cond_expr": 0,
+    "blobs_unreferenced": 59,
+    "blobs_unreferenced_ordinals_first": [
+     14,
+     43,
+     86,
+     94,
+     124,
+     157,
+     191,
+     248,
+     250,
+     332,
+     358,
+     364,
+     391,
+     399,
+     422,
+     538,
+     540,
+     552,
+     554,
+     562,
+     565,
+     654,
+     717,
+     733,
+     742,
+     753,
+     759,
+     769,
+     794,
+     827,
+     846,
+     849,
+     860,
+     890,
+     898,
+     923,
+     925,
+     948,
+     950,
+     962
+    ],
+    "blob_shape_by_class": {
+     "expr": {
+      "[0, 0, 4] ptr+60": 28,
+      "[0, 1, 1] ptr+40": 20,
+      "[0, 0, 1] ptr+36": 18,
+      "[0, 0, 6] ptr+76": 17,
+      "[0, 0, 3] ptr+52": 15,
+      "[0, 0, 0] ptr+28": 9,
+      "[0, 0, 8] ptr+92": 9,
+      "[0, 0, 5] ptr+68": 7
+     },
+     "cond": {
+      "[0, 1, 0] ptr+32": 480,
+      "[0, 0, 0] ptr+28": 135,
+      "[0, 0, 1] ptr+36": 128,
+      "[0, 0, 4] ptr+60": 99,
+      "[0, 0, 3] ptr+52": 98,
+      "[0, 0, 2] ptr+44": 78,
+      "[0, 0, 5] ptr+68": 58,
+      "[0, 1, 1] ptr+40": 56
+     },
+     "unreferenced": {
+      "[0, 0, 0] ptr+28": 34,
+      "[0, 2, 3] ptr+60": 16,
+      "[0, 4, 3] ptr+68": 5,
+      "[0, 0, 6] ptr+76": 4
+     }
+    }
+   },
+   "crowds": {
+    "ctx_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\context\\crowds_contexts.bin",
+    "ctx_sha256": "359041866445ae8db5e8dbe04e9a827817c3a1c4faa95fd9f7cea21de5420b75",
+    "gas_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\context\\crowds_contextgasscript.gas",
+    "gas_sha256": "adbb04f1a27cafdc7406de60145f335a733fff8806f1669dfe9b7e0dae1b6734",
+    "records": 1164,
+    "gas_blobs": 588,
+    "gas_empty_blobs": 0,
+    "gas_id_words": {
+     "distinct": 588,
+     "min": 1,
+     "max": 1922,
+     "injective": true,
+     "sequential": false,
+     "order_inversions": 307
+    },
+    "conditions": {
+     "distinct_ids": 316,
+     "references": 5113,
+     "resolved_ids": 316,
+     "resolved_refs": 5113,
+     "unresolved": []
+    },
+    "expressions": {
+     "distinct_ids": 272,
+     "references": 1020,
+     "resolved_ids": 272,
+     "resolved_refs": 1020,
+     "unresolved": []
+    },
+    "ids_shared_cond_expr": 0,
+    "blobs_unreferenced": 0,
+    "blobs_unreferenced_ordinals_first": [],
+    "blob_shape_by_class": {
+     "cond": {
+      "[0, 0, 0] ptr+28": 111,
+      "[0, 1, 0] ptr+32": 68,
+      "[0, 0, 1] ptr+36": 41,
+      "[0, 0, 3] ptr+52": 32,
+      "[0, 0, 2] ptr+44": 23,
+      "[0, 0, 6] ptr+76": 17,
+      "[0, 0, 4] ptr+60": 14,
+      "[0, 0, 5] ptr+68": 10
+     },
+     "expr": {
+      "[0, 0, 0] ptr+28": 264,
+      "[0, 1, 0] ptr+32": 5,
+      "[0, 0, 2] ptr+44": 2,
+      "[0, 0, 4] ptr+60": 1
+     }
+    }
+   }
+  },
+  "ps3-nhl11": {
+   "pbp_eng": {
+    "ctx_file": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\context\\pbp_eng_contexts.bin",
+    "ctx_sha256": "5fe5018b18e3d799461435241053d8f281df2f3da30937f6fed19fb9d8fb6081",
+    "gas_file": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\context\\pbp_eng_contextgasscript.gas",
+    "gas_sha256": "450a4ac0c5aca83d96ab23cbe4f2fd2d4fd0f6d958d2ba8cac88f08c4a76a83d",
+    "records": 2833,
+    "gas_blobs": 1739,
+    "gas_empty_blobs": 0,
+    "gas_id_words": {
+     "distinct": 1739,
+     "min": 5,
+     "max": 2250,
+     "injective": true,
+     "sequential": false,
+     "order_inversions": 896
+    },
+    "conditions": {
+     "distinct_ids": 1525,
+     "references": 11702,
+     "resolved_ids": 1525,
+     "resolved_refs": 11702,
+     "unresolved": []
+    },
+    "expressions": {
+     "distinct_ids": 155,
+     "references": 2438,
+     "resolved_ids": 155,
+     "resolved_refs": 2438,
+     "unresolved": []
+    },
+    "ids_shared_cond_expr": 0,
+    "blobs_unreferenced": 59,
+    "blobs_unreferenced_ordinals_first": [
+     14,
+     43,
+     86,
+     94,
+     124,
+     157,
+     191,
+     248,
+     250,
+     332,
+     358,
+     364,
+     391,
+     399,
+     422,
+     538,
+     540,
+     552,
+     554,
+     562,
+     565,
+     654,
+     717,
+     733,
+     742,
+     753,
+     759,
+     769,
+     794,
+     827,
+     846,
+     849,
+     860,
+     890,
+     898,
+     923,
+     925,
+     948,
+     950,
+     962
+    ],
+    "blob_shape_by_class": {
+     "expr": {
+      "[0, 0, 4] ptr+60": 28,
+      "[0, 1, 1] ptr+40": 20,
+      "[0, 0, 1] ptr+36": 18,
+      "[0, 0, 6] ptr+76": 17,
+      "[0, 0, 3] ptr+52": 15,
+      "[0, 0, 0] ptr+28": 9,
+      "[0, 0, 8] ptr+92": 9,
+      "[0, 0, 5] ptr+68": 7
+     },
+     "cond": {
+      "[0, 1, 0] ptr+32": 480,
+      "[0, 0, 0] ptr+28": 135,
+      "[0, 0, 1] ptr+36": 128,
+      "[0, 0, 4] ptr+60": 99,
+      "[0, 0, 3] ptr+52": 98,
+      "[0, 0, 2] ptr+44": 78,
+      "[0, 0, 5] ptr+68": 58,
+      "[0, 1, 1] ptr+40": 56
+     },
+     "unreferenced": {
+      "[0, 0, 0] ptr+28": 34,
+      "[0, 2, 3] ptr+60": 16,
+      "[0, 4, 3] ptr+68": 5,
+      "[0, 0, 6] ptr+76": 4
+     }
+    }
+   },
+   "crowds": {
+    "ctx_file": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\context\\crowds_contexts.bin",
+    "ctx_sha256": "5d16805d4ee77f2e50ef704f1adc5849c5f1338a1d5d185fd7105f50b8a66c80",
+    "gas_file": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\context\\crowds_contextgasscript.gas",
+    "gas_sha256": "adbb04f1a27cafdc7406de60145f335a733fff8806f1669dfe9b7e0dae1b6734",
+    "records": 1164,
+    "gas_blobs": 588,
+    "gas_empty_blobs": 0,
+    "gas_id_words": {
+     "distinct": 588,
+     "min": 1,
+     "max": 1922,
+     "injective": true,
+     "sequential": false,
+     "order_inversions": 307
+    },
+    "conditions": {
+     "distinct_ids": 316,
+     "references": 5113,
+     "resolved_ids": 316,
+     "resolved_refs": 5113,
+     "unresolved": []
+    },
+    "expressions": {
+     "distinct_ids": 272,
+     "references": 1020,
+     "resolved_ids": 272,
+     "resolved_refs": 1020,
+     "unresolved": []
+    },
+    "ids_shared_cond_expr": 0,
+    "blobs_unreferenced": 0,
+    "blobs_unreferenced_ordinals_first": [],
+    "blob_shape_by_class": {
+     "cond": {
+      "[0, 0, 0] ptr+28": 111,
+      "[0, 1, 0] ptr+32": 68,
+      "[0, 0, 1] ptr+36": 41,
+      "[0, 0, 3] ptr+52": 32,
+      "[0, 0, 2] ptr+44": 23,
+      "[0, 0, 6] ptr+76": 17,
+      "[0, 0, 4] ptr+60": 14,
+      "[0, 0, 5] ptr+68": 10
+     },
+     "expr": {
+      "[0, 0, 0] ptr+28": 264,
+      "[0, 1, 0] ptr+32": 5,
+      "[0, 0, 2] ptr+44": 2,
+      "[0, 0, 4] ptr+60": 1
+     }
+    }
+   }
+  },
+  "x360-nhl12": {
+   "pbp_eng": {
+    "ctx_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\context\\pbp_eng_contexts.bin",
+    "ctx_sha256": "dea6cc1cf813bba8e5095abda249c41561fd4b33e73b3bd8d07642d89bf02c48",
+    "gas_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\context\\pbp_eng_contextgasscript.gas",
+    "gas_sha256": "8b9e17d5d0b91c3466dc31375027b8c1bfa474213434b7535958f987c5f2b7aa",
+    "records": 3339,
+    "gas_blobs": 1975,
+    "gas_empty_blobs": 0,
+    "gas_id_words": {
+     "distinct": 1975,
+     "min": 5,
+     "max": 2505,
+     "injective": true,
+     "sequential": false,
+     "order_inversions": 999
+    },
+    "conditions": {
+     "distinct_ids": 1758,
+     "references": 13099,
+     "resolved_ids": 1758,
+     "resolved_refs": 13099,
+     "unresolved": []
+    },
+    "expressions": {
+     "distinct_ids": 158,
+     "references": 2638,
+     "resolved_ids": 158,
+     "resolved_refs": 2638,
+     "unresolved": []
+    },
+    "ids_shared_cond_expr": 0,
+    "blobs_unreferenced": 59,
+    "blobs_unreferenced_ordinals_first": [
+     16,
+     49,
+     91,
+     101,
+     129,
+     169,
+     211,
+     274,
+     276,
+     367,
+     397,
+     403,
+     433,
+     441,
+     466,
+     591,
+     594,
+     606,
+     609,
+     617,
+     620,
+     719,
+     796,
+     817,
+     825,
+     838,
+     844,
+     857,
+     868,
+     891,
+     953,
+     958,
+     969,
+     1007,
+     1016,
+     1047,
+     1049,
+     1074,
+     1077,
+     1168
+    ],
+    "blob_shape_by_class": {
+     "cond": {
+      "[0, 1, 0] ptr+32": 637,
+      "[0, 0, 0] ptr+28": 146,
+      "[0, 0, 1] ptr+36": 134,
+      "[0, 0, 4] ptr+60": 99,
+      "[0, 0, 3] ptr+52": 98,
+      "[0, 0, 2] ptr+44": 78,
+      "[0, 1, 1] ptr+40": 63,
+      "[0, 2, 0] ptr+36": 62
+     },
+     "expr": {
+      "[0, 0, 4] ptr+60": 28,
+      "[0, 1, 1] ptr+40": 20,
+      "[0, 0, 1] ptr+36": 18,
+      "[0, 0, 6] ptr+76": 17,
+      "[0, 0, 3] ptr+52": 15,
+      "[0, 0, 0] ptr+28": 9,
+      "[0, 0, 8] ptr+92": 9,
+      "[0, 0, 5] ptr+68": 7
+     },
+     "unreferenced": {
+      "[0, 0, 0] ptr+28": 34,
+      "[0, 2, 3] ptr+60": 16,
+      "[0, 4, 3] ptr+68": 5,
+      "[0, 0, 6] ptr+76": 4
+     }
+    }
+   },
+   "crowds": {
+    "ctx_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\context\\crowds_contexts.bin",
+    "ctx_sha256": "f8f01b850c7efd17b20d5cdb75ff41b89a67010e06f47226c6e78e34c97958a2",
+    "gas_file": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\context\\crowds_contextgasscript.gas",
+    "gas_sha256": "b34029df65995b2b47d56187c78a57f9d9440562f3b71a8e604609fec57bfc0a",
+    "records": 1164,
+    "gas_blobs": 586,
+    "gas_empty_blobs": 0,
+    "gas_id_words": {
+     "distinct": 586,
+     "min": 1,
+     "max": 1922,
+     "injective": true,
+     "sequential": false,
+     "order_inversions": 305
+    },
+    "conditions": {
+     "distinct_ids": 316,
+     "references": 5113,
+     "resolved_ids": 316,
+     "resolved_refs": 5113,
+     "unresolved": []
+    },
+    "expressions": {
+     "distinct_ids": 270,
+     "references": 1020,
+     "resolved_ids": 270,
+     "resolved_refs": 1020,
+     "unresolved": []
+    },
+    "ids_shared_cond_expr": 0,
+    "blobs_unreferenced": 0,
+    "blobs_unreferenced_ordinals_first": [],
+    "blob_shape_by_class": {
+     "cond": {
+      "[0, 0, 0] ptr+28": 111,
+      "[0, 1, 0] ptr+32": 68,
+      "[0, 0, 1] ptr+36": 41,
+      "[0, 0, 3] ptr+52": 32,
+      "[0, 0, 2] ptr+44": 23,
+      "[0, 0, 6] ptr+76": 17,
+      "[0, 0, 4] ptr+60": 14,
+      "[0, 0, 5] ptr+68": 10
+     },
+     "expr": {
+      "[0, 0, 0] ptr+28": 262,
+      "[0, 1, 0] ptr+32": 5,
+      "[0, 0, 2] ptr+44": 2,
+      "[0, 0, 4] ptr+60": 1
+     }
+    }
+   }
+  }
+ }
+}

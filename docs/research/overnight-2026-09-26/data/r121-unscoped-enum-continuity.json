@@ -1,0 +1,6226 @@
+{
+ "note": "R121 - continuity of the remaining title-free (unscoped) player enums in defs/enums, on the R120 matching (K1 = name + calendar birth\ndate; same pairs): eye colour (`ubPc.eyecolorcode`), skin colour (`ubPc.skincolor`), skater style (`dSvy` p_style / playerstyle) and goalie style\n(`mHuy` g_style / playerstyle), joined to the bio row by game_id. Per source: metadata and value distribution; per pair: share unchanged and\nsystematic code moves (a code whose players mostly carry another code on the next title). Continuity only - no title-owned labels were\nfound for these fields; a systematic move flags a possible renumbering, a stable map is supporting evidence, neither is proof.\nDeterminism (corrected 2026-09-27): match keys are sorted and every ranking breaks count ties by code order.\nUsage: python r121_unscoped_enum_continuity.py <out.json>\n",
+ "sources": {
+  "xbox360-nhl07": {
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "fields": {
+    "eye_colour": null,
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "10",
+     "values": [
+      [
+       1,
+       796
+      ],
+      [
+       2,
+       909
+      ],
+      [
+       3,
+       471
+      ],
+      [
+       4,
+       31
+      ],
+      [
+       5,
+       28
+      ],
+      [
+       6,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       8,
+       5
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.p_style",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       1,
+       658
+      ],
+      [
+       2,
+       57
+      ],
+      [
+       3,
+       666
+      ],
+      [
+       4,
+       295
+      ],
+      [
+       5,
+       249
+      ],
+      [
+       6,
+       68
+      ],
+      [
+       7,
+       22
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.g_style",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       43
+      ],
+      [
+       1,
+       84
+      ],
+      [
+       2,
+       108
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl08": {
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "6",
+     "values": [
+      [
+       0,
+       1174
+      ],
+      [
+       1,
+       220
+      ],
+      [
+       2,
+       1148
+      ],
+      [
+       3,
+       174
+      ],
+      [
+       4,
+       169
+      ],
+      [
+       5,
+       71
+      ],
+      [
+       6,
+       6
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "10",
+     "values": [
+      [
+       1,
+       978
+      ],
+      [
+       2,
+       966
+      ],
+      [
+       3,
+       683
+      ],
+      [
+       4,
+       294
+      ],
+      [
+       6,
+       27
+      ],
+      [
+       9,
+       10
+      ],
+      [
+       10,
+       4
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.p_style",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       1,
+       918
+      ],
+      [
+       2,
+       123
+      ],
+      [
+       3,
+       1004
+      ],
+      [
+       4,
+       256
+      ],
+      [
+       5,
+       199
+      ],
+      [
+       6,
+       110
+      ],
+      [
+       7,
+       37
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.g_style",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       33
+      ],
+      [
+       1,
+       158
+      ],
+      [
+       2,
+       124
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl09": {
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       1356
+      ],
+      [
+       1,
+       220
+      ],
+      [
+       2,
+       1888
+      ],
+      [
+       3,
+       179
+      ],
+      [
+       4,
+       205
+      ],
+      [
+       5,
+       118
+      ],
+      [
+       6,
+       2
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       1265
+      ],
+      [
+       2,
+       1246
+      ],
+      [
+       3,
+       969
+      ],
+      [
+       4,
+       435
+      ],
+      [
+       6,
+       35
+      ],
+      [
+       9,
+       14
+      ],
+      [
+       10,
+       4
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.p_style",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       1,
+       1210
+      ],
+      [
+       2,
+       194
+      ],
+      [
+       3,
+       1306
+      ],
+      [
+       4,
+       311
+      ],
+      [
+       5,
+       269
+      ],
+      [
+       6,
+       205
+      ],
+      [
+       7,
+       54
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.g_style",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       33
+      ],
+      [
+       1,
+       200
+      ],
+      [
+       2,
+       182
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl10": {
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       1310
+      ],
+      [
+       1,
+       207
+      ],
+      [
+       2,
+       1974
+      ],
+      [
+       3,
+       160
+      ],
+      [
+       4,
+       188
+      ],
+      [
+       5,
+       91
+      ],
+      [
+       6,
+       3
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       1388
+      ],
+      [
+       2,
+       1235
+      ],
+      [
+       3,
+       890
+      ],
+      [
+       4,
+       365
+      ],
+      [
+       6,
+       37
+      ],
+      [
+       9,
+       15
+      ],
+      [
+       10,
+       3
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.p_style",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       1089
+      ],
+      [
+       2,
+       244
+      ],
+      [
+       3,
+       22
+      ],
+      [
+       4,
+       1070
+      ],
+      [
+       5,
+       411
+      ],
+      [
+       6,
+       303
+      ],
+      [
+       7,
+       216
+      ],
+      [
+       8,
+       64
+      ],
+      [
+       9,
+       80
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.g_style",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       33
+      ],
+      [
+       1,
+       188
+      ],
+      [
+       2,
+       213
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl11": {
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       1077
+      ],
+      [
+       1,
+       182
+      ],
+      [
+       2,
+       3661
+      ],
+      [
+       3,
+       141
+      ],
+      [
+       4,
+       166
+      ],
+      [
+       5,
+       80
+      ],
+      [
+       6,
+       3
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2364
+      ],
+      [
+       2,
+       1422
+      ],
+      [
+       3,
+       1107
+      ],
+      [
+       4,
+       344
+      ],
+      [
+       6,
+       51
+      ],
+      [
+       9,
+       19
+      ],
+      [
+       10,
+       3
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.p_style",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       978
+      ],
+      [
+       2,
+       305
+      ],
+      [
+       3,
+       80
+      ],
+      [
+       4,
+       425
+      ],
+      [
+       5,
+       718
+      ],
+      [
+       6,
+       602
+      ],
+      [
+       7,
+       424
+      ],
+      [
+       8,
+       321
+      ],
+      [
+       9,
+       785
+      ],
+      [
+       10,
+       122
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.g_style",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       31
+      ],
+      [
+       1,
+       257
+      ],
+      [
+       2,
+       262
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl12": {
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       1017
+      ],
+      [
+       1,
+       181
+      ],
+      [
+       2,
+       3581
+      ],
+      [
+       3,
+       175
+      ],
+      [
+       4,
+       264
+      ],
+      [
+       5,
+       175
+      ],
+      [
+       6,
+       2
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2356
+      ],
+      [
+       2,
+       1422
+      ],
+      [
+       3,
+       1189
+      ],
+      [
+       4,
+       347
+      ],
+      [
+       6,
+       61
+      ],
+      [
+       9,
+       16
+      ],
+      [
+       10,
+       4
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.p_style",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       987
+      ],
+      [
+       2,
+       261
+      ],
+      [
+       3,
+       68
+      ],
+      [
+       4,
+       501
+      ],
+      [
+       5,
+       671
+      ],
+      [
+       6,
+       573
+      ],
+      [
+       7,
+       423
+      ],
+      [
+       8,
+       339
+      ],
+      [
+       9,
+       905
+      ],
+      [
+       10,
+       93
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.g_style",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       20
+      ],
+      [
+       1,
+       387
+      ],
+      [
+       2,
+       167
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl13": {
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       971
+      ],
+      [
+       1,
+       1726
+      ],
+      [
+       2,
+       1129
+      ],
+      [
+       3,
+       995
+      ],
+      [
+       4,
+       291
+      ],
+      [
+       5,
+       218
+      ],
+      [
+       6,
+       82
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2415
+      ],
+      [
+       2,
+       1378
+      ],
+      [
+       3,
+       1220
+      ],
+      [
+       4,
+       310
+      ],
+      [
+       6,
+       63
+      ],
+      [
+       9,
+       16
+      ],
+      [
+       10,
+       10
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.p_style",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       980
+      ],
+      [
+       2,
+       282
+      ],
+      [
+       3,
+       56
+      ],
+      [
+       4,
+       521
+      ],
+      [
+       5,
+       600
+      ],
+      [
+       6,
+       635
+      ],
+      [
+       7,
+       462
+      ],
+      [
+       8,
+       324
+      ],
+      [
+       9,
+       958
+      ],
+      [
+       10,
+       57
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.g_style",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       19
+      ],
+      [
+       1,
+       363
+      ],
+      [
+       2,
+       155
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl14": {
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       958
+      ],
+      [
+       1,
+       1681
+      ],
+      [
+       2,
+       1123
+      ],
+      [
+       3,
+       1024
+      ],
+      [
+       4,
+       276
+      ],
+      [
+       5,
+       218
+      ],
+      [
+       6,
+       94
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2458
+      ],
+      [
+       2,
+       1344
+      ],
+      [
+       3,
+       1190
+      ],
+      [
+       4,
+       278
+      ],
+      [
+       6,
+       70
+      ],
+      [
+       9,
+       23
+      ],
+      [
+       10,
+       11
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       982
+      ],
+      [
+       2,
+       279
+      ],
+      [
+       3,
+       45
+      ],
+      [
+       4,
+       531
+      ],
+      [
+       5,
+       528
+      ],
+      [
+       6,
+       632
+      ],
+      [
+       7,
+       466
+      ],
+      [
+       8,
+       324
+      ],
+      [
+       9,
+       1016
+      ],
+      [
+       10,
+       48
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       17
+      ],
+      [
+       1,
+       369
+      ],
+      [
+       2,
+       137
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhl15": {
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       950
+      ],
+      [
+       1,
+       1610
+      ],
+      [
+       2,
+       1334
+      ],
+      [
+       3,
+       1033
+      ],
+      [
+       4,
+       283
+      ],
+      [
+       5,
+       223
+      ],
+      [
+       6,
+       101
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2421
+      ],
+      [
+       2,
+       1419
+      ],
+      [
+       3,
+       1243
+      ],
+      [
+       4,
+       320
+      ],
+      [
+       6,
+       93
+      ],
+      [
+       9,
+       29
+      ],
+      [
+       10,
+       9
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       907
+      ],
+      [
+       2,
+       260
+      ],
+      [
+       3,
+       44
+      ],
+      [
+       4,
+       674
+      ],
+      [
+       5,
+       452
+      ],
+      [
+       6,
+       604
+      ],
+      [
+       7,
+       476
+      ],
+      [
+       8,
+       344
+      ],
+      [
+       9,
+       1170
+      ],
+      [
+       10,
+       47
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       14
+      ],
+      [
+       1,
+       388
+      ],
+      [
+       2,
+       154
+      ]
+     ]
+    }
+   }
+  },
+  "xbox360-nhllegacy": {
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       668
+      ],
+      [
+       1,
+       122
+      ],
+      [
+       2,
+       4347
+      ],
+      [
+       3,
+       123
+      ],
+      [
+       4,
+       187
+      ],
+      [
+       5,
+       185
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2556
+      ],
+      [
+       2,
+       1594
+      ],
+      [
+       3,
+       1082
+      ],
+      [
+       4,
+       235
+      ],
+      [
+       5,
+       4
+      ],
+      [
+       6,
+       120
+      ],
+      [
+       7,
+       12
+      ],
+      [
+       8,
+       4
+      ],
+      [
+       9,
+       12
+      ],
+      [
+       10,
+       13
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       747
+      ],
+      [
+       2,
+       241
+      ],
+      [
+       3,
+       38
+      ],
+      [
+       4,
+       734
+      ],
+      [
+       5,
+       633
+      ],
+      [
+       6,
+       539
+      ],
+      [
+       7,
+       477
+      ],
+      [
+       8,
+       290
+      ],
+      [
+       9,
+       1322
+      ],
+      [
+       10,
+       45
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       9
+      ],
+      [
+       1,
+       413
+      ],
+      [
+       2,
+       144
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl15": {
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       956
+      ],
+      [
+       1,
+       1621
+      ],
+      [
+       2,
+       1335
+      ],
+      [
+       3,
+       1034
+      ],
+      [
+       4,
+       284
+      ],
+      [
+       5,
+       224
+      ],
+      [
+       6,
+       101
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2431
+      ],
+      [
+       2,
+       1418
+      ],
+      [
+       3,
+       1256
+      ],
+      [
+       4,
+       319
+      ],
+      [
+       6,
+       93
+      ],
+      [
+       9,
+       29
+      ],
+      [
+       10,
+       9
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       940
+      ],
+      [
+       2,
+       245
+      ],
+      [
+       3,
+       46
+      ],
+      [
+       4,
+       667
+      ],
+      [
+       5,
+       501
+      ],
+      [
+       6,
+       580
+      ],
+      [
+       7,
+       475
+      ],
+      [
+       8,
+       329
+      ],
+      [
+       9,
+       1163
+      ],
+      [
+       10,
+       50
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       14
+      ],
+      [
+       1,
+       394
+      ],
+      [
+       2,
+       151
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl16": {
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       668
+      ],
+      [
+       1,
+       123
+      ],
+      [
+       2,
+       4347
+      ],
+      [
+       3,
+       123
+      ],
+      [
+       4,
+       187
+      ],
+      [
+       5,
+       184
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2557
+      ],
+      [
+       2,
+       1594
+      ],
+      [
+       3,
+       1081
+      ],
+      [
+       4,
+       235
+      ],
+      [
+       5,
+       4
+      ],
+      [
+       6,
+       120
+      ],
+      [
+       7,
+       12
+      ],
+      [
+       8,
+       4
+      ],
+      [
+       9,
+       12
+      ],
+      [
+       10,
+       13
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       747
+      ],
+      [
+       2,
+       241
+      ],
+      [
+       3,
+       38
+      ],
+      [
+       4,
+       734
+      ],
+      [
+       5,
+       633
+      ],
+      [
+       6,
+       539
+      ],
+      [
+       7,
+       477
+      ],
+      [
+       8,
+       290
+      ],
+      [
+       9,
+       1322
+      ],
+      [
+       10,
+       45
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       9
+      ],
+      [
+       1,
+       413
+      ],
+      [
+       2,
+       144
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl17": {
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 5,
+     "lo": "0",
+     "hi": "31",
+     "values": [
+      [
+       0,
+       4059
+      ],
+      [
+       1,
+       115
+      ],
+      [
+       2,
+       1489
+      ],
+      [
+       3,
+       117
+      ],
+      [
+       4,
+       168
+      ],
+      [
+       5,
+       180
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       3228
+      ],
+      [
+       2,
+       1721
+      ],
+      [
+       3,
+       863
+      ],
+      [
+       4,
+       168
+      ],
+      [
+       5,
+       4
+      ],
+      [
+       6,
+       105
+      ],
+      [
+       7,
+       8
+      ],
+      [
+       8,
+       8
+      ],
+      [
+       9,
+       11
+      ],
+      [
+       10,
+       12
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       879
+      ],
+      [
+       2,
+       269
+      ],
+      [
+       3,
+       45
+      ],
+      [
+       4,
+       798
+      ],
+      [
+       5,
+       504
+      ],
+      [
+       6,
+       566
+      ],
+      [
+       7,
+       525
+      ],
+      [
+       8,
+       304
+      ],
+      [
+       9,
+       1594
+      ],
+      [
+       10,
+       43
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       12
+      ],
+      [
+       1,
+       540
+      ],
+      [
+       2,
+       49
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl18": {
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 5,
+     "lo": "0",
+     "hi": "31",
+     "values": [
+      [
+       0,
+       5164
+      ],
+      [
+       1,
+       139
+      ],
+      [
+       2,
+       1444
+      ],
+      [
+       3,
+       143
+      ],
+      [
+       4,
+       173
+      ],
+      [
+       5,
+       173
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       3992
+      ],
+      [
+       2,
+       2049
+      ],
+      [
+       3,
+       873
+      ],
+      [
+       4,
+       159
+      ],
+      [
+       5,
+       5
+      ],
+      [
+       6,
+       118
+      ],
+      [
+       7,
+       7
+      ],
+      [
+       8,
+       11
+      ],
+      [
+       9,
+       10
+      ],
+      [
+       10,
+       12
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       907
+      ],
+      [
+       2,
+       286
+      ],
+      [
+       3,
+       40
+      ],
+      [
+       4,
+       1096
+      ],
+      [
+       5,
+       502
+      ],
+      [
+       6,
+       605
+      ],
+      [
+       7,
+       566
+      ],
+      [
+       8,
+       347
+      ],
+      [
+       9,
+       2140
+      ],
+      [
+       10,
+       33
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       14
+      ],
+      [
+       1,
+       592
+      ],
+      [
+       2,
+       108
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl19-base": {
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 5,
+     "lo": "0",
+     "hi": "31",
+     "values": [
+      [
+       0,
+       5346
+      ],
+      [
+       1,
+       113
+      ],
+      [
+       2,
+       1255
+      ],
+      [
+       3,
+       121
+      ],
+      [
+       4,
+       149
+      ],
+      [
+       5,
+       151
+      ],
+      [
+       6,
+       1
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       4019
+      ],
+      [
+       2,
+       2057
+      ],
+      [
+       3,
+       777
+      ],
+      [
+       4,
+       137
+      ],
+      [
+       5,
+       5
+      ],
+      [
+       6,
+       108
+      ],
+      [
+       7,
+       4
+      ],
+      [
+       8,
+       11
+      ],
+      [
+       9,
+       8
+      ],
+      [
+       10,
+       10
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       839
+      ],
+      [
+       2,
+       254
+      ],
+      [
+       3,
+       42
+      ],
+      [
+       4,
+       1166
+      ],
+      [
+       5,
+       412
+      ],
+      [
+       6,
+       539
+      ],
+      [
+       7,
+       541
+      ],
+      [
+       8,
+       320
+      ],
+      [
+       9,
+       2242
+      ],
+      [
+       10,
+       34
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       25
+      ],
+      [
+       1,
+       630
+      ],
+      [
+       2,
+       92
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl21": {
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       0,
+       461
+      ],
+      [
+       1,
+       215
+      ],
+      [
+       2,
+       6023
+      ],
+      [
+       3,
+       238
+      ],
+      [
+       4,
+       178
+      ],
+      [
+       5,
+       131
+      ],
+      [
+       6,
+       1
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       4066
+      ],
+      [
+       2,
+       2238
+      ],
+      [
+       3,
+       659
+      ],
+      [
+       4,
+       125
+      ],
+      [
+       5,
+       6
+      ],
+      [
+       6,
+       123
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       8,
+       14
+      ],
+      [
+       9,
+       8
+      ],
+      [
+       10,
+       5
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       698
+      ],
+      [
+       2,
+       234
+      ],
+      [
+       3,
+       19
+      ],
+      [
+       4,
+       1353
+      ],
+      [
+       5,
+       344
+      ],
+      [
+       6,
+       570
+      ],
+      [
+       7,
+       508
+      ],
+      [
+       8,
+       331
+      ],
+      [
+       9,
+       2403
+      ],
+      [
+       10,
+       38
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       38
+      ],
+      [
+       1,
+       617
+      ],
+      [
+       2,
+       94
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl20-real": {
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       0,
+       5864
+      ],
+      [
+       1,
+       117
+      ],
+      [
+       2,
+       1173
+      ],
+      [
+       3,
+       115
+      ],
+      [
+       4,
+       160
+      ],
+      [
+       5,
+       146
+      ],
+      [
+       6,
+       1
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       4249
+      ],
+      [
+       2,
+       2251
+      ],
+      [
+       3,
+       786
+      ],
+      [
+       4,
+       136
+      ],
+      [
+       5,
+       4
+      ],
+      [
+       6,
+       121
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       8,
+       12
+      ],
+      [
+       9,
+       8
+      ],
+      [
+       10,
+       6
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       818
+      ],
+      [
+       2,
+       245
+      ],
+      [
+       3,
+       30
+      ],
+      [
+       4,
+       1320
+      ],
+      [
+       5,
+       441
+      ],
+      [
+       6,
+       592
+      ],
+      [
+       7,
+       547
+      ],
+      [
+       8,
+       331
+      ],
+      [
+       9,
+       2439
+      ],
+      [
+       10,
+       40
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       35
+      ],
+      [
+       1,
+       628
+      ],
+      [
+       2,
+       110
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl19-patch56": {
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 5,
+     "lo": "0",
+     "hi": "31",
+     "values": [
+      [
+       0,
+       6435
+      ],
+      [
+       1,
+       118
+      ],
+      [
+       2,
+       1290
+      ],
+      [
+       3,
+       119
+      ],
+      [
+       4,
+       157
+      ],
+      [
+       5,
+       159
+      ],
+      [
+       6,
+       1
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       4688
+      ],
+      [
+       2,
+       2403
+      ],
+      [
+       3,
+       868
+      ],
+      [
+       4,
+       153
+      ],
+      [
+       5,
+       5
+      ],
+      [
+       6,
+       127
+      ],
+      [
+       7,
+       4
+      ],
+      [
+       8,
+       13
+      ],
+      [
+       9,
+       9
+      ],
+      [
+       10,
+       9
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       898
+      ],
+      [
+       2,
+       290
+      ],
+      [
+       3,
+       37
+      ],
+      [
+       4,
+       1449
+      ],
+      [
+       5,
+       439
+      ],
+      [
+       6,
+       623
+      ],
+      [
+       7,
+       593
+      ],
+      [
+       8,
+       373
+      ],
+      [
+       9,
+       2695
+      ],
+      [
+       10,
+       33
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       27
+      ],
+      [
+       1,
+       705
+      ],
+      [
+       2,
+       117
+      ]
+     ]
+    }
+   }
+  },
+  "ps4-nhl15-patch00": {
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "fields": {
+    "eye_colour": {
+     "field": "exhibitionplayerbiotable.eyecolorcode",
+     "depth": 3,
+     "lo": "0",
+     "hi": "7",
+     "values": [
+      [
+       0,
+       956
+      ],
+      [
+       1,
+       1621
+      ],
+      [
+       2,
+       1335
+      ],
+      [
+       3,
+       1034
+      ],
+      [
+       4,
+       284
+      ],
+      [
+       5,
+       224
+      ],
+      [
+       6,
+       101
+      ]
+     ]
+    },
+    "skin_colour": {
+     "field": "exhibitionplayerbiotable.skincolor",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       2431
+      ],
+      [
+       2,
+       1418
+      ],
+      [
+       3,
+       1256
+      ],
+      [
+       4,
+       319
+      ],
+      [
+       6,
+       93
+      ],
+      [
+       9,
+       29
+      ],
+      [
+       10,
+       9
+      ]
+     ]
+    },
+    "skater_style": {
+     "field": "exhibitionskaterai.playerstyle",
+     "depth": 4,
+     "lo": "0",
+     "hi": "15",
+     "values": [
+      [
+       1,
+       940
+      ],
+      [
+       2,
+       245
+      ],
+      [
+       3,
+       46
+      ],
+      [
+       4,
+       667
+      ],
+      [
+       5,
+       501
+      ],
+      [
+       6,
+       580
+      ],
+      [
+       7,
+       475
+      ],
+      [
+       8,
+       329
+      ],
+      [
+       9,
+       1163
+      ],
+      [
+       10,
+       50
+      ]
+     ]
+    },
+    "goalie_style": {
+     "field": "exhibitiongoalieai.playerstyle",
+     "depth": 2,
+     "lo": "0",
+     "hi": "3",
+     "values": [
+      [
+       0,
+       14
+      ],
+      [
+       1,
+       394
+      ],
+      [
+       2,
+       151
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "pairs": [
+  {
+   "kind": "same-season",
+   "pair": [
+    "xbox360-nhl15",
+    "ps4-nhl15"
+   ],
+   "matched": 5347,
+   "eye_colour": {
+    "n": 5347,
+    "share_equal": 0.9996,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       3,
+       0
+      ],
+      1
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 5347,
+    "share_equal": 0.9996,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       4,
+       3
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 4823,
+    "share_equal": 0.9459,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      44
+     ],
+     [
+      [
+       9,
+       5
+      ],
+      34
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      33
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      20
+     ],
+     [
+      [
+       8,
+       5
+      ],
+      19
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 524,
+    "share_equal": 0.9924,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      4
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "same-season",
+   "pair": [
+    "xbox360-nhllegacy",
+    "ps4-nhl16"
+   ],
+   "matched": 5452,
+   "eye_colour": {
+    "n": 5452,
+    "share_equal": 0.9998,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       5,
+       1
+      ],
+      1
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 5452,
+    "share_equal": 0.9998,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       3,
+       1
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 4916,
+    "share_equal": 1.0,
+    "systematic_code_moves": [],
+    "top_changes": []
+   },
+   "goalie_style": {
+    "n": 536,
+    "share_equal": 1.0,
+    "systematic_code_moves": [],
+    "top_changes": []
+   }
+  },
+  {
+   "kind": "same-title variant",
+   "pair": [
+    "ps4-nhl15",
+    "ps4-nhl15-patch00"
+   ],
+   "matched": 5375,
+   "eye_colour": {
+    "n": 5375,
+    "share_equal": 1.0,
+    "systematic_code_moves": [],
+    "top_changes": []
+   },
+   "skin_colour": {
+    "n": 5375,
+    "share_equal": 1.0,
+    "systematic_code_moves": [],
+    "top_changes": []
+   },
+   "skater_style": {
+    "n": 4846,
+    "share_equal": 1.0,
+    "systematic_code_moves": [],
+    "top_changes": []
+   },
+   "goalie_style": {
+    "n": 529,
+    "share_equal": 1.0,
+    "systematic_code_moves": [],
+    "top_changes": []
+   }
+  },
+  {
+   "kind": "same-title variant",
+   "pair": [
+    "ps4-nhl19-base",
+    "ps4-nhl19-patch56"
+   ],
+   "matched": 6843,
+   "eye_colour": {
+    "n": 6843,
+    "share_equal": 0.9994,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       0,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       0,
+       4
+      ],
+      1
+     ],
+     [
+      [
+       3,
+       4
+      ],
+      1
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 6843,
+    "share_equal": 0.9993,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       6,
+       8
+      ],
+      1
+     ],
+     [
+      [
+       8,
+       9
+      ],
+      1
+     ],
+     [
+      [
+       10,
+       8
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 6137,
+    "share_equal": 0.9713,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       9,
+       6
+      ],
+      17
+     ],
+     [
+      [
+       4,
+       1
+      ],
+      16
+     ],
+     [
+      [
+       4,
+       2
+      ],
+      15
+     ],
+     [
+      [
+       9,
+       7
+      ],
+      15
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      14
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 706,
+    "share_equal": 0.9547,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      21
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      5
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      3
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl07",
+    "xbox360-nhl08"
+   ],
+   "matched": 1938,
+   "eye_colour": null,
+   "skin_colour": {
+    "n": 1938,
+    "share_equal": 0.4618,
+    "systematic_code_moves": [
+     {
+      "code_a": 3,
+      "players": 434,
+      "maps_to": [
+       [
+        1,
+        134
+       ],
+       [
+        2,
+        131
+       ],
+       [
+        3,
+        114
+       ]
+      ]
+     },
+     {
+      "code_a": 5,
+      "players": 23,
+      "maps_to": [
+       [
+        3,
+        8
+       ],
+       [
+        4,
+        5
+       ],
+       [
+        1,
+        4
+       ]
+      ]
+     },
+     {
+      "code_a": 8,
+      "players": 5,
+      "maps_to": [
+       [
+        6,
+        3
+       ],
+       [
+        3,
+        1
+       ],
+       [
+        9,
+        1
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      192
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      149
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      134
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      131
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      119
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 1741,
+    "share_equal": 0.861,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       5,
+       3
+      ],
+      52
+     ],
+     [
+      [
+       4,
+       3
+      ],
+      48
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      34
+     ],
+     [
+      [
+       3,
+       5
+      ],
+      19
+     ],
+     [
+      [
+       5,
+       4
+      ],
+      16
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 197,
+    "share_equal": 0.9137,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      8
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      5
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      2
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl08",
+    "xbox360-nhl09"
+   ],
+   "matched": 2233,
+   "eye_colour": {
+    "n": 2233,
+    "share_equal": 0.9521,
+    "systematic_code_moves": [
+     {
+      "code_a": 6,
+      "players": 5,
+      "maps_to": [
+       [
+        6,
+        2
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        1
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       0,
+       2
+      ],
+      77
+     ],
+     [
+      [
+       0,
+       5
+      ],
+      9
+     ],
+     [
+      [
+       0,
+       4
+      ],
+      8
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      4
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      4
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 2233,
+    "share_equal": 0.966,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      18
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      13
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      10
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      8
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      7
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 2020,
+    "share_equal": 0.8812,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      35
+     ],
+     [
+      [
+       3,
+       5
+      ],
+      35
+     ],
+     [
+      [
+       3,
+       4
+      ],
+      29
+     ],
+     [
+      [
+       3,
+       6
+      ],
+      24
+     ],
+     [
+      [
+       4,
+       5
+      ],
+      14
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 213,
+    "share_equal": 0.9953,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       0,
+       1
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl09",
+    "xbox360-nhl10"
+   ],
+   "matched": 2816,
+   "eye_colour": {
+    "n": 2816,
+    "share_equal": 0.995,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       0,
+       2
+      ],
+      13
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      1
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 2816,
+    "share_equal": 0.995,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      4
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      3
+     ],
+     [
+      [
+       1,
+       3
+      ],
+      2
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      2
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      2
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 2531,
+    "share_equal": 0.3449,
+    "systematic_code_moves": [
+     {
+      "code_a": 3,
+      "players": 913,
+      "maps_to": [
+       [
+        4,
+        781
+       ],
+       [
+        9,
+        58
+       ],
+       [
+        5,
+        30
+       ]
+      ]
+     },
+     {
+      "code_a": 4,
+      "players": 256,
+      "maps_to": [
+       [
+        5,
+        240
+       ],
+       [
+        4,
+        7
+       ],
+       [
+        7,
+        4
+       ]
+      ]
+     },
+     {
+      "code_a": 5,
+      "players": 224,
+      "maps_to": [
+       [
+        6,
+        212
+       ],
+       [
+        5,
+        5
+       ],
+       [
+        4,
+        4
+       ]
+      ]
+     },
+     {
+      "code_a": 6,
+      "players": 168,
+      "maps_to": [
+       [
+        7,
+        157
+       ],
+       [
+        4,
+        6
+       ],
+       [
+        6,
+        2
+       ]
+      ]
+     },
+     {
+      "code_a": 7,
+      "players": 46,
+      "maps_to": [
+       [
+        8,
+        44
+       ],
+       [
+        6,
+        2
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       3,
+       4
+      ],
+      781
+     ],
+     [
+      [
+       4,
+       5
+      ],
+      240
+     ],
+     [
+      [
+       5,
+       6
+      ],
+      212
+     ],
+     [
+      [
+       6,
+       7
+      ],
+      157
+     ],
+     [
+      [
+       3,
+       9
+      ],
+      58
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 285,
+    "share_equal": 0.9965,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl10",
+    "xbox360-nhl11"
+   ],
+   "matched": 3037,
+   "eye_colour": {
+    "n": 3037,
+    "share_equal": 0.9934,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       0,
+       2
+      ],
+      19
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      1
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 3037,
+    "share_equal": 0.9361,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       3
+      ],
+      40
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      38
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      26
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      19
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      19
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 2735,
+    "share_equal": 0.2523,
+    "systematic_code_moves": [
+     {
+      "code_a": 4,
+      "players": 860,
+      "maps_to": [
+       [
+        5,
+        401
+       ],
+       [
+        9,
+        210
+       ],
+       [
+        6,
+        87
+       ]
+      ]
+     },
+     {
+      "code_a": 5,
+      "players": 343,
+      "maps_to": [
+       [
+        6,
+        199
+       ],
+       [
+        9,
+        59
+       ],
+       [
+        7,
+        43
+       ]
+      ]
+     },
+     {
+      "code_a": 6,
+      "players": 249,
+      "maps_to": [
+       [
+        7,
+        113
+       ],
+       [
+        9,
+        58
+       ],
+       [
+        6,
+        39
+       ]
+      ]
+     },
+     {
+      "code_a": 7,
+      "players": 174,
+      "maps_to": [
+       [
+        8,
+        86
+       ],
+       [
+        9,
+        44
+       ],
+       [
+        6,
+        17
+       ]
+      ]
+     },
+     {
+      "code_a": 8,
+      "players": 50,
+      "maps_to": [
+       [
+        7,
+        28
+       ],
+       [
+        6,
+        15
+       ],
+       [
+        9,
+        5
+       ]
+      ]
+     },
+     {
+      "code_a": 9,
+      "players": 74,
+      "maps_to": [
+       [
+        10,
+        52
+       ],
+       [
+        5,
+        21
+       ],
+       [
+        8,
+        1
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       4,
+       5
+      ],
+      401
+     ],
+     [
+      [
+       4,
+       9
+      ],
+      210
+     ],
+     [
+      [
+       5,
+       6
+      ],
+      199
+     ],
+     [
+      [
+       1,
+       4
+      ],
+      160
+     ],
+     [
+      [
+       6,
+       7
+      ],
+      113
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 302,
+    "share_equal": 0.7517,
+    "systematic_code_moves": [
+     {
+      "code_a": 0,
+      "players": 24,
+      "maps_to": [
+       [
+        0,
+        11
+       ],
+       [
+        1,
+        8
+       ],
+       [
+        2,
+        5
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      40
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      10
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      8
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      7
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      5
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl11",
+    "xbox360-nhl12"
+   ],
+   "matched": 3793,
+   "eye_colour": {
+    "n": 3793,
+    "share_equal": 0.9678,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       5
+      ],
+      45
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      37
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      25
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      9
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      5
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 3793,
+    "share_equal": 0.913,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      70
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       3
+      ],
+      43
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      31
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      26
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 3410,
+    "share_equal": 0.8273,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       4
+      ],
+      55
+     ],
+     [
+      [
+       1,
+       4
+      ],
+      48
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      48
+     ],
+     [
+      [
+       4,
+       1
+      ],
+      46
+     ],
+     [
+      [
+       9,
+       5
+      ],
+      33
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 383,
+    "share_equal": 0.7389,
+    "systematic_code_moves": [
+     {
+      "code_a": 0,
+      "players": 16,
+      "maps_to": [
+       [
+        0,
+        7
+       ],
+       [
+        1,
+        7
+       ],
+       [
+        2,
+        2
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      86
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      7
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      3
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      2
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl12",
+    "xbox360-nhl13"
+   ],
+   "matched": 3983,
+   "eye_colour": {
+    "n": 3983,
+    "share_equal": 0.2488,
+    "systematic_code_moves": [
+     {
+      "code_a": 0,
+      "players": 790,
+      "maps_to": [
+       [
+        1,
+        215
+       ],
+       [
+        0,
+        197
+       ],
+       [
+        2,
+        162
+       ]
+      ]
+     },
+     {
+      "code_a": 1,
+      "players": 157,
+      "maps_to": [
+       [
+        1,
+        74
+       ],
+       [
+        0,
+        24
+       ],
+       [
+        2,
+        24
+       ]
+      ]
+     },
+     {
+      "code_a": 2,
+      "players": 2549,
+      "maps_to": [
+       [
+        1,
+        860
+       ],
+       [
+        2,
+        640
+       ],
+       [
+        3,
+        482
+       ]
+      ]
+     },
+     {
+      "code_a": 3,
+      "players": 147,
+      "maps_to": [
+       [
+        3,
+        42
+       ],
+       [
+        2,
+        32
+       ],
+       [
+        1,
+        30
+       ]
+      ]
+     },
+     {
+      "code_a": 4,
+      "players": 194,
+      "maps_to": [
+       [
+        1,
+        52
+       ],
+       [
+        3,
+        38
+       ],
+       [
+        2,
+        33
+       ]
+      ]
+     },
+     {
+      "code_a": 5,
+      "players": 144,
+      "maps_to": [
+       [
+        1,
+        43
+       ],
+       [
+        2,
+        29
+       ],
+       [
+        0,
+        24
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      860
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      482
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      287
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      215
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      162
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 3983,
+    "share_equal": 0.9947,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      6
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      5
+     ],
+     [
+      [
+       1,
+       3
+      ],
+      2
+     ],
+     [
+      [
+       4,
+       3
+      ],
+      2
+     ],
+     [
+      [
+       1,
+       4
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 3600,
+    "share_equal": 0.8908,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       5,
+       9
+      ],
+      46
+     ],
+     [
+      [
+       4,
+       1
+      ],
+      40
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      37
+     ],
+     [
+      [
+       9,
+       6
+      ],
+      34
+     ],
+     [
+      [
+       9,
+       5
+      ],
+      30
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 383,
+    "share_equal": 0.9608,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      7
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      4
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      3
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl13",
+    "xbox360-nhl14"
+   ],
+   "matched": 4249,
+   "eye_colour": {
+    "n": 4249,
+    "share_equal": 0.9925,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       3,
+       2
+      ],
+      9
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      5
+     ],
+     [
+      [
+       3,
+       0
+      ],
+      5
+     ],
+     [
+      [
+       1,
+       5
+      ],
+      4
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      3
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 4249,
+    "share_equal": 0.9969,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      3
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      3
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      2
+     ],
+     [
+      [
+       4,
+       1
+      ],
+      2
+     ],
+     [
+      [
+       1,
+       9
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 3858,
+    "share_equal": 0.9295,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      34
+     ],
+     [
+      [
+       1,
+       4
+      ],
+      21
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      19
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      19
+     ],
+     [
+      [
+       5,
+       9
+      ],
+      17
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 391,
+    "share_equal": 0.9744,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      5
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      3
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      2
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl14",
+    "xbox360-nhl15"
+   ],
+   "matched": 3821,
+   "eye_colour": {
+    "n": 3821,
+    "share_equal": 0.9691,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      15
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      12
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      11
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      8
+     ],
+     [
+      [
+       1,
+       3
+      ],
+      8
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 3821,
+    "share_equal": 0.9778,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      16
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      15
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      13
+     ],
+     [
+      [
+       1,
+       3
+      ],
+      9
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      7
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 3472,
+    "share_equal": 0.9228,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       6,
+       9
+      ],
+      26
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      23
+     ],
+     [
+      [
+       1,
+       4
+      ],
+      22
+     ],
+     [
+      [
+       4,
+       1
+      ],
+      20
+     ],
+     [
+      [
+       6,
+       7
+      ],
+      17
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 349,
+    "share_equal": 0.9456,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      13
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      5
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "xbox360-nhl15",
+    "xbox360-nhllegacy"
+   ],
+   "matched": 4056,
+   "eye_colour": {
+    "n": 4056,
+    "share_equal": 0.2747,
+    "systematic_code_moves": [
+     {
+      "code_a": 0,
+      "players": 557,
+      "maps_to": [
+       [
+        2,
+        306
+       ],
+       [
+        0,
+        165
+       ],
+       [
+        4,
+        26
+       ]
+      ]
+     },
+     {
+      "code_a": 1,
+      "players": 1224,
+      "maps_to": [
+       [
+        2,
+        910
+       ],
+       [
+        0,
+        146
+       ],
+       [
+        1,
+        55
+       ]
+      ]
+     },
+     {
+      "code_a": 3,
+      "players": 771,
+      "maps_to": [
+       [
+        2,
+        582
+       ],
+       [
+        0,
+        77
+       ],
+       [
+        4,
+        37
+       ]
+      ]
+     },
+     {
+      "code_a": 4,
+      "players": 202,
+      "maps_to": [
+       [
+        2,
+        144
+       ],
+       [
+        0,
+        25
+       ],
+       [
+        4,
+        14
+       ]
+      ]
+     },
+     {
+      "code_a": 5,
+      "players": 182,
+      "maps_to": [
+       [
+        2,
+        116
+       ],
+       [
+        5,
+        32
+       ],
+       [
+        0,
+        19
+       ]
+      ]
+     },
+     {
+      "code_a": 6,
+      "players": 75,
+      "maps_to": [
+       [
+        2,
+        62
+       ],
+       [
+        0,
+        5
+       ],
+       [
+        5,
+        5
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      910
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      582
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      306
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      146
+     ],
+     [
+      [
+       4,
+       2
+      ],
+      144
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 4056,
+    "share_equal": 0.8563,
+    "systematic_code_moves": [
+     {
+      "code_a": 9,
+      "players": 22,
+      "maps_to": [
+       [
+        9,
+        10
+       ],
+       [
+        6,
+        4
+       ],
+       [
+        8,
+        3
+       ]
+      ]
+     },
+     {
+      "code_a": 10,
+      "players": 8,
+      "maps_to": [
+       [
+        10,
+        3
+       ],
+       [
+        6,
+        2
+       ],
+       [
+        7,
+        1
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      111
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      109
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      89
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      52
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      43
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 3684,
+    "share_equal": 0.8852,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      64
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      61
+     ],
+     [
+      [
+       9,
+       5
+      ],
+      42
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      33
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      30
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 372,
+    "share_equal": 0.9704,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      9
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "ps4-nhl15",
+    "ps4-nhl16"
+   ],
+   "matched": 4070,
+   "eye_colour": {
+    "n": 4070,
+    "share_equal": 0.2749,
+    "systematic_code_moves": [
+     {
+      "code_a": 0,
+      "players": 562,
+      "maps_to": [
+       [
+        2,
+        308
+       ],
+       [
+        0,
+        168
+       ],
+       [
+        4,
+        26
+       ]
+      ]
+     },
+     {
+      "code_a": 1,
+      "players": 1230,
+      "maps_to": [
+       [
+        2,
+        914
+       ],
+       [
+        0,
+        146
+       ],
+       [
+        1,
+        56
+       ]
+      ]
+     },
+     {
+      "code_a": 3,
+      "players": 772,
+      "maps_to": [
+       [
+        2,
+        584
+       ],
+       [
+        0,
+        76
+       ],
+       [
+        4,
+        37
+       ]
+      ]
+     },
+     {
+      "code_a": 4,
+      "players": 203,
+      "maps_to": [
+       [
+        2,
+        144
+       ],
+       [
+        0,
+        26
+       ],
+       [
+        4,
+        14
+       ]
+      ]
+     },
+     {
+      "code_a": 5,
+      "players": 182,
+      "maps_to": [
+       [
+        2,
+        116
+       ],
+       [
+        5,
+        32
+       ],
+       [
+        0,
+        19
+       ]
+      ]
+     },
+     {
+      "code_a": 6,
+      "players": 75,
+      "maps_to": [
+       [
+        2,
+        62
+       ],
+       [
+        0,
+        5
+       ],
+       [
+        5,
+        5
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      914
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      584
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      308
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      146
+     ],
+     [
+      [
+       4,
+       2
+      ],
+      144
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 4070,
+    "share_equal": 0.857,
+    "systematic_code_moves": [
+     {
+      "code_a": 9,
+      "players": 22,
+      "maps_to": [
+       [
+        9,
+        10
+       ],
+       [
+        6,
+        4
+       ],
+       [
+        8,
+        3
+       ]
+      ]
+     },
+     {
+      "code_a": 10,
+      "players": 8,
+      "maps_to": [
+       [
+        10,
+        3
+       ],
+       [
+        6,
+        2
+       ],
+       [
+        7,
+        1
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      111
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      109
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      90
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      52
+     ],
+     [
+      [
+       2,
+       3
+      ],
+      43
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 3696,
+    "share_equal": 0.9345,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       6,
+       9
+      ],
+      37
+     ],
+     [
+      [
+       4,
+       1
+      ],
+      34
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      21
+     ],
+     [
+      [
+       1,
+       4
+      ],
+      19
+     ],
+     [
+      [
+       8,
+       5
+      ],
+      17
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 374,
+    "share_equal": 0.9813,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      5
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "ps4-nhl16",
+    "ps4-nhl17"
+   ],
+   "matched": 4260,
+   "eye_colour": {
+    "n": 4260,
+    "share_equal": 0.5453,
+    "systematic_code_moves": [
+     {
+      "code_a": 2,
+      "players": 3251,
+      "maps_to": [
+       [
+        0,
+        1912
+       ],
+       [
+        2,
+        1333
+       ],
+       [
+        1,
+        2
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       2,
+       0
+      ],
+      1912
+     ],
+     [
+      [
+       1,
+       5
+      ],
+      3
+     ],
+     [
+      [
+       5,
+       0
+      ],
+      3
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      2
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      2
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 4260,
+    "share_equal": 0.957,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      42
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      36
+     ],
+     [
+      [
+       1,
+       3
+      ],
+      28
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      18
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      16
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 3856,
+    "share_equal": 0.8561,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      78
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      55
+     ],
+     [
+      [
+       9,
+       6
+      ],
+      43
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      38
+     ],
+     [
+      [
+       9,
+       7
+      ],
+      33
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 404,
+    "share_equal": 0.8589,
+    "systematic_code_moves": [
+     {
+      "code_a": 2,
+      "players": 93,
+      "maps_to": [
+       [
+        1,
+        53
+       ],
+       [
+        2,
+        39
+       ],
+       [
+        0,
+        1
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      53
+     ],
+     [
+      [
+       1,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      1
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "ps4-nhl17",
+    "ps4-nhl18"
+   ],
+   "matched": 4765,
+   "eye_colour": {
+    "n": 4765,
+    "share_equal": 0.9784,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       0,
+       2
+      ],
+      31
+     ],
+     [
+      [
+       0,
+       3
+      ],
+      27
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      21
+     ],
+     [
+      [
+       0,
+       4
+      ],
+      10
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      4
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 4765,
+    "share_equal": 0.9964,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      16
+     ],
+     [
+      [
+       6,
+       3
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 4319,
+    "share_equal": 0.9442,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      46
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      28
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      25
+     ],
+     [
+      [
+       9,
+       5
+      ],
+      24
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      22
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 446,
+    "share_equal": 0.8632,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      55
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      4
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "ps4-nhl18",
+    "ps4-nhl19-base"
+   ],
+   "matched": 5117,
+   "eye_colour": {
+    "n": 5117,
+    "share_equal": 0.9943,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       0,
+       2
+      ],
+      8
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      6
+     ],
+     [
+      [
+       3,
+       0
+      ],
+      3
+     ],
+     [
+      [
+       0,
+       3
+      ],
+      2
+     ],
+     [
+      [
+       0,
+       4
+      ],
+      2
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 5117,
+    "share_equal": 0.9945,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      12
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      6
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      2
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       1,
+       6
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 4632,
+    "share_equal": 0.9525,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      46
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      40
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      20
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      14
+     ],
+     [
+      [
+       9,
+       5
+      ],
+      13
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 485,
+    "share_equal": 0.9959,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       2,
+       1
+      ],
+      2
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "ps4-nhl19-base",
+    "ps4-nhl20-real"
+   ],
+   "matched": 5766,
+   "eye_colour": {
+    "n": 5766,
+    "share_equal": 0.9936,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       0,
+       4
+      ],
+      12
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      8
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      4
+     ],
+     [
+      [
+       2,
+       0
+      ],
+      3
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      2
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 5766,
+    "share_equal": 0.9934,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      26
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      6
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       4,
+       2
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 5181,
+    "share_equal": 0.9448,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       4,
+       1
+      ],
+      59
+     ],
+     [
+      [
+       7,
+       9
+      ],
+      26
+     ],
+     [
+      [
+       6,
+       9
+      ],
+      22
+     ],
+     [
+      [
+       9,
+       5
+      ],
+      21
+     ],
+     [
+      [
+       9,
+       7
+      ],
+      21
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 585,
+    "share_equal": 0.9521,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      19
+     ],
+     [
+      [
+       1,
+       0
+      ],
+      4
+     ],
+     [
+      [
+       0,
+       2
+      ],
+      2
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      2
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "adjacent",
+   "pair": [
+    "ps4-nhl20-real",
+    "ps4-nhl21"
+   ],
+   "matched": 5726,
+   "eye_colour": {
+    "n": 5726,
+    "share_equal": 0.3158,
+    "systematic_code_moves": [
+     {
+      "code_a": 0,
+      "players": 4335,
+      "maps_to": [
+       [
+        2,
+        3901
+       ],
+       [
+        0,
+        417
+       ],
+       [
+        1,
+        6
+       ]
+      ]
+     }
+    ],
+    "top_changes": [
+     [
+      [
+       0,
+       2
+      ],
+      3901
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      6
+     ],
+     [
+      [
+       0,
+       4
+      ],
+      6
+     ],
+     [
+      [
+       0,
+       3
+      ],
+      4
+     ],
+     [
+      [
+       0,
+       5
+      ],
+      1
+     ]
+    ]
+   },
+   "skin_colour": {
+    "n": 5726,
+    "share_equal": 0.9974,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       2
+      ],
+      5
+     ],
+     [
+      [
+       2,
+       1
+      ],
+      3
+     ],
+     [
+      [
+       3,
+       1
+      ],
+      1
+     ],
+     [
+      [
+       3,
+       2
+      ],
+      1
+     ],
+     [
+      [
+       4,
+       6
+      ],
+      1
+     ]
+    ]
+   },
+   "skater_style": {
+    "n": 5156,
+    "share_equal": 0.987,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       5,
+       9
+      ],
+      29
+     ],
+     [
+      [
+       1,
+       4
+      ],
+      12
+     ],
+     [
+      [
+       9,
+       6
+      ],
+      3
+     ],
+     [
+      [
+       9,
+       7
+      ],
+      3
+     ],
+     [
+      [
+       2,
+       4
+      ],
+      2
+     ]
+    ]
+   },
+   "goalie_style": {
+    "n": 570,
+    "share_equal": 0.9965,
+    "systematic_code_moves": [],
+    "top_changes": [
+     [
+      [
+       1,
+       0
+      ],
+      2
+     ]
+    ]
+   }
+  }
+ ]
+}

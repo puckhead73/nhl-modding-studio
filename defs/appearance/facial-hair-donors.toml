@@ -1,0 +1,39 @@
+# Facial-hair donor registry (Appearance Studio → Facial Hair facet).
+#
+# Curated list of head assets whose hair slots carry FACIAL-hair
+# geometry (moustache/beard cards). Curation is manual because facial
+# hair has no reliable geometric signature: on vanilla heads it is
+# usually PAINTED into the head texture, and grafted facial-hair cards
+# (the in-game-proven Lanny McDonald moustache) are routinely SMALLER
+# than the ~64-vert bald brow band the hairstyle scan filters out.
+#
+# Each entry must point at an INSTALLED head (`player_<head_id>.rx2`
+# in the project's texture cache) that carries some hair-slot geometry
+# — entries for missing/bald assets are silently skipped at catalog
+# time. Typical sources: heads you've already baked facial cards into
+# (they then become reusable donors), or NHL24-derived assets packed
+# via the mesh-import pipeline.
+#
+# Fields per [[donor]]:
+#   head_id   (required) — the donor asset's id
+#   label     (optional) — display name; falls back to head-ids.toml
+#   translate (optional) — suggested [x, y, z] nudge that recenters the
+#                          donor's cards on a standard head. The facet
+#                          pre-fills its sliders with this. Example:
+#                          the Lanny moustache cards were authored
+#                          against a non-centered NHL24 reference head
+#                          and needed [-0.248, 0.0, 0.0].
+#   notes     (optional) — free-form curation note shown in the UI
+#
+# Example:
+# [[donor]]
+# head_id = 1234
+# label = "Moustache — thick (Lanny bake)"
+# translate = [-0.248, 0.0, 0.0]
+# notes = "Cards grafted from the NHL24 Jagr reference; verified in-game."
+
+name = "Facial-Hair Donors"
+
+[source]
+kind = "operator-curated"
+description = "Heads carrying facial-hair cards, curated by hand"

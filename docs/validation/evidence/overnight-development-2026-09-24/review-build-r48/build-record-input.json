@@ -1,0 +1,21 @@
+{
+  "candidate": "NHL Modding Studio rc-20260928-r48",
+  "built": "2026-09-28T05:22:57-06:00 .. 05:25:30-06:00",
+  "command": "CARGO_INCREMENTAL=0 npm run build -- --no-bundle (repo root; tauri build; existing target\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 916,
+  "dirty_manifest_sha256": "de319971f28788b7c8006a15a4527040f5609e4c8809ad926e9cf0a05b868e24",
+  "dirty_inputs_after_build_identical": false,
+  "input_drift": "src-tauri/Cargo.toml was rewritten by the Tauri CLI during the build from CRLF to LF line endings only; with CRLF restored the post-build bytes hash to the pre-build 43b088ed…4113 (content identical). No other input changed.",
+  "exe_sha256": "73e16eb56e2fe346082ec451941e1cb908d23d5d5736eed1e6d129de6346015b",
+  "exe_bytes": 50022912,
+  "defs_tree_sha256": "ed34ae8957a9aef43941c696aebce0034f533146a666e0eb9c6491109ffb8c53",
+  "frontend_dist_tree_sha256": "03cbd47750a0fa3bae521e42a448cfa751d71e777b6d976f7a79666c8ffc27b4",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "developer receipts through 48 (incl. 44 NHL 08-11 group labels, 45 Hockey Shop title naming, 46 MIT metadata / About & Licences / notices / release gate / startup message, 47 Hockey Shop write regression + NHL 12 mesh-as-pad fix, 48 grouped schedule generation)",
+  "tree_sha_definition": "SHA-256 of '<relpath>\t<sha256>\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

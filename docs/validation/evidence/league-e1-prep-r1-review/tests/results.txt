@@ -1,0 +1,41 @@
+PASS 01 clean install then rollback  install -> L=original O=absent I=absent U=[]
+PASS 02 idempotent: rollback on stock, install twice, rollback twice  L=original O=absent I=absent U=[]
+PASS 03 install interrupted after copy; re-entry reuses verified incoming  L=candidate O=original I=absent U=[]
+PASS 04a install interrupted after rename1 (live absent); re-entry install completes  L=candidate O=original I=absent U=[]
+PASS 04b install interrupted after rename1; re-entry rollback restores  L=original O=absent I=absent U=[]
+PASS 05 second rename fails (live absent, original + incoming present) then incoming lost  L=original O=absent I=absent U=[]
+PASS 06 rollback interrupted after rename1 (live absent, used present); re-entry completes  L=original O=absent I=absent U=[]
+PASS 07 missing live with verified original only  L=original O=absent I=absent U=[]
+PASS 08a primary rollback source missing -> secondary fallback (space ok)  L=original O=absent I=absent U=[]
+PASS 08b primary missing, insufficient space for the fallback copy -> refused, nothing mutated  L=candidate O=absent I=absent U=[]
+PASS 08c primary and secondary missing -> blocked with exact explanation  L=candidate O=absent I=absent U=[]
+PASS 08d fallback interrupted after copy (live candidate, incoming original) then resumed  L=original O=absent I=absent U=[]
+PASS 08e fallback interrupted after rename1 (live absent, incoming original) then resumed  L=original O=absent I=absent U=[]
+PASS 09 insufficient space blocks install but rename rollback still works  L=original O=absent I=absent U=[]
+PASS 10 nonempty overlay dir and loose dir block install, not rollback  L=original O=absent I=absent U=[]
+PASS 11a unknown live bytes: both modes refuse, file untouched  L=junk O=absent I=absent U=[]
+PASS 11b unknown incoming: install refuses and preserves; unknown used: rollback proceeds and preserves  L=original O=absent I=absent U=[junk]
+PASS 11c unknown original with candidate live -> rollback via secondary, original preserved  L=original O=junk I=absent U=[]
+PASS 11d duplicate original: both modes refuse/no-op, nothing deleted  L=original O=original I=absent U=[]
+PASS 11e stale known-candidate incoming on stock: rollback removes it, install reuses it  L=original O=absent I=absent U=[]
+FAIL 12 unreadable precondition directory fails install closed; rollback unaffected  install should fail closed: 2026-09-18 00:10:29 [install] state: Live=original (len 4096, sha 0b044c4f3efe0ec0...) | Original=absent | Incoming=absent | Used=[] | Candidate=candidate (len 4096, sha 27d03191a5c6523f...) | Secondary=original (len 4096, sha 0b044c4f3efe0ec0...)
+2026-09-18 00:10:29 [install] derived state: S0-stock
+2026-09-18 00:10:29 [install] check emulator stopped             PASS  
+2026-09-18 00:10:29 [install] check no loose game-tree DB dir    PASS  E:\Repositories\nhl-modding-studio\local\reviews\e1-prep-r1\tests\fx\12\nhl\data\common\gamemodes
+2026-09-18 00:10:29 [install] check mods_folder empty            PASS  0 entries
+2026-09-18 00:10:29 [install] check patches empty                PASS  0 entries
+2026-09-18 00:10:29 [install] check cheats empty                 PASS  0 entries
+2026-09-18 00:10:29 [install] check custom_configs empty         PASS  0 entries
+2026-09-18 00:10:29 [install] check candidate verified           PASS  candidate (len 4096, sha 27d03191a5c6523f...)
+2026-09-18 00:10:29 [install] check emulator exe identity          MANUAL  (pass -ExpectedExeSha to automate; record from the run log)
+2026-09-18 00:10:29 [install] check config unchanged vs E0       PASS  0 differing lines (window position ignored)
+2026-09-18 00:10:29 [install] copy: copied candidate -> inxp_00.big.e1-incoming (4096 B)
+2026-09-18 00:10:29 [install] copy: verified inxp_00.big.e1-incoming = 27d03191a5c6523ff86ec32d4a1157be819a97251eb80c595e30d121d39df835
+2026-09-18 00:10:29 [install] rename1: renamed inxp_00.big -> inxp_00.big.e1-original
+2026-09-18 00:10:29 [install] rename2: renamed inxp_00.big.e1-incoming -> inxp_00.big
+2026-09-18 00:10:29 [install] INSTALLED: live = candidate (verified); original retained beside it (verified)
+
+PASS 13 emulator running blocks both modes before any mutation  L=candidate O=original I=absent U=[]
+PASS 14 missing candidate artifact blocks install  L=original O=absent I=absent U=[]
+PASS 15 guards: fixture root on H:/ShadPS4 refused; live profile refuses hooks  both refused
+SUMMARY: 23 passed, 1 failed

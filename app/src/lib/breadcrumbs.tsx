@@ -31,7 +31,14 @@ const BreadcrumbContext = createContext<Ctx | null>(null);
 const MAX = 8;
 
 /** Redirect-only paths that immediately bounce elsewhere — never worth a crumb of their own. */
-const IGNORED = new Set(["/app", "/app/", "/app/database", "/app/historical"]);
+const IGNORED = new Set([
+  "/app",
+  "/app/",
+  "/app/database",
+  "/app/historical",
+  "/app/settings",
+  "/app/dashboard", // now redirects to Settings › Dashboard
+]);
 
 export function BreadcrumbProvider({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
@@ -90,8 +97,9 @@ const PRETTY: Record<string, string> = {
   dashboard: "Dashboard",
   settings: "Settings",
   assets: "Assets",
-  builds: "Builds",
-  pending: "Pending Edits",
+  legends: "Legends",
+  picks: "Puck's Picks",
+  pending: "Project Overview",
   transactions: "Transactions",
 };
 
@@ -116,3 +124,4 @@ function deriveLabel(pathname: string): string {
 function titleCase(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
+

@@ -1,0 +1,29 @@
+archive=H:\Emulators\ShadPS4\Games\CUSA18182\databigs\inxp_00.big
+  file_count=2950 version=0x00110400 name_slot=70 dir_slot=105 dir_count=152 declared_size=777373328 actual_size=777373328
+
+[1156] nhl/data/kettle/loc/eng_us.db
+  offset=746617088 stored_size=3921060 kind=raw magic=b'DB\x00\x08' +0x04=0 +0x0C(sort)=0x6bf4503c +0x10(path_hash)=0x878ca819 djb2(path)=0x878ca819 match=True
+  member_sha256=24693e2f1ae87bde23066d083458bae2efea9a633269518f4fede2354fbac969
+  compare H:\Emulators\ShadPS4\Games\CUSA18182\databigs\Extracted\nhl\data\kettle\loc\eng_us.db
+    sha256=24693e2f1ae87bde23066d083458bae2efea9a633269518f4fede2354fbac969 size=3921060 identical=True
+  extracted -> E:\Repositories\nhl-modding-studio\local\runs\league-l11-q1\eng_us.db sha256=24693e2f1ae87bde23066d083458bae2efea9a633269518f4fede2354fbac969
+
+[1479] nhl/data/common/gamemodes/database/t3db/nhl_game-meta.xml
+  offset=737440176 stored_size=495259 kind=raw magic=b'\xef\xbb\xbf<' +0x04=0 +0x0C(sort)=0x84b970fa +0x10(path_hash)=0x3454f746 djb2(path)=0x3454f746 match=True
+  member_sha256=0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d
+  compare E:\Repositories\nhl-modding-studio\anchors\ps4\nhl21\databases\nhl_game-meta.xml
+    sha256=0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d size=495259 identical=True
+
+[2652] nhl/data/common/gamemodes/database/t3db/nhl_game.db
+  offset=726230496 stored_size=11209672 kind=raw magic=b'DB\x00\x08' +0x04=0 +0x0C(sort)=0xe6955448 +0x10(path_hash)=0x00429ca7 djb2(path)=0x00429ca7 match=True
+  member_sha256=90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9
+  compare E:\Repositories\nhl-modding-studio\anchors\ps4\nhl21\databases\nhl_game.db
+    sha256=90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9 size=11209672 identical=True
+
+[2888] nhl/data/kettle/loc/eng_us-meta.xml
+  offset=750538160 stored_size=962 kind=raw magic=b'\xef\xbb\xbf<' +0x04=0 +0x0C(sort)=0xf958cdbe +0x10(path_hash)=0x932a5038 djb2(path)=0x932a5038 match=True
+  member_sha256=54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b
+  compare E:\Repositories\nhl-modding-studio\anchors\ps4\nhl21\databases\eng_us-meta.xml
+    sha256=54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b size=962 identical=True
+
+archive_sha256=1c41f578a595dbd5aae7ad921445626636f3a842d8fb869bc054d35e3e849e87

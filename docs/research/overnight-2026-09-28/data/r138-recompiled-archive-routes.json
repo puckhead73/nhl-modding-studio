@@ -1,0 +1,1011 @@
+{
+ "note": "R138 - Legacy Recompiled archive-member routes (research package 5, 28 Sep 2026). Read-only; nothing launched.\n  A  the registered Recompiled install (`H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test\\`): files under game\\, `_compiled\\` / loose\n     `rendering\\` / `db\\` presence, every EB archive's member count by top-level folder;\n  B  every file of the X360 NHL Legacy loose tree (the tree Studio's loose routes read) matched by lower-case path against the Recompiled\n     archive members -> per class: loose files, with an archive member, loose-only;\n  C  identity sample per class (the smallest members, up to --per-class): member unwrapped (stored / chunkzip / chunklzx / refpack) compared\n     byte-for-byte with the X360 loose file; archive, member, codec, stored bytes, SHA-256 of the unwrapped bytes;\n  D  save content-header sidecars under the save root: size, content type word, constant word, content name vs folder name, profile / title\n     words vs the directory names (Studio `content_header.rs` layout), container magic kind + version word of the save file itself (no\n     payload decoded; display names not copied).\nUsage: python r138_recompiled_archive_routes.py <out.json> [--per-class N]\n",
+ "recomp_root": "H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test",
+ "x360_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+ "A": {
+  "game_files": [
+   "audioboot.big",
+   "audioboot2.big",
+   "boot.big",
+   "cache.big",
+   "cacheaudio.big",
+   "cacheboot.big",
+   "cachemovie.big",
+   "cacheoverlay.big",
+   "cacherender.big",
+   "data0.big",
+   "default - Copy.xex",
+   "default.xex",
+   "gamedata",
+   "nocache.big",
+   "nocacherender.big",
+   "nxeart",
+   "options.viv",
+   "renderboot.big"
+  ],
+  "has__compiled": false,
+  "has_loose_rendering": false,
+  "has_loose_db": false,
+  "archives": {
+   "audioboot.big": {
+    "members": 25,
+    "top_folders": {
+     "audio": 25
+    }
+   },
+   "audioboot2.big": {
+    "members": 10,
+    "top_folders": {
+     "audio": 10
+    }
+   },
+   "boot.big": {
+    "members": 599,
+    "top_folders": {
+     "rendering": 291,
+     "fe": 147,
+     "shaders": 130,
+     "attribdb": 21,
+     "scrape": 4,
+     "gamedata": 3,
+     "sku": 1,
+     "debug": 1,
+     "ice": 1
+    }
+   },
+   "cache.big": {
+    "members": 17760,
+    "top_folders": {
+     "fe": 17643,
+     "gamedata": 63,
+     "scenario": 54
+    }
+   },
+   "cacheaudio.big": {
+    "members": 7,
+    "top_folders": {
+     "audio": 7
+    }
+   },
+   "cacheboot.big": {
+    "members": 61,
+    "top_folders": {
+     "fe": 56,
+     "db": 4,
+     "scenario": 1
+    }
+   },
+   "cachemovie.big": {
+    "members": 6,
+    "top_folders": {
+     "fe": 4,
+     "rendering": 2
+    }
+   },
+   "cacheoverlay.big": {
+    "members": 63,
+    "top_folders": {
+     "fe": 63
+    }
+   },
+   "cacherender.big": {
+    "members": 12845,
+    "top_folders": {
+     "rendering": 12845
+    }
+   },
+   "data0.big": {
+    "members": 5,
+    "top_folders": {
+     "gamedata": 5
+    }
+   },
+   "nocache.big": {
+    "members": 9707,
+    "top_folders": {
+     "fe": 9432,
+     "audio": 238,
+     "rendering": 37
+    }
+   },
+   "nocacherender.big": {
+    "members": 3237,
+    "top_folders": {
+     "rendering": 3237
+    }
+   },
+   "renderboot.big": {
+    "members": 277,
+    "top_folders": {
+     "rendering": 277
+    }
+   }
+  }
+ },
+ "B": {
+  "": {
+   "label": "other",
+   "loose files": 288,
+   "with archive member": 284,
+   "member copies > 1": 0,
+   "loose only": 4,
+   "loose_only_examples": [
+    "gamedata/aidata.big",
+    "gamedata/gps.big",
+    "gamedata/nis.big",
+    "gamedata/anim/faceposer.big"
+   ]
+  },
+  "audio/": {
+   "label": "other audio",
+   "loose files": 16,
+   "with archive member": 16,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "audio/music/": {
+   "label": "music",
+   "loose files": 8,
+   "with archive member": 8,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "audio/sfx/": {
+   "label": "sound banks",
+   "loose files": 236,
+   "with archive member": 236,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "audio/speech/": {
+   "label": "speech",
+   "loose files": 20,
+   "with archive member": 20,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "db/": {
+   "label": "main / aux databases",
+   "loose files": 4,
+   "with archive member": 4,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "fe/": {
+   "label": "front end (logos, portraits, UI)",
+   "loose files": 27329,
+   "with archive member": 27329,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "fe/loc/": {
+   "label": "localization dictionaries",
+   "loose files": 16,
+   "with archive member": 16,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "rendering/": {
+   "label": "other rendering",
+   "loose files": 11224,
+   "with archive member": 11224,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "rendering/jersey/": {
+   "label": "kits / nameplates",
+   "loose files": 1883,
+   "with archive member": 1883,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "rendering/logo/": {
+   "label": "rink-logo family",
+   "loose files": 1926,
+   "with archive member": 1926,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "rendering/player/": {
+   "label": "heads / equipment",
+   "loose files": 1589,
+   "with archive member": 1589,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  },
+  "rendering/stadium/": {
+   "label": "venue packages",
+   "loose files": 67,
+   "with archive member": 67,
+   "member copies > 1": 0,
+   "loose_only_examples": []
+  }
+ },
+ "C": {
+  "db/": [
+   {
+    "member": "db/dynamic_ratings.db",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 18860,
+    "bytes": 18860,
+    "sha256": "f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   },
+   {
+    "member": "db/nhlng-meta.xml",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 444404,
+    "bytes": 444404,
+    "sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   },
+   {
+    "member": "db/draft_roster.db",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 1898964,
+    "bytes": 1898964,
+    "sha256": "2ade8a604f1e2b4509f9d823d93bda29594c7f802c54fafa5ec7ec05e6ec9acc",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   },
+   {
+    "member": "db/nhlng.db",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 2901504,
+    "bytes": 2901504,
+    "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   }
+  ],
+  "fe/loc/": [
+   {
+    "member": "fe/loc/nhl_lng_lg-meta.xml",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 790,
+    "bytes": 790,
+    "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   },
+   {
+    "member": "fe/loc/nhl_cze_cz-meta.xml",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 962,
+    "bytes": 962,
+    "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   },
+   {
+    "member": "fe/loc/nhl_lng_lg.db",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 840084,
+    "bytes": 840084,
+    "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   },
+   {
+    "member": "fe/loc/nhl_eng_us.db",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 1759044,
+    "bytes": 1759044,
+    "sha256": "f00926ceff27d46f1e5264385468369cd60f91d54d9944dd5c8584bf6d9b8f70",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   }
+  ],
+  "audio/sfx/": [
+   {
+    "member": "audio/sfx/aemshorn.csi",
+    "archive": "audioboot.big",
+    "codec": "stored",
+    "stored_bytes": 1236,
+    "bytes": 1236,
+    "sha256": "997d1d2b840e89e4088551c8590f66f65b659bf4262776466349d6d044d20289",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "audioboot.big"
+    ]
+   },
+   {
+    "member": "audio/sfx/aemsfe.csi",
+    "archive": "audioboot.big",
+    "codec": "stored",
+    "stored_bytes": 1624,
+    "bytes": 1624,
+    "sha256": "4fb690f33fee6c9b5e28f5d426af09860ba3d7130c56bf1a1764bce603881cfc",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "audioboot.big"
+    ]
+   },
+   {
+    "member": "audio/sfx/024_goal.abk",
+    "archive": "nocache.big",
+    "codec": "stored",
+    "stored_bytes": 239596,
+    "bytes": 239596,
+    "sha256": "2562f74b41cb5b63f188d1ef96307081894aa8cd2b417d899434590c7d375c98",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "audio/sfx/0293_chant.abk",
+    "archive": "nocache.big",
+    "codec": "stored",
+    "stored_bytes": 240200,
+    "bytes": 240200,
+    "sha256": "7fc6ecafa6f7d415adc4787f868216d720f7f8192f475f7b154a0a35f2cc4e65",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "nocache.big"
+    ]
+   }
+  ],
+  "audio/speech/": [
+   {
+    "member": "audio/speech/ann_eng_repetitionpools.bin",
+    "archive": "nocache.big",
+    "codec": "stored",
+    "stored_bytes": 144,
+    "bytes": 144,
+    "sha256": "01e1639c28e8d99f90053cdbb53895fb65a6eddacb62d4c8ffd0360822b56cc9",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "audio/speech/pbp_eng_acmemoduledef.xml",
+    "archive": "nocache.big",
+    "codec": "stored",
+    "stored_bytes": 165,
+    "bytes": 165,
+    "sha256": "e6ca559bbc256bfdf5f140ac748f5b1d34ca6b0db7fb2b1ce79e95c13e6f347d",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "audio/speech/pbp_eng_keywords.bin",
+    "archive": "nocache.big",
+    "codec": "chunklzx",
+    "stored_bytes": 46762,
+    "bytes": 208572,
+    "sha256": "6ab1a512d88ec6a41ec6663e86993fcedd8272806b19d7428f9dcf0c70403c40",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "audio/speech/pbp_eng_speecheventsubscr.bin",
+    "archive": "audioboot.big",
+    "codec": "chunklzx",
+    "stored_bytes": 53132,
+    "bytes": 374640,
+    "sha256": "52f4aceffd8b5e0e3fbbf2cc3fef78b6c4f1431b48f5b6ea03ac398e519e2f0d",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "audioboot.big"
+    ]
+   }
+  ],
+  "audio/music/": [
+   {
+    "member": "audio/music/music_eventdef.csi",
+    "archive": "audioboot.big",
+    "codec": "stored",
+    "stored_bytes": 72,
+    "bytes": 72,
+    "sha256": "9c0ac58e662d9f437f1c643ee5771a3282858b8567da358909022b086f39f13e",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "audioboot.big"
+    ]
+   },
+   {
+    "member": "audio/music/music_repetitionpools.bin",
+    "archive": "audioboot.big",
+    "codec": "stored",
+    "stored_bytes": 516,
+    "bytes": 516,
+    "sha256": "3f99fb13dd02080342642242fb10e5b4fb6e40708c1c42700141e4debde9ee49",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "audioboot.big"
+    ]
+   },
+   {
+    "member": "audio/music/music_graffitidata.bin",
+    "archive": "audioboot.big",
+    "codec": "chunklzx",
+    "stored_bytes": 1124,
+    "bytes": 3400,
+    "sha256": "691667031596eac65fed1a22a200e2a842e3269b441813d0a046d9290e65969f",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "audioboot.big"
+    ]
+   },
+   {
+    "member": "audio/music/music_samples.sbr",
+    "archive": "audioboot.big",
+    "codec": "chunklzx",
+    "stored_bytes": 2166,
+    "bytes": 4962,
+    "sha256": "2523286850e87a12bfbd097d378fa0fabbcb64bfbcfda1d7680267274e9b450d",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "audioboot.big"
+    ]
+   }
+  ],
+  "audio/": [
+   {
+    "member": "audio/context/crowds_contextmoduledef.xml",
+    "archive": "nocache.big",
+    "codec": "stored",
+    "stored_bytes": 350,
+    "bytes": 350,
+    "sha256": "2e08e7368ce0ff604cd3ba0b41963a5af1271fdc1c9aefbee90f98fcacabfda0",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "audio/context/pbp_eng_contextmoduledef.xml",
+    "archive": "nocache.big",
+    "codec": "stored",
+    "stored_bytes": 514,
+    "bytes": 514,
+    "sha256": "583acec7fe18cbb92350807562fe779636f689d2c4888e3140c8f3aea9ff3b66",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "audio/context/crowds_contextgasscript.gas",
+    "archive": "nocache.big",
+    "codec": "chunklzx",
+    "stored_bytes": 11224,
+    "bytes": 164080,
+    "sha256": "61056a0603151500d7421f6afbdfe9d07a33625c8076880e46c03c577b707667",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "audio/context/pbp_eng_contexteventsubscr.bin",
+    "archive": "nocache.big",
+    "codec": "chunklzx",
+    "stored_bytes": 16568,
+    "bytes": 66560,
+    "sha256": "a40a787079e8c6b65df7dfa7d7344f0167a7ecc298e24e1d06b23e570b3c9fd9",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "nocache.big"
+    ]
+   }
+  ],
+  "rendering/jersey/": [
+   {
+    "member": "rendering/jersey/shirt_0_0_0.rx2",
+    "archive": "renderboot.big",
+    "codec": "chunklzx",
+    "stored_bytes": 1046,
+    "bytes": 3024,
+    "sha256": "b59d717268c77b9bacef76ee33d05f5da8048f1223f4966749edef2be32e4bdb",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "renderboot.big"
+    ]
+   },
+   {
+    "member": "rendering/jersey/name_0_326_2_cm.rx2",
+    "archive": "nocacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 1102,
+    "bytes": 364544,
+    "sha256": "e8c153c57a81903788dcee07c99f9e4ebd403377bbd3258c13f65de89329d47e",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "nocacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/jersey/jersey_0_0_2_1_1_0.rx2",
+    "archive": "nocacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 9960,
+    "bytes": 17216,
+    "sha256": "6dc0c606ea5ea32cf9482a6a917d3c7303f9f58936b1137233c55137ee2b0eb4",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "nocacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/jersey/jersey_0_0_2_2_1_0.rx2",
+    "archive": "nocacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 9996,
+    "bytes": 17216,
+    "sha256": "57a03cfbcb2c136115ba5ef3f6c9d70d7dfa0194b661c3e9bbf6f06331aadda5",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "nocacherender.big"
+    ]
+   }
+  ],
+  "rendering/logo/": [
+   {
+    "member": "rendering/logo/texlib_30_0_0.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 926,
+    "bytes": 200704,
+    "sha256": "4cad4102c4ee1df12a5272d3541152f2fe8afa03ddea9536b6929c3e21d967d4",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/logo/texlib_31_0_0.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 926,
+    "bytes": 200704,
+    "sha256": "afad20c6d41d2b581864d66798ccd8b53c6eb2dc86a639e79c0b6c54500ec75d",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/logo/texlib_393_0_2.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 960,
+    "bytes": 200704,
+    "sha256": "4ebfa553c529cde8b830cf43c7d562934a6aa6ed50fe1097dbfc2b6e4afc958b",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/logo/texlib_393_1_2.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 960,
+    "bytes": 200704,
+    "sha256": "1bf631e97194cbaa8da8c27375ec1acf0c66fd8bd031c25adb574a200b5dcba3",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   }
+  ],
+  "rendering/player/": [
+   {
+    "member": "rendering/player/player_186.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 75400,
+    "bytes": 141280,
+    "sha256": "bd1cd73cf1d6da3bd02d9deb20a153126d97fed53ced75543d2b860a07904dac",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/player/player_708.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 75454,
+    "bytes": 141024,
+    "sha256": "0340d7d7c9c1dd5c4ad9b60c2e3d813b36d95154e184f743473734fa12281611",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/player/player_9026.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 107038,
+    "bytes": 184992,
+    "sha256": "8b1c1a6bee8e5164c283f3e1cb00ec3b69b071adbe25e5278e13df5fe183601e",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/player/player_71.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 107136,
+    "bytes": 187472,
+    "sha256": "2faff48f8586d89af43865a34b54f7335df1518b9f0954faedb629a69ed4e454",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   }
+  ],
+  "rendering/stadium/": [
+   {
+    "member": "rendering/stadium/ice_nhl_full_lm_container_0.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 11510,
+    "bytes": 117776,
+    "sha256": "27f0aa4ab91685b984e57c51939bdd7eb0e01b8ceda79241ffe4ac32e6f3eccb",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/stadium/ice_nhl_container_0.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 11554,
+    "bytes": 117776,
+    "sha256": "9a10d17c898505438cd01063a10cc8b8d9404e3fc1e6c152027fb3e4d3e8a8c1",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/stadium/stadium_326_container_0.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 3795550,
+    "bytes": 15434304,
+    "sha256": "55c846a0f55e0db480537fbb4bcec1d52fce325eff931f541e244507892b8339",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/stadium/stadium_155_container_0.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 3805518,
+    "bytes": 12030144,
+    "sha256": "7152de65da6d905322a3a38a9093b55ca419f1f36323647aa9acfc4c7bd3197e",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   }
+  ],
+  "rendering/": [
+   {
+    "member": "rendering/watermark/nhl_wordmark_160x50.fsh",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 206,
+    "bytes": 8192,
+    "sha256": "bb8964e0bca7abe566f376dbe27ee61e69aeec5e25a9a15a35ed09e0ba47d28b",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/particle/stadium_28.rvi",
+    "archive": "boot.big",
+    "codec": "chunklzx",
+    "stored_bytes": 366,
+    "bytes": 1123,
+    "sha256": "813a6eeb29ba6bebac92a1e3640889affd1f913c1d176ba64eecd00cfb5974b3",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "boot.big"
+    ]
+   },
+   {
+    "member": "rendering/banner/banner_401_cm.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 42838,
+    "bytes": 397312,
+    "sha256": "d2dcbcd2d09d9b05bee2314ceceb11eb7b3bfa7831f29d28b10e6ec19f141580",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   },
+   {
+    "member": "rendering/goaliepad/fegoaliepad_1_0_tm.rx2",
+    "archive": "cacherender.big",
+    "codec": "chunklzx",
+    "stored_bytes": 42838,
+    "bytes": 1421312,
+    "sha256": "9490e748c05a162d1cf8546a79121b3e6b0145555ea178a6e2487d47487d8d1b",
+    "equals_x360_loose": true,
+    "raw_equals_loose": false,
+    "copies": [
+     "cacherender.big"
+    ]
+   }
+  ],
+  "fe/": [
+   {
+    "member": "fe/dynamicsettings.txt",
+    "archive": "boot.big",
+    "codec": "stored",
+    "stored_bytes": 2,
+    "bytes": 2,
+    "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "boot.big"
+    ]
+   },
+   {
+    "member": "fe/ion/fonts/fonts.txt",
+    "archive": "cacheboot.big",
+    "codec": "stored",
+    "stored_bytes": 99,
+    "bytes": 99,
+    "sha256": "56a0e545f063220b311b471e953682a84f57330f47ba32bc318e77e4d528768f",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cacheboot.big"
+    ]
+   },
+   {
+    "member": "fe/ion/artassets/playerheads/p4001_8000/p5135.big",
+    "archive": "nocache.big",
+    "codec": "stored",
+    "stored_bytes": 17520,
+    "bytes": 17520,
+    "sha256": "abcf80f8f28b3df47bef0de21a8976e2efd5ac90bba9191a1c207a69b5418946",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "nocache.big"
+    ]
+   },
+   {
+    "member": "fe/ion/artassets/teamlogoscalendar/c154.big",
+    "archive": "cache.big",
+    "codec": "stored",
+    "stored_bytes": 17520,
+    "bytes": 17520,
+    "sha256": "fff43673ddacf3962db3c08b55772acde9281e56a03226fd4701fdd0a1cb9208",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "cache.big"
+    ]
+   }
+  ],
+  "": [
+   {
+    "member": "sku/na.ini",
+    "archive": "boot.big",
+    "codec": "stored",
+    "stored_bytes": 1,
+    "bytes": 1,
+    "sha256": "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "boot.big"
+    ]
+   },
+   {
+    "member": "attribdb/feattribdb.opt",
+    "archive": "boot.big",
+    "codec": "stored",
+    "stored_bytes": 16,
+    "bytes": 16,
+    "sha256": "5a60cce3b5637cde173fd2341b8f610e91500daf46d37496761bdc99587f237a",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "boot.big"
+    ]
+   },
+   {
+    "member": "shaders/lynxribbon.fxo",
+    "archive": "boot.big",
+    "codec": "stored",
+    "stored_bytes": 24204,
+    "bytes": 24204,
+    "sha256": "7d00daf0fa4dde2b24f6f5708baa3ebeb199136fb04ed0de5e95d343e831cc38",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "boot.big"
+    ]
+   },
+   {
+    "member": "shaders/env_ice_2hotspots.fxo",
+    "archive": "boot.big",
+    "codec": "stored",
+    "stored_bytes": 24300,
+    "bytes": 24300,
+    "sha256": "d7ec9d3435b2979f41401c203e90087afd07dc5480207c2135b5af3d47c8ba30",
+    "equals_x360_loose": true,
+    "raw_equals_loose": true,
+    "copies": [
+     "boot.big"
+    ]
+   }
+  ]
+ },
+ "D": {
+  "root": "C:\\Users\\puckh\\Documents\\nhllegacy",
+  "headers": [
+   {
+    "header": "BUILDYOURAI 20260915213449.header",
+    "bytes": 328,
+    "type_word": 1,
+    "const_word": 1,
+    "content_name_eq_file_stem": true,
+    "profile_eq_dir": true,
+    "title_eq_dir": true,
+    "tail_zero": true,
+    "save_present": true,
+    "save_magic_token": "TXT_BUILD_YOUR_",
+    "save_version_word": 4
+   },
+   {
+    "header": "DYNASTY 20260815043618.header",
+    "bytes": 328,
+    "type_word": 1,
+    "const_word": 1,
+    "content_name_eq_file_stem": true,
+    "profile_eq_dir": true,
+    "title_eq_dir": true,
+    "tail_zero": true,
+    "save_present": true,
+    "save_magic_token": "Dynasty",
+    "save_version_word": 5
+   },
+   {
+    "header": "DYNASTY 20260815045633A.header",
+    "bytes": 328,
+    "type_word": 1,
+    "const_word": 1,
+    "content_name_eq_file_stem": true,
+    "profile_eq_dir": true,
+    "title_eq_dir": true,
+    "tail_zero": true,
+    "save_present": true,
+    "save_magic_token": "Dynasty",
+    "save_version_word": 5
+   },
+   {
+    "header": "HOCKEYCARD 20260723054108.header",
+    "bytes": 328,
+    "type_word": 1,
+    "const_word": 1,
+    "content_name_eq_file_stem": true,
+    "profile_eq_dir": true,
+    "title_eq_dir": true,
+    "tail_zero": true,
+    "save_present": true,
+    "save_magic_token": "HockeyCards",
+    "save_version_word": 4
+   },
+   {
+    "header": "PROFILE 20260815045633.header",
+    "bytes": 328,
+    "type_word": 1,
+    "const_word": 1,
+    "content_name_eq_file_stem": true,
+    "profile_eq_dir": true,
+    "title_eq_dir": true,
+    "tail_zero": true,
+    "save_present": true,
+    "save_magic_token": "UserProfileFile",
+    "save_version_word": 4
+   },
+   {
+    "header": "ROSTER 20260814040808.header",
+    "bytes": 328,
+    "type_word": 1,
+    "const_word": 1,
+    "content_name_eq_file_stem": true,
+    "profile_eq_dir": true,
+    "title_eq_dir": true,
+    "tail_zero": true,
+    "save_present": true,
+    "save_magic_token": "RosterFile",
+    "save_version_word": 4
+   }
+  ]
+ }
+}

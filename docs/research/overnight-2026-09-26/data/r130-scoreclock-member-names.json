@@ -1,0 +1,182 @@
+{
+ "note": "R130 - Presentation 5.3 scorebug: member names of the `scoreclock` overlay textures on PS4 (EB archives, listing only - nothing extracted),\nnormalised (digits -> '#') and tested for team keys: a name token equal to a team abbreviation (`exhibitionteams.abbrname` / `artabbr`) or a\nnumber equal to a team `artid` / `teamid` of the same title. Also the other overlay folders' names containing a team token. Read-only.\nUsage: python r130_scoreclock_member_names.py <out.json> [titles...]\n",
+ "titles": {
+  "nhl21": {
+   "scoreclock_members": 259,
+   "folders": {
+    "nhl/ui/features/overlays/vvms/gauntlet": 2,
+    "nhl/ui/features/overlays/vvms": 2,
+    "nhl/ui/features/overlays/vvms/proam": 2,
+    "nhl/ui/features/overlays/vvms/3on3": 2,
+    "nhl/ui/kettle_assets/widgets": 24,
+    "nhl/ui/kettle_assets/overlays/3on3": 15,
+    "nhl/ui/kettle_assets/overlays/proam": 6,
+    "nhl/ui/kettle_assets": 1,
+    "nhl/ui/swfassets/kettle/overlays": 205
+   },
+   "name_patterns": {
+    "goal_i#.gnf": 50,
+    "goal_fr_i#.gnf": 50,
+    "scoreclock_i#.gnf": 14,
+    "puck_points_#.gnf": 6,
+    "goal_i#b.gnf": 6,
+    "goal_fr_i#b.gnf": 6,
+    "goal_i#d.gnf": 5,
+    "goal_i#f.gnf": 5,
+    "goal_ia#.gnf": 5,
+    "goal_fr_i#f.gnf": 5,
+    "goal_fr_ia#.gnf": 5,
+    "scoreclock.vvm": 4,
+    "scoreclockoverlay.layout": 4,
+    "goal_i#e.gnf": 4,
+    "goal_fr_i#d.gnf": 4,
+    "goal_fr_i#e.gnf": 4,
+    "goal_i#a.gnf": 3,
+    "goal_i#c.gnf": 3,
+    "goal_ib#.gnf": 3,
+    "goal_fr_i#a.gnf": 3,
+    "goal_fr_i#c.gnf": 3,
+    "goal_fr_ib#.gnf": 3,
+    "scoreclock_i#e.gnf": 2,
+    "scoreclock_i#a.gnf": 2,
+    "scoredivider.gnf": 1,
+    "teamcolorstripe.gnf": 1,
+    "colourbasebottomhl.gnf": 1,
+    "colourbasedarkgrad.gnf": 1,
+    "logocover_gradientcover.gnf": 1,
+    "leftcap.gnf": 1,
+    "colorgradientcover.gnf": 1,
+    "periodbg.gnf": 1,
+    "logofader.gnf": 1,
+    "penaltygrad.gnf": 1,
+    "dropdownbg.gnf": 1,
+    "statdivider.gnf": 1,
+    "powerplaybarbg.gnf": 1,
+    "timebg.gnf": 1,
+    "anglewithfade.gnf": 1,
+    "periodlight_off.gnf": 1,
+    "teamcolortab.gnf": 1,
+    "blackbg.gnf": 1,
+    "messagebg.gnf": 1,
+    "powerplaybarbggrad.gnf": 1,
+    "screencalibrationscoreclock.gnf": 1,
+    "frame.gnf": 1,
+    "dropdown_puck_pointsbg.gnf": 1,
+    "backgroundend.gnf": 1,
+    "backgroundmid.gnf": 1,
+    "teamcolordisc.gnf": 1,
+    "rightcap.gnf": 1,
+    "moneypuckbg.gnf": 1,
+    "periodlight_on.gnf": 1,
+    "angle.gnf": 1,
+    "topmessagebackground.gnf": 1,
+    "glow.gnf": 1,
+    "timebgbase.gnf": 1,
+    "rightcapbg.gnf": 1,
+    "adbackground.gnf": 1,
+    "graphiclines.gnf": 1
+   },
+   "team_keyed_candidates": [
+    {
+     "path": "nhl/ui/kettle_assets/overlays/3on3/scoreclock/puck_points_0.gnf",
+     "abbr_tokens": [],
+     "id_tokens": [
+      0
+     ]
+    },
+    {
+     "path": "nhl/ui/kettle_assets/overlays/3on3/scoreclock/puck_points_1.gnf",
+     "abbr_tokens": [],
+     "id_tokens": [
+      1
+     ]
+    },
+    {
+     "path": "nhl/ui/kettle_assets/overlays/3on3/scoreclock/puck_points_2.gnf",
+     "abbr_tokens": [],
+     "id_tokens": [
+      2
+     ]
+    },
+    {
+     "path": "nhl/ui/kettle_assets/overlays/3on3/scoreclock/puck_points_3.gnf",
+     "abbr_tokens": [],
+     "id_tokens": [
+      3
+     ]
+    },
+    {
+     "path": "nhl/ui/kettle_assets/overlays/3on3/scoreclock/puck_points_4.gnf",
+     "abbr_tokens": [],
+     "id_tokens": [
+      4
+     ]
+    },
+    {
+     "path": "nhl/ui/kettle_assets/overlays/3on3/scoreclock/puck_points_5.gnf",
+     "abbr_tokens": [],
+     "id_tokens": [
+      5
+     ]
+    },
+    {
+     "path": "nhl/ui/swfassets/kettle/overlays/scoreclock/goalanimation/goal_id.gnf",
+     "abbr_tokens": [
+      "id"
+     ],
+     "id_tokens": []
+    },
+    {
+     "path": "nhl/ui/swfassets/kettle/overlays/scoreclock/goalanimation/goal_fr_id.gnf",
+     "abbr_tokens": [
+      "id"
+     ],
+     "id_tokens": []
+    }
+   ],
+   "team_keyed_count": 8,
+   "sample": [
+    "nhl/ui/features/overlays/vvms/gauntlet/scoreclock/scoreclock.vvm",
+    "nhl/ui/features/overlays/vvms/scoreclock/scoreclock.vvm",
+    "nhl/ui/features/overlays/vvms/gauntlet/scoreclock/scoreclockoverlay.layout",
+    "nhl/ui/features/overlays/vvms/scoreclock/scoreclockoverlay.layout",
+    "nhl/ui/features/overlays/vvms/proam/scoreclock/scoreclock.vvm",
+    "nhl/ui/features/overlays/vvms/3on3/scoreclock/scoreclock.vvm",
+    "nhl/ui/features/overlays/vvms/3on3/scoreclock/scoreclockoverlay.layout",
+    "nhl/ui/features/overlays/vvms/proam/scoreclock/scoreclockoverlay.layout",
+    "nhl/ui/kettle_assets/widgets/scoreclock/scoredivider.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/teamcolorstripe.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/colourbasebottomhl.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/colourbasedarkgrad.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/logocover_gradientcover.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/leftcap.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/colorgradientcover.gnf",
+    "nhl/ui/kettle_assets/overlays/proam/scoreclock/periodbg.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/logofader.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/penaltygrad.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/dropdownbg.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/statdivider.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/powerplaybarbg.gnf",
+    "nhl/ui/kettle_assets/overlays/proam/scoreclock/timebg.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/anglewithfade.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/periodlight_off.gnf",
+    "nhl/ui/kettle_assets/overlays/proam/scoreclock/teamcolortab.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/blackbg.gnf",
+    "nhl/ui/kettle_assets/overlays/proam/scoreclock/messagebg.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/powerplaybarbggrad.gnf",
+    "nhl/ui/kettle_assets/scoreclock/screencalibrationscoreclock.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/frame.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/dropdown_puck_pointsbg.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/backgroundend.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/backgroundmid.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/teamcolordisc.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/rightcap.gnf",
+    "nhl/ui/kettle_assets/overlays/proam/scoreclock/moneypuckbg.gnf",
+    "nhl/ui/kettle_assets/overlays/3on3/scoreclock/periodlight_on.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/angle.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/topmessagebackground.gnf",
+    "nhl/ui/kettle_assets/widgets/scoreclock/glow.gnf"
+   ]
+  }
+ }
+}

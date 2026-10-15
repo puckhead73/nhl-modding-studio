@@ -1,0 +1,174 @@
+[General]
+activeControllerID = ""
+alwaysShowChangelog = false
+autoUpdate = false
+BGMvolume = 50
+checkCompatibilityOnStartup = false
+chooseHomeTab = "General"
+compatibilityEnabled = false
+customCpuCores = []
+defaultControllerID = ""
+DisableHardcodedHotkeys = false
+enableAutoBackup = false
+enableDiscordRPC = false
+enableMods = true
+enableUpdates = true
+enableUPnP = true
+extraDmemInMbytes = 0
+firstBootHandled = false
+fontsPath = ""
+GamesMenuUI = false
+httpHostOverride = "localhost"
+HubMenuUI = false
+isConnectedToNetwork = false
+isDevKit = false
+isIdenticalLogGrouped = true
+isPS4Pro = false
+isShadNetEnabled = false
+isSideTrophy = "right"
+isTrophyPopupDisabled = false
+logFilter = ""
+logType = "sync"
+memoryCompressionLevel = 0
+muteEnabled = false
+pauseOnUnfocus = false
+playBGM = false
+playerEnabledStates = [true, true, true, true]
+restartWithBaseGame = false
+screenshotNotificationsEnabled = true
+screenTipDisable = false
+separateUpdateEnabled = false
+shadNetEnabledStates = [false, false, false, false]
+shadNetNpids = ["", "", "", ""]
+shadNetPasswords = ["", "", "", ""]
+shadnetServer = "srv.shadps4.net:31313"
+shadnetWebApiServer = "http://srv.shadps4.net:31315"
+showSplash = false
+showWelcomeDialog = true
+signalingInfo = ""
+sysModulesPath = ""
+trophyNotificationDuration = 6.0
+updateChannel = ""
+UseHomeButtonForHotkeys = false
+useHostMemoryFallback = false
+userNames = ["shadPS4", "shadps4-2", "shadPS4-3", "shadPS4-4"]
+volumeSlider = 100
+
+[Input]
+backgroundControllerInput = false
+cursorHideTimeout = 5
+cursorState = 1
+isKeyboardBindingsDisabled = false
+isMotionControlsEnabled = true
+specialPadClass1 = 1
+specialPadClass2 = 1
+specialPadClass3 = 1
+specialPadClass4 = 1
+usbDeviceBackend = 0
+useSpecialPad1 = false
+useSpecialPad2 = false
+useSpecialPad3 = false
+useSpecialPad4 = false
+useUnifiedInputConfig = true
+xCircleButtonSwap = false
+
+[Audio]
+audioBackend = 0
+mainOutputDevice = "Default Device"
+micDevice = "Default Device"
+padSpkOutputDevice = "Default Device"
+
+[GPU]
+allowHDR = false
+copyGPUBuffers = false
+directMemoryAccess = true
+dumpShaders = false
+fpsLimit = 60
+fpsLimiterEnabled = false
+fsrEnabled = true
+Fullscreen = false
+FullscreenMode = "Windowed"
+internalScreenHeight = 720
+internalScreenWidth = 1280
+manualInterpLod0 = false
+nullGpu = false
+patchShaders = false
+presentMode = "Mailbox"
+rcasAttenuation = 250
+rcasEnabled = true
+readbackLinearImages = false
+readbackSpeedMode = 3
+screenHeight = 720
+screenWidth = 1280
+shaderSkipsEnabled = false
+syncRenderTargetAliases = true
+syncStorageImages = true
+vblankFrequency = 60
+windowPosX = 1087
+windowPosY = 115
+
+[Vulkan]
+crashDiagnostic = false
+gpuId = -1
+guestMarkers = false
+hostMarkers = false
+pipelineCacheArchive = true
+pipelineCacheEnable = true
+rdocEnable = false
+validation = false
+validation_core = true
+validation_gpu = false
+validation_sync = false
+
+[Debug]
+CollectShader = false
+DebugDump = false
+isSeparateLogFilesEnabled = false
+logEnabled = true
+showFpsCounter = false
+
+[Keys]
+TrophyKey = ""
+
+[GUI]
+addonDirectories = ""
+addonInstallDir = ""
+backgroundImageOpacity = 50
+CustomBackgroundImage = ""
+descriptionVisible = true
+Directories = []
+DirectoriesEnabled = []
+elfDirs = []
+emulatorLanguage = "en_US"
+enableColorFilter = true
+gameTableMode = 0
+geometry_h = 720
+geometry_w = 1280
+geometry_x = 400
+geometry_y = 400
+guiStyle = "Fusion"
+iconSize = 36
+iconSizeGrid = 69
+installDirs = []
+installDirsEnabled = []
+isGameRunning = false
+isQT = false
+isSDL = false
+launcher_boot = false
+loadGameSizeEnabled = true
+mw_height = 720
+mw_width = 1280
+nexusApiKey = ""
+recentFiles = []
+saveDataPath = ""
+showBackgroundImage = true
+showLabelsUnderIcons = true
+sliderPos = 0
+sliderPosGrid = 0
+theme = 0
+version_path = ""
+
+[GUI.ToolbarVisibility]
+[Settings]
+consoleLanguage = 1
+

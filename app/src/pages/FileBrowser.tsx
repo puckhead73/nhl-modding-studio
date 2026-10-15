@@ -1,3 +1,4 @@
+import { assetRoot } from "../lib/assetRoot";
 // File Browser — pick any file (or a whole folder) from the game's extracted install tree and
 // export it, decoding recognized assets to the same glTF/PNG/DDS the player-asset exporter produces.
 //
@@ -22,8 +23,16 @@ import {
   Stat,
   type Tone,
 } from "../components/primitives";
+import {
+  formatBytes,
+  TextureThumbnail,
+  useTextureReplace,
+} from "../components/TextureReplace";
 import type { BrowseEntryDto } from "../bindings/BrowseEntryDto";
 import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
+
+/** File kinds whose texture can be re-encoded and written back in place. */
+const REPLACEABLE_KINDS = new Set(["portrait", "texture"]);
 
 /** Badge tone + label for a file's decoded output kind (null = the exporter doesn't recognize it). */
 const KIND_META: Record<string, { tone: Tone; label: string }> = {
@@ -34,7 +43,7 @@ const KIND_META: Record<string, { tone: Tone; label: string }> = {
 
 export function FileBrowserPage() {
   const { install } = useProject();
-  const installDir = install?.install_dir ?? null;
+  const installDir = assetRoot(install) ?? null;
 
   const [cwd, setCwd] = useState(""); // "" = the install root
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -44,6 +53,7 @@ export function FileBrowserPage() {
   const [copyUnrecognized, setCopyUnrecognized] = useState(false);
   const [crop, setCrop] = useState(false);
   const [summary, setSummary] = useState<FileExportSummaryDto | null>(null);
+  const [showThumbs, setShowThumbs] = useState(false);
 
   const listing = useQuery({
     queryKey: ["browseInstallFiles", installDir, cwd],
@@ -91,11 +101,15 @@ export function FileBrowserPage() {
     onSuccess: (s) => s && setSummary(s),
   });
 
+  // The pick → before/after preview → confirm → result flow (shared with the Team Uniforms surface).
+  // Refetch the listing after a write, since the on-disk size may have changed.
+  const replace = useTextureReplace(installDir, () => void listing.refetch());
+
   if (!installDir) {
     return (
       <EmptyState
         title="No install folder for this project"
-        hint="The file browser needs the game's install folder to walk its files. Re-open the project through the root-folder onboarding flow rather than by picking a database file directly."
+        hint="Choose a game source folder under Project Overview → Game source folders. Your edits stay in this project."
       />
     );
   }
@@ -130,21 +144,27 @@ export function FileBrowserPage() {
                   This folder is empty.
                 </div>
               ) : (
-                entries.map((e) => (
-                  <EntryRow
-                    key={e.rel_path}
-                    entry={e}
-                    checked={selected.has(e.rel_path)}
-                    onToggle={() => toggle(e.rel_path)}
-                    onOpen={e.is_dir ? () => setCwd(e.rel_path) : undefined}
-                  />
-                ))
+                entries.map((e) => {
+                  const replaceable = !e.is_dir && !!e.kind && REPLACEABLE_KINDS.has(e.kind);
+                  return (
+                    <EntryRow
+                      key={e.rel_path}
+                      entry={e}
+                      checked={selected.has(e.rel_path)}
+                      onToggle={() => toggle(e.rel_path)}
+                      onOpen={e.is_dir ? () => setCwd(e.rel_path) : undefined}
+                      onReplace={replaceable ? () => void replace.pick(e.rel_path, e.name) : undefined}
+                      replacing={replace.pendingRel === e.rel_path}
+                      thumb={showThumbs && replaceable ? { installDir } : undefined}
+                    />
+                  );
+                })
               )}
             </div>
           )}
 
           {entries.length > 0 ? (
-            <div className="mt-2 flex items-center gap-3 text-xs">
+            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
               <button
                 onClick={selectAllHere}
                 className="text-sky-400 hover:text-sky-300"
@@ -152,9 +172,27 @@ export function FileBrowserPage() {
               >
                 Select everything in this folder
               </button>
+              <span className="text-slate-600">·</span>
+              <label className="flex cursor-pointer items-center gap-1.5 text-slate-400">
+                <input
+                  type="checkbox"
+                  checked={showThumbs}
+                  onChange={(ev) => setShowThumbs(ev.target.checked)}
+                />
+                Show thumbnails
+              </label>
+              <span className="text-slate-600">·</span>
+              <span className="text-slate-500">
+                Portraits and textures show a <span className="text-sky-400">Replace…</span> action to
+                preview and write an edited image back in place.
+              </span>
             </div>
           ) : null}
+
+          {replace.result ? <div className="mt-2">{replace.result}</div> : null}
         </Card>
+
+        {replace.dialog}
 
         <Card title="Export" subtitle="What to write for the selected files.">
           <div className="space-y-4 text-sm">
@@ -241,11 +279,18 @@ function EntryRow({
   checked,
   onToggle,
   onOpen,
+  onReplace,
+  replacing,
+  thumb,
 }: {
   entry: BrowseEntryDto;
   checked: boolean;
   onToggle: () => void;
   onOpen?: () => void;
+  onReplace?: () => void;
+  replacing?: boolean;
+  /** When set, show a decoded thumbnail of this texture in place of the file icon. */
+  thumb?: { installDir: string };
 }) {
   const kind = entry.kind ? KIND_META[entry.kind] : undefined;
   return (
@@ -258,7 +303,13 @@ function EntryRow({
         className="shrink-0"
         aria-label={`Select ${entry.name}`}
       />
-      <span className="w-5 shrink-0 text-center text-slate-500">{entry.is_dir ? "📁" : "📄"}</span>
+      {thumb ? (
+        <TextureThumbnail installDir={thumb.installDir} relPath={entry.rel_path} />
+      ) : (
+        <span className="w-5 shrink-0 text-center text-slate-500">
+          {entry.is_dir ? "📁" : "📄"}
+        </span>
+      )}
       {onOpen ? (
         <button
           onClick={onOpen}
@@ -274,6 +325,17 @@ function EntryRow({
         </span>
       )}
       {kind ? <Pill tone={kind.tone}>{kind.label}</Pill> : null}
+      {onReplace ? (
+        <button
+          onClick={onReplace}
+          disabled={replacing}
+          className="shrink-0 text-xs text-sky-400 hover:text-sky-300 disabled:text-slate-600"
+          type="button"
+          title="Preview and write an edited image back into this texture (keeps a .bak)"
+        >
+          Replace…
+        </button>
+      ) : null}
       <span className="w-20 shrink-0 text-right text-xs tabular-nums text-slate-500">
         {entry.is_dir ? "" : formatBytes(entry.size)}
       </span>
@@ -363,11 +425,4 @@ function Check({
       </span>
     </label>
   );
-}
-
-function formatBytes(n: number): string {
-  if (n < 1024) return `${n} B`;
-  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
-  if (n < 1024 * 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)} MB`;
-  return `${(n / 1024 / 1024 / 1024).toFixed(2)} GB`;
 }

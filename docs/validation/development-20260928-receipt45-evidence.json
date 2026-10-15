@@ -1,0 +1,56 @@
+{
+  "r123": {
+    "invalid_odd_rule_request_failures": [],
+    "invalid_odd_rule_proposal": [
+      [],
+      []
+    ],
+    "vectors": 27,
+    "vectors_all_ok": true,
+    "stock_tables": 144,
+    "stock_failures": 0,
+    "replay_equals_published": true
+  },
+  "schedule_tests": {
+    "ignored": 1,
+    "failed": 0,
+    "passed": 18
+  },
+  "archive_negative_cases": 13,
+  "archive_check": "passed",
+  "review_date": "2026-09-28",
+  "hashes": [
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\src\\schedule_edit.rs",
+      "sha256": "2a72ed8db349832238f49482216fa65faef942af1436b398658c5dae04b60bdd"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\tests\\schedule_preservation.rs",
+      "sha256": "a93b308626d2b643ff8ffdb3c8e20733f8ae98af454fb45f9674d846913d631d"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\tests\\schedule_edit.rs",
+      "sha256": "38b167daf72dc086efe868366c5f2453cdf939556f8e097eab72b83f12d3c084"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\tools\\release-archive\\verify.py",
+      "sha256": "0fda384cd3523e1b2fe5053b38aca67e3f965c5c85cd61b7805b5e3891344d5f"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-api\\src\\hockey_shop.rs",
+      "sha256": "13155801725963922e346e5d8aa741997ef476ce9b5e05458c242340d4948df2"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-api\\tests\\hockey_shop_title_spec.rs",
+      "sha256": "ad4ef4364da3b20edc258b629f772fe87f12b612bd1404d29e51e8a8ceb01abe"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-26\\probes\\r123_schedule_generation_contract.py",
+      "sha256": "cd46f8fbc14b75c157959cc79d32b0c51d64983df1924091d7d945d3597a1c32"
+    },
+    {
+      "path": "E:\\nhlms-release-candidate-20260927\\NHL Modding Studio rc-20260927-r43.zip",
+      "sha256": "7e81d48b56c300030884064ff6d07d91fdd4b2171a2a72226b154a2b8e618776"
+    }
+  ]
+}

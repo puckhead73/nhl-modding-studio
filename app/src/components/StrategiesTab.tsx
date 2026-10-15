@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { call } from "../lib/client";
-import { useProject } from "../lib/project";
+import { useFieldEdit } from "../lib/useFieldEdit";
 import { EmptyState, Spinner } from "./primitives";
+import { EnumSelect } from "./EnumSelect";
 import {
   BIAS_MAX,
   BIAS_MIN,
@@ -208,26 +209,6 @@ function tacticOptions(cell: StrategyCellDto): Array<{ raw: number; label: strin
     options.push({ raw: current, label: `(uncatalogued: ${current})` });
   }
   return options;
-}
-
-/** Stage one strategy cell through `set_field`, then refetch. */
-function useStrategyEdit(projectId: number, record: number) {
-  const qc = useQueryClient();
-  const { update } = useProject();
-  return useMutation({
-    mutationFn: (v: { field: string; value: number }) =>
-      call("set_field", {
-        projectId,
-        table: "EeYo",
-        record,
-        field: v.field,
-        intValue: v.value,
-      }),
-    onSuccess: async () => {
-      await qc.invalidateQueries();
-      update(await call("project_summary", { projectId }));
-    },
-  });
 }
 
 // ---------------------------------------------------------------------------
@@ -451,11 +432,11 @@ function StrategyControl({
   record: number;
   cell: StrategyCellDto;
 }) {
-  const mut = useStrategyEdit(projectId, record);
-  const f = cell.field;
+  const mut = useFieldEdit(projectId, record, cell.field);
+  const f = mut.field!;
   const slider = TACTIC_SLIDERS[f.studio_field];
 
-  if (slider) {
+  if (slider && f.enum_options.length === 0) {
     return (
       <BiasSlider
         projectId={projectId}
@@ -474,7 +455,7 @@ function StrategyControl({
         <select
           value={f.decoded ?? 0}
           disabled={!f.editable || mut.isPending}
-          onChange={(e) => mut.mutate({ field: f.studio_field, value: Number(e.target.value) })}
+          onChange={(e) => mut.mutate({ intValue: Number(e.target.value) })}
           className="w-full rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
         >
           {options.map((o) => (
@@ -510,14 +491,24 @@ function BiasSlider({
   max?: number;
   showLabel?: boolean;
 }) {
-  const mut = useStrategyEdit(projectId, record);
-  const stored = cell.field.decoded ?? 0;
+  const mut = useFieldEdit(projectId, record, cell.field);
+  const stored = mut.field?.decoded ?? 0;
   const [draft, setDraft] = useState(stored);
   useEffect(() => setDraft(stored), [stored]);
 
   const commit = () => {
-    if (draft !== stored) mut.mutate({ field: cell.field.studio_field, value: draft });
+    if (draft !== stored) mut.mutate({ intValue: draft });
   };
+
+  // Named choices take precedence over a numeric bias slider when the title supplies them.
+  if (cell.field.enum_options.length > 0) {
+    return <div title={mut.error != null ? String(mut.error) : cell.label}>
+      {showLabel && <div className="text-[10px] uppercase tracking-wide text-slate-500">{axis.label}</div>}
+      <EnumSelect label={cell.label} value={stored} options={cell.field.enum_options}
+        disabled={!cell.field.editable || mut.isPending}
+        onChange={(raw) => mut.mutate({ intValue: raw })} />
+    </div>;
+  }
 
   return (
     <div

@@ -1,0 +1,58 @@
+{
+  "hashes": [
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-api\\src\\hockey_shop.rs",
+      "sha256": "fdea1a8f6bb890ed41558c58c2f41dfb8f1777d83a85156efe366f161758ad73"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-api\\tests\\hockey_shop_title_spec.rs",
+      "sha256": "606cf06204f1effbc03ccca8949828776ea039dc557f1b768ffb29a0d5328f4f"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\src\\encoding.rs",
+      "sha256": "ac470a6b243f60bdf6a63ee6e421bb99cd8c2fb50926a093db3dc7691e362ee2"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\tests\\encoding_contract.rs",
+      "sha256": "c75a4249176362c17a03f19e6b8ded402419b630773b163698e1420689d8f42e"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\src\\schedule_edit.rs",
+      "sha256": "dce517ed35fce497643e669929eb61a23348c79f33fe91506e2c82005c981954"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\src\\schedule_stock.rs",
+      "sha256": "add636643bda322a5cff83a853f94c697ece6b576863f6df0293bc3225420ce4"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\crates\\studio-domain\\tests\\schedule_grouped.rs",
+      "sha256": "5bbbf861036972abf06e1e5e6095d1ca59a2956548be4d8fb2009d793dc3dff7"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\tools\\release-archive\\verify.py",
+      "sha256": "554e9a86a4500434c4fdcdeedf330dba353f8ec3003074513bf41af64da70f21"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\tools\\release-archive\\embedded-resources.json",
+      "sha256": "9727edb5621f263ba91e3f83ea4c71f3b870d932730f57af3ffe7dcaaff6b864"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\docs\\validation\\evidence\\coordinator-r60-rollback.rs",
+      "sha256": "706cc65ddb8fe038aefbd4676715e6901a14fac182bc8e58b45314ce4c8442eb"
+    },
+    {
+      "path": "E:\\nhlms-release-candidate-20260928\\NHL Modding Studio rc-20260928-r59.zip",
+      "sha256": "aaf1e4fbce2115e4a7b01aa25c87e263980d9bdf8a6f5e2447ef2c9ec4173401"
+    }
+  ],
+  "date": "2026-09-28",
+  "archive_check": "passed",
+  "rollback_probe": "rollback_failed=true backup_survives=false",
+  "tests": {
+    "schedule_grouped": 4,
+    "encoding_contract": 10,
+    "failed": 0,
+    "hockey_shop_title_spec": 2
+  },
+  "release_check": "refused: MIT holder and 53 unrecorded artwork files"
+}

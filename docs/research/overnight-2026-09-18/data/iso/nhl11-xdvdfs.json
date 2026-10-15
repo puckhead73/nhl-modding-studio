@@ -1,0 +1,141 @@
+{
+ "iso": "X:/Games/Emulation/Roms/XBOX360/NHL 11/NHL 11 (USA) (En,Fr).iso",
+ "layout": "xgd2",
+ "base": 265879552,
+ "root_sector": 1783934,
+ "root_size": 2048,
+ "entries": [
+  {
+   "path": "$SystemUpdate",
+   "sector": 1783935,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "$SystemUpdate/su20076000_00000000",
+   "sector": 1775675,
+   "size": 7983104,
+   "attr": 128
+  },
+  {
+   "path": "$SystemUpdate/system.manifest",
+   "sector": 1779573,
+   "size": 2372,
+   "attr": 0
+  },
+  {
+   "path": "audioboot.big",
+   "sector": 1768588,
+   "size": 3897568,
+   "attr": 128
+  },
+  {
+   "path": "audioboot2.big",
+   "sector": 2641930,
+   "size": 19823984,
+   "attr": 128
+  },
+  {
+   "path": "audiostream.big",
+   "sector": 1783936,
+   "size": 1284102240,
+   "attr": 128
+  },
+  {
+   "path": "boot.big",
+   "sector": 1770655,
+   "size": 8770576,
+   "attr": 128
+  },
+  {
+   "path": "data0.big",
+   "sector": 261318,
+   "size": 154929504,
+   "attr": 128
+  },
+  {
+   "path": "default.xex",
+   "sector": 1779788,
+   "size": 8491008,
+   "attr": 128
+  },
+  {
+   "path": "fe.big",
+   "sector": 2410940,
+   "size": 348445424,
+   "attr": 128
+  },
+  {
+   "path": "gamedata",
+   "sector": 1770654,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "gamedata/aidata.big",
+   "sector": 1770492,
+   "size": 330240,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim",
+   "sector": 261317,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "gamedata/anim/faceposer.big",
+   "sector": 257183,
+   "size": 8465872,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/gps.big",
+   "sector": 257182,
+   "size": 1031,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/nis.big",
+   "sector": 2591156,
+   "size": 103984096,
+   "attr": 128
+  },
+  {
+   "path": "nxeart",
+   "sector": 1774939,
+   "size": 1507328,
+   "attr": 128
+  },
+  {
+   "path": "options.viv",
+   "sector": 1774938,
+   "size": 284,
+   "attr": 128
+  },
+  {
+   "path": "rendercache.big",
+   "sector": 457782,
+   "size": 921066528,
+   "attr": 128
+  },
+  {
+   "path": "rendernocache.big",
+   "sector": 907522,
+   "size": 1763461232,
+   "attr": 128
+  },
+  {
+   "path": "stadium.big",
+   "sector": 336968,
+   "size": 247425072,
+   "attr": 128
+  },
+  {
+   "path": "transitions.big",
+   "sector": 2581080,
+   "size": 20634032,
+   "attr": 128
+  }
+ ]
+}

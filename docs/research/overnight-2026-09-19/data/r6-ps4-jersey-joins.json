@@ -1,0 +1,209 @@
+{
+ "nhl15": {
+  "rows": 659,
+  "distinct_triples": 657,
+  "distinct_fe_triples": 657,
+  "dup_triples": 2
+ },
+ "nhl16": {
+  "rows": 703,
+  "distinct_triples": 698,
+  "distinct_fe_triples": 698,
+  "dup_triples": 3,
+  "teamjerseys": {
+   "files": 1207,
+   "triples": 1207,
+   "db_triple_has_file": 697,
+   "db_fetriple_has_file": 697,
+   "file_without_db_triple": 510,
+   "four_component": 0,
+   "fourth_values": []
+  }
+ },
+ "nhl17": {
+  "rows": 813,
+  "distinct_triples": 810,
+  "distinct_fe_triples": 810,
+  "dup_triples": 3,
+  "teamjerseys": {
+   "files": 1326,
+   "triples": 1326,
+   "db_triple_has_file": 796,
+   "db_fetriple_has_file": 796,
+   "file_without_db_triple": 530,
+   "four_component": 0,
+   "fourth_values": []
+  }
+ },
+ "nhl18": {
+  "rows": 1030,
+  "distinct_triples": 998,
+  "distinct_fe_triples": 998,
+  "dup_triples": 10,
+  "teamjerseys": {
+   "files": 1584,
+   "triples": 1584,
+   "db_triple_has_file": 988,
+   "db_fetriple_has_file": 988,
+   "file_without_db_triple": 596,
+   "four_component": 0,
+   "fourth_values": []
+  }
+ },
+ "nhl19": {
+  "rows": 1532,
+  "distinct_triples": 1091,
+  "distinct_fe_triples": 1091,
+  "dup_triples": 271,
+  "teamjerseys": {
+   "files": 1749,
+   "triples": 1749,
+   "db_triple_has_file": 1087,
+   "db_fetriple_has_file": 1087,
+   "file_without_db_triple": 662,
+   "four_component": 0,
+   "fourth_values": []
+  },
+  "teamjerseysxl": {
+   "files": 1270,
+   "triples": 1270,
+   "db_triple_has_file": 1086,
+   "db_fetriple_has_file": 1086,
+   "file_without_db_triple": 184,
+   "four_component": 0,
+   "fourth_values": []
+  }
+ },
+ "nhl20": {
+  "rows": 1652,
+  "distinct_triples": 1151,
+  "distinct_fe_triples": 1151,
+  "dup_triples": 271,
+  "teamjerseysxl": {
+   "files": 1406,
+   "triples": 448,
+   "db_triple_has_file": 381,
+   "db_fetriple_has_file": 381,
+   "file_without_db_triple": 67,
+   "four_component": 1406,
+   "fourth_values": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+   ]
+  },
+  "teamjerseys": {
+   "files": 1883,
+   "triples": 464,
+   "db_triple_has_file": 382,
+   "db_fetriple_has_file": 382,
+   "file_without_db_triple": 82,
+   "four_component": 1883,
+   "fourth_values": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+   ]
+  }
+ },
+ "nhl21": {
+  "rows": 1792,
+  "distinct_triples": 1250,
+  "distinct_fe_triples": 1250,
+  "dup_triples": 280,
+  "teamjerseysxl": {
+   "files": 1574,
+   "triples": 457,
+   "db_triple_has_file": 379,
+   "db_fetriple_has_file": 379,
+   "file_without_db_triple": 78,
+   "four_component": 1574,
+   "fourth_values": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+   ]
+  },
+  "teamjerseys": {
+   "files": 2044,
+   "triples": 472,
+   "db_triple_has_file": 380,
+   "db_fetriple_has_file": 380,
+   "file_without_db_triple": 92,
+   "four_component": 2044,
+   "fourth_values": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+   ]
+  }
+ }
+}

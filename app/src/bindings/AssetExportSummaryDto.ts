@@ -9,4 +9,20 @@ export type AssetExportSummaryDto = { players_considered: number, portraits_writ
  * Portraits skipped because they're a generic placeholder shared across many
  * un-portraited players, not the player's own.
  */
-portraits_skipped_generic: number, skipped_no_slug: number, failures: Array<string>, bytes_written: number, };
+portraits_skipped_generic: number, skipped_no_slug: number, 
+/**
+ * Heads not written because `pPaD` is a shared pool id (captured generically).
+ */
+meshes_skipped_pool: number, 
+/**
+ * Heads not written because `pPaD` is shared by several players (captured generically).
+ */
+meshes_skipped_shared: number, 
+/**
+ * Heads not written because the player has no head assigned (`pPaD == 0`).
+ */
+meshes_skipped_no_head: number, 
+/**
+ * Heads not written because a non-pool `pPaD` resolved no mesh file on disk.
+ */
+meshes_skipped_missing: number, failures: Array<string>, bytes_written: number, };

@@ -1,0 +1,2104 @@
+{
+  "schema": "nhlms-game-files/1",
+  "game_id": "nhl07",
+  "platform": "xbox",
+  "source": "NHL 07 (USA) Xbox 360 — user-supplied original ISO",
+  "region": "USA",
+  "image_sha256": "dca27bd7c3c0e6358c9bd35a08cef5de6d8d640e39b56695f5fe318be806cc91",
+  "files": [
+    {
+      "path": "$SystemUpdate/su20076000_00000000",
+      "size": 3100672,
+      "sha256": "dc26b64e52300b15b9185cd63c37878bba74a160bbedaff449d901bc88af80e0",
+      "kind": "loose",
+      "optional": true
+    },
+    {
+      "path": "audio/context/Events.csi",
+      "size": 1064,
+      "sha256": "0457cbe7c657d8fc3e77c66fc94d213e31828bdd36dd9f357ca988bd6b8fed11",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/context/Events.evt",
+      "size": 2405,
+      "sha256": "62fa70476db1c06cbd0ecedb06748af411ceb239d61a0b297e2e8d6b67ef0706",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/context/crowd.css",
+      "size": 114764,
+      "sha256": "a6d0246822a38140b221bf149517b8e43910a30c142907d19ade54cae8b7fe87",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/context/crowd.viv",
+      "size": 750012,
+      "sha256": "8ab094ce982bd65aa251120318a9c269602c6fcf02517bd58014f820ad82b671",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/context/speech.css",
+      "size": 305476,
+      "sha256": "249d7780b551426db640d230b9e9a9a0a79a9716e452eff00e2b94415f59fbab",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/context/speech.viv",
+      "size": 1955692,
+      "sha256": "c1486b6bb2ca51647b4f647cb344a0b7e18b7cd18808073194464335678d88e6",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/music/loading/ml01.abk",
+      "size": 76676,
+      "sha256": "0a0d196c7c954a7498251d99b6bf233f890aa28551f8e39a572b96a7112e5879",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/reverb/Reverb.irf",
+      "size": 2236976,
+      "sha256": "98c7c3d710ab18bd0f37acb53ca54017952e799809cf8fb77636ff7df0480c08",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0004_chant.abk",
+      "size": 157552,
+      "sha256": "140ac0c91dd267271fe066653e7acd558adeeb9a81a23c0ba5888b19129768d2",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/000_chant.abk",
+      "size": 242276,
+      "sha256": "94e3b29752229975954495e3a9183468f7ed92d9acdb1a0cf4f675aed51c4fdd",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/000_goal.abk",
+      "size": 206024,
+      "sha256": "f2a29c23b04f9ed064afca2e95dc2e6847f87ad6c9536afc83d6eb0fe48d080f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/000_period.abk",
+      "size": 21704,
+      "sha256": "5756a40b06462ba95f696321a542c97240529ca3a5fb881b26ed1f1c738b6bd1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/001_chant.abk",
+      "size": 498276,
+      "sha256": "12c207a6f4a5d08d320a1d7b48a510cabbc8d9285034e01a5a473355181b92df",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/001_goal.abk",
+      "size": 175500,
+      "sha256": "f006258ba48c3a31f5f3a8fe15e72461366b89186bc5e17c630dee9f0da8f1e7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/001_period.abk",
+      "size": 21704,
+      "sha256": "5756a40b06462ba95f696321a542c97240529ca3a5fb881b26ed1f1c738b6bd1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/002_chant.abk",
+      "size": 256612,
+      "sha256": "6d42fd48560c3d6e174ffc319658f4ad28de513f3029e13db302eabcb402fa18",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/002_goal.abk",
+      "size": 181424,
+      "sha256": "e36c7144ad7210f1e5af61eef6108bb9491b74a76aeb6c6daaff7b10dd9f45fa",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/002_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0031_chant.abk",
+      "size": 153456,
+      "sha256": "7ab0d7b47c443877dad438cdbcacec252b76b54f3e12e8384224d5bf2e426a4d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/003_chant.abk",
+      "size": 447076,
+      "sha256": "6b19206864423135f61344f4e284cd709c35c7d9b0195f77c637ec8e79342f7c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/003_goal.abk",
+      "size": 146608,
+      "sha256": "e1b912f7fb44c0d0ed6864518a46f852c8df337c05253abbdda4908335bae52d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/003_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0041_chant.abk",
+      "size": 139032,
+      "sha256": "72561031a32a33c83c786a10100ddc4e72c3660f001d0730e7e30ae4b542c6a4",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/004_chant.abk",
+      "size": 275044,
+      "sha256": "9fdc8b2ca1bef8691d973c39c7bebab8a20464b80e50fa54d629141eb0915297",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/004_goal.abk",
+      "size": 228552,
+      "sha256": "8cdfb842c163556bd773c45e19b6db8e7bc9281ed58c45bc54380f3b50ac9312",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/004_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0059_chant.abk",
+      "size": 157552,
+      "sha256": "5149b5e2f0b5f61aa65be22b8c8b289b9d466ccb8014e6c57959a0483642e2a0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/005_chant.abk",
+      "size": 426596,
+      "sha256": "70f0137e65034d976d8d5ace8f310b7322ecd800bae502fa2ac584238650c925",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/005_goal.abk",
+      "size": 152776,
+      "sha256": "5b117c5a4b3a8b9d7082fa1c8567e5c4938f2e974c79a9d13ac9ecec5432f94b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/005_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/006_chant.abk",
+      "size": 270948,
+      "sha256": "9262314db77d8c2e6bc3bc3fd33220046cf384bb9cb422ddbb13c07bd90c86dd",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/006_goal.abk",
+      "size": 167112,
+      "sha256": "6facbbf4a3bb4b22a7d055eb9ab5cf5f206e597c3928b1203e0b82ec7e7437f1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/006_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/007_chant.abk",
+      "size": 291428,
+      "sha256": "ed5c95eb5da9df97bd8ee282b2a9fdb9a6646c1cbf36b163189b98e41ccc1f58",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/007_goal.abk",
+      "size": 130224,
+      "sha256": "f597a6eb13a2f6bb8ec2fe906c2651ff303b5e3bdb91e59bbd5dca3b2a9e5860",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/007_period.abk",
+      "size": 27848,
+      "sha256": "53a49e5c309e016536126f681d9f4fbe7be757dff81aba90fab59fbae8548a04",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0084_chant.abk",
+      "size": 143128,
+      "sha256": "aa72b83f2d636c536293b227376f3d09818f384c36b03eaa20d33a7e14478a37",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/008_chant.abk",
+      "size": 461412,
+      "sha256": "50f89f1164b15078214fddef2d36e3703d9e433d2a867d2f789703fe195802b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/008_goal.abk",
+      "size": 126208,
+      "sha256": "cde6e18f85b8509b26f9b294a46bcefc1689ce60178327c5abcd736456b19d47",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/008_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/009_chant.abk",
+      "size": 301668,
+      "sha256": "dbf8240d2ec3b58ab6cf284e05a98cb5d428cc702acfa0e504dbf0b81cf4124a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/009_goal.abk",
+      "size": 187592,
+      "sha256": "e760afdb7e11dbd4f782cbee21d29e1eb66810e465c1f63ab83698a4d409c07f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/009_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/010_chant.abk",
+      "size": 260708,
+      "sha256": "2349239954d0c217f572a2c0f1671276e6f6478a101aad9de155273c507fa777",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/010_goal.abk",
+      "size": 195784,
+      "sha256": "a61c6292ea36b86e29279a8e21b5aae09c2cdbd64ee658f705695bc07e0b43d2",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/010_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0119_chant.abk",
+      "size": 173936,
+      "sha256": "e2acf0a93e3a1fb948ebced39eb7c551f4dc838d26020316e27804bf083fe00e",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/011_chant.abk",
+      "size": 424548,
+      "sha256": "532963b895ba9357c8ad0e31784429a20d2f5f43d8ee5eb81cfa135d958c8f67",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/011_goal.abk",
+      "size": 163016,
+      "sha256": "8b8475296693cbb7979ac89e15b514a24275016caf88f586746067d9ed536730",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/011_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/012_chant.abk",
+      "size": 469604,
+      "sha256": "dd8308967aca18e970c40b70dee761146beb94b8d70c72bd6af831a18ddd5ee9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/012_goal.abk",
+      "size": 152752,
+      "sha256": "5d5558bf9d36a6972d91e6f402a8d9744985ddefcc01b4ba89898a4c52ae2bae",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/012_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/013_chant.abk",
+      "size": 285284,
+      "sha256": "573f1d73273735458a761db16867dde223b11b84d37ef7aaf28ea54e89733611",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/013_goal.abk",
+      "size": 193736,
+      "sha256": "a72d796f687147901f13fc797938e8ac76f3399dcca718b8e5b856399cc303d7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/013_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/014_chant.abk",
+      "size": 266852,
+      "sha256": "ebe3debb8141e0358274d2d0dd10e8fc9fd2be855d09c097dc8c07ffa87f93c0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/014_goal.abk",
+      "size": 240840,
+      "sha256": "61303fc203195d38daf1b2942b728eb0be3879fa25da4380f3a4a42f8f7d6ea9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/014_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/015_chant.abk",
+      "size": 277092,
+      "sha256": "14eface7ff77658e72dee079cb6cbbc8bfefc2a50ef512d051a32e6e74f0d2fb",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/015_goal.abk",
+      "size": 203952,
+      "sha256": "762c19189ff9c04080512ffefd468fc55f1cb4bce6dd3e2dd8ba6800df2d44c3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/015_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/016_chant.abk",
+      "size": 481892,
+      "sha256": "548844a7fc88dcbc86837985055fc5b63149220d4e941049b4cbceafb7f3ae94",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/016_goal.abk",
+      "size": 160968,
+      "sha256": "f8f7dc10222bfcbcdb7a3dfb49aea3e7d5a8eb37cc2452f7ecd470540c40b9bc",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/016_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0170_chant.abk",
+      "size": 132976,
+      "sha256": "3c4c541a2ed9c33e936ccfcb6f37617f569d1873fc0f6f4f54cb72cf487daa94",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/017_chant.abk",
+      "size": 455268,
+      "sha256": "08f2e692e07329e9c982454f5d20f79311f8ae0d5a663215fdc27f8cf367b91f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/017_goal.abk",
+      "size": 165260,
+      "sha256": "b54975910ed7060e81968ba330aa630235c1900739be956e83f0b8c58f0dfcc1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/017_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/018_chant.abk",
+      "size": 451172,
+      "sha256": "40d23a40605912cffee96e15d4a4b5a27ce71802f7e15fcb5d0263c5acd2b4e3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/018_goal.abk",
+      "size": 179400,
+      "sha256": "ee1cc5302d6075ccc8aeb1240eb0e0eacbc303e8a4b15dad6903f1f112aad9da",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/018_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/019_chant.abk",
+      "size": 500324,
+      "sha256": "60fc1ce487d70ed87a4c894557b8314fafe66035e2f862213e38a3d2357d7d2a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/019_goal.abk",
+      "size": 175304,
+      "sha256": "4d20573d0580c080d6966b54197c0e7b8f8917e32c1eb74b05a7c17435311878",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/019_period.abk",
+      "size": 27848,
+      "sha256": "53a49e5c309e016536126f681d9f4fbe7be757dff81aba90fab59fbae8548a04",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/020_chant.abk",
+      "size": 277092,
+      "sha256": "a9e25764fa59607216ee8fe031f16a346db9cf10d436648ab23a6f5a10a34f88",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/020_goal.abk",
+      "size": 128200,
+      "sha256": "2add00ad43a2c45aa3d62c9848e356c4ae3026c59aec26bcfcd15fd567491dff",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/020_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0210_chant.abk",
+      "size": 147312,
+      "sha256": "99ec839519de943545e7b54b7e489f9bba6a62340b1f94e6b327d4906af1f576",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0218_chant.abk",
+      "size": 161648,
+      "sha256": "3e64e041d3b21842eaa47505bc2fdf4070e2b0e9d9285182b8fd89c928ec1d19",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/021_chant.abk",
+      "size": 473700,
+      "sha256": "ec35f6025edfe3b0c26c5eba38b37dcc6a563659d3b6cd83bbab15a820062ab0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/021_goal.abk",
+      "size": 228552,
+      "sha256": "de94bed36336e97687deb0750e96ba46aa64b6f4fb05a76d210280b462966e0a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/021_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/022_chant.abk",
+      "size": 459364,
+      "sha256": "91ee3f331589050bdeea52c28a99050183b1dbc2dfc4c7117c546e28d1f0d650",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/022_goal.abk",
+      "size": 171184,
+      "sha256": "7a33bb78dcda0a6c5ee8741a3d28ab0e6a2b9c813b065296cec5c865eaddad0b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/022_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/023_chant.abk",
+      "size": 260708,
+      "sha256": "738975b8b0f2ee926f92aaaddd20456ccdcad61d2bed8702fcf79b23140a38bd",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/023_goal.abk",
+      "size": 130224,
+      "sha256": "9c94c772ee79eb19607a2e095067363fa58f28c90df28ff662efc63c90e23571",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/023_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0246_chant.abk",
+      "size": 132888,
+      "sha256": "965f5d91715fc570127a7a4b7121269a3d1dc9efdd6348feac51c3e699aef659",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/024_chant.abk",
+      "size": 465508,
+      "sha256": "34135ae3690680962715c3dd0bb6506f3d88b13e0225dd5ab7fe89394868325f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/024_goal.abk",
+      "size": 146632,
+      "sha256": "8fecd7a03f0bdcf3bbbf4da84a0e20113c1b5f7fb501a835dd41a9de86abbc56",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/024_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/025_chant.abk",
+      "size": 283236,
+      "sha256": "de9af4e4fe37ddf0e59e0a04df862e45d5f771b30c8d6fc87ce3715cb342615a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/025_goal.abk",
+      "size": 206024,
+      "sha256": "76c8f729e1885ac8aae239e7e1237df4b7a9f7ca311133ec654eb2f5b0b4abfb",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/025_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0261_chant.abk",
+      "size": 145176,
+      "sha256": "7dd299af9c8d3bedada88560ba58ca73f878f00a9a459d4f60196fdfcda422b2",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0264_chant.abk",
+      "size": 143216,
+      "sha256": "0963e31c1a51199067945a6c3a17e649dfb1d602d21372d04db8c1a9c41b8b8b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/026_chant.abk",
+      "size": 481892,
+      "sha256": "f524f17a3085ad5a61104ef46f29abdca1ac2d75d710fec03f3b15f31fe6c5b4",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/026_goal.abk",
+      "size": 146632,
+      "sha256": "be5518434001c6ac98f147b06b59315b59d47f7df1e4e3081f57e4eea3c60fa1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/026_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0275_chant.abk",
+      "size": 155504,
+      "sha256": "1cc1b3f3d57e2b1537cf5fe1d8e31878c17e2bcff1aa2bfa33b548731de5abd1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/027_chant.abk",
+      "size": 254564,
+      "sha256": "11863204ee1b0d648a5eb16325198d25c1350799329c9a550103c6a3cc63139f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/027_goal.abk",
+      "size": 163212,
+      "sha256": "e09d2e290f0c45ed97218ef37bfc8035a4956e56b890c48da12cfa10520df69b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/027_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/028_chant.abk",
+      "size": 277092,
+      "sha256": "370eb1bc0b1ad4cc6915dcc08a741e40e476e15da185eaa9f2056907cf9b584c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/028_goal.abk",
+      "size": 142536,
+      "sha256": "872ff630055944ae3b9945b7a086c5a2429fe0dad94fe413684352d823394cfa",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/028_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0293_chant.abk",
+      "size": 161648,
+      "sha256": "e619f2ab8aff1ca45adf777588f9f78b4dd373a2c8497f84eb23ff64444d6647",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0298_chant.abk",
+      "size": 163696,
+      "sha256": "7e7fd2135d912dcb99f5f8dfcfa26bfb4009a0fa1dfa13e681b8e89a761a99c0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/029_chant.abk",
+      "size": 275044,
+      "sha256": "b21470d0e05c03295a344b17dd6f084f6455389542c52513bf316eaa8120c0e9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/029_goal.abk",
+      "size": 132272,
+      "sha256": "cd3ebba1a586d82b2f59aa28fc57bcd71d6f5c371982a45e2314afa5ef34a908",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/029_period.abk",
+      "size": 23752,
+      "sha256": "61cf16d78320cfb04c1311ca8e76860fc84dae06f398aaa3dfe396395c5e01b3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0300_chant.abk",
+      "size": 153456,
+      "sha256": "d9e66d081b1fcf2c72624ea5ac37f72b4f398d4b6b1aadb523c45db7d4fd736e",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0312_chant.abk",
+      "size": 153456,
+      "sha256": "0819ad1f0306ff78879d2c24d85091e473ad8b9f742eadb90eb18cd0d036b5ea",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0321_chant.abk",
+      "size": 143128,
+      "sha256": "9763408f560d55aafc4bbe48e7f5f79ddbb906dcb735f178812449d22d6c17df",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0346_chant.abk",
+      "size": 153456,
+      "sha256": "701c7a383af29c7d8c48be369f09f3765261ac6201a6f5764a8e4581fe23d65e",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/034_chant.abk",
+      "size": 303716,
+      "sha256": "e95b6d709c9cb7e31dcc5f561aa2fb2b2fcea6b7540cde882e1be490ca2c72b7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/036_chant.abk",
+      "size": 254564,
+      "sha256": "009268c21f2c391d5eba96a19b56e5c58539731dc7b61118cad3e97d6d35f6f5",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/037_chant.abk",
+      "size": 283236,
+      "sha256": "0bef448e651164f7b680cdbacd83f9e8056fc5519339a86f8c7bff861784ab0a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/038_chant.abk",
+      "size": 408164,
+      "sha256": "22b5937e20f03b616ac823d7492a747d78b585557b59aeeba5f198695080538d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/039_chant.abk",
+      "size": 281188,
+      "sha256": "dc2f9d4d82fb1c42760ff71f3a24846a372c768b7fa01756db7467b73a5f994b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0404_chant.abk",
+      "size": 141080,
+      "sha256": "2041fc55dda3e405a365cb830187cfc8ecac6db4f841bd0cdbd27d8a0621d0a9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/040_chant.abk",
+      "size": 295524,
+      "sha256": "0d12e9e418649d1d06b3ace80b38d068e70e4334ed7c9956768111f3940fe921",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/041_chant.abk",
+      "size": 270948,
+      "sha256": "2c453fddb74ab4eb2f3e39a4ba96f2147469eba6d249a4057d49640b82241590",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0422_chant.abk",
+      "size": 157552,
+      "sha256": "3ca09c6aafaa262c1fae9fca0b4c078a645eb8ca891c7e5257052eb8c2cec19b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0423_chant.abk",
+      "size": 139032,
+      "sha256": "3db2b202b14b542768f02f7a10286f0afc190cd93035aa98d965e0f76ae783c3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/042_chant.abk",
+      "size": 289380,
+      "sha256": "2df24af495bf0b74a8d1aa01c46001c4117f0f2b1408bba95191f37d4b615f06",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/043_chant.abk",
+      "size": 248420,
+      "sha256": "cee382e40e22b5d9167a366fa16e0d5422d61700d7e9358148124c83b438c422",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0440_chant.abk",
+      "size": 149360,
+      "sha256": "56eae2a36cb312590265c98b08d410c5790e04ebb1b6d88b9c788ec516dfce79",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0445_chant.abk",
+      "size": 157552,
+      "sha256": "7def6fa6fa08f73a8a494d55a02b86e4666c1123391963ba24483d0b157f010e",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/044_chant.abk",
+      "size": 252516,
+      "sha256": "8b57758830a355dce9a1ab94a006daa1a68e75508a1562b72c64198405dd2c09",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0457_chant.abk",
+      "size": 157552,
+      "sha256": "6af7a5b10a3216402c9ee461d0a457682589661269754169c3e7e4f914a87dd1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/045_chant.abk",
+      "size": 268900,
+      "sha256": "a2341116a647f135a9787d230b0c3a5be87dd9e4984f262d1f26a343a97ed2b4",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/048_chant.abk",
+      "size": 277092,
+      "sha256": "0d2b72396e5b3a0c582ebf770a941e707a2436f6539a36ee06d57dccb88b9725",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0506_chant.abk",
+      "size": 147224,
+      "sha256": "a14fc0521d102ae485ae7bc98f952565c8ea8f38a3ef53571efaad435d056ad1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/051_chant.abk",
+      "size": 506468,
+      "sha256": "f565141d31bd6f0c33af51504ede88a16c4e729f29a2769aceb29dff13b69a5b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0521_chant.abk",
+      "size": 175984,
+      "sha256": "6b590c30a9226e436115f4ffa5e390493688a46e2d9dfda86b0b4fe7b2ac79c4",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0524_chant.abk",
+      "size": 157552,
+      "sha256": "94177072f4fe87cc6a02bc7c10df305b42e992d2a3c653094407125c278e59a9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/052_chant.abk",
+      "size": 275044,
+      "sha256": "fb11df24047229ee46834ee930b8b33deffd1901b800691a4177384f7f00a3af",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/053_chant.abk",
+      "size": 287332,
+      "sha256": "ddb2ce5f84ed7c0e885171a7be8e17f477c0bb160f6777fffb99d160b4e99737",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0547_chant.abk",
+      "size": 208752,
+      "sha256": "250a25d3e2edbce51437fc01280a737f9c71833e88b5e2969a94378a7e9b91ad",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0574_chant.abk",
+      "size": 120688,
+      "sha256": "fbe37b141fb9a381baad08e4515e2a499a0236687c64e3b6d51635285eda32f1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0623_chant.abk",
+      "size": 147312,
+      "sha256": "4e45dae329d72297bb7a8478316db636bbbcd06c9a6c12025b67a91261988281",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0661_chant.abk",
+      "size": 149360,
+      "sha256": "74b1161183cdc35b17177ea54679ff3b5ecfab59cbc0fb62459ff00a8250347d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0681_chant.abk",
+      "size": 149360,
+      "sha256": "3549601583a372a7adfeb83ab93c3de541f3e169d9d92ac6fb87c117567f7615",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0724_chant.abk",
+      "size": 145176,
+      "sha256": "576957bc27f4692c564e9973948cc770506c0498ef197ecd96dcff4533c9aac5",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0726_chant.abk",
+      "size": 136984,
+      "sha256": "ef2ef90963149cd60747f07e8fd836a10609c9393be14535fa35ab2915888a9e",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0776_chant.abk",
+      "size": 153456,
+      "sha256": "4dadcb13826afd4681019575b33e97c680799f1f866475fd10d52e3116ab87b0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0805_chant.abk",
+      "size": 151408,
+      "sha256": "58501831456d61e231bf1808df9d9e93fce4077e4edaca9a14933111b663b91f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0818_chant.abk",
+      "size": 153368,
+      "sha256": "8743a6638e4435ff16fa42fb2b71ba0ceadd669b6bfa0cf56df673dbb1e491d3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0827_chant.abk",
+      "size": 151320,
+      "sha256": "66f2bfe06426d71530ee3e2e238f94930463f9ac80fc5783222dfe26a951d116",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0832_chant.abk",
+      "size": 157552,
+      "sha256": "7c8c0fe3db78ff6040a8d18a56c5cd67d253d3f119d68a7995c4009031db0906",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0840_chant.abk",
+      "size": 147224,
+      "sha256": "16a2716510d743fd350e5e7d8e0923520fe9fe44df78c1e266a6cae77833a8d6",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0958_chant.abk",
+      "size": 175984,
+      "sha256": "4371fbd91228dc5a9474a00c54e597846d5332647b3e2fc77f95f01decbb45c4",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/0982_chant.abk",
+      "size": 161648,
+      "sha256": "10fcc9211fd5a0cb90c906f85b3f4234e32bc0b614453aefb010b25885d8e47f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/100_chant.abk",
+      "size": 303552,
+      "sha256": "a07209a110762050194ea67302f18aad601f6c87fb5d08c7c56c559a717b2d87",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/100_goal.abk",
+      "size": 1176,
+      "sha256": "36fc79ca55cef18e6d210336b66189f36a1498957dd31fa78f4501ace6eff3c5",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/100_period.abk",
+      "size": 21508,
+      "sha256": "bc7c87097e311645c5922233ab129a4d7a2537df9ba6339c700b74fb565bdc65",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/1011_chant.abk",
+      "size": 159600,
+      "sha256": "7fd6be3aa1e895ada1743af51060fe97bacdc95396c8b0965e2fb2061487627a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/101_chant.abk",
+      "size": 254400,
+      "sha256": "002814412950b0483f070b958a5eabddd6c11ff8299498ff7d1348c54827fbf1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/102_chant.abk",
+      "size": 283072,
+      "sha256": "32b04f3ad05fbaf9e5d00fbd7c86c0ead37c15af568f86813c1d85bc03126f10",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/103_chant.abk",
+      "size": 408000,
+      "sha256": "c718954db025389bce9692836aafcf698cd4de8135f58757fd6cf72a12b42fe9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/104_chant.abk",
+      "size": 281024,
+      "sha256": "a5c06dc97732d12557529201ea7b24633f99834545b0b3c5f90b25a46e69492f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/105_chant.abk",
+      "size": 295360,
+      "sha256": "96c614e7e157f5cead244f76d41840382d1d85a4a81b0e372bbfdf220410a3ff",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/106_chant.abk",
+      "size": 270784,
+      "sha256": "c86ccdad5433dadd87faa712eae023b5731b9985e98c1ec20f02ae91d27eee74",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/107_chant.abk",
+      "size": 248256,
+      "sha256": "60da3a383e2a130bc4895421927f0e9d8da718d1ec229234c6628585e0bf228b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/108_chant.abk",
+      "size": 408000,
+      "sha256": "970e1b5e07d2109b3786610142eb14ef436f7ec305d12c921328be377ee991b7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/109_chant.abk",
+      "size": 268736,
+      "sha256": "b0524cfa6c5d0c5c8682368910ac7bfd3cb6187ee09a79be8fe51f0e84170e60",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/110_chant.abk",
+      "size": 270784,
+      "sha256": "9d449da51f8d55433077e2cf4ea309417658e22350e293f8582074154c468fd6",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/111_chant.abk",
+      "size": 276928,
+      "sha256": "f967a19a6a342ac7935059859579fd3a9c38a3326168d2d1d474e1feb1bd41df",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/112_chant.abk",
+      "size": 268736,
+      "sha256": "f2715cddf2f6e19818e5a926748f154e3d2a5589cb1dc9ae92de06514a42794b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/113_chant.abk",
+      "size": 506304,
+      "sha256": "007a0a4d22e1ed0eb8f8a9a0cc997d66bb08249bad09f5b7c102f3597f551506",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/114_chant.abk",
+      "size": 274880,
+      "sha256": "d7df373eb6bd7073f255bf09699e497c00fc84c262b21ed9a5fb8e4633b771a7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/115_chant.abk",
+      "size": 289216,
+      "sha256": "59083319e3dec20d21f4793700786f023b3d19d418bbbdc45ae46ae528054d14",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/116_chant.abk",
+      "size": 287168,
+      "sha256": "1e5ea9b85cf064b986ec800a24bfd1983d4ce9ca52f33ca3a7a78a661e751214",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/117_chant.abk",
+      "size": 420288,
+      "sha256": "2349c859d607698647a3575a5cdd0eba1fe76003a4b97b69ec31186a18e30a38",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/118_chant.abk",
+      "size": 260544,
+      "sha256": "2690ee0fcd8f516cc6805473747893fe674bdcd3b48273672c4186ba3cbe99b0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/1258_chant.abk",
+      "size": 136984,
+      "sha256": "046e41762b2fc8419ed1f35db73cf4ab49b1af4bcca8ece915eedbb7b74b8d04",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3105_chant.abk",
+      "size": 112408,
+      "sha256": "3c09aa885d1eaaf0996dc7cfc96b968f7f338c936f965bb2015a5fc79f24c373",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3157_chant.abk",
+      "size": 141080,
+      "sha256": "f3d8e428f50f78bf717fecd70fdb7db671cffe5117aa9017433a090682dbcf1f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3181_chant.abk",
+      "size": 173848,
+      "sha256": "d1b54cdce181f1bdb82353aab51c4f7bac114b1ce320bd8798df7c917d8e326d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3221_chant.abk",
+      "size": 149272,
+      "sha256": "5f2e932c665f6de85aae6d40902afcf9c72b10847aa5ef580fded32eb7aa96ed",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3244_chant.abk",
+      "size": 134936,
+      "sha256": "0ed23018ad631ea71604cb807fcdfa4ada2b39375a8cab013c127de83a8086e7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3421_chant.abk",
+      "size": 136984,
+      "sha256": "b5fe7af7ee916fc77af56b37dd3f0d0802b82b0fafed2450597c871590e255e1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3582_chant.abk",
+      "size": 134936,
+      "sha256": "047fd9a6b052c6024089996b4e4397b8f99ebc454a1e443249d1b9bc2a28a3f0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3609_chant.abk",
+      "size": 128792,
+      "sha256": "d1de079711260c6ebeec0b92a43857dd2604beeb5e903116b4a8f406eb86907c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3635_chant.abk",
+      "size": 147224,
+      "sha256": "905e62097b0a705053765c864d08d60dbcaf7298f1c2d387007cc5b556a7d9ca",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3648_chant.abk",
+      "size": 303304,
+      "sha256": "2af3f2833cc710681af7ec6653d7dae1568dbdc69a69905a6c16e9a3001c576d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/3765_chant.abk",
+      "size": 153456,
+      "sha256": "3a1e911705caf0592ce56fcee06a44344126648b61cb4692d807ad6aae0b4d3b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/4460_chant.abk",
+      "size": 147224,
+      "sha256": "f69b336ae6ed0a542795c641aaeda7140bf6f55a366fa919f6a42b1edfba00e3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/5595_chant.abk",
+      "size": 139032,
+      "sha256": "262cd0379f955c57b95dbe689f6c217ea4a25c5c33e809cd8d8624bd32dc6597",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/5726_chant.abk",
+      "size": 136984,
+      "sha256": "17ca74a26b48db0fb4040c275883e128dee7fd43dba8dda4e9f1a05d9cc364ea",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/7154_chant.abk",
+      "size": 141080,
+      "sha256": "a1dc08d4069a66334a0a74ac6004e538fdd65ae4bcc35bf9568227cc38c514e5",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/7616_chant.abk",
+      "size": 200472,
+      "sha256": "78c2130416265a50942f0bbe345ca5a8ac0d2ee3167b335aec842956537822d8",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/7798_chant.abk",
+      "size": 145176,
+      "sha256": "bed3f856dfa1ce113f77b488a4decbd27dc51877fd3432f3136794c3faa1cacf",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/7877_chant.abk",
+      "size": 139032,
+      "sha256": "92b2ad93f0e7b90ab15a45beb431929e8f6b582ce0e7d665560fe1081bc370d3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/8592_chant.abk",
+      "size": 143128,
+      "sha256": "954ade1d18f21a42db3e74ae51c4c1e8d203cdefc17b129a80f093ad7829999b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/crowds.abk",
+      "size": 17044164,
+      "sha256": "11658a7290f8bcdcdd80035938d1439c03c094a7e7b0877ae2ffad4acb7abdaa",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/fe.abk",
+      "size": 667248,
+      "sha256": "78f3a4544d76d98a16178fcb689d7b8a46dc67b0b785cd0dd5813d4fb4eb1468",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/horns.abk",
+      "size": 3088,
+      "sha256": "79c75e4447819e7e5bfecbbd89ec10be52cea1d3bbeaa1b14f6bb0c3b6fb8af1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/load01.abk",
+      "size": 914520,
+      "sha256": "1ef197e54cdc34f000a9fa1e39089ead822d4b8b9b5a395a9228d73494ffb01a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/load02.abk",
+      "size": 742488,
+      "sha256": "01f7d015679d45fca4fba9ee5a98b672f040f109ece3bd930f6f27b79965ecd3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/load03.abk",
+      "size": 924760,
+      "sha256": "b98adaff1254a1638650a4b13ea5d1015c4669f3faddb64377cf4fb8c7bdad03",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/load04.abk",
+      "size": 914520,
+      "sha256": "bfd02b3cfe0109aa8d5a513810eb2410f19ad9d3bc32bb6b13acc0b470af05f9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop000.abk",
+      "size": 1239968,
+      "sha256": "cd84fb0605727030ef4d0da7bc1f78ce71ba8ffce926deea74fc4b2aa29d476c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop001.abk",
+      "size": 1117088,
+      "sha256": "aa0f927fb06415a70f63751418ca44dea9e8b2e9342b4393aca5b822eebdb7c1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop002.abk",
+      "size": 1227680,
+      "sha256": "e958aba8556aea35f98f6a09a3c58b4bd012e4c21e65ef183ebe0e525be34e0e",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop003.abk",
+      "size": 1121184,
+      "sha256": "d76776fca468d2ac2f421336f9c4771c1f6af8a3e444ebec9fb5ab34e4c76e1b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop004.abk",
+      "size": 1227680,
+      "sha256": "74196abc379df52285a9ef6829169fcf699c06cd77df0a257ab5f96ed6c502d8",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop005.abk",
+      "size": 1264544,
+      "sha256": "3798f37fda3e5e0fadb6093c01999b6fbbf8781378da9ef65aac5ceaa234be4f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop006.abk",
+      "size": 1221532,
+      "sha256": "bd959cb0545fc6db0ec792cc67c8ae16e81d273d19f7f58917b3a1f102cb33e1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop007.abk",
+      "size": 1121184,
+      "sha256": "f2f37dd27345d8bc8fdc8ddc249bf8adc6b1c8319749817f636782b692357f03",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop008.abk",
+      "size": 1121184,
+      "sha256": "c074e32e602bb587656fb6ed80d9af94e9ca2ae63a40c7fba1ca724fc9331cf1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop009.abk",
+      "size": 1121184,
+      "sha256": "583f400d2c5230b884559ea2fda4c5f4afa7b2c95f6895adaf0e101369d2192a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop010.abk",
+      "size": 1121184,
+      "sha256": "071efd08c0bf0802caa0d36fb34f58d8103a9749accd1c80d3aa65c2cdcbbd6c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop011.abk",
+      "size": 1151904,
+      "sha256": "3ae193bfc3fca2308358889dd05f58220379c7f48b92262098adfb0e90ffd81b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop012.abk",
+      "size": 1151904,
+      "sha256": "40b834bd25371584d939420b7ff1216d2b3373b46d0844e586d273af4f583cdf",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop013.abk",
+      "size": 1151904,
+      "sha256": "b26b5b97f5e9369c05599c831902bf3e75e814f41e055c8104cd4ea1da8a2645",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop014.abk",
+      "size": 1151904,
+      "sha256": "df531463d56ec28ee793339710937db1420ba478ebf7d7f3f959ac3fec780007",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop015.abk",
+      "size": 1151904,
+      "sha256": "374e7b97e286383e2eaf396eef01378fec98fdf525651cbc0b553dd2af0ba09b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop016.abk",
+      "size": 1151904,
+      "sha256": "e50db6ae7be44995db63ba611b6d359a45bed9dec6de4fb849a7cd831c3ea580",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop017.abk",
+      "size": 1151904,
+      "sha256": "c4355137358002d41193171388f819d9aa77d0523e28d947c1b622077ae6e7f9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop018.abk",
+      "size": 1151904,
+      "sha256": "7c68f9fc0f68172b3b9b6a9aa7c9e8f2f6dbadefd9959bce3f3a93fc5d3f58a1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop019.abk",
+      "size": 1151904,
+      "sha256": "b80eb73f8a6f1277f543ecca379b2a6c240c4a28f9cf7d22028dfd36059d670c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop020.abk",
+      "size": 1151904,
+      "sha256": "424e9e02b50dac9d5150edbcd5d0529e641811df930709878e9579e06c23b037",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop021.abk",
+      "size": 1151904,
+      "sha256": "47b245e6d7546ced8f332058303dfe0eca6623d6c81b248a5618f14c28962119",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop022.abk",
+      "size": 1151904,
+      "sha256": "93acf1b6b7430a3464bfb8725ef8c6aa2a9ef4b8dfd0ab0bf773c48dbbe47b1e",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop023.abk",
+      "size": 1151904,
+      "sha256": "ee06c093ad0cffba30216d39a86138ecd1254a940e6183d30d69bfe579f70ff0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop024.abk",
+      "size": 1151904,
+      "sha256": "7780c84a21e423a3169dfa962dabaf3447bdad55a757932fd5c2af837262d700",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop025.abk",
+      "size": 1151904,
+      "sha256": "0eb198194ff4438ce00759b6c589e916c6e4b0f4d33361c5176918ed12cfdcb5",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop026.abk",
+      "size": 1151904,
+      "sha256": "95a7c680bd9244fd4eaedef7dbc9cc308135e026178a49e7c806d0205fbae406",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop027.abk",
+      "size": 1151904,
+      "sha256": "047c86818cb934e116820c9b0580625cc67e3d774c38b798bc5f232b599fa1ec",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop028.abk",
+      "size": 1151904,
+      "sha256": "9004252e2216ac43839f737fde9a155ea43ecf85478298faca8ed32754fd06bc",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop029.abk",
+      "size": 1151904,
+      "sha256": "2a2b2de3d25496ce1092b4e5a8070ffe0418af78c45cda90ccea17762e8f01ca",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop100.abk",
+      "size": 1151904,
+      "sha256": "13fdb2ee6300064646e92aed69d7e8d780870b5246d708e5d384b46e417bde44",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop101.abk",
+      "size": 1151904,
+      "sha256": "7f0a2b97b8b05db3e6bb7695b5ae46bcd78958694614cf69125a70cf05d49b9b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop102.abk",
+      "size": 1151904,
+      "sha256": "d78851ded5e5884c1538ce105bf4e96b44447ed1cb0245360d3d19e0acbdc9a8",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/loadLoop103.abk",
+      "size": 1151904,
+      "sha256": "539613737e0debe9bf1b0f0902e8dca2995c6a7dde9316d7a303ec1a2d3c3f8a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/pLoad01.abk",
+      "size": 629848,
+      "sha256": "5e8cc9e23b932c61c392a29960e44a9e5d0f138fe2e55a153a2dcd46ab1c20bd",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/pLoad02.abk",
+      "size": 840792,
+      "sha256": "20543e20bb8e2f3012fa78bbe3ffc15f8c27d13e2850992a4fbe021cedec4c85",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/sLoad01.abk",
+      "size": 304216,
+      "sha256": "a8e9f3a91b5fa7427e05d5abef8be2e0a6bb601505636c773d1a0fb32d5bc02d",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/sLoad02.abk",
+      "size": 279640,
+      "sha256": "56e2bb7c35a2b4b0dba2d3435c09db1e3520b7df1a6c0d31a21916bb929e58f7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/sLoad03.abk",
+      "size": 253016,
+      "sha256": "73218c387be5580f0daad5aad4910ad3eaff3a973249b44362fc7bea3755032c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/sLoad04.abk",
+      "size": 349272,
+      "sha256": "b153dcdc379e7f3bfe805e4b432ec88ad540683ac91e482db4615d7976f405b0",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/sLoad05.abk",
+      "size": 244824,
+      "sha256": "4beb48728aed225db83f4958af416ca15ced9d55fd3aa60e6de4cb6df25815d7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/RAM/sfx.abk",
+      "size": 6139636,
+      "sha256": "b0111a2e96d3c008ae0d49df097201e7043209804203ca465135371a07257dc9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/events/NHL07.csi",
+      "size": 2288,
+      "sha256": "c7df47456e6932ea003052232cd9519d772b8cb24498ad8fa004cc230e8b28ea",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/events/aemsFe.csi",
+      "size": 380,
+      "sha256": "a81e82521e653a49b287877582c23a8aec3e440c40b3bb2921383b5d37bcdc92",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/events/aemsHorn.csi",
+      "size": 1124,
+      "sha256": "8a2665cdf833a96cbfad40447447ad39a8c0fbe4f4a7b4b06f8ecd001d2f0f57",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/events/aemsSfx.csi",
+      "size": 10932,
+      "sha256": "290333b5e2ecb019a95106aef05ae582f367b661681245c8f18a6d5f6c7f8c01",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/events/aemscrwd.csi",
+      "size": 20832,
+      "sha256": "b808585cfa5bce57e26a305cc2bd0c5a64a76bcba1561b09bc86d66555219d51",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/streams/crowds.ast",
+      "size": 9970048,
+      "sha256": "df29c74c2302886b5242d254c2f2aa9a4ad5de547861b1cdb3a8fe6dec0d33ca",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/sfx/streams/sfx.ast",
+      "size": 39194112,
+      "sha256": "19a046cf7b7c43ec7faeba62d9873b7d78b8c2ed1ed1d5dd5ac5881eaeeefb76",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/pbp_eng.big",
+      "size": 694928512,
+      "sha256": "c4e57f05bf12be9c268975108510780f546ec683e905b5a73624e24bfb8b2d33",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/pbp_eng.csi",
+      "size": 37804,
+      "sha256": "b3b822ce97712d48f714cd51d277a2dbb679023bfcb518424a395376d1b7c0c1",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/pbp_eng.evt",
+      "size": 150104,
+      "sha256": "dd485a4431a97e2592d3c4e12d3aff21ab2ebd352471990c65eaa24e24109261",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/pbp_eng.idx",
+      "size": 431332,
+      "sha256": "24b0b9d4289bf7869d8d554b5760912219073da89d17aaf8d3ad61cdb4f19e4b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/rink.big",
+      "size": 79797248,
+      "sha256": "c4bdb012c7dd2f141353c1a3e3f1d53d400578d89da1399f5c6072d73d3aa055",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/rink.csi",
+      "size": 412,
+      "sha256": "e7bdd3029846109538ece4c104881e22683d669674bd77a7788ce8bde5ef25db",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/rink.evt",
+      "size": 8161,
+      "sha256": "571e80b6356c09bd2d2ab4153f3ab51383c895f08f439d78fee378502a6097c7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/speech/rink.idx",
+      "size": 255844,
+      "sha256": "81d8066e50f1d88b3810cbe607b33a155fe3d92d5460a99b7077e460e890d605",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/streams/streams.dat",
+      "size": 5544,
+      "sha256": "a5d60176267efbb45ab2c74af7cc17f0da6cb282896796a966460f5aa81b981c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "audio/streams/streams.viv",
+      "size": 120009920,
+      "sha256": "67457c0ca743431455b2bc6a07fa4b266dcb7b49510ea9d0c49fb1f72552b3da",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "boot.bh",
+      "size": 464,
+      "sha256": "c4097f0f3f35e8a5dd6624253ecd379ed58b1574ea894f030e215c038fbf1b4c",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "boot.big",
+      "size": 1630060,
+      "sha256": "e866a6a18644ac71e357056d8215d712d0c15729cbd244c9ac7b75872d52ef2e",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data0.bh",
+      "size": 55872,
+      "sha256": "3c899dc5b3966e4dd1a7bb30a465b9b2c074346dca46ef451eb278dc01b0cc2f",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data0.big",
+      "size": 284526259,
+      "sha256": "769758f27904dd0d66284d251123e9e1220ff2788c2503b2e7e508c5c82436e6",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data1.bh",
+      "size": 81568,
+      "sha256": "d2fc823ae46261bb66dfd67a3aae9825d02bcfa66bfa828fc112aaca2524554b",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data1.big",
+      "size": 441735646,
+      "sha256": "71fc7b95e7cd975fe1efacf0c34b3c4b1ddffd5f9c2f4632219a37d97c4d4edc",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data2.bh",
+      "size": 38768,
+      "sha256": "53cd85cb2923a1e38aff436f08081ca0be26041fdb196137e05ffda894e63622",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data2.big",
+      "size": 346450939,
+      "sha256": "ed37e31630da7ba2a3e40ccff9a6f631f9ebb2a39a31cd62bdd242c1b444021c",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data3.bh",
+      "size": 44224,
+      "sha256": "2e6cfebd6d129556b5dab8aab2d8f656c69f7ab28c112cb82be57f3e76da5632",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data3.big",
+      "size": 588272802,
+      "sha256": "fb837289286ac40c5bba05e1648bc41326eba63259c2dfdd40af811d9385de38",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data4.bh",
+      "size": 22352,
+      "sha256": "2cf961e5c2c6bbaf92443d887e84938e7a622bd4c60d52e7467cd2a02c050f70",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data4.big",
+      "size": 444449465,
+      "sha256": "2b3a255974ff0662826dc40b816fe36dac65df9a144b4544292eb8f11a96ed12",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "data5.bh",
+      "size": 2384,
+      "sha256": "039d23731ab7e19f64644949719ae4e19718789e1617ad7bea8dc5bf109a1ce7",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "data5.big",
+      "size": 26027404,
+      "sha256": "f132cf289d6063e75b1f75c93bee3ccbbba00eca585b6744e5491a974e67291b",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "db/NHL07NG-meta.xml",
+      "size": 269813,
+      "sha256": "c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "db/NHL07NG.db",
+      "size": 4189776,
+      "sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "default.xex",
+      "size": 10858496,
+      "sha256": "0fc761b260deec4c8a6b9686748d134f62fdf5d81825235a1b0f2db1bef52617",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/loc/nhl_eng_us.db",
+      "size": 182500,
+      "sha256": "5d3c0b0187b8d673b9642eaec4fabf346fc3451f9a3bf14e4e6bfb4cd61743c3",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/EASPORTSmovie.vp6",
+      "size": 2402488,
+      "sha256": "e130cf60f3e6f129104b4f71e3c652afd48786a86b1e994db1acbf905cb2ac1a",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/ESRB-E-nV.vp6",
+      "size": 133584,
+      "sha256": "bf09fab47a82b79271ea0077158ca0e94440430775b504cb63cc021cb05806bc",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/NHL07-Intro-ng-n.vp6",
+      "size": 42471856,
+      "sha256": "2e9e2144216c31ab3c3a2a2649ffd2f616cd7d31f117a1d2c51120a1372691a9",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/bootflow.vp6",
+      "size": 5163836,
+      "sha256": "058770c595eed0a3f0a605b681e1124df176fd0d2845556af94a426f55ba8711",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/preview1.vp6",
+      "size": 17081968,
+      "sha256": "03ecbe4b641ad3850a86c22806c41b9946d0196f727a4aa29c277f52db68e526",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "fe/movies/ntsc/tutorial.vp6",
+      "size": 64530476,
+      "sha256": "2196419293ff40de0983eac43d04bcd7746841113ee9b0e637e9d21c20d4c9bb",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "gamedata/aidata.bh",
+      "size": 256,
+      "sha256": "0f11e5e56688bc721346b741f1b26d38def3c93c5cc49956bed8f5b3997ce043",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "gamedata/aidata.big",
+      "size": 37274,
+      "sha256": "bf82e0503b043794f9b8a5f6ce1402624503b1a069c2d7187e075a591d09306b",
+      "kind": "container",
+      "optional": false
+    },
+    {
+      "path": "gamedata/nis.bh",
+      "size": 4112,
+      "sha256": "86ba607f6ee20da31fb060c21cb6ec625a4e609e39ca2a4927be26c53815b957",
+      "kind": "loose",
+      "optional": false
+    },
+    {
+      "path": "gamedata/nis.big",
+      "size": 19857408,
+      "sha256": "b6c0feddcf6f34d3b2883a2d3e65b6c8706806fa60ae1798d11dc562d30026af",
+      "kind": "container",
+      "optional": false
+    }
+  ],
+  "anchors": [
+    {
+      "path": "databases/NHL07NG-meta.xml",
+      "sha256": "c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520",
+      "disc_matches": [
+        "db/NHL07NG-meta.xml"
+      ]
+    },
+    {
+      "path": "databases/NHL07NG.db",
+      "sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+      "disc_matches": [
+        "db/NHL07NG.db"
+      ]
+    },
+    {
+      "path": "databases/nhl_eng_us-meta.xml",
+      "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+      "disc_matches": []
+    },
+    {
+      "path": "databases/nhl_eng_us.db",
+      "sha256": "5d3c0b0187b8d673b9642eaec4fabf346fc3451f9a3bf14e4e6bfb4cd61743c3",
+      "disc_matches": [
+        "fe/loc/nhl_eng_us.db"
+      ]
+    },
+    {
+      "path": "savefiles/DYNASTY1/DYNASTY1",
+      "sha256": "4c5c1ec41be11ef28ae93077a258df5b70ffbc979fd2c2d338e260bada9ebb00",
+      "disc_matches": []
+    },
+    {
+      "path": "savefiles/ROSTER1/ROSTER1",
+      "sha256": "40a06d5344d4ca7460cffeb8ec0cb1626bdefb1a28ba337f17c6f9ddacd2223d",
+      "disc_matches": []
+    },
+    {
+      "path": "savefiles/USER PROFILE1/USER PROFILE1",
+      "sha256": "b3210a93ea480cc4b92ddf8d638b0a03c93cd1fff751f4d14f8cf1b277e7909b",
+      "disc_matches": []
+    }
+  ]
+}

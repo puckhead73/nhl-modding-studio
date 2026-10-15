@@ -1,0 +1,129 @@
+{
+ "iso": "X:/Games/Emulation/Roms/XBOX360/NHL 12/NHL 12 (USA, Europe) (En,Fr,De,Sv,Fi,Ru,Cs).iso",
+ "layout": "xgd2",
+ "base": 265879552,
+ "root_sector": 1783935,
+ "root_size": 2048,
+ "entries": [
+  {
+   "path": "$SystemUpdate",
+   "sector": 1778786,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "$SystemUpdate/su20076000_00000000",
+   "sector": 1768546,
+   "size": 11612160,
+   "attr": 128
+  },
+  {
+   "path": "$SystemUpdate/system.manifest",
+   "sector": 1774216,
+   "size": 6100,
+   "attr": 0
+  },
+  {
+   "path": "audioboot.big",
+   "sector": 1762815,
+   "size": 1940416,
+   "attr": 128
+  },
+  {
+   "path": "audioboot2.big",
+   "sector": 3044062,
+   "size": 3456096,
+   "attr": 128
+  },
+  {
+   "path": "boot.big",
+   "sector": 1763763,
+   "size": 9791728,
+   "attr": 128
+  },
+  {
+   "path": "cache.big",
+   "sector": 113264,
+   "size": 280576432,
+   "attr": 128
+  },
+  {
+   "path": "cacherender.big",
+   "sector": 250265,
+   "size": 1246859632,
+   "attr": 128
+  },
+  {
+   "path": "data0.big",
+   "sector": 98035,
+   "size": 23003184,
+   "attr": 128
+  },
+  {
+   "path": "default.xex",
+   "sector": 1779487,
+   "size": 9109504,
+   "attr": 128
+  },
+  {
+   "path": "gamedata",
+   "sector": 1762814,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/aidata.big",
+   "sector": 1762805,
+   "size": 16912,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim",
+   "sector": 113263,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/anim/faceposer.big",
+   "sector": 109269,
+   "size": 8178864,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/gps.big",
+   "sector": 109268,
+   "size": 1031,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/nis.big",
+   "sector": 1783936,
+   "size": 132720000,
+   "attr": 128
+  },
+  {
+   "path": "nocache.big",
+   "sector": 1848741,
+   "size": 2448015792,
+   "attr": 128
+  },
+  {
+   "path": "nocacherender.big",
+   "sector": 859084,
+   "size": 1850819808,
+   "attr": 128
+  },
+  {
+   "path": "nxeart",
+   "sector": 1778787,
+   "size": 1433600,
+   "attr": 128
+  },
+  {
+   "path": "options.viv",
+   "sector": 1768545,
+   "size": 284,
+   "attr": 128
+  }
+ ]
+}

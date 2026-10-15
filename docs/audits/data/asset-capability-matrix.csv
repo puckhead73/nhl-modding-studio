@@ -1,0 +1,5 @@
+game_id,platform,asset_family,discover,identify,preview,export,replace_modified,rebuild,install,game_verified,blocker,evidence_date
+nhllegacy,xbox360,portraits,pass,pass,pass,pass,pass,pass,external,not_run,none(extracted-file target),2026-08-03
+nhllegacy,xbox360,logos,pass,pass,pass,pass,pass,pass,external,not_run,none(extracted-file target),2026-08-03
+nhllegacy,xbox360,uniforms,pass,pass,pass,pass,pass,pass,external,not_run,none(extracted-file target),2026-08-03
+nhllegacy,xbox360,equipment,pass,partial,pass,pass,pass,pass,external,not_run,none(extracted-file target),2026-08-03

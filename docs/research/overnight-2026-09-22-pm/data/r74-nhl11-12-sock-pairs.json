@@ -1,0 +1,207 @@
+{
+ "note": "R74 - NHL 11 / 12 (X360, loose trees) sock texture pairs: what does the `0 / 1` sub-index of `sock_<style>_<0|1>_<artid>_<variant>_cm`\nselect? (developer observation O-2). Read-only. For every complete pair: descriptor dims / format / mips of both files, byte identity,\nand the block-mean base-level image of `_1_` compared with `_0_` directly, mirrored horizontally and flipped vertically (mean absolute\ndifference, 0-255). Classes: mirror_h (mirror MAD <= 1.5 and >= 4x better than direct), identical_content (direct MAD <= 1.5), flat\n(base std < 2), other (listed with the three distances).\nUsage: python r74_nhl11_12_sock_pairs.py <out.json>\n",
+ "titles": {
+  "x360-nhl11": {
+   "files_cm": 1512,
+   "files": 1582,
+   "pairs": 756,
+   "byte_identical_pairs": 0,
+   "classes": {
+    "mirror_h": 459,
+    "identical_content": 153,
+    "other": 120,
+    "flat": 24
+   },
+   "dims": {
+    "((512, 512, 18, 10), (512, 512, 18, 10))": 756
+   },
+   "other_examples": [
+    [
+     "sock_0_0_111_0_cm.rx2",
+     15.8,
+     5.6,
+     47.2,
+     77.9
+    ],
+    [
+     "sock_0_0_111_1_cm.rx2",
+     16.5,
+     4.6,
+     75.9,
+     76.8
+    ],
+    [
+     "sock_0_0_12_1_cm.rx2",
+     4.8,
+     4.8,
+     143.7,
+     92.9
+    ],
+    [
+     "sock_0_0_13_0_cm.rx2",
+     5.4,
+     5.8,
+     23.4,
+     30.8
+    ],
+    [
+     "sock_0_0_17_3_cm.rx2",
+     11.8,
+     5.0,
+     44.7,
+     68.4
+    ],
+    [
+     "sock_0_0_17_4_cm.rx2",
+     6.3,
+     2.2,
+     42.9,
+     67.7
+    ],
+    [
+     "sock_0_0_181_0_cm.rx2",
+     11.5,
+     1.9,
+     11.2,
+     28.6
+    ],
+    [
+     "sock_0_0_181_1_cm.rx2",
+     10.0,
+     1.9,
+     9.4,
+     25.5
+    ],
+    [
+     "sock_0_0_181_2_cm.rx2",
+     4.0,
+     1.9,
+     18.5,
+     39.0
+    ],
+    [
+     "sock_0_0_181_3_cm.rx2",
+     6.7,
+     2.7,
+     37.6,
+     70.0
+    ],
+    [
+     "sock_0_0_182_0_cm.rx2",
+     15.6,
+     4.7,
+     15.8,
+     37.4
+    ],
+    [
+     "sock_0_0_182_1_cm.rx2",
+     15.4,
+     3.0,
+     15.8,
+     37.3
+    ]
+   ]
+  },
+  "x360-nhl12": {
+   "files_cm": 1946,
+   "files": 2016,
+   "pairs": 973,
+   "byte_identical_pairs": 0,
+   "classes": {
+    "mirror_h": 704,
+    "identical_content": 124,
+    "other": 119,
+    "flat": 26
+   },
+   "dims": {
+    "((512, 512, 18, 10), (512, 512, 18, 10))": 973
+   },
+   "other_examples": [
+    [
+     "sock_0_0_111_0_cm.rx2",
+     15.6,
+     5.7,
+     46.7,
+     77.3
+    ],
+    [
+     "sock_0_0_111_1_cm.rx2",
+     16.4,
+     4.8,
+     76.1,
+     76.9
+    ],
+    [
+     "sock_0_0_12_1_cm.rx2",
+     4.8,
+     4.8,
+     144.4,
+     92.8
+    ],
+    [
+     "sock_0_0_13_0_cm.rx2",
+     5.2,
+     5.5,
+     23.0,
+     29.9
+    ],
+    [
+     "sock_0_0_17_3_cm.rx2",
+     11.3,
+     4.6,
+     44.7,
+     68.3
+    ],
+    [
+     "sock_0_0_17_4_cm.rx2",
+     6.1,
+     2.2,
+     42.3,
+     67.6
+    ],
+    [
+     "sock_0_0_181_0_cm.rx2",
+     11.6,
+     1.8,
+     11.2,
+     28.4
+    ],
+    [
+     "sock_0_0_181_1_cm.rx2",
+     10.2,
+     1.8,
+     9.5,
+     25.6
+    ],
+    [
+     "sock_0_0_181_2_cm.rx2",
+     4.0,
+     1.9,
+     18.7,
+     39.2
+    ],
+    [
+     "sock_0_0_181_3_cm.rx2",
+     6.8,
+     2.7,
+     38.4,
+     70.6
+    ],
+    [
+     "sock_0_0_181_4_cm.rx2",
+     20.0,
+     4.1,
+     20.8,
+     37.8
+    ],
+    [
+     "sock_0_0_181_5_cm.rx2",
+     16.7,
+     4.7,
+     58.2,
+     70.9
+    ]
+   ]
+  }
+ }
+}

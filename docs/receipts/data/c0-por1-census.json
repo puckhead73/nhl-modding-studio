@@ -1,0 +1,517 @@
+{
+ "tool": "por1_census.py",
+ "tool_sha256": {
+  "por1_formats.py": "679ebd69e608a3920f634b6541a5b5a688a3ddfcc4960247f7d390dc4834a760",
+  "por1_census.py": "44f85315c1de95fbdac37552db9928a76c172913835f79d1a44dde3fddd032ec"
+ },
+ "note": "Counts only. 'accepted' means accepted by this inspection parser, not semantically validated.",
+ "roots": {
+  "ps3-nhllegacy": "H:\\Emulators\\RPCS3\\dev_hdd0\\game\\BLUS31540\\USRDIR\\fe\\ion\\artassets",
+  "x360-nhllegacy": "H:\\Emulators\\games\\XBOX\\NHL Legacy - Vanilla\\_compiled\\fe\\ion\\artassets",
+  "ps4-nhl21": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\ui\\kettle_assets"
+ },
+ "inventory": [
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheads",
+   "files": 9331,
+   "by_extension": {
+    ".bak": 103,
+    ".big": 9228
+   },
+   "by_group": {
+    "backup-labelled": 103,
+    "current": 9228
+   },
+   "by_subfolder": {
+    "p0_4000": 3087,
+    "p4001_8000": 3196,
+    "p8001_12000": 3044,
+    "silhouettes": 4
+   },
+   "accepted_by_inspection_parser": 9331,
+   "not_accepted": [],
+   "texture_payloads_found": 9331
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheadssmall",
+   "files": 9332,
+   "by_extension": {
+    ".bak": 103,
+    ".big": 9229
+   },
+   "by_group": {
+    "backup-labelled": 103,
+    "current": 9229
+   },
+   "by_subfolder": {
+    "p0_4000": 3089,
+    "p4001_8000": 3196,
+    "p8001_12000": 3043,
+    "silhouettes": 4
+   },
+   "accepted_by_inspection_parser": 9332,
+   "not_accepted": [],
+   "texture_payloads_found": 9332
+  },
+  {
+   "location": "x360-nhllegacy",
+   "folder": "playerheads",
+   "files": 9228,
+   "by_extension": {
+    ".big": 9228
+   },
+   "by_group": {
+    "current": 9228
+   },
+   "by_subfolder": {
+    "p0_4000": 3023,
+    "p4001_8000": 3173,
+    "p8001_12000": 3028,
+    "silhouettes": 4
+   },
+   "accepted_by_inspection_parser": 9228,
+   "not_accepted": [],
+   "texture_payloads_found": 9228
+  },
+  {
+   "location": "x360-nhllegacy",
+   "folder": "playerheadssmall",
+   "files": 9230,
+   "by_extension": {
+    ".big": 9229,
+    ".options": 1
+   },
+   "by_group": {
+    "current": 9229,
+    "other": 1
+   },
+   "by_subfolder": {
+    "p0_4000": 3026,
+    "p4001_8000": 3173,
+    "p8001_12000": 3027,
+    "silhouettes": 4
+   },
+   "accepted_by_inspection_parser": 9229,
+   "not_accepted": [
+    {
+     "path": "p0_4000/p1112_glump.options",
+     "accepted": false,
+     "reason": "no BIGF magic",
+     "first4": "2d626967"
+    }
+   ],
+   "texture_payloads_found": 9229
+  },
+  {
+   "location": "ps4-nhl21",
+   "folder": "playerportraits",
+   "files": 10421,
+   "by_extension": {
+    ".gnf": 10421
+   },
+   "by_group": {
+    "current": 10421
+   },
+   "by_subfolder": {
+    ".": 10421
+   },
+   "accepted_by_inspection_parser": 10421,
+   "not_accepted": [],
+   "texture_payloads_found": 10421
+  }
+ ],
+ "structural_groups": [
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheads",
+   "count": 6465,
+   "example": "p0_4000/p1.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 512,
+    "linear_size": 262144,
+    "mip_count": 0,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheads",
+   "count": 2660,
+   "example": "p0_4000/p1000.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 256,
+    "linear_size": 131072,
+    "mip_count": 0,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheads",
+   "count": 102,
+   "example": "p0_4000/p1070.big.bak",
+   "group": "backup-labelled",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 512,
+    "linear_size": 262144,
+    "mip_count": 0,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheads",
+   "count": 100,
+   "example": "p0_4000/p1070.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x401008",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 512,
+    "linear_size": 262144,
+    "mip_count": 10,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheads",
+   "count": 3,
+   "example": "p0_4000/p732.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 512,
+    "linear_size": 262144,
+    "mip_count": 1,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheads",
+   "count": 1,
+   "example": "p0_4000/p576.big.bak",
+   "group": "backup-labelled",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 256,
+    "linear_size": 131072,
+    "mip_count": 0,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheadssmall",
+   "count": 9126,
+   "example": "p0_4000/p1.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 128,
+    "linear_size": 32768,
+    "mip_count": 0,
+    "width": 256
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheadssmall",
+   "count": 103,
+   "example": "p0_4000/p1070.big.bak",
+   "group": "backup-labelled",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 128,
+    "linear_size": 32768,
+    "mip_count": 0,
+    "width": 256
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheadssmall",
+   "count": 100,
+   "example": "p0_4000/p1070.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x401008",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 128,
+    "linear_size": 32768,
+    "mip_count": 9,
+    "width": 256
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps3-nhllegacy",
+   "folder": "playerheadssmall",
+   "count": 3,
+   "example": "p0_4000/p732.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "caps": "0x1000",
+    "codec": "DXT5",
+    "container": "dds",
+    "height": 128,
+    "linear_size": 32768,
+    "mip_count": 1,
+    "width": 256
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "x360-nhllegacy",
+   "folder": "playerheads",
+   "count": 6567,
+   "example": "p0_4000/p1.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "container": "xpr2",
+    "data_format_bits": 20,
+    "data_size": 262144,
+    "height": 512,
+    "mip_descriptor_dword": "0x00000d10",
+    "pitch_texels": 512,
+    "tiled_bit": 1,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "x360-nhllegacy",
+   "folder": "playerheads",
+   "count": 2661,
+   "example": "p0_4000/p1000.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "container": "xpr2",
+    "data_format_bits": 20,
+    "data_size": 131072,
+    "height": 256,
+    "mip_descriptor_dword": "0x00000d10",
+    "pitch_texels": 512,
+    "tiled_bit": 1,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "x360-nhllegacy",
+   "folder": "playerheadssmall",
+   "count": 9229,
+   "example": "p0_4000/p1.big",
+   "group": "current",
+   "member_count": 6,
+   "member_pattern": [
+    "0",
+    "<num>",
+    "sg1",
+    "<num>",
+    "sg2",
+    "1"
+   ],
+   "texture": {
+    "container": "xpr2",
+    "data_format_bits": 20,
+    "data_size": 32768,
+    "height": 128,
+    "mip_descriptor_dword": "0x00000d10",
+    "pitch_texels": 256,
+    "tiled_bit": 1,
+    "width": 256
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps4-nhl21",
+   "folder": "playerportraits",
+   "count": 10246,
+   "example": "p100.gnf",
+   "group": "current",
+   "member_count": null,
+   "member_pattern": null,
+   "texture": {
+    "container": "gnf",
+    "contents_size": 248,
+    "data_format": 41,
+    "dst_sel_x": 7,
+    "height": 340,
+    "last_level": 0,
+    "num_format": 0,
+    "tiling_index": 13,
+    "version": 2,
+    "width": 512
+   },
+   "texture_members": 1
+  },
+  {
+   "location": "ps4-nhl21",
+   "folder": "playerportraits",
+   "count": 175,
+   "example": "p1.gnf",
+   "group": "current",
+   "member_count": null,
+   "member_pattern": null,
+   "texture": {
+    "container": "gnf",
+    "contents_size": 248,
+    "data_format": 41,
+    "dst_sel_x": 0,
+    "height": 340,
+    "last_level": 0,
+    "num_format": 9,
+    "tiling_index": 13,
+    "version": 2,
+    "width": 512
+   },
+   "texture_members": 1
+  }
+ ],
+ "totals": {
+  "files_inventoried": 47542,
+  "accepted_by_inspection_parser": 47541,
+  "texture_payloads_found": 47541
+ }
+}

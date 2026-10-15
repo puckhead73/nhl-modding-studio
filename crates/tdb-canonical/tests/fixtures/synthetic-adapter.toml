@@ -1,0 +1,300 @@
+# SYNTHETIC FIXTURE — NOT A TARGET PROFILE, NOT REGISTRY COVERAGE.
+#
+# Every value in this file is invented. It exists to exercise the `target-adapter/2` representations
+# for which this repository establishes no real fact yet — a pooled string, a literal-code null
+# sentinel, two's-complement and offset-binary signedness, a canonical-value predicate, a one-to-many
+# companion, a metadata-declared foreign key, a capacity ceiling read from a main DB, and the
+# `not-applicable` state — so that those representations are proven to work before a real target ever
+# needs them.
+#
+# `synthetic = true` is load-bearing: `registry_population` excludes synthetic adapters, so nothing
+# here can inflate coverage, and a test asserts no file under defs/adapters/ carries the flag. The
+# `target` is `fixture-synthetic`, which is not a catalog unit and never will be.
+
+schema = "target-adapter/2"
+adapter_version = 2
+canonical_schema_version = 1
+target = "fixture-synthetic"
+generation = "synthetic"
+endian = "little"
+synthetic = true
+
+[[table]]
+id = "SYN1"
+name = "synthetic_primary"
+provenance = ["crates/tdb-canonical/tests/fixtures/synthetic-adapter.toml (SYNTHETIC)"]
+
+[[table]]
+id = "SYN2"
+name = "synthetic_companion"
+provenance = ["crates/tdb-canonical/tests/fixtures/synthetic-adapter.toml (SYNTHETIC)"]
+
+[[table]]
+id = "SYN3"
+name = "synthetic_parent"
+provenance = ["crates/tdb-canonical/tests/fixtures/synthetic-adapter.toml (SYNTHETIC)"]
+
+# --- a POOLED string: the representation no committed target uses ------------------------------
+
+[[mapping]]
+canonical = "player.first_name"
+table = "SYN1"
+field = "SYNa"
+read_transform = "pool-ref"
+write_transform = "pool-ref"
+inverse_verified = false
+confidence = "asserted"
+qualification = "unknown"
+provenance = ["SYNTHETIC — invented for fixture coverage"]
+note = "SYNTHETIC. Exercises varchar-pool string storage and `truncate` overflow, neither of which any committed target establishes."
+
+[mapping.storage]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.storage.value]
+kind = "varchar-pool"
+bit_offset = 0
+bit_width = 32
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "little"
+
+[mapping.transform]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.transform.value]
+kind = "opaque"
+
+[mapping.string_storage]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.string_storage.value]
+storage = "varchar-pool"
+encoding = "utf8"
+padding = "none"
+over_capacity = "truncate"
+
+[mapping.applicability]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --- two's-complement storage with a LITERAL-CODE sentinel --------------------------------------
+
+[[mapping]]
+canonical = "player.rating_overall"
+table = "SYN1"
+field = "SYNb"
+read_transform = "synthetic-opaque"
+write_transform = "synthetic-opaque-inverse"
+inverse_verified = false
+confidence = "asserted"
+qualification = "unknown"
+provenance = ["SYNTHETIC"]
+note = "SYNTHETIC. Exercises two's-complement signedness, an `opaque` transform whose spelling the validator cannot check, and a literal-code sentinel that is inside the storage range but reserved. C0-REG1a-R2: the sentinel `raw` is the unsigned STORED BIT PATTERN (16 = 0b10000, which this 5-bit two's-complement field decodes to -16); it was written as the decoded -16 before the contract fixed the units."
+
+[mapping.storage]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.storage.value]
+kind = "fixed-bit-signed"
+bit_offset = 32
+bit_width = 5
+signedness = "twos-complement"
+range_low = -16
+range_high = 15
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.transform.value]
+kind = "opaque"
+
+[mapping.null_sentinel]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.null_sentinel.value]
+encoding = "literal-code"
+raw = 16
+canonical_meaning = "unset"
+
+[mapping.string_storage]
+state = "not-applicable"
+reason = "SYNTHETIC — an integer field has no string behaviour. Exercises the not-applicable state, which is a different thing from unknown."
+
+# --- offset-binary storage behind a CANONICAL-VALUE predicate -----------------------------------
+
+[[mapping]]
+canonical = "player.rating_speed"
+table = "SYN1"
+field = "SYNc"
+read_transform = "offset+7"
+write_transform = "offset-7"
+inverse_verified = false
+confidence = "asserted"
+qualification = "unknown"
+provenance = ["SYNTHETIC"]
+note = "SYNTHETIC. Exercises offset-binary signedness and a canonical-predicate applicability, which reads a canonical property rather than a target field."
+
+[mapping.storage]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.storage.value]
+kind = "fixed-bit-signed"
+bit_offset = 40
+bit_width = 6
+signedness = "offset-binary"
+range_low = -32
+range_high = 31
+endian = "little"
+
+[mapping.transform]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.transform.value]
+kind = "linear-offset"
+offset = 7
+
+[mapping.applicability]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+note = "SYNTHETIC. `codes` are canonical enum ordinals here, not stored target codes."
+[mapping.applicability.value]
+kind = "canonical-predicate"
+property = "player.shoots"
+codes = [0]
+
+# --- a CANDIDATE: a proposal recorded with its citation, driving nothing -------------------------
+
+[[mapping]]
+canonical = "player.last_name"
+table = "SYN1"
+field = "SYNe"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "unknown"
+qualification = "blocked"
+note = "SYNTHETIC. Exercises the non-operative candidate channel and the `unresolved` transform spelling: an identity is named, the encoding is not established, and a proposed encoding is recorded without anything acting on it."
+
+[mapping.transform]
+state = "unknown"
+[mapping.transform.candidate]
+confidence = "asserted"
+provenance = ["SYNTHETIC"]
+note = "PROPOSED, NOT OPERATIVE."
+[mapping.transform.candidate.value]
+kind = "linear-offset"
+offset = 12
+
+[mapping.storage]
+state = "unknown"
+[mapping.storage.candidate]
+confidence = "asserted"
+provenance = ["SYNTHETIC"]
+note = "PROPOSED, NOT OPERATIVE. A candidate storage block must never reach `human_range`."
+[mapping.storage.candidate.value]
+kind = "fixed-bit-uint"
+bit_offset = 64
+bit_width = 6
+signedness = "unsigned"
+range_low = 0
+range_high = 63
+endian = "little"
+
+# --- a foreign key EA metadata declares, rather than one inferred from a name --------------------
+
+[[mapping]]
+canonical = "player.team"
+table = "SYN1"
+field = "SYNd"
+read_transform = "identity"
+write_transform = "identity"
+inverse_verified = false
+confidence = "asserted"
+qualification = "unknown"
+provenance = ["SYNTHETIC"]
+
+[mapping.foreign_key]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+[mapping.foreign_key.value]
+parent_table = "SYN3"
+parent_key_field = "SYNk"
+declaration = "declared-in-meta"
+index_origin = 0
+
+[mapping.storage]
+state = "unknown"
+note = "SYNTHETIC — deliberately left unknown so the fixture also covers a mapping whose physical storage is not established."
+
+# --- a capacity read from the MAIN DB, and a one-to-many companion ------------------------------
+
+[[capacity]]
+table = "SYN1"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+note = "SYNTHETIC. Exercises `main-db-max-records`, the source no committed gen7 adapter can use."
+[capacity.declared.value]
+ceiling_records = 1000
+population_records = 250
+source = "main-db-max-records"
+
+[[capacity]]
+table = "SYN2"
+[capacity.declared]
+state = "not-applicable"
+reason = "SYNTHETIC — a table with no allocation ceiling. Exercises not-applicable on an adapter-level constraint."
+
+[[companion_rule]]
+primary_table = "SYN1"
+[companion_rule.declared]
+state = "established"
+confidence = "derived"
+provenance = ["SYNTHETIC"]
+derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
+note = "SYNTHETIC. `one-to-many` with `applies_when = \"always\"` — the shape no committed adapter uses, and the one that needs no position discriminator."
+[companion_rule.declared.value]
+shared_key_field = "SYNk"
+[[companion_rule.declared.value.companion]]
+table = "SYN2"
+cardinality = "one-to-many"
+applies_when = "always"

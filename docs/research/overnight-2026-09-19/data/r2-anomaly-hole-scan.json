@@ -1,0 +1,180 @@
+{
+ "note": "Whole-hole zero check on the four declared-size anomalous PS4 EB archives (review F2).",
+ "archives": [
+  {
+   "title": "nhl15",
+   "archive": "game20.big",
+   "version": "0x00100400",
+   "archive_size": 1149233088,
+   "file_length": 1168990144,
+   "entries": 26644,
+   "holes_total": 24853,
+   "hole_bytes_total": 5258518,
+   "holes_gt_16": 8,
+   "holes_gt_16_list": [
+    {
+     "offset": 189944692,
+     "length": 2250972,
+     "all_zero": true
+    },
+    {
+     "offset": 203849476,
+     "length": 592300,
+     "all_zero": true
+    },
+    {
+     "offset": 206494247,
+     "length": 2046313,
+     "all_zero": true
+    },
+    {
+     "offset": 208929305,
+     "length": 1383,
+     "all_zero": true
+    },
+    {
+     "offset": 404919491,
+     "length": 51357,
+     "all_zero": true
+    },
+    {
+     "offset": 405125894,
+     "length": 47306,
+     "all_zero": true
+    },
+    {
+     "offset": 408139981,
+     "length": 38947,
+     "all_zero": true
+    },
+    {
+     "offset": 408343788,
+     "length": 30740,
+     "all_zero": true
+    }
+   ],
+   "nonzero_holes": [],
+   "nonzero_bytes_total": 0,
+   "entries_beyond_declared": 124,
+   "first_beyond_offset": 1149233088,
+   "first_beyond_equals_declared": true,
+   "last_end": 1168990144,
+   "last_end_equals_length": true
+  },
+  {
+   "title": "nhl15",
+   "archive": "inxp20.big",
+   "version": "0x00100400",
+   "archive_size": 136298544,
+   "file_length": 144744240,
+   "entries": 1435,
+   "holes_total": 1308,
+   "hole_bytes_total": 3064903,
+   "holes_gt_16": 8,
+   "holes_gt_16_list": [
+    {
+     "offset": 594218,
+     "length": 128982,
+     "all_zero": true
+    },
+    {
+     "offset": 836923,
+     "length": 202997,
+     "all_zero": true
+    },
+    {
+     "offset": 1480648,
+     "length": 102472,
+     "all_zero": true
+    },
+    {
+     "offset": 2180142,
+     "length": 117618,
+     "all_zero": true
+    },
+    {
+     "offset": 2623229,
+     "length": 1403411,
+     "all_zero": true
+    },
+    {
+     "offset": 6016932,
+     "length": 457916,
+     "all_zero": true
+    },
+    {
+     "offset": 8346066,
+     "length": 458686,
+     "all_zero": true
+    },
+    {
+     "offset": 53172574,
+     "length": 182418,
+     "all_zero": true
+    }
+   ],
+   "nonzero_holes": [],
+   "nonzero_bytes_total": 0,
+   "entries_beyond_declared": 39,
+   "first_beyond_offset": 136298544,
+   "first_beyond_equals_declared": true,
+   "last_end": 144744240,
+   "last_end_equals_length": true
+  },
+  {
+   "title": "nhl15",
+   "archive": "patch_inxp00.big",
+   "version": "0x00100400",
+   "archive_size": 872044656,
+   "file_length": 872223088,
+   "entries": 563,
+   "holes_total": 526,
+   "hole_bytes_total": 78854,
+   "holes_gt_16": 1,
+   "holes_gt_16_list": [
+    {
+     "offset": 832861662,
+     "length": 74562,
+     "all_zero": true
+    }
+   ],
+   "nonzero_holes": [],
+   "nonzero_bytes_total": 0,
+   "entries_beyond_declared": 1,
+   "first_beyond_offset": 872044656,
+   "first_beyond_equals_declared": true,
+   "last_end": 872223088,
+   "last_end_equals_length": true
+  },
+  {
+   "title": "nhl16",
+   "archive": "game_90.big",
+   "version": "0x00110400",
+   "archive_size": 7414739808,
+   "file_length": 7431532384,
+   "entries": 53098,
+   "holes_total": 42069,
+   "hole_bytes_total": 3197158,
+   "holes_gt_16": 2,
+   "holes_gt_16_list": [
+    {
+     "offset": 2876253120,
+     "length": 59152,
+     "all_zero": true
+    },
+    {
+     "offset": 7423136096,
+     "length": 2798848,
+     "all_zero": true
+    }
+   ],
+   "nonzero_holes": [],
+   "nonzero_bytes_total": 0,
+   "entries_beyond_declared": 3,
+   "first_beyond_offset": 7414739808,
+   "first_beyond_equals_declared": true,
+   "last_end": 7431532384,
+   "last_end_equals_length": true
+  }
+ ]
+}

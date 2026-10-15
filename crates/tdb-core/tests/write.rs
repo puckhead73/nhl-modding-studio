@@ -117,7 +117,12 @@ fn inline_string_edit_round_trips() {
     let t = db.table_canonical("ubPc").unwrap();
     // firstname — on-disk shortname `PedH` (byte-aligned, 200-bit / 25-byte inline string).
     let first = t.fields.iter().find(|f| f.id.raw() == "PedH").unwrap();
-    let other = t.fields.iter().find(|f| f.id.0 != first.id.0).unwrap().clone();
+    let other = t
+        .fields
+        .iter()
+        .find(|f| f.id.0 != first.id.0)
+        .unwrap()
+        .clone();
 
     let rec = 0u32;
     let original_other = db.read_u64(t, rec, &other).unwrap();
@@ -133,10 +138,17 @@ fn inline_string_edit_round_trips() {
     let t2 = db2.table_canonical("ubPc").unwrap();
     let first2 = t2.fields.iter().find(|f| f.id.raw() == "PedH").unwrap();
     let read_back = db2.read_inline_str(t2, rec, first2).unwrap();
-    assert_eq!(read_back, b"Gretzky", "string edit took effect and reads back exactly");
+    assert_eq!(
+        read_back, b"Gretzky",
+        "string edit took effect and reads back exactly"
+    );
 
     let other2 = t2.fields.iter().find(|f| f.id.0 == other.id.0).unwrap();
-    assert_eq!(db2.read_u64(t2, rec, other2).unwrap(), original_other, "neighbor unchanged");
+    assert_eq!(
+        db2.read_u64(t2, rec, other2).unwrap(),
+        original_other,
+        "neighbor unchanged"
+    );
 
     // Too-long strings are refused, not truncated.
     let width_bytes = (first.bit_width / 8) as usize;

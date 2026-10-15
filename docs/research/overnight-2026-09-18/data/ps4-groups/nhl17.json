@@ -1,0 +1,564 @@
+{
+ "eboot": "H:/Emulators/ShadPS4/Games/CUSA04326/eboot.bin",
+ "format": "SELF",
+ "relative_relocs": 246703,
+ "tables": [
+  {
+   "va": 66657472,
+   "stride": 8,
+   "count": 183,
+   "west_index": 1,
+   "entries": [
+    {
+     "key": "NHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "NHLDivisionA"
+    },
+    {
+     "key": "NHLDivisionB"
+    },
+    {
+     "key": "NHLDivisionC"
+    },
+    {
+     "key": "NHLDivisionD"
+    },
+    {
+     "key": "AHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "AtlanticDivision"
+    },
+    {
+     "key": "NorthDivision"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "PacificDivision"
+    },
+    {
+     "key": "TXT_LEAGUE_O2_EXTRALIGA"
+    },
+    {
+     "key": "TXT_LEAGUE_SWISS_LEAGUE"
+    },
+    {
+     "key": "SMLIIGA"
+    },
+    {
+     "key": "TXT_LEAGUE_DEL"
+    },
+    {
+     "key": "elitserien"
+    },
+    {
+     "key": "TXT_LEAGUE_NORWAY"
+    },
+    {
+     "key": "OHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "EastDivision"
+    },
+    {
+     "key": "MidwestDivision"
+    },
+    {
+     "key": "WestDivision"
+    },
+    {
+     "key": "QMJHL"
+    },
+    {
+     "key": "EastDivision"
+    },
+    {
+     "key": "MaritimesDivision"
+    },
+    {
+     "key": "WestDivision"
+    },
+    {
+     "key": "WHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "BcDivision"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "EastDivision"
+    },
+    {
+     "key": "UsDivision"
+    },
+    {
+     "key": "ECHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "MountainDivision"
+    },
+    {
+     "key": "NorthDivision"
+    },
+    {
+     "key": "SouthDivision"
+    },
+    {
+     "key": "TournamentFile"
+    },
+    {
+     "key": "PoolA"
+    },
+    {
+     "key": "PoolB"
+    },
+    {
+     "key": "Playoffs"
+    },
+    {
+     "key": "ConferenceA"
+    },
+    {
+     "key": "ConferenceB"
+    },
+    {
+     "key": "DivisionA"
+    },
+    {
+     "key": "DivisionB"
+    },
+    {
+     "key": "DivisionC"
+    },
+    {
+     "key": "DivisionD"
+    },
+    {
+     "key": "CUSTOM_TEAMS"
+    },
+    {
+     "key": "TXT_TOPIC_TEAM_CHEMISTRY"
+    },
+    {
+     "key": "TXT_TOPIC_TEAM_MORALE"
+    },
+    {
+     "key": "TXT_TOPIC_LAST_GAME_ATTENDANCE"
+    },
+    {
+     "key": "TXT_TOPIC_TEAM_PRESTIGE"
+    },
+    {
+     "key": "TXT_TOPIC_NATIONAL_POPULARITY"
+    },
+    {
+     "key": "TXT_TOPIC_LOCAL_POPULARITY"
+    },
+    {
+     "key": "TXT_TOPIC_MARKET_SIZE"
+    },
+    {
+     "key": "TXT_TOPIC_FAN_BASE"
+    },
+    {
+     "key": "TXT_TOPIC_NATIONAL_FAN_BASE"
+    },
+    {
+     "key": "TXT_TOPIC_GENERATED_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_CONCESSION_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_TEAM_STORE_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_PARKING_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_GAME_TIX_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_SEASON_TIX_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_GENERATED_PROFIT"
+    },
+    {
+     "key": "TXT_TOPIC_SEASON_TIX_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_GAME_TIX_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_CONCESSION_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_TEAM_STORE_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_PARKING_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_BATHROOM_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_ARENA_SEAT_MTNC_HAPPY"
+    },
+    {
+     "key": "TXT_TOPIC_ARENA_UPGRADE_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_CONCESSION_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_CONCESSION_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_TEAM_STORE_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_TEAM_STORE_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_PARKADE_ONE_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_PARKADE_ONE_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_PARKADE_TWO_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_PARKADE_TWO_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_CLUB_SEATING_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_CLUB_SEATING_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_LOWER_BOWL_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_UPPER_BOWL_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_EXEC_SUITES_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_BATHROOM_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_EXPECTED_PROFIT"
+    },
+    {
+     "key": "TXT_TOPIC_RELOCATION_INFO"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_CHEMISTRY"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_MORALE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_LAST_GAME_ATTENDANCE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_PRESTIGE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_NATIONAL_POPULARITY"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_LOCAL_POPULARITY"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_MARKET_SIZE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_FAN_BASE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_NATIONAL_FAN_BASE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GENERATED_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKING_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GAME_TIX_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_SEASON_TIX_REVENUE"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GENERATED_PROFIT"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_SEASON_TIX_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GAME_TIX_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKING_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_BATHROOM_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_ARENA_SEAT_MTNC_HAPPY"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_ARENA_UPGRADE_HAPPINESS"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_ONE_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_ONE_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_TWO_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_TWO_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CLUB_SEATING_LEVEL"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CLUB_SEATING_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_LOWER_BOWL_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_UPPER_BOWL_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_EXEC_SUITES_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_BATHROOM_MTNC"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_EXPECTED_PROFIT"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_RELOCATION_INFO"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_CHEMISTRY2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_MORALE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_LAST_GAME_ATTENDANCE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_PRESTIGE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_NATIONAL_POPULARITY2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_LOCAL_POPULARITY2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_MARKET_SIZE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_FAN_BASE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_NATIONAL_FAN_BASE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GENERATED_REVENUE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_REVENUE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_REVENUE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKING_REVENUE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GAME_TIX_REVENUE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_SEASON_TIX_REVENUE2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GENERATED_PROFIT2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_SEASON_TIX_HAPPINESS2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_GAME_TIX_HAPPINESS2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_HAPPINESS2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_HAPPINESS2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKING_HAPPINESS2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_BATHROOM_HAPPINESS2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_ARENA_SEAT_MTNC_HAPPY2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_ARENA_UPGRADE_HAPPINESS2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_LEVEL2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CONCESSION_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_LEVEL2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_TEAM_STORE_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_ONE_LEVEL2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_ONE_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_TWO_LEVEL2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_PARKADE_TWO_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CLUB_SEATING_LEVEL2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_CLUB_SEATING_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_LOWER_BOWL_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_UPPER_BOWL_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_EXEC_SUITES_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_BATHROOM_MTNC2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_EXPECTED_PROFIT2"
+    },
+    {
+     "key": "TXT_TOPIC_NOTE_RELOCATION_INFO2"
+    },
+    {
+     "key": "INPUT"
+    },
+    {
+     "key": "OUTPUT"
+    },
+    {
+     "key": "SPEC1"
+    },
+    {
+     "key": "SPEC2"
+    },
+    {
+     "key": "SPEC3"
+    },
+    {
+     "key": "SPEC4"
+    },
+    {
+     "key": "SPEC5"
+    }
+   ]
+  }
+ ]
+}

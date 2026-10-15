@@ -2,7 +2,7 @@
 //!
 //! Port of Heck DB Editor v1.2's `_parse_rx2` + `_strip_to_triangles`
 //! + `_half_be` + `_compute_smooth_normals` + `_compute_tangents`
-//! (`eq_3d_helpers.py`).
+//!   (`eq_3d_helpers.py`).
 //!
 //! Reads positions, optional UV1, optional UV2, and triangle indices
 //! from one or more FXRS render-piece sets inside an RX2 file. Output
@@ -15,14 +15,23 @@
 #![forbid(unsafe_code)]
 #![warn(rust_2018_idioms)]
 
+pub mod bc45;
+pub mod bc7;
 pub mod container;
+#[cfg(test)]
+pub(crate) mod fixtures;
 pub mod gnf;
 pub mod mcd;
+pub mod mcd_write;
 pub mod obj;
 pub mod pack;
 pub mod playermesh;
+pub mod ps3_mesh;
 pub mod skeleton;
 pub mod texlib;
+pub mod texlib_ps3;
+pub mod venue;
+pub mod venue_board;
 pub mod xpr;
 
 use thiserror::Error;
@@ -310,10 +319,10 @@ pub fn parse_mesh(data: &[u8]) -> Result<Mesh, Rx2Error> {
         if n_verts == 0 || idx_count == 0 {
             continue;
         }
-        let vb_needed = n_verts.checked_mul(stride).unwrap_or(usize::MAX);
+        let vb_needed = n_verts.saturating_mul(stride);
         if vb_data_off
             .checked_add(vb_needed)
-            .map_or(true, |end| end > data.len())
+            .is_none_or(|end| end > data.len())
         {
             return Err(Rx2Error::TruncatedVertexBuffer {
                 piece: piece_idx,
@@ -321,10 +330,10 @@ pub fn parse_mesh(data: &[u8]) -> Result<Mesh, Rx2Error> {
                 have: data.len().saturating_sub(vb_data_off),
             });
         }
-        let ib_needed = idx_count.checked_mul(2).unwrap_or(usize::MAX);
+        let ib_needed = idx_count.saturating_mul(2);
         if ib_data_off
             .checked_add(ib_needed)
-            .map_or(true, |end| end > data.len())
+            .is_none_or(|end| end > data.len())
         {
             return Err(Rx2Error::TruncatedIndexBuffer {
                 piece: piece_idx,
@@ -448,18 +457,13 @@ fn read_i32_be(data: &[u8], offset: usize) -> Result<i32, Rx2Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::fixtures::{require, EQUIPMENT_GLOVE, EQUIPMENT_HELMET};
 
-    fn load_asset(name: &str) -> Option<Vec<u8>> {
-        let p = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("..")
-            .join("tdb-gui-api")
-            .join("assets")
-            .join("equipment-preview")
-            .join(name);
-        if !p.is_file() {
-            return None;
-        }
-        std::fs::read(&p).ok()
+    /// The equipment-preview meshes are private game data supplied
+    /// through the fixture root; every case that needs one is
+    /// `#[ignore]`d — see [`crate::fixtures`].
+    fn load_asset(key: &str) -> Vec<u8> {
+        require(key)
     }
 
     #[test]
@@ -470,11 +474,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "private fixture equipment-preview/feprop_glove_0.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn parses_glove_mesh_smoke() {
-        let Some(data) = load_asset("feprop_glove_0.rx2") else {
-            eprintln!("skipping: bundled glove mesh not present");
-            return;
-        };
+        let data = load_asset(EQUIPMENT_GLOVE);
         let mesh = parse_mesh(&data).expect("parse must succeed");
         assert!(
             mesh.positions.len() >= 100,
@@ -494,11 +496,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "private fixture equipment-preview/helmet_14_2.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn parses_helmet_mesh_smoke() {
-        let Some(data) = load_asset("helmet_14_2.rx2") else {
-            eprintln!("skipping: bundled helmet mesh not present");
-            return;
-        };
+        let data = load_asset(EQUIPMENT_HELMET);
         let mesh = parse_mesh(&data).expect("parse must succeed");
         assert!(mesh.positions.len() >= 100);
         // Heck's `tm_uses_uv2_offset` config flag implies UV2 *might*
@@ -519,10 +519,9 @@ mod tests {
     /// uses). Either is faithful to Heck — captures a "ground truth"
     /// fact about the asset rather than a behavior we enforce.
     #[test]
+    #[ignore = "private fixture equipment-preview/helmet_14_2.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn uv2_observation_on_bundled_helmet() {
-        let Some(data) = load_asset("helmet_14_2.rx2") else {
-            return;
-        };
+        let data = load_asset(EQUIPMENT_HELMET);
         let mesh = parse_mesh(&data).unwrap();
         eprintln!(
             "bundled helmet UV2 presence: {} entries (positions = {})",
@@ -532,10 +531,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "private fixture equipment-preview/feprop_glove_0.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn bounding_box_and_normals_make_sense() {
-        let Some(data) = load_asset("feprop_glove_0.rx2") else {
-            return;
-        };
+        let data = load_asset(EQUIPMENT_GLOVE);
         let mesh = parse_mesh(&data).unwrap();
         let (center, span) = mesh.center_and_span();
         assert!(span > 0.0);

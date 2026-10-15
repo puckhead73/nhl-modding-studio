@@ -6,11 +6,12 @@
 
 > Engine home: the `tdb-core` / `tdb-defs` crates and the **(title, platform) schema/codec
 > registry** in [DESIGN.md](DESIGN.md#cross-cutting-the-title-platform-registry). The reference app
-> proved the format for **Legacy / 14 / 15**; per-title schemas for the rest of NHL 10–21 are
-> reversed in [ROADMAP.md](ROADMAP.md) Phase 10.
+> proved the format for **Legacy / 14 / 15**; per-title schemas for the rest of the catalog
+> (**NHL 07–21**, Legacy, Recompiled) are now registered and exercised against the 27 anchors — see
+> [01-scope-and-compatibility.md](01-scope-and-compatibility.md) for each target's evidence level.
 >
 > **Verification status: DRAFT.** This document captures intent and a place to record confirmed
-> facts. EA's TDB format has real nuances that vary by **year (NHL 10–21)** and **platform**.
+> facts. EA's TDB format has real nuances that vary by **year (NHL 07–21)** and **platform**.
 > **Do not treat any binary-layout specific here as fact until it is confirmed** against the prior
 > reference implementation or against real (locally held, never-committed) game data. Where a claim
 > is unverified, it is marked `[UNVERIFIED]`.
@@ -23,7 +24,7 @@ related tables — in a proprietary database format referred to as **TDB**. NHL 
 
 ## Why a version-aware codec is required
 
-Across NHL 10 → 21 the databases differ in ways that matter:
+Across NHL 07 → 21 the databases differ in ways that matter:
 
 - **Schema drift** — tables and fields are added, removed, resized, or reordered between years.
 - **Field encodings** — attribute scales and bit-packing can change.
@@ -46,7 +47,7 @@ As each is verified, replace the checkbox with the confirmed detail and cite the
 - [ ] Endianness rules per platform and per title.
 - [ ] Checksums / integrity fields that must be recomputed on write.
 - [ ] How the TDB is packed within each platform's title files.
-- [ ] Per-title schema deltas (10 → 11 → … → 21).
+- [ ] Per-title schema deltas (07 → 08 → … → 21).
 - [ ] Legacy Recompilation differences vs the stock Xbox build.
 
 ## Design requirements for the `tdb` crate

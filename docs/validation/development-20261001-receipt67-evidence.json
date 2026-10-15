@@ -1,0 +1,17 @@
+{
+  "archive_sha256": "6297cda973d2b9368d5809c086d71eb9f72c0ec14aa463493083f73fdfaa0b4a",
+  "exe_sha256": "60eee0adbd16df95692c4249f9926d7aff998855cf04958ba897fa12d37bbe65",
+  "files": 620,
+  "manifest_entries": 619,
+  "failures": [],
+  "distribution": "internal-review",
+  "release_ready": false,
+  "scope": "streamed ZIP and existing extracted-file hashes; not full verifier/selftest",
+  "ui_test": {
+    "target": "ArenaVenueArtCard.test.tsx",
+    "passed": 4,
+    "failed": 0,
+    "duration_seconds": 19.16
+  },
+  "initial_test_command": "BoardReplace.test.tsx: no matching test file; corrected"
+}

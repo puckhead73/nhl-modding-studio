@@ -1,0 +1,567 @@
+$ python research/nhl08-roster-schema/scripts/roster_group_meta.py anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml "anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658"
+
+lVMf exhibitiongoalieequipment  rows=315 recB=68  insert=gKeN(60) delete=None(None) update=JJDo(-1) groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  game_id                    zIBw  INTEGER     13 0..8191       K   -                            494     494     494       -
+  neckprotector              crfg  INTEGER      1 0..1              U                            487     487     487       -
+  stickcolor                 OCtm  INTEGER      8 0..255            U                            152     152     152       -
+  trapperstripe2color_g      bhAx  INTEGER      8 0..255            U                            272     272     272       -
+  blockerstripe1color_g      bDjV  INTEGER      8 0..255            U                            256     256     256       -
+  padsstripe1color_g         CEpc  INTEGER      8 0..255            U                             24      24      24       -
+  blockertrim1color_g        sGNc  INTEGER      8 0..255            U                            424     424     424       -
+  blockerstripe1color_r      gjqo  INTEGER      8 0..255            U                            312     312     312       -
+  padsstripe1color_b         RkPs  INTEGER      8 0..255            U                            200     200     200       -
+  pantstypecode              GPQs  INTEGER      1 0..1              U                            471     471     471       -
+  blockertrim1color_b        Huvs  INTEGER      8 0..255            U                             88      88      88       -
+  maskpattern                SszE  INTEGER      8 0..255            U                            208     208     208       -
+  blockertrim1color_r        reEN  INTEGER      8 0..255            U                            400     400     400       -
+  padsstripe1color_r         NAcN  INTEGER      8 0..255            U                            144     144     144       -
+  trapper                    RJTO  INTEGER      5 0..31             U                            480     480     480       -
+  blockerstripe1color_b      QzZR  INTEGER      8 0..255            U                            184     184     184       -
+  jerseytuck                 jqpY  INTEGER      3 0..7              U                            491     491     491       -
+  trapperstripe2color_b      QJKZ  INTEGER      8 0..255            U                            176     176     176       -
+  maskrank                   HSnc  INTEGER      2 0..3              U                            472     472     472       -
+  hascustompads              iPGg  INTEGER      1 0..1              U                            488     488     488       -
+  masktype                   jpcg  INTEGER      2 0..3              U                            489     489     489       -
+  hascustomtrapper           TYDh  INTEGER      1 0..1              U                            486     486     486       -
+  trapperstripe2color_r      gtRs  INTEGER      8 0..255            U                            320     320     320       -
+  stick                      xFXw  INTEGER      8 0..190            U                            448     448     448       -
+  padslogocolor_b            rLdA  INTEGER      8 0..255            U                            392     392     392       -
+  blockerlogocolor_r         mmiH  INTEGER      8 0..255            U                            384     384     384       -
+  blocker                    zxmK  INTEGER      5 0..31             U                            507     507     507       -
+  trapperothercolor_b        tQdL  INTEGER      8 0..255            U                            432     432     432       -
+  trappermeshcolor_r         liOM  INTEGER      8 0..255            U                            368     368     368       -
+  trapperbasecolor_r         AvcN  INTEGER      8 0..255            U                              8       8       8       -
+  trapperothercolor_r        FgOO  INTEGER      8 0..255            U                             64      64      64       -
+  trapperbasecolor_b         cLXQ  INTEGER      8 0..255            U                            280     280     280       -
+  trappermeshcolor_b         JylR  INTEGER      8 0..255            U                             96      96      96       -
+  blockerlogocolor_b         CWJS  INTEGER      8 0..255            U                             32      32      32       -
+  trapperstripe1color_g      YaLX  INTEGER      8 0..255            U                            248     248     248       -
+  padsstrapcolor_g           bYYY  INTEGER      8 0..255            U                            264     264     264       -
+  padslogocolor_r            Dvyd  INTEGER      8 0..255            U                             56      56      56       -
+  blockerstripe2color_g      YAQf  INTEGER      8 0..255            U                            240     240     240       -
+  trapperlogocolor_r         AHzh  INTEGER      8 0..255            U                              0       0       0       -
+  blockerbasecolor_r         mShj  INTEGER      8 0..255            U                            376     376     376       -
+  sticktapestylecode         TJol  INTEGER      1 0..1              U                            485     485     485       -
+  padsbasecolor_b            rzCs  INTEGER      8 0..255            U                            408     408     408       -
+  keepcustomiftraded         Dwow  INTEGER      1 0..1              U                            470     470     470       -
+  padsbasecolor_r            DPxx  INTEGER      8 0..255            U                             48      48      48       -
+  blockertrim2color_g        zNaC  INTEGER      8 0..255            U                            456     456     456       -
+  padsstripe2color_g         VHWC  INTEGER      8 0..255            U                            224     224     224       -
+  blockerbasecolor_b         CiiC  INTEGER      8 0..255            U                             40      40      40       -
+  padsothercolor_g           SvXG  INTEGER      8 0..255            U                            216     216     216       -
+  trapperlogocolor_b         crcI  INTEGER      8 0..255            U                            288     288     288       -
+  hascustomblocker           JoGJ  INTEGER      1 0..1              U                            475     475     475       -
+  blockertrim2color_b        MtcS  INTEGER      8 0..255            U                            136     136     136       -
+  padsstripe2color_b         ifkS  INTEGER      8 0..255            U                            336     336     336       -
+  blockerbasecolor_g         dCwS  INTEGER      8 0..255            U                            296     296     296       -
+  padsothercolor_b           hHlW  INTEGER      8 0..255            U                            328     328     328       -
+  blockerstripe2color_r      joNW  INTEGER      8 0..255            U                            344     344     344       -
+  trapperlogocolor_g         PvOY  INTEGER      8 0..255            U                            168     168     168       -
+  padsothercolor_r           RXqb  INTEGER      8 0..255            U                            192     192     192       -
+  blockerstripe2color_b      HEmb  INTEGER      8 0..255            U                             72      72      72       -
+  padsstripe2color_r         uvrf  INTEGER      8 0..255            U                            440     440     440       -
+  blockertrim2color_r        kdnf  INTEGER      8 0..255            U                            360     360     360       -
+  hascustommask              IIGk  INTEGER      1 0..1              U                            474     474     474       -
+  pads                       AUIm  INTEGER      5 0..31             U                            464     464     464       -
+  padsbasecolor_g            MDgo  INTEGER      8 0..255            U                            112     112     112       -
+  trapperbasecolor_g         Pbps  INTEGER      8 0..255            U                            160     160     160       -
+  trappermeshcolor_g         Wmzt  INTEGER      8 0..255            U                            232     232     232       -
+  blockerlogocolor_g         dOru  INTEGER      8 0..255            U                            304     304     304       -
+  trapperstripe1color_b      HKpz  INTEGER      8 0..255            U                             80      80      80       -
+  maskcolor                  sEaA  INTEGER      8 0..255            U                            416     416     416       -
+  padsstrapcolor_b           MgGA  INTEGER      8 0..255            U                            120     120     120       -
+  padslogocolor_g            MrbI  INTEGER      8 0..255            U                            128     128     128       -
+  trapperstripe1color_r      juCK  INTEGER      8 0..255            U                            352     352     352       -
+  padsstrapcolor_r           AwtN  INTEGER      8 0..255            U                             16      16      16       -
+  sticktapecolor             OSIN  INTEGER      4 0..15             U                            476     476     476       -
+  trapperothercolor_g        KYLT  INTEGER      8 0..255            U                            104     104     104       -
+  benskeepcustomiftraded     CuEU  INTEGER      1 0..1              U                            469     469     469       -
+  note: binary descriptor order differs from meta document order
+
+NDEo customteamequipmenttable  rows=600 recB=32  insert=None(None) delete=None(None) update=hTDj(-1) groups=rosters,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER     10 0..1023       K   -                            237       -     237       -
+  brand                      LWKT  INTEGER      5 -1..30            U                            224       -     224       -
+  variant                    TccF  INTEGER      4 -1..14            U                            233       -     233       -
+  equipment                  MpJj  INTEGER      4 -1..14            U                            229       -     229       -
+  zone9_b                    JDiC  INTEGER      8 0..255            U                             72       -      72       -
+  zone8_b                    GdYD  INTEGER      8 0..255            U                             40       -      40       -
+  zone2_b                    QIHG  INTEGER      8 0..255            U                             80       -      80       -
+  zone3_b                    biZH  INTEGER      8 0..255            U                            128       -     128       -
+  zone1_b                    hyBI  INTEGER      8 0..255            U                            160       -     160       -
+  zone4_b                    CQuK  INTEGER      8 0..255            U                             24       -      24       -
+  zone5_b                    lmIL  INTEGER      8 0..255            U                            168       -     168       -
+  zone7_b                    zSgM  INTEGER      8 0..255            U                            216       -     216       -
+  zone6_b                    AUON  INTEGER      8 0..255            U                              0       -       0       -
+  zone5_r                    JCjO  INTEGER      8 0..255            U                             64       -      64       -
+  zone4_r                    GgVP  INTEGER      8 0..255            U                             48       -      48       -
+  zone6_r                    wEBQ  INTEGER      8 0..255            U                            200       -     200       -
+  zone7_r                    bCLR  INTEGER      8 0..255            U                            112       -     112       -
+  zone3_r                    nSCS  INTEGER      8 0..255            U                            184       -     184       -
+  zone2_r                    gssT  INTEGER      8 0..255            U                            144       -     144       -
+  zone1_r                    VOaV  INTEGER      8 0..255            U                             88       -      88       -
+  zone8_r                    CNbW  INTEGER      8 0..255            U                             16       -      16       -
+  zone9_r                    lntX  INTEGER      8 0..255            U                            176       -     176       -
+  team                       BSXd  INTEGER      8 -1..254           U                              8       -       8       -
+  zone9_g                    WzYK  INTEGER      8 0..255            U                            104       -     104       -
+  zone8_g                    hNmL  INTEGER      8 0..255            U                            152       -     152       -
+  zone2_g                    bgZO  INTEGER      8 0..255            U                            120       -     120       -
+  zone3_g                    wSLP  INTEGER      8 0..255            U                            208       -     208       -
+  zone1_g                    GCnQ  INTEGER      8 0..255            U                             32       -      32       -
+  zone4_g                    VowS  INTEGER      8 0..255            U                             96       -      96       -
+  zone5_g                    GyeT  INTEGER      8 0..255            U                             56       -      56       -
+  zone7_g                    gSCU  INTEGER      8 0..255            U                            136       -     136       -
+  zone6_g                    nkQV  INTEGER      8 0..255            U                            192       -     192       -
+  note: binary descriptor order differs from meta document order
+
+ajmx exhibitionskaterequipment  rows=2647 recB=12  insert=BlkH(300) delete=None(None) update=MSZu(-1) groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  game_id                    zIBw  INTEGER     13 0..8191       K   -                             62      62      62       -
+  visortype                  BFnc  INTEGER      4 0..15             U                              8       8       8       -
+  skatesocktuck              xUUD  INTEGER      4 0..15             U                             58      58      58       -
+  helmetbrand                pZUY  INTEGER      4 0..15             U                             46      46      46       -
+  stickcurve                 kjmj  INTEGER      4 0..15             U                             42      42      42       -
+  pantstypecode              GPQs  INTEGER      1 0..1              U                             12      12      12       -
+  skatebrand                 eOOA  INTEGER      4 0..15             U                             31      31      31       -
+  gloves                     RUmN  INTEGER      5 0..31             U                             25      25      25       -
+  jerseytuck                 jqpY  INTEGER      3 0..7              U                             35      35      35       -
+  socktapestyle              Hnrd  INTEGER      4 0..15             U                             13      13      13       -
+  stick                      xFXw  INTEGER      8 0..190            U                              0       0       0       -
+  shoulderpads               uVix  INTEGER      4 0..15             U                             50      50      50       -
+  sticktapestylecode         TJol  INTEGER      1 0..1              U                             30      30      30       -
+  visorcolor                 QYBD  INTEGER      4 0..15             U                             21      21      21       -
+  stickflex                  uuMM  INTEGER      4 0..15             U                             54      54      54       -
+  skaterocker                kNCF  INTEGER      4 0..15             U                             38      38      38       -
+  sticktapecolor             OSIN  INTEGER      4 0..15             U                             17      17      17       -
+  note: binary descriptor order differs from meta document order
+
+oYeE exhibitionteamstrategies  rows=138 recB=8  insert=None(None) delete=None(None) update=mASv(-1) groups=rosters,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER      8 0..255        K   -   exhibitionteams            0       -       0       -
+  offense4                   OwPC  INTEGER      3 0..7              U                             11       -      11       -
+  pk                         yPzN  INTEGER      3 0..7              U                             35       -      35       -
+  offense1                   FIRe  INTEGER      3 0..7              U                              8       -       8       -
+  defense                    reKr  INTEGER      3 0..7              U                             29       -      29       -
+  dpressure                  vvKx  INTEGER      3 0..7              U                             32       -      32       -
+  offense3                   ZBLA  INTEGER      3 0..7              U                             17       -      17       -
+  forecheck                  ZCsF  INTEGER      3 0..7              U                             20       -      20       -
+  pp                         emab  INTEGER      3 0..7              U                             23       -      23       -
+  offense2                   jlIL  INTEGER      3 0..7              U                             26       -      26       -
+  opressure                  SVTT  INTEGER      3 0..7              U                             14       -      14       -
+  note: binary descriptor order differs from meta document order
+
+Roup custompalettetable  rows=20 recB=4  insert=None(None) delete=None(None) update=KjDh(-1) groups=rosters,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER      5 0..31         K   -                             25       -      25       -
+  color_r                    tfxc  INTEGER      8 0..255            U                             16       -      16       -
+  active                     NYKk  INTEGER      1 0..1              U                             24       -      24       -
+  color_b                    FvCF  INTEGER      8 0..255            U                              0       -       0       -
+  color_g                    irgh  INTEGER      8 0..255            U                              8       -       8       -
+  note: binary descriptor order differs from meta document order
+
+nAUy stockgoalieequipment  rows=236 recB=148  insert=sAud(60) delete=aGgS(-1) update=VDLc(-1) groups=rosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  key                        XWot  INTEGER     12 0..4095       K   -                           1134    1134    1134       0
+  neckprotector              crfg  INTEGER      1 0..1              U                           1146    1146    1146       -
+  stickcolor                 OCtm  INTEGER      8 0..255            U                            152     152     152       -
+  trapperstripe2color_g      bhAx  INTEGER      8 0..255            U                            912     912     912       -
+  firstname                  PedH  STRING     320 0..0              U                            168     168     168       -
+  blockerstripe1color_g      bDjV  INTEGER      8 0..255            U                            896     896     896       -
+  padsstripe1color_g         CEpc  INTEGER      8 0..255            U                             24      24      24       -
+  blockertrim1color_g        sGNc  INTEGER      8 0..255            U                           1064    1064    1064       -
+  blockerstripe1color_r      gjqo  INTEGER      8 0..255            U                            952     952     952       -
+  padsstripe1color_b         RkPs  INTEGER      8 0..255            U                            840     840     840       -
+  pantstypecode              GPQs  INTEGER      1 0..1              U                           1118    1118    1118       -
+  blockertrim1color_b        Huvs  INTEGER      8 0..255            U                             88      88      88       -
+  maskpattern                SszE  INTEGER      8 0..255            U                            848     848     848       -
+  blockertrim1color_r        reEN  INTEGER      8 0..255            U                           1040    1040    1040       -
+  padsstripe1color_r         NAcN  INTEGER      8 0..255            U                            144     144     144       -
+  trapper                    RJTO  INTEGER      5 0..31             U                           1127    1127    1127       -
+  blockerstripe1color_b      QzZR  INTEGER      8 0..255            U                            504     504     504       -
+  jerseytuck                 jqpY  INTEGER      3 0..7              U                           1150    1150    1150       -
+  trapperstripe2color_b      QJKZ  INTEGER      8 0..255            U                            496     496     496       -
+  maskrank                   HSnc  INTEGER      2 0..3              U                           1119    1119    1119       -
+  hascustompads              iPGg  INTEGER      1 0..1              U                           1147    1147    1147       -
+  masktype                   jpcg  INTEGER      2 0..3              U                           1148    1148    1148       -
+  hascustomtrapper           TYDh  INTEGER      1 0..1              U                           1133    1133    1133       -
+  trapperstripe2color_r      gtRs  INTEGER      8 0..255            U                            960     960     960       -
+  stick                      xFXw  INTEGER      8 0..190            U                           1088    1088    1088       -
+  game_id                    zIBw  INTEGER     13 0..8191           U                           1153    1153    1153       -
+  padslogocolor_b            rLdA  INTEGER      8 0..255            U                           1032    1032    1032       -
+  blockerlogocolor_r         mmiH  INTEGER      8 0..255            U                           1024    1024    1024       -
+  blocker                    zxmK  INTEGER      5 0..31             U                           1166    1166    1166       -
+  trapperothercolor_b        tQdL  INTEGER      8 0..255            U                           1072    1072    1072       -
+  trappermeshcolor_r         liOM  INTEGER      8 0..255            U                           1008    1008    1008       -
+  trapperbasecolor_r         AvcN  INTEGER      8 0..255            U                              8       8       8       -
+  trapperothercolor_r        FgOO  INTEGER      8 0..255            U                             64      64      64       -
+  lastname                   RMbQ  STRING     320 0..0              U                            512     512     512       -
+  trapperbasecolor_b         cLXQ  INTEGER      8 0..255            U                            920     920     920       -
+  trappermeshcolor_b         JylR  INTEGER      8 0..255            U                             96      96      96       -
+  blockerlogocolor_b         CWJS  INTEGER      8 0..255            U                             32      32      32       -
+  trapperstripe1color_g      YaLX  INTEGER      8 0..255            U                            888     888     888       -
+  padsstrapcolor_g           bYYY  INTEGER      8 0..255            U                            904     904     904       -
+  padslogocolor_r            Dvyd  INTEGER      8 0..255            U                             56      56      56       -
+  blockerstripe2color_g      YAQf  INTEGER      8 0..255            U                            880     880     880       -
+  trapperlogocolor_r         AHzh  INTEGER      8 0..255            U                              0       0       0       -
+  blockerbasecolor_r         mShj  INTEGER      8 0..255            U                           1016    1016    1016       -
+  sticktapestylecode         TJol  INTEGER      1 0..1              U                           1132    1132    1132       -
+  padsbasecolor_b            rzCs  INTEGER      8 0..255            U                           1048    1048    1048       -
+  keepcustomiftraded         Dwow  INTEGER      1 0..1              U                           1117    1117    1117       -
+  padsbasecolor_r            DPxx  INTEGER      8 0..255            U                             48      48      48       -
+  blockertrim2color_g        zNaC  INTEGER      8 0..255            U                           1096    1096    1096       -
+  padsstripe2color_g         VHWC  INTEGER      8 0..255            U                            864     864     864       -
+  blockerbasecolor_b         CiiC  INTEGER      8 0..255            U                             40      40      40       -
+  padsothercolor_g           SvXG  INTEGER      8 0..255            U                            856     856     856       -
+  trapperlogocolor_b         crcI  INTEGER      8 0..255            U                            928     928     928       -
+  hascustomblocker           JoGJ  INTEGER      1 0..1              U                           1122    1122    1122       -
+  blockertrim2color_b        MtcS  INTEGER      8 0..255            U                            136     136     136       -
+  padsstripe2color_b         ifkS  INTEGER      8 0..255            U                            976     976     976       -
+  blockerbasecolor_g         dCwS  INTEGER      8 0..255            U                            936     936     936       -
+  padsothercolor_b           hHlW  INTEGER      8 0..255            U                            968     968     968       -
+  blockerstripe2color_r      joNW  INTEGER      8 0..255            U                            984     984     984       -
+  trapperlogocolor_g         PvOY  INTEGER      8 0..255            U                            488     488     488       -
+  padsothercolor_r           RXqb  INTEGER      8 0..255            U                            832     832     832       -
+  blockerstripe2color_b      HEmb  INTEGER      8 0..255            U                             72      72      72       -
+  team                       BSXd  INTEGER      7 -1..126           U                           1109    1109    1109       -
+  padsstripe2color_r         uvrf  INTEGER      8 0..255            U                           1080    1080    1080       -
+  blockertrim2color_r        kdnf  INTEGER      8 0..255            U                           1000    1000    1000       -
+  hascustommask              IIGk  INTEGER      1 0..1              U                           1121    1121    1121       -
+  pads                       AUIm  INTEGER      5 0..31             U                           1104    1104    1104       -
+  padsbasecolor_g            MDgo  INTEGER      8 0..255            U                            112     112     112       -
+  trapperbasecolor_g         Pbps  INTEGER      8 0..255            U                            160     160     160       -
+  trappermeshcolor_g         Wmzt  INTEGER      8 0..255            U                            872     872     872       -
+  blockerlogocolor_g         dOru  INTEGER      8 0..255            U                            944     944     944       -
+  trapperstripe1color_b      HKpz  INTEGER      8 0..255            U                             80      80      80       -
+  maskcolor                  sEaA  INTEGER      8 0..255            U                           1056    1056    1056       -
+  padsstrapcolor_b           MgGA  INTEGER      8 0..255            U                            120     120     120       -
+  padslogocolor_g            MrbI  INTEGER      8 0..255            U                            128     128     128       -
+  trapperstripe1color_r      juCK  INTEGER      8 0..255            U                            992     992     992       -
+  padsstrapcolor_r           AwtN  INTEGER      8 0..255            U                             16      16      16       -
+  sticktapecolor             OSIN  INTEGER      4 0..15             U                           1123    1123    1123       -
+  trapperothercolor_g        KYLT  INTEGER      8 0..255            U                            104     104     104       -
+  benskeepcustomiftraded     CuEU  INTEGER      1 0..1              U                           1116    1116    1116       -
+  note: binary descriptor order differs from meta document order
+
+QEoV exhibitionfreeagents  rows=156 recB=4  insert=sAMA(600) delete=mGOv(-1) update=None(None) groups=currentrosters,rosters,defaultrosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  playerindex                TWSX  INTEGER     13 0..8191       K   -   exhibitionplayers          0       0       -       0
+
+ttOk exhibitionteams  rows=138 recB=204  insert=None(None) delete=None(None) update=SREo(-1) groups=rosters,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER      8 0..255        K   -                           1208       -    1184       -
+  active                     NYKk  INTEGER      1 0..1              U                           1561       -    1536       -
+  pantsstyle                 ztft  INTEGER      2 0..3              U                           1627       -    1588       -
+  inaugural                  siPF  INTEGER      4 0..15             U                           1609       -    1570       -
+  fullname                   JkmY  STRING     400 0..0              U                            664       -     648       -
+  coachartid                 YuDe  INTEGER     13 0..8191           U                           1581       -    1549       -
+  jerseybackaway             tjNg  INTEGER      8 0..255            U                           1232       -    1208       -
+  artid                      rnOl  INTEGER      8 0..255            U                           1216       -    1192       -
+  conference                 zsar  INTEGER      1 0..1              U                           1626       -    1587       -
+  artabbr                    RPbr  STRING      64 0..0              U                           1072       -    1056       -
+  abbrname                   nnsx  STRING      64 0..0              U                           1144       -    1120       -
+  league                     jjMx  INTEGER      3 0..7              U                           1601       -    1562       -
+  original                   eZVK  INTEGER      4 0..15             -                           1594       -       -       -
+  audioid2                   ylSM  INTEGER      9 0..511            U                           1617       -    1578       -
+  smoke_g                    JGFS  INTEGER      8 0..255            -                            656       -       -       -
+  rivalteam                  LSre  INTEGER      8 0..255            U                           1064       -    1048       -
+  sockstyle                  wzfn  INTEGER      3 0..7              U                           1614       -    1575       -
+  itechvisorcolor            iHzu  INTEGER      3 0..7              -                           1598       -       -       -
+  division                   Xegx  INTEGER      3 0..7              U                           1578       -    1546       -
+  ahlaffiliate               TxsC  INTEGER      7 -1..126           -                           1571       -       -       -
+  shortname                  ITNQ  STRING     320 0..0              U                            336       -     328       -
+  font                       sgrR  INTEGER      5 0..31             U                           1604       -    1565       -
+  table                      BERR  INTEGER      1 0..1              -                           1560       -       -       -
+  coachlastname              uOCh  STRING     320 0..0              U                           1240       -    1216       -
+  audioid                    Nzao  INTEGER      9 0..511            U                           1562       -    1537       -
+  smoke_b                    WeDu  INTEGER      8 0..255            -                           1136       -       -       -
+  jerseybackhome             spwD  INTEGER      8 0..255            U                           1224       -    1200       -
+  coachfirstname             CDBF  STRING     320 0..0              U                              0       -       0       -
+  logo                       FmRJ  INTEGER      8 0..255            U                            320       -     320       -
+  jerseystyle                ucaK  INTEGER      1 0..1              U                           1613       -    1574       -
+  smoke_r                    GOMP  INTEGER      8 0..255            -                            328       -       -       -
+  note: binary descriptor order differs from meta document order
+
+Vzjq customfacetable  rows=180 recB=8  insert=None(None) delete=None(None) update=PPVt(-1) groups=rosters,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  playerid                   qFky  INTEGER     13 0..8191       K   -                             40       -      40       -
+  hairstyle                  TpVs  INTEGER      4 0..15             U                             12       -      12       -
+  facialhairstyle            Gdzy  INTEGER      4 0..15             U                              0       -       0       -
+  haircolor                  wFGt  INTEGER      4 0..15             U                             53       -      53       -
+  facialhaircolor            lhIz  INTEGER      4 0..15             U                             36       -      36       -
+  freckles                   KYFD  INTEGER      4 0..15             U                              4       -       4       -
+  cutsscars                  gFSM  INTEGER      4 0..15             U                             28       -      28       -
+  blackeye                   isZW  INTEGER      4 0..15             U                             32       -      32       -
+  wrinkles                   NtOg  INTEGER      4 0..15             U                              8       -       8       -
+  eyebrowshape               bRvt  INTEGER      4 0..15             U                             20       -      20       -
+  eyedetail                  XDVl  INTEGER      4 0..15             U                             16       -      16       -
+  eyebrowcolor               eiVK  INTEGER      4 0..15             U                             24       -      24       -
+  skintexture                xohz  INTEGER      4 0..15             U                             57       -      57       -
+  note: binary descriptor order differs from meta document order
+
+caBZ exhibitionplayers  rows=3257 recB=4  insert=LZbD(1000) delete=Frps(-1) update=qWeu(-1) groups=currentrosters,rosters,defaultrosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER     13 0..8191       K   -                              2       2       2       0
+  playerid                   qFky  INTEGER     13 0..8191           U                             15      15      15       -
+  table                      BERR  INTEGER      2 0..3              U                              0       0       0       -
+  note: binary descriptor order differs from meta document order
+
+ulGe exhibitionrostertable  rows=2525 recB=16  insert=ibGM(1500) delete=AtUj(-1) update=vozd(-1) groups=currentrosters,rosters,defaultrosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  key                        XWot  INTEGER     13 0..8191       K   -                             54      54      54       0
+  rosterstatus               jZSh  INTEGER      2 0..3              U                             77      77      77       -
+  pk4_2c                     tmxm  INTEGER      1 0..1              U                            106     106     106       -
+  captain                    lcCm  INTEGER      2 0..3              U                             81      81      81       -
+  pk3_2rd                    VSQu  INTEGER      1 0..1              U                             48      48      48       -
+  s3                         vBOv  INTEGER      1 0..1              U                            109     109     109       -
+  pp2rd                      Onyv  INTEGER      1 0..1              U                             28      28      28       -
+  pk3_1rd                    kQGw  INTEGER      1 0..1              U                             80      80      80       -
+  pp1rd                      jxQx  INTEGER      1 0..1              U                             79      79      79       -
+  x1                         sNcy  INTEGER      1 0..1              U                             97      97      97       -
+  pp4_1ld                    XBWz  INTEGER      1 0..1              U                             52      52      52       -
+  pp4_2c                     yoNB  INTEGER      1 0..1              U                            111     111     111       -
+  pp4_2ld                    ajIB  INTEGER      1 0..1              U                             69      69      69       -
+  pp1c                       OsHB  INTEGER      1 0..1              U                             29      29      29       -
+  h4                         irsI  INTEGER      1 0..1              U                             76      76      76       -
+  pk4_1c                     aRgN  INTEGER      1 0..1              U                             68      68      68       -
+  playerstyle                sFgQ  INTEGER      3 0..7              U                             93      93      93       -
+  pp4_1c                     pPkW  INTEGER      1 0..1              U                             88      88      88       -
+  pp2c                       BnOW  INTEGER      1 0..1              U                             14      14      14       -
+  l1rd                       bSAb  INTEGER      1 0..1              U                             71      71      71       -
+  l3rd                       Jmcc  INTEGER      1 0..1              U                             24      24      24       -
+  l2rd                       OQOd  INTEGER      1 0..1              U                             27      27      27       -
+  pp2lw                      Plxr  INTEGER      1 0..1              U                             31      31      31       -
+  pp1lw                      iXft  INTEGER      1 0..1              U                             75      75      75       -
+  g2                         Imzy  INTEGER      1 0..1              U                             23      23      23       -
+  h1                         VvqE  INTEGER      1 0..1              U                             49      49      49       -
+  h5                         wHvH  INTEGER      1 0..1              U                            110     110     110       -
+  s2                         pxVU  INTEGER      1 0..1              U                             90      90      90       -
+  l4lw                       pOUV  INTEGER      1 0..1              U                             87      87      87       -
+  l1lw                       aAvX  INTEGER      1 0..1              U                             67      67      67       -
+  l3lw                       IkTY  INTEGER      1 0..1              U                             22      22      22       -
+  l2lw                       PGhZ  INTEGER      1 0..1              U                             30      30      30       -
+  pk4_1ld                    bjni  INTEGER      1 0..1              U                             72      72      72       -
+  pk4_2ld                    WZZk  INTEGER      1 0..1              U                             51      51      51       -
+  x2                         uklz  INTEGER      1 0..1              U                            108     108     108       -
+  s4                         AkyJ  INTEGER      1 0..1              U                             10      10      10       -
+  pp2rw                      MykP  INTEGER      1 0..1              U                             25      25      25       -
+  pk3_2c                     oOKP  INTEGER      1 0..1              U                             85      85      85       -
+  pp1rw                      tIqR  INTEGER      1 0..1              U                             98      98      98       -
+  playerindex                TWSX  INTEGER     13 0..8191           U   exhibitionplayers         34      34      34       -
+  pp4_1lw                    FMkb  INTEGER      1 0..1              U                             20      20      20       -
+  pp4_2lw                    Auad  INTEGER      1 0..1              U                             11      11      11       -
+  pk4_1rd                    AAai  INTEGER      1 0..1              U                              8       8       8       -
+  pk4_2rd                    FGkk  INTEGER      1 0..1              U                             19      19      19       -
+  jersey                     tRVs  INTEGER      7 0..127            U                             99      99      99       -
+  l1rw                       pfiv  INTEGER      1 0..1              U                             89      89      89       -
+  l3rw                       TbGw  INTEGER      1 0..1              U                             47      47      47       -
+  l2rw                       Adsx  INTEGER      1 0..1              U                              9       9       9       -
+  l4rw                       mxhB  INTEGER      1 0..1              U                             84      84      84       -
+  l4c                        lxRC  INTEGER      1 0..1              U                             83      83      83       -
+  pk3_1c                     bNDE  INTEGER      1 0..1              U                             70      70      70       -
+  h3                         dCEG  INTEGER      1 0..1              U                             74      74      74       -
+  pk3_2ld                    GtFK  INTEGER      1 0..1              U                             21      21      21       -
+  pp2ld                      NYLL  INTEGER      1 0..1              U                             26      26      26       -
+  pk3_1ld                    rrTM  INTEGER      1 0..1              U                             91      91      91       -
+  pp1ld                      sKFN  INTEGER      1 0..1              U                             96      96      96       -
+  l1c                        ctKP  INTEGER      1 0..1              U                             73      73      73       -
+  h2                         ryzV  INTEGER      1 0..1              U                             92      92      92       -
+  pp4_1rd                    EGLX  INTEGER      1 0..1              U                             17      17      17       -
+  pp4_2rd                    BcVZ  INTEGER      1 0..1              U                             13      13      13       -
+  team                       BSXd  INTEGER      8 0..255            U                              0       0       0       -
+  g1                         WPGf  INTEGER      1 0..1              U                             50      50      50       -
+  l1ld                       opNr  INTEGER      1 0..1              U                             86      86      86       -
+  l3ld                       Sxps  INTEGER      1 0..1              U                             33      33      33       -
+  l2ld                       BvDt  INTEGER      1 0..1              U                             15      15      15       -
+  l2c                        PufE  INTEGER      1 0..1              U                             32      32      32       -
+  pk4_1lw                    BWVK  INTEGER      1 0..1              U                             12      12      12       -
+  pk4_2lw                    EMLM  INTEGER      1 0..1              U                             18      18      18       -
+  l3c                        CLEN  INTEGER      1 0..1              U                             16      16      16       -
+  s1                         XUMR  INTEGER      1 0..1              U                             53      53      53       -
+  s5                         uAxS  INTEGER      1 0..1              U                            107     107     107       -
+  note: binary descriptor order differs from meta document order
+
+vbHh stockteamequipmenttable  rows=8000 recB=32  insert=None(None) delete=None(None) update=UHgc(-1) groups=rosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER     13 0..8191       K   -                            239       -     239       -
+  brand                      LWKT  INTEGER      5 -1..30            U                            224       -     224       -
+  variant                    TccF  INTEGER      4 -1..14            U                            235       -     235       -
+  equipment                  MpJj  INTEGER      4 -1..14            U                            229       -     229       -
+  zone9_b                    JDiC  INTEGER      8 0..255            U                             72       -      72       -
+  zone8_b                    GdYD  INTEGER      8 0..255            U                             40       -      40       -
+  zone2_b                    QIHG  INTEGER      8 0..255            U                             80       -      80       -
+  zone3_b                    biZH  INTEGER      8 0..255            U                            128       -     128       -
+  zone1_b                    hyBI  INTEGER      8 0..255            U                            160       -     160       -
+  zone4_b                    CQuK  INTEGER      8 0..255            U                             24       -      24       -
+  zone5_b                    lmIL  INTEGER      8 0..255            U                            168       -     168       -
+  zone7_b                    zSgM  INTEGER      8 0..255            U                            216       -     216       -
+  zone6_b                    AUON  INTEGER      8 0..255            U                              0       -       0       -
+  zone5_r                    JCjO  INTEGER      8 0..255            U                             64       -      64       -
+  zone4_r                    GgVP  INTEGER      8 0..255            U                             48       -      48       -
+  zone6_r                    wEBQ  INTEGER      8 0..255            U                            200       -     200       -
+  zone7_r                    bCLR  INTEGER      8 0..255            U                            112       -     112       -
+  zone3_r                    nSCS  INTEGER      8 0..255            U                            184       -     184       -
+  zone2_r                    gssT  INTEGER      8 0..255            U                            144       -     144       -
+  zone1_r                    VOaV  INTEGER      8 0..255            U                             88       -      88       -
+  zone8_r                    CNbW  INTEGER      8 0..255            U                             16       -      16       -
+  zone9_r                    lntX  INTEGER      8 0..255            U                            176       -     176       -
+  team                       BSXd  INTEGER      8 -1..254           U                              8       -       8       -
+  zone9_g                    WzYK  INTEGER      8 0..255            U                            104       -     104       -
+  zone8_g                    hNmL  INTEGER      8 0..255            U                            152       -     152       -
+  zone2_g                    bgZO  INTEGER      8 0..255            U                            120       -     120       -
+  zone3_g                    wSLP  INTEGER      8 0..255            U                            208       -     208       -
+  zone1_g                    GCnQ  INTEGER      8 0..255            U                             32       -      32       -
+  zone4_g                    VowS  INTEGER      8 0..255            U                             96       -      96       -
+  zone5_g                    GyeT  INTEGER      8 0..255            U                             56       -      56       -
+  zone7_g                    gSCU  INTEGER      8 0..255            U                            136       -     136       -
+  era                        RbhV  INTEGER      2 -1..2             U                            233       -     233       -
+  zone6_g                    nkQV  INTEGER      8 0..255            U                            192       -     192       -
+  note: binary descriptor order differs from meta document order
+
+cPbu exhibitionplayerbiotable  rows=2962 recB=184  insert=PsvH(360) delete=None(None) update=CvSu(-1) groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  game_id                    zIBw  INTEGER     13 0..8191       K   -                           1432    1432    1432       -
+  rookie                     vnCd  INTEGER      1 0..1              U                           1430    1430    1430       -
+  active                     NYKk  INTEGER      1 0..1              U                           1324    1324    1324       -
+  yeardrafted                PQgy  INTEGER      7 0..127            U                           1339    1339    1339       -
+  firstname                  PedH  STRING     320 0..0              U                            328     328     328       -
+  statename                  aVXc  STRING     320 0..0              U                            976     976     976       -
+  artid                      rnOl  INTEGER     14 0..16383          U                           1409    1409    1409       -
+  weight                     WZNs  INTEGER      8 0..255            U                            968     968     968       -
+  handedness                 pkRG  INTEGER      1 0..1              U                           1408    1408    1408       -
+  haircards_b                HLGG  INTEGER      1 0..1              U                           1316    1316    1316       -
+  proteam                    WBbd  INTEGER      5 -1..30            U                           1355    1355    1355       -
+  headid                     DaPp  INTEGER     15 0..32767          U                           1297    1297    1297       -
+  haircap                    Fdcp  INTEGER      1 0..1              U                           1312    1312    1312       -
+  day                        iwsK  INTEGER      5 0..31             U                           1396    1396    1396       -
+  skincolor                  QDTK  INTEGER      4 0..10             U                           1351    1351    1351       -
+  contractis2way             DVoL  INTEGER      1 0..1              U                           1296    1296    1296       -
+  intlcountry                hleL  INTEGER      7 0..127            U                           1389    1389    1389       -
+  birthplace                 JzFM  STRING     320 0..0              U                              8       8       8       -
+  lastname                   RMbQ  STRING     320 0..0              U                            648     648     648       -
+  state                      IxvQ  INTEGER      7 0..127            U                           1317    1317    1317       -
+  eyecolorcode               jfuZ  INTEGER      3 0..6              U                           1401    1401    1401       -
+  positiondrafted            fjUo  INTEGER      9 0..511            U                           1380    1380    1380       -
+  year                       dnFq  INTEGER      7 0..127            U                           1373    1373    1373       -
+  jersey                     tRVs  INTEGER      7 0..127            U                           1423    1423    1423       -
+  height                     QBpy  INTEGER      5 0..31             U                           1346    1346    1346       -
+  month                      pLKJ  INTEGER      4 0..15             U                           1404    1404    1404       -
+  haircards_a                xOzX  INTEGER      1 0..1              U                           1431    1431    1431       -
+  team                       BSXd  INTEGER      8 0..255            U                              0       0       0       -
+  contractdollars            dhKk  INTEGER     10 0..1023           U                           1363    1363    1363       -
+  audioid                    Nzao  INTEGER     14 0..16383          U                           1325    1325    1325       -
+  position                   aljv  INTEGER      3 0..7              U                           1360    1360    1360       -
+  contractlength             GDhI  INTEGER      3 0..7              U                           1313    1313    1313       -
+  note: binary descriptor order differs from meta document order
+
+OEtS exhibitionarena  rows=138 recB=104  insert=None(None) delete=None(None) update=TUaR(-1) groups=rosters,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER      8 0..255        K   -                            736       -     736       -
+  arenatype                  rQxd  INTEGER      1 0..1              U                            818       -     818       -
+  boardtrim                  Yrrm  INTEGER      3 0..7              U                            795       -     795       -
+  icelogoshown               trbt  INTEGER      1 0..1              U                            820       -     820       -
+  icead1                     caZu  INTEGER      4 0..15             U                            807       -     807       -
+  maxattendance              JACw  INTEGER     15 0..32767          U                            766       -     766       -
+  seathigh                   OSjI  INTEGER      8 0..255            U                            376       -     376       -
+  jumbotron                  lLtM  INTEGER      8 0..255            U                            720       -     720       -
+  icequality                 HLIg  INTEGER      1 0..1              U                            765       -     765       -
+  icelogo                    Adth  INTEGER      8 0..255            U                              0       -       0       -
+  chantaudioid               sTsp  INTEGER      8 0..255            U                            752       -     752       -
+  doorlogo                   UrwC  INTEGER      8 0..255            U                            392       -     392       -
+  boardadshown               CRDD  INTEGER      1 0..1              U                            764       -     764       -
+  step                       SWaG  INTEGER      8 0..255            U                            384       -     384       -
+  crowdtype                  sfmX  INTEGER      1 0..1              U                            819       -     819       -
+  seatmedium                 sJMl  INTEGER      8 0..255            U                            744       -     744       -
+  walls                      SKzw  INTEGER      5 0..31             U                            785       -     785       -
+  redline                    UBby  INTEGER      5 0..31             U                            790       -     790       -
+  crease                     zqrz  INTEGER      1 0..1              U                            824       -     824       -
+  periodhorn                 BplC  INTEGER      8 0..255            U                              8       -       8       -
+  icead2                     KXgL  INTEGER      4 0..15             U                            781       -     781       -
+  cityaudioid                aEAU  INTEGER      9 0..511            U                            798       -     798       -
+  seatlow                    KUgV  INTEGER      8 0..255            U                            352       -     352       -
+  puck                       NZGZ  INTEGER      8 0..255            U                            368       -     368       -
+  cityname                   DQhb  STRING     320 0..0              U                             16       -      16       -
+  arenaartid                 lRDh  INTEGER      8 0..255            U                            728       -     728       -
+  boardad                    yyzQ  INTEGER      3 0..7              U                            821       -     821       -
+  avgattendance              oNiT  INTEGER      7 0..127            U                            811       -     811       -
+  arenaname                  cFAb  STRING     320 0..0              U                            400       -     400       -
+  arenaaudioid               NSuo  INTEGER      8 0..255            U                            360       -     360       -
+  roof                       FEaI  INTEGER      8 0..255            U                            336       -     336       -
+  goalhorn                   JxRK  INTEGER      8 0..255            U                            344       -     344       -
+  icead3                     ATjQ  INTEGER      4 0..15             U                            760       -     760       -
+  note: binary descriptor order differs from meta document order
+
+yvSd exhibitionskaterai  rows=2647 recB=24  insert=kbtS(300) delete=None(None) update=RosT(-1) groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  game_id                    zIBw  INTEGER     13 0..8191       K   -                            155     155     155       -
+  p_offawareness             uMsT  INTEGER      6 0..63             U                            149     149     149       -
+  p_deking                   qQvX  INTEGER      6 0..63             U                            137     137     137       -
+  p_checking                 kOdX  INTEGER      6 0..63             U                            113     113     113       -
+  pass_carrybias             baRY  INTEGER      4 0..15             U                             91      91      91       -
+  p_agility                  NUxf  INTEGER      6 0..63             U                             55      55      55       -
+  p_passing                  MDFs  INTEGER      6 0..63             U                             49      49      49       -
+  p_discipline               WyUw  INTEGER      6 0..63             U                             61      61      61       -
+  p_potential                Kusi  INTEGER      6 0..63             U                             43      43      43       -
+  p_toughness                cnVI  INTEGER      6 0..63             U                             95      95      95       -
+  off_defbias                EksY  INTEGER      4 0..15             U                             30      30      30       -
+  p_acceleration             ntSb  INTEGER      6 0..63             U                            125     125     125       -
+  p_slapaccuracy             pter  INTEGER      6 0..63             U                            131     131     131       -
+  shoot_passbias             hlsv  INTEGER      4 0..15             U                            101     101     101       -
+  p_endurance                CKPw  INTEGER      6 0..63             U                              6       6       6       -
+  p_wristaccuracy            EKlF  INTEGER      6 0..63             U                             18      18      18       -
+  p_puckcontrol              kMSG  INTEGER      6 0..63             U                            107     107     107       -
+  p_defawareness             luUP  INTEGER      6 0..63             U                            119     119     119       -
+  p_wristshotpower           zNcV  INTEGER      6 0..63             U                            168     168     168       -
+  p_poise                    IjcX  INTEGER      6 0..63             U                             37      37      37       -
+  p_shotblocking             sIMc  INTEGER      6 0..63             U                            143     143     143       -
+  p_deflections              YnJj  INTEGER      6 0..63             U                             73      73      73       -
+  p_style                    EoQm  INTEGER      3 0..7              U                             34      34      34       -
+  p_slapshotpower            ZjQo  INTEGER      6 0..63             U                             79      79      79       -
+  p_speed                    YWPq  INTEGER      6 0..63             U                             67      67      67       -
+  p_faceoffs                 ZpNt  INTEGER      6 0..63             U                             85      85      85       -
+  p_aggression               ArKB  INTEGER      6 0..63             U                              0       0       0       -
+  p_fighting                 joMD  INTEGER      2 0..3              U                            105     105     105       -
+  p_balance                  EcHG  INTEGER      6 0..63             U                             24      24      24       -
+  p_durability               EByO  INTEGER      6 0..63             U                             12      12      12       -
+  note: binary descriptor order differs from meta document order
+
+yuHm exhibitiongoalieai  rows=315 recB=20  insert=PxTk(60) delete=None(None) update=uyGF(-1) groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  game_id                    zIBw  INTEGER     13 0..8191       K   -                            138     138     138       -
+  g_breakaway                jmPC  INTEGER      6 0..63             U                             92      92      92       -
+  g_paddledown               DOmH  INTEGER      2 0..3              U                             12      12      12       -
+  g_pokecheck                uVsH  INTEGER      6 0..63             U                            126     126     126       -
+  g_fighting                 qiGO  INTEGER      2 0..3              U                            116     116     116       -
+  g_endurance                GLub  INTEGER      6 0..63             U                             20      20      20       -
+  g_vision                   MoFf  INTEGER      6 0..63             U                             44      44      44       -
+  g_speed                    MgKo  INTEGER      6 0..63             U                             38      38      38       -
+  g_positioning              RbJp  INTEGER      6 0..63             U                             56      56      56       -
+  g_reboundcontrol           BSHP  INTEGER      6 0..63             U                              0       0       0       -
+  g_shotrecover              iBQX  INTEGER      6 0..63             U                             80      80      80       -
+  g_poise                    wtth  INTEGER      6 0..63             U                            132     132     132       -
+  g_style                    suJw  INTEGER      2 0..3              U                            124     124     124       -
+  g_durability               bFWy  INTEGER      6 0..63             U                             68      68      68       -
+  g_passing                  soMM  INTEGER      6 0..63             U                            118     118     118       -
+  g_aggression               jnmR  INTEGER      6 0..63             U                             98      98      98       -
+  g_puckplayfrequency        hZxg  INTEGER      6 0..63             U                             74      74      74       -
+  g_5hole                    Ewap  INTEGER      6 0..63             U                             14      14      14       -
+  g_floppiness               qTeq  INTEGER      6 0..63             U                            110     110     110       -
+  g_gsl                      OdSs  INTEGER      6 0..63             U                             50      50      50       -
+  g_gsh                      nRPv  INTEGER      6 0..63             U                            104     104     104       -
+  g_consistency              IBOA  INTEGER      6 0..63             U                             32      32      32       -
+  g_agility                  BboH  INTEGER      6 0..63             U                              6       6       6       -
+  g_potential                GrVN  INTEGER      6 0..63             U                             26      26      26       -
+  g_ssl                      aiFP  INTEGER      6 0..63             U                             62      62      62       -
+  g_ssh                      jWgU  INTEGER      6 0..63             U                             86      86      86       -
+  note: binary descriptor order differs from meta document order
+
+sozv stockteamcolorstable  rows=143 recB=8  insert=yJYN(10) delete=None(None) update=XGls(-1) groups=rosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+  name                       id    type     depth range         key upd fk                     p.bit ins.bit upd.bit del.bit
+  index                      qEfv  INTEGER      9 0..511        K   -                             34      34      24       -
+  color_r                    tfxc  INTEGER      8 0..255            U                             16      16      16       -
+  color_b                    FvCF  INTEGER      8 0..255            U                              0       0       0       -
+  color_g                    irgh  INTEGER      8 0..255            U                              8       8       8       -
+  team                       BSXd  INTEGER      7 0..127            -                             24      24       -       -
+  colorid                    XfpA  INTEGER      3 0..7              -                             31      31       -       -
+  note: binary descriptor order differs from meta document order
+

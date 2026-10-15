@@ -1,0 +1,174 @@
+{
+ "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)",
+ "scanned": 18968,
+ "hits": [
+  {
+   "where": "data0.big:fe/ion/artassets/jerseys/jersey_0_51_1.big [refpack]",
+   "key": "CHTM",
+   "offset": 194339,
+   "context": "\u0011\u00ff \n\u000e\u00ff\b\f\u000b\u00ff\u0005\u0007\b\u00ff\u0004\u0005\u0005c_WZ\u00ff\u000b\n\n\u00ff\u0005\u0005\u0006\u00f6\b\u0007\n]e]]RiccHtmmC}yyA\u008d\u008d\u008dOg`dEnkk>{w{<\u008c\u0088\u0088D\u0099\u0099\u0099L\u00a4\u00a1\u00a1V\u00a9\u00a9\u00a9\u00a8\u00a2\u00a0\u00a0=\u009a\u0096\u0096D\u00a5\u00a5\u00a5N\u00aa\u00aa\u00aa[\u00ad\u00aa\u00aa\u00ff\u00c1\u00bf"
+  },
+  {
+   "where": "data0.big:fe/ion/artassets/jerseys/jersey_0_51_1.big [refpack]::224",
+   "key": "CHTM",
+   "offset": 190243,
+   "context": "\u0011\u00ff \n\u000e\u00ff\b\f\u000b\u00ff\u0005\u0007\b\u00ff\u0004\u0005\u0005c_WZ\u00ff\u000b\n\n\u00ff\u0005\u0005\u0006\u00f6\b\u0007\n]e]]RiccHtmmC}yyA\u008d\u008d\u008dOg`dEnkk>{w{<\u008c\u0088\u0088D\u0099\u0099\u0099L\u00a4\u00a1\u00a1V\u00a9\u00a9\u00a9\u00a8\u00a2\u00a0\u00a0=\u009a\u0096\u0096D\u00a5\u00a5\u00a5N\u00aa\u00aa\u00aa[\u00ad\u00aa\u00aa\u00ff\u00c1\u00bf"
+  },
+  {
+   "where": "data0.big:fe/ion/artassets/playerheads/p151.big [refpack]",
+   "key": "CHTM",
+   "offset": 38750,
+   "context": "U>~\u0081_D~wU<t\\A0u[?-trQ=usP8~iH2~{Y>~\u0087cJ~\u0085cHtmO9txW?ttS=tiJ4~\u0083aF~\u007f]B~\u007f]B~wU>t`A0u]A-teH4tiL9~{[B~\u0081]F~}[F~w"
+  },
+  {
+   "where": "data0.big:fe/ion/artassets/playerheads/p151.big [refpack]::52",
+   "key": "CHTM",
+   "offset": 34654,
+   "context": "U>~\u0081_D~wU<t\\A0u[?-trQ=usP8~iH2~{Y>~\u0087cJ~\u0085cHtmO9txW?ttS=tiJ4~\u0083aF~\u007f]B~\u007f]B~wU>t`A0u]A-teH4tiL9~{[B~\u0081]F~}[F~w"
+  },
+  {
+   "where": "data0.big:fe/ion/artassets/teamlogoswide/t18.big [refpack]",
+   "key": "CHTM",
+   "offset": 416275,
+   "context": "OPB<OML>ONG>NME;ONA:NK\u009c[@KsNGKwNGKwNGH\u009f\\CHtMJHtMFGvOGKwNGKzNGK\u00a6_@K\u00b4b=HxMFH{MFG\u00a5]@G\u00b7`=K\u00b4b=K\u00b4b=K\u00b4b=K\u00b4b=G\u00b7d"
+  },
+  {
+   "where": "data0.big:fe/ion/artassets/teamlogoswide/t18.big [refpack]::26",
+   "key": "CHTM",
+   "offset": 412179,
+   "context": "OPB<OML>ONG>NME;ONA:NK\u009c[@KsNGKwNGKwNGH\u009f\\CHtMJHtMFGvOGKwNGKzNGK\u00a6_@K\u00b4b=HxMFH{MFG\u00a5]@G\u00b7`=K\u00b4b=K\u00b4b=K\u00b4b=K\u00b4b=G\u00b7d"
+  },
+  {
+   "where": "data1.big:fe/ion/game/screens/createplayer/cp_playerorigin.big [refpack]",
+   "key": "German",
+   "offset": 14292,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "data1.big:fe/ion/game/screens/createplayer/cp_playerorigin.big [refpack]::1",
+   "key": "German",
+   "offset": 6612,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "data1.big:fe/ion/game/screens/createplayer/cp1_playerinfo.big [refpack]",
+   "key": "German",
+   "offset": 79492,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "data1.big:fe/ion/game/screens/createplayer/cp1_playerinfo.big [refpack]::1",
+   "key": "German",
+   "offset": 34500,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "loose:fe/ion/artassets/jerseys/jersey_0_51_1.big",
+   "key": "CHTM",
+   "offset": 194339,
+   "context": "\u0011\u00ff \n\u000e\u00ff\b\f\u000b\u00ff\u0005\u0007\b\u00ff\u0004\u0005\u0005c_WZ\u00ff\u000b\n\n\u00ff\u0005\u0005\u0006\u00f6\b\u0007\n]e]]RiccHtmmC}yyA\u008d\u008d\u008dOg`dEnkk>{w{<\u008c\u0088\u0088D\u0099\u0099\u0099L\u00a4\u00a1\u00a1V\u00a9\u00a9\u00a9\u00a8\u00a2\u00a0\u00a0=\u009a\u0096\u0096D\u00a5\u00a5\u00a5N\u00aa\u00aa\u00aa[\u00ad\u00aa\u00aa\u00ff\u00c1\u00bf"
+  },
+  {
+   "where": "loose:fe/ion/artassets/jerseys/jersey_0_51_1.big::224",
+   "key": "CHTM",
+   "offset": 190243,
+   "context": "\u0011\u00ff \n\u000e\u00ff\b\f\u000b\u00ff\u0005\u0007\b\u00ff\u0004\u0005\u0005c_WZ\u00ff\u000b\n\n\u00ff\u0005\u0005\u0006\u00f6\b\u0007\n]e]]RiccHtmmC}yyA\u008d\u008d\u008dOg`dEnkk>{w{<\u008c\u0088\u0088D\u0099\u0099\u0099L\u00a4\u00a1\u00a1V\u00a9\u00a9\u00a9\u00a8\u00a2\u00a0\u00a0=\u009a\u0096\u0096D\u00a5\u00a5\u00a5N\u00aa\u00aa\u00aa[\u00ad\u00aa\u00aa\u00ff\u00c1\u00bf"
+  },
+  {
+   "where": "loose:fe/ion/artassets/playerheads/p151.big",
+   "key": "CHTM",
+   "offset": 38750,
+   "context": "U>~\u0081_D~wU<t\\A0u[?-trQ=usP8~iH2~{Y>~\u0087cJ~\u0085cHtmO9txW?ttS=tiJ4~\u0083aF~\u007f]B~\u007f]B~wU>t`A0u]A-teH4tiL9~{[B~\u0081]F~}[F~w"
+  },
+  {
+   "where": "loose:fe/ion/artassets/playerheads/p151.big::52",
+   "key": "CHTM",
+   "offset": 34654,
+   "context": "U>~\u0081_D~wU<t\\A0u[?-trQ=usP8~iH2~{Y>~\u0087cJ~\u0085cHtmO9txW?ttS=tiJ4~\u0083aF~\u007f]B~\u007f]B~wU>t`A0u]A-teH4tiL9~{[B~\u0081]F~}[F~w"
+  },
+  {
+   "where": "loose:fe/ion/artassets/teamlogoswide/t18.big",
+   "key": "CHTM",
+   "offset": 416275,
+   "context": "OPB<OML>ONG>NME;ONA:NK\u009c[@KsNGKwNGKwNGH\u009f\\CHtMJHtMFGvOGKwNGKzNGK\u00a6_@K\u00b4b=HxMFH{MFG\u00a5]@G\u00b7`=K\u00b4b=K\u00b4b=K\u00b4b=K\u00b4b=G\u00b7d"
+  },
+  {
+   "where": "loose:fe/ion/artassets/teamlogoswide/t18.big::26",
+   "key": "CHTM",
+   "offset": 412179,
+   "context": "OPB<OML>ONG>NME;ONA:NK\u009c[@KsNGKwNGKwNGH\u009f\\CHtMJHtMFGvOGKwNGKzNGK\u00a6_@K\u00b4b=HxMFH{MFG\u00a5]@G\u00b7`=K\u00b4b=K\u00b4b=K\u00b4b=K\u00b4b=G\u00b7d"
+  },
+  {
+   "where": "loose:fe/ion/game/screens/createplayer/cp1_playerinfo.big",
+   "key": "German",
+   "offset": 79492,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "loose:fe/ion/game/screens/createplayer/cp1_playerinfo.big::1",
+   "key": "German",
+   "offset": 34500,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "loose:fe/ion/game/screens/createplayer/cp_playerorigin.big",
+   "key": "German",
+   "offset": 14292,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "loose:fe/ion/game/screens/createplayer/cp_playerorigin.big::1",
+   "key": "German",
+   "offset": 6612,
+   "context": "Poland\u00b7\u00b7NorthernIreland\u00b7Italy\u00b7\u00b7\u00b7Hungary\u00b7Germany\u00b7France\u00b7\u00b7England\u00b7CzechRepublic\u00b7\u00b7\u00b7Belgium\u00b7Austria\u00b7Ukraine\u00b7Ru"
+  },
+  {
+   "where": "loose:db/NHL07NG-meta.xml",
+   "key": "Elitserien",
+   "offset": 6099,
+   "context": "fields>\r\n  </table>\r\n  <table name=\"intlelitserienschedule\" shortname=\"aWBf\" difflistproperty=\"ENABLED\">\r\n    "
+  },
+  {
+   "where": "loose:db/NHL07NG-meta.xml",
+   "key": "Liiga",
+   "offset": 133211,
+   "context": "elds>\r\n  </table>\r\n  <table name=\"intlsmliigaschedule\" shortname=\"PlDA\" difflistproperty=\"ENABLED\">\r\n    "
+  },
+  {
+   "where": "loose:db/NHL07NG-meta.xml",
+   "key": "ELITSERIEN",
+   "offset": 6099,
+   "context": "fields>\r\n  </table>\r\n  <table name=\"intlelitserienschedule\" shortname=\"aWBf\" difflistproperty=\"ENABLED\">\r\n    "
+  },
+  {
+   "where": "loose:db/NHL07NG.db",
+   "key": "German",
+   "offset": 1877204,
+   "context": "\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u0015\b\n\u00042\u0011\u0080\u0005\u0018\u00c0\u00b7\u0001\u0011\u0001A_\u00c7A,\u0006\u0090\u00c0\u00b7\u00b7Germany\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7"
+  },
+  {
+   "where": "loose:db/NHL07NG.db",
+   "key": "German",
+   "offset": 1891211,
+   "context": "\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b8)\u00d0Q\u0094\u0013\u0089\b8\u00c4\u00848 \u00b2\r\u0082\u00c7U\u00f4Jp\u00c0\u00b7\u00b7K\u00c3\u00b6ln, Germany\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7"
+  },
+  {
+   "where": "loose:db/NHL07NG.db",
+   "key": "German",
+   "offset": 1892335,
+   "context": "\u00b7\u00b7\u00b7\u00b7\u00b7\u00b8jP\u00d1\u0094\u0014\u0089\bx\u00c4\u0084@!\u0092\u001d\u0082\u00c7V\u0004J\u0090\u00c0\u00b7\u00b7N\u00c3\u00bcrnberg, Germany\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7"
+  },
+  {
+   "where": "loose:db/NHL07NG.db",
+   "key": "German",
+   "offset": 4157588,
+   "context": "\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7(N((\u00b7S\b\u00b7@@\u00b7\u00b7Germany\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7"
+  },
+  {
+   "where": "loose:db/NHL07NG.db",
+   "key": "German",
+   "offset": 4157844,
+   "context": "\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7Germany\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7\u00b7"
+  }
+ ]
+}

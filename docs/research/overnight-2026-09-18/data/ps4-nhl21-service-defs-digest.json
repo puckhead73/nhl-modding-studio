@@ -1,0 +1,4110 @@
+{
+ "asset": {
+  "spreadsheet": {
+   "entry": 539,
+   "size": 389,
+   "items": [
+    {
+     "urn": "nhl-data:asset:spreadsheet:definition:get:01.00.00",
+     "description": "Assetdataserviceforspreadsheetdefinitions",
+     "input": "nhl-schema:asset:spreadsheet:id:01.00.00",
+     "output": "nhl-schema:asset:spreadsheet:definition:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:asset:spreadsheet:definition:01.00.00",
+     "description": "Spreadsheetdefinitiondata",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:asset:spreadsheet:definition:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SpreadsheetDefinition",
+       "type": "string",
+       "desc": "Spreadsheetdefinitionblobstring",
+       "max": 1048576
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:asset:spreadsheet:id:01.00.00",
+     "description": "SpreadsheetdefinitionID",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:asset:spreadsheet:definition:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SpreadsheetDefinitionId",
+       "type": "string",
+       "desc": "SpreadsheetdefinitionassetID",
+       "max": 256
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "competition": {
+  "league_state": {
+   "entry": 866,
+   "size": 455,
+   "items": [
+    {
+     "urn": "nhl-data:competition:league-state:current:info:get:01.00.00",
+     "description": "Retrievesthecurrentleaguestartandenddates.",
+     "input": null,
+     "output": "nhl-schema:competition:league-state:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:competition:league-state:list:01.00.00",
+     "description": "Containsinformationaboutthecurrentleague'sstate.",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:league-state:current:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "CompetitionLeagueStateList",
+       "type": "array",
+       "desc": null,
+       "max": 50
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.CompetitionId",
+       "type": "integer",
+       "desc": "CompetitionID",
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState.CurrentDate",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState.MaxTeamSalary",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState.CurrentSeasonStartingYear",
+       "type": "integer",
+       "desc": "Startingyearforcurrentseason(e.g.2014for2014-2015season)",
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState.StartDate",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState.MinPlayerSalary",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState.SalaryCapEnabled",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionLeagueStateList.CompetitionLeagueState.LeagueState.MinTeamSalary",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "bio": {
+   "entry": 2966,
+   "size": 592,
+   "items": [
+    {
+     "urn": "nhl-data:competition:bio:info:by-current-competition:get:01.00.00",
+     "description": "Getsbioinformationforthecurrentcompetition",
+     "input": null,
+     "output": "nhl-schema:competition:bio:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:bio:info:set:01.00.00",
+     "description": "Setnameanddescriptionofthecompetition",
+     "input": "nhl-schema:league-creation:competition:bio:info:01.00.00",
+     "output": null,
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:competition:bio:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:bio:info:by-current-competition:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "CompetitionBioList",
+       "type": "array",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionBioList.CompetitionBio",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionBioList.CompetitionBio.CompetitionId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionBioList.CompetitionBio.Bio",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionBioList.CompetitionBio.Bio.Name",
+       "type": "string",
+       "desc": "Competition'sname",
+       "max": 256
+      },
+      {
+       "key": "CompetitionBioList.CompetitionBio.Bio.Description",
+       "type": "string",
+       "desc": "Competition'sdescription",
+       "max": 256
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:league-creation:competition:bio:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:bio:info:set:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "Competition",
+       "type": "dictionary",
+       "desc": "HoldsCompetitionnameanddescription",
+       "max": null
+      },
+      {
+       "key": "Competition.Name",
+       "type": "string",
+       "desc": "NameoftheLeague",
+       "max": 256
+      },
+      {
+       "key": "Competition.Description",
+       "type": "string",
+       "desc": "DescriptionoftheLeague",
+       "max": 256
+      }
+     ]
+    }
+   ]
+  },
+  "members": {
+   "entry": 3498,
+   "size": 1072,
+   "items": [
+    {
+     "urn": "nhl-data:competition:members:info:by-user-id:get:01.00.00",
+     "description": "Gettheuserinfofromcurrentcompetitionusingtheuserid",
+     "input": "nhl-schema:user:id:list:01.00.00",
+     "output": "nhl-schema:competition:members:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:members:team:id:recent:info:by-current-competition:get:01.00.00",
+     "description": "GetteamIDslistwhichtheuserwasinteractingrecently",
+     "input": null,
+     "output": "nhl-schema:team:id:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:competition:members:list:01.00.00",
+     "description": "Listofcompetitionmembersinfo",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:gmc-mailbox:competition:members:by-current-competition:get:01.00.00",
+      "nhl-data:competition:members:info:by-user-id:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "CompetitionMembersList",
+       "type": "array",
+       "desc": "Listofcompetitionsanditsmembers",
+       "max": 200
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers",
+       "type": "dictionary",
+       "desc": "Membersofacompetition",
+       "max": null
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.CompetitionId",
+       "type": "integer",
+       "desc": "CompetitionID",
+       "max": null
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList",
+       "type": "array",
+       "desc": "Listofcompetitionmembers",
+       "max": 750
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member",
+       "type": "dictionary",
+       "desc": "Memberinfo",
+       "max": null
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member.UserId",
+       "type": "integer",
+       "desc": "UserID",
+       "max": null
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member.UserTeamId",
+       "type": "integer",
+       "desc": "UserteamID",
+       "max": null
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member.UserRoles",
+       "type": "array",
+       "desc": "ContainsalltherolesofanUserinacompetition",
+       "max": 3
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member.UserRoles.UserRoleId",
+       "type": "integer",
+       "desc": "enumMemberRole{COMPETITION_ROLE_UNKNOWN=-1,COMPETITION_ROLE_OBSERVER=0,COMPETITION_ROLE_PLAYER=1,COMPETITION_ROLE_GENERAL_MANAGER=2,COMPETITION_ROLE_COMMISSIONER=3};",
+       "max": 3
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member.UserGMName",
+       "type": "string",
+       "desc": "OnlyusedforBeaGMmode",
+       "max": 64
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member.UserProTeamId",
+       "type": "integer",
+       "desc": "UserproteamID",
+       "max": null
+      },
+      {
+       "key": "CompetitionMembersList.CompetitionMembers.Members.MemberList.Member.UserMinorTeamId",
+       "type": "integer",
+       "desc": "Itisoptionalbecausenotallleagueshavetwotiers.",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:team:id:list:01.00.00",
+     "description": "ListofteamIDs",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:creation-zone:roster:team-players:info:get:01.00.00",
+      "nhl:fantasy-draft:pick-order:info:set:01.00.00",
+      "nhl:roster:moves:info:get:01.00.00",
+      "nhl:roster:team-players:info:get:01.00.00",
+      "nhl:trade-finder:team:list:get:01.00.00",
+      "nhl-data:bap:draft:team:list:get:01.00.00",
+      "nhl-data:competition:info:available-teams:get:01.00.00",
+      "nhl-data:competition:members:team:id:recent:info:by-current-competition:get:01.00.00",
+      "nhl-data:creation-zone:team:available:ids:get:01.00.00",
+      "nhl-data:league-creation:competition:salary-info:get:01.00.00",
+      "nhl-data:team:fa-contracts:info:get:01.00.00",
+      "nhl-data:team:id:by-league-id:get:01.00.00",
+      "nhl-data:team:organization:id-list:get:01.00.00",
+      "nhl-data:team:rfa-contracts:info:get:01.00.00",
+      "nhl-data:team:salary:info:get:01.00.00",
+      "nhl-data:trade-block:surplus:info:get:01.00.00",
+      "nhl-data:trade-block:trade-items:info:get:01.00.00",
+      "nhl-data:trade-block:wants:info:get:01.00.00",
+      "nhl-job:creation-zone:player:delete:notify:01.00.00",
+      "nhl-job:creation-zone:roster:team-players:info:get:01.00.00",
+      "nhl-job:roster:team-players:info:get:01.00.00",
+      "nhl-job:scouting:scout:current-scout:team:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "TeamIdList",
+       "type": "array",
+       "desc": null,
+       "max": 300
+      },
+      {
+       "key": "TeamIdList.TeamId",
+       "type": "integer",
+       "desc": "TeamID",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:user:id:list:01.00.00",
+     "description": "ListofuserIDs",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:members:info:by-user-id:get:01.00.00",
+      "nhl-data:user:bio:info:get:01.00.00",
+      "nhl-data:user:competitions:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "UserIdList",
+       "type": "array",
+       "desc": "ListofUserIDs",
+       "max": 750
+      },
+      {
+       "key": "UserIdList.UserId",
+       "type": "integer",
+       "desc": "UserID",
+       "max": null
+      },
+      {
+       "key": "UserTeamId",
+       "type": "integer",
+       "desc": "Allowstheusertoeditatradethatisnotfortheactiveteam",
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "info": {
+   "entry": 4497,
+   "size": 1587,
+   "items": [
+    {
+     "urn": "nhl-data:competition:info:active-league:get:01.00.00",
+     "description": null,
+     "input": null,
+     "output": "nhl-schema:competition:active-league:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:info:add:01.00.00",
+     "description": null,
+     "input": "nhl-schema:competition:settings:list:01.00.00",
+     "output": "nhl-schema:competition:id:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:info:available-teams:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:competition:optional:league-index:01.00.00",
+     "output": "nhl-schema:team:id:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:info:current-team:set:01.00.00",
+     "description": null,
+     "input": "nhl-schema:team:id:01.00.00",
+     "output": null,
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:info:fantasy-draft:finish:notify:01.00.00",
+     "description": null,
+     "input": "nhl-schema:competition:mode:info:01.00.00",
+     "output": "nhl-schema:competition:id:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:info:fantasy-draft:start:notify:01.00.00",
+     "description": null,
+     "input": "nhl-schema:competition:settings:list:01.00.00",
+     "output": null,
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:info:settings:default:set:01.00.00",
+     "description": null,
+     "input": "nhl-schema:common:league:id:01.00.00",
+     "output": null,
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competition:info:user-teams:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:competition:optional:league-index:01.00.00",
+     "output": "nhl-schema:competition:user-teams:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:common:league:id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:info:settings:default:set:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueId",
+       "type": "integer",
+       "desc": "IDofleague.",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competition:active-league:info:01.00.00",
+     "description": "Retrievescurrentleagueinfo",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:league:current:info:get:01.00.00",
+      "nhl-data:competition:info:active-league:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueIndex",
+       "type": "integer",
+       "desc": "Leagueindex",
+       "max": 15
+      },
+      {
+       "key": "LeagueId",
+       "type": "integer",
+       "desc": "CurrentleagueID",
+       "max": null
+      },
+      {
+       "key": "LeagueYear",
+       "type": "integer",
+       "desc": "Currentleagueyear",
+       "max": null
+      },
+      {
+       "key": "Season",
+       "type": "string",
+       "desc": "Currentseason",
+       "max": 16
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competition:id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:fantasy-draft:status:finish:notify:01.00.00",
+      "nhl:league-creation:competition:info:add:01.00.00",
+      "nhl-data:competition:info:add:01.00.00",
+      "nhl-data:competition:info:fantasy-draft:finish:notify:01.00.00",
+      "nhl-job:league-creation:competition:info:add:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "CompetitionId",
+       "type": "integer",
+       "desc": "DuringfantasyDraftmodetheCompetitionIDisoptional",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competition:mode:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:info:fantasy-draft:finish:notify:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "CompetitionMode",
+       "type": "string",
+       "desc": "Competitionmode(BE_A_GMorBE_A_PRO)",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competition:optional:league-index:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:award:winners:info:get:01.00.00",
+      "nhl-data:award:winners:info:get:01.00.00",
+      "nhl-data:competition:info:available-teams:get:01.00.00",
+      "nhl-data:competition:info:user-teams:get:01.00.00",
+      "nhl-job:award:winners:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueIndex",
+       "type": "integer",
+       "desc": null,
+       "max": 15
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competition:settings:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:info:add:01.00.00",
+      "nhl-data:competition:info:fantasy-draft:start:notify:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "CompetitionMode",
+       "type": "string",
+       "desc": "Competitionmode(BE_A_GMorBE_A_PRO)",
+       "max": null
+      },
+      {
+       "key": "GM",
+       "type": "dictionary",
+       "desc": "containerfortheuserinputGMinfoduringleaguecreation(onlyrequiredifCompetitionModeisBE_A_GM)",
+       "max": null
+      },
+      {
+       "key": "GM.Name",
+       "type": "string",
+       "desc": "GMname",
+       "max": 64
+      },
+      {
+       "key": "GM.TeamId",
+       "type": "integer",
+       "desc": "TeamIDtheGMbelongsto",
+       "max": null
+      },
+      {
+       "key": "CompetitionGameSettingList",
+       "type": "array",
+       "desc": null,
+       "max": 600
+      },
+      {
+       "key": "CompetitionGameSettingList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionGameSettingList.?.GameSettingId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompetitionGameSettingList.?.GameSettingValue",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competition:user-teams:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competition:info:user-teams:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "UserTeamList",
+       "type": "array",
+       "desc": null,
+       "max": 64
+      },
+      {
+       "key": "UserTeamList.TeamId",
+       "type": "integer",
+       "desc": null,
+       "max": 255
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:team:id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:competition:current-team:info:set:01.00.00",
+      "nhl:creation-zone:team:custom:delete:set:01.00.00",
+      "nhl:creation-zone:team:defaults:set:01.00.00",
+      "nhl:creation-zone:team:details:get:01.00.00",
+      "nhl:expansion-draft:picks:remove:01.00.00",
+      "nhl:fantasy-draft:recent-picks:info:get:01.00.00",
+      "nhl:fantasy-draft:team-depth:info:get:01.00.00",
+      "nhl:fantasy-draft:team-salary:info:get:01.00.00",
+      "nhl:injury:report:info:get:01.00.00",
+      "nhl:lines:edit-lines:best-lines:for-exhibition:set:01.00.00",
+      "nhl:lines:edit-lines:best-lines:set:01.00.00",
+      "nhl:manage-team:assistant-coach:best-lines:set:01.00.00",
+      "nhl:manage-team:assistant-coach:best-roster:set:01.00.00",
+      "nhl:manage-team:assistant-coach:minimal-fix-lines:set:01.00.00",
+      "nhl:roster:moves:roster-is-valid:get:01.00.00",
+      "nhl:scouting:all-prospects:pro:info:get:01.00.00",
+      "nhl:team:details:info:get:01.00.00",
+      "nhl:team-card:regular:view:get:01.00.00",
+      "nhl:user-draft:depth-chart:info:get:01.00.00",
+      "nhl:user-draft:pinned-to-watchlist:info:get:01.00.00",
+      "nhl:user-draft:recent-picks:info:get:01.00.00",
+      "nhl-data:competition:info:current-team:set:01.00.00",
+      "nhl-data:creation-zone:player:default-team:get:01.00.00",
+      "nhl-data:creation-zone:team:stock-data:get:01.00.00",
+      "nhl-data:resort:equipment:stock-team:default:get:01.00.00",
+      "nhl-data:roster:team-players:custom-delete:set:01.00.00",
+      "nhl-data:scouting:report:team:info:get:01.00.00",
+      "nhl-data:team:jersey-number:info:get:01.00.00",
+      "nhl-data:team:jersey-number:retired-numbers:get:01.00.00",
+      "nhl-data:team:roster:is-valid:get:01.00.00",
+      "nhl-job:creation-zone:team:add:notify:01.00.00",
+      "nhl-job:fantasy-draft:team-depth:info:get:01.00.00",
+      "nhl-job:injury:report:info:get:01.00.00",
+      "nhl-job:lines:line:list:get:01.00.00",
+      "nhl-job:scouting:all-prospects:pro:info:get:01.00.00",
+      "nhl-job:three-on-three:roster:manual-adjustment:get:01.00.00",
+      "nhl-job:trade-block:teams-blocks:team-players:info:get:01.00.00",
+      "nhl-job:user-draft:depth-chart:info:get:01.00.00",
+      "nhl-job:user-draft:pinned-to-watchlist:info:get:01.00.00",
+      "nhl-job:user-draft:recent-picks:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "TeamId",
+       "type": "integer",
+       "desc": "TeamID",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:team:id:list:01.00.00",
+     "description": "ListofteamIDs",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:creation-zone:roster:team-players:info:get:01.00.00",
+      "nhl:fantasy-draft:pick-order:info:set:01.00.00",
+      "nhl:roster:moves:info:get:01.00.00",
+      "nhl:roster:team-players:info:get:01.00.00",
+      "nhl:trade-finder:team:list:get:01.00.00",
+      "nhl-data:bap:draft:team:list:get:01.00.00",
+      "nhl-data:competition:info:available-teams:get:01.00.00",
+      "nhl-data:competition:members:team:id:recent:info:by-current-competition:get:01.00.00",
+      "nhl-data:creation-zone:team:available:ids:get:01.00.00",
+      "nhl-data:league-creation:competition:salary-info:get:01.00.00",
+      "nhl-data:team:fa-contracts:info:get:01.00.00",
+      "nhl-data:team:id:by-league-id:get:01.00.00",
+      "nhl-data:team:organization:id-list:get:01.00.00",
+      "nhl-data:team:rfa-contracts:info:get:01.00.00",
+      "nhl-data:team:salary:info:get:01.00.00",
+      "nhl-data:trade-block:surplus:info:get:01.00.00",
+      "nhl-data:trade-block:trade-items:info:get:01.00.00",
+      "nhl-data:trade-block:wants:info:get:01.00.00",
+      "nhl-job:creation-zone:player:delete:notify:01.00.00",
+      "nhl-job:creation-zone:roster:team-players:info:get:01.00.00",
+      "nhl-job:roster:team-players:info:get:01.00.00",
+      "nhl-job:scouting:scout:current-scout:team:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "TeamIdList",
+       "type": "array",
+       "desc": null,
+       "max": 300
+      },
+      {
+       "key": "TeamIdList.TeamId",
+       "type": "integer",
+       "desc": "TeamID",
+       "max": null
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "competitive_seasons": {
+  "season": {
+   "entry": 1848,
+   "size": 3261,
+   "items": [
+    {
+     "urn": "nhl-data:competitive-seasons:season:config:info:get:01.00.00",
+     "description": "Getstheconfigurationforaspecificseasoninstance",
+     "input": "nhl-schema:competitive-seasons:season-id:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season:config:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:config:list:get:01.00.00",
+     "description": "Getstheconfigurationforallseasoninstancesoftherequestedseasonentitytype",
+     "input": "nhl-schema:competitive-seasons:season-entity-type:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season:config:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:round:stats:info:get:01.00.00",
+     "description": "Getsthestatsforanentitywithinaspecifiedseasonround",
+     "input": "nhl-schema:competitive-seasons:season-round-entity-id:01.00.00",
+     "output": "nhl-schema:competitive-seasons:round:stats:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:selection:info:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:competitive-seasons:season-selection:filter:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season-selection:info-for-data:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:state:info:get:01.00.00",
+     "description": "Getsthestateofthespecifiedseasoninstance",
+     "input": "nhl-schema:competitive-seasons:season-id-state:info:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season:state:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:state:list:get:01.00.00",
+     "description": "Getsthestateforallseasoninstancesoftherequestedseasonentitytype",
+     "input": "nhl-schema:competitive-seasons:season-entity-type:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season:state:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:stats:info:get:01.00.00",
+     "description": "Getsthestatsforanentitywithinaspecifiedseason",
+     "input": "nhl-schema:competitive-seasons:season-entity-id:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season:stats:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:stats:list:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:competitive-seasons:season-list-entity-id:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season:stats:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:competitive-seasons:season:summary:info:get:01.00.00",
+     "description": "Getsasummaryinformationregardingallpast,presentandfuturecompetitiveseasons",
+     "input": "nhl-schema:competitive-seasons:season-entity-type:01.00.00",
+     "output": "nhl-schema:competitive-seasons:season-hub:mode:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:config:season-points:01.00.00",
+     "description": "Describestheseasonpointsthatareawardedbasedonanentity'sleaderboardrank",
+     "input": null,
+     "output": null,
+     "used_by": [],
+     "schema": [
+      {
+       "key": "SeasonPointsList",
+       "type": "array",
+       "desc": "Alistofleaderboardrankrangesandtheirassociatedseasonpoints",
+       "max": null
+      },
+      {
+       "key": "SeasonPointsList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonPointsList.?.MinRank",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonPointsList.?.MaxRank",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonPointsList.?.Points",
+       "type": "integer",
+       "desc": "Thenumberofseasonpointstobeawardediftheentityfallswithinthespecifiedleaderboardrankrangeatthecompletionoftheround",
+       "max": null
+      },
+      {
+       "key": "DefaultSeasonPoints",
+       "type": "integer",
+       "desc": "Thenumberofseasonpointstobeawardediftheentitycompletedtheirprovisionalgamesfortheround.",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:round:stats:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:round:stats:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "EntityRoundState",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundRank",
+       "type": "integer",
+       "desc": "WillbeomittedifEntityRoundStateisENTITY_UNRANKED",
+       "max": null
+      },
+      {
+       "key": "CurrentRoundPoints",
+       "type": "integer",
+       "desc": "WillbeomittedifEntityRoundStateisENTITY_UNRANKED",
+       "max": null
+      },
+      {
+       "key": "PreviousRoundPoints",
+       "type": "integer",
+       "desc": "WillbeomittedifEntityRoundStateisENTITY_UNRANKED",
+       "max": null
+      },
+      {
+       "key": "RoundWins",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundLosses",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundOvertimeLosses",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GameHistoryList",
+       "type": "array",
+       "desc": null,
+       "max": 200
+      },
+      {
+       "key": "GameHistoryList.Game",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GameHistoryList.Game.GameResult",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GameHistoryList.Game.EntityScore",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GameHistoryList.Game.OpponentScore",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season:config:info:01.00.00",
+     "description": "TheconfigurationforaCompetitiveSeasonsinstance",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:config:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonFullName",
+       "type": "string",
+       "desc": "Thelocalizedfullnameoftheseason",
+       "max": 40
+      },
+      {
+       "key": "SeasonShortName",
+       "type": "string",
+       "desc": "Thelocalizedshortnameoftheseason",
+       "max": 30
+      },
+      {
+       "key": "SeasonAbbrevName",
+       "type": "string",
+       "desc": "Theabbreviatednameoftheseason",
+       "max": 30
+      },
+      {
+       "key": "SeasonStartDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "SeasonEndDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "IsSeasonVisible",
+       "type": "boolean",
+       "desc": "Whethertheseasonisvisibleforendusers",
+       "max": null
+      },
+      {
+       "key": "SeasonKeyscopeValue",
+       "type": "integer",
+       "desc": "TheSeasonkeyscopevaluetobeusedforleaderboardrequests",
+       "max": null
+      },
+      {
+       "key": "SeasonLogoId",
+       "type": "integer",
+       "desc": "TheassetIDoftheseasonlogo",
+       "max": null
+      },
+      {
+       "key": "SeasonBackgroundId",
+       "type": "integer",
+       "desc": "TheassetIDoftheseasonbackground",
+       "max": null
+      },
+      {
+       "key": "PlayTileDynamicMsgId",
+       "type": "integer",
+       "desc": "TheassetIDofthebackgroundfortheseasonsPlayTile",
+       "max": null
+      },
+      {
+       "key": "InfoDynamicMessageId",
+       "type": "integer",
+       "desc": "TheIDfordynamicmessagesfortheseasonsdynamicmessagetile",
+       "max": null
+      },
+      {
+       "key": "SeasonSponsorLogoIdList",
+       "type": "array",
+       "desc": "ListofassetIDsfortheseasonsponsorlogos",
+       "max": 5
+      },
+      {
+       "key": "SeasonSponsorLogoIdList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonSponsorLogoIdList.?.SeasonSponsorLogoId",
+       "type": "integer",
+       "desc": "AnassetIDofasponsorlogo",
+       "max": null
+      },
+      {
+       "key": "SeasonSponsorLogoIdList.?.SeasonSponsorLogoURI",
+       "type": "string",
+       "desc": "AnURIofasponsorlogo",
+       "max": 30
+      },
+      {
+       "key": "MoreInfoEligibleHeader",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedastheheaderfortheMoreInfoscreenwhentheentityisinintheEligiblestate",
+       "max": 40
+      },
+      {
+       "key": "MoreInfoEligibleBody",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedasthebodyfortheMoreInfoscreenwhentheentityisinintheEligiblestate",
+       "max": 40
+      },
+      {
+       "key": "MoreInfoIneligibleHeader",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedastheheaderfortheMoreInfoscreenwhentheentityisinintheIneligiblestate",
+       "max": 40
+      },
+      {
+       "key": "MoreInfoIneligibleBody",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedastheheaderfortheMoreInfoscreenwhentheentityisinintheIneligiblestate",
+       "max": 40
+      },
+      {
+       "key": "SeasonEntityType",
+       "type": "string",
+       "desc": "Theentitytype(userorclub)fortheseason",
+       "max": null
+      },
+      {
+       "key": "RoundList",
+       "type": "array",
+       "desc": "Thelistofrounds",
+       "max": 50
+      },
+      {
+       "key": "RoundList.Round",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.RoundId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.RoundFullName",
+       "type": "string",
+       "desc": "Thelocalizedfullnameoftheround",
+       "max": 40
+      },
+      {
+       "key": "RoundList.Round.RoundShortName",
+       "type": "string",
+       "desc": "Thelocalizedshortnameoftheround",
+       "max": 40
+      },
+      {
+       "key": "RoundList.Round.RoundAbbrevName",
+       "type": "string",
+       "desc": "Theabbreviatednameoftheround",
+       "max": 40
+      },
+      {
+       "key": "RoundList.Round.RoundOpenDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "RoundList.Round.RoundLockDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "RoundList.Round.RoundProcessDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "RoundList.Round.RoundCompleteDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "RoundList.Round.RoundKeyscopeValue",
+       "type": "integer",
+       "desc": "TheRoundkeyscopevaluetobeusedforleaderboardrequests.",
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.RoundNumProvisionalGames",
+       "type": "integer",
+       "desc": "ThenumberofprovisionalgamesthatmustbecompletedbeforetheentityisrankedontheRoundLeaderboard",
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.SeasonPoints",
+       "type": "reference",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.SeasonPoints.SeasonPointsList",
+       "type": "array",
+       "desc": "Alistofleaderboardrankrangesandtheirassociatedseasonpoints",
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.SeasonPoints.SeasonPointsList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.SeasonPoints.SeasonPointsList.?.MinRank",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.SeasonPoints.SeasonPointsList.?.MaxRank",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.SeasonPoints.SeasonPointsList.?.Points",
+       "type": "integer",
+       "desc": "Thenumberofseasonpointstobeawardediftheentityfallswithinthespecifiedleaderboardrankrangeatthecompletionoftheround",
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.SeasonPoints.DefaultSeasonPoints",
+       "type": "integer",
+       "desc": "Thenumberofseasonpointstobeawardediftheentitycompletedtheirprovisionalgamesfortheround.",
+       "max": null
+      },
+      {
+       "key": "RoundList.Round.RoundMaxGames",
+       "type": "integer",
+       "desc": "Themaxnumberofgamesausercanplayforaspecificround.Avalueof-1meansnolimit",
+       "max": null
+      },
+      {
+       "key": "SeasonStartInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonStart",
+       "max": 50
+      },
+      {
+       "key": "SeasonEndInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonEnd",
+       "max": 50
+      },
+      {
+       "key": "SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season:config:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:config:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonList",
+       "type": "array",
+       "desc": null,
+       "max": 100
+      },
+      {
+       "key": "SeasonList.SeasonConfig",
+       "type": "reference",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonFullName",
+       "type": "string",
+       "desc": "Thelocalizedfullnameoftheseason",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonShortName",
+       "type": "string",
+       "desc": "Thelocalizedshortnameoftheseason",
+       "max": 30
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonAbbrevName",
+       "type": "string",
+       "desc": "Theabbreviatednameoftheseason",
+       "max": 30
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonStartDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonEndDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "SeasonList.SeasonConfig.IsSeasonVisible",
+       "type": "boolean",
+       "desc": "Whethertheseasonisvisibleforendusers",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonKeyscopeValue",
+       "type": "integer",
+       "desc": "TheSeasonkeyscopevaluetobeusedforleaderboardrequests",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonLogoId",
+       "type": "integer",
+       "desc": "TheassetIDoftheseasonlogo",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonBackgroundId",
+       "type": "integer",
+       "desc": "TheassetIDoftheseasonbackground",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.PlayTileDynamicMsgId",
+       "type": "integer",
+       "desc": "TheassetIDofthebackgroundfortheseasonsPlayTile",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.InfoDynamicMessageId",
+       "type": "integer",
+       "desc": "TheIDfordynamicmessagesfortheseasonsdynamicmessagetile",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonSponsorLogoIdList",
+       "type": "array",
+       "desc": "ListofassetIDsfortheseasonsponsorlogos",
+       "max": 5
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonSponsorLogoIdList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonSponsorLogoIdList.?.SeasonSponsorLogoId",
+       "type": "integer",
+       "desc": "AnassetIDofasponsorlogo",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonSponsorLogoIdList.?.SeasonSponsorLogoURI",
+       "type": "string",
+       "desc": "AnURIofasponsorlogo",
+       "max": 30
+      },
+      {
+       "key": "SeasonList.SeasonConfig.MoreInfoEligibleHeader",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedastheheaderfortheMoreInfoscreenwhentheentityisinintheEligiblestate",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.MoreInfoEligibleBody",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedasthebodyfortheMoreInfoscreenwhentheentityisinintheEligiblestate",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.MoreInfoIneligibleHeader",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedastheheaderfortheMoreInfoscreenwhentheentityisinintheIneligiblestate",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.MoreInfoIneligibleBody",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedastheheaderfortheMoreInfoscreenwhentheentityisinintheIneligiblestate",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonEntityType",
+       "type": "string",
+       "desc": "Theentitytype(userorclub)fortheseason",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList",
+       "type": "array",
+       "desc": "Thelistofrounds",
+       "max": 50
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundFullName",
+       "type": "string",
+       "desc": "Thelocalizedfullnameoftheround",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundShortName",
+       "type": "string",
+       "desc": "Thelocalizedshortnameoftheround",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundAbbrevName",
+       "type": "string",
+       "desc": "Theabbreviatednameoftheround",
+       "max": 40
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundOpenDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundLockDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundProcessDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundCompleteDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundKeyscopeValue",
+       "type": "integer",
+       "desc": "TheRoundkeyscopevaluetobeusedforleaderboardrequests.",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundNumProvisionalGames",
+       "type": "integer",
+       "desc": "ThenumberofprovisionalgamesthatmustbecompletedbeforetheentityisrankedontheRoundLeaderboard",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.SeasonPoints",
+       "type": "reference",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.SeasonPoints.SeasonPointsList",
+       "type": "array",
+       "desc": "Alistofleaderboardrankrangesandtheirassociatedseasonpoints",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.SeasonPoints.SeasonPointsList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.SeasonPoints.SeasonPointsList.?.MinRank",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.SeasonPoints.SeasonPointsList.?.MaxRank",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.SeasonPoints.SeasonPointsList.?.Points",
+       "type": "integer",
+       "desc": "Thenumberofseasonpointstobeawardediftheentityfallswithinthespecifiedleaderboardrankrangeatthecompletionoftheround",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.SeasonPoints.DefaultSeasonPoints",
+       "type": "integer",
+       "desc": "Thenumberofseasonpointstobeawardediftheentitycompletedtheirprovisionalgamesfortheround.",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.RoundList.Round.RoundMaxGames",
+       "type": "integer",
+       "desc": "Themaxnumberofgamesausercanplayforaspecificround.Avalueof-1meansnolimit",
+       "max": null
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonStartInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonStart",
+       "max": 50
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonEndInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonEnd",
+       "max": 50
+      },
+      {
+       "key": "SeasonList.SeasonConfig.SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season:state:info:01.00.00",
+     "description": "ThecurrentstateofaCompetitiveSeasonsinstance",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:state:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "State",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStartDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "SeasonEndDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "SeasonKeyscopeValue",
+       "type": "integer",
+       "desc": "TheSeasonkeyscopevaluetobeusedforleaderboardrequests",
+       "max": null
+      },
+      {
+       "key": "CurrentRoundId",
+       "type": "integer",
+       "desc": "TheIDofthecurrentlyactiveround.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": null
+      },
+      {
+       "key": "CurrentRoundKeyscopeValue",
+       "type": "integer",
+       "desc": "TheRoundkeyscopevaluetobeusedforleaderboardrequests.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": null
+      },
+      {
+       "key": "CurrentRoundOpenDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "CurrentRoundLockDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "CurrentRoundProcessDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "CurrentRoundCompleteDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "NextRoundId",
+       "type": "integer",
+       "desc": "TheIDoftheupcominground.WillonlybepopulatediftheSeasonStateisSEASON_UPCOMINGorSEASON_ROUND_UPCOMING",
+       "max": null
+      },
+      {
+       "key": "NextRoundOpenDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_UPCOMINGorSEASON_ROUND_UPCOMING",
+       "max": 16
+      },
+      {
+       "key": "PreviousRoundId",
+       "type": "integer",
+       "desc": "TheIDofthepreviousround.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_UPCOMINGorSEASON_COMPLETE",
+       "max": null
+      },
+      {
+       "key": "CurrentDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      },
+      {
+       "key": "QualifiedWgcSeasonId",
+       "type": "integer",
+       "desc": "TheseasonidoftheWGCthesessionuserhasqualifiedforifany.-1willbereturnedifthesessionuserdidnotqualifyforanywgc",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season:state:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:state:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonStateList",
+       "type": "array",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState",
+       "type": "reference",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.State",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.SeasonStartDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.SeasonEndDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.SeasonKeyscopeValue",
+       "type": "integer",
+       "desc": "TheSeasonkeyscopevaluetobeusedforleaderboardrequests",
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.CurrentRoundId",
+       "type": "integer",
+       "desc": "TheIDofthecurrentlyactiveround.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.CurrentRoundKeyscopeValue",
+       "type": "integer",
+       "desc": "TheRoundkeyscopevaluetobeusedforleaderboardrequests.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.CurrentRoundOpenDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.CurrentRoundLockDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.CurrentRoundProcessDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.CurrentRoundCompleteDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_OPEN,SEASON_ROUND_LOCKED,orSEASON_ROUND_PROCESSING",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.NextRoundId",
+       "type": "integer",
+       "desc": "TheIDoftheupcominground.WillonlybepopulatediftheSeasonStateisSEASON_UPCOMINGorSEASON_ROUND_UPCOMING",
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.NextRoundOpenDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.WillonlybepopulatediftheSeasonStateisSEASON_UPCOMINGorSEASON_ROUND_UPCOMING",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.PreviousRoundId",
+       "type": "integer",
+       "desc": "TheIDofthepreviousround.WillonlybepopulatediftheSeasonStateisSEASON_ROUND_UPCOMINGorSEASON_COMPLETE",
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.CurrentDate",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bittimestamp.",
+       "max": 16
+      },
+      {
+       "key": "SeasonStateList.SeasonState.SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      },
+      {
+       "key": "SeasonStateList.SeasonState.QualifiedWgcSeasonId",
+       "type": "integer",
+       "desc": "TheseasonidoftheWGCthesessionuserhasqualifiedforifany.-1willbereturnedifthesessionuserdidnotqualifyforanywgc",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season:stats:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:stats:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "EntitySeasonState",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonRank",
+       "type": "integer",
+       "desc": "WillbeomittedifEntitySeasonStateisENTITY_UNRANKED",
+       "max": null
+      },
+      {
+       "key": "SeasonPoints",
+       "type": "integer",
+       "desc": "WillbeomittedifEntitySeasonStateisENTITY_UNRANKED",
+       "max": null
+      },
+      {
+       "key": "SeasonWins",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonLosses",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonOvertimeLosses",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season:stats:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:stats:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonStatsList",
+       "type": "array",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats",
+       "type": "reference",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats.SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats.EntitySeasonState",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats.SeasonRank",
+       "type": "integer",
+       "desc": "WillbeomittedifEntitySeasonStateisENTITY_UNRANKED",
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats.SeasonPoints",
+       "type": "integer",
+       "desc": "WillbeomittedifEntitySeasonStateisENTITY_UNRANKED",
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats.SeasonWins",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats.SeasonLosses",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonStatsList.SeasonStats.SeasonOvertimeLosses",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-entity-id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:stats:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "EntityId",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bitinteger",
+       "max": 19
+      },
+      {
+       "key": "SeasonEntityType",
+       "type": "string",
+       "desc": "Theentitytype(userorclub)fortheseason",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-entity-type:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:competitive-seasons:season-hub:mode:info:get:01.00.00",
+      "nhl-data:competitive-seasons:season:config:list:get:01.00.00",
+      "nhl-data:competitive-seasons:season:state:list:get:01.00.00",
+      "nhl-data:competitive-seasons:season:summary:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonEntityType",
+       "type": "string",
+       "desc": "Theentitytype(userorclub)fortheseason",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-hub:mode:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:competitive-seasons:season-hub:mode:info:get:01.00.00",
+      "nhl-data:competitive-seasons:season:summary:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "NumLiveSeasons",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "NumUpcomingSeasons",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "NumRecentlyFinishedSeasons",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveSeasons",
+       "type": "array",
+       "desc": "Thethreeoldestactiveseasons",
+       "max": 3
+      },
+      {
+       "key": "LiveSeasons.?",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingSeasons",
+       "type": "array",
+       "desc": "Thethreeclosestupcomingseasonsrelativetothecurrenttime",
+       "max": 3
+      },
+      {
+       "key": "UpcomingSeasons.?",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RecentlyFinishedSeasons",
+       "type": "array",
+       "desc": "Thethreemostrecentlycompletedseasonswithina48hourwindow",
+       "max": 3
+      },
+      {
+       "key": "RecentlyFinishedSeasons.?",
+       "type": "string",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:competitive-seasons:branding:info:get:01.00.00",
+      "nhl:competitive-seasons:postgame:info:get:01.00.00",
+      "nhl-data:competitive-seasons:season:config:info:get:01.00.00",
+      "nhl-job:competitive-seasons:competitive-seasons-summary:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "SeasonEntityType",
+       "type": "string",
+       "desc": "Theentitytype(userorclub)fortheseason",
+       "max": null
+      },
+      {
+       "key": "SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-id-state:info:01.00.00",
+     "description": "nhl-data:competitive-seasons:season:state:info:get:01.00.00",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:state:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-list-entity-id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:stats:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "EntityId",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bitinteger",
+       "max": 19
+      },
+      {
+       "key": "SeasonIdList",
+       "type": "array",
+       "desc": null,
+       "max": 100
+      },
+      {
+       "key": "SeasonIdList.SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-round-entity-id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:round:stats:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "RoundId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "EntityId",
+       "type": "string",
+       "desc": "Stringrepresentationofa64-bitinteger",
+       "max": 19
+      },
+      {
+       "key": "SeasonEntityType",
+       "type": "string",
+       "desc": "Theentitytype(userorclub)fortheseason",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-selection:filter:01.00.00",
+     "description": "Filterinformationforfilteringseasonsforselection",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:competitive-seasons:season-selection:info:get:01.00.00",
+      "nhl-data:competitive-seasons:season:selection:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "SeasonEntityType",
+       "type": "string",
+       "desc": "Theentitytype(userorclub)fortheseason",
+       "max": null
+      },
+      {
+       "key": "SeasonFilterType",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Page",
+       "type": "integer",
+       "desc": "Ifnotprovidedthefirstpagewillbereturned",
+       "max": null
+      },
+      {
+       "key": "SeasonId",
+       "type": "integer",
+       "desc": "Ifprovided,pageandfilterareignored",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:competitive-seasons:season-selection:info-for-data:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:competitive-seasons:season:selection:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "PageSize",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "PageNum",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "NumLive",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList",
+       "type": "array",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList.?.SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList.?.StartInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonStart",
+       "max": 50
+      },
+      {
+       "key": "LiveList.?.EndInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonEnd",
+       "max": 50
+      },
+      {
+       "key": "LiveList.?.FullName",
+       "type": "string",
+       "desc": "Thelocalizedfullnameoftheseason",
+       "max": 40
+      },
+      {
+       "key": "LiveList.?.SeasonStartDate",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList.?.SeasonEndDate",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList.?.TimeRemaining",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList.?.LastCompletedRoundId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LiveList.?.SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      },
+      {
+       "key": "NumUpcoming",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList",
+       "type": "array",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList.?.SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList.?.StartInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonStart",
+       "max": 50
+      },
+      {
+       "key": "UpcomingList.?.EndInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonEnd",
+       "max": 50
+      },
+      {
+       "key": "UpcomingList.?.FullName",
+       "type": "string",
+       "desc": "Thelocalizedfullnameoftheseason",
+       "max": 40
+      },
+      {
+       "key": "UpcomingList.?.SeasonStartDate",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList.?.SeasonEndDate",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList.?.TimeRemaining",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList.?.LastCompletedRoundId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "UpcomingList.?.SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      },
+      {
+       "key": "NumCompleted",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList",
+       "type": "array",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList.?.SeasonId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList.?.StartInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonStart",
+       "max": 50
+      },
+      {
+       "key": "CompletedList.?.EndInfo",
+       "type": "string",
+       "desc": "AlocalizedstringtobedisplayedtoprovidemoreinformationontheSeasonEnd",
+       "max": 50
+      },
+      {
+       "key": "CompletedList.?.FullName",
+       "type": "string",
+       "desc": "Thelocalizedfullnameoftheseason",
+       "max": 40
+      },
+      {
+       "key": "CompletedList.?.SeasonStartDate",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList.?.SeasonEndDate",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList.?.TimeRemaining",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList.?.LastCompletedRoundId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CompletedList.?.SeasonModeType",
+       "type": "string",
+       "desc": "Thetypeofcompetitiveseason",
+       "max": null
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "arena": {
+  "bio": {
+   "entry": 2142,
+   "size": 622,
+   "items": [
+    {
+     "urn": "nhl-data:arena:bio:info:get:01.00.00",
+     "description": "Retrievesalltheinforegardingthebioofthefranchisesarenas(likename,etc).",
+     "input": "nhl-schema:arena:id:list:01.00.00",
+     "output": "nhl-schema:arena:bio:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:arena:bio:info:01.00.00",
+     "description": "Listofarena\u00b4sbioinfo.",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:arena:bio:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "ArenaBioList",
+       "type": "array",
+       "desc": null,
+       "max": 48
+      },
+      {
+       "key": "ArenaBioList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "ArenaBioList.?.ArenaId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "ArenaBioList.?.Bio",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "ArenaBioList.?.Bio.CityNameLocId",
+       "type": "string",
+       "desc": null,
+       "max": 36
+      },
+      {
+       "key": "ArenaBioList.?.Bio.ArenaNameLocId",
+       "type": "string",
+       "desc": null,
+       "max": 36
+      },
+      {
+       "key": "ArenaBioList.?.Bio.Rating",
+       "type": "integer",
+       "desc": "Therankinggoesfrom1tothemaxofteamsintheleague.",
+       "max": null
+      },
+      {
+       "key": "ArenaBioList.?.Bio.MarketSizeId",
+       "type": "integer",
+       "desc": "PossiblevaluesSMALL=0,MEDIUM=1,LARGE=2",
+       "max": null
+      },
+      {
+       "key": "ArenaBioList.?.Bio.Age",
+       "type": "integer",
+       "desc": "Ageissetinyears.",
+       "max": null
+      },
+      {
+       "key": "ArenaBioList.?.Bio.TeamId",
+       "type": "integer",
+       "desc": "Idoftheteamusingthisarena.",
+       "max": null
+      },
+      {
+       "key": "ArenaBioList.?.Bio.SeatingCapacity",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:arena:id:list:01.00.00",
+     "description": "ListofarenaIDs.",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:arena:bio:info:get:01.00.00",
+      "nhl-data:arena:properties:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "ArenaIdList",
+       "type": "array",
+       "desc": null,
+       "max": 48
+      },
+      {
+       "key": "ArenaIdList.?",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Context",
+       "type": "string",
+       "desc": null,
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "properties": {
+   "entry": 4503,
+   "size": 535,
+   "items": [
+    {
+     "urn": "nhl-data:arena:properties:info:get:01.00.00",
+     "description": "Retrievesallthepropertiesregardingthearena",
+     "input": "nhl-schema:arena:id:list:01.00.00",
+     "output": "nhl-schema:arena:properties:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:arena:properties:info:set:01.00.00",
+     "description": "Setsthepropertiesregardingthearena",
+     "input": "nhl-schema:arena:properties:info:01.00.00",
+     "output": null,
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:arena:id:list:01.00.00",
+     "description": "ListofarenaIDs.",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:arena:bio:info:get:01.00.00",
+      "nhl-data:arena:properties:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "ArenaIdList",
+       "type": "array",
+       "desc": null,
+       "max": 48
+      },
+      {
+       "key": "ArenaIdList.?",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Context",
+       "type": "string",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:arena:properties:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:arena:properties:info:get:01.00.00",
+      "nhl-data:arena:properties:info:set:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "ArenaPropertiesList",
+       "type": "array",
+       "desc": null,
+       "max": 30
+      },
+      {
+       "key": "ArenaPropertiesList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "ArenaPropertiesList.?.ArenaId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "ArenaPropertiesList.?.Properties",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "ArenaPropertiesList.?.Properties.MaxAttendance",
+       "type": "integer",
+       "desc": "Themaximumseatingcapacityofanarena",
+       "max": null
+      },
+      {
+       "key": "ArenaPropertiesList.?.Properties.CityName",
+       "type": "string",
+       "desc": "Thenameofthecity",
+       "max": 40
+      },
+      {
+       "key": "ArenaPropertiesList.?.Properties.ArenaName",
+       "type": "string",
+       "desc": "Thenameofthearena",
+       "max": 64
+      },
+      {
+       "key": "Context",
+       "type": "string",
+       "desc": null,
+       "max": null
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "jersey": {
+  "bio": {
+   "entry": 2257,
+   "size": 951,
+   "items": [
+    {
+     "urn": "nhl-data:jersey:bio:info:by-team-id:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:team:context-id:list:01.00.00",
+     "output": "nhl-schema:jersey:bio:list:by-team-id:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:jersey:bio:info:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:jersey:context-id:list:01.00.00",
+     "output": "nhl-schema:jersey:bio:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:jersey:bio:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:jersey:bio:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "JerseyBioList",
+       "type": "array",
+       "desc": null,
+       "max": 1250
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.JerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.JerseyTypeId",
+       "type": "integer",
+       "desc": "Jerseytype:JERSEY_HOME=0,JERSEY_AWAY,JERSEY_ALTERNATE,JERSEY_OLD_HOME,JERSEY_OLD_AWAY,JERSEY_OLD_SECOND_HOME,JERSEY_VINTAGE,JERSEY_SINGLE.",
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.OrderId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.IsCustom",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.IsDefaultHome",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.IsDefaultAway",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.IsLightColor",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.Style",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.IsLocked",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.IsChampionsLeague",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.IsCasual",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioList.JerseyBioDictionary.Bio.YearStart",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:jersey:bio:list:by-team-id:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:jersey:bio:info:by-team-id:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "JerseyBioByTeamIdList",
+       "type": "array",
+       "desc": "Assuming20jerseysperteam.Currently,thisserviceiscalledwithatmosttwoteams(homeandaway)",
+       "max": 40
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.JerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.JerseyTeamId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.JerseyIndex",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.TeamId",
+       "type": "integer",
+       "desc": "TeamID",
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.Bio",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.Bio.JerseyTypeId",
+       "type": "integer",
+       "desc": "Jerseytype:JERSEY_HOME=0,JERSEY_AWAY,JERSEY_ALTERNATE,JERSEY_OLD_HOME,JERSEY_OLD_AWAY,JERSEY_OLD_SECOND_HOME,JERSEY_VINTAGE,JERSEY_SINGLE.",
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.Bio.IsCustom",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.Bio.IsDefaultHome",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.Bio.IsDefaultAway",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.Bio.Style",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyBioByTeamIdList.JerseyBioByTeamId.Bio.IsLocked",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:jersey:context-id:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:jersey:bio:info:get:01.00.00",
+      "nhl-data:jersey:identifiers:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "Context",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdList",
+       "type": "array",
+       "desc": null,
+       "max": 20
+      },
+      {
+       "key": "JerseyIdList.JerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:team:context-id:list:01.00.00",
+     "description": "ListofteamIDs",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:jersey:bio:info:by-team-id:get:01.00.00",
+      "nhl-data:team:misc:info:get:01.00.00",
+      "nhl-data:team:morale:info:get:01.00.00",
+      "nhl-data:team:ratings:details:info:get:01.00.00",
+      "nhl-data:team:roster:best-lines:set:01.00.00",
+      "nhl-data:team:roster:best-lines-for-three-on-three:set:01.00.00",
+      "nhl-data:team:roster:info:get:00.00.00",
+      "nhl-data:team:roster:info:get:01.00.00",
+      "nhl-data:team:strategies:info:get:01.00.00",
+      "nhl-job:team:roster:lines:get:01.00.00",
+      "nhl-job:team:roster:player:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "Context",
+       "type": "string",
+       "desc": "Storagecontext(default:Exhibition)",
+       "max": null
+      },
+      {
+       "key": "TeamIdList",
+       "type": "array",
+       "desc": null,
+       "max": 260
+      },
+      {
+       "key": "TeamIdList.TeamId",
+       "type": "integer",
+       "desc": "TeamID",
+       "max": null
+      },
+      {
+       "key": "IgnoreFogOfWar",
+       "type": "boolean",
+       "desc": "Defaultstofalse",
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "identifiers": {
+   "entry": 5625,
+   "size": 453,
+   "items": [
+    {
+     "urn": "nhl-data:jersey:identifiers:info:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:jersey:context-id:list:01.00.00",
+     "output": "nhl-schema:jersey:identifiers:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:jersey:context-id:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:jersey:bio:info:get:01.00.00",
+      "nhl-data:jersey:identifiers:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "Context",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdList",
+       "type": "array",
+       "desc": null,
+       "max": 20
+      },
+      {
+       "key": "JerseyIdList.JerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:jersey:identifiers:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:jersey:identifiers:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "JerseyIdentifiersList",
+       "type": "array",
+       "desc": null,
+       "max": 1250
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.JerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.Identifiers",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.Identifiers.JerseyTeamId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.Identifiers.JerseyIndex",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.Identifiers.TeamId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.Identifiers.ArtId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.Identifiers.FEVariant",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "JerseyIdentifiersList.JerseyIdentifiersDictionary.Identifiers.VariantLegend",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "stock_asset": {
+   "entry": 7189,
+   "size": 986,
+   "items": [
+    {
+     "urn": "nhl-data:jersey:stock-asset:id:get:01.00.00",
+     "description": "Returntheassetidlistforalistofstockjerseys",
+     "input": "nhl-schema:jersey:stock:id:list:01.00.00",
+     "output": "nhl-schema:jersey:stock-asset:id:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:jersey:stock:id:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:jersey-preview:stock-jersey:art-id:get:01.00.00",
+      "nhl-data:jersey:stock-asset:id:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "HomeJerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "AwayJerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "AlternateJerseyId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "TeamId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:jersey:stock-asset:id:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:jersey-preview:stock-jersey:art-id:get:01.00.00",
+      "nhl-data:jersey:stock-asset:id:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "HomeJerseyAssetId",
+       "type": "string",
+       "desc": null,
+       "max": 64
+      },
+      {
+       "key": "AwayJerseyAssetId",
+       "type": "string",
+       "desc": null,
+       "max": 64
+      },
+      {
+       "key": "AlternateJerseyAssetId",
+       "type": "string",
+       "desc": null,
+       "max": 64
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "league": {
+  "record_book": {
+   "entry": 2737,
+   "size": 1026,
+   "items": [
+    {
+     "urn": "nhl-data:league:record-book:info:get:01.00.00",
+     "description": "GetsRecordBookinfofromLeagueBELogic.",
+     "input": null,
+     "output": "nhl-schema:league:record-book:record-info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:league:record-book:record-info:01.00.00",
+     "description": "RecordinfofromLeagueBElogic.",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:league:record-book:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueFranchiseRecord",
+       "type": "array",
+       "desc": "LeagueFranchiseRecord",
+       "max": 800
+      },
+      {
+       "key": "LeagueFranchiseRecord.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.FranchiseCategory",
+       "type": "string",
+       "desc": "Franchiserecordcategory",
+       "max": null
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.FirstName",
+       "type": "string",
+       "desc": "Firstname",
+       "max": 40
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.LastName",
+       "type": "string",
+       "desc": "Lastname",
+       "max": 40
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.TeamId",
+       "type": "integer",
+       "desc": "TeamID",
+       "max": null
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.Year",
+       "type": "integer",
+       "desc": "Year",
+       "max": null
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.FranchiseRecordType",
+       "type": "string",
+       "desc": "Franchiserecordtype",
+       "max": null
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.Value",
+       "type": "integer",
+       "desc": "Playervalue",
+       "max": null
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.CurrentFirstName",
+       "type": "string",
+       "desc": "Currentfirstname",
+       "max": 40
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.CurrentLastName",
+       "type": "string",
+       "desc": "CurrentlLastname",
+       "max": 40
+      },
+      {
+       "key": "LeagueFranchiseRecord.?.CurrentValue",
+       "type": "integer",
+       "desc": "Currentplayervalue",
+       "max": null
+      },
+      {
+       "key": "LeagueNhlRecord",
+       "type": "array",
+       "desc": null,
+       "max": 100
+      },
+      {
+       "key": "LeagueNhlRecord.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueNhlRecord.?.NhlCategory",
+       "type": "string",
+       "desc": "Nhlrecordcategory",
+       "max": null
+      },
+      {
+       "key": "LeagueNhlRecord.?.FirstName",
+       "type": "string",
+       "desc": "Firstname",
+       "max": 40
+      },
+      {
+       "key": "LeagueNhlRecord.?.LastName",
+       "type": "string",
+       "desc": "Lastname",
+       "max": 40
+      },
+      {
+       "key": "LeagueNhlRecord.?.Value",
+       "type": "integer",
+       "desc": "Playerscore",
+       "max": null
+      },
+      {
+       "key": "LeagueNhlRecord.?.Year",
+       "type": "integer",
+       "desc": "Year",
+       "max": null
+      },
+      {
+       "key": "LeagueNhlRecord.?.NhlRecordType",
+       "type": "string",
+       "desc": "Nhlrecordtype",
+       "max": null
+      },
+      {
+       "key": "LeagueNhlRecord.?.isUserPlayer",
+       "type": "boolean",
+       "desc": "Isuserplayer",
+       "max": null
+      },
+      {
+       "key": "UserTeamId",
+       "type": "integer",
+       "desc": "User'steamID",
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "presentation": {
+   "entry": 4218,
+   "size": 580,
+   "items": [
+    {
+     "urn": "nhl-data:league:presentation:info:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:league:id:list:01.00.00",
+     "output": "nhl-schema:league:presentation:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:league:id:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:league:presentation:info:get:01.00.00",
+      "nhl-data:league:bio:info:get:01.00.00",
+      "nhl-data:league:presentation:info:get:01.00.00",
+      "nhl-job:creation-zone:team:stock-jersey:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueIdList",
+       "type": "array",
+       "desc": null,
+       "max": 15
+      },
+      {
+       "key": "LeagueIdList.Leagueid",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:league:presentation:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [],
+     "schema": [
+      {
+       "key": "LeagueId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Presentation",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Presentation.ArtId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Presentation.PrimaryColor",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Presentation.SecondaryColor",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:league:presentation:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:league:presentation:info:get:01.00.00",
+      "nhl-data:league:presentation:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeaguePresentationList",
+       "type": "array",
+       "desc": "NHL,AHL,ELITESERIE,SMLIIGA,DEL,EXTRALIGA,SWISS,NORWAY,NATIONAL,OHL,QMJHL,WHL,PROSPECTTEAMS,ECHL,WorldCup,CUSTOMTEAMS,NHL,EASHL,CHL,US,RUSSIA,ROWLEAGUE,HUT,LEGENDTEAMS,THREEONTHREE",
+       "max": 25
+      },
+      {
+       "key": "LeaguePresentationList.LeaguePresentation",
+       "type": "reference",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeaguePresentationList.LeaguePresentation.LeagueId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeaguePresentationList.LeaguePresentation.Presentation",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeaguePresentationList.LeaguePresentation.Presentation.ArtId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeaguePresentationList.LeaguePresentation.Presentation.PrimaryColor",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeaguePresentationList.LeaguePresentation.Presentation.SecondaryColor",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "events": {
+   "entry": 4368,
+   "size": 148,
+   "items": [
+    {
+     "urn": "nhl-data:league:events:end-game:notify:01.00.00",
+     "description": "Notifiesthatthegamehasended.",
+     "input": null,
+     "output": null,
+     "used_by": null,
+     "schema": []
+    }
+   ]
+  },
+  "bio": {
+   "entry": 4874,
+   "size": 561,
+   "items": [
+    {
+     "urn": "nhl-data:league:bio:info:get:01.00.00",
+     "description": null,
+     "input": "nhl-schema:league:id:list:01.00.00",
+     "output": "nhl-schema:league:bio:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:league:bio:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:league:bio:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueBioList",
+       "type": "array",
+       "desc": "NHL,AHL,ELITESERIE,SMLIIGA,DEL,EXTRALIGA,SWISS,NORWAY,NATIONAL,OHL,QMJHL,WHL,PROSPECTTEAMS,ECHL,WorldCup,CUSTOMTEAMS,NHL,EASHL,CHL,US,RUSSIA,ROWLEAGUE,HUT,LEGENDTEAMS,THREEONTHREE",
+       "max": 25
+      },
+      {
+       "key": "LeagueBioList.LeagueBioDictionary",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueBioList.LeagueBioDictionary.LeagueId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueBioList.LeagueBioDictionary.Bio",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueBioList.LeagueBioDictionary.Bio.LocStringId",
+       "type": "string",
+       "desc": null,
+       "max": 50
+      },
+      {
+       "key": "LeagueBioList.LeagueBioDictionary.OrderId",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:league:id:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:league:presentation:info:get:01.00.00",
+      "nhl-data:league:bio:info:get:01.00.00",
+      "nhl-data:league:presentation:info:get:01.00.00",
+      "nhl-job:creation-zone:team:stock-jersey:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueIdList",
+       "type": "array",
+       "desc": null,
+       "max": 15
+      },
+      {
+       "key": "LeagueIdList.Leagueid",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "audio": {
+  "ids_for_team": {
+   "entry": 3231,
+   "size": 1003,
+   "items": [
+    {
+     "urn": "nhl-data:audio:ids-for-team:get:01.00.00",
+     "description": "Getsathecityandteamidsassociatedwithateam",
+     "input": "nhl-schema:audio:team-id:01.00.00",
+     "output": "nhl-schema:audio:ids-for-team:output:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:audio:ids-for-team:output:01.00.00",
+     "description": "Audioidscorrespondingateamid",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:audio:ids-for-team:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "TeamAudioId",
+       "type": "integer",
+       "desc": "Theaudioteamid(NONEreturnedifthereisnoassociatedid)",
+       "max": null
+      },
+      {
+       "key": "CityAudioId",
+       "type": "integer",
+       "desc": "Theaudiocityid(NONEreturnedifthereisnoassociatedid)",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:audio:team-id:01.00.00",
+     "description": "Theteamidtoretrieveaudioidsfor",
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:audio:ids-for-team:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "TeamId",
+       "type": "integer",
+       "desc": "Theidoftheteam",
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "ids": {
+   "entry": 4110,
+   "size": 639,
+   "items": [
+    {
+     "urn": "nhl-data:audio:ids:get:01.00.00",
+     "description": "Getsalistofpossiblecities,teams,andgoalhornsthatausercanselectfortheirteam",
+     "input": null,
+     "output": "nhl-schema:audio:ids:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-data:audio:ids:integer-narration:list:get:01.00.00",
+     "description": "Getstheaudioidsneededtonarratealistofintegervalues",
+     "input": "nhl-schema:audio:ids:integer-to-narrate:list:01.00.00",
+     "output": "nhl-schema:audio:ids:integer-narration:list:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:audio:ids:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:audio:ids:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "CityData",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CityData.CityList",
+       "type": "array",
+       "desc": null,
+       "max": 600
+      },
+      {
+       "key": "CityData.CityList.City",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CityData.CityList.City.Id",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CityData.CityList.City.Name",
+       "type": "string",
+       "desc": null,
+       "max": 30
+      },
+      {
+       "key": "CityData.CityList.City.DictLetter",
+       "type": "string",
+       "desc": null,
+       "max": 1
+      },
+      {
+       "key": "CityData.NoneInfo",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CityData.NoneInfo.Id",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "CityData.NoneInfo.Name",
+       "type": "string",
+       "desc": null,
+       "max": 20
+      },
+      {
+       "key": "TeamData",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "TeamData.TeamList",
+       "type": "array",
+       "desc": null,
+       "max": 750
+      },
+      {
+       "key": "TeamData.TeamList.Team",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "TeamData.TeamList.Team.Id",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "TeamData.TeamList.Team.Name",
+       "type": "string",
+       "desc": null,
+       "max": 30
+      },
+      {
+       "key": "TeamData.TeamList.Team.DictLetter",
+       "type": "string",
+       "desc": null,
+       "max": 1
+      },
+      {
+       "key": "TeamData.NoneInfo",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "TeamData.NoneInfo.Id",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "TeamData.NoneInfo.Name",
+       "type": "string",
+       "desc": null,
+       "max": 20
+      },
+      {
+       "key": "GoalHornData",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GoalHornData.GoalHornList",
+       "type": "array",
+       "desc": null,
+       "max": 150
+      },
+      {
+       "key": "GoalHornData.GoalHornList.GoalHorn",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GoalHornData.GoalHornList.GoalHorn.Id",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GoalHornData.GoalHornList.GoalHorn.Filter",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GoalHornData.GoalHornList.GoalHorn.Name",
+       "type": "string",
+       "desc": null,
+       "max": 30
+      },
+      {
+       "key": "GoalHornData.NoneInfo",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GoalHornData.NoneInfo.Id",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GoalHornData.NoneInfo.Filter",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "GoalHornData.NoneInfo.Name",
+       "type": "string",
+       "desc": null,
+       "max": 20
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:audio:ids:integer-narration:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:audio:ids:integer-narration:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "IntegerAudioIdList",
+       "type": "array",
+       "desc": null,
+       "max": 26
+      },
+      {
+       "key": "IntegerAudioIdList.?",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "IntegerAudioIdList.?.IntegerToNarrate",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "IntegerAudioIdList.?.AudioIdList",
+       "type": "array",
+       "desc": "Listofaudioidsneededtonarrateaninteger",
+       "max": 10
+      },
+      {
+       "key": "IntegerAudioIdList.?.AudioIdList.?",
+       "type": "integer",
+       "desc": "Audioidfornarration",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:audio:ids:integer-to-narrate:list:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:audio:ids:integer-narration:list:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "IntegerList",
+       "type": "array",
+       "desc": "Listofintegerstobenarrated",
+       "max": 26
+      },
+      {
+       "key": "IntegerList.?",
+       "type": "integer",
+       "desc": "Integertobenarrated",
+       "max": null
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "calendar": {
+  "league_info": {
+   "entry": 3628,
+   "size": 639,
+   "items": [
+    {
+     "urn": "nhl-data:calendar:league-info:info:get:01.00.00",
+     "description": "LeagueInfoList",
+     "input": "nhl-schema:optional:league-index:info:01.00.00",
+     "output": "nhl-schema:calendar:league-info:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:calendar:league-info:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:calendar:league-info:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueInfo",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueInfo.CurrentDate",
+       "type": "integer",
+       "desc": "formatYYYYMMDD",
+       "max": null
+      },
+      {
+       "key": "LeagueInfo.CurrentPhase",
+       "type": "string",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueInfo.CurrentLeagueYear",
+       "type": "integer",
+       "desc": null,
+       "max": 2040
+      },
+      {
+       "key": "LeagueInfo.CurrentLeagueIndex",
+       "type": "integer",
+       "desc": null,
+       "max": 15
+      },
+      {
+       "key": "LeagueInfo.CurrentLeagueId",
+       "type": "integer",
+       "desc": "thisisbasedontheLeagueTeamLeagueenum",
+       "max": null
+      },
+      {
+       "key": "LeagueInfo.DependentGame",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueInfo.DependentGame.HasUnplayedDependentGame",
+       "type": "boolean",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "LeagueInfo.DependentGame.DependentGameId",
+       "type": "integer",
+       "desc": "GameIdofdependentgame-onlysetifHasUnplayedDependentGameistrue",
+       "max": null
+      }
+     ]
+    },
+    {
+     "urn": "nhl-schema:optional:league-index:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl:player:morale:info:get:01.00.00",
+      "nhl-data:calendar:league-info:info:get:01.00.00",
+      "nhl-data:season:special-days:info:get:01.00.00",
+      "nhl-job:calendar:career-status:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "LeagueIndex",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      }
+     ]
+    }
+   ]
+  },
+  "misc": {
+   "entry": 3745,
+   "size": 876,
+   "items": [
+    {
+     "urn": "nhl-data:calendar:misc:info:get:01.00.00",
+     "description": "CalendarMisc",
+     "input": null,
+     "output": "nhl-schema:calendar:misc:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:calendar:misc:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:calendar:misc:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "Misc",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Misc.DayWeekNameList",
+       "type": "array",
+       "desc": null,
+       "max": 7
+      },
+      {
+       "key": "Misc.DayWeekNameList.DayWeekName",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Misc.DayWeekNameList.DayWeekName.DayOfWeekId",
+       "type": "integer",
+       "desc": null,
+       "max": 6
+      },
+      {
+       "key": "Misc.DayWeekNameList.DayWeekName.DayNameStringId",
+       "type": "string",
+       "desc": null,
+       "max": 32
+      },
+      {
+       "key": "Misc.DayWeekNameList.DayWeekName.DayAbbrNameStringId",
+       "type": "string",
+       "desc": null,
+       "max": 32
+      },
+      {
+       "key": "Misc.MonthNameList",
+       "type": "array",
+       "desc": null,
+       "max": 12
+      },
+      {
+       "key": "Misc.MonthNameList.MonthName",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Misc.MonthNameList.MonthName.MonthNameStringId",
+       "type": "string",
+       "desc": null,
+       "max": 30
+      },
+      {
+       "key": "Misc.MonthNameList.MonthName.MonthId",
+       "type": "integer",
+       "desc": null,
+       "max": 11
+      }
+     ]
+    }
+   ]
+  },
+  "schedule": {
+   "entry": 3846,
+   "size": 859,
+   "items": [
+    {
+     "urn": "nhl-data:calendar:schedule:info:get:01.00.00",
+     "description": "SchuduleInfo",
+     "input": null,
+     "output": "nhl-schema:calendar:schedule:info:01.00.00",
+     "used_by": null,
+     "schema": []
+    },
+    {
+     "urn": "nhl-schema:calendar:schedule:info:01.00.00",
+     "description": null,
+     "input": null,
+     "output": null,
+     "used_by": [
+      "nhl-data:calendar:schedule:info:get:01.00.00"
+     ],
+     "schema": [
+      {
+       "key": "Schedule",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Schedule.MonthList",
+       "type": "array",
+       "desc": "Themonthlistisinorder.1-based.Thislistallmonthsshownonthecalendar.Thiscanbemorethanayear",
+       "max": 18
+      },
+      {
+       "key": "Schedule.MonthList.Month",
+       "type": "dictionary",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Schedule.MonthList.Month.MonthId",
+       "type": "integer",
+       "desc": null,
+       "max": 12
+      },
+      {
+       "key": "Schedule.MonthList.Month.NumberOfDays",
+       "type": "integer",
+       "desc": null,
+       "max": 31
+      },
+      {
+       "key": "Schedule.MonthList.Month.Year",
+       "type": "integer",
+       "desc": null,
+       "max": null
+      },
+      {
+       "key": "Schedule.MonthList.Month.FirstDayOfWeek",
+       "type": "integer",
+       "desc": "0=Sunday,1=Monday,...,Saturday=6",
+       "max": 6
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

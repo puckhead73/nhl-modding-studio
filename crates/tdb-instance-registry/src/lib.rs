@@ -98,7 +98,9 @@ impl InstanceRegistry {
     /// Record (or overwrite) one import. A re-import of the same `(person, season, target)` updates the
     /// stored `ea_player_id`/`imported_at`. A **no-op** (returns `Ok`) when disabled.
     pub fn record(&self, entry: &LedgerEntry) -> Result<(), RegistryError> {
-        let Some(conn) = &self.conn else { return Ok(()) };
+        let Some(conn) = &self.conn else {
+            return Ok(());
+        };
         conn.execute(
             "INSERT INTO imports(person_id, season_year, target, ea_player_id, imported_at)
              VALUES (?1, ?2, ?3, ?4, ?5)
@@ -124,7 +126,9 @@ impl InstanceRegistry {
         season_year: i64,
         target: &str,
     ) -> Result<Option<LedgerEntry>, RegistryError> {
-        let Some(conn) = &self.conn else { return Ok(None) };
+        let Some(conn) = &self.conn else {
+            return Ok(None);
+        };
         let row = conn
             .query_row(
                 "SELECT person_id, season_year, target, ea_player_id, imported_at
@@ -138,7 +142,9 @@ impl InstanceRegistry {
 
     /// Every import recorded against `target` (newest first). Empty when disabled.
     pub fn entries_for_target(&self, target: &str) -> Result<Vec<LedgerEntry>, RegistryError> {
-        let Some(conn) = &self.conn else { return Ok(Vec::new()) };
+        let Some(conn) = &self.conn else {
+            return Ok(Vec::new());
+        };
         let mut stmt = conn.prepare(
             "SELECT person_id, season_year, target, ea_player_id, imported_at
              FROM imports WHERE target = ?1 ORDER BY imported_at DESC, person_id",
@@ -177,9 +183,11 @@ fn migrate(conn: &Connection) -> rusqlite::Result<bool> {
          CREATE INDEX IF NOT EXISTS idx_imports_target ON imports(target);",
     )?;
     let found: Option<i64> = conn
-        .query_row("SELECT CAST(value AS INTEGER) FROM meta WHERE key='schema_version'", [], |r| {
-            r.get(0)
-        })
+        .query_row(
+            "SELECT CAST(value AS INTEGER) FROM meta WHERE key='schema_version'",
+            [],
+            |r| r.get(0),
+        )
         .optional()?;
     match found {
         Some(v) => Ok(v == SCHEMA_VERSION), // skew → false → open disabled
@@ -211,7 +219,10 @@ mod tests {
     fn round_trip_and_dedup_lookup() {
         let reg = InstanceRegistry::open_in_memory().unwrap();
         assert!(reg.is_enabled());
-        assert!(reg.lookup(1, 2024, "gameA").unwrap().is_none(), "nothing imported yet");
+        assert!(
+            reg.lookup(1, 2024, "gameA").unwrap().is_none(),
+            "nothing imported yet"
+        );
 
         let e = entry(1, 2024, "gameA", 5001, 1000);
         reg.record(&e).unwrap();
@@ -230,7 +241,11 @@ mod tests {
         let got = reg.lookup(1, 2024, "gameA").unwrap().unwrap();
         assert_eq!(got.ea_player_id, 6002, "the latest import wins");
         assert_eq!(got.imported_at, 2000);
-        assert_eq!(reg.entries_for_target("gameA").unwrap().len(), 1, "still one row for the key");
+        assert_eq!(
+            reg.entries_for_target("gameA").unwrap().len(),
+            1,
+            "still one row for the key"
+        );
     }
 
     #[test]

@@ -1,0 +1,1184 @@
+{
+ "note": "R95b - the crowd CONTROL bank `controlCenter.abk` (`AemsCrowdControlBank`, always loaded) carries the twelve club picker NAMES (R95\nL3): where inside its node graph, under which parent, and with what adjacent constants. Also the `aemscrwd.csi` MOIR layout\n(stride-12 entries `u16 string ptr | u16 id | 8 x 0` at 0x2c, string pool at the first pointer) and the size of the region between the\ntable and the pool (a compiled body or not). Candidate constants adjacent to the club references are tested against the NHL 15\nanchor's team identities for the 12 clubs (index, artid, audioid fields, arenaid) - a match is a CANDIDATE, never a binding, and the\nFinnish-arena counterexample (chantaudioid 61) is carried. Read-only.\nUsage: python r95b_controlcenter.py <out.json>\n",
+ "trees": {
+  "x360-nhl15": {
+   "moir": {
+    "size": 32248,
+    "sha256": "615ebc46ada781c0b9a9e59e0facc156c619a11f24f372fd6a2c93bf0754aae4",
+    "count": 196,
+    "table_end": 2396,
+    "first_string_ptr": 14492,
+    "body_bytes": 12096,
+    "pads_all_zero": true,
+    "ptrs_increasing": true,
+    "ids_sorted": true,
+    "pool_end_is_eof": false,
+    "body_head_hex": "00 00 4a 36 00 6a 00 00 00 00 00 00 00 00 4a 3b 03 7e 00 00 00 00 00 00 00 00 4a 4a 04 03 00 00 00 00 00 00 00 00 4a 5d 04 03 00 00 00 00 00 00 00 00 4a 6a 0a 6e 00 00 00 00 00 00 00 00 4a 7d",
+    "body_nonzero_bytes": 3477,
+    "body_u16_ids_present": [
+     20423,
+     20535,
+     21839,
+     24804,
+     25502,
+     26861,
+     30876,
+     31371
+    ],
+    "body_u16_ids_present_count": 8,
+    "body_u32_ptrs_present_count": 0,
+    "header_u16s": [
+     3,
+     512,
+     1280,
+     196,
+     63,
+     709,
+     1577,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "body_byte_histogram_top": [
+     [
+      0,
+      8619
+     ],
+     [
+      127,
+      75
+     ],
+     [
+      255,
+      71
+     ],
+     [
+      1,
+      50
+     ],
+     [
+      91,
+      35
+     ],
+     [
+      95,
+      34
+     ],
+     [
+      119,
+      34
+     ],
+     [
+      120,
+      33
+     ]
+    ],
+    "body_u16_be_top": [
+     [
+      0,
+      4268
+     ],
+     [
+      32767,
+      64
+     ],
+     [
+      1,
+      34
+     ],
+     [
+      2,
+      10
+     ],
+     [
+      10000,
+      9
+     ],
+     [
+      1000,
+      8
+     ],
+     [
+      3,
+      6
+     ],
+     [
+      500,
+      6
+     ],
+     [
+      4,
+      6
+     ],
+     [
+      20000,
+      5
+     ],
+     [
+      15000,
+      5
+     ],
+     [
+      2000,
+      5
+     ]
+    ],
+    "club_entries": [
+     {
+      "ptr": 14811,
+      "id": 3286,
+      "name": "frolundaSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 14938,
+      "id": 4073,
+      "name": "malmoSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 16658,
+      "id": 17499,
+      "name": "modoSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 16826,
+      "id": 18908,
+      "name": "brynasSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 16872,
+      "id": 19179,
+      "name": "timraSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 16944,
+      "id": 19963,
+      "name": "luleaSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 17375,
+      "id": 22651,
+      "name": "moraSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 17717,
+      "id": 25377,
+      "name": "farjestadSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 18641,
+      "id": 30084,
+      "name": "linkSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 18662,
+      "id": 30693,
+      "name": "djurgardenSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 18764,
+      "id": 30876,
+      "name": "sodertaljeSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 18815,
+      "id": 31094,
+      "name": "hv71SamplePicker_msg",
+      "pad_zero": true
+     }
+    ],
+    "chant_entries": [
+     {
+      "ptr": 15134,
+      "id": 5841,
+      "name": "chantFilterValues_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 15625,
+      "id": 9631,
+      "name": "playOffChantSamplePicker_msg",
+      "pad_zero": true
+     },
+     {
+      "ptr": 15787,
+      "id": 10147,
+      "name": "chantTrigger_msg",
+      "pad_zero": true
+     }
+    ]
+   },
+   "controlCenter": {
+    "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\controlCenter.abk",
+    "size": 27084,
+    "sha256": "c94e05f4e4065aeabe0d9721177db3bf465cfb65fdc01a429ecf41bb5b923ebf",
+    "records": 0,
+    "names": 189,
+    "lists": 0,
+    "refusals": [],
+    "names_all": [
+     "anger01samplePicker_msg",
+     "anger01samplePicker_snd",
+     "anger02samplePicker_msg",
+     "anger02samplePicker_snd",
+     "anger03samplePicker_msg",
+     "anger03samplePicker_snd",
+     "anticipationHiSamplePicker_msg",
+     "anticipationHiSamplePicker_snd",
+     "anticipationLoSamplePick_msg",
+     "anticipationLoSamplePick_snd",
+     "anticipationMedSamplePicker_msg",
+     "anticipationMedSamplePicker_snd",
+     "anticipationOSSamplePicker_msg",
+     "anticipationOSSamplePicker_snd",
+     "anticipationSamplePicker_msg",
+     "anticipationSamplePicker_snd",
+     "anticipationSlotSamplePick_msg",
+     "anticipationSlotSamplePick_snd",
+     "awe01samplePicker_msg",
+     "awe01samplePicker_snd",
+     "awe02samplePicker_msg",
+     "awe02samplePicker_snd",
+     "awe03samplePicker_msg",
+     "awe03samplePicker_snd",
+     "badPenCallGenSamplePicker_msg",
+     "badPenCallGenSamplePicker_snd",
+     "badPenCallManySamplePicker_msg",
+     "badPenCallManySamplePicker_snd",
+     "booSamplePicker_msg",
+     "booSamplePicker_snd",
+     "breakawaySamplePicker_msg",
+     "breakawaySamplePicker_snd",
+     "brynasSamplePicker_msg",
+     "brynasSamplePicker_snd",
+     "c_ducker",
+     "c_pause",
+     "c_service",
+     "cheer01samplePicker_msg",
+     "cheer01samplePicker_snd",
+     "cheer02samplePicker_msg",
+     "cheer02samplePicker_snd",
+     "cheer03samplePicker_msg",
+     "cheer03samplePicker_snd",
+     "cheer04samplePicker_msg",
+     "cheer04samplePicker_snd",
+     "cheerB1samplePicker_msg",
+     "cheerB1samplePicker_snd",
+     "cheerB2samplePicker_msg",
+     "cheerB2samplePicker_snd",
+     "cheerB3samplePicker_msg",
+     "cheerB3samplePicker_snd",
+     "cheerColorSamplePicker_msg",
+     "cheerColorSamplePicker_snd",
+     "closeCallSamplePicker_msg",
+     "closeCallSamplePicker_snd",
+     "congratsSamplePicker_msg",
+     "congratsSamplePicker_snd",
+     "crowdAmbienceDuckerValue_snd",
+     "crowdAmbienceMasterVol_snd",
+     "crowdDuckerState_snd",
+     "crowdKillDelayTime_snd",
+     "crowdPauseDelayTime_snd",
+     "crowdReactionsDuckerValue_snd",
+     "crowdReactionsMasterVol_snd",
+     "diveSamplePicker_msg",
+     "diveSamplePicker_snd",
+     "djurgardenSamplePicker_msg",
+     "djurgardenSamplePicker_snd",
+     "farjestadSamplePicker_msg",
+     "farjestadSamplePicker_snd",
+     "frolundaSamplePicker_msg",
+     "frolundaSamplePicker_snd",
+     "frustrationSamplePicker_msg",
+     "frustrationSamplePicker_snd",
+     "getItOutSamplePicker_msg",
+     "getItOutSamplePicker_snd",
+     "giveUpSamplePicker_msg",
+     "giveUpSamplePicker_snd",
+     "goodPenCallGenSamplePicker_msg",
+     "goodPenCallGenSamplePicker_snd",
+     "goodPenCallManySamplePicker_msg",
+     "goodPenCallManySamplePicker_snd",
+     "hiAmbColorSamplePicker01_msg",
+     "hiAmbColorSamplePicker01_snd",
+     "hiAmbColorSamplePicker02_msg",
+     "hiAmbColorSamplePicker02_snd",
+     "hitPostSamplePicker_msg",
+     "hitPostSamplePicker_snd",
+     "homeHitAwaySamplePicker_msg",
+     "homeHittingAwaySamplePicker_snd",
+     "homeScordOnManySamplePicker_msg",
+     "homeScordOnManySamplePicker_snd",
+     "homeScoredOnGenSamplePicker_msg",
+     "homeScoredOnGenSamplePicker_snd",
+     "hornsSamplePicker_msg",
+     "hornsSamplePicker_snd",
+     "hv71SamplePicker_msg",
+     "hv71SamplePicker_snd",
+     "intensityMonitor_snd",
+     "introNIScrowdVolumeTrim_snd",
+     "laughterSamplePicker_msg",
+     "laughterSamplePicker_snd",
+     "linkSamplePicker_msg",
+     "linkSamplePicker_snd",
+     "lividSamplePicker_msg",
+     "lividSamplePicker_snd",
+     "loAmbGenericSamplePicker_msg",
+     "loAmbGenericSamplePicker_snd",
+     "loAmbPositiveSamplePicker_msg",
+     "loAmbPositiveSamplePicker_snd",
+     "luleaSamplePicker_msg",
+     "luleaSamplePicker_snd",
+     "m_crowd_v",
+     "malmoSamplePicker_msg",
+     "malmoSamplePicker_snd",
+     "missedHookSamplePicker_msg",
+     "missedHookSamplePicker_snd",
+     "missedPenCallSamplePicker_msg",
+     "missedPenCallSamplePicker_snd",
+     "missedShotSamplePicker_msg",
+     "missedShotSamplePicker_snd",
+     "missedSlashSamplePicker_msg",
+     "missedSlashSamplePicker_snd",
+     "missedTripSamplePicker_msg",
+     "missedTripSamplePicker_snd",
+     "modoSamplePicker_msg",
+     "modoSamplePicker_snd",
+     "moraSamplePicker_msg",
+     "moraSamplePicker_snd",
+     "ohColorSamplePicker_msg",
+     "ohColorSamplePicker_snd",
+     "ohHighLongSamplePicker_msg",
+     "ohHighLongSamplePicker_snd",
+     "ohHighSamplePicker_msg",
+     "ohHighSamplePicker_snd",
+     "ohLowMedSamplePicker_msg",
+     "ohLowMedSamplePicker_snd",
+     "ohLowSamplePicker_msg",
+     "ohLowSamplePicker_snd",
+     "ohMedHighSamplePicker_msg",
+     "ohMedHighSamplePicker_snd",
+     "ohMedSamplePicker_msg",
+     "ohMedSamplePicker_snd",
+     "ooh01samplePicker_msg",
+     "ooh01samplePicker_snd",
+     "ooh02samplePicker_msg",
+     "ooh02samplePicker_snd",
+     "ooh03samplePicker_msg",
+     "ooh03samplePicker_snd",
+     "oohColorSamplePicker_msg",
+     "oohColorSamplePicker_snd",
+     "ownGoalAwaySamplePicker_msg",
+     "ownGoalAwaySamplePicker_snd",
+     "ownGoalHomeSamplePicker_msg",
+     "ownGoalHomeSamplePicker_snd",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "playOffChantSamplePicker_msg",
+     "playOffChantSamplePicker_snd",
+     "practiceAmbSamplePicker_msg",
+     "practiceAmbSamplePicker_snd",
+     "randomReactionSamplePicker_msg",
+     "randomReactionSamplePicker_snd",
+     "sarcasmSamplePicker_msg",
+     "sarcasmSamplePicker_snd",
+     "screamsSamplePicker_msg",
+     "screamsSamplePicker_snd",
+     "serviceShutdown_msg",
+     "serviceStartup_msg",
+     "shootSamplePicker_msg",
+     "shootSamplePicker_snd",
+     "sodertaljeSamplePicker_msg",
+     "sodertaljeSamplePicker_snd",
+     "superFanSamplePicker_msg",
+     "superFanSamplePicker_snd",
+     "supriseSamplePicker_msg",
+     "supriseSamplePicker_snd",
+     "timraSamplePicker_msg",
+     "timraSamplePicker_snd",
+     "whistlesSamplePicker_msg",
+     "whistlesSamplePicker_snd"
+    ],
+    "names_team_chant_related": [
+     "breakawaySamplePicker_msg",
+     "breakawaySamplePicker_snd",
+     "homeHitAwaySamplePicker_msg",
+     "homeHittingAwaySamplePicker_snd",
+     "homeScordOnManySamplePicker_msg",
+     "homeScordOnManySamplePicker_snd",
+     "homeScoredOnGenSamplePicker_msg",
+     "homeScoredOnGenSamplePicker_snd",
+     "ownGoalAwaySamplePicker_msg",
+     "ownGoalAwaySamplePicker_snd",
+     "ownGoalHomeSamplePicker_msg",
+     "ownGoalHomeSamplePicker_snd",
+     "playOffChantSamplePicker_msg",
+     "playOffChantSamplePicker_snd"
+    ],
+    "club_nodes": [
+     {
+      "node": "0x28f0",
+      "end": "0x290c",
+      "size": 28,
+      "names": [
+       "brynasSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x290c",
+      "end": "0x2928",
+      "size": 28,
+      "names": [
+       "djurgardenSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x2928",
+      "end": "0x2944",
+      "size": 28,
+      "names": [
+       "farjestadSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x2944",
+      "end": "0x2960",
+      "size": 28,
+      "names": [
+       "hv71SamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x2960",
+      "end": "0x297c",
+      "size": 28,
+      "names": [
+       "linkSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x297c",
+      "end": "0x2998",
+      "size": 28,
+      "names": [
+       "luleaSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x2998",
+      "end": "0x29b4",
+      "size": 28,
+      "names": [
+       "malmoSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x29b4",
+      "end": "0x29d0",
+      "size": 28,
+      "names": [
+       "modoSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x29d0",
+      "end": "0x29ec",
+      "size": 28,
+      "names": [
+       "moraSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x29ec",
+      "end": "0x2a08",
+      "size": 28,
+      "names": [
+       "sodertaljeSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x2a08",
+      "end": "0x2a24",
+      "size": 28,
+      "names": [
+       "timraSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x2a24",
+      "end": "0x2a40",
+      "size": 28,
+      "names": [
+       "frolundaSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x3e3c",
+      "end": "0x3e54",
+      "size": 24,
+      "names": [
+       "brynasSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3e54",
+      "end": "0x3e6c",
+      "size": 24,
+      "names": [
+       "djurgardenSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3e6c",
+      "end": "0x3e84",
+      "size": 24,
+      "names": [
+       "farjestadSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3e84",
+      "end": "0x3e9c",
+      "size": 24,
+      "names": [
+       "hv71SamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3e9c",
+      "end": "0x3eb4",
+      "size": 24,
+      "names": [
+       "linkSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3eb4",
+      "end": "0x3ecc",
+      "size": 24,
+      "names": [
+       "luleaSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3ecc",
+      "end": "0x3ee4",
+      "size": 24,
+      "names": [
+       "malmoSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3ee4",
+      "end": "0x3efc",
+      "size": 24,
+      "names": [
+       "modoSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3efc",
+      "end": "0x3f14",
+      "size": 24,
+      "names": [
+       "moraSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3f14",
+      "end": "0x3f2c",
+      "size": 24,
+      "names": [
+       "sodertaljeSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3f2c",
+      "end": "0x3f44",
+      "size": 24,
+      "names": [
+       "timraSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     },
+     {
+      "node": "0x3f44",
+      "end": "0x3f5c",
+      "size": 24,
+      "names": [
+       "frolundaSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 7f ff ff fe"
+     }
+    ],
+    "parents_of_club_nodes": [],
+    "candidate_u16_constants_in_parents": {}
+   },
+   "db_identities": "not joined: ModuleNotFoundError(\"No module named 'r04_tdb'\")"
+  },
+  "ps3-nhl15": {
+   "moir": {
+    "size": 46728,
+    "sha256": "7089a8c1d647ec3540dd34730fdc938024f7290c1591e99e98025fe9fc880993",
+    "count": 196,
+    "table_end": 2396,
+    "first_string_ptr": 0,
+    "body_bytes": -2396,
+    "pads_all_zero": false,
+    "ptrs_increasing": false,
+    "ids_sorted": true,
+    "pool_end_is_eof": false,
+    "body_head_hex": "",
+    "body_nonzero_bytes": 0,
+    "body_u16_ids_present": [],
+    "body_u16_ids_present_count": 0,
+    "body_u32_ptrs_present_count": 0,
+    "header_u16s": [
+     3,
+     512,
+     1792,
+     196,
+     63,
+     709,
+     1577,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "body_byte_histogram_top": [],
+    "body_u16_be_top": [],
+    "club_entries": [],
+    "chant_entries": []
+   },
+   "controlCenter": {
+    "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\controlCenter.abk",
+    "size": 32332,
+    "sha256": "6403dbd53c0b6b759c20b9de736a0d553b74aee376f18ac495cbd7c109f309d1",
+    "records": 0,
+    "names": 189,
+    "lists": 0,
+    "refusals": [],
+    "names_all": [
+     "anger01samplePicker_msg",
+     "anger01samplePicker_snd",
+     "anger02samplePicker_msg",
+     "anger02samplePicker_snd",
+     "anger03samplePicker_msg",
+     "anger03samplePicker_snd",
+     "anticipationHiSamplePicker_msg",
+     "anticipationHiSamplePicker_snd",
+     "anticipationLoSamplePick_msg",
+     "anticipationLoSamplePick_snd",
+     "anticipationMedSamplePicker_msg",
+     "anticipationMedSamplePicker_snd",
+     "anticipationOSSamplePicker_msg",
+     "anticipationOSSamplePicker_snd",
+     "anticipationSamplePicker_msg",
+     "anticipationSamplePicker_snd",
+     "anticipationSlotSamplePick_msg",
+     "anticipationSlotSamplePick_snd",
+     "awe01samplePicker_msg",
+     "awe01samplePicker_snd",
+     "awe02samplePicker_msg",
+     "awe02samplePicker_snd",
+     "awe03samplePicker_msg",
+     "awe03samplePicker_snd",
+     "badPenCallGenSamplePicker_msg",
+     "badPenCallGenSamplePicker_snd",
+     "badPenCallManySamplePicker_msg",
+     "badPenCallManySamplePicker_snd",
+     "booSamplePicker_msg",
+     "booSamplePicker_snd",
+     "breakawaySamplePicker_msg",
+     "breakawaySamplePicker_snd",
+     "brynasSamplePicker_msg",
+     "brynasSamplePicker_snd",
+     "c_ducker",
+     "c_pause",
+     "c_service",
+     "cheer01samplePicker_msg",
+     "cheer01samplePicker_snd",
+     "cheer02samplePicker_msg",
+     "cheer02samplePicker_snd",
+     "cheer03samplePicker_msg",
+     "cheer03samplePicker_snd",
+     "cheer04samplePicker_msg",
+     "cheer04samplePicker_snd",
+     "cheerB1samplePicker_msg",
+     "cheerB1samplePicker_snd",
+     "cheerB2samplePicker_msg",
+     "cheerB2samplePicker_snd",
+     "cheerB3samplePicker_msg",
+     "cheerB3samplePicker_snd",
+     "cheerColorSamplePicker_msg",
+     "cheerColorSamplePicker_snd",
+     "closeCallSamplePicker_msg",
+     "closeCallSamplePicker_snd",
+     "congratsSamplePicker_msg",
+     "congratsSamplePicker_snd",
+     "crowdAmbienceDuckerValue_snd",
+     "crowdAmbienceMasterVol_snd",
+     "crowdDuckerState_snd",
+     "crowdKillDelayTime_snd",
+     "crowdPauseDelayTime_snd",
+     "crowdReactionsDuckerValue_snd",
+     "crowdReactionsMasterVol_snd",
+     "diveSamplePicker_msg",
+     "diveSamplePicker_snd",
+     "djurgardenSamplePicker_msg",
+     "djurgardenSamplePicker_snd",
+     "farjestadSamplePicker_msg",
+     "farjestadSamplePicker_snd",
+     "frolundaSamplePicker_msg",
+     "frolundaSamplePicker_snd",
+     "frustrationSamplePicker_msg",
+     "frustrationSamplePicker_snd",
+     "getItOutSamplePicker_msg",
+     "getItOutSamplePicker_snd",
+     "giveUpSamplePicker_msg",
+     "giveUpSamplePicker_snd",
+     "goodPenCallGenSamplePicker_msg",
+     "goodPenCallGenSamplePicker_snd",
+     "goodPenCallManySamplePicker_msg",
+     "goodPenCallManySamplePicker_snd",
+     "hiAmbColorSamplePicker01_msg",
+     "hiAmbColorSamplePicker01_snd",
+     "hiAmbColorSamplePicker02_msg",
+     "hiAmbColorSamplePicker02_snd",
+     "hitPostSamplePicker_msg",
+     "hitPostSamplePicker_snd",
+     "homeHitAwaySamplePicker_msg",
+     "homeHittingAwaySamplePicker_snd",
+     "homeScordOnManySamplePicker_msg",
+     "homeScordOnManySamplePicker_snd",
+     "homeScoredOnGenSamplePicker_msg",
+     "homeScoredOnGenSamplePicker_snd",
+     "hornsSamplePicker_msg",
+     "hornsSamplePicker_snd",
+     "hv71SamplePicker_msg",
+     "hv71SamplePicker_snd",
+     "intensityMonitor_snd",
+     "introNIScrowdVolumeTrim_snd",
+     "laughterSamplePicker_msg",
+     "laughterSamplePicker_snd",
+     "linkSamplePicker_msg",
+     "linkSamplePicker_snd",
+     "lividSamplePicker_msg",
+     "lividSamplePicker_snd",
+     "loAmbGenericSamplePicker_msg",
+     "loAmbGenericSamplePicker_snd",
+     "loAmbPositiveSamplePicker_msg",
+     "loAmbPositiveSamplePicker_snd",
+     "luleaSamplePicker_msg",
+     "luleaSamplePicker_snd",
+     "m_crowd_v",
+     "malmoSamplePicker_msg",
+     "malmoSamplePicker_snd",
+     "missedHookSamplePicker_msg",
+     "missedHookSamplePicker_snd",
+     "missedPenCallSamplePicker_msg",
+     "missedPenCallSamplePicker_snd",
+     "missedShotSamplePicker_msg",
+     "missedShotSamplePicker_snd",
+     "missedSlashSamplePicker_msg",
+     "missedSlashSamplePicker_snd",
+     "missedTripSamplePicker_msg",
+     "missedTripSamplePicker_snd",
+     "modoSamplePicker_msg",
+     "modoSamplePicker_snd",
+     "moraSamplePicker_msg",
+     "moraSamplePicker_snd",
+     "ohColorSamplePicker_msg",
+     "ohColorSamplePicker_snd",
+     "ohHighLongSamplePicker_msg",
+     "ohHighLongSamplePicker_snd",
+     "ohHighSamplePicker_msg",
+     "ohHighSamplePicker_snd",
+     "ohLowMedSamplePicker_msg",
+     "ohLowMedSamplePicker_snd",
+     "ohLowSamplePicker_msg",
+     "ohLowSamplePicker_snd",
+     "ohMedHighSamplePicker_msg",
+     "ohMedHighSamplePicker_snd",
+     "ohMedSamplePicker_msg",
+     "ohMedSamplePicker_snd",
+     "ooh01samplePicker_msg",
+     "ooh01samplePicker_snd",
+     "ooh02samplePicker_msg",
+     "ooh02samplePicker_snd",
+     "ooh03samplePicker_msg",
+     "ooh03samplePicker_snd",
+     "oohColorSamplePicker_msg",
+     "oohColorSamplePicker_snd",
+     "ownGoalAwaySamplePicker_msg",
+     "ownGoalAwaySamplePicker_snd",
+     "ownGoalHomeSamplePicker_msg",
+     "ownGoalHomeSamplePicker_snd",
+     "pauseBegin_msg",
+     "pauseEnd_msg",
+     "playOffChantSamplePicker_msg",
+     "playOffChantSamplePicker_snd",
+     "practiceAmbSamplePicker_msg",
+     "practiceAmbSamplePicker_snd",
+     "randomReactionSamplePicker_msg",
+     "randomReactionSamplePicker_snd",
+     "sarcasmSamplePicker_msg",
+     "sarcasmSamplePicker_snd",
+     "screamsSamplePicker_msg",
+     "screamsSamplePicker_snd",
+     "serviceShutdown_msg",
+     "serviceStartup_msg",
+     "shootSamplePicker_msg",
+     "shootSamplePicker_snd",
+     "sodertaljeSamplePicker_msg",
+     "sodertaljeSamplePicker_snd",
+     "superFanSamplePicker_msg",
+     "superFanSamplePicker_snd",
+     "supriseSamplePicker_msg",
+     "supriseSamplePicker_snd",
+     "timraSamplePicker_msg",
+     "timraSamplePicker_snd",
+     "whistlesSamplePicker_msg",
+     "whistlesSamplePicker_snd"
+    ],
+    "names_team_chant_related": [
+     "breakawaySamplePicker_msg",
+     "breakawaySamplePicker_snd",
+     "homeHitAwaySamplePicker_msg",
+     "homeHittingAwaySamplePicker_snd",
+     "homeScordOnManySamplePicker_msg",
+     "homeScordOnManySamplePicker_snd",
+     "homeScoredOnGenSamplePicker_msg",
+     "homeScoredOnGenSamplePicker_snd",
+     "ownGoalAwaySamplePicker_msg",
+     "ownGoalAwaySamplePicker_snd",
+     "ownGoalHomeSamplePicker_msg",
+     "ownGoalHomeSamplePicker_snd",
+     "playOffChantSamplePicker_msg",
+     "playOffChantSamplePicker_snd"
+    ],
+    "club_nodes": [
+     {
+      "node": "0x3490",
+      "end": "0x34c8",
+      "size": 56,
+      "names": [
+       "brynasSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x34c8",
+      "end": "0x3500",
+      "size": 56,
+      "names": [
+       "djurgardenSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x3500",
+      "end": "0x3538",
+      "size": 56,
+      "names": [
+       "farjestadSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x3538",
+      "end": "0x3570",
+      "size": 56,
+      "names": [
+       "hv71SamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x3570",
+      "end": "0x35a8",
+      "size": 56,
+      "names": [
+       "linkSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x35a8",
+      "end": "0x35e0",
+      "size": 56,
+      "names": [
+       "luleaSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x35e0",
+      "end": "0x3618",
+      "size": 56,
+      "names": [
+       "malmoSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x3618",
+      "end": "0x3650",
+      "size": 56,
+      "names": [
+       "modoSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x3650",
+      "end": "0x3688",
+      "size": 56,
+      "names": [
+       "moraSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x3688",
+      "end": "0x36c0",
+      "size": 56,
+      "names": [
+       "sodertaljeSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x36c0",
+      "end": "0x36f8",
+      "size": 56,
+      "names": [
+       "timraSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x36f8",
+      "end": "0x3730",
+      "size": 56,
+      "names": [
+       "frolundaSamplePicker_msg"
+      ],
+      "cls": 2,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+     },
+     {
+      "node": "0x5118",
+      "end": "0x5140",
+      "size": 40,
+      "names": [
+       "brynasSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x5140",
+      "end": "0x5168",
+      "size": 40,
+      "names": [
+       "djurgardenSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x5168",
+      "end": "0x5190",
+      "size": 40,
+      "names": [
+       "farjestadSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x5190",
+      "end": "0x51b8",
+      "size": 40,
+      "names": [
+       "hv71SamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x51b8",
+      "end": "0x51e0",
+      "size": 40,
+      "names": [
+       "linkSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x51e0",
+      "end": "0x5208",
+      "size": 40,
+      "names": [
+       "luleaSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x5208",
+      "end": "0x5230",
+      "size": 40,
+      "names": [
+       "malmoSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x5230",
+      "end": "0x5258",
+      "size": 40,
+      "names": [
+       "modoSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x5258",
+      "end": "0x5280",
+      "size": 40,
+      "names": [
+       "moraSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x5280",
+      "end": "0x52a8",
+      "size": 40,
+      "names": [
+       "sodertaljeSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x52a8",
+      "end": "0x52d0",
+      "size": 40,
+      "names": [
+       "timraSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     },
+     {
+      "node": "0x52d0",
+      "end": "0x52f8",
+      "size": 40,
+      "names": [
+       "frolundaSamplePicker_snd"
+      ],
+      "cls": 0,
+      "bytes": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f ff 7f ff ff fe 00 00 00 00 7f ff ff fe 00 00 00 00"
+     }
+    ],
+    "parents_of_club_nodes": [],
+    "candidate_u16_constants_in_parents": {}
+   },
+   "db_identities": "not joined: ModuleNotFoundError(\"No module named 'r04_tdb'\")"
+  }
+ }
+}

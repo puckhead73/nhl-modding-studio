@@ -1,0 +1,39 @@
+$ python research/nhl08-roster-schema/scripts/save_directory_order.py "anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658" anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml
+#   save  role    parent parent name                        meta#  gameDir#
+0   gKeN  insert  lVMf  exhibitiongoalieequipment              4        11
+1   JJDo  update  lVMf  exhibitiongoalieequipment              4        11
+2   hTDj  update  NDEo  customteamequipmenttable               7         3
+3   BlkH  insert  ajmx  exhibitionskaterequipment              9        18
+4   MSZu  update  ajmx  exhibitionskaterequipment              9        18
+5   mASv  update  oYeE  exhibitionteamstrategies              11        21
+6   KjDh  update  Roup  custompalettetable                    19         2
+7   sAud  insert  nAUy  stockgoalieequipment                  21        70
+8   aGgS  delete  nAUy  stockgoalieequipment                  21        70
+9   VDLc  update  nAUy  stockgoalieequipment                  21        70
+10  sAMA  insert  QEoV  exhibitionfreeagents                  32         9
+11  mGOv  delete  QEoV  exhibitionfreeagents                  32         9
+12  SREo  update  ttOk  exhibitionteams                       37        20
+13  PPVt  update  Vzjq  customfacetable                       39         1
+14  LZbD  insert  caBZ  exhibitionplayers                     48        14
+15  Frps  delete  caBZ  exhibitionplayers                     48        14
+16  qWeu  update  caBZ  exhibitionplayers                     48        14
+17  ibGM  insert  ulGe  exhibitionrostertable                 49        15
+18  AtUj  delete  ulGe  exhibitionrostertable                 49        15
+19  vozd  update  ulGe  exhibitionrostertable                 49        15
+20  UHgc  update  vbHh  stockteamequipmenttable               50        77
+21  PsvH  insert  cPbu  exhibitionplayerbiotable              53        13
+22  CvSu  update  cPbu  exhibitionplayerbiotable              53        13
+23  TUaR  update  OEtS  exhibitionarena                       61         6
+24  kbtS  insert  yvSd  exhibitionskaterai                    64        17
+25  RosT  update  yvSd  exhibitionskaterai                    64        17
+26  PxTk  insert  yuHm  exhibitiongoalieai                    68        10
+27  uyGF  update  yuHm  exhibitiongoalieai                    68        10
+28  yJYN  insert  sozv  stockteamcolorstable                  72        76
+29  XGls  update  sozv  stockteamcolorstable                  72        76
+
+parent meta order non-decreasing along the save directory: True
+parent game-directory order non-decreasing: False
+role sequence per parent: [('insert', 'delete'), ('insert', 'delete', 'update'), ('insert', 'update'), ('update',)]
+meta attribute order on a declaring table (document text):
+   <table name="leaguefreeagents" shortname="kGzd" updateshortname="HnSp" insertshortname="ioPQ" deleteshortname="oiBf" maxupdate="-1" maxinsert="800" maxdelete="-1" difflistproperty="ENABLED" savegroups="league,dynasty,allloaded">
+

@@ -23,20 +23,34 @@ use tdb_core::TdbFile;
 use tdb_relations::PlayerKind;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 struct Tmp(PathBuf);
 impl Tmp {
     fn new(tag: &str) -> Self {
-        let safe: String = tag.chars().map(|c| if c.is_ascii_alphanumeric() { c } else { '-' }).collect();
+        let safe: String = tag
+            .chars()
+            .map(|c| if c.is_ascii_alphanumeric() { c } else { '-' })
+            .collect();
         let dir = std::env::temp_dir().join(format!("nhlms-s3-{safe}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();
         Tmp(dir)
     }
     fn copy_in(&self, src: &Path, name: &str) -> String {
-        let safe: String = name.chars().map(|c| if c.is_ascii_alphanumeric() || c == '.' { c } else { '-' }).collect();
+        let safe: String = name
+            .chars()
+            .map(|c| {
+                if c.is_ascii_alphanumeric() || c == '.' {
+                    c
+                } else {
+                    '-'
+                }
+            })
+            .collect();
         let dst = self.0.join(safe);
         std::fs::copy(src, &dst).unwrap();
         dst.to_string_lossy().into_owned()
@@ -51,7 +65,14 @@ impl Drop for Tmp {
 fn open(tmp: &Tmp, db_rel: &str, meta_rel: &str, platform: Platform, tag: &str) -> EditSession {
     let path = tmp.copy_in(&repo(db_rel), &format!("{tag}.db"));
     EditSession::begin(
-        Project::load(&path, platform, ProjectRole::Nhlng, repo(meta_rel), repo("defs")).unwrap(),
+        Project::load(
+            &path,
+            platform,
+            ProjectRole::Nhlng,
+            repo(meta_rel),
+            repo("defs"),
+        )
+        .unwrap(),
     )
 }
 
@@ -66,8 +87,14 @@ fn rating_cells(sess: &EditSession) -> (u32, Vec<String>) {
         .find(|p| p.kind == PlayerKind::Skater && p.skater_ai.is_some())
         .unwrap();
     let rec = p.skater_ai.unwrap();
-    let fields = entity_fields(&db, sess.project().meta(), sess.project().enums(), "dSvy", rec);
-    let attrs = build_player_attributes(&fields, "dSvy");
+    let fields = entity_fields(
+        &db,
+        sess.project().meta(),
+        sess.project().enums(),
+        "dSvy",
+        rec,
+    );
+    let attrs = build_player_attributes(&fields, "dSvy", false);
     let ids = attrs
         .flat
         .iter()
@@ -88,7 +115,8 @@ fn bench(db_rel: &str, meta_rel: &str, platform: Platform, tag: &str) {
     let t0 = Instant::now();
     for (k, id) in ids.iter().enumerate() {
         // Write within range for both (0,63) and (0,99); value irrelevant to the cost.
-        a.set_field("dSvy", rec, id, FieldValue::Int((k % 60) as i64)).unwrap();
+        a.set_field("dSvy", rec, id, FieldValue::Int((k % 60) as i64))
+            .unwrap();
     }
     let per_op_ms = t0.elapsed().as_secs_f64() * 1000.0;
     let per_op_depth = a.undo_depth();
@@ -98,8 +126,11 @@ fn bench(db_rel: &str, meta_rel: &str, platform: Platform, tag: &str) {
     let tmp_b = Tmp::new(&format!("{tag}-batch"));
     let mut b = open(&tmp_b, db_rel, meta_rel, platform, tag);
     let (recb, idsb) = rating_cells(&b);
-    let writes: Vec<(String, i64)> =
-        idsb.iter().enumerate().map(|(k, id)| (id.clone(), (k % 60) as i64)).collect();
+    let writes: Vec<(String, i64)> = idsb
+        .iter()
+        .enumerate()
+        .map(|(k, id)| (id.clone(), (k % 60) as i64))
+        .collect();
     let t1 = Instant::now();
     b.set_cells_int("dSvy", recb, &writes).unwrap();
     let batch_ms = t1.elapsed().as_secs_f64() * 1000.0;
@@ -134,7 +165,15 @@ fn bench(db_rel: &str, meta_rel: &str, platform: Platform, tag: &str) {
 fn import_history_cost() {
     println!(
         "\n{:<12} {:>7} {:>5} {:>10} {:>7} {:>11} {:>10} {:>7} {:>11}",
-        "anchor", "db_MB", "cells", "perop_ms", "depth", "retain_MB", "batch_ms", "depth", "retain_MB"
+        "anchor",
+        "db_MB",
+        "cells",
+        "perop_ms",
+        "depth",
+        "retain_MB",
+        "batch_ms",
+        "depth",
+        "retain_MB"
     );
     println!("{}", "-".repeat(88));
     bench(

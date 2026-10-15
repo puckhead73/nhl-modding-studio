@@ -1,0 +1,97 @@
+$ python research/nhl08-roster-schema/scripts/difflist_map.py anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1 anchors/xbox360/nhl07/databases/NHL07NG.db anchors/xbox360/nhl07/databases/NHL07NG-meta.xml --group rosters
+meta: 90 tables; declared insert ids 53, delete ids 52, update ids 41
+savegroups: {'dynasty': 29, 'league': 22, 'currentrosters': 9, 'defaultbiosattributes': 6, 'rosters': 16, 'rosterupdate': 9, 'settings': 4, 'defaultrosters': 3}
+save: 31 tables at 0x1c
+
+== mapping ==
+save  role    parent parent name                    inGame   nf  recB key(s)         capacity capacity source          field-set cross-check
+DZfz  update  dDrd  exhibitiondownloadgoalieai     yes      23    16 zIBw                 50 -1 (parent max_records)  parent+2 other(s) ['YzeG', 'yuHm']
+YvhR  update  Raym  exhibitiondownloadskaterai     yes      27    20 zIBw                150 -1 (parent max_records)  parent+2 other(s) ['yvSd', 'oDHy']
+znPC  insert  oYeE  exhibitionteamstrategies       yes      11     8 qEfv                 30 declared                 parent+1 other(s) ['QfUJ']
+JhBt  delete  oYeE  exhibitionteamstrategies       yes       1     4 qEfv                 93 -1 (parent max_records)  parent+42 other(s) ['gtua', 'HUMb', 'lSMf', 'aWBf', 'YELf', 'xZCi', 'ccZn', 'vfuv', 'IALy', 'UzqH', 'xxMJ', 'WluS', 'Nyyq', 'ubRu', 'QfUJ', 'kPYO', 'JLWf', 'AOIh', 'ttOk', 'FJTs', 'PSFv', 'pVcz', 'PlDA', 'caBZ', 'EClp', 'ZXww', 'bZvB', 'TlmR', 'sbGR', 'OEtS', 'vHJZ', 'zbuc', 'uGze', 'bGsk', 'Urkm', 'yvnq', 'wiLv', 'kPCA', 'sDbJ', 'YJMJ', 'RxFK', 'MMxP']
+mASv  update  oYeE  exhibitionteamstrategies       yes      11     8 qEfv                 93 -1 (parent max_records)  parent+1 other(s) ['QfUJ']
+eUOR  insert  MqdK  customplayerbiotable           yes      45   508 zIBw                180 declared                 unique
+oCMe  delete  MqdK  customplayerbiotable           yes       1     4 zIBw                  0 -1 (parent max_records)  parent+21 other(s) ['dDrd', 'Raym', 'BojX', 'EhOn', 'dZCE', 'YzeG', 'sziH', 'LsXI', 'TJKL', 'OqAO', 'FovP', 'FfSU', 'BRDa', 'cPbu', 'yvSd', 'yuHm', 'pDCn', 'ySst', 'aUhv', 'oDHy', 'cPLz']
+HHLk  update  MqdK  customplayerbiotable           yes      44   504 zIBw                180 declared                 unique
+MVOx  update  EhOn  exhibitiondownloadplayerbio    yes      42   504 zIBw                200 -1 (parent max_records)  unique
+KboR  insert  YzeG  customgoalieai                 yes      23    16 zIBw                 30 declared                 parent+4 other(s) ['dDrd', 'TJKL', 'FovP', 'yuHm']
+Exae  delete  YzeG  customgoalieai                 yes       1     4 zIBw                  0 -1 (parent max_records)  parent+21 other(s) ['dDrd', 'Raym', 'MqdK', 'BojX', 'EhOn', 'dZCE', 'sziH', 'LsXI', 'TJKL', 'OqAO', 'FovP', 'FfSU', 'BRDa', 'cPbu', 'yvSd', 'yuHm', 'pDCn', 'ySst', 'aUhv', 'oDHy', 'cPLz']
+rcpY  update  YzeG  customgoalieai                 yes      23    16 zIBw                 30 declared                 parent+2 other(s) ['dDrd', 'yuHm']
+sAMA  insert  QEoV  exhibitionfreeagents           yes       1     4 TWSX                200 declared                 parent+2 other(s) ['kGzd', 'TrVV']
+mGOv  delete  QEoV  exhibitionfreeagents           yes       1     4 TWSX                 74 -1 (parent max_records)  parent+4 other(s) ['kGzd', 'ulGe', 'TrVV', 'Smgy']
+fyFF  insert  ttOk  exhibitionteams                yes       4     4 qEfv                 30 declared                 unique
+dULq  delete  ttOk  exhibitionteams                yes       1     4 qEfv                 93 -1 (parent max_records)  parent+42 other(s) ['gtua', 'HUMb', 'lSMf', 'aWBf', 'YELf', 'xZCi', 'ccZn', 'vfuv', 'IALy', 'oYeE', 'UzqH', 'xxMJ', 'WluS', 'Nyyq', 'ubRu', 'QfUJ', 'kPYO', 'JLWf', 'AOIh', 'FJTs', 'PSFv', 'pVcz', 'PlDA', 'caBZ', 'EClp', 'ZXww', 'bZvB', 'TlmR', 'sbGR', 'OEtS', 'vHJZ', 'zbuc', 'uGze', 'bGsk', 'Urkm', 'yvnq', 'wiLv', 'kPCA', 'sDbJ', 'YJMJ', 'RxFK', 'MMxP']
+LZbD  insert  caBZ  exhibitionplayers              yes       3     4 qEfv                180 declared                 unique
+Frps  delete  caBZ  exhibitionplayers              yes       1     4 qEfv               2790 -1 (parent max_records)  parent+42 other(s) ['gtua', 'HUMb', 'lSMf', 'aWBf', 'YELf', 'xZCi', 'ccZn', 'vfuv', 'IALy', 'oYeE', 'UzqH', 'xxMJ', 'WluS', 'Nyyq', 'ubRu', 'QfUJ', 'kPYO', 'JLWf', 'AOIh', 'ttOk', 'FJTs', 'PSFv', 'pVcz', 'PlDA', 'EClp', 'ZXww', 'bZvB', 'TlmR', 'sbGR', 'OEtS', 'vHJZ', 'zbuc', 'uGze', 'bGsk', 'Urkm', 'yvnq', 'wiLv', 'kPCA', 'sDbJ', 'YJMJ', 'RxFK', 'MMxP']
+ibGM  insert  ulGe  exhibitionrostertable          yes      70    16 TWSX               3200 declared                 parent+1 other(s) ['Smgy']
+AtUj  delete  ulGe  exhibitionrostertable          yes       1     4 TWSX               2516 -1 (parent max_records)  parent+4 other(s) ['kGzd', 'QEoV', 'TrVV', 'Smgy']
+vozd  update  ulGe  exhibitionrostertable          yes      70    16 TWSX               2516 -1 (parent max_records)  unique
+CvSu  update  cPbu  exhibitionplayerbiotable       yes      43   504 zIBw               2250 -1 (parent max_records)  unique
+tMYP  insert  bZvB  rosterversiontable             yes       2    68 qEfv                  1 declared                 parent+1 other(s) ['AOIh']
+nGCg  delete  bZvB  rosterversiontable             yes       1     4 qEfv                  1 -1 (parent max_records)  parent+42 other(s) ['gtua', 'HUMb', 'lSMf', 'aWBf', 'YELf', 'xZCi', 'ccZn', 'vfuv', 'IALy', 'oYeE', 'UzqH', 'xxMJ', 'WluS', 'Nyyq', 'ubRu', 'QfUJ', 'kPYO', 'JLWf', 'AOIh', 'ttOk', 'FJTs', 'PSFv', 'pVcz', 'PlDA', 'caBZ', 'EClp', 'ZXww', 'TlmR', 'sbGR', 'OEtS', 'vHJZ', 'zbuc', 'uGze', 'bGsk', 'Urkm', 'yvnq', 'wiLv', 'kPCA', 'sDbJ', 'YJMJ', 'RxFK', 'MMxP']
+Iblm  update  bZvB  rosterversiontable             yes       2    68 qEfv                  1 -1 (parent max_records)  unique
+CTnc  insert  OEtS  exhibitionarena                yes       3     4 qEfv                 30 declared                 parent+1 other(s) ['PSFv']
+RosT  update  yvSd  exhibitionskaterai             yes      27    20 zIBw               2015 -1 (parent max_records)  parent+2 other(s) ['Raym', 'oDHy']
+uyGF  update  yuHm  exhibitiongoalieai             yes      23    16 zIBw                235 -1 (parent max_records)  parent+2 other(s) ['dDrd', 'YzeG']
+KERl  insert  oDHy  customplayerai                 yes      27    20 zIBw                150 declared                 parent+4 other(s) ['Raym', 'dZCE', 'LsXI', 'yvSd']
+wKzK  delete  oDHy  customplayerai                 yes       1     4 zIBw                  0 -1 (parent max_records)  parent+21 other(s) ['dDrd', 'Raym', 'MqdK', 'BojX', 'EhOn', 'dZCE', 'YzeG', 'sziH', 'LsXI', 'TJKL', 'OqAO', 'FovP', 'FfSU', 'BRDa', 'cPbu', 'yvSd', 'yuHm', 'pDCn', 'ySst', 'aUhv', 'cPLz']
+zrsU  update  oDHy  customplayerai                 yes      27    20 zIBw                150 declared                 parent+2 other(s) ['Raym', 'yvSd']
+
+parents in save group 'rosters':
+  dDrd  exhibitiondownloadgoalieai     declared ins=None  del=None  upd=DZfz  in save: ['DZfz:update']
+  Raym  exhibitiondownloadskaterai     declared ins=None  del=None  upd=YvhR  in save: ['YvhR:update']
+  oYeE  exhibitionteamstrategies       declared ins=znPC  del=JhBt  upd=mASv  in save: ['znPC:insert', 'JhBt:delete', 'mASv:update']
+  MqdK  customplayerbiotable           declared ins=eUOR  del=oCMe  upd=HHLk  in save: ['eUOR:insert', 'oCMe:delete', 'HHLk:update']
+  EhOn  exhibitiondownloadplayerbio    declared ins=None  del=None  upd=MVOx  in save: ['MVOx:update']
+  YzeG  customgoalieai                 declared ins=KboR  del=Exae  upd=rcpY  in save: ['KboR:insert', 'Exae:delete', 'rcpY:update']
+  QEoV  exhibitionfreeagents           declared ins=sAMA  del=mGOv  upd=None  in save: ['sAMA:insert', 'mGOv:delete']
+  ttOk  exhibitionteams                declared ins=fyFF  del=dULq  upd=None  in save: ['fyFF:insert', 'dULq:delete']
+  caBZ  exhibitionplayers              declared ins=LZbD  del=Frps  upd=None  in save: ['LZbD:insert', 'Frps:delete']
+  ulGe  exhibitionrostertable          declared ins=ibGM  del=AtUj  upd=vozd  in save: ['ibGM:insert', 'AtUj:delete', 'vozd:update']
+  cPbu  exhibitionplayerbiotable       declared ins=None  del=None  upd=CvSu  in save: ['CvSu:update']
+  bZvB  rosterversiontable             declared ins=tMYP  del=nGCg  upd=Iblm  in save: ['tMYP:insert', 'nGCg:delete', 'Iblm:update']
+  OEtS  exhibitionarena                declared ins=CTnc  del=None  upd=None  in save: ['CTnc:insert']
+  yvSd  exhibitionskaterai             declared ins=None  del=None  upd=RosT  in save: ['RosT:update']
+  yuHm  exhibitiongoalieai             declared ins=None  del=None  upd=uyGF  in save: ['uyGF:update']
+  oDHy  customplayerai                 declared ins=KERl  del=wKzK  upd=zrsU  in save: ['KERl:insert', 'wKzK:delete', 'zrsU:update']
+save tables whose parent is NOT in group 'rosters': none
+
+== descriptor comparison with the parent (binary descriptors of the game DB) ==
+DZfz  update  -> dDrd  exhibitiondownloadgoalieai   fields 23/23 set=expected offsets=parent order=parent dense-pack=True recB 16 vs parent 16 descriptors ok
+YvhR  update  -> Raym  exhibitiondownloadskaterai   fields 27/27 set=expected offsets=parent order=parent dense-pack=True recB 20 vs parent 20 descriptors ok
+znPC  insert  -> oYeE  exhibitionteamstrategies     fields 11/11 set=expected offsets=parent order=parent dense-pack=True recB 8 vs parent 8 descriptors ok
+JhBt  delete  -> oYeE  exhibitionteamstrategies     fields  1/11 set=expected offsets=re-packed order=parent dense-pack=True recB 4 vs parent 8 descriptors ok
+mASv  update  -> oYeE  exhibitionteamstrategies     fields 11/11 set=expected offsets=parent order=parent dense-pack=True recB 8 vs parent 8 descriptors ok
+eUOR  insert  -> MqdK  customplayerbiotable         fields 45/45 set=expected offsets=parent order=parent dense-pack=True recB 508 vs parent 508 descriptors ok
+oCMe  delete  -> MqdK  customplayerbiotable         fields  1/45 set=expected offsets=re-packed order=parent dense-pack=True recB 4 vs parent 508 descriptors ok
+HHLk  update  -> MqdK  customplayerbiotable         fields 44/45 set=expected offsets=re-packed order=parent dense-pack=True recB 504 vs parent 508 descriptors ok
+        parent fields absent from the update table (name:width@parent_bit): ['defaultaudioid:14@3900']
+        first shifted fields (parent_bit->save_bit): ['audioid@3914->3900', 'yeardrafted@3928->3914', 'height@3934->3920', 'skincolor@3939->3925', 'visortypecode@3943->3929', 'sticktapestylecode@3945->3931']
+MVOx  update  -> EhOn  exhibitiondownloadplayerbio  fields 42/46 set=expected offsets=re-packed order=parent dense-pack=True recB 504 vs parent 508 descriptors ok
+        parent fields absent from the update table (name:width@parent_bit): ['team:7@3856', 'headid:14@3864', 'defaultaudioid:14@3899', 'artid:14@4010']
+        first shifted fields (parent_bit->save_bit): ['contractis2way@3863->3856', 'helmetbrandorgoaliemask@3878->3857', 'contractlength@3883->3862', 'pantstypecode@3886->3865', 'hascustommask@3887->3866', 'state@3888->3867']
+KboR  insert  -> YzeG  customgoalieai               fields 23/23 set=expected offsets=parent order=parent dense-pack=True recB 16 vs parent 16 descriptors ok
+Exae  delete  -> YzeG  customgoalieai               fields  1/23 set=expected offsets=parent order=parent dense-pack=True recB 4 vs parent 16 descriptors ok
+rcpY  update  -> YzeG  customgoalieai               fields 23/23 set=expected offsets=parent order=parent dense-pack=True recB 16 vs parent 16 descriptors ok
+sAMA  insert  -> QEoV  exhibitionfreeagents         fields  1/ 1 set=expected offsets=parent order=parent dense-pack=True recB 4 vs parent 4 descriptors ok
+mGOv  delete  -> QEoV  exhibitionfreeagents         fields  1/ 1 set=expected offsets=parent order=parent dense-pack=True recB 4 vs parent 4 descriptors ok
+fyFF  insert  -> ttOk  exhibitionteams              fields  4/ 4 set=expected offsets=parent order=parent dense-pack=True recB 4 vs parent 4 descriptors ok
+dULq  delete  -> ttOk  exhibitionteams              fields  1/ 4 set=expected offsets=re-packed order=parent dense-pack=True recB 4 vs parent 4 descriptors ok
+LZbD  insert  -> caBZ  exhibitionplayers            fields  3/ 3 set=expected offsets=parent order=parent dense-pack=True recB 4 vs parent 4 descriptors ok
+Frps  delete  -> caBZ  exhibitionplayers            fields  1/ 3 set=expected offsets=re-packed order=parent dense-pack=True recB 4 vs parent 4 descriptors ok
+ibGM  insert  -> ulGe  exhibitionrostertable        fields 70/70 set=expected offsets=parent order=parent dense-pack=True recB 16 vs parent 16 descriptors ok
+AtUj  delete  -> ulGe  exhibitionrostertable        fields  1/70 set=expected offsets=re-packed order=parent dense-pack=True recB 4 vs parent 16 descriptors ok
+vozd  update  -> ulGe  exhibitionrostertable        fields 70/70 set=expected offsets=parent order=parent dense-pack=True recB 16 vs parent 16 descriptors ok
+CvSu  update  -> cPbu  exhibitionplayerbiotable     fields 43/46 set=expected offsets=re-packed order=parent dense-pack=True recB 504 vs parent 508 descriptors ok
+        parent fields absent from the update table (name:width@parent_bit): ['headid:14@3864', 'defaultaudioid:14@3899', 'artid:14@4010']
+        first shifted fields (parent_bit->save_bit): ['helmetbrandorgoaliemask@3878->3864', 'contractlength@3883->3869', 'pantstypecode@3886->3872', 'hascustommask@3887->3873', 'state@3888->3874', 'hascustomblocker@3895->3881']
+tMYP  insert  -> bZvB  rosterversiontable           fields  2/ 2 set=expected offsets=parent order=parent dense-pack=True recB 68 vs parent 68 descriptors ok
+nGCg  delete  -> bZvB  rosterversiontable           fields  1/ 2 set=expected offsets=re-packed order=parent dense-pack=True recB 4 vs parent 68 descriptors ok
+Iblm  update  -> bZvB  rosterversiontable           fields  2/ 2 set=expected offsets=parent order=parent dense-pack=True recB 68 vs parent 68 descriptors ok
+CTnc  insert  -> OEtS  exhibitionarena              fields  3/ 3 set=expected offsets=parent order=parent dense-pack=True recB 4 vs parent 4 descriptors ok
+RosT  update  -> yvSd  exhibitionskaterai           fields 27/27 set=expected offsets=parent order=parent dense-pack=True recB 20 vs parent 20 descriptors ok
+uyGF  update  -> yuHm  exhibitiongoalieai           fields 23/23 set=expected offsets=parent order=parent dense-pack=True recB 16 vs parent 16 descriptors ok
+KERl  insert  -> oDHy  customplayerai               fields 27/27 set=expected offsets=parent order=parent dense-pack=True recB 20 vs parent 20 descriptors ok
+wKzK  delete  -> oDHy  customplayerai               fields  1/27 set=expected offsets=parent order=parent dense-pack=True recB 4 vs parent 20 descriptors ok
+zrsU  update  -> oDHy  customplayerai               fields 27/27 set=expected offsets=parent order=parent dense-pack=True recB 20 vs parent 20 descriptors ok
+

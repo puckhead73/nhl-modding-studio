@@ -46,9 +46,9 @@ pub mod ids {
     pub const POSITION: &str = "vjla"; // ubPc position code (0..4, 4 = goalie)
     pub const INDEX_KEY: &str = "vfEq"; // ZBac key (XSWT target)
     pub const INDEX_TO_BIO: &str = "ykFq"; // ZBac → ubPc.wBIz
-    // NOTE (Spike S4): `ZBac.RREB` is the PLAYER-TYPE discriminator (TNHLPlayerType), not roster
-    // status, so the model no longer reads it. The real dressed/scratched signal is the per-slot
-    // `eGlu.hSZj` boolean below.
+                                           // NOTE (Spike S4): `ZBac.RREB` is the PLAYER-TYPE discriminator (TNHLPlayerType), not roster
+                                           // status, so the model no longer reads it. The real dressed/scratched signal is the per-slot
+                                           // `eGlu.hSZj` boolean below.
     pub const SLOT_KEY: &str = "toWX"; // eGlu key
     pub const SLOT_TO_INDEX: &str = "XSWT"; // eGlu → ZBac.vfEq
     pub const SLOT_TEAM: &str = "dXSB"; // eGlu → kOtt.vfEq
@@ -240,10 +240,7 @@ impl RosterModel {
         for i in 0..team_t.current_records as u32 {
             if let Some(team_id) = db.read_u64(team_t, i, team_key) {
                 model.team_by_id.insert(team_id, model.teams.len());
-                model.teams.push(Team {
-                    record: i,
-                    team_id,
-                });
+                model.teams.push(Team { record: i, team_id });
             }
         }
 
@@ -350,7 +347,9 @@ impl RosterModel {
                 team_id,
                 index_key,
                 player_id: entry.map(|e| e.player_id),
-                dressed: slot_dressed.and_then(|f| db.read_u64(slot_t, i, f)).map(|v| v != 0),
+                dressed: slot_dressed
+                    .and_then(|f| db.read_u64(slot_t, i, f))
+                    .map(|v| v != 0),
                 jersey: slot_jersey.and_then(|f| db.read_u64(slot_t, i, f)),
                 captaincy: slot_captaincy.and_then(|f| db.read_u64(slot_t, i, f)),
             });

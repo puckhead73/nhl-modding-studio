@@ -13,4 +13,8 @@ kind: string, title: string,
 /**
  * Studio table id — the edit/add/delete address.
  */
-table: string, columns: Array<CareerColumnDto>, rows: Array<CareerRowDto>, };
+table: string, columns: Array<CareerColumnDto>, rows: Array<CareerRowDto>, 
+/**
+ * False when this schema has no inline team-code field.
+ */
+team_code_supported?: boolean, };

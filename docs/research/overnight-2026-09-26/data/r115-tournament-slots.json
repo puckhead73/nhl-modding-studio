@@ -1,0 +1,6864 @@
+{
+ "note": "R115 (review 2026-09-26 r107-r112, queue item 5) - tournament schedule slot semantics on every PS4 source that ships a populated tournament\ntable (R113 source list; hash de-duplication). Tables: championsschedule, spenglerschedule, wcschedule (worldchamp / worldjunior are\nreported by row count). Per table and round: rows, slot ids, pairs, per-slot game counts, dates; round-0 groups = connected components of the\nround-0 pair graph. Join tests (each reported as agree / disagree, never adopted):\n  J1  slot = rank by `index` among the tournament league's own members (stockleagues name WorldCup / TXT_SPENGLER_CUP / TXT_CHAMPIONS_LEAGUE);\n      agreement test: every round-0 group maps into one `divisiongroup` value and each value into one group (where the league has >1 value).\n  J2  Spengler only: slot = position inside the `divisiongroup` (groups ordered by id, members by index) - consistent with the groups by\n      construction; reported so J1 and J2 can be compared.\n  JC  CHL participant candidate set = distinct `teamid` of `stockteamjerseys` rows with ischampionsleague = 1; its size and league mix; under\n      \"slot = rank by index within that set\", the number of round-0 groups holding two clubs of the same league (diagnostic of that reading).\n  Spengler placeholder structure: ids >= member count, the games they occur in, and whether each pairs with the one club absent from the\n  day-1 game of its group (the 'winner / loser of game k' reading); knockout rounds: slot ids per round and pairing pattern.\nRead-only. Usage: python r115_tournament_slots.py <out.json>\n",
+ "sources": [
+  {
+   "label": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "provenance": "anchors/ps4/nhl15",
+   "tables": {}
+  },
+  {
+   "label": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "provenance": "anchors/ps4/nhl16",
+   "tables": {}
+  },
+  {
+   "label": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "provenance": "anchors/ps4/nhl17",
+   "tables": {
+    "wcschedule": {
+     "rows": 17,
+     "max_records": 17,
+     "rounds": {
+      "0": {
+       "games": 12,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "games_per_slot": {
+        "3": 8
+       },
+       "pairs": [
+        [
+         2,
+         7
+        ],
+        [
+         0,
+         1
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         3,
+         4
+        ],
+        [
+         1,
+         2
+        ],
+        [
+         4,
+         5
+        ],
+        [
+         6,
+         3
+        ],
+        [
+         7,
+         0
+        ],
+        [
+         6,
+         4
+        ],
+        [
+         0,
+         2
+        ],
+        [
+         5,
+         3
+        ],
+        [
+         1,
+         7
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         8,
+         16
+        ],
+        [
+         8,
+         17
+        ],
+        [
+         8,
+         18
+        ],
+        [
+         8,
+         19
+        ],
+        [
+         8,
+         20
+        ],
+        [
+         8,
+         21
+        ]
+       ]
+      },
+      "3": {
+       "games": 2,
+       "slot_ids": [
+        8
+       ],
+       "games_per_slot": {
+        "4": 1
+       },
+       "pairs": [
+        [
+         8,
+         8
+        ],
+        [
+         8,
+         8
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         8,
+         23
+        ],
+        [
+         8,
+         24
+        ]
+       ]
+      },
+      "4": {
+       "games": 3,
+       "slot_ids": [
+        8
+       ],
+       "games_per_slot": {
+        "6": 1
+       },
+       "pairs": [
+        [
+         8,
+         8
+        ],
+        [
+         8,
+         8
+        ],
+        [
+         8,
+         8
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         8,
+         26
+        ],
+        [
+         8,
+         28
+        ],
+        [
+         9,
+         0
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1,
+       2,
+       7
+      ],
+      [
+       3,
+       4,
+       5,
+       6
+      ]
+     ],
+     "league": {
+      "name": "WorldCup",
+      "id": 14,
+      "members": [
+       {
+        "rank": 0,
+        "index": 243,
+        "abbr": "CAN",
+        "divisiongroup": 44
+       },
+       {
+        "rank": 1,
+        "index": 244,
+        "abbr": "CZE",
+        "divisiongroup": 44
+       },
+       {
+        "rank": 2,
+        "index": 245,
+        "abbr": "EUR",
+        "divisiongroup": 44
+       },
+       {
+        "rank": 3,
+        "index": 246,
+        "abbr": "FIN",
+        "divisiongroup": 45
+       },
+       {
+        "rank": 4,
+        "index": 247,
+        "abbr": "NA",
+        "divisiongroup": 45
+       },
+       {
+        "rank": 5,
+        "index": 248,
+        "abbr": "RUS",
+        "divisiongroup": 45
+       },
+       {
+        "rank": 6,
+        "index": 249,
+        "abbr": "SWE",
+        "divisiongroup": 45
+       },
+       {
+        "rank": 7,
+        "index": 250,
+        "abbr": "USA",
+        "divisiongroup": 44
+       }
+      ]
+     },
+     "J1_rank_by_index": {
+      "group_divisiongroups": [
+       [
+        44
+       ],
+       [
+        45
+       ]
+      ],
+      "agree": true,
+      "league_divisiongroup_values": [
+       44,
+       45
+      ]
+     }
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "provenance": "anchors/ps4/nhl18",
+   "tables": {
+    "championsschedule": {
+     "rows": 125,
+     "max_records": 155,
+     "rounds": {
+      "0": {
+       "games": 96,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+       ],
+       "games_per_slot": {
+        "6": 32
+       },
+       "pairs": [
+        [
+         18,
+         19
+        ],
+        [
+         21,
+         23
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         28,
+         31
+        ],
+        [
+         13,
+         14
+        ],
+        [
+         7,
+         4
+        ],
+        [
+         17,
+         16
+        ],
+        [
+         20,
+         22
+        ],
+        [
+         29,
+         30
+        ],
+        [
+         3,
+         0
+        ],
+        [
+         15,
+         12
+        ],
+        [
+         8,
+         10
+        ],
+        [
+         9,
+         11
+        ],
+        [
+         27,
+         26
+        ],
+        [
+         24,
+         25
+        ],
+        [
+         1,
+         2
+        ],
+        [
+         28,
+         30
+        ],
+        [
+         29,
+         31
+        ],
+        [
+         18,
+         16
+        ],
+        [
+         5,
+         4
+        ],
+        [
+         21,
+         22
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         17,
+         19
+        ],
+        [
+         20,
+         23
+        ],
+        [
+         15,
+         14
+        ],
+        [
+         24,
+         26
+        ],
+        [
+         13,
+         12
+        ],
+        [
+         3,
+         2
+        ],
+        [
+         8,
+         11
+        ],
+        [
+         9,
+         10
+        ],
+        [
+         27,
+         25
+        ],
+        [
+         1,
+         0
+        ],
+        [
+         4,
+         5
+        ],
+        [
+         23,
+         20
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         19,
+         17
+        ],
+        [
+         12,
+         13
+        ],
+        [
+         14,
+         15
+        ],
+        [
+         10,
+         9
+        ],
+        [
+         30,
+         28
+        ],
+        [
+         11,
+         8
+        ],
+        [
+         31,
+         29
+        ],
+        [
+         22,
+         21
+        ],
+        [
+         16,
+         18
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         25,
+         24
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         26,
+         27
+        ],
+        [
+         4,
+         7
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         19,
+         18
+        ],
+        [
+         11,
+         9
+        ],
+        [
+         14,
+         13
+        ],
+        [
+         23,
+         21
+        ],
+        [
+         12,
+         15
+        ],
+        [
+         10,
+         8
+        ],
+        [
+         30,
+         29
+        ],
+        [
+         31,
+         28
+        ],
+        [
+         22,
+         20
+        ],
+        [
+         0,
+         1
+        ],
+        [
+         25,
+         27
+        ],
+        [
+         26,
+         24
+        ],
+        [
+         2,
+         3
+        ],
+        [
+         16,
+         17
+        ],
+        [
+         18,
+         17
+        ],
+        [
+         3,
+         1
+        ],
+        [
+         9,
+         8
+        ],
+        [
+         27,
+         24
+        ],
+        [
+         28,
+         29
+        ],
+        [
+         13,
+         15
+        ],
+        [
+         12,
+         14
+        ],
+        [
+         26,
+         25
+        ],
+        [
+         4,
+         6
+        ],
+        [
+         10,
+         11
+        ],
+        [
+         30,
+         31
+        ],
+        [
+         22,
+         23
+        ],
+        [
+         16,
+         19
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         21,
+         20
+        ],
+        [
+         2,
+         0
+        ],
+        [
+         15,
+         13
+        ],
+        [
+         8,
+         9
+        ],
+        [
+         25,
+         26
+        ],
+        [
+         23,
+         22
+        ],
+        [
+         24,
+         27
+        ],
+        [
+         6,
+         4
+        ],
+        [
+         14,
+         12
+        ],
+        [
+         11,
+         10
+        ],
+        [
+         20,
+         21
+        ],
+        [
+         29,
+         28
+        ],
+        [
+         0,
+         2
+        ],
+        [
+         7,
+         5
+        ],
+        [
+         19,
+         16
+        ],
+        [
+         1,
+         3
+        ],
+        [
+         17,
+         18
+        ],
+        [
+         31,
+         30
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         7,
+         23
+        ],
+        [
+         7,
+         24
+        ],
+        [
+         7,
+         25
+        ],
+        [
+         7,
+         26
+        ],
+        [
+         7,
+         30
+        ],
+        [
+         8,
+         0
+        ],
+        [
+         8,
+         1
+        ],
+        [
+         8,
+         2
+        ],
+        [
+         9,
+         2
+        ],
+        [
+         9,
+         3
+        ],
+        [
+         9,
+         9
+        ],
+        [
+         9,
+         10
+        ]
+       ]
+      },
+      "3": {
+       "games": 16,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+       ],
+       "games_per_slot": {
+        "2": 16
+       },
+       "pairs": [
+        [
+         15,
+         0
+        ],
+        [
+         14,
+         1
+        ],
+        [
+         13,
+         2
+        ],
+        [
+         12,
+         3
+        ],
+        [
+         11,
+         4
+        ],
+        [
+         10,
+         5
+        ],
+        [
+         9,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         0,
+         15
+        ],
+        [
+         1,
+         14
+        ],
+        [
+         2,
+         13
+        ],
+        [
+         3,
+         12
+        ],
+        [
+         4,
+         11
+        ],
+        [
+         5,
+         10
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         8
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         9,
+         30
+        ],
+        [
+         10,
+         0
+        ],
+        [
+         10,
+         6
+        ]
+       ]
+      },
+      "4": {
+       "games": 8,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "games_per_slot": {
+        "2": 8
+       },
+       "pairs": [
+        [
+         7,
+         0
+        ],
+        [
+         6,
+         1
+        ],
+        [
+         5,
+         2
+        ],
+        [
+         4,
+         3
+        ],
+        [
+         0,
+         7
+        ],
+        [
+         1,
+         6
+        ],
+        [
+         2,
+         5
+        ],
+        [
+         3,
+         4
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         2
+        ],
+        [
+         11,
+         3
+        ],
+        [
+         11,
+         11
+        ]
+       ]
+      },
+      "5": {
+       "games": 4,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "games_per_slot": {
+        "2": 4
+       },
+       "pairs": [
+        [
+         3,
+         0
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         1,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         0,
+         8
+        ],
+        [
+         0,
+         9
+        ],
+        [
+         0,
+         15
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         1,
+         5
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1,
+       2,
+       3
+      ],
+      [
+       4,
+       5,
+       6,
+       7
+      ],
+      [
+       8,
+       9,
+       10,
+       11
+      ],
+      [
+       12,
+       13,
+       14,
+       15
+      ],
+      [
+       16,
+       17,
+       18,
+       19
+      ],
+      [
+       20,
+       21,
+       22,
+       23
+      ],
+      [
+       24,
+       25,
+       26,
+       27
+      ],
+      [
+       28,
+       29,
+       30,
+       31
+      ]
+     ],
+     "league": {
+      "name": "TXT_CHAMPIONS_LEAGUE",
+      "id": 9,
+      "members": [
+       {
+        "rank": 0,
+        "index": 244,
+        "abbr": "BANS",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 1,
+        "index": 245,
+        "abbr": "CARD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 2,
+        "index": 246,
+        "abbr": "ESB",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 3,
+        "index": 247,
+        "abbr": "GAP",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 4,
+        "index": 248,
+        "abbr": "GROD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 5,
+        "index": 249,
+        "abbr": "KRAK",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 6,
+        "index": 250,
+        "abbr": "NOTT",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 7,
+        "index": 251,
+        "abbr": "STAV",
+        "divisiongroup": 64
+       }
+      ]
+     },
+     "J1_rank_by_index": {
+      "agree": null,
+      "why": "not testable: 8 members for 32 round-0 club slots, divisiongroup values [64]"
+     },
+     "JC_chance_no_same_league_group_uniform": {
+      "trials": 200000,
+      "hits": 30,
+      "seed": 20260926
+     },
+     "JC_jersey_flag_candidates": {
+      "flagged_rows": 64,
+      "distinct_teams": 32,
+      "rows_per_team": {
+       "2": 32
+      },
+      "league_mix": {
+       "elitserien": 5,
+       "SMLIIGA": 5,
+       "TXT_LEAGUE_DEL": 3,
+       "TXT_LEAGUE_O2_EXTRALIGA": 4,
+       "TXT_LEAGUE_SWISS_LEAGUE": 4,
+       "TXT_CHAMPIONS_LEAGUE": 8,
+       "TXT_LEAGUE_EBEL": 3
+      },
+      "teams": [
+       {
+        "index": 65,
+        "abbr": "BIF"
+       },
+       {
+        "index": 68,
+        "abbr": "VF"
+       },
+       {
+        "index": 69,
+        "abbr": "HV"
+       },
+       {
+        "index": 73,
+        "abbr": "MALM"
+       },
+       {
+        "index": 78,
+        "abbr": "VXJ"
+       },
+       {
+        "index": 81,
+        "abbr": "IFK"
+       },
+       {
+        "index": 84,
+        "abbr": "JYP"
+       },
+       {
+        "index": 85,
+        "abbr": "KAL"
+       },
+       {
+        "index": 91,
+        "abbr": "TAP"
+       },
+       {
+        "index": 92,
+        "abbr": "TPS"
+       },
+       {
+        "index": 102,
+        "abbr": "MAN"
+       },
+       {
+        "index": 103,
+        "abbr": "EHC"
+       },
+       {
+        "index": 107,
+        "abbr": "WOF"
+       },
+       {
+        "index": 108,
+        "abbr": "BRNO"
+       },
+       {
+        "index": 111,
+        "abbr": "LBC"
+       },
+       {
+        "index": 114,
+        "abbr": "CBE"
+       },
+       {
+        "index": 119,
+        "abbr": "TRI"
+       },
+       {
+        "index": 123,
+        "abbr": "BERN"
+       },
+       {
+        "index": 125,
+        "abbr": "HCD"
+       },
+       {
+        "index": 132,
+        "abbr": "ZUG"
+       },
+       {
+        "index": 133,
+        "abbr": "ZSC"
+       },
+       {
+        "index": 244,
+        "abbr": "BANS"
+       },
+       {
+        "index": 245,
+        "abbr": "CARD"
+       },
+       {
+        "index": 246,
+        "abbr": "ESB"
+       },
+       {
+        "index": 247,
+        "abbr": "GAP"
+       },
+       {
+        "index": 248,
+        "abbr": "GROD"
+       },
+       {
+        "index": 249,
+        "abbr": "KRAK"
+       },
+       {
+        "index": 250,
+        "abbr": "NOTT"
+       },
+       {
+        "index": 251,
+        "abbr": "STAV"
+       },
+       {
+        "index": 257,
+        "abbr": "KLAG"
+       },
+       {
+        "index": 259,
+        "abbr": "SALZ"
+       },
+       {
+        "index": 260,
+        "abbr": "VIEN"
+       }
+      ],
+      "rank_by_index_reading_groups_with_same_league_pair": 8,
+      "round0_groups": 8
+     }
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "max_records": 41,
+     "rounds": {
+      "0": {
+       "games": 6,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+       ],
+       "games_per_slot": {
+        "1": 8,
+        "2": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ],
+        [
+         3,
+         4
+        ],
+        [
+         2,
+         7
+        ],
+        [
+         5,
+         9
+        ],
+        [
+         6,
+         2
+        ],
+        [
+         8,
+         5
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         25
+        ],
+        [
+         11,
+         26
+        ],
+        [
+         11,
+         27
+        ]
+       ]
+      },
+      "4": {
+       "games": 2,
+       "slot_ids": [
+        1,
+        2,
+        4,
+        5
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         1,
+         5
+        ],
+        [
+         4,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         28
+        ]
+       ]
+      },
+      "5": {
+       "games": 2,
+       "slot_ids": [
+        0,
+        3,
+        10,
+        11
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         3,
+         10
+        ],
+        [
+         0,
+         11
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         29
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         1,
+         0
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         30
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1
+      ],
+      [
+       2,
+       6,
+       7
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       5,
+       8,
+       9
+      ]
+     ],
+     "league": {
+      "name": "TXT_SPENGLER_CUP",
+      "id": 20,
+      "members": [
+       {
+        "rank": 0,
+        "index": 278,
+        "abbr": "SC1",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 1,
+        "index": 279,
+        "abbr": "SC2",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 2,
+        "index": 280,
+        "abbr": "SC3",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 3,
+        "index": 281,
+        "abbr": "SC4",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 4,
+        "index": 282,
+        "abbr": "SC5",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 5,
+        "index": 283,
+        "abbr": "SC6",
+        "divisiongroup": 75
+       }
+      ]
+     },
+     "spengler_structure": {
+      "members": 6,
+      "club_ids": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
+      "placeholder_ids": [
+       6,
+       7,
+       8,
+       9
+      ],
+      "day1_games": [
+       [
+        0,
+        1
+       ],
+       [
+        3,
+        4
+       ]
+      ],
+      "third_clubs": [
+       2,
+       5
+      ],
+      "placeholder_opponents": {
+       "6": [
+        2
+       ],
+       "7": [
+        2
+       ],
+       "8": [
+        5
+       ],
+       "9": [
+        5
+       ]
+      },
+      "reading_R_WL": [
+       {
+        "day1_game": [
+         0,
+         1
+        ],
+        "placeholder_ids": [
+         6,
+         7
+        ],
+        "their_opponents": [
+         2
+        ],
+        "group_under_reading": [
+         0,
+         1,
+         2
+        ]
+       },
+       {
+        "day1_game": [
+         3,
+         4
+        ],
+        "placeholder_ids": [
+         8,
+         9
+        ],
+        "their_opponents": [
+         5
+        ],
+        "group_under_reading": [
+         3,
+         4,
+         5
+        ]
+       }
+      ],
+      "reading_consistent": true
+     },
+     "J1_rank_by_index": {
+      "agree": null,
+      "why": "not testable: 6 members for 6 round-0 club slots, divisiongroup values [75]"
+     },
+     "J2_position_in_group": {
+      "slot_to_abbr": [
+       "SC1",
+       "SC2",
+       "SC3",
+       "SC4",
+       "SC5",
+       "SC6"
+      ],
+      "groups_by_id": {
+       "75": [
+        "SC1",
+        "SC2",
+        "SC3",
+        "SC4",
+        "SC5",
+        "SC6"
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "provenance": "anchors/ps4/nhl19",
+   "tables": {
+    "championsschedule": {
+     "rows": 125,
+     "max_records": 155,
+     "rounds": {
+      "0": {
+       "games": 96,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+       ],
+       "games_per_slot": {
+        "6": 32
+       },
+       "pairs": [
+        [
+         15,
+         18
+        ],
+        [
+         4,
+         17
+        ],
+        [
+         22,
+         6
+        ],
+        [
+         20,
+         21
+        ],
+        [
+         31,
+         1
+        ],
+        [
+         23,
+         30
+        ],
+        [
+         14,
+         12
+        ],
+        [
+         16,
+         0
+        ],
+        [
+         28,
+         5
+        ],
+        [
+         7,
+         26
+        ],
+        [
+         24,
+         13
+        ],
+        [
+         2,
+         9
+        ],
+        [
+         10,
+         19
+        ],
+        [
+         11,
+         25
+        ],
+        [
+         27,
+         8
+        ],
+        [
+         29,
+         3
+        ],
+        [
+         4,
+         30
+        ],
+        [
+         15,
+         6
+        ],
+        [
+         22,
+         18
+        ],
+        [
+         20,
+         1
+        ],
+        [
+         23,
+         17
+        ],
+        [
+         31,
+         21
+        ],
+        [
+         2,
+         25
+        ],
+        [
+         28,
+         3
+        ],
+        [
+         24,
+         19
+        ],
+        [
+         10,
+         13
+        ],
+        [
+         11,
+         9
+        ],
+        [
+         14,
+         26
+        ],
+        [
+         16,
+         8
+        ],
+        [
+         7,
+         12
+        ],
+        [
+         27,
+         0
+        ],
+        [
+         29,
+         5
+        ],
+        [
+         5,
+         29
+        ],
+        [
+         13,
+         24
+        ],
+        [
+         9,
+         11
+        ],
+        [
+         25,
+         2
+        ],
+        [
+         1,
+         20
+        ],
+        [
+         3,
+         28
+        ],
+        [
+         21,
+         31
+        ],
+        [
+         30,
+         23
+        ],
+        [
+         17,
+         4
+        ],
+        [
+         6,
+         15
+        ],
+        [
+         8,
+         27
+        ],
+        [
+         0,
+         16
+        ],
+        [
+         12,
+         14
+        ],
+        [
+         18,
+         22
+        ],
+        [
+         19,
+         10
+        ],
+        [
+         26,
+         7
+        ],
+        [
+         1,
+         31
+        ],
+        [
+         3,
+         29
+        ],
+        [
+         19,
+         24
+        ],
+        [
+         5,
+         28
+        ],
+        [
+         9,
+         2
+        ],
+        [
+         21,
+         20
+        ],
+        [
+         17,
+         23
+        ],
+        [
+         30,
+         4
+        ],
+        [
+         26,
+         14
+        ],
+        [
+         0,
+         27
+        ],
+        [
+         25,
+         11
+        ],
+        [
+         13,
+         10
+        ],
+        [
+         12,
+         7
+        ],
+        [
+         6,
+         22
+        ],
+        [
+         8,
+         16
+        ],
+        [
+         18,
+         15
+        ],
+        [
+         15,
+         22
+        ],
+        [
+         16,
+         27
+        ],
+        [
+         5,
+         3
+        ],
+        [
+         7,
+         14
+        ],
+        [
+         9,
+         25
+        ],
+        [
+         0,
+         8
+        ],
+        [
+         1,
+         21
+        ],
+        [
+         4,
+         23
+        ],
+        [
+         11,
+         2
+        ],
+        [
+         18,
+         6
+        ],
+        [
+         20,
+         31
+        ],
+        [
+         28,
+         29
+        ],
+        [
+         13,
+         19
+        ],
+        [
+         10,
+         24
+        ],
+        [
+         17,
+         30
+        ],
+        [
+         26,
+         12
+        ],
+        [
+         6,
+         18
+        ],
+        [
+         24,
+         10
+        ],
+        [
+         8,
+         0
+        ],
+        [
+         2,
+         11
+        ],
+        [
+         3,
+         5
+        ],
+        [
+         27,
+         16
+        ],
+        [
+         21,
+         1
+        ],
+        [
+         12,
+         26
+        ],
+        [
+         31,
+         20
+        ],
+        [
+         29,
+         28
+        ],
+        [
+         19,
+         13
+        ],
+        [
+         23,
+         4
+        ],
+        [
+         22,
+         15
+        ],
+        [
+         14,
+         7
+        ],
+        [
+         25,
+         9
+        ],
+        [
+         30,
+         17
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         7,
+         29
+        ],
+        [
+         7,
+         30
+        ],
+        [
+         8,
+         0
+        ],
+        [
+         8,
+         1
+        ],
+        [
+         8,
+         5
+        ],
+        [
+         8,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         8,
+         8
+        ],
+        [
+         9,
+         8
+        ],
+        [
+         9,
+         9
+        ],
+        [
+         9,
+         15
+        ],
+        [
+         9,
+         16
+        ]
+       ]
+      },
+      "3": {
+       "games": 16,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+       ],
+       "games_per_slot": {
+        "2": 16
+       },
+       "pairs": [
+        [
+         15,
+         0
+        ],
+        [
+         14,
+         1
+        ],
+        [
+         13,
+         2
+        ],
+        [
+         12,
+         3
+        ],
+        [
+         11,
+         4
+        ],
+        [
+         10,
+         5
+        ],
+        [
+         9,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         0,
+         15
+        ],
+        [
+         1,
+         14
+        ],
+        [
+         2,
+         13
+        ],
+        [
+         3,
+         12
+        ],
+        [
+         4,
+         11
+        ],
+        [
+         5,
+         10
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         8
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         9,
+         30
+        ],
+        [
+         10,
+         0
+        ],
+        [
+         10,
+         6
+        ]
+       ]
+      },
+      "4": {
+       "games": 8,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "games_per_slot": {
+        "2": 8
+       },
+       "pairs": [
+        [
+         7,
+         0
+        ],
+        [
+         6,
+         1
+        ],
+        [
+         5,
+         2
+        ],
+        [
+         4,
+         3
+        ],
+        [
+         0,
+         7
+        ],
+        [
+         1,
+         6
+        ],
+        [
+         2,
+         5
+        ],
+        [
+         3,
+         4
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         2
+        ],
+        [
+         11,
+         3
+        ],
+        [
+         11,
+         11
+        ]
+       ]
+      },
+      "5": {
+       "games": 4,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "games_per_slot": {
+        "2": 4
+       },
+       "pairs": [
+        [
+         3,
+         0
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         1,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         0,
+         8
+        ],
+        [
+         0,
+         9
+        ],
+        [
+         0,
+         15
+        ],
+        [
+         0,
+         16
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         1,
+         5
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       8,
+       16,
+       27
+      ],
+      [
+       1,
+       20,
+       21,
+       31
+      ],
+      [
+       2,
+       9,
+       11,
+       25
+      ],
+      [
+       3,
+       5,
+       28,
+       29
+      ],
+      [
+       4,
+       17,
+       23,
+       30
+      ],
+      [
+       6,
+       15,
+       18,
+       22
+      ],
+      [
+       7,
+       12,
+       14,
+       26
+      ],
+      [
+       10,
+       13,
+       19,
+       24
+      ]
+     ],
+     "league": {
+      "name": "TXT_CHAMPIONS_LEAGUE",
+      "id": 9,
+      "members": [
+       {
+        "rank": 0,
+        "index": 245,
+        "abbr": "AAL",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 1,
+        "index": 246,
+        "abbr": "BANS",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 2,
+        "index": 247,
+        "abbr": "CARD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 3,
+        "index": 248,
+        "abbr": "GROD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 4,
+        "index": 249,
+        "abbr": "MNSK",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 5,
+        "index": 250,
+        "abbr": "ROUE",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 6,
+        "index": 251,
+        "abbr": "STOR",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 7,
+        "index": 252,
+        "abbr": "TYCH",
+        "divisiongroup": 64
+       }
+      ]
+     },
+     "J1_rank_by_index": {
+      "agree": null,
+      "why": "not testable: 8 members for 32 round-0 club slots, divisiongroup values [64]"
+     },
+     "JC_chance_no_same_league_group_uniform": {
+      "trials": 200000,
+      "hits": 27,
+      "seed": 20260926
+     },
+     "JC_jersey_flag_candidates": {
+      "flagged_rows": 64,
+      "distinct_teams": 32,
+      "rows_per_team": {
+       "2": 32
+      },
+      "league_mix": {
+       "elitserien": 5,
+       "SMLIIGA": 5,
+       "TXT_LEAGUE_DEL": 3,
+       "TXT_LEAGUE_O2_EXTRALIGA": 4,
+       "TXT_LEAGUE_SWISS_LEAGUE": 4,
+       "TXT_CHAMPIONS_LEAGUE": 8,
+       "TXT_LEAGUE_EBEL": 3
+      },
+      "teams": [
+       {
+        "index": 67,
+        "abbr": "DIF"
+       },
+       {
+        "index": 69,
+        "abbr": "VF"
+       },
+       {
+        "index": 73,
+        "abbr": "MALM"
+       },
+       {
+        "index": 77,
+        "abbr": "SKE"
+       },
+       {
+        "index": 79,
+        "abbr": "VXJ"
+       },
+       {
+        "index": 82,
+        "abbr": "IFK"
+       },
+       {
+        "index": 85,
+        "abbr": "JYP"
+       },
+       {
+        "index": 87,
+        "abbr": "KAR"
+       },
+       {
+        "index": 92,
+        "abbr": "TAP"
+       },
+       {
+        "index": 93,
+        "abbr": "TPS"
+       },
+       {
+        "index": 96,
+        "abbr": "EBB"
+       },
+       {
+        "index": 104,
+        "abbr": "EHC"
+       },
+       {
+        "index": 105,
+        "abbr": "NIT"
+       },
+       {
+        "index": 109,
+        "abbr": "BRNO"
+       },
+       {
+        "index": 115,
+        "abbr": "CBE"
+       },
+       {
+        "index": 118,
+        "abbr": "PLZ"
+       },
+       {
+        "index": 120,
+        "abbr": "TRI"
+       },
+       {
+        "index": 124,
+        "abbr": "BERN"
+       },
+       {
+        "index": 130,
+        "abbr": "HCL"
+       },
+       {
+        "index": 133,
+        "abbr": "ZUG"
+       },
+       {
+        "index": 134,
+        "abbr": "ZSC"
+       },
+       {
+        "index": 245,
+        "abbr": "AAL"
+       },
+       {
+        "index": 246,
+        "abbr": "BANS"
+       },
+       {
+        "index": 247,
+        "abbr": "CARD"
+       },
+       {
+        "index": 248,
+        "abbr": "GROD"
+       },
+       {
+        "index": 249,
+        "abbr": "MNSK"
+       },
+       {
+        "index": 250,
+        "abbr": "ROUE"
+       },
+       {
+        "index": 251,
+        "abbr": "STOR"
+       },
+       {
+        "index": 252,
+        "abbr": "TYCH"
+       },
+       {
+        "index": 253,
+        "abbr": "BOLZ"
+       },
+       {
+        "index": 260,
+        "abbr": "SALZ"
+       },
+       {
+        "index": 261,
+        "abbr": "VIEN"
+       }
+      ],
+      "rank_by_index_reading_groups_with_same_league_pair": 0,
+      "round0_groups": 8
+     }
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "max_records": 41,
+     "rounds": {
+      "0": {
+       "games": 6,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+       ],
+       "games_per_slot": {
+        "1": 8,
+        "2": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ],
+        [
+         3,
+         4
+        ],
+        [
+         2,
+         7
+        ],
+        [
+         5,
+         9
+        ],
+        [
+         6,
+         2
+        ],
+        [
+         8,
+         5
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         25
+        ],
+        [
+         11,
+         26
+        ],
+        [
+         11,
+         27
+        ]
+       ]
+      },
+      "4": {
+       "games": 2,
+       "slot_ids": [
+        1,
+        2,
+        4,
+        5
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         1,
+         5
+        ],
+        [
+         4,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         28
+        ]
+       ]
+      },
+      "5": {
+       "games": 2,
+       "slot_ids": [
+        0,
+        3,
+        10,
+        11
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         3,
+         10
+        ],
+        [
+         0,
+         11
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         29
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         1,
+         0
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         30
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1
+      ],
+      [
+       2,
+       6,
+       7
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       5,
+       8,
+       9
+      ]
+     ],
+     "league": {
+      "name": "TXT_SPENGLER_CUP",
+      "id": 20,
+      "members": [
+       {
+        "rank": 0,
+        "index": 279,
+        "abbr": "SWI",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 1,
+        "index": 280,
+        "abbr": "RIGA",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 2,
+        "index": 281,
+        "abbr": "HPK",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 3,
+        "index": 282,
+        "abbr": "CBE",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 4,
+        "index": 283,
+        "abbr": "CANS",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 5,
+        "index": 284,
+        "abbr": "HCD",
+        "divisiongroup": 75
+       }
+      ]
+     },
+     "spengler_structure": {
+      "members": 6,
+      "club_ids": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
+      "placeholder_ids": [
+       6,
+       7,
+       8,
+       9
+      ],
+      "day1_games": [
+       [
+        0,
+        1
+       ],
+       [
+        3,
+        4
+       ]
+      ],
+      "third_clubs": [
+       2,
+       5
+      ],
+      "placeholder_opponents": {
+       "6": [
+        2
+       ],
+       "7": [
+        2
+       ],
+       "8": [
+        5
+       ],
+       "9": [
+        5
+       ]
+      },
+      "reading_R_WL": [
+       {
+        "day1_game": [
+         0,
+         1
+        ],
+        "placeholder_ids": [
+         6,
+         7
+        ],
+        "their_opponents": [
+         2
+        ],
+        "group_under_reading": [
+         0,
+         1,
+         2
+        ]
+       },
+       {
+        "day1_game": [
+         3,
+         4
+        ],
+        "placeholder_ids": [
+         8,
+         9
+        ],
+        "their_opponents": [
+         5
+        ],
+        "group_under_reading": [
+         3,
+         4,
+         5
+        ]
+       }
+      ],
+      "reading_consistent": true
+     },
+     "J1_rank_by_index": {
+      "group_divisiongroups": [
+       [
+        76
+       ],
+       [
+        75
+       ]
+      ],
+      "agree": true,
+      "league_divisiongroup_values": [
+       75,
+       76
+      ]
+     },
+     "J2_position_in_group": {
+      "slot_to_abbr": [
+       "CBE",
+       "CANS",
+       "HCD",
+       "SWI",
+       "RIGA",
+       "HPK"
+      ],
+      "groups_by_id": {
+       "75": [
+        "CBE",
+        "CANS",
+        "HCD"
+       ],
+       "76": [
+        "SWI",
+        "RIGA",
+        "HPK"
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "provenance": "anchors/ps4/nhl21",
+   "tables": {
+    "championsschedule": {
+     "rows": 125,
+     "max_records": 155,
+     "rounds": {
+      "0": {
+       "games": 96,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+       ],
+       "games_per_slot": {
+        "6": 32
+       },
+       "pairs": [
+        [
+         5,
+         4
+        ],
+        [
+         11,
+         8
+        ],
+        [
+         26,
+         25
+        ],
+        [
+         2,
+         3
+        ],
+        [
+         27,
+         24
+        ],
+        [
+         1,
+         0
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         9,
+         10
+        ],
+        [
+         19,
+         16
+        ],
+        [
+         29,
+         30
+        ],
+        [
+         13,
+         12
+        ],
+        [
+         14,
+         15
+        ],
+        [
+         18,
+         17
+        ],
+        [
+         23,
+         21
+        ],
+        [
+         22,
+         20
+        ],
+        [
+         28,
+         31
+        ],
+        [
+         11,
+         10
+        ],
+        [
+         26,
+         24
+        ],
+        [
+         27,
+         25
+        ],
+        [
+         7,
+         4
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         2,
+         0
+        ],
+        [
+         1,
+         3
+        ],
+        [
+         9,
+         8
+        ],
+        [
+         19,
+         17
+        ],
+        [
+         29,
+         31
+        ],
+        [
+         13,
+         15
+        ],
+        [
+         28,
+         30
+        ],
+        [
+         22,
+         21
+        ],
+        [
+         14,
+         12
+        ],
+        [
+         18,
+         16
+        ],
+        [
+         23,
+         20
+        ],
+        [
+         25,
+         27
+        ],
+        [
+         31,
+         28
+        ],
+        [
+         4,
+         5
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         17,
+         18
+        ],
+        [
+         10,
+         9
+        ],
+        [
+         16,
+         19
+        ],
+        [
+         24,
+         26
+        ],
+        [
+         30,
+         29
+        ],
+        [
+         8,
+         11
+        ],
+        [
+         15,
+         14
+        ],
+        [
+         20,
+         23
+        ],
+        [
+         3,
+         2
+        ],
+        [
+         0,
+         1
+        ],
+        [
+         21,
+         22
+        ],
+        [
+         12,
+         13
+        ],
+        [
+         25,
+         26
+        ],
+        [
+         31,
+         29
+        ],
+        [
+         16,
+         18
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         4,
+         7
+        ],
+        [
+         30,
+         28
+        ],
+        [
+         17,
+         19
+        ],
+        [
+         24,
+         27
+        ],
+        [
+         10,
+         11
+        ],
+        [
+         20,
+         22
+        ],
+        [
+         12,
+         14
+        ],
+        [
+         21,
+         23
+        ],
+        [
+         8,
+         9
+        ],
+        [
+         15,
+         13
+        ],
+        [
+         3,
+         1
+        ],
+        [
+         0,
+         2
+        ],
+        [
+         19,
+         18
+        ],
+        [
+         22,
+         23
+        ],
+        [
+         20,
+         21
+        ],
+        [
+         29,
+         28
+        ],
+        [
+         4,
+         6
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         8,
+         10
+        ],
+        [
+         27,
+         26
+        ],
+        [
+         30,
+         31
+        ],
+        [
+         25,
+         24
+        ],
+        [
+         16,
+         17
+        ],
+        [
+         9,
+         11
+        ],
+        [
+         15,
+         12
+        ],
+        [
+         14,
+         13
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         7,
+         5
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         11,
+         9
+        ],
+        [
+         26,
+         27
+        ],
+        [
+         13,
+         14
+        ],
+        [
+         18,
+         19
+        ],
+        [
+         6,
+         4
+        ],
+        [
+         17,
+         16
+        ],
+        [
+         23,
+         22
+        ],
+        [
+         21,
+         20
+        ],
+        [
+         1,
+         2
+        ],
+        [
+         12,
+         15
+        ],
+        [
+         28,
+         29
+        ],
+        [
+         31,
+         30
+        ],
+        [
+         3,
+         0
+        ],
+        [
+         10,
+         8
+        ],
+        [
+         24,
+         25
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         7,
+         28
+        ],
+        [
+         7,
+         29
+        ],
+        [
+         7,
+         30
+        ],
+        [
+         8,
+         0
+        ],
+        [
+         8,
+         4
+        ],
+        [
+         8,
+         5
+        ],
+        [
+         8,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         9,
+         7
+        ],
+        [
+         9,
+         8
+        ],
+        [
+         9,
+         14
+        ],
+        [
+         9,
+         15
+        ]
+       ]
+      },
+      "3": {
+       "games": 16,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+       ],
+       "games_per_slot": {
+        "2": 16
+       },
+       "pairs": [
+        [
+         15,
+         0
+        ],
+        [
+         14,
+         1
+        ],
+        [
+         13,
+         2
+        ],
+        [
+         12,
+         3
+        ],
+        [
+         11,
+         4
+        ],
+        [
+         10,
+         5
+        ],
+        [
+         9,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         0,
+         15
+        ],
+        [
+         1,
+         14
+        ],
+        [
+         2,
+         13
+        ],
+        [
+         3,
+         12
+        ],
+        [
+         4,
+         11
+        ],
+        [
+         5,
+         10
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         8
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         10,
+         11
+        ],
+        [
+         10,
+         12
+        ],
+        [
+         10,
+         18
+        ],
+        [
+         10,
+         19
+        ]
+       ]
+      },
+      "4": {
+       "games": 8,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "games_per_slot": {
+        "2": 8
+       },
+       "pairs": [
+        [
+         7,
+         0
+        ],
+        [
+         6,
+         1
+        ],
+        [
+         5,
+         2
+        ],
+        [
+         4,
+         3
+        ],
+        [
+         0,
+         7
+        ],
+        [
+         1,
+         6
+        ],
+        [
+         2,
+         5
+        ],
+        [
+         3,
+         4
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         2
+        ],
+        [
+         11,
+         3
+        ],
+        [
+         11,
+         9
+        ]
+       ]
+      },
+      "5": {
+       "games": 4,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "games_per_slot": {
+        "2": 4
+       },
+       "pairs": [
+        [
+         3,
+         0
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         1,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         0,
+         6
+        ],
+        [
+         0,
+         7
+        ],
+        [
+         0,
+         13
+        ],
+        [
+         0,
+         14
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         1,
+         3
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1,
+       2,
+       3
+      ],
+      [
+       4,
+       5,
+       6,
+       7
+      ],
+      [
+       8,
+       9,
+       10,
+       11
+      ],
+      [
+       12,
+       13,
+       14,
+       15
+      ],
+      [
+       16,
+       17,
+       18,
+       19
+      ],
+      [
+       20,
+       21,
+       22,
+       23
+      ],
+      [
+       24,
+       25,
+       26,
+       27
+      ],
+      [
+       28,
+       29,
+       30,
+       31
+      ]
+     ],
+     "league": {
+      "name": "TXT_CHAMPIONS_LEAGUE",
+      "id": 9,
+      "members": [
+       {
+        "rank": 0,
+        "index": 245,
+        "abbr": "AAL",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 1,
+        "index": 246,
+        "abbr": "VOJ",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 2,
+        "index": 247,
+        "abbr": "CARD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 3,
+        "index": 248,
+        "abbr": "GROD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 4,
+        "index": 249,
+        "abbr": "MNSK",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 5,
+        "index": 250,
+        "abbr": "GREN",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 6,
+        "index": 251,
+        "abbr": "STAV",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 7,
+        "index": 252,
+        "abbr": "TYCH",
+        "divisiongroup": 64
+       }
+      ]
+     },
+     "J1_rank_by_index": {
+      "agree": null,
+      "why": "not testable: 8 members for 32 round-0 club slots, divisiongroup values [64]"
+     },
+     "JC_chance_no_same_league_group_uniform": {
+      "trials": 200000,
+      "hits": 28,
+      "seed": 20260926
+     },
+     "JC_jersey_flag_candidates": {
+      "flagged_rows": 64,
+      "distinct_teams": 32,
+      "rows_per_team": {
+       "2": 32
+      },
+      "league_mix": {
+       "elitserien": 5,
+       "SMLIIGA": 4,
+       "TXT_LEAGUE_DEL": 4,
+       "TXT_LEAGUE_O2_EXTRALIGA": 3,
+       "TXT_LEAGUE_SWISS_LEAGUE": 5,
+       "TXT_CHAMPIONS_LEAGUE": 8,
+       "TXT_LEAGUE_EBEL": 3
+      },
+      "teams": [
+       {
+        "index": 68,
+        "abbr": "FBK"
+       },
+       {
+        "index": 69,
+        "abbr": "VF"
+       },
+       {
+        "index": 72,
+        "abbr": "LHF"
+       },
+       {
+        "index": 76,
+        "abbr": "ROG"
+       },
+       {
+        "index": 77,
+        "abbr": "SKE"
+       },
+       {
+        "index": 83,
+        "abbr": "ILV"
+       },
+       {
+        "index": 87,
+        "abbr": "KAR"
+       },
+       {
+        "index": 89,
+        "abbr": "LUK"
+       },
+       {
+        "index": 92,
+        "abbr": "TAP"
+       },
+       {
+        "index": 96,
+        "abbr": "EBB"
+       },
+       {
+        "index": 103,
+        "abbr": "MAN"
+       },
+       {
+        "index": 104,
+        "abbr": "EHC"
+       },
+       {
+        "index": 107,
+        "abbr": "STR"
+       },
+       {
+        "index": 112,
+        "abbr": "LBC"
+       },
+       {
+        "index": 119,
+        "abbr": "SPA"
+       },
+       {
+        "index": 120,
+        "abbr": "TRI"
+       },
+       {
+        "index": 125,
+        "abbr": "BIEL"
+       },
+       {
+        "index": 126,
+        "abbr": "HCD"
+       },
+       {
+        "index": 132,
+        "abbr": "GEN"
+       },
+       {
+        "index": 133,
+        "abbr": "ZUG"
+       },
+       {
+        "index": 134,
+        "abbr": "ZSC"
+       },
+       {
+        "index": 245,
+        "abbr": "AAL"
+       },
+       {
+        "index": 246,
+        "abbr": "VOJ"
+       },
+       {
+        "index": 247,
+        "abbr": "CARD"
+       },
+       {
+        "index": 248,
+        "abbr": "GROD"
+       },
+       {
+        "index": 249,
+        "abbr": "MNSK"
+       },
+       {
+        "index": 250,
+        "abbr": "GREN"
+       },
+       {
+        "index": 251,
+        "abbr": "STAV"
+       },
+       {
+        "index": 252,
+        "abbr": "TYCH"
+       },
+       {
+        "index": 253,
+        "abbr": "BOLZ"
+       },
+       {
+        "index": 260,
+        "abbr": "SALZ"
+       },
+       {
+        "index": 261,
+        "abbr": "VIEN"
+       }
+      ],
+      "rank_by_index_reading_groups_with_same_league_pair": 8,
+      "round0_groups": 8
+     }
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "max_records": 41,
+     "rounds": {
+      "0": {
+       "games": 6,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+       ],
+       "games_per_slot": {
+        "1": 8,
+        "2": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ],
+        [
+         3,
+         4
+        ],
+        [
+         2,
+         7
+        ],
+        [
+         5,
+         9
+        ],
+        [
+         6,
+         2
+        ],
+        [
+         8,
+         5
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         25
+        ],
+        [
+         11,
+         26
+        ],
+        [
+         11,
+         27
+        ]
+       ]
+      },
+      "4": {
+       "games": 2,
+       "slot_ids": [
+        1,
+        2,
+        4,
+        5
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         1,
+         5
+        ],
+        [
+         4,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         28
+        ]
+       ]
+      },
+      "5": {
+       "games": 2,
+       "slot_ids": [
+        0,
+        3,
+        10,
+        11
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         3,
+         10
+        ],
+        [
+         0,
+         11
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         29
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         1,
+         0
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         30
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1
+      ],
+      [
+       2,
+       6,
+       7
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       5,
+       8,
+       9
+      ]
+     ],
+     "league": {
+      "name": "TXT_SPENGLER_CUP",
+      "id": 20,
+      "members": [
+       {
+        "rank": 0,
+        "index": 279,
+        "abbr": "TRI",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 1,
+        "index": 280,
+        "abbr": "UFA",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 2,
+        "index": 281,
+        "abbr": "TPS",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 3,
+        "index": 282,
+        "abbr": "HCD",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 4,
+        "index": 283,
+        "abbr": "CANS",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 5,
+        "index": 284,
+        "abbr": "HCAP",
+        "divisiongroup": 76
+       }
+      ]
+     },
+     "spengler_structure": {
+      "members": 6,
+      "club_ids": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
+      "placeholder_ids": [
+       6,
+       7,
+       8,
+       9
+      ],
+      "day1_games": [
+       [
+        0,
+        1
+       ],
+       [
+        3,
+        4
+       ]
+      ],
+      "third_clubs": [
+       2,
+       5
+      ],
+      "placeholder_opponents": {
+       "6": [
+        2
+       ],
+       "7": [
+        2
+       ],
+       "8": [
+        5
+       ],
+       "9": [
+        5
+       ]
+      },
+      "reading_R_WL": [
+       {
+        "day1_game": [
+         0,
+         1
+        ],
+        "placeholder_ids": [
+         6,
+         7
+        ],
+        "their_opponents": [
+         2
+        ],
+        "group_under_reading": [
+         0,
+         1,
+         2
+        ]
+       },
+       {
+        "day1_game": [
+         3,
+         4
+        ],
+        "placeholder_ids": [
+         8,
+         9
+        ],
+        "their_opponents": [
+         5
+        ],
+        "group_under_reading": [
+         3,
+         4,
+         5
+        ]
+       }
+      ],
+      "reading_consistent": true
+     },
+     "J1_rank_by_index": {
+      "group_divisiongroups": [
+       [
+        75,
+        76
+       ],
+       [
+        75,
+        76
+       ]
+      ],
+      "agree": false,
+      "league_divisiongroup_values": [
+       75,
+       76
+      ]
+     },
+     "J2_position_in_group": {
+      "slot_to_abbr": [
+       "TRI",
+       "HCD",
+       "CANS",
+       "UFA",
+       "TPS",
+       "HCAP"
+      ],
+      "groups_by_id": {
+       "75": [
+        "TRI",
+        "HCD",
+        "CANS"
+       ],
+       "76": [
+        "UFA",
+        "TPS",
+        "HCAP"
+       ]
+      }
+     }
+    },
+    "worldchampschedule": {
+     "rows": 0,
+     "max_records": 100
+    },
+    "worldjuniorschedule": {
+     "rows": 0,
+     "max_records": 60
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)",
+   "alias_of": "ps4-nhl19-base"
+  },
+  {
+   "label": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "provenance": "CUSA15439 inxp_00.big (01.00)",
+   "tables": {
+    "championsschedule": {
+     "rows": 125,
+     "max_records": 155,
+     "rounds": {
+      "0": {
+       "games": 96,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+       ],
+       "games_per_slot": {
+        "6": 32
+       },
+       "pairs": [
+        [
+         5,
+         4
+        ],
+        [
+         11,
+         8
+        ],
+        [
+         26,
+         25
+        ],
+        [
+         2,
+         3
+        ],
+        [
+         27,
+         24
+        ],
+        [
+         1,
+         0
+        ],
+        [
+         7,
+         6
+        ],
+        [
+         9,
+         10
+        ],
+        [
+         19,
+         16
+        ],
+        [
+         29,
+         30
+        ],
+        [
+         13,
+         12
+        ],
+        [
+         14,
+         15
+        ],
+        [
+         18,
+         17
+        ],
+        [
+         23,
+         21
+        ],
+        [
+         22,
+         20
+        ],
+        [
+         28,
+         31
+        ],
+        [
+         11,
+         10
+        ],
+        [
+         26,
+         24
+        ],
+        [
+         27,
+         25
+        ],
+        [
+         7,
+         4
+        ],
+        [
+         5,
+         6
+        ],
+        [
+         2,
+         0
+        ],
+        [
+         1,
+         3
+        ],
+        [
+         9,
+         8
+        ],
+        [
+         19,
+         17
+        ],
+        [
+         29,
+         31
+        ],
+        [
+         13,
+         15
+        ],
+        [
+         28,
+         30
+        ],
+        [
+         22,
+         21
+        ],
+        [
+         14,
+         12
+        ],
+        [
+         18,
+         16
+        ],
+        [
+         23,
+         20
+        ],
+        [
+         25,
+         27
+        ],
+        [
+         31,
+         28
+        ],
+        [
+         4,
+         5
+        ],
+        [
+         6,
+         7
+        ],
+        [
+         17,
+         18
+        ],
+        [
+         10,
+         9
+        ],
+        [
+         16,
+         19
+        ],
+        [
+         24,
+         26
+        ],
+        [
+         30,
+         29
+        ],
+        [
+         8,
+         11
+        ],
+        [
+         15,
+         14
+        ],
+        [
+         20,
+         23
+        ],
+        [
+         3,
+         2
+        ],
+        [
+         0,
+         1
+        ],
+        [
+         21,
+         22
+        ],
+        [
+         12,
+         13
+        ],
+        [
+         25,
+         26
+        ],
+        [
+         31,
+         29
+        ],
+        [
+         16,
+         18
+        ],
+        [
+         6,
+         5
+        ],
+        [
+         4,
+         7
+        ],
+        [
+         30,
+         28
+        ],
+        [
+         17,
+         19
+        ],
+        [
+         24,
+         27
+        ],
+        [
+         10,
+         11
+        ],
+        [
+         20,
+         22
+        ],
+        [
+         12,
+         14
+        ],
+        [
+         21,
+         23
+        ],
+        [
+         8,
+         9
+        ],
+        [
+         15,
+         13
+        ],
+        [
+         3,
+         1
+        ],
+        [
+         0,
+         2
+        ],
+        [
+         19,
+         18
+        ],
+        [
+         22,
+         23
+        ],
+        [
+         20,
+         21
+        ],
+        [
+         29,
+         28
+        ],
+        [
+         4,
+         6
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         8,
+         10
+        ],
+        [
+         27,
+         26
+        ],
+        [
+         30,
+         31
+        ],
+        [
+         25,
+         24
+        ],
+        [
+         16,
+         17
+        ],
+        [
+         9,
+         11
+        ],
+        [
+         15,
+         12
+        ],
+        [
+         14,
+         13
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         7,
+         5
+        ],
+        [
+         5,
+         7
+        ],
+        [
+         11,
+         9
+        ],
+        [
+         26,
+         27
+        ],
+        [
+         13,
+         14
+        ],
+        [
+         18,
+         19
+        ],
+        [
+         6,
+         4
+        ],
+        [
+         17,
+         16
+        ],
+        [
+         23,
+         22
+        ],
+        [
+         21,
+         20
+        ],
+        [
+         1,
+         2
+        ],
+        [
+         12,
+         15
+        ],
+        [
+         28,
+         29
+        ],
+        [
+         31,
+         30
+        ],
+        [
+         3,
+         0
+        ],
+        [
+         10,
+         8
+        ],
+        [
+         24,
+         25
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         7,
+         28
+        ],
+        [
+         7,
+         29
+        ],
+        [
+         7,
+         30
+        ],
+        [
+         8,
+         0
+        ],
+        [
+         8,
+         4
+        ],
+        [
+         8,
+         5
+        ],
+        [
+         8,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         9,
+         7
+        ],
+        [
+         9,
+         8
+        ],
+        [
+         9,
+         14
+        ],
+        [
+         9,
+         15
+        ]
+       ]
+      },
+      "3": {
+       "games": 16,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+       ],
+       "games_per_slot": {
+        "2": 16
+       },
+       "pairs": [
+        [
+         15,
+         0
+        ],
+        [
+         14,
+         1
+        ],
+        [
+         13,
+         2
+        ],
+        [
+         12,
+         3
+        ],
+        [
+         11,
+         4
+        ],
+        [
+         10,
+         5
+        ],
+        [
+         9,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         0,
+         15
+        ],
+        [
+         1,
+         14
+        ],
+        [
+         2,
+         13
+        ],
+        [
+         3,
+         12
+        ],
+        [
+         4,
+         11
+        ],
+        [
+         5,
+         10
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         8
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         10,
+         11
+        ],
+        [
+         10,
+         12
+        ],
+        [
+         10,
+         18
+        ],
+        [
+         10,
+         19
+        ]
+       ]
+      },
+      "4": {
+       "games": 8,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "games_per_slot": {
+        "2": 8
+       },
+       "pairs": [
+        [
+         7,
+         0
+        ],
+        [
+         6,
+         1
+        ],
+        [
+         5,
+         2
+        ],
+        [
+         4,
+         3
+        ],
+        [
+         0,
+         7
+        ],
+        [
+         1,
+         6
+        ],
+        [
+         2,
+         5
+        ],
+        [
+         3,
+         4
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         2
+        ],
+        [
+         11,
+         3
+        ],
+        [
+         11,
+         9
+        ]
+       ]
+      },
+      "5": {
+       "games": 4,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "games_per_slot": {
+        "2": 4
+       },
+       "pairs": [
+        [
+         3,
+         0
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         1,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         0,
+         6
+        ],
+        [
+         0,
+         7
+        ],
+        [
+         0,
+         13
+        ],
+        [
+         0,
+         14
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         1,
+         3
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1,
+       2,
+       3
+      ],
+      [
+       4,
+       5,
+       6,
+       7
+      ],
+      [
+       8,
+       9,
+       10,
+       11
+      ],
+      [
+       12,
+       13,
+       14,
+       15
+      ],
+      [
+       16,
+       17,
+       18,
+       19
+      ],
+      [
+       20,
+       21,
+       22,
+       23
+      ],
+      [
+       24,
+       25,
+       26,
+       27
+      ],
+      [
+       28,
+       29,
+       30,
+       31
+      ]
+     ],
+     "league": {
+      "name": "TXT_CHAMPIONS_LEAGUE",
+      "id": 9,
+      "members": [
+       {
+        "rank": 0,
+        "index": 245,
+        "abbr": "RUNG",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 1,
+        "index": 246,
+        "abbr": "BANS",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 2,
+        "index": 247,
+        "abbr": "CARD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 3,
+        "index": 248,
+        "abbr": "BELF",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 4,
+        "index": 249,
+        "abbr": "MNSK",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 5,
+        "index": 250,
+        "abbr": "GREN",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 6,
+        "index": 251,
+        "abbr": "FRSK",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 7,
+        "index": 252,
+        "abbr": "TYCH",
+        "divisiongroup": 64
+       }
+      ]
+     },
+     "J1_rank_by_index": {
+      "agree": null,
+      "why": "not testable: 8 members for 32 round-0 club slots, divisiongroup values [64]"
+     },
+     "JC_chance_no_same_league_group_uniform": {
+      "trials": 200000,
+      "hits": 23,
+      "seed": 20260926
+     },
+     "JC_jersey_flag_candidates": {
+      "flagged_rows": 64,
+      "distinct_teams": 32,
+      "rows_per_team": {
+       "2": 32
+      },
+      "league_mix": {
+       "elitserien": 5,
+       "SMLIIGA": 4,
+       "TXT_LEAGUE_DEL": 3,
+       "TXT_LEAGUE_O2_EXTRALIGA": 4,
+       "TXT_LEAGUE_SWISS_LEAGUE": 5,
+       "TXT_CHAMPIONS_LEAGUE": 8,
+       "TXT_LEAGUE_EBEL": 3
+      },
+      "teams": [
+       {
+        "index": 67,
+        "abbr": "DIF"
+       },
+       {
+        "index": 68,
+        "abbr": "FBK"
+       },
+       {
+        "index": 69,
+        "abbr": "VF"
+       },
+       {
+        "index": 72,
+        "abbr": "LHF"
+       },
+       {
+        "index": 77,
+        "abbr": "SKE"
+       },
+       {
+        "index": 81,
+        "abbr": "HPK"
+       },
+       {
+        "index": 87,
+        "abbr": "KAR"
+       },
+       {
+        "index": 90,
+        "abbr": "PEL"
+       },
+       {
+        "index": 92,
+        "abbr": "TAP"
+       },
+       {
+        "index": 95,
+        "abbr": "AUG"
+       },
+       {
+        "index": 103,
+        "abbr": "MAN"
+       },
+       {
+        "index": 104,
+        "abbr": "EHC"
+       },
+       {
+        "index": 112,
+        "abbr": "LBC"
+       },
+       {
+        "index": 115,
+        "abbr": "CBE"
+       },
+       {
+        "index": 118,
+        "abbr": "PLZ"
+       },
+       {
+        "index": 120,
+        "abbr": "TRI"
+       },
+       {
+        "index": 123,
+        "abbr": "HCAP"
+       },
+       {
+        "index": 124,
+        "abbr": "BERN"
+       },
+       {
+        "index": 125,
+        "abbr": "BIEL"
+       },
+       {
+        "index": 129,
+        "abbr": "LAU"
+       },
+       {
+        "index": 133,
+        "abbr": "ZUG"
+       },
+       {
+        "index": 245,
+        "abbr": "RUNG"
+       },
+       {
+        "index": 246,
+        "abbr": "BANS"
+       },
+       {
+        "index": 247,
+        "abbr": "CARD"
+       },
+       {
+        "index": 248,
+        "abbr": "BELF"
+       },
+       {
+        "index": 249,
+        "abbr": "MNSK"
+       },
+       {
+        "index": 250,
+        "abbr": "GREN"
+       },
+       {
+        "index": 251,
+        "abbr": "FRSK"
+       },
+       {
+        "index": 252,
+        "abbr": "TYCH"
+       },
+       {
+        "index": 256,
+        "abbr": "GRAZ"
+       },
+       {
+        "index": 258,
+        "abbr": "KLAG"
+       },
+       {
+        "index": 261,
+        "abbr": "VIEN"
+       }
+      ],
+      "rank_by_index_reading_groups_with_same_league_pair": 8,
+      "round0_groups": 8
+     }
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "max_records": 41,
+     "rounds": {
+      "0": {
+       "games": 6,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+       ],
+       "games_per_slot": {
+        "1": 8,
+        "2": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ],
+        [
+         3,
+         4
+        ],
+        [
+         2,
+         7
+        ],
+        [
+         5,
+         9
+        ],
+        [
+         6,
+         2
+        ],
+        [
+         8,
+         5
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         25
+        ],
+        [
+         11,
+         26
+        ],
+        [
+         11,
+         27
+        ]
+       ]
+      },
+      "4": {
+       "games": 2,
+       "slot_ids": [
+        1,
+        2,
+        4,
+        5
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         1,
+         5
+        ],
+        [
+         4,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         28
+        ]
+       ]
+      },
+      "5": {
+       "games": 2,
+       "slot_ids": [
+        0,
+        3,
+        10,
+        11
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         3,
+         10
+        ],
+        [
+         0,
+         11
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         29
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         1,
+         0
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         30
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1
+      ],
+      [
+       2,
+       6,
+       7
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       5,
+       8,
+       9
+      ]
+     ],
+     "league": {
+      "name": "TXT_SPENGLER_CUP",
+      "id": 20,
+      "members": [
+       {
+        "rank": 0,
+        "index": 279,
+        "abbr": "TRI",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 1,
+        "index": 280,
+        "abbr": "MMG",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 2,
+        "index": 281,
+        "abbr": "KAL",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 3,
+        "index": 282,
+        "abbr": "HCD",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 4,
+        "index": 283,
+        "abbr": "CANS",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 5,
+        "index": 284,
+        "abbr": "NIT",
+        "divisiongroup": 75
+       }
+      ]
+     },
+     "spengler_structure": {
+      "members": 6,
+      "club_ids": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
+      "placeholder_ids": [
+       6,
+       7,
+       8,
+       9
+      ],
+      "day1_games": [
+       [
+        0,
+        1
+       ],
+       [
+        3,
+        4
+       ]
+      ],
+      "third_clubs": [
+       2,
+       5
+      ],
+      "placeholder_opponents": {
+       "6": [
+        2
+       ],
+       "7": [
+        2
+       ],
+       "8": [
+        5
+       ],
+       "9": [
+        5
+       ]
+      },
+      "reading_R_WL": [
+       {
+        "day1_game": [
+         0,
+         1
+        ],
+        "placeholder_ids": [
+         6,
+         7
+        ],
+        "their_opponents": [
+         2
+        ],
+        "group_under_reading": [
+         0,
+         1,
+         2
+        ]
+       },
+       {
+        "day1_game": [
+         3,
+         4
+        ],
+        "placeholder_ids": [
+         8,
+         9
+        ],
+        "their_opponents": [
+         5
+        ],
+        "group_under_reading": [
+         3,
+         4,
+         5
+        ]
+       }
+      ],
+      "reading_consistent": true
+     },
+     "J1_rank_by_index": {
+      "group_divisiongroups": [
+       [
+        76
+       ],
+       [
+        75
+       ]
+      ],
+      "agree": true,
+      "league_divisiongroup_values": [
+       75,
+       76
+      ]
+     },
+     "J2_position_in_group": {
+      "slot_to_abbr": [
+       "HCD",
+       "CANS",
+       "NIT",
+       "TRI",
+       "MMG",
+       "KAL"
+      ],
+      "groups_by_id": {
+       "75": [
+        "HCD",
+        "CANS",
+        "NIT"
+       ],
+       "76": [
+        "TRI",
+        "MMG",
+        "KAL"
+       ]
+      }
+     }
+    },
+    "worldchampschedule": {
+     "rows": 0,
+     "max_records": 100
+    },
+    "worldjuniorschedule": {
+     "rows": 0,
+     "max_records": 60
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "provenance": "CUSA11126 patch_inxp_56.big entry 504; base meta",
+   "tables": {
+    "championsschedule": {
+     "rows": 125,
+     "max_records": 155,
+     "rounds": {
+      "0": {
+       "games": 96,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+       ],
+       "games_per_slot": {
+        "6": 32
+       },
+       "pairs": [
+        [
+         15,
+         18
+        ],
+        [
+         4,
+         17
+        ],
+        [
+         22,
+         6
+        ],
+        [
+         20,
+         21
+        ],
+        [
+         31,
+         1
+        ],
+        [
+         23,
+         30
+        ],
+        [
+         14,
+         12
+        ],
+        [
+         16,
+         0
+        ],
+        [
+         28,
+         5
+        ],
+        [
+         7,
+         26
+        ],
+        [
+         24,
+         13
+        ],
+        [
+         2,
+         9
+        ],
+        [
+         10,
+         19
+        ],
+        [
+         11,
+         25
+        ],
+        [
+         27,
+         8
+        ],
+        [
+         29,
+         3
+        ],
+        [
+         4,
+         30
+        ],
+        [
+         15,
+         6
+        ],
+        [
+         22,
+         18
+        ],
+        [
+         20,
+         1
+        ],
+        [
+         23,
+         17
+        ],
+        [
+         31,
+         21
+        ],
+        [
+         2,
+         25
+        ],
+        [
+         28,
+         3
+        ],
+        [
+         24,
+         19
+        ],
+        [
+         10,
+         13
+        ],
+        [
+         11,
+         9
+        ],
+        [
+         14,
+         26
+        ],
+        [
+         16,
+         8
+        ],
+        [
+         7,
+         12
+        ],
+        [
+         27,
+         0
+        ],
+        [
+         29,
+         5
+        ],
+        [
+         5,
+         29
+        ],
+        [
+         13,
+         24
+        ],
+        [
+         9,
+         11
+        ],
+        [
+         25,
+         2
+        ],
+        [
+         1,
+         20
+        ],
+        [
+         3,
+         28
+        ],
+        [
+         21,
+         31
+        ],
+        [
+         30,
+         23
+        ],
+        [
+         17,
+         4
+        ],
+        [
+         6,
+         15
+        ],
+        [
+         8,
+         27
+        ],
+        [
+         0,
+         16
+        ],
+        [
+         12,
+         14
+        ],
+        [
+         18,
+         22
+        ],
+        [
+         19,
+         10
+        ],
+        [
+         26,
+         7
+        ],
+        [
+         1,
+         31
+        ],
+        [
+         3,
+         29
+        ],
+        [
+         19,
+         24
+        ],
+        [
+         5,
+         28
+        ],
+        [
+         9,
+         2
+        ],
+        [
+         21,
+         20
+        ],
+        [
+         17,
+         23
+        ],
+        [
+         30,
+         4
+        ],
+        [
+         26,
+         14
+        ],
+        [
+         0,
+         27
+        ],
+        [
+         25,
+         11
+        ],
+        [
+         13,
+         10
+        ],
+        [
+         12,
+         7
+        ],
+        [
+         6,
+         22
+        ],
+        [
+         8,
+         16
+        ],
+        [
+         18,
+         15
+        ],
+        [
+         15,
+         22
+        ],
+        [
+         16,
+         27
+        ],
+        [
+         5,
+         3
+        ],
+        [
+         7,
+         14
+        ],
+        [
+         9,
+         25
+        ],
+        [
+         0,
+         8
+        ],
+        [
+         1,
+         21
+        ],
+        [
+         4,
+         23
+        ],
+        [
+         11,
+         2
+        ],
+        [
+         18,
+         6
+        ],
+        [
+         20,
+         31
+        ],
+        [
+         28,
+         29
+        ],
+        [
+         13,
+         19
+        ],
+        [
+         10,
+         24
+        ],
+        [
+         17,
+         30
+        ],
+        [
+         26,
+         12
+        ],
+        [
+         6,
+         18
+        ],
+        [
+         24,
+         10
+        ],
+        [
+         8,
+         0
+        ],
+        [
+         2,
+         11
+        ],
+        [
+         3,
+         5
+        ],
+        [
+         27,
+         16
+        ],
+        [
+         21,
+         1
+        ],
+        [
+         12,
+         26
+        ],
+        [
+         31,
+         20
+        ],
+        [
+         29,
+         28
+        ],
+        [
+         19,
+         13
+        ],
+        [
+         23,
+         4
+        ],
+        [
+         22,
+         15
+        ],
+        [
+         14,
+         7
+        ],
+        [
+         25,
+         9
+        ],
+        [
+         30,
+         17
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         7,
+         29
+        ],
+        [
+         7,
+         30
+        ],
+        [
+         8,
+         0
+        ],
+        [
+         8,
+         1
+        ],
+        [
+         8,
+         5
+        ],
+        [
+         8,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         8,
+         8
+        ],
+        [
+         9,
+         8
+        ],
+        [
+         9,
+         9
+        ],
+        [
+         9,
+         15
+        ],
+        [
+         9,
+         16
+        ]
+       ]
+      },
+      "3": {
+       "games": 16,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+       ],
+       "games_per_slot": {
+        "2": 16
+       },
+       "pairs": [
+        [
+         15,
+         0
+        ],
+        [
+         14,
+         1
+        ],
+        [
+         13,
+         2
+        ],
+        [
+         12,
+         3
+        ],
+        [
+         11,
+         4
+        ],
+        [
+         10,
+         5
+        ],
+        [
+         9,
+         6
+        ],
+        [
+         8,
+         7
+        ],
+        [
+         0,
+         15
+        ],
+        [
+         1,
+         14
+        ],
+        [
+         2,
+         13
+        ],
+        [
+         3,
+         12
+        ],
+        [
+         4,
+         11
+        ],
+        [
+         5,
+         10
+        ],
+        [
+         6,
+         9
+        ],
+        [
+         7,
+         8
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         10,
+         5
+        ],
+        [
+         10,
+         19
+        ],
+        [
+         10,
+         20
+        ]
+       ]
+      },
+      "4": {
+       "games": 8,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+       ],
+       "games_per_slot": {
+        "2": 8
+       },
+       "pairs": [
+        [
+         7,
+         0
+        ],
+        [
+         6,
+         1
+        ],
+        [
+         5,
+         2
+        ],
+        [
+         4,
+         3
+        ],
+        [
+         0,
+         7
+        ],
+        [
+         1,
+         6
+        ],
+        [
+         2,
+         5
+        ],
+        [
+         3,
+         4
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         3
+        ],
+        [
+         11,
+         4
+        ],
+        [
+         11,
+         10
+        ]
+       ]
+      },
+      "5": {
+       "games": 4,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3
+       ],
+       "games_per_slot": {
+        "2": 4
+       },
+       "pairs": [
+        [
+         3,
+         0
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         0,
+         3
+        ],
+        [
+         1,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         0,
+         7
+        ],
+        [
+         0,
+         8
+        ],
+        [
+         0,
+         14
+        ],
+        [
+         0,
+         15
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         1,
+         4
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       8,
+       16,
+       27
+      ],
+      [
+       1,
+       20,
+       21,
+       31
+      ],
+      [
+       2,
+       9,
+       11,
+       25
+      ],
+      [
+       3,
+       5,
+       28,
+       29
+      ],
+      [
+       4,
+       17,
+       23,
+       30
+      ],
+      [
+       6,
+       15,
+       18,
+       22
+      ],
+      [
+       7,
+       12,
+       14,
+       26
+      ],
+      [
+       10,
+       13,
+       19,
+       24
+      ]
+     ],
+     "league": {
+      "name": "TXT_CHAMPIONS_LEAGUE",
+      "id": 9,
+      "members": [
+       {
+        "rank": 0,
+        "index": 245,
+        "abbr": "AAL",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 1,
+        "index": 246,
+        "abbr": "BANS",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 2,
+        "index": 247,
+        "abbr": "CARD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 3,
+        "index": 248,
+        "abbr": "GROD",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 4,
+        "index": 249,
+        "abbr": "MNSK",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 5,
+        "index": 250,
+        "abbr": "ROUE",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 6,
+        "index": 251,
+        "abbr": "STOR",
+        "divisiongroup": 64
+       },
+       {
+        "rank": 7,
+        "index": 252,
+        "abbr": "TYCH",
+        "divisiongroup": 64
+       }
+      ]
+     },
+     "J1_rank_by_index": {
+      "agree": null,
+      "why": "not testable: 8 members for 32 round-0 club slots, divisiongroup values [64]"
+     },
+     "JC_chance_no_same_league_group_uniform": {
+      "trials": 200000,
+      "hits": 27,
+      "seed": 20260926
+     },
+     "JC_jersey_flag_candidates": {
+      "flagged_rows": 64,
+      "distinct_teams": 32,
+      "rows_per_team": {
+       "2": 32
+      },
+      "league_mix": {
+       "elitserien": 5,
+       "SMLIIGA": 5,
+       "TXT_LEAGUE_DEL": 3,
+       "TXT_LEAGUE_O2_EXTRALIGA": 4,
+       "TXT_LEAGUE_SWISS_LEAGUE": 4,
+       "TXT_CHAMPIONS_LEAGUE": 8,
+       "TXT_LEAGUE_EBEL": 3
+      },
+      "teams": [
+       {
+        "index": 67,
+        "abbr": "DIF"
+       },
+       {
+        "index": 69,
+        "abbr": "VF"
+       },
+       {
+        "index": 73,
+        "abbr": "MALM"
+       },
+       {
+        "index": 77,
+        "abbr": "SKE"
+       },
+       {
+        "index": 79,
+        "abbr": "VXJ"
+       },
+       {
+        "index": 82,
+        "abbr": "IFK"
+       },
+       {
+        "index": 85,
+        "abbr": "JYP"
+       },
+       {
+        "index": 87,
+        "abbr": "KAR"
+       },
+       {
+        "index": 92,
+        "abbr": "TAP"
+       },
+       {
+        "index": 93,
+        "abbr": "TPS"
+       },
+       {
+        "index": 96,
+        "abbr": "EBB"
+       },
+       {
+        "index": 104,
+        "abbr": "EHC"
+       },
+       {
+        "index": 105,
+        "abbr": "NIT"
+       },
+       {
+        "index": 109,
+        "abbr": "BRNO"
+       },
+       {
+        "index": 115,
+        "abbr": "CBE"
+       },
+       {
+        "index": 118,
+        "abbr": "PLZ"
+       },
+       {
+        "index": 120,
+        "abbr": "TRI"
+       },
+       {
+        "index": 124,
+        "abbr": "BERN"
+       },
+       {
+        "index": 130,
+        "abbr": "HCL"
+       },
+       {
+        "index": 133,
+        "abbr": "ZUG"
+       },
+       {
+        "index": 134,
+        "abbr": "ZSC"
+       },
+       {
+        "index": 245,
+        "abbr": "AAL"
+       },
+       {
+        "index": 246,
+        "abbr": "BANS"
+       },
+       {
+        "index": 247,
+        "abbr": "CARD"
+       },
+       {
+        "index": 248,
+        "abbr": "GROD"
+       },
+       {
+        "index": 249,
+        "abbr": "MNSK"
+       },
+       {
+        "index": 250,
+        "abbr": "ROUE"
+       },
+       {
+        "index": 251,
+        "abbr": "STOR"
+       },
+       {
+        "index": 252,
+        "abbr": "TYCH"
+       },
+       {
+        "index": 253,
+        "abbr": "BOLZ"
+       },
+       {
+        "index": 260,
+        "abbr": "SALZ"
+       },
+       {
+        "index": 261,
+        "abbr": "VIEN"
+       }
+      ],
+      "rank_by_index_reading_groups_with_same_league_pair": 0,
+      "round0_groups": 8
+     }
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "max_records": 41,
+     "rounds": {
+      "0": {
+       "games": 6,
+       "slot_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+       ],
+       "games_per_slot": {
+        "1": 8,
+        "2": 2
+       },
+       "pairs": [
+        [
+         0,
+         1
+        ],
+        [
+         3,
+         4
+        ],
+        [
+         2,
+         7
+        ],
+        [
+         5,
+         9
+        ],
+        [
+         6,
+         2
+        ],
+        [
+         8,
+         5
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         25
+        ],
+        [
+         11,
+         26
+        ],
+        [
+         11,
+         27
+        ]
+       ]
+      },
+      "4": {
+       "games": 2,
+       "slot_ids": [
+        1,
+        2,
+        4,
+        5
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         1,
+         5
+        ],
+        [
+         4,
+         2
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         28
+        ]
+       ]
+      },
+      "5": {
+       "games": 2,
+       "slot_ids": [
+        0,
+        3,
+        10,
+        11
+       ],
+       "games_per_slot": {
+        "1": 4
+       },
+       "pairs": [
+        [
+         3,
+         10
+        ],
+        [
+         0,
+         11
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         29
+        ]
+       ]
+      },
+      "6": {
+       "games": 1,
+       "slot_ids": [
+        0,
+        1
+       ],
+       "games_per_slot": {
+        "1": 2
+       },
+       "pairs": [
+        [
+         1,
+         0
+        ]
+       ],
+       "dates (month0, day0)": [
+        [
+         11,
+         30
+        ]
+       ]
+      }
+     },
+     "round0_groups": [
+      [
+       0,
+       1
+      ],
+      [
+       2,
+       6,
+       7
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       5,
+       8,
+       9
+      ]
+     ],
+     "league": {
+      "name": "TXT_SPENGLER_CUP",
+      "id": 20,
+      "members": [
+       {
+        "rank": 0,
+        "index": 279,
+        "abbr": "TRI",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 1,
+        "index": 280,
+        "abbr": "MMG",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 2,
+        "index": 281,
+        "abbr": "KAL",
+        "divisiongroup": 76
+       },
+       {
+        "rank": 3,
+        "index": 282,
+        "abbr": "HCD",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 4,
+        "index": 283,
+        "abbr": "CANS",
+        "divisiongroup": 75
+       },
+       {
+        "rank": 5,
+        "index": 284,
+        "abbr": "NIT",
+        "divisiongroup": 75
+       }
+      ]
+     },
+     "spengler_structure": {
+      "members": 6,
+      "club_ids": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
+      "placeholder_ids": [
+       6,
+       7,
+       8,
+       9
+      ],
+      "day1_games": [
+       [
+        0,
+        1
+       ],
+       [
+        3,
+        4
+       ]
+      ],
+      "third_clubs": [
+       2,
+       5
+      ],
+      "placeholder_opponents": {
+       "6": [
+        2
+       ],
+       "7": [
+        2
+       ],
+       "8": [
+        5
+       ],
+       "9": [
+        5
+       ]
+      },
+      "reading_R_WL": [
+       {
+        "day1_game": [
+         0,
+         1
+        ],
+        "placeholder_ids": [
+         6,
+         7
+        ],
+        "their_opponents": [
+         2
+        ],
+        "group_under_reading": [
+         0,
+         1,
+         2
+        ]
+       },
+       {
+        "day1_game": [
+         3,
+         4
+        ],
+        "placeholder_ids": [
+         8,
+         9
+        ],
+        "their_opponents": [
+         5
+        ],
+        "group_under_reading": [
+         3,
+         4,
+         5
+        ]
+       }
+      ],
+      "reading_consistent": true
+     },
+     "J1_rank_by_index": {
+      "group_divisiongroups": [
+       [
+        76
+       ],
+       [
+        75
+       ]
+      ],
+      "agree": true,
+      "league_divisiongroup_values": [
+       75,
+       76
+      ]
+     },
+     "J2_position_in_group": {
+      "slot_to_abbr": [
+       "HCD",
+       "CANS",
+       "NIT",
+       "TRI",
+       "MMG",
+       "KAL"
+      ],
+      "groups_by_id": {
+       "75": [
+        "HCD",
+        "CANS",
+        "NIT"
+       ],
+       "76": [
+        "TRI",
+        "MMG",
+        "KAL"
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "provenance": "CUSA00561 patch_inxp00.big; base meta",
+   "tables": {}
+  }
+ ]
+}

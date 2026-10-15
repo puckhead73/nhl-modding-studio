@@ -1,0 +1,9 @@
+{
+  "spdx": "MIT",
+  "decision": "Q46e, docs/plans/completion-design-questions.md (7 Sep 2026): standard MIT for Studio-owned source code; third-party code, data and assets keep their own terms",
+  "template": "LICENSE-MIT.spdx-3.29.0.txt",
+  "template_source": "https://raw.githubusercontent.com/spdx/license-list-data/v3.29.0/text/MIT.txt (SHA-256 b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5, retrieved 2026-09-28)",
+  "copyright_year": "2026",
+  "copyright_holder": null,
+  "holder_status": "Requested by the coordinator on 28 Sep 2026; no answer recorded. The assembler withholds LICENSE and marks the candidate not release-ready until this is filled from a recorded user answer (never invented)."
+}

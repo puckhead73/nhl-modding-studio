@@ -1,0 +1,802 @@
+{
+ "note": "R120c - title-owned evidence for the position codes and the weight / height zero rows (R120 companion). Per distinct source:\n  (a) position code of every player flagged in an even-strength line slot of exhibitionrostertable (l1-l4 c / lw / rw / ld / rd, g1 / g2;\n      roster -> exhibitionplayers.index -> playerid -> bio.game_id): the code distribution per slot family. Studio's enum: 0 Centre,\n      1 Left Wing, 2 Right Wing, 3 Defenseman, 4 Goalie.\n  (b) rows with raw weight 0 and / or raw height 0: counts, overlap, whether they carry names, and whether any roster slot uses them.\nUsage: python r120c_position_line_slots.py <out.json>\n",
+ "sources": {
+  "xbox360-nhl07": {
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 347,
+     "1": 9,
+     "2": 13
+    },
+    "defence slots": {
+     "3": 555
+    },
+    "goalie slots": {
+     "4": 185
+    },
+    "left-wing slots": {
+     "0": 33,
+     "1": 302,
+     "2": 37
+    },
+    "right-wing slots": {
+     "0": 19,
+     "1": 37,
+     "2": 310
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 9,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "xbox360-nhl08": {
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 355,
+     "1": 41,
+     "2": 35,
+     "3": 1
+    },
+    "defence slots": {
+     "1": 1,
+     "3": 647
+    },
+    "goalie slots": {
+     "4": 216
+    },
+    "left-wing slots": {
+     "0": 64,
+     "1": 286,
+     "2": 77,
+     "3": 5
+    },
+    "right-wing slots": {
+     "0": 59,
+     "1": 80,
+     "2": 288,
+     "3": 5
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 188,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "xbox360-nhl09": {
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 501,
+     "1": 77,
+     "2": 54
+    },
+    "defence slots": {
+     "1": 1,
+     "3": 947
+    },
+    "goalie slots": {
+     "4": 316
+    },
+    "left-wing slots": {
+     "0": 101,
+     "1": 391,
+     "2": 136,
+     "3": 4
+    },
+    "right-wing slots": {
+     "0": 96,
+     "1": 156,
+     "2": 379,
+     "3": 1
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 197,
+    "height0": 185,
+    "both": 185,
+    "both_named": 5,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     "Mark Pandolfo",
+     "Anders Lindbäck",
+     "Jacob Josefsson",
+     "Daniel lik",
+     "Jere Mylleniemi"
+    ]
+   }
+  },
+  "xbox360-nhl10": {
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 456,
+     "1": 85,
+     "2": 67
+    },
+    "defence slots": {
+     "2": 1,
+     "3": 911
+    },
+    "goalie slots": {
+     "4": 304
+    },
+    "left-wing slots": {
+     "0": 112,
+     "1": 361,
+     "2": 135
+    },
+    "right-wing slots": {
+     "0": 87,
+     "1": 145,
+     "2": 375,
+     "3": 1
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 197,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "xbox360-nhl11": {
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 699,
+     "1": 79,
+     "2": 70
+    },
+    "defence slots": {
+     "0": 1,
+     "3": 1271
+    },
+    "goalie slots": {
+     "4": 424
+    },
+    "left-wing slots": {
+     "0": 117,
+     "1": 592,
+     "2": 138,
+     "3": 1
+    },
+    "right-wing slots": {
+     "0": 128,
+     "1": 163,
+     "2": 555,
+     "3": 2
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 180,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "xbox360-nhl12": {
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 656,
+     "1": 106,
+     "2": 87,
+     "3": 3
+    },
+    "defence slots": {
+     "3": 1278
+    },
+    "goalie slots": {
+     "4": 426
+    },
+    "left-wing slots": {
+     "0": 164,
+     "1": 520,
+     "2": 163,
+     "3": 5
+    },
+    "right-wing slots": {
+     "0": 149,
+     "1": 210,
+     "2": 490,
+     "3": 3
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 181,
+    "height0": 181,
+    "both": 181,
+    "both_named": 1,
+    "both_on_a_roster": 1,
+    "names_sample": [
+     "Colton Heffley",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "xbox360-nhl13": {
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 672,
+     "1": 110,
+     "2": 89,
+     "3": 1
+    },
+    "defence slots": {
+     "1": 3,
+     "2": 5,
+     "3": 1300
+    },
+    "goalie slots": {
+     "4": 436
+    },
+    "left-wing slots": {
+     "0": 152,
+     "1": 529,
+     "2": 189,
+     "3": 2
+    },
+    "right-wing slots": {
+     "0": 164,
+     "1": 222,
+     "2": 482,
+     "3": 4
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 180,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "xbox360-nhl14": {
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 682,
+     "1": 108,
+     "2": 73,
+     "3": 1
+    },
+    "defence slots": {
+     "2": 5,
+     "3": 1291
+    },
+    "goalie slots": {
+     "4": 432
+    },
+    "left-wing slots": {
+     "0": 162,
+     "1": 528,
+     "2": 168,
+     "3": 6
+    },
+    "right-wing slots": {
+     "0": 147,
+     "1": 200,
+     "2": 504,
+     "3": 13
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 181,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "xbox360-nhl15": {
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 677,
+     "1": 95,
+     "2": 92
+    },
+    "defence slots": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1293
+    },
+    "goalie slots": {
+     "4": 432
+    },
+    "left-wing slots": {
+     "0": 153,
+     "1": 543,
+     "2": 167,
+     "3": 1
+    },
+    "right-wing slots": {
+     "0": 155,
+     "1": 199,
+     "2": 504,
+     "3": 6
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 181,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "xbox360-nhllegacy": {
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 809,
+     "1": 49,
+     "2": 30
+    },
+    "defence slots": {
+     "1": 1,
+     "3": 1331
+    },
+    "goalie slots": {
+     "4": 444
+    },
+    "left-wing slots": {
+     "0": 76,
+     "1": 713,
+     "2": 96,
+     "3": 3
+    },
+    "right-wing slots": {
+     "0": 67,
+     "1": 110,
+     "2": 708,
+     "3": 3
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 0,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl15": {
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 674,
+     "1": 98,
+     "2": 92
+    },
+    "defence slots": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1293
+    },
+    "goalie slots": {
+     "4": 432
+    },
+    "left-wing slots": {
+     "0": 160,
+     "1": 535,
+     "2": 167,
+     "3": 2
+    },
+    "right-wing slots": {
+     "0": 160,
+     "1": 201,
+     "2": 496,
+     "3": 7
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 181,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  },
+  "ps4-nhl16": {
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 809,
+     "1": 49,
+     "2": 30
+    },
+    "defence slots": {
+     "1": 1,
+     "3": 1331
+    },
+    "goalie slots": {
+     "4": 444
+    },
+    "left-wing slots": {
+     "0": 76,
+     "1": 713,
+     "2": 96,
+     "3": 3
+    },
+    "right-wing slots": {
+     "0": 67,
+     "1": 110,
+     "2": 708,
+     "3": 3
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 0,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl17": {
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 880,
+     "1": 66,
+     "2": 63,
+     "3": 3
+    },
+    "defence slots": {
+     "1": 1,
+     "3": 1517
+    },
+    "goalie slots": {
+     "4": 506
+    },
+    "left-wing slots": {
+     "0": 128,
+     "1": 733,
+     "2": 143,
+     "3": 8
+    },
+    "right-wing slots": {
+     "0": 110,
+     "1": 176,
+     "2": 717,
+     "3": 9
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 2,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl18": {
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 965,
+     "1": 76,
+     "2": 83
+    },
+    "defence slots": {
+     "2": 1,
+     "3": 1685
+    },
+    "goalie slots": {
+     "4": 562
+    },
+    "left-wing slots": {
+     "0": 208,
+     "1": 689,
+     "2": 227
+    },
+    "right-wing slots": {
+     "0": 204,
+     "1": 263,
+     "2": 655,
+     "3": 2
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 4,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl19-base": {
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 1355,
+     "1": 153,
+     "2": 129,
+     "3": 3
+    },
+    "defence slots": {
+     "0": 24,
+     "1": 30,
+     "2": 23,
+     "3": 2383
+    },
+    "goalie slots": {
+     "4": 820
+    },
+    "left-wing slots": {
+     "0": 437,
+     "1": 922,
+     "2": 266,
+     "3": 15
+    },
+    "right-wing slots": {
+     "0": 326,
+     "1": 364,
+     "2": 928,
+     "3": 22
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 5,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl21": {
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 1398,
+     "1": 181,
+     "2": 117
+    },
+    "defence slots": {
+     "0": 27,
+     "1": 10,
+     "2": 21,
+     "3": 2486
+    },
+    "goalie slots": {
+     "4": 848
+    },
+    "left-wing slots": {
+     "0": 528,
+     "1": 860,
+     "2": 292,
+     "3": 16
+    },
+    "right-wing slots": {
+     "0": 345,
+     "1": 410,
+     "2": 921,
+     "3": 20
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 0,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl20-real": {
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 1301,
+     "1": 184,
+     "2": 143
+    },
+    "defence slots": {
+     "0": 24,
+     "1": 21,
+     "2": 25,
+     "3": 2372
+    },
+    "goalie slots": {
+     "4": 814
+    },
+    "left-wing slots": {
+     "0": 450,
+     "1": 813,
+     "2": 347,
+     "3": 18
+    },
+    "right-wing slots": {
+     "0": 356,
+     "1": 413,
+     "2": 837,
+     "3": 22
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 2,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl19-patch56": {
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 1355,
+     "1": 172,
+     "2": 129
+    },
+    "defence slots": {
+     "0": 30,
+     "1": 34,
+     "2": 27,
+     "3": 2393
+    },
+    "goalie slots": {
+     "4": 828
+    },
+    "left-wing slots": {
+     "0": 476,
+     "1": 858,
+     "2": 305,
+     "3": 17
+    },
+    "right-wing slots": {
+     "0": 340,
+     "1": 396,
+     "2": 907,
+     "3": 13
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 1,
+    "height0": 0,
+    "both": 0,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": []
+   }
+  },
+  "ps4-nhl15-patch00": {
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "line_slot_position_codes": {
+    "centre slots": {
+     "0": 674,
+     "1": 98,
+     "2": 92
+    },
+    "defence slots": {
+     "0": 1,
+     "1": 1,
+     "2": 1,
+     "3": 1293
+    },
+    "goalie slots": {
+     "4": 432
+    },
+    "left-wing slots": {
+     "0": 160,
+     "1": 535,
+     "2": 167,
+     "3": 2
+    },
+    "right-wing slots": {
+     "0": 160,
+     "1": 201,
+     "2": 496,
+     "3": 7
+    }
+   },
+   "roster_rows_unresolved": 0,
+   "zero_rows": {
+    "weight0": 181,
+    "height0": 180,
+    "both": 180,
+    "both_named": 0,
+    "both_on_a_roster": 0,
+    "names_sample": [
+     " ",
+     " ",
+     " ",
+     " ",
+     " "
+    ]
+   }
+  }
+ }
+}

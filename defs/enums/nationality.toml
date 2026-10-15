@@ -34,7 +34,14 @@ Anchor population (default.db, 5632 populated rows):
 
 [source]
 kind = "operator-research"
-description = "Task #35 anchor-set audit (NHL Legacy default.db, 2026)"
+description = "confirmed on NHL Legacy (Task #35 audit, NHLViewNG cross-reference); the national-team rosters of NHL 13 → PS4 NHL 21 carry the same codes (research R120b)"
+
+# Title scope (receipt 28, 26 Sep 2026; research C16 / R120b): codes are renumbered between titles up to
+# NHL 13 (Czech Republic 79 / 81 / 82 on NHL 08-09 / 10 / 11+, Japan 108 on NHL 11 / 12, 109 from NHL 13).
+# From NHL 13 on every national team's roster matches this table, so it applies to NHL 13 → NHL 21 and NHL
+# Legacy (Recompiled by identity). Earlier titles have their own files (nationality-nhl*.toml).
+[scope]
+games = ["nhl13", "nhl14", "nhl15", "nhllegacy", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21"]
 
 [[bindings]]
 field_name = "Nationality"

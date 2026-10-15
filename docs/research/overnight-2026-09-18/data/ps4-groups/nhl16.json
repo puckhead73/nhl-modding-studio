@@ -1,0 +1,407 @@
+{
+ "eboot": "H:/Emulators/ShadPS4/Games/CUSA01909/eboot.bin",
+ "format": "ELF",
+ "relative_relocs": 217000,
+ "tables": [
+  {
+   "va": 53542224,
+   "stride": 16,
+   "count": 98,
+   "west_index": 1,
+   "entries": [
+    {
+     "key": "NHL",
+     "word2": 0
+    },
+    {
+     "key": "WesternConference",
+     "word2": 0
+    },
+    {
+     "key": "EasternConference",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionA",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionB",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionC",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionD",
+     "word2": 0
+    },
+    {
+     "key": "AHL",
+     "word2": 1
+    },
+    {
+     "key": "WesternConference",
+     "word2": 1
+    },
+    {
+     "key": "EasternConference",
+     "word2": 1
+    },
+    {
+     "key": "AtlanticDivision",
+     "word2": 1
+    },
+    {
+     "key": "NorthDivision",
+     "word2": 1
+    },
+    {
+     "key": "CentralDivision",
+     "word2": 1
+    },
+    {
+     "key": "PacificDivision",
+     "word2": 1
+    },
+    {
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "word2": 7
+    },
+    {
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "word2": 10
+    },
+    {
+     "key": "SMLIIGA",
+     "word2": 3
+    },
+    {
+     "key": "TXT_LEAGUE_DEL",
+     "word2": 6
+    },
+    {
+     "key": "elitserien",
+     "word2": 2
+    },
+    {
+     "key": "TXT_LEAGUE_NORWAY",
+     "word2": 15
+    },
+    {
+     "key": "OHL",
+     "word2": 12
+    },
+    {
+     "key": "WesternConference",
+     "word2": 12
+    },
+    {
+     "key": "EasternConference",
+     "word2": 12
+    },
+    {
+     "key": "CentralDivision",
+     "word2": 12
+    },
+    {
+     "key": "EastDivision",
+     "word2": 12
+    },
+    {
+     "key": "MidwestDivision",
+     "word2": 12
+    },
+    {
+     "key": "WestDivision",
+     "word2": 12
+    },
+    {
+     "key": "QMJHL",
+     "word2": 13
+    },
+    {
+     "key": "EastDivision",
+     "word2": 13
+    },
+    {
+     "key": "MaritimesDivision",
+     "word2": 13
+    },
+    {
+     "key": "WestDivision",
+     "word2": 13
+    },
+    {
+     "key": "WHL",
+     "word2": 11
+    },
+    {
+     "key": "WesternConference",
+     "word2": 11
+    },
+    {
+     "key": "EasternConference",
+     "word2": 11
+    },
+    {
+     "key": "BcDivision",
+     "word2": 11
+    },
+    {
+     "key": "CentralDivision",
+     "word2": 11
+    },
+    {
+     "key": "EastDivision",
+     "word2": 11
+    },
+    {
+     "key": "UsDivision",
+     "word2": 11
+    },
+    {
+     "key": "TournamentFile",
+     "word2": 5
+    },
+    {
+     "key": "PoolA",
+     "word2": 5
+    },
+    {
+     "key": "PoolB",
+     "word2": 5
+    },
+    {
+     "key": "Playoffs",
+     "word2": 5
+    },
+    {
+     "key": "ConferenceA",
+     "word2": 5
+    },
+    {
+     "key": "ConferenceB",
+     "word2": 5
+    },
+    {
+     "key": "DivisionA",
+     "word2": 5
+    },
+    {
+     "key": "DivisionB",
+     "word2": 5
+    },
+    {
+     "key": "DivisionC",
+     "word2": 5
+    },
+    {
+     "key": "DivisionD",
+     "word2": 5
+    },
+    {
+     "key": "CUSTOM_TEAMS",
+     "word2": 5
+    },
+    {
+     "key": "TXT_GM_RECORDS_NONE_YET",
+     "word2": 4294901957
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_TOTAL_EARNED_TASKS",
+     "word2": 149
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_BEST_YEARLY_EARNED",
+     "word2": 150
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MOST_XP_IN_WEEK",
+     "word2": 151
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MOST_XP_IN_MONTH",
+     "word2": 152
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MOST_XP_IN_YEAR",
+     "word2": 153
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_STAFF_UPGRADES",
+     "word2": 154
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MOST_UPGRADED_STAFF",
+     "word2": 155
+    },
+    {
+     "key": "TXT_GM_STAT_NUM_CAREER_SHUTOUTS",
+     "word2": 65692
+    },
+    {
+     "key": "TXT_GM_STAT_MOST_SHUTOUTS_IN_SEASON",
+     "word2": 65693
+    },
+    {
+     "key": "TXT_GM_STAT_MOST_WINS_IN_SEASON",
+     "word2": 65694
+    },
+    {
+     "key": "TXT_GM_STAT_LONGEST_EVER_WIN_STREAK",
+     "word2": 65695
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_TRADES_MADE",
+     "word2": 131232
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_ACCEPTED_COUNTER",
+     "word2": 131237
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_TRADE_REJECTIONS",
+     "word2": 131233
+    },
+    {
+     "key": "TXT_GM_HISTORY_MOST_TRADES_IN_YEAR",
+     "word2": 131234
+    },
+    {
+     "key": "TXT_GM_HISTORY_REP_BOOSTS_FROM_TRADE",
+     "word2": 131235
+    },
+    {
+     "key": "TXT_GM_HISTORY_REP_DROP_FROM_TRADE",
+     "word2": 131236
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_HIGHEST_REPUTATION",
+     "word2": 131238
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MOST_NUM_PHONES",
+     "word2": 131239
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_HIGHEST_FA_OVRL",
+     "word2": 196776
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_FA_SIGNED",
+     "word2": 196777
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_RENEWALS",
+     "word2": 196778
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_FA_REJECTIONS",
+     "word2": 196779
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_RESIGN_REJECTIONS",
+     "word2": 196780
+    },
+    {
+     "key": "TXT_GM_HISTORY_HIGHEST_RENEWAL_OFFERS",
+     "word2": 196781
+    },
+    {
+     "key": "TXT_GM_HISTORY_NUM_WAIVER_PICKUPS",
+     "word2": 196782
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_SCOUT_ASSIGNMENTS",
+     "word2": 262319
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_BEST_ROOKIE_PCT",
+     "word2": 262320
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_PLAYERS_DRAFTED",
+     "word2": 262321
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_NUM_FRANCHISES_DRAFTED",
+     "word2": 262322
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_CENTERS_DRAFTED",
+     "word2": 262323
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_WINGERS_DRAFTED",
+     "word2": 262324
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_DEFENDERS_DRAFTED",
+     "word2": 262325
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_GOALIES_DRAFTED",
+     "word2": 262326
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_STANLEY_CUPS",
+     "word2": 327863
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_TOTAL_TROPHIES",
+     "word2": 327864
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MADE_THE_PLAYOFFS",
+     "word2": 327865
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_ELIM_ROUND1",
+     "word2": 327866
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MADE_ROUND2",
+     "word2": 327867
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MADE_ROUND3",
+     "word2": 327868
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_MADE_FINALS",
+     "word2": 327869
+    },
+    {
+     "key": "TXT_GM_STAT_HISTORY_TOTAL_ROUNDS_SWEPT",
+     "word2": 327870
+    },
+    {
+     "key": "TXT_GM_RANK_WEEKS_TOP_10",
+     "word2": 393407
+    },
+    {
+     "key": "TXT_GM_RANK_WEEKS_MID_10",
+     "word2": 393408
+    },
+    {
+     "key": "TXT_GM_RANK_WEEKS_BOT_10",
+     "word2": 393409
+    },
+    {
+     "key": "TXT_GM_RANK_FINISH_TOP_10",
+     "word2": 393410
+    },
+    {
+     "key": "TXT_GM_RANK_FINISH_MID_10",
+     "word2": 393411
+    },
+    {
+     "key": "TXT_GM_RANK_FINISH_BOT_10",
+     "word2": 393412
+    }
+   ]
+  }
+ ]
+}

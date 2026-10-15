@@ -37,6 +37,19 @@ desktop.ini
 logs/
 tmp/
 *.tmp
+__pycache__/
+*.py[cod]
+
+# Local verification runs, private projects, downloaded tools and release outputs.
+/local/
+/out/
+/corpus/
+/Reference/
+/Nhl19BigStudio-Tester/
+/RPSGL*/
+/*.zip
+/*.rar
+/--print
 
 # ---- Game data & user artifacts (NEVER commit copyrighted EA data) ----
 # Real game databases, saves, and extracted assets must stay out of the repo.

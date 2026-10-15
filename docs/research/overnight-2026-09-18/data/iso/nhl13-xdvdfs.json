@@ -1,0 +1,147 @@
+{
+ "iso": "X:/Games/Emulation/Roms/XBOX360/NHL 13/NHL 13 (USA, Europe).iso",
+ "layout": "xgd2",
+ "base": 265879552,
+ "root_sector": 1783935,
+ "root_size": 2048,
+ "entries": [
+  {
+   "path": "$SystemUpdate",
+   "sector": 1778332,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "$SystemUpdate/su20076000_00000000",
+   "sector": 1768092,
+   "size": 12197888,
+   "attr": 128
+  },
+  {
+   "path": "$SystemUpdate/system.manifest",
+   "sector": 1774048,
+   "size": 6308,
+   "attr": 0
+  },
+  {
+   "path": "audioboot.big",
+   "sector": 1762155,
+   "size": 1720256,
+   "attr": 128
+  },
+  {
+   "path": "audioboot2.big",
+   "sector": 1759276,
+   "size": 5881760,
+   "attr": 128
+  },
+  {
+   "path": "boot.big",
+   "sector": 1762995,
+   "size": 10435888,
+   "attr": 128
+  },
+  {
+   "path": "cache.big",
+   "sector": 101785,
+   "size": 447904176,
+   "attr": 128
+  },
+  {
+   "path": "cacheaudio.big",
+   "sector": 1830624,
+   "size": 82471808,
+   "attr": 128
+  },
+  {
+   "path": "cachemovie.big",
+   "sector": 1825210,
+   "size": 11086736,
+   "attr": 128
+  },
+  {
+   "path": "cacheoverlay.big",
+   "sector": 1823442,
+   "size": 3620656,
+   "attr": 128
+  },
+  {
+   "path": "cacherender.big",
+   "sector": 320489,
+   "size": 1181076176,
+   "attr": 128
+  },
+  {
+   "path": "data0.big",
+   "sector": 83979,
+   "size": 29265968,
+   "attr": 128
+  },
+  {
+   "path": "default.xex",
+   "sector": 1779137,
+   "size": 9826304,
+   "attr": 128
+  },
+  {
+   "path": "gamedata",
+   "sector": 1762154,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/aidata.big",
+   "sector": 1762148,
+   "size": 10864,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim",
+   "sector": 101784,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/anim/faceposer.big",
+   "sector": 98271,
+   "size": 7193120,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/gps.big",
+   "sector": 98270,
+   "size": 1527,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/nis.big",
+   "sector": 1783936,
+   "size": 80907888,
+   "attr": 128
+  },
+  {
+   "path": "nocache.big",
+   "sector": 1870894,
+   "size": 2662611888,
+   "attr": 128
+  },
+  {
+   "path": "nocacherender.big",
+   "sector": 897187,
+   "size": 1765558032,
+   "attr": 128
+  },
+  {
+   "path": "nxeart",
+   "sector": 1778333,
+   "size": 1646592,
+   "attr": 128
+  },
+  {
+   "path": "options.viv",
+   "sector": 1768091,
+   "size": 284,
+   "attr": 128
+  }
+ ]
+}

@@ -1,0 +1,1854 @@
+# Head ID registry (pPaD).
+#
+# Named head models keyed by ubPc.pPaD. For "starred" players the engine
+# happens to assign head_id == audio full-name ID (the rows in this file
+# match audio-playernames.toml by raw value as of the 2015-16 snapshot),
+# but the two are kept as separate registries because they bind to
+# distinct fields (ubPc.pPaD vs ubPc.oazN) and could diverge in future
+# roster updates.
+
+name = "Player Head Models"
+notes = """
+Per-player head models. Match strategy for new EA players: look up
+"Lastname, Firstname" here (case-insensitive). When present, stage the
+matching `id` into `ubPc.pPaD`. When absent, leave the head ID alone
+(no surname fallback — head models are individually authored).
+"""
+
+[source]
+kind = "operator-curated"
+description = "Roster 'head IDs.txt' (2015-16 era)"
+
+[[head]]
+id = 20
+last_name = "Antropov"
+first_name = "Nik"
+
+[[head]]
+id = 1373
+last_name = "Backes"
+first_name = "David"
+
+[[head]]
+id = 1431
+last_name = "Backstrom"
+first_name = "Nicklas"
+
+[[head]]
+id = 7607
+last_name = "Baertschi"
+first_name = "Sven"
+
+[[head]]
+id = 51
+last_name = "Beauchemin"
+first_name = "Francois"
+
+[[head]]
+id = 373
+last_name = "Benn"
+first_name = "Jamie"
+
+[[head]]
+id = 9870
+last_name = "Bennett"
+first_name = "Sam"
+
+[[head]]
+id = 67
+last_name = "Bergeron"
+first_name = "Patrice"
+
+[[head]]
+id = 4445
+last_name = "Berglund"
+first_name = "Patrik"
+
+[[head]]
+id = 2076
+last_name = "Bernier"
+first_name = "Jonathan"
+
+[[head]]
+id = 71
+last_name = "Bertuzzi"
+first_name = "Todd"
+
+[[head]]
+id = 1152
+last_name = "Bieksa"
+first_name = "Kevin"
+
+[[head]]
+id = 5754
+last_name = "Blum"
+first_name = "Eric"
+
+[[head]]
+id = 7507
+last_name = "Bobrovsky"
+first_name = "Sergei"
+
+[[head]]
+id = 4440
+last_name = "Boedker"
+first_name = "Mikkel"
+
+[[head]]
+id = 102
+last_name = "Bouwmeester"
+first_name = "Jay"
+
+[[head]]
+id = 104
+last_name = "Boyle"
+first_name = "Dan"
+
+[[head]]
+id = 481
+last_name = "Bozak"
+first_name = "Tyler"
+
+[[head]]
+id = 2279
+last_name = "Brassard"
+first_name = "Derick"
+
+[[head]]
+id = 112
+last_name = "Brewer"
+first_name = "Eric"
+
+[[head]]
+id = 113
+last_name = "Briere"
+first_name = "Daniel"
+
+[[head]]
+id = 123
+last_name = "Brown"
+first_name = "Dustin"
+
+[[head]]
+id = 5677
+last_name = "Brunner"
+first_name = "Damien"
+
+[[head]]
+id = 127
+last_name = "Bryzgalov"
+first_name = "Ilya"
+
+[[head]]
+id = 133
+last_name = "Burns"
+first_name = "Brent"
+
+[[head]]
+id = 1157
+last_name = "Burrows"
+first_name = "Alexandre"
+
+[[head]]
+id = 1215
+last_name = "Byfuglien"
+first_name = "Dustin"
+
+[[head]]
+id = 5498
+last_name = "Bykov"
+first_name = "Andrei"
+
+[[head]]
+id = 1360
+last_name = "Callahan"
+first_name = "Ryan"
+
+[[head]]
+id = 142
+last_name = "Cammalleri"
+first_name = "Mike"
+
+[[head]]
+id = 143
+last_name = "Campbell"
+first_name = "Brian"
+
+[[head]]
+id = 1414
+last_name = "Carcillo"
+first_name = "Daniel"
+
+[[head]]
+id = 1089
+last_name = "Carter"
+first_name = "Jeff"
+
+[[head]]
+id = 151
+last_name = "Chara"
+first_name = "Zdeno"
+
+[[head]]
+id = 2090
+last_name = "Cogliano"
+first_name = "Andrew"
+
+[[head]]
+id = 8779
+last_name = "Conacher"
+first_name = "Cory"
+
+[[head]]
+id = 6058
+last_name = "Connolly"
+first_name = "Brett"
+
+[[head]]
+id = 483
+last_name = "Couture"
+first_name = "Logan"
+
+[[head]]
+id = 6840
+last_name = "Couturier"
+first_name = "Sean"
+
+[[head]]
+id = 1082
+last_name = "Crosby"
+first_name = "Sidney"
+
+[[head]]
+id = 201
+last_name = "Datsyuk"
+first_name = "Pavel"
+
+[[head]]
+id = 220
+last_name = "Doan"
+first_name = "Shane"
+
+[[head]]
+id = 4452
+last_name = "Doughty"
+first_name = "Drew"
+
+[[head]]
+id = 9753
+last_name = "Draisaitl"
+first_name = "Leon"
+
+[[head]]
+id = 2024
+last_name = "Dubinsky"
+first_name = "Brandon"
+
+[[head]]
+id = 371
+last_name = "Duchene"
+first_name = "Matt"
+
+[[head]]
+id = 7633
+last_name = "Dumba"
+first_name = "Matt"
+
+[[head]]
+id = 1151
+last_name = "Eager"
+first_name = "Ben"
+
+[[head]]
+id = 6107
+last_name = "Eberle"
+first_name = "Jordan"
+
+[[head]]
+id = 1342
+last_name = "Edler"
+first_name = "Alexander"
+
+[[head]]
+id = 241
+last_name = "Ehrhoff"
+first_name = "Christian"
+
+[[head]]
+id = 8976
+last_name = "Ekblad"
+first_name = "Aaron"
+
+[[head]]
+id = 243
+last_name = "Elias"
+first_name = "Patrik"
+
+[[head]]
+id = 246
+last_name = "Emery"
+first_name = "Ray"
+
+[[head]]
+id = 3238
+last_name = "Enstrom"
+first_name = "Toby"
+
+[[head]]
+id = 248
+last_name = "Erat"
+first_name = "Martin"
+
+[[head]]
+id = 3242
+last_name = "Eriksson"
+first_name = "Loui"
+
+[[head]]
+id = 9026
+last_name = "Faksa"
+first_name = "Radek"
+
+[[head]]
+id = 1223
+last_name = "Filppula"
+first_name = "Valtteri"
+
+[[head]]
+id = 275
+last_name = "Fleury"
+first_name = "Marc-Andre"
+
+[[head]]
+id = 6738
+last_name = "Fowler"
+first_name = "Cam"
+
+[[head]]
+id = 1124
+last_name = "Franzen"
+first_name = "Johan"
+
+[[head]]
+id = 289
+last_name = "Gaborik"
+first_name = "Marian"
+
+[[head]]
+id = 290
+last_name = "Gagne"
+first_name = "Simon"
+
+[[head]]
+id = 2091
+last_name = "Gagner"
+first_name = "Sam"
+
+[[head]]
+id = 7832
+last_name = "Galchenyuk"
+first_name = "Alex"
+
+[[head]]
+id = 6248
+last_name = "Gallagher"
+first_name = "Brendan"
+
+[[head]]
+id = 8737
+last_name = "Gardiner"
+first_name = "Jake"
+
+[[head]]
+id = 298
+last_name = "Gerber"
+first_name = "Martin"
+
+[[head]]
+id = 1092
+last_name = "Getzlaf"
+first_name = "Ryan"
+
+[[head]]
+id = 302
+last_name = "Gionta"
+first_name = "Brian"
+
+[[head]]
+id = 1226
+last_name = "Giordano"
+first_name = "Mark"
+
+[[head]]
+id = 1400
+last_name = "Girardi"
+first_name = "Dan"
+
+[[head]]
+id = 5296
+last_name = "Giroux"
+first_name = "Claude"
+
+[[head]]
+id = 308
+last_name = "Gomez"
+first_name = "Scott"
+
+[[head]]
+id = 309
+last_name = "Gonchar"
+first_name = "Sergei"
+
+[[head]]
+id = 6932
+last_name = "Gormley"
+first_name = "Brandon"
+
+[[head]]
+id = 2201
+last_name = "Grabner"
+first_name = "Michael"
+
+[[head]]
+id = 1305
+last_name = "Green"
+first_name = "Mike"
+
+[[head]]
+id = 7198
+last_name = "Gretzky"
+first_name = "Wayne"
+
+[[head]]
+id = 9207
+last_name = "Grigorenko"
+first_name = "Mikhail"
+
+[[head]]
+id = 6721
+last_name = "Hall"
+first_name = "Taylor"
+
+[[head]]
+id = 335
+last_name = "Hamhuis"
+first_name = "Dan"
+
+[[head]]
+id = 338
+last_name = "Handzus"
+first_name = "Michal"
+
+[[head]]
+id = 340
+last_name = "Hannan"
+first_name = "Scott"
+
+[[head]]
+id = 344
+last_name = "Hartnell"
+first_name = "Scott"
+
+[[head]]
+id = 349
+last_name = "Havlat"
+first_name = "Martin"
+
+[[head]]
+id = 353
+last_name = "Heatley"
+first_name = "Dany"
+
+[[head]]
+id = 2553
+last_name = "Hedman"
+first_name = "Victor"
+
+[[head]]
+id = 363
+last_name = "Hemsky"
+first_name = "Ales"
+
+[[head]]
+id = 1473
+last_name = "Hjalmarsson"
+first_name = "Niklas"
+
+[[head]]
+id = 6325
+last_name = "Hodgson"
+first_name = "Cody"
+
+[[head]]
+id = 8113
+last_name = "Holden"
+first_name = "Josh"
+
+[[head]]
+id = 380
+last_name = "Horcoff"
+first_name = "Shawn"
+
+[[head]]
+id = 382
+last_name = "Horton"
+first_name = "Nathan"
+
+[[head]]
+id = 384
+last_name = "Hossa"
+first_name = "Marian"
+
+[[head]]
+id = 7076
+last_name = "Huberdeau"
+first_name = "Jonathan"
+
+[[head]]
+id = 386
+last_name = "Hudler"
+first_name = "Jiri"
+
+[[head]]
+id = 387
+last_name = "Huet"
+first_name = "Cristobal"
+
+[[head]]
+id = 398
+last_name = "Iginla"
+first_name = "Jarome"
+
+[[head]]
+id = 401
+last_name = "Jackman"
+first_name = "Barret"
+
+[[head]]
+id = 404
+last_name = "Jagr"
+first_name = "Jaromir"
+
+[[head]]
+id = 6018
+last_name = "Johansen"
+first_name = "Ryan"
+
+[[head]]
+id = 418
+last_name = "Jokinen"
+first_name = "Olli"
+
+[[head]]
+id = 9746
+last_name = "Jones"
+first_name = "Seth"
+
+[[head]]
+id = 5737
+last_name = "Josi"
+first_name = "Roman"
+
+[[head]]
+id = 425
+last_name = "Kaberle"
+first_name = "Tomas"
+
+[[head]]
+id = 6444
+last_name = "Kadri"
+first_name = "Nazem"
+
+[[head]]
+id = 364
+last_name = "Kane"
+first_name = "Evander"
+
+[[head]]
+id = 2086
+last_name = "Kane"
+first_name = "Patrick"
+
+[[head]]
+id = 89
+last_name = "Karlsson"
+first_name = "Erik"
+
+[[head]]
+id = 6725
+last_name = "Kassian"
+first_name = "Zack"
+
+[[head]]
+id = 1116
+last_name = "Keith"
+first_name = "Duncan"
+
+[[head]]
+id = 439
+last_name = "Kesler"
+first_name = "Ryan"
+
+[[head]]
+id = 1309
+last_name = "Kessel"
+first_name = "Phil"
+
+[[head]]
+id = 452
+last_name = "Kobasew"
+first_name = "Chuck"
+
+[[head]]
+id = 1136
+last_name = "Koivu"
+first_name = "Mikko"
+
+[[head]]
+id = 3624
+last_name = "Kopitar"
+first_name = "Anze"
+
+[[head]]
+id = 467
+last_name = "Kovalchuk"
+first_name = "Ilya"
+
+[[head]]
+id = 1398
+last_name = "Krejci"
+first_name = "David"
+
+[[head]]
+id = 476
+last_name = "Kronwall"
+first_name = "Niklas"
+
+[[head]]
+id = 484
+last_name = "Lack"
+first_name = "Eddie"
+
+[[head]]
+id = 1158
+last_name = "Ladd"
+first_name = "Andrew"
+
+[[head]]
+id = 6422
+last_name = "Landeskog"
+first_name = "Gabriel"
+
+[[head]]
+id = 513
+last_name = "Lecavalier"
+first_name = "Vincent"
+
+[[head]]
+id = 522
+last_name = "Legwand"
+first_name = "David"
+
+[[head]]
+id = 524
+last_name = "Lehtonen"
+first_name = "Kari"
+
+[[head]]
+id = 8322
+last_name = "Lemieux"
+first_name = "Mario"
+
+[[head]]
+id = 1298
+last_name = "Letang"
+first_name = "Kris"
+
+[[head]]
+id = 533
+last_name = "Lilja"
+first_name = "Andreas"
+
+[[head]]
+id = 2098
+last_name = "Little"
+first_name = "Bryan"
+
+[[head]]
+id = 2099
+last_name = "Lucic"
+first_name = "Milan"
+
+[[head]]
+id = 1190
+last_name = "Lundqvist"
+first_name = "Henrik"
+
+[[head]]
+id = 547
+last_name = "Luongo"
+first_name = "Roberto"
+
+[[head]]
+id = 549
+last_name = "Lupul"
+first_name = "Joffrey"
+
+[[head]]
+id = 9179
+last_name = "MacKinnon"
+first_name = "Nathan"
+
+[[head]]
+id = 564
+last_name = "Malhotra"
+first_name = "Manny"
+
+[[head]]
+id = 1325
+last_name = "Malkin"
+first_name = "Evgeni"
+
+[[head]]
+id = 5309
+last_name = "Marchand"
+first_name = "Brad"
+
+[[head]]
+id = 577
+last_name = "Marleau"
+first_name = "Patrick"
+
+[[head]]
+id = 646
+last_name = "Martin"
+first_name = "Matt"
+
+[[head]]
+id = 9857
+last_name = "McDavid"
+first_name = "Connor"
+
+[[head]]
+id = 8398
+last_name = "McDonagh"
+first_name = "Ryan"
+
+[[head]]
+id = 618
+last_name = "Michalek"
+first_name = "Milan"
+
+[[head]]
+id = 623
+last_name = "Miller"
+first_name = "Ryan"
+
+[[head]]
+id = 7797
+last_name = "Monahan"
+first_name = "Sean"
+
+[[head]]
+id = 645
+last_name = "Morrow"
+first_name = "Brenden"
+
+[[head]]
+id = 1977
+last_name = "Moulson"
+first_name = "Matt"
+
+[[head]]
+id = 5815
+last_name = "Murray"
+first_name = "Ryan"
+
+[[head]]
+id = 663
+last_name = "Nash"
+first_name = "Rick"
+
+[[head]]
+id = 2168
+last_name = "Neal"
+first_name = "James"
+
+[[head]]
+id = 6019
+last_name = "Niederreiter"
+first_name = "Nino"
+
+[[head]]
+id = 6083
+last_name = "Nugent-Hopkins"
+first_name = "Ryan"
+
+[[head]]
+id = 9268
+last_name = "Nyquist"
+first_name = "Gustav"
+
+[[head]]
+id = 695
+last_name = "Ohlund"
+first_name = "Mattias"
+
+[[head]]
+id = 2494
+last_name = "Okposo"
+first_name = "Kyle"
+
+[[head]]
+id = 376
+last_name = "O'Reilly"
+first_name = "Ryan"
+
+[[head]]
+id = 4444
+last_name = "Oshie"
+first_name = "T.J."
+
+[[head]]
+id = 1083
+last_name = "Ovechkin"
+first_name = "Alexander"
+
+[[head]]
+id = 5355
+last_name = "Pacioretty"
+first_name = "Max"
+
+[[head]]
+id = 1407
+last_name = "Parenteau"
+first_name = "Pierre-Alexandre"
+
+[[head]]
+id = 1098
+last_name = "Parise"
+first_name = "Zach"
+
+[[head]]
+id = 1353
+last_name = "Pavelski"
+first_name = "Joe"
+
+[[head]]
+id = 1100
+last_name = "Perry"
+first_name = "Corey"
+
+[[head]]
+id = 1086
+last_name = "Phaneuf"
+first_name = "Dion"
+
+[[head]]
+id = 731
+last_name = "Phillips"
+first_name = "Chris"
+
+[[head]]
+id = 4446
+last_name = "Pietrangelo"
+first_name = "Alex"
+
+[[head]]
+id = 743
+last_name = "Plekanec"
+first_name = "Tomas"
+
+[[head]]
+id = 750
+last_name = "Ponikarovsky"
+first_name = "Alexei"
+
+[[head]]
+id = 2077
+last_name = "Price"
+first_name = "Carey"
+
+[[head]]
+id = 759
+last_name = "Pronger"
+first_name = "Chris"
+
+[[head]]
+id = 2305
+last_name = "Quick"
+first_name = "Jonathan"
+
+[[head]]
+id = 1327
+last_name = "Radulov"
+first_name = "Alexander"
+
+[[head]]
+id = 2244
+last_name = "Rask"
+first_name = "Tuukka"
+
+[[head]]
+id = 8849
+last_name = "Reinhart"
+first_name = "Sam"
+
+[[head]]
+id = 788
+last_name = "Ribeiro"
+first_name = "Mike"
+
+[[head]]
+id = 790
+last_name = "Richards"
+first_name = "Brad"
+
+[[head]]
+id = 1102
+last_name = "Richards"
+first_name = "Mike"
+
+[[head]]
+id = 1199
+last_name = "Rinne"
+first_name = "Pekka"
+
+[[head]]
+id = 812
+last_name = "Roy"
+first_name = "Derek"
+
+[[head]]
+id = 2682
+last_name = "Roy"
+first_name = "Patrick"
+
+[[head]]
+id = 818
+last_name = "Ruutu"
+first_name = "Tuomo"
+
+[[head]]
+id = 2078
+last_name = "Ryan"
+first_name = "Bobby"
+
+[[head]]
+id = 820
+last_name = "Ryder"
+first_name = "Michael"
+
+[[head]]
+id = 827
+last_name = "Salvador"
+first_name = "Bryce"
+
+[[head]]
+id = 842
+last_name = "Savard"
+first_name = "Marc"
+
+[[head]]
+id = 4447
+last_name = "Schenn"
+first_name = "Luke"
+
+[[head]]
+id = 1103
+last_name = "Seabrook"
+first_name = "Brent"
+
+[[head]]
+id = 857
+last_name = "Sedin"
+first_name = "Daniel"
+
+[[head]]
+id = 858
+last_name = "Sedin"
+first_name = "Henrik"
+
+[[head]]
+id = 6605
+last_name = "Seguin"
+first_name = "Tyler"
+
+[[head]]
+id = 1304
+last_name = "Semin"
+first_name = "Alexander"
+
+[[head]]
+id = 2089
+last_name = "Setoguchi"
+first_name = "Devin"
+
+[[head]]
+id = 7201
+last_name = "Sewell"
+first_name = "Ryan"
+
+[[head]]
+id = 867
+last_name = "Sharp"
+first_name = "Patrick"
+
+[[head]]
+id = 8443
+last_name = "Shattenkirk"
+first_name = "Kevin"
+
+[[head]]
+id = 4451
+last_name = "Simmonds"
+first_name = "Wayne"
+
+[[head]]
+id = 6419
+last_name = "Skinner"
+first_name = "Jeff"
+
+[[head]]
+id = 904
+last_name = "Spezza"
+first_name = "Jason"
+
+[[head]]
+id = 5507
+last_name = "Sprunger"
+first_name = "Julien"
+
+[[head]]
+id = 908
+last_name = "Staal"
+first_name = "Eric"
+
+[[head]]
+id = 1297
+last_name = "Staal"
+first_name = "Jordan"
+
+[[head]]
+id = 2084
+last_name = "Staal"
+first_name = "Marc"
+
+[[head]]
+id = 4430
+last_name = "Stamkos"
+first_name = "Steven"
+
+[[head]]
+id = 1292
+last_name = "Stastny"
+first_name = "Paul"
+
+[[head]]
+id = 1107
+last_name = "Steen"
+first_name = "Alexander"
+
+[[head]]
+id = 2176
+last_name = "Stewart"
+first_name = "Chris"
+
+[[head]]
+id = 1396
+last_name = "Stortini"
+first_name = "Zack"
+
+[[head]]
+id = 1203
+last_name = "Streit"
+first_name = "Mark"
+
+[[head]]
+id = 983
+last_name = "Subban"
+first_name = "P.K."
+
+[[head]]
+id = 5536
+last_name = "Suri"
+first_name = "Reto"
+
+[[head]]
+id = 1104
+last_name = "Suter"
+first_name = "Ryan"
+
+[[head]]
+id = 5904
+last_name = "Tavares"
+first_name = "John"
+
+[[head]]
+id = 963
+last_name = "Thornton"
+first_name = "Joe"
+
+[[head]]
+id = 2087
+last_name = "Toews"
+first_name = "Jonathan"
+
+[[head]]
+id = 973
+last_name = "Torres"
+first_name = "Raffi"
+
+[[head]]
+id = 2652
+last_name = "Turris"
+first_name = "Kyle"
+
+[[head]]
+id = 1139
+last_name = "Umberger"
+first_name = "R.J."
+
+[[head]]
+id = 389
+last_name = "Van Riemsdyk"
+first_name = "James"
+
+[[head]]
+id = 1084
+last_name = "Vanek"
+first_name = "Thomas"
+
+[[head]]
+id = 1005
+last_name = "Vermette"
+first_name = "Antoine"
+
+[[head]]
+id = 1985
+last_name = "Versteeg"
+first_name = "Kris"
+
+[[head]]
+id = 1299
+last_name = "Vlasic"
+first_name = "Marc-Edouard"
+
+[[head]]
+id = 4435
+last_name = "Voracek"
+first_name = "Jakub"
+
+[[head]]
+id = 1015
+last_name = "Vyborny"
+first_name = "David"
+
+[[head]]
+id = 1187
+last_name = "Ward"
+first_name = "Cam"
+
+[[head]]
+id = 1176
+last_name = "Weber"
+first_name = "Shea"
+
+[[head]]
+id = 1034
+last_name = "Weiss"
+first_name = "Stephen"
+
+[[head]]
+id = 5713
+last_name = "Wieser"
+first_name = "Marc"
+
+[[head]]
+id = 1045
+last_name = "Williams"
+first_name = "Jason"
+
+[[head]]
+id = 1046
+last_name = "Williams"
+first_name = "Justin"
+
+[[head]]
+id = 7836
+last_name = "Yakupov"
+first_name = "Nail"
+
+[[head]]
+id = 1315
+last_name = "Yandle"
+first_name = "Keith"
+
+[[head]]
+id = 1070
+last_name = "Zetterberg"
+first_name = "Henrik"
+
+[[head]]
+id = 8488
+last_name = "Zibanejad"
+first_name = "Mika"
+
+[[head]]
+id = 1080
+last_name = "Zubrus"
+first_name = "Dainius"
+
+# ----------------------------------------------------------------------
+# Auto-filled from the roster ubPc table via the gen_head_ids bin:
+# individually-authored heads (pPaD assigned to exactly ONE player)
+# that were not already named above. Generated 2026-06-07 from
+# database/nhlng.db. Shared/generic head ids (one model reused by many
+# players) are intentionally omitted -- they are not a single player.
+# ----------------------------------------------------------------------
+[[head]]
+id = 6
+last_name = "Afinogenov"
+first_name = "Maxim"
+
+[[head]]
+id = 10
+last_name = "Alfredsson"
+first_name = "Daniel"
+
+[[head]]
+id = 25
+last_name = "Arnott"
+first_name = "Jason"
+
+[[head]]
+id = 29
+last_name = "Aucoin"
+first_name = "Adrian"
+
+[[head]]
+id = 31
+last_name = "Auld"
+first_name = "Alexander"
+
+[[head]]
+id = 33
+last_name = "Avery"
+first_name = "Sean"
+
+[[head]]
+id = 76
+last_name = "Biron"
+first_name = "Martin"
+
+[[head]]
+id = 80
+last_name = "Blake"
+first_name = "Jason"
+
+[[head]]
+id = 88
+last_name = "Bonk"
+first_name = "Radek"
+
+[[head]]
+id = 105
+last_name = "Boynton"
+first_name = "Nick"
+
+[[head]]
+id = 119
+last_name = "Brodeur"
+first_name = "Martin"
+
+[[head]]
+id = 125
+last_name = "Brunette"
+first_name = "Andrew"
+
+[[head]]
+id = 141
+last_name = "Calder"
+first_name = "Kyle"
+
+[[head]]
+id = 154
+last_name = "Cheechoo"
+first_name = "Jonathan"
+
+[[head]]
+id = 155
+last_name = "Chelios"
+first_name = "Chris"
+
+[[head]]
+id = 166
+last_name = "Clark"
+first_name = "Chris"
+
+[[head]]
+id = 175
+last_name = "Comrie"
+first_name = "Mike"
+
+[[head]]
+id = 183
+last_name = "Corvo"
+first_name = "Joseph"
+
+[[head]]
+id = 208
+last_name = "Demitra"
+first_name = "Pavol"
+
+[[head]]
+id = 218
+last_name = "DiPietro"
+first_name = "Rick"
+
+[[head]]
+id = 228
+last_name = "Draper"
+first_name = "Kris"
+
+[[head]]
+id = 230
+last_name = "Drury"
+first_name = "Chris"
+
+[[head]]
+id = 258
+last_name = "Fedorov"
+first_name = "Sergei"
+
+[[head]]
+id = 287
+last_name = "Frolov"
+first_name = "Alexander"
+
+[[head]]
+id = 300
+last_name = "Giguere"
+first_name = "Jean-Sebastien"
+
+[[head]]
+id = 312
+last_name = "Grahame"
+first_name = "John"
+
+[[head]]
+id = 321
+last_name = "Grier"
+first_name = "Mike"
+
+[[head]]
+id = 348
+last_name = "Havelid"
+first_name = "Niclas"
+
+[[head]]
+id = 361
+last_name = "Hejduk"
+first_name = "Milan"
+
+[[head]]
+id = 378
+last_name = "Holmstrom"
+first_name = "Tomas"
+
+[[head]]
+id = 423
+last_name = "Jovanovski"
+first_name = "Ed"
+
+[[head]]
+id = 440
+last_name = "Khabibulin"
+first_name = "Nikolai"
+
+[[head]]
+id = 445
+last_name = "Kiprusoff"
+first_name = "Miikka"
+
+[[head]]
+id = 453
+last_name = "Koivu"
+first_name = "Saku"
+
+[[head]]
+id = 459
+last_name = "Komisarek"
+first_name = "Mike"
+
+[[head]]
+id = 466
+last_name = "Kotalik"
+first_name = "Ales"
+
+[[head]]
+id = 468
+last_name = "Kovalev"
+first_name = "Alex"
+
+[[head]]
+id = 503
+last_name = "Langkow"
+first_name = "Daymond"
+
+[[head]]
+id = 504
+last_name = "Laperriere"
+first_name = "Ian"
+
+[[head]]
+id = 531
+last_name = "Lidstrom"
+first_name = "Nicklas"
+
+[[head]]
+id = 559
+last_name = "Madden"
+first_name = "John"
+
+[[head]]
+id = 566
+last_name = "Malone"
+first_name = "Ryan"
+
+[[head]]
+id = 584
+last_name = "Mason"
+first_name = "Chris"
+
+[[head]]
+id = 589
+last_name = "Mayers"
+first_name = "Jamal"
+
+[[head]]
+id = 592
+last_name = "McCabe"
+first_name = "Bryan"
+
+[[head]]
+id = 598
+last_name = "McDonald"
+first_name = "Andy"
+
+[[head]]
+id = 628
+last_name = "Modano"
+first_name = "Mike"
+
+[[head]]
+id = 638
+last_name = "Moreau"
+first_name = "Ethan"
+
+[[head]]
+id = 642
+last_name = "Morris"
+first_name = "Derek"
+
+[[head]]
+id = 643
+last_name = "Morrison"
+first_name = "Brendan"
+
+[[head]]
+id = 661
+last_name = "Nabokov"
+first_name = "Evgeni"
+
+[[head]]
+id = 681
+last_name = "Niittymaki"
+first_name = "Antero"
+
+[[head]]
+id = 739
+last_name = "Pisani"
+first_name = "Fernando"
+
+[[head]]
+id = 740
+last_name = "Pitkanen"
+first_name = "Joni"
+
+[[head]]
+id = 753
+last_name = "Poti"
+first_name = "Tom"
+
+[[head]]
+id = 761
+last_name = "Prospal"
+first_name = "Vaclav"
+
+[[head]]
+id = 779
+last_name = "Redden"
+first_name = "Wade"
+
+[[head]]
+id = 780
+last_name = "Regehr"
+first_name = "Robyn"
+
+[[head]]
+id = 796
+last_name = "Rivet"
+first_name = "Craig"
+
+[[head]]
+id = 803
+last_name = "Roenick"
+first_name = "Jeremy"
+
+[[head]]
+id = 805
+last_name = "Roloson"
+first_name = "Dwayne"
+
+[[head]]
+id = 806
+last_name = "Rolston"
+first_name = "Brian"
+
+[[head]]
+id = 826
+last_name = "Salo"
+first_name = "Sami"
+
+[[head]]
+id = 828
+last_name = "Samsonov"
+first_name = "Sergei"
+
+[[head]]
+id = 837
+last_name = "Satan"
+first_name = "Miroslav"
+
+[[head]]
+id = 862
+last_name = "Selanne"
+first_name = "Teemu"
+
+[[head]]
+id = 880
+last_name = "Sjostrom"
+first_name = "Fredrik"
+
+[[head]]
+id = 897
+last_name = "Smyth"
+first_name = "Ryan"
+
+[[head]]
+id = 902
+last_name = "Souray"
+first_name = "Sheldon"
+
+[[head]]
+id = 907
+last_name = "St. Louis"
+first_name = "Martin"
+
+[[head]]
+id = 918
+last_name = "Stillman"
+first_name = "Cory"
+
+[[head]]
+id = 929
+last_name = "Sturm"
+first_name = "Marco"
+
+[[head]]
+id = 933
+last_name = "Sullivan"
+first_name = "Steve"
+
+[[head]]
+id = 958
+last_name = "Theodore"
+first_name = "Jose"
+
+[[head]]
+id = 967
+last_name = "Timonen"
+first_name = "Kimmo"
+
+[[head]]
+id = 974
+last_name = "Toskala"
+first_name = "Vesa"
+
+[[head]]
+id = 982
+last_name = "Turco"
+first_name = "Marty"
+
+[[head]]
+id = 1043
+last_name = "Whitney"
+first_name = "Ray"
+
+[[head]]
+id = 1052
+last_name = "Witt"
+first_name = "Brendan"
+
+[[head]]
+id = 1059
+last_name = "Yashin"
+first_name = "Alexei"
+
+[[head]]
+id = 1069
+last_name = "Zednik"
+first_name = "Richard"
+
+[[head]]
+id = 1072
+last_name = "Zherdev"
+first_name = "Nikolay"
+
+[[head]]
+id = 1118
+last_name = "Parros"
+first_name = "George"
+
+[[head]]
+id = 1181
+last_name = "Penner"
+first_name = "Dustin"
+
+[[head]]
+id = 1310
+last_name = "O'Sullivan"
+first_name = "Patrick"
+
+[[head]]
+id = 4214
+last_name = "Steen"
+first_name = "Alexander"
+
+[[head]]
+id = 5750
+last_name = "Rüthemann"
+first_name = "Ivo"
+
+[[head]]
+id = 7202
+last_name = "King"
+first_name = "Christopher"
+
+[[head]]
+id = 8344
+last_name = "Yzerman"
+first_name = "Steve"
+
+[[head]]
+id = 8585
+last_name = "Howe"
+first_name = "Gordie"
+
+[[head]]
+id = 8586
+last_name = "Bourque"
+first_name = "Ray"
+
+[[head]]
+id = 8587
+last_name = "Salming"
+first_name = "Borje"
+
+[[head]]
+id = 10094
+last_name = "Smith-Pelly"
+first_name = "Devante"
+
+[[head]]
+id = 30100
+last_name = "Fisher"
+first_name = "Victoria"
+
+# ----------------------------------------------------------------------
+# Operator-identified orphan heads (gen 2026-06-07): head assets that
+# exist on disk (player_<id>.rx2) but are not assigned to any roster
+# player, so the name cannot be read from the DB. Hand-named from
+# reference data. (10273 corrected Tarasennko -> Tarasenko.)
+# ----------------------------------------------------------------------
+
+[[head]]
+id = 66
+last_name = "Beaulieu"
+first_name = "Nathan"
+
+[[head]]
+id = 103
+last_name = "Boyes"
+first_name = "Brad"
+
+[[head]]
+id = 108
+last_name = "Brashear"
+first_name = "Donald"
+
+[[head]]
+id = 173
+last_name = "Cole"
+first_name = "Erik"
+
+[[head]]
+id = 177
+last_name = "Connolly"
+first_name = "Tim"
+
+[[head]]
+id = 178
+last_name = "Conroy"
+first_name = "Craig"
+
+[[head]]
+id = 179
+last_name = "Cooke"
+first_name = "Matt"
+
+[[head]]
+id = 186
+last_name = "Cullen"
+first_name = "Matt"
+
+[[head]]
+id = 194
+last_name = "Cumiskey"
+first_name = "Kyle"
+
+[[head]]
+id = 260
+last_name = "Fedotenko"
+first_name = "Ruslan"
+
+[[head]]
+id = 281
+last_name = "Forsberg"
+first_name = "Peter"
+
+[[head]]
+id = 346
+last_name = "Hasek"
+first_name = "Dominik"
+
+[[head]]
+id = 383
+last_name = "Hossa"
+first_name = "Marcel"
+
+[[head]]
+id = 430
+last_name = "Kariya"
+first_name = "Paul"
+
+[[head]]
+id = 532
+last_name = "Liles"
+first_name = "John-Michael"
+
+[[head]]
+id = 565
+last_name = "Malik"
+first_name = "Marek"
+
+[[head]]
+id = 575
+last_name = "Markov"
+first_name = "Andrei"
+
+[[head]]
+id = 629
+last_name = "Modin"
+first_name = "Fredrik"
+
+[[head]]
+id = 675
+last_name = "Niedermayer"
+first_name = "Rob"
+
+[[head]]
+id = 676
+last_name = "Niedermayer"
+first_name = "Scott"
+
+[[head]]
+id = 692
+last_name = "Nylander"
+first_name = "Michael"
+
+[[head]]
+id = 815
+last_name = "Rucinsky"
+first_name = "Martin"
+
+[[head]]
+id = 909
+last_name = "Staios"
+first_name = "Stephen"
+
+[[head]]
+id = 939
+last_name = "Sutton"
+first_name = "Andy"
+
+[[head]]
+id = 940
+last_name = "Svatos"
+first_name = "Marek"
+
+[[head]]
+id = 946
+last_name = "Sykora"
+first_name = "Petr"
+
+[[head]]
+id = 951
+last_name = "Tanguay"
+first_name = "Alex"
+
+[[head]]
+id = 962
+last_name = "Thomas"
+first_name = "Tim"
+
+[[head]]
+id = 1000
+last_name = "Vanek"
+first_name = "Thomas"
+
+[[head]]
+id = 1011
+last_name = "Vokoun"
+first_name = "Tomas"
+
+[[head]]
+id = 1066
+last_name = "Yzerman"
+first_name = "Steve"
+
+[[head]]
+id = 8274
+last_name = "Stevens"
+first_name = "Scott"
+
+[[head]]
+id = 8323
+last_name = "Hull"
+first_name = "Brett"
+
+[[head]]
+id = 10273
+last_name = "Tarasenko"
+first_name = "Vladimir"

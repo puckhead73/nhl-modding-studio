@@ -1,0 +1,50 @@
+{
+  "bundle": {
+    "scope": "Streaming ZIP manifest/member hashes and existing extracted files, not full verify.py check/selftest or PE/licence checks",
+    "archive_sha256": "7072c276c8ebd14f8f23256e090ef6f3dd0588a3948446101ad5546f306f73b5",
+    "file_count": 620,
+    "manifest_entries": 619,
+    "failures": [],
+    "distribution": "internal-review",
+    "release_ready": false,
+    "exe_sha256": "483b498d941d476048fde56af320121499900c0064bf1e0af77dac0d982d8fbb"
+  },
+  "source_hashes": {
+    "crates/studio-api/src/registry.rs": "6becc4c195daed4f7c3726a4ca82b39edd3f50c87114fea1c19b44ff45cfad0f",
+    "crates/studio-api/src/hockey_shop.rs": "ddd4cf93ee7f30c358ecfaf9a4479c632abec8fc42456887e065aa5a1e54a699",
+    "crates/studio-domain/src/ps4_vault.rs": "0244dfef7d7bb3a6b0a1b650ac7a582a7fcd7e24ba796b2ace128a26ef41fbdf",
+    "crates/studio-domain/src/ps4_hair.rs": "f956896f275e96413c05b0430c75cff17c0322922022fbad5a1c927c4b6b3b5e",
+    "crates/studio-domain/src/player_reassign.rs": "3c9ac8a23d58293e0cd237a56daedc484186129dc5d46775bfb73db911074cd5",
+    "crates/studio-api/tests/ps4_hair_reassign.rs": "92a3a506887d8d14d2c696b875ab4db550b0bed56b67cc0310466d947eb5d960",
+    "crates/studio-api/tests/ps4_vault_revalidation.rs": "e10029885299207c7aa1df9d673603afc50e22fe2741bd12e0b24b34b39989ea",
+    "app/src/components/PlayerContainmentCard.tsx": "c9e785fefdf1aeea6ab8d3c747d3d04615bd67429ed6395c1a2098eae6a06ac1"
+  },
+  "tests": [
+    {
+      "target": "studio-api --lib hockey_shop",
+      "passed": 13,
+      "failed": 0,
+      "seconds": 0.12
+    },
+    {
+      "target": "studio-api ps4_hair_reassign --include-ignored",
+      "passed": 1,
+      "failed": 0,
+      "seconds": 128.86
+    },
+    {
+      "target": "PlayerContainmentCard.test.tsx",
+      "passed": 6,
+      "failed": 0,
+      "duration_seconds": 21.6
+    },
+    {
+      "target": "studio-api ps4_vault_revalidation --include-ignored",
+      "passed": 1,
+      "failed": 0,
+      "seconds": 69.6
+    }
+  ],
+  "total_passed": 21,
+  "total_failed": 0
+}

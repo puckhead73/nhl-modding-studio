@@ -1,0 +1,5776 @@
+{
+ "note": "R18 \u2014 Arena presentation packs (PS4 15\u201321): the stadium texture-pack / kit classes keyed by `ArenaID` (dasher boards, centre ads,\ncrowd chairs, scarves, stanchions, netting, spotlight logos, goal lights, jumbotron, entrance props, dressing kits, \u2026) \u2014 per title:\neach class's records, the `ArenaID` (or `Team`) value set, coverage of the DB `exhibitionarena.arenaartid` values and of the `ge_level.ID`\nvalues, the referenced texture paths on examples. The `ge_level` records' typed slots for these packs are null in `gccollections`\n(measured), so the pack's own `ArenaID` attribute is the binding candidate. Read-only. Usage: python r18_arena_packs.py <out.json>\n",
+ "titles": {
+  "nhl15": {
+   "title": "nhl15",
+   "vault": {
+    "gccollections.vlt": "d1ec595c56b6d87692ac3c47919de739af41929847252669719f6584e5229c77",
+    "gccollections.bin": "0684ef978cbb8ae1e34ba8abb8c98f09187154544be44de5c647d2b96ec66bd2"
+   },
+   "db_arenaartid_distinct": 32,
+   "level_ids": 0,
+   "classes": {
+    "ge_nhl_stadiumcenteradtexturepack": {
+     "records": 147,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6db617b1",
+       "Int32"
+      ],
+      [
+       "8e60e3cf",
+       "CenterAd"
+      ],
+      [
+       "9b49a1a3",
+       "AdSize"
+      ],
+      [
+       "d1206d03",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlinetexturepack": {
+     "records": 33,
+     "attributes": [
+      [
+       "CenterLine",
+       "CenterLine"
+      ],
+      [
+       "3cf60484",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "dce7052a",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlogotexturepack": {
+     "records": 221,
+     "attributes": [
+      [
+       "21ed461a",
+       "Int32"
+      ],
+      [
+       "25093e4c",
+       "RefSpec"
+      ],
+      [
+       "CenterLogo",
+       "Team"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ]
+     ],
+     "keyed_by": [
+      "CenterLogo:Team"
+     ],
+     "examples": [
+      {
+       "key": "84b20bdd",
+       "name": "centerlogo_421_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\centerlogo_421_cm"
+       ]
+      },
+      {
+       "key": "9b9004b8",
+       "name": "centerlogo_420_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\centerlogo_420_cm"
+       ]
+      },
+      {
+       "key": "5547a0ff",
+       "name": "centerlogo_41_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\centerlogo_501_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "CenterLogo:Team": {
+       "distinct": 221,
+       "records_per_value_max": 1
+      }
+     }
+    },
+    "ge_nhl_stadiumicelinetexturepack": {
+     "records": 4,
+     "attributes": [
+      [
+       "IceLine",
+       "IceLineTeamLeague"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "df7bc1d4",
+       "Int32"
+      ],
+      [
+       "f9949296",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumspotlightlogotexturepack": {
+     "records": 217,
+     "attributes": [
+      [
+       "3853ea8d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a09d575c",
+       "Int32"
+      ],
+      [
+       "f66ca16f",
+       "Team"
+      ]
+     ],
+     "keyed_by": [
+      "f66ca16f:Team"
+     ],
+     "examples": [
+      {
+       "key": "f38b320f",
+       "name": "spotlight_400_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_41_cm"
+       ]
+      },
+      {
+       "key": "cf1a8468",
+       "name": "spotlight_3_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_3_cm"
+       ]
+      },
+      {
+       "key": "d4af5db0",
+       "name": "spotlight_39_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_31_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "f66ca16f:Team": {
+       "distinct": 215,
+       "records_per_value_max": 2
+      }
+     }
+    }
+   }
+  },
+  "nhl16": {
+   "title": "nhl16",
+   "vault": {
+    "gccollections.vlt": "202035cfc80f9dbf283ea610cef13262b92a6314cbe1c2fbeb360bbedc394d7e",
+    "gccollections.bin": "b1217f4a536542607b61a49aaa65b31bb74cb95756a90e2dcbe0c1ba9e092571"
+   },
+   "db_arenaartid_distinct": 33,
+   "level_ids": 0,
+   "classes": {
+    "ge_nhl_eashlbannertexturepack": {
+     "records": 8,
+     "attributes": [
+      [
+       "DiffuseTexture",
+       "RefSpec"
+      ],
+      [
+       "33b2e1d8",
+       "BannerType"
+      ],
+      [
+       "67f77570",
+       "BannerLanguage"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "faa3e26e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_jumbotron": {
+     "records": 1,
+     "attributes": [
+      [
+       "1b880937",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "Type",
+       "Jumbotron"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "c2db9378",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenteradtexturepack": {
+     "records": 155,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6db617b1",
+       "Int32"
+      ],
+      [
+       "8e60e3cf",
+       "CenterAd"
+      ],
+      [
+       "9b49a1a3",
+       "AdSize"
+      ],
+      [
+       "d1206d03",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlinetexturepack": {
+     "records": 36,
+     "attributes": [
+      [
+       "CenterLine",
+       "CenterLine"
+      ],
+      [
+       "3cf60484",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "dce7052a",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlogotexturepack": {
+     "records": 237,
+     "attributes": [
+      [
+       "21d09a65",
+       "Int32"
+      ],
+      [
+       "25093e4c",
+       "RefSpec"
+      ],
+      [
+       "CenterLogo",
+       "Team"
+      ],
+      [
+       "2bd5e05c",
+       "CenterlogoStyle"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ]
+     ],
+     "keyed_by": [
+      "CenterLogo:Team"
+     ],
+     "examples": [
+      {
+       "key": "67958e53",
+       "name": "centerlogo_47_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\centerlogo_501_cm"
+       ]
+      },
+      {
+       "key": "933cad1e",
+       "name": "centerlogo_46_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\centerlogo_501_cm"
+       ]
+      },
+      {
+       "key": "432b557b",
+       "name": "centerlogo_45_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\centerlogo_501_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "CenterLogo:Team": {
+       "distinct": 236,
+       "records_per_value_max": 2
+      }
+     }
+    },
+    "ge_nhl_stadiumicelinetexturepack": {
+     "records": 4,
+     "attributes": [
+      [
+       "IceLine",
+       "IceLineTeamLeague"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "df7bc1d4",
+       "Int32"
+      ],
+      [
+       "f9949296",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumspotlightlogotexturepack": {
+     "records": 1,
+     "attributes": [
+      [
+       "3853ea8d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a09d575c",
+       "Int32"
+      ],
+      [
+       "f66ca16f",
+       "Team"
+      ]
+     ],
+     "keyed_by": [
+      "f66ca16f:Team"
+     ],
+     "examples": [
+      {
+       "key": "aac9e4fb",
+       "name": "spotlight_9_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_9_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "f66ca16f:Team": {
+       "distinct": 1,
+       "records_per_value_max": 1
+      }
+     }
+    }
+   }
+  },
+  "nhl17": {
+   "title": "nhl17",
+   "vault": {
+    "gccollections.vlt": "df39aeaa7f10a97570d35159d0a031b33f4a66e4ea5f9cef7bf213a2ddf06531",
+    "gccollections.bin": "2da87ee854ea844aac1b1484b9fe1f688e71b622bdee86d0d5a3eddbf5de5811"
+   },
+   "db_arenaartid_distinct": 39,
+   "level_ids": 0,
+   "classes": {
+    "ge_nhl_eashlbannertexturepack": {
+     "records": 8,
+     "attributes": [
+      [
+       "DiffuseTexture",
+       "RefSpec"
+      ],
+      [
+       "33b2e1d8",
+       "BannerType"
+      ],
+      [
+       "67f77570",
+       "BannerLanguage"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "faa3e26e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_jumbotron": {
+     "records": 10,
+     "attributes": [
+      [
+       "1b880937",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "Type",
+       "Jumbotron"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenteradtexturepack": {
+     "records": 155,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6db617b1",
+       "Int32"
+      ],
+      [
+       "8e60e3cf",
+       "CenterAd"
+      ],
+      [
+       "9b49a1a3",
+       "AdSize"
+      ],
+      [
+       "d1206d03",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlinetexturepack": {
+     "records": 76,
+     "attributes": [
+      [
+       "CenterLine",
+       "CenterLine"
+      ],
+      [
+       "3cf60484",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "dce7052a",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlogotexturepack": {
+     "records": 278,
+     "attributes": [
+      [
+       "21d09a65",
+       "Int32"
+      ],
+      [
+       "25093e4c",
+       "RefSpec"
+      ],
+      [
+       "CenterLogo",
+       "Team"
+      ],
+      [
+       "2bd5e05c",
+       "CenterlogoStyle"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ]
+     ],
+     "keyed_by": [
+      "CenterLogo:Team"
+     ],
+     "examples": [
+      {
+       "key": "5856f5eb",
+       "name": "centerlogo_477_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_477_cm"
+       ]
+      },
+      {
+       "key": "67958e53",
+       "name": "centerlogo_47_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_501_cm"
+       ]
+      },
+      {
+       "key": "aac7992d",
+       "name": "centerlogo_475_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_475_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "CenterLogo:Team": {
+       "distinct": 272,
+       "records_per_value_max": 7
+      }
+     }
+    },
+    "ge_nhl_stadiumchaircomposite": {
+     "records": 1,
+     "attributes": [
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "4018071a",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a9cfd3b3",
+       "Int32"
+      ],
+      [
+       "b020e806",
+       "PromotionalItems"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumchairscarftexturepack": {
+     "records": 54,
+     "attributes": [
+      [
+       "00a2491f",
+       "RefSpec"
+      ],
+      [
+       "034dc8a2",
+       "RefSpec"
+      ],
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "8ceff355",
+       "RefSpec"
+      ],
+      [
+       "b8b38399",
+       "RefSpec"
+      ],
+      [
+       "f2053da6",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "82e85e28",
+       "name": "scarf_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_frontend_diffuse_packed"
+       ]
+      },
+      {
+       "key": "0fdc5d6c",
+       "name": "scarf_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_florida_diffuse_packed"
+       ]
+      },
+      {
+       "key": "1317de2d",
+       "name": "scarf_euroswisszurich_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_euroswisszurich_diffuse_packed"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 54,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 38,
+       "db_arenaartid_uncovered": [
+        800
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        254,
+        255,
+        498,
+        512,
+        514,
+        515,
+        701,
+        702,
+        703,
+        704,
+        705,
+        706,
+        707,
+        708,
+        709
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumchairtexturepack": {
+     "records": 53,
+     "attributes": [
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "1e36edcd",
+       "RefSpec"
+      ],
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "3db779ea",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b13f6a9e",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "d6b4afe8",
+       "name": "crowdchair_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_losangeles_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      },
+      {
+       "key": "ec9bc917",
+       "name": "crowdchair_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_norm",
+        "rendering\\characters\\crowd\\crowdchair_color_frontend_diff"
+       ]
+      },
+      {
+       "key": "d3becb94",
+       "name": "crowdchair_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_florida_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 53,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 38,
+       "db_arenaartid_uncovered": [
+        800
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        255,
+        498,
+        512,
+        514,
+        515,
+        701,
+        702,
+        703,
+        704,
+        705,
+        706,
+        707,
+        708,
+        709
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumdashertexturepack": {
+     "records": 1,
+     "attributes": [
+      [
+       "65dbc203",
+       "Dasher"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "78f4f331",
+       "RefSpec"
+      ],
+      [
+       "d705e19b",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumegoallight": {
+     "records": 3,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "fd178094",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumentranceprop": {
+     "records": 15,
+     "attributes": [
+      [
+       "0639d9d7",
+       "EntranceProp"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7f8e99b5",
+       "Int32"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumgoallightstanchion": {
+     "records": 13,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6d4b2293",
+       "ArenaId"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "baee1cda",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "6d4b2293:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "8e59f0be",
+       "name": "goallight_verticalled_custom_stlouis",
+       "textures": []
+      },
+      {
+       "key": "5bc61188",
+       "name": "goallight_verticalled_custom_pittsburgh",
+       "textures": []
+      },
+      {
+       "key": "dc47c798",
+       "name": "goallight_verticalled_custom_edmonton",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "6d4b2293:ArenaId": {
+       "distinct": 13,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 1,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        50,
+        51,
+        325,
+        329,
+        331,
+        510,
+        513,
+        800
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        512,
+        514,
+        515,
+        701,
+        702,
+        703,
+        704,
+        705,
+        706,
+        707,
+        708,
+        709
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumicelinetexturepack": {
+     "records": 5,
+     "attributes": [
+      [
+       "IceLine",
+       "IceLineTeamLeague"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "df7bc1d4",
+       "Int32"
+      ],
+      [
+       "f9949296",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumnettingtexturepack": {
+     "records": 2,
+     "attributes": [
+      [
+       "3f2e0c46",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "82266122",
+       "Int32"
+      ],
+      [
+       "c457d085",
+       "RefSpec"
+      ],
+      [
+       "c5056124",
+       "RefSpec"
+      ],
+      [
+       "cbb436b1",
+       "NettingColor"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumstanchionmaterial": {
+     "records": 3,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7317fd61",
+       "Stanchion"
+      ],
+      [
+       "78eed86b",
+       "RefSpec"
+      ],
+      [
+       "868a05bf",
+       "RefSpec"
+      ],
+      [
+       "f55d5a5e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    }
+   }
+  },
+  "nhl18": {
+   "title": "nhl18",
+   "vault": {
+    "gccollections.vlt": "0a5e019da94855f20ebc9d389ffec8c538a9d464df2ea8b777c4b34746490fd8",
+    "gccollections.bin": "cf0cfab277acb2f5bb9598384e523f38ddf455c8e1bdee691677e2ce3f23999c"
+   },
+   "db_arenaartid_distinct": 52,
+   "level_ids": 0,
+   "classes": {
+    "ge_nhl_conversionkit": {
+     "records": 8,
+     "attributes": [
+      [
+       "03ec7403",
+       "Int32"
+      ],
+      [
+       "087da7ea",
+       "RefSpec"
+      ],
+      [
+       "Effects",
+       "RefSpec"
+      ],
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "4847f06d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "9be81e01",
+       "RefSpec"
+      ],
+      [
+       "a37898d9",
+       "RefSpec"
+      ],
+      [
+       "Type",
+       "ConversionKitType"
+      ],
+      [
+       "d032743a",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_eashlbannertexturepack": {
+     "records": 8,
+     "attributes": [
+      [
+       "DiffuseTexture",
+       "RefSpec"
+      ],
+      [
+       "33b2e1d8",
+       "BannerType"
+      ],
+      [
+       "67f77570",
+       "BannerLanguage"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "faa3e26e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_jumbotron": {
+     "records": 10,
+     "attributes": [
+      [
+       "1b880937",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "Type",
+       "Jumbotron"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenteradtexturepack": {
+     "records": 178,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6db617b1",
+       "Int32"
+      ],
+      [
+       "8e60e3cf",
+       "CenterAd"
+      ],
+      [
+       "9b49a1a3",
+       "AdSize"
+      ],
+      [
+       "d1206d03",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlinetexturepack": {
+     "records": 105,
+     "attributes": [
+      [
+       "CenterLine",
+       "CenterLine"
+      ],
+      [
+       "3cf60484",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "dce7052a",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlogotexturepack": {
+     "records": 308,
+     "attributes": [
+      [
+       "21d09a65",
+       "Int32"
+      ],
+      [
+       "25093e4c",
+       "RefSpec"
+      ],
+      [
+       "CenterLogo",
+       "Team"
+      ],
+      [
+       "2bd5e05c",
+       "CenterlogoStyle"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ]
+     ],
+     "keyed_by": [
+      "CenterLogo:Team"
+     ],
+     "examples": [
+      {
+       "key": "bf1fcf69",
+       "name": "centerlogo_470_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_470_cm"
+       ]
+      },
+      {
+       "key": "071acdf5",
+       "name": "centerlogo_471_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_471_cm"
+       ]
+      },
+      {
+       "key": "5439accc",
+       "name": "centerlogo_469_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_469_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "CenterLogo:Team": {
+       "distinct": 302,
+       "records_per_value_max": 7
+      }
+     }
+    },
+    "ge_nhl_stadiumchaircomposite": {
+     "records": 1,
+     "attributes": [
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "4018071a",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a9cfd3b3",
+       "Int32"
+      ],
+      [
+       "b020e806",
+       "PromotionalItems"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumchairscarftexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "00a2491f",
+       "RefSpec"
+      ],
+      [
+       "034dc8a2",
+       "RefSpec"
+      ],
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "8ceff355",
+       "RefSpec"
+      ],
+      [
+       "b8b38399",
+       "RefSpec"
+      ],
+      [
+       "f2053da6",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "9e4068b1",
+       "name": "scarf_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_losangeles_diffuse_packed"
+       ]
+      },
+      {
+       "key": "82e85e28",
+       "name": "scarf_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_frontend_diffuse_packed"
+       ]
+      },
+      {
+       "key": "0fdc5d6c",
+       "name": "scarf_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_florida_diffuse_packed"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 42,
+       "db_arenaartid_uncovered": [
+        36,
+        321,
+        326,
+        516,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        254,
+        255,
+        498,
+        512,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumchairtexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "1e36edcd",
+       "RefSpec"
+      ],
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "3db779ea",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b13f6a9e",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "d6b4afe8",
+       "name": "crowdchair_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_losangeles_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      },
+      {
+       "key": "ec9bc917",
+       "name": "crowdchair_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_norm",
+        "rendering\\characters\\crowd\\crowdchair_color_frontend_diff"
+       ]
+      },
+      {
+       "key": "d3becb94",
+       "name": "crowdchair_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_florida_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 43,
+       "db_arenaartid_uncovered": [
+        36,
+        321,
+        326,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        255,
+        498,
+        512,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumdashertexturepack": {
+     "records": 1,
+     "attributes": [
+      [
+       "65dbc203",
+       "Dasher"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "78f4f331",
+       "RefSpec"
+      ],
+      [
+       "d705e19b",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumdressingkit": {
+     "records": 21,
+     "attributes": [
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ],
+      [
+       "f8971d12",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "fad9b64f",
+       "name": "dressingkit_threes_5_tier3",
+       "textures": []
+      },
+      {
+       "key": "698593e5",
+       "name": "dressingkit_threes_6_tier1",
+       "textures": []
+      },
+      {
+       "key": "977051b4",
+       "name": "dressingkit_threes_5_tier2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 7,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 7,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        36,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumegoallight": {
+     "records": 3,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "fd178094",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumentranceprop": {
+     "records": 20,
+     "attributes": [
+      [
+       "0639d9d7",
+       "EntranceProp"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7f8e99b5",
+       "Int32"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumgoallightstanchion": {
+     "records": 20,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6d4b2293",
+       "ArenaId"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "baee1cda",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "6d4b2293:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "4c755281",
+       "name": "goallight_verticalled_custom_threes_3",
+       "textures": []
+      },
+      {
+       "key": "e1f85a82",
+       "name": "goallight_verticalled_custom_threes_4",
+       "textures": []
+      },
+      {
+       "key": "b3b77755",
+       "name": "goallight_verticalled_custom_threes_2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "6d4b2293:ArenaId": {
+       "distinct": 20,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 11,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        36,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        512,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumicelinetexturepack": {
+     "records": 36,
+     "attributes": [
+      [
+       "IceLine",
+       "IceLineTeamLeague"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b7e42640",
+       "ThreesRinkGraphic"
+      ],
+      [
+       "c2546336",
+       "Int32"
+      ],
+      [
+       "f9949296",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumnettingtexturepack": {
+     "records": 2,
+     "attributes": [
+      [
+       "3f2e0c46",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "82266122",
+       "Int32"
+      ],
+      [
+       "c457d085",
+       "RefSpec"
+      ],
+      [
+       "c5056124",
+       "RefSpec"
+      ],
+      [
+       "cbb436b1",
+       "NettingColor"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumspotlightlogotexturepack": {
+     "records": 2,
+     "attributes": [
+      [
+       "3853ea8d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a09d575c",
+       "Int32"
+      ],
+      [
+       "f66ca16f",
+       "Team"
+      ]
+     ],
+     "keyed_by": [
+      "f66ca16f:Team"
+     ],
+     "examples": [
+      {
+       "key": "350e4079",
+       "name": "spotlight_threes_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_threes_cm"
+       ]
+      },
+      {
+       "key": "aac9e4fb",
+       "name": "spotlight_9_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_9_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "f66ca16f:Team": {
+       "distinct": 2,
+       "records_per_value_max": 1
+      }
+     }
+    },
+    "ge_nhl_stadiumstanchionmaterial": {
+     "records": 3,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7317fd61",
+       "Stanchion"
+      ],
+      [
+       "78eed86b",
+       "RefSpec"
+      ],
+      [
+       "868a05bf",
+       "RefSpec"
+      ],
+      [
+       "f55d5a5e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreeslocpack": {
+     "records": 1,
+     "attributes": [
+      [
+       "0f8440a6",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7e4c5b8f",
+       "RefSpec"
+      ],
+      [
+       "82177814",
+       "Int32"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreestunnelgraphictexturepack": {
+     "records": 7,
+     "attributes": [
+      [
+       "26fb2df9",
+       "OnOff"
+      ],
+      [
+       "4a6038d4",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "b599d4df",
+       "RefSpec"
+      ],
+      [
+       "fad4b729",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    }
+   }
+  },
+  "nhl19": {
+   "title": "nhl19",
+   "vault": {
+    "gccollections.vlt": "6e537bb7b61f1832a88377757a3769586643f70d6452e9c4b61a76c2568146a1",
+    "gccollections.bin": "aece3f7a24bb26139472c0ec870d26909c3b9883838eef8997a76d32ee4c5a25"
+   },
+   "db_arenaartid_distinct": 56,
+   "level_ids": 0,
+   "classes": {
+    "ge_nhl_conversionkit": {
+     "records": 8,
+     "attributes": [
+      [
+       "03ec7403",
+       "Int32"
+      ],
+      [
+       "087da7ea",
+       "RefSpec"
+      ],
+      [
+       "Effects",
+       "RefSpec"
+      ],
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "4847f06d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "9be81e01",
+       "RefSpec"
+      ],
+      [
+       "a37898d9",
+       "RefSpec"
+      ],
+      [
+       "Type",
+       "ConversionKitType"
+      ],
+      [
+       "d032743a",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_eashlbannertexturepack": {
+     "records": 8,
+     "attributes": [
+      [
+       "DiffuseTexture",
+       "RefSpec"
+      ],
+      [
+       "33b2e1d8",
+       "BannerType"
+      ],
+      [
+       "67f77570",
+       "BannerLanguage"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "faa3e26e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_jumbotron": {
+     "records": 10,
+     "attributes": [
+      [
+       "1b880937",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "Type",
+       "Jumbotron"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenteradtexturepack": {
+     "records": 195,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6db617b1",
+       "Int32"
+      ],
+      [
+       "8e60e3cf",
+       "CenterAd"
+      ],
+      [
+       "9b49a1a3",
+       "AdSize"
+      ],
+      [
+       "d1206d03",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlinetexturepack": {
+     "records": 120,
+     "attributes": [
+      [
+       "CenterLine",
+       "CenterLine"
+      ],
+      [
+       "3cf60484",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "dce7052a",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlogotexturepack": {
+     "records": 321,
+     "attributes": [
+      [
+       "21d09a65",
+       "Int32"
+      ],
+      [
+       "25093e4c",
+       "RefSpec"
+      ],
+      [
+       "CenterLogo",
+       "Team"
+      ],
+      [
+       "2bd5e05c",
+       "CenterlogoStyle"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ]
+     ],
+     "keyed_by": [
+      "CenterLogo:Team"
+     ],
+     "examples": [
+      {
+       "key": "7dbe66a9",
+       "name": "centerlogo_468_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_468_cm"
+       ]
+      },
+      {
+       "key": "5439accc",
+       "name": "centerlogo_469_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_469_cm"
+       ]
+      },
+      {
+       "key": "da0e76ee",
+       "name": "centerlogo_467_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_467_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "CenterLogo:Team": {
+       "distinct": 315,
+       "records_per_value_max": 7
+      }
+     }
+    },
+    "ge_nhl_stadiumchaircomposite": {
+     "records": 1,
+     "attributes": [
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "4018071a",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a9cfd3b3",
+       "Int32"
+      ],
+      [
+       "b020e806",
+       "PromotionalItems"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumchairscarftexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "00a2491f",
+       "RefSpec"
+      ],
+      [
+       "034dc8a2",
+       "RefSpec"
+      ],
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "8ceff355",
+       "RefSpec"
+      ],
+      [
+       "b8b38399",
+       "RefSpec"
+      ],
+      [
+       "f2053da6",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "9e4068b1",
+       "name": "scarf_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_losangeles_diffuse_packed"
+       ]
+      },
+      {
+       "key": "82e85e28",
+       "name": "scarf_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_frontend_diffuse_packed"
+       ]
+      },
+      {
+       "key": "0fdc5d6c",
+       "name": "scarf_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_florida_diffuse_packed"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 42,
+       "db_arenaartid_uncovered": [
+        36,
+        321,
+        326,
+        516,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522,
+        900,
+        901,
+        902,
+        903
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        254,
+        255,
+        498,
+        512,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumchairtexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "1e36edcd",
+       "RefSpec"
+      ],
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "3db779ea",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b13f6a9e",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "d6b4afe8",
+       "name": "crowdchair_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_losangeles_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      },
+      {
+       "key": "ec9bc917",
+       "name": "crowdchair_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_norm",
+        "rendering\\characters\\crowd\\crowdchair_color_frontend_diff"
+       ]
+      },
+      {
+       "key": "d3becb94",
+       "name": "crowdchair_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_florida_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 43,
+       "db_arenaartid_uncovered": [
+        36,
+        321,
+        326,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522,
+        900,
+        901,
+        902,
+        903
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        255,
+        498,
+        512,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumcrowdsecondarypack": {
+     "records": 6,
+     "attributes": [
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "RinkId",
+       "RinkID"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7598d376",
+       "Int32"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "e6b05789",
+       "RinkID"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "ae891237",
+       "name": "crowdsecondarypack_outdoor_tier2_rink1_half1",
+       "textures": []
+      },
+      {
+       "key": "830f56d7",
+       "name": "crowdsecondarypack_outdoor_tier2_rink2_half0",
+       "textures": []
+      },
+      {
+       "key": "f111b61e",
+       "name": "crowdsecondarypack_outdoor_tier2_rink2_half1",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 1,
+       "records_per_value_max": 6,
+       "db_arenaartid_covered": 1,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        36,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumdashertexturepack": {
+     "records": 1,
+     "attributes": [
+      [
+       "65dbc203",
+       "Dasher"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "78f4f331",
+       "RefSpec"
+      ],
+      [
+       "d705e19b",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumdressingkit": {
+     "records": 21,
+     "attributes": [
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ],
+      [
+       "f8971d12",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "fad9b64f",
+       "name": "dressingkit_threes_5_tier3",
+       "textures": []
+      },
+      {
+       "key": "698593e5",
+       "name": "dressingkit_threes_6_tier1",
+       "textures": []
+      },
+      {
+       "key": "977051b4",
+       "name": "dressingkit_threes_5_tier2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 7,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 7,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        36,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumegoallight": {
+     "records": 3,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "fd178094",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumentranceprop": {
+     "records": 20,
+     "attributes": [
+      [
+       "0639d9d7",
+       "EntranceProp"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7f8e99b5",
+       "Int32"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumgoallightstanchion": {
+     "records": 20,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6d4b2293",
+       "ArenaId"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "baee1cda",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "6d4b2293:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "4c755281",
+       "name": "goallight_verticalled_custom_threes_3",
+       "textures": []
+      },
+      {
+       "key": "e1f85a82",
+       "name": "goallight_verticalled_custom_threes_4",
+       "textures": []
+      },
+      {
+       "key": "b3b77755",
+       "name": "goallight_verticalled_custom_threes_2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "6d4b2293:ArenaId": {
+       "distinct": 20,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 11,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        36,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        512,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumicelinetexturepack": {
+     "records": 37,
+     "attributes": [
+      [
+       "IceLine",
+       "IceLineTeamLeague"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b7e42640",
+       "ThreesRinkGraphic"
+      ],
+      [
+       "c2546336",
+       "Int32"
+      ],
+      [
+       "f9949296",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumnetpack": {
+     "records": 9,
+     "attributes": [
+      [
+       "186f9c6e",
+       "Int32"
+      ],
+      [
+       "RinkId",
+       "RinkID"
+      ],
+      [
+       "5ae01b86",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "78ba39a9",
+       "name": "netpack_tier4_rink0",
+       "textures": []
+      },
+      {
+       "key": "e9bf2c08",
+       "name": "netpack_tier3_rink2",
+       "textures": []
+      },
+      {
+       "key": "60e9a54e",
+       "name": "netpack_tier4_rink2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 3,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 3,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        36,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumnettingtexturepack": {
+     "records": 2,
+     "attributes": [
+      [
+       "3f2e0c46",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "82266122",
+       "Int32"
+      ],
+      [
+       "c457d085",
+       "RefSpec"
+      ],
+      [
+       "c5056124",
+       "RefSpec"
+      ],
+      [
+       "cbb436b1",
+       "NettingColor"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumspotlightlogotexturepack": {
+     "records": 4,
+     "attributes": [
+      [
+       "3853ea8d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a09d575c",
+       "Int32"
+      ],
+      [
+       "f66ca16f",
+       "Team"
+      ]
+     ],
+     "keyed_by": [
+      "f66ca16f:Team"
+     ],
+     "examples": [
+      {
+       "key": "aac9e4fb",
+       "name": "spotlight_9_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_9_cm"
+       ]
+      },
+      {
+       "key": "350e4079",
+       "name": "spotlight_threes_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_threes_cm"
+       ]
+      },
+      {
+       "key": "b443efcc",
+       "name": "spotlight_10_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_10_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "f66ca16f:Team": {
+       "distinct": 4,
+       "records_per_value_max": 1
+      }
+     }
+    },
+    "ge_nhl_stadiumstanchionmaterial": {
+     "records": 3,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7317fd61",
+       "Stanchion"
+      ],
+      [
+       "78eed86b",
+       "RefSpec"
+      ],
+      [
+       "868a05bf",
+       "RefSpec"
+      ],
+      [
+       "f55d5a5e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreeslocpack": {
+     "records": 1,
+     "attributes": [
+      [
+       "0f8440a6",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7e4c5b8f",
+       "RefSpec"
+      ],
+      [
+       "82177814",
+       "Int32"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreestunnelgraphictexturepack": {
+     "records": 7,
+     "attributes": [
+      [
+       "26fb2df9",
+       "OnOff"
+      ],
+      [
+       "4a6038d4",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "b599d4df",
+       "RefSpec"
+      ],
+      [
+       "fad4b729",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    }
+   }
+  },
+  "nhl20": {
+   "title": "nhl20",
+   "vault": {
+    "gccollections.vlt": "31a2727f470d32262b9b0462378e1fc1bf907964f1b523ff954f4d49980e5a63",
+    "gccollections.bin": "e5266477c8c158653c4aa40f302a5fa2e782ec30ff48d9d10e8934013f8d3ef8"
+   },
+   "db_arenaartid_distinct": 60,
+   "level_ids": 0,
+   "classes": {
+    "ge_nhl_conversionkit": {
+     "records": 8,
+     "attributes": [
+      [
+       "03ec7403",
+       "Int32"
+      ],
+      [
+       "087da7ea",
+       "RefSpec"
+      ],
+      [
+       "Effects",
+       "RefSpec"
+      ],
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "4847f06d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "9be81e01",
+       "RefSpec"
+      ],
+      [
+       "a37898d9",
+       "RefSpec"
+      ],
+      [
+       "Type",
+       "ConversionKitType"
+      ],
+      [
+       "d032743a",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_eashlbannertexturepack": {
+     "records": 8,
+     "attributes": [
+      [
+       "DiffuseTexture",
+       "RefSpec"
+      ],
+      [
+       "33b2e1d8",
+       "BannerType"
+      ],
+      [
+       "67f77570",
+       "BannerLanguage"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "faa3e26e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_jumbotron": {
+     "records": 10,
+     "attributes": [
+      [
+       "1b880937",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "Type",
+       "Jumbotron"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_lightingpack": {
+     "records": 12,
+     "attributes": [
+      [
+       "121e5052",
+       "RefSpec"
+      ],
+      [
+       "1e23a7ae",
+       "RefSpec"
+      ],
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "25656849",
+       "RinkKitType"
+      ],
+      [
+       "5b358c93",
+       "RefSpec"
+      ],
+      [
+       "6481727f",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a76463be",
+       "RefSpec"
+      ],
+      [
+       "ad640c68",
+       "Int32"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ],
+      [
+       "f384cf1f",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "555c2544",
+       "name": "outdoor_peak_threes_lightingpack",
+       "textures": []
+      },
+      {
+       "key": "8fbd5119",
+       "name": "outdoor_peak_proam_lightingpack",
+       "textures": []
+      },
+      {
+       "key": "eae308dd",
+       "name": "outdoor_peak_ones_lightingpack",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 4,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 4,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumcenteradtexturepack": {
+     "records": 206,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6db617b1",
+       "Int32"
+      ],
+      [
+       "8e60e3cf",
+       "CenterAd"
+      ],
+      [
+       "9b49a1a3",
+       "AdSize"
+      ],
+      [
+       "d1206d03",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlinetexturepack": {
+     "records": 136,
+     "attributes": [
+      [
+       "CenterLine",
+       "CenterLine"
+      ],
+      [
+       "3cf60484",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "dce7052a",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlogotexturepack": {
+     "records": 328,
+     "attributes": [
+      [
+       "21d09a65",
+       "Int32"
+      ],
+      [
+       "25093e4c",
+       "RefSpec"
+      ],
+      [
+       "CenterLogo",
+       "Team"
+      ],
+      [
+       "2bd5e05c",
+       "CenterlogoStyle"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ]
+     ],
+     "keyed_by": [
+      "CenterLogo:Team"
+     ],
+     "examples": [
+      {
+       "key": "6c1d3785",
+       "name": "centerlogo_472_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_472_cm"
+       ]
+      },
+      {
+       "key": "6e835d75",
+       "name": "centerlogo_473_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_473_cm"
+       ]
+      },
+      {
+       "key": "071acdf5",
+       "name": "centerlogo_471_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_471_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "CenterLogo:Team": {
+       "distinct": 322,
+       "records_per_value_max": 7
+      }
+     }
+    },
+    "ge_nhl_stadiumchaircomposite": {
+     "records": 1,
+     "attributes": [
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "4018071a",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a9cfd3b3",
+       "Int32"
+      ],
+      [
+       "b020e806",
+       "PromotionalItems"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumchairscarftexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "00a2491f",
+       "RefSpec"
+      ],
+      [
+       "034dc8a2",
+       "RefSpec"
+      ],
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "8ceff355",
+       "RefSpec"
+      ],
+      [
+       "b8b38399",
+       "RefSpec"
+      ],
+      [
+       "f2053da6",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "9e4068b1",
+       "name": "scarf_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_losangeles_diffuse_packed"
+       ]
+      },
+      {
+       "key": "82e85e28",
+       "name": "scarf_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_frontend_diffuse_packed"
+       ]
+      },
+      {
+       "key": "0fdc5d6c",
+       "name": "scarf_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_florida_diffuse_packed"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 42,
+       "db_arenaartid_uncovered": [
+        321,
+        326,
+        516,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522,
+        900,
+        901,
+        902,
+        903,
+        904,
+        905,
+        906,
+        907,
+        908
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        254,
+        255,
+        498,
+        513,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumchairtexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "1e36edcd",
+       "RefSpec"
+      ],
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "3db779ea",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b13f6a9e",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "d6b4afe8",
+       "name": "crowdchair_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_losangeles_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      },
+      {
+       "key": "ec9bc917",
+       "name": "crowdchair_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_norm",
+        "rendering\\characters\\crowd\\crowdchair_color_frontend_diff"
+       ]
+      },
+      {
+       "key": "d3becb94",
+       "name": "crowdchair_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_florida_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 43,
+       "db_arenaartid_uncovered": [
+        321,
+        326,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522,
+        900,
+        901,
+        902,
+        903,
+        904,
+        905,
+        906,
+        907,
+        908
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        255,
+        498,
+        513,
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumcrowdsecondarypack": {
+     "records": 6,
+     "attributes": [
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "RinkId",
+       "RinkID"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7598d376",
+       "Int32"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "e6b05789",
+       "RinkID"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "ae891237",
+       "name": "crowdsecondarypack_outdoor_tier2_rink1_half1",
+       "textures": []
+      },
+      {
+       "key": "830f56d7",
+       "name": "crowdsecondarypack_outdoor_tier2_rink2_half0",
+       "textures": []
+      },
+      {
+       "key": "f111b61e",
+       "name": "crowdsecondarypack_outdoor_tier2_rink2_half1",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 1,
+       "records_per_value_max": 6,
+       "db_arenaartid_covered": 1,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumdashertexturepack": {
+     "records": 1,
+     "attributes": [
+      [
+       "65dbc203",
+       "Dasher"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "78f4f331",
+       "RefSpec"
+      ],
+      [
+       "d705e19b",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumdressingkit": {
+     "records": 21,
+     "attributes": [
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ],
+      [
+       "f8971d12",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "fad9b64f",
+       "name": "dressingkit_threes_5_tier3",
+       "textures": []
+      },
+      {
+       "key": "698593e5",
+       "name": "dressingkit_threes_6_tier1",
+       "textures": []
+      },
+      {
+       "key": "977051b4",
+       "name": "dressingkit_threes_5_tier2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 7,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 7,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumegoallight": {
+     "records": 3,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "fd178094",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumentranceprop": {
+     "records": 20,
+     "attributes": [
+      [
+       "0639d9d7",
+       "EntranceProp"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7f8e99b5",
+       "Int32"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumgoallightstanchion": {
+     "records": 20,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6d4b2293",
+       "ArenaId"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "baee1cda",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "6d4b2293:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "4c755281",
+       "name": "goallight_verticalled_custom_threes_3",
+       "textures": []
+      },
+      {
+       "key": "e1f85a82",
+       "name": "goallight_verticalled_custom_threes_4",
+       "textures": []
+      },
+      {
+       "key": "b3b77755",
+       "name": "goallight_verticalled_custom_threes_2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "6d4b2293:ArenaId": {
+       "distinct": 20,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 12,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        900
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        514,
+        515,
+        702,
+        703,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumicelinetexturepack": {
+     "records": 44,
+     "attributes": [
+      [
+       "IceLine",
+       "IceLineTeamLeague"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b7e42640",
+       "ThreesRinkGraphic"
+      ],
+      [
+       "c2546336",
+       "Int32"
+      ],
+      [
+       "f9949296",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumnetpack": {
+     "records": 9,
+     "attributes": [
+      [
+       "186f9c6e",
+       "Int32"
+      ],
+      [
+       "RinkId",
+       "RinkID"
+      ],
+      [
+       "5ae01b86",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "78ba39a9",
+       "name": "netpack_tier4_rink0",
+       "textures": []
+      },
+      {
+       "key": "e9bf2c08",
+       "name": "netpack_tier3_rink2",
+       "textures": []
+      },
+      {
+       "key": "60e9a54e",
+       "name": "netpack_tier4_rink2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 3,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 3,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumnettingtexturepack": {
+     "records": 2,
+     "attributes": [
+      [
+       "3f2e0c46",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "82266122",
+       "Int32"
+      ],
+      [
+       "c457d085",
+       "RefSpec"
+      ],
+      [
+       "c5056124",
+       "RefSpec"
+      ],
+      [
+       "cbb436b1",
+       "NettingColor"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumspotlightlogotexturepack": {
+     "records": 4,
+     "attributes": [
+      [
+       "3853ea8d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a09d575c",
+       "Int32"
+      ],
+      [
+       "f66ca16f",
+       "Team"
+      ]
+     ],
+     "keyed_by": [
+      "f66ca16f:Team"
+     ],
+     "examples": [
+      {
+       "key": "aac9e4fb",
+       "name": "spotlight_9_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_9_cm"
+       ]
+      },
+      {
+       "key": "350e4079",
+       "name": "spotlight_threes_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_threes_cm"
+       ]
+      },
+      {
+       "key": "b443efcc",
+       "name": "spotlight_10_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_10_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "f66ca16f:Team": {
+       "distinct": 4,
+       "records_per_value_max": 1
+      }
+     }
+    },
+    "ge_nhl_stadiumstanchionmaterial": {
+     "records": 3,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7317fd61",
+       "Stanchion"
+      ],
+      [
+       "78eed86b",
+       "RefSpec"
+      ],
+      [
+       "868a05bf",
+       "RefSpec"
+      ],
+      [
+       "f55d5a5e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreeslocpack": {
+     "records": 1,
+     "attributes": [
+      [
+       "0f8440a6",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7e4c5b8f",
+       "RefSpec"
+      ],
+      [
+       "82177814",
+       "Int32"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreestunnelgraphictexturepack": {
+     "records": 7,
+     "attributes": [
+      [
+       "26fb2df9",
+       "OnOff"
+      ],
+      [
+       "4a6038d4",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "b599d4df",
+       "RefSpec"
+      ],
+      [
+       "fad4b729",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    }
+   }
+  },
+  "nhl21": {
+   "title": "nhl21",
+   "vault": {
+    "gccollections.vlt": "dd4ceff033fd052a4e3a1e85c964d9b32a81778cd31e24c4f193e8fd54b4ea8d",
+    "gccollections.bin": "d668bbe104dbb441b2868a60fb3644537a3b4489b2bc30bad67f6056b22971db"
+   },
+   "db_arenaartid_distinct": 62,
+   "level_ids": 0,
+   "classes": {
+    "ge_nhl_conversionkit": {
+     "records": 10,
+     "attributes": [
+      [
+       "03ec7403",
+       "Int32"
+      ],
+      [
+       "087da7ea",
+       "RefSpec"
+      ],
+      [
+       "Effects",
+       "RefSpec"
+      ],
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "4847f06d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "9be81e01",
+       "RefSpec"
+      ],
+      [
+       "a37898d9",
+       "RefSpec"
+      ],
+      [
+       "Type",
+       "ConversionKitType"
+      ],
+      [
+       "d032743a",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_eashlbannertexturepack": {
+     "records": 8,
+     "attributes": [
+      [
+       "DiffuseTexture",
+       "RefSpec"
+      ],
+      [
+       "33b2e1d8",
+       "BannerType"
+      ],
+      [
+       "67f77570",
+       "BannerLanguage"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "faa3e26e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_jumbotron": {
+     "records": 10,
+     "attributes": [
+      [
+       "1b880937",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "Type",
+       "Jumbotron"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_lightingpack": {
+     "records": 12,
+     "attributes": [
+      [
+       "121e5052",
+       "RefSpec"
+      ],
+      [
+       "1e23a7ae",
+       "RefSpec"
+      ],
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "25656849",
+       "RinkKitType"
+      ],
+      [
+       "5b358c93",
+       "RefSpec"
+      ],
+      [
+       "6481727f",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a76463be",
+       "RefSpec"
+      ],
+      [
+       "ad640c68",
+       "Int32"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ],
+      [
+       "f384cf1f",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "555c2544",
+       "name": "outdoor_peak_threes_lightingpack",
+       "textures": []
+      },
+      {
+       "key": "8fbd5119",
+       "name": "outdoor_peak_proam_lightingpack",
+       "textures": []
+      },
+      {
+       "key": "eae308dd",
+       "name": "outdoor_peak_ones_lightingpack",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 4,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 4,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_scbannertexturepack": {
+     "records": 40,
+     "attributes": [
+      [
+       "Season",
+       "ScBannerSeason"
+      ],
+      [
+       "09e5803c",
+       "Int32"
+      ],
+      [
+       "2a15af51",
+       "Int32"
+      ],
+      [
+       "629d9d62",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "77c89a7c",
+       "ScBannerRank"
+      ],
+      [
+       "7f0a17f9",
+       "OnOff"
+      ],
+      [
+       "876c57bb",
+       "ScBannerBase"
+      ],
+      [
+       "d34a7bc3",
+       "Int32"
+      ],
+      [
+       "e1370ab4",
+       "BannerLanguage"
+      ],
+      [
+       "ef224dfe",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumbapteamtexturepack": {
+     "records": 32,
+     "attributes": [
+      [
+       "03669009",
+       "RefSpec"
+      ],
+      [
+       "1cc77ccd",
+       "RefSpec"
+      ],
+      [
+       "4dce2d1a",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6adc3000",
+       "RefSpec"
+      ],
+      [
+       "70d8ccb0",
+       "RefSpec"
+      ],
+      [
+       "af887c98",
+       "RefSpec"
+      ],
+      [
+       "c7ebeaa6",
+       "RefSpec"
+      ],
+      [
+       "f1523838",
+       "Int32"
+      ],
+      [
+       "Team",
+       "Team"
+      ]
+     ],
+     "keyed_by": [
+      "Team:Team"
+     ],
+     "examples": [
+      {
+       "key": "a8ff1596",
+       "name": "bap_philadelphia_texpack",
+       "textures": [
+        "rendering\\characters\\player\\jersey_adidas_philadelphia_home_cm",
+        "rendering\\stadiums\\common\\bap_logos_lockerroom_philadelphia_alpha",
+        "rendering\\stadiums\\common\\bap_logos_lockerroom_philadelphia_diff",
+        "rendering\\stadiums\\common\\bap_philadelphia_logos_coeff",
+        "rendering\\stadiums\\common\\logos_conference_philadelphia_diff"
+       ]
+      },
+      {
+       "key": "622b0d9a",
+       "name": "bap_ottawa_texpack",
+       "textures": [
+        "rendering\\characters\\player\\jersey_adidas_ottawa_home_cm",
+        "rendering\\stadiums\\common\\bap_logos_lockerroom_ottawa_alpha",
+        "rendering\\stadiums\\common\\bap_logos_lockerroom_ottawa_diff",
+        "rendering\\stadiums\\common\\bap_ottawa_logos_coeff",
+        "rendering\\stadiums\\common\\logos_conference_ottawa_diff"
+       ]
+      },
+      {
+       "key": "72d6ae5b",
+       "name": "bap_sanjose_texpack",
+       "textures": [
+        "rendering\\characters\\player\\jersey_adidas_sanjose_home_cm",
+        "rendering\\stadiums\\common\\bap_logos_lockerroom_sanjose_alpha",
+        "rendering\\stadiums\\common\\bap_logos_lockerroom_sanjose_diff",
+        "rendering\\stadiums\\common\\bap_sanjose_logos_coeff",
+        "rendering\\stadiums\\common\\logos_conference_sanjose_diff"
+       ]
+      }
+     ],
+     "joins": {
+      "Team:Team": {
+       "distinct": 32,
+       "records_per_value_max": 1
+      }
+     }
+    },
+    "ge_nhl_stadiumcenteradtexturepack": {
+     "records": 219,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6db617b1",
+       "Int32"
+      ],
+      [
+       "8e60e3cf",
+       "CenterAd"
+      ],
+      [
+       "9b49a1a3",
+       "AdSize"
+      ],
+      [
+       "d1206d03",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlinetexturepack": {
+     "records": 145,
+     "attributes": [
+      [
+       "CenterLine",
+       "CenterLine"
+      ],
+      [
+       "3cf60484",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "dce7052a",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumcenterlogotexturepack": {
+     "records": 348,
+     "attributes": [
+      [
+       "21d09a65",
+       "Int32"
+      ],
+      [
+       "25093e4c",
+       "RefSpec"
+      ],
+      [
+       "CenterLogo",
+       "Team"
+      ],
+      [
+       "2bd5e05c",
+       "CenterlogoStyle"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ]
+     ],
+     "keyed_by": [
+      "CenterLogo:Team"
+     ],
+     "examples": [
+      {
+       "key": "67958e53",
+       "name": "centerlogo_47_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_501_cm"
+       ]
+      },
+      {
+       "key": "29a11a54",
+       "name": "centerlogo_48_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_501_cm"
+       ]
+      },
+      {
+       "key": "0a97b3dc",
+       "name": "centerlogo_479_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\ice_centerlogo_479_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "CenterLogo:Team": {
+       "distinct": 342,
+       "records_per_value_max": 7
+      }
+     }
+    },
+    "ge_nhl_stadiumchaircomposite": {
+     "records": 1,
+     "attributes": [
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "4018071a",
+       "OnOff"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a9cfd3b3",
+       "Int32"
+      ],
+      [
+       "b020e806",
+       "PromotionalItems"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumchairscarftexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "00a2491f",
+       "RefSpec"
+      ],
+      [
+       "034dc8a2",
+       "RefSpec"
+      ],
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "8ceff355",
+       "RefSpec"
+      ],
+      [
+       "b8b38399",
+       "RefSpec"
+      ],
+      [
+       "f2053da6",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "9e4068b1",
+       "name": "scarf_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_losangeles_diffuse_packed"
+       ]
+      },
+      {
+       "key": "82e85e28",
+       "name": "scarf_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_frontend_diffuse_packed"
+       ]
+      },
+      {
+       "key": "0fdc5d6c",
+       "name": "scarf_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\scarf_florida_diffuse_packed"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 43,
+       "db_arenaartid_uncovered": [
+        321,
+        326,
+        516,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522,
+        900,
+        901,
+        902,
+        903,
+        904,
+        905,
+        906,
+        907,
+        908,
+        910
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        254,
+        255,
+        498,
+        513,
+        514,
+        515,
+        702,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumchairtexturepack": {
+     "records": 55,
+     "attributes": [
+      [
+       "05019493",
+       "Int32"
+      ],
+      [
+       "ArenaID",
+       "ArenaId"
+      ],
+      [
+       "1e36edcd",
+       "RefSpec"
+      ],
+      [
+       "1e408ba7",
+       "RefSpec"
+      ],
+      [
+       "3db779ea",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b13f6a9e",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaID:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "d6b4afe8",
+       "name": "crowdchair_losangeles_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_losangeles_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      },
+      {
+       "key": "ec9bc917",
+       "name": "crowdchair_frontend_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_cloth_generic_norm",
+        "rendering\\characters\\crowd\\crowdchair_color_frontend_diff"
+       ]
+      },
+      {
+       "key": "d3becb94",
+       "name": "crowdchair_florida_texturepack",
+       "textures": [
+        "rendering\\characters\\crowd\\crowdchair_color_florida_diff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_coeff",
+        "rendering\\characters\\crowd\\crowdchair_vinyl_generic_norm"
+       ]
+      }
+     ],
+     "joins": {
+      "ArenaID:ArenaId": {
+       "distinct": 55,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 44,
+       "db_arenaartid_uncovered": [
+        321,
+        326,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522,
+        900,
+        901,
+        902,
+        903,
+        904,
+        905,
+        906,
+        907,
+        908,
+        910
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        100,
+        255,
+        498,
+        513,
+        514,
+        515,
+        702,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumcrowdsecondarypack": {
+     "records": 6,
+     "attributes": [
+      [
+       "1eaac17f",
+       "Text"
+      ],
+      [
+       "RinkId",
+       "RinkID"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7598d376",
+       "Int32"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "e6b05789",
+       "RinkID"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "ae891237",
+       "name": "crowdsecondarypack_outdoor_tier2_rink1_half1",
+       "textures": []
+      },
+      {
+       "key": "830f56d7",
+       "name": "crowdsecondarypack_outdoor_tier2_rink2_half0",
+       "textures": []
+      },
+      {
+       "key": "f111b61e",
+       "name": "crowdsecondarypack_outdoor_tier2_rink2_half1",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 1,
+       "records_per_value_max": 6,
+       "db_arenaartid_covered": 1,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumdashertexturepack": {
+     "records": 1,
+     "attributes": [
+      [
+       "65dbc203",
+       "Dasher"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "78f4f331",
+       "RefSpec"
+      ],
+      [
+       "d705e19b",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumdressingkit": {
+     "records": 25,
+     "attributes": [
+      [
+       "Group",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "99290b31",
+       "ConversionKitTier"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ],
+      [
+       "f8971d12",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "65c50d58",
+       "name": "dressingkit_threes_5_tier1",
+       "textures": []
+      },
+      {
+       "key": "977051b4",
+       "name": "dressingkit_threes_5_tier2",
+       "textures": []
+      },
+      {
+       "key": "fad9b64f",
+       "name": "dressingkit_threes_5_tier3",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 8,
+       "records_per_value_max": 5,
+       "db_arenaartid_covered": 8,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512,
+        700
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumegoallight": {
+     "records": 3,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "fd178094",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumentranceprop": {
+     "records": 20,
+     "attributes": [
+      [
+       "0639d9d7",
+       "EntranceProp"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7f8e99b5",
+       "Int32"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "Lighting",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumgoallightstanchion": {
+     "records": 20,
+     "attributes": [
+      [
+       "1c4bc9f8",
+       "GoalLight"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "6d4b2293",
+       "ArenaId"
+      ],
+      [
+       "aa24590b",
+       "RefSpec"
+      ],
+      [
+       "baee1cda",
+       "Int32"
+      ]
+     ],
+     "keyed_by": [
+      "6d4b2293:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "4c755281",
+       "name": "goallight_verticalled_custom_threes_3",
+       "textures": []
+      },
+      {
+       "key": "e1f85a82",
+       "name": "goallight_verticalled_custom_threes_4",
+       "textures": []
+      },
+      {
+       "key": "b3b77755",
+       "name": "goallight_verticalled_custom_threes_2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "6d4b2293:ArenaId": {
+       "distinct": 20,
+       "records_per_value_max": 1,
+       "db_arenaartid_covered": 13,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        900
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": [
+        514,
+        515,
+        702,
+        704,
+        706,
+        707,
+        708
+       ]
+      }
+     }
+    },
+    "ge_nhl_stadiumicelinetexturepack": {
+     "records": 45,
+     "attributes": [
+      [
+       "IceLine",
+       "IceLineTeamLeague"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "b7e42640",
+       "ThreesRinkGraphic"
+      ],
+      [
+       "c2546336",
+       "Int32"
+      ],
+      [
+       "f9949296",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumnetpack": {
+     "records": 9,
+     "attributes": [
+      [
+       "186f9c6e",
+       "Int32"
+      ],
+      [
+       "RinkId",
+       "RinkID"
+      ],
+      [
+       "5ae01b86",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "ArenaId",
+       "ArenaId"
+      ]
+     ],
+     "keyed_by": [
+      "ArenaId:ArenaId"
+     ],
+     "examples": [
+      {
+       "key": "78ba39a9",
+       "name": "netpack_tier4_rink0",
+       "textures": []
+      },
+      {
+       "key": "e9bf2c08",
+       "name": "netpack_tier3_rink2",
+       "textures": []
+      },
+      {
+       "key": "60e9a54e",
+       "name": "netpack_tier4_rink2",
+       "textures": []
+      }
+     ],
+     "joins": {
+      "ArenaId:ArenaId": {
+       "distinct": 3,
+       "records_per_value_max": 3,
+       "db_arenaartid_covered": 3,
+       "db_arenaartid_uncovered": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        50,
+        51,
+        321,
+        325,
+        326,
+        329,
+        331,
+        510,
+        512
+       ],
+       "level_ids_covered": 0,
+       "values_without_db_arena": []
+      }
+     }
+    },
+    "ge_nhl_stadiumnettingtexturepack": {
+     "records": 2,
+     "attributes": [
+      [
+       "3f2e0c46",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "82266122",
+       "Int32"
+      ],
+      [
+       "c457d085",
+       "RefSpec"
+      ],
+      [
+       "c5056124",
+       "RefSpec"
+      ],
+      [
+       "cbb436b1",
+       "NettingColor"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumspotlightlogotexturepack": {
+     "records": 4,
+     "attributes": [
+      [
+       "3853ea8d",
+       "RefSpec"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "a09d575c",
+       "Int32"
+      ],
+      [
+       "f66ca16f",
+       "Team"
+      ]
+     ],
+     "keyed_by": [
+      "f66ca16f:Team"
+     ],
+     "examples": [
+      {
+       "key": "aac9e4fb",
+       "name": "spotlight_9_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_9_cm"
+       ]
+      },
+      {
+       "key": "350e4079",
+       "name": "spotlight_threes_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_threes_cm"
+       ]
+      },
+      {
+       "key": "b443efcc",
+       "name": "spotlight_10_texpack",
+       "textures": [
+        "rendering\\stadiums\\common\\spotlight_10_cm"
+       ]
+      }
+     ],
+     "joins": {
+      "f66ca16f:Team": {
+       "distinct": 4,
+       "records_per_value_max": 1
+      }
+     }
+    },
+    "ge_nhl_stadiumstanchionmaterial": {
+     "records": 3,
+     "attributes": [
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7317fd61",
+       "Stanchion"
+      ],
+      [
+       "78eed86b",
+       "RefSpec"
+      ],
+      [
+       "868a05bf",
+       "RefSpec"
+      ],
+      [
+       "f55d5a5e",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreeslocpack": {
+     "records": 5,
+     "attributes": [
+      [
+       "0f8440a6",
+       "OnOff"
+      ],
+      [
+       "223ae338",
+       "ConversionKitTier"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "7e4c5b8f",
+       "RefSpec"
+      ],
+      [
+       "8969e53c",
+       "RefSpec"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "cc997d84",
+       "Int32"
+      ]
+     ],
+     "keyed_by": null
+    },
+    "ge_nhl_stadiumthreestunnelgraphictexturepack": {
+     "records": 7,
+     "attributes": [
+      [
+       "26fb2df9",
+       "OnOff"
+      ],
+      [
+       "4a6038d4",
+       "Int32"
+      ],
+      [
+       "DebugName",
+       "Text"
+      ],
+      [
+       "90062d01",
+       "OnOff"
+      ],
+      [
+       "b599d4df",
+       "RefSpec"
+      ],
+      [
+       "fad4b729",
+       "RefSpec"
+      ]
+     ],
+     "keyed_by": null
+    }
+   }
+  }
+ }
+}

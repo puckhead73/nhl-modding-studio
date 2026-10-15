@@ -43,10 +43,50 @@ pub mod captaincy {
 /// anchor metadata and bytes: 322 rows on NHL Legacy, e.g. Montreal's eleven retired numbers). Each row
 /// is a retired `(team, number)` pair; there is **no** retired-number field set on `kOtt` itself.
 /// Studio ids: `dXSB` = team (→ `kOtt.vfEq`, 8-bit), `JFiY` = jersey number (7-bit).
+pub fn explicit_free_agents(bytes: &[u8]) -> Result<Option<Vec<u64>>, EditError> {
+    let db = TdbFile::parse(bytes).map_err(|e| EditError::Parse(e.to_string()))?;
+    let Some(pool) = db.table_canonical("VoEQ") else { return Ok(None) };
+    // Only the witnessed single-key pool is supported; do not discard unknown columns.
+    if pool.fields.len() != 1 || pool.fields[0].id.canonical(db.endian) != "XSWT" {
+        return Err(EditError::Refused("Unsupported free-agent list schema".into()));
+    }
+    let index = db.table_canonical(ids::INDEX).ok_or_else(|| EditError::UnknownTable(ids::INDEX.into()))?;
+    let field = |id: &str| index.fields.iter().find(|f| f.id.canonical(db.endian) == id)
+        .ok_or_else(|| EditError::UnknownField { table: ids::INDEX.into(), field: id.into() });
+    let key = field(ids::INDEX_KEY)?;
+    let bio = field(ids::INDEX_TO_BIO)?;
+    let mut result = Vec::new();
+    for row in 0..pool.current_records as u32 {
+        let pointer = db.read_u64(pool, row, &pool.fields[0]);
+        let matches: Vec<_> = (0..index.current_records as u32)
+            .filter(|&r| db.read_u64(index, r, key) == pointer).collect();
+        if matches.len() != 1 { return Err(EditError::Refused("Free-agent index is missing or ambiguous".into())); }
+        let player = db.read_u64(index, matches[0], bio).ok_or_else(|| EditError::Refused("Invalid free-agent pointer".into()))?;
+        if result.contains(&player) { return Err(EditError::Refused("Duplicate free-agent entry".into())); }
+        result.push(player);
+    }
+    Ok(Some(result))
+}
+
 pub mod retired {
     pub const TABLE: &str = "wcSL";
     pub const TEAM: &str = "dXSB";
     pub const NUMBER: &str = "JFiY";
+}
+
+/// The team-jersey registry (`xjgw` — "stockteamjerseys"). `TEAM` (`mCXg`) is **0-indexed**
+/// (verified against the anchor meta — the opposite of `hHbv.dXSB`). The `{STYLE}_{ART_ID}_
+/// {VARIANT}` triple is the asset id keying the kit's texture files; `FE_VARIANT` (`ddOX`)
+/// always mirrors `VARIANT` in stock data.
+pub mod jerseys {
+    pub const TABLE: &str = "xjgw";
+    pub const TEAM: &str = "mCXg";
+    /// Per-team jersey index (5-bit → 32-kit ceiling per team).
+    pub const INDEX: &str = "tYnx";
+    pub const STYLE: &str = "cVLR";
+    pub const ART_ID: &str = "GDQL";
+    pub const VARIANT: &str = "FccT";
+    pub const FE_VARIANT: &str = "ddOX";
 }
 
 /// The future-draft-pick table (`qHav` — "exhibitiondraftpick"). One row per pick; `Uwdb` is the
@@ -180,9 +220,16 @@ pub struct ImportWrite {
 #[derive(Clone, Debug)]
 pub enum ImportOp {
     /// Create a new player cluster on `team` at `position`, then write `writes`.
-    Create { team: u64, position: u64, writes: Vec<ImportWrite> },
+    Create {
+        team: u64,
+        position: u64,
+        writes: Vec<ImportWrite>,
+    },
     /// Update the existing player `player_id`'s bio/companion cells with `writes`.
-    Update { player_id: u64, writes: Vec<ImportWrite> },
+    Update {
+        player_id: u64,
+        writes: Vec<ImportWrite>,
+    },
 }
 
 /// The result of applying an import cart: the aggregate op outcome plus every newly-created `wBIz`
@@ -315,6 +362,72 @@ impl EditTransaction {
         })
     }
 
+    /// Set many fixed-bit cells — possibly across many records of one table — inside **one**
+    /// repairing transaction. Values are the already-validated encoded raw values, as for
+    /// [`Self::set_cell_int`]. The table is parsed once for the whole batch (the per-cell path
+    /// re-parses the working bytes per write, which is prohibitive for a 1 231-row schedule);
+    /// the post-condition audit runs once at the end, and any failure rolls the whole batch back.
+    pub fn set_cells_int_many(
+        &mut self,
+        studio_table: &str,
+        cells: &[(u32, String, u64)],
+    ) -> Result<OpOutcome, EditError> {
+        self.with_repairing_transaction(|tx| {
+            let view = tx.working.clone();
+            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+            let table = db
+                .table_canonical(studio_table)
+                .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+            let mut edits = 0u32;
+            for (record, studio_field, value) in cells {
+                let field = table
+                    .fields
+                    .iter()
+                    .find(|f| f.id.canonical(db.endian) == *studio_field)
+                    .ok_or_else(|| EditError::UnknownField {
+                        table: studio_table.to_string(),
+                        field: studio_field.to_string(),
+                    })?;
+                if !db.set_u64(&mut tx.working, table, *record, field, *value) {
+                    return Err(EditError::OutOfRange {
+                        table: studio_table.to_string(),
+                        record: *record,
+                    });
+                }
+                edits += 1;
+            }
+            Ok(OpOutcome {
+                edits,
+                repairs: Vec::new(),
+            })
+        })
+    }
+
+    /// Replay validated cells as one change set. Intermediate states may be inconsistent (for
+    /// example moving a player before changing their jersey); only the final state is audited.
+    pub fn set_cells_atomic(&mut self, cells: &[(String, u32, String, ImportCell)]) -> Result<OpOutcome, EditError> {
+        self.with_repairing_transaction(|tx| {
+            // Scalar writes do not change table layouts. Share one parsed snapshot for the
+            // whole batch while still writing into the transaction's rollback-protected bytes.
+            let view = tx.working.clone();
+            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+            for (table, record, field, value) in cells {
+                let descriptor = db.table_canonical(table)
+                    .ok_or_else(|| EditError::UnknownTable(table.clone()))?;
+                let column = descriptor.fields.iter().find(|f| f.id.canonical(db.endian) == *field)
+                    .ok_or_else(|| EditError::UnknownField { table: table.clone(), field: field.clone() })?;
+                let written = match value {
+                    ImportCell::Int(v) => db.set_u64(&mut tx.working, descriptor, *record, column, *v),
+                    ImportCell::Str(v) => db.set_inline_str(&mut tx.working, descriptor, *record, column, v),
+                };
+                if !written {
+                    return Err(EditError::OutOfRange { table: table.clone(), record: *record });
+                }
+            }
+            Ok(OpOutcome { edits: cells.len() as u32, repairs: Vec::new() })
+        })
+    }
+
     /// Set a single inline-string cell (studio ids) inside a repairing transaction. `text` must
     /// already fit the field width (the caller validates against metadata).
     pub fn set_cell_str(
@@ -349,6 +462,69 @@ impl EditTransaction {
         Ok(index)
     }
 
+    /// Replace the explicit pool by player identity, preserving the requested order.
+    /// Used by release/sign and package replay; the surrounding transaction is atomic.
+    /// Replace a caller-validated integer table, preserving allocation where possible.
+    /// Domain callers must restrict this to their supported structural operations.
+    pub fn replace_integer_rows(&mut self, table_id: &str, rows: &[Vec<(String, u64)>]) -> Result<OpOutcome, EditError> {
+        self.with_repairing_transaction(|tx| {
+            if rows.len() > u16::MAX as usize { return Err(EditError::Refused("Too many records".into())); }
+            loop {
+                let view = tx.working.clone();
+                let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+                let table = db.table_canonical(table_id).ok_or_else(|| EditError::UnknownTable(table_id.into()))?;
+                let count = table.current_records as usize;
+                if count == rows.len() { break; }
+                tx.working = if count < rows.len() {
+                    db.append_record(&table.id.raw()).map_err(|e| EditError::Alloc(e.to_string()))?.0
+                } else {
+                    db.remove_record_ordered(&table.id.raw(), (count - 1) as u32).map_err(|e| EditError::Alloc(e.to_string()))?
+                };
+            }
+            let view = tx.working.clone();
+            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+            let table = db.table_canonical(table_id).unwrap();
+            for (record, cells) in rows.iter().enumerate() {
+                if cells.len() != table.fields.len() { return Err(EditError::Refused("A replacement row must include every field".into())); }
+                let mut seen = HashSet::new();
+                for (id, value) in cells {
+                    let field = table.fields.iter().find(|f| f.id.canonical(db.endian) == *id).ok_or_else(|| EditError::Refused("Unknown replacement field".into()))?;
+                    if !seen.insert(id) || field.bit_width < 64 && *value >= (1u64 << field.bit_width) { return Err(EditError::Refused("Invalid replacement value".into())); }
+                    if !db.set_u64(&mut tx.working, table, record as u32, field, *value) { return Err(EditError::Refused("Cannot write replacement row".into())); }
+                }
+            }
+            Ok(OpOutcome { edits: rows.len().max(1) as u32, repairs: Vec::new() })
+        })
+    }
+
+    pub fn set_free_agent_pool(&mut self, players: &[u64]) -> Result<OpOutcome, EditError> {
+        self.with_repairing_transaction(|tx| {
+            explicit_free_agents(tx.bytes())?.ok_or_else(|| EditError::Refused("This database has no explicit free-agent list".into()))?;
+            let mut keys = Vec::new();
+            for &player in players {
+                if keys.iter().any(|(p, _)| *p == player) { return Err(EditError::Refused("Duplicate free-agent entry".into())); }
+                keys.push((player, tx.player_pool_index_key(player)?));
+            }
+            let db = TdbFile::parse(tx.bytes()).map_err(|e| EditError::Parse(e.to_string()))?;
+            let table = db.table_canonical("VoEQ").unwrap();
+            let mut kept = 0;
+            let mut removed = HashSet::new();
+            for r in 0..table.current_records as u32 {
+                let key = db.read_u64(table, r, &table.fields[0]).ok_or_else(|| EditError::Refused("Unreadable free-agent row".into()))?;
+                if keys.get(kept).is_some_and(|(_, wanted)| *wanted == key) { kept += 1; }
+                else { removed.insert(key); }
+            }
+            // Keep the longest surviving prefix. A release appends one row; a signing
+            // removes one row, preserving the order and bytes of all other members.
+            tx.remove_matching_ordered("VoEQ", "XSWT", &removed)?;
+            for (_, key) in keys.into_iter().skip(kept) {
+                let row = tx.append("VoEQ")?;
+                tx.set_field("VoEQ", row, "XSWT", key)?;
+            }
+            Ok(OpOutcome { edits: 1, repairs: Vec::new() })
+        })
+    }
+
     /// Mint a fresh unique id for a key field: the **smallest free value** in `1..sentinel` not already
     /// used by any record. (`max + 1` is wrong here — these 14-bit id spaces are nearly full and their
     /// top value is the all-ones "none" sentinel, so `max + 1` would alias it; the spaces are sparse,
@@ -378,9 +554,9 @@ impl EditTransaction {
                 used.insert(v);
             }
         }
-        (1..sentinel)
-            .find(|c| !used.contains(c))
-            .ok_or_else(|| EditError::Alloc(format!("no free id for {studio_table}.{studio_field}")))
+        (1..sentinel).find(|c| !used.contains(c)).ok_or_else(|| {
+            EditError::Alloc(format!("no free id for {studio_table}.{studio_field}"))
+        })
     }
 
     /// Insert a zeroed record **at `index`** of a studio-named table (order-preserving), updating the
@@ -448,8 +624,10 @@ impl EditTransaction {
                     table: studio_table.to_string(),
                     field: studio_field.to_string(),
                 })?;
-            let hit = (0..table.current_records as u32)
-                .find(|&i| db.read_u64(table, i, field).is_some_and(|v| wanted.contains(&v)));
+            let hit = (0..table.current_records as u32).find(|&i| {
+                db.read_u64(table, i, field)
+                    .is_some_and(|v| wanted.contains(&v))
+            });
             let Some(index) = hit else { break };
             let raw = table.id.raw();
             let new_bytes = if ordered {
@@ -493,8 +671,7 @@ impl EditTransaction {
                 return Ok(outcome);
             }
             // Some violation is present; only reject if the op *increased* a predicate's count.
-            let pre_db =
-                TdbFile::parse(&snapshot).map_err(|e| EditError::Parse(e.to_string()))?;
+            let pre_db = TdbFile::parse(&snapshot).map_err(|e| EditError::Parse(e.to_string()))?;
             let pre = predicate_counts(&pre_db);
             for (i, (predicate, post_n)) in post.iter().enumerate() {
                 if *post_n > pre[i].1 {
@@ -521,7 +698,10 @@ impl EditTransaction {
         player_id: u64,
         role: u64,
     ) -> Result<OpOutcome, EditError> {
-        if !matches!(role, captaincy::NONE | captaincy::CAPTAIN | captaincy::ALTERNATE) {
+        if !matches!(
+            role,
+            captaincy::NONE | captaincy::CAPTAIN | captaincy::ALTERNATE
+        ) {
             return Err(EditError::InvalidValue {
                 what: "captaincy role",
                 value: role as i64,
@@ -544,7 +724,12 @@ impl EditTransaction {
                         && s.captaincy == Some(captaincy::CAPTAIN)
                         && s.record != target_record
                 }) {
-                    tx.set_field(ids::ROSTER_LINES, prior.record, ids::SLOT_CAPTAINCY, captaincy::NONE)?;
+                    tx.set_field(
+                        ids::ROSTER_LINES,
+                        prior.record,
+                        ids::SLOT_CAPTAINCY,
+                        captaincy::NONE,
+                    )?;
                     repairs.push(format!(
                         "demoted prior captain (player {:?}) on team {team_id}",
                         prior.player_id
@@ -564,7 +749,11 @@ impl EditTransaction {
     /// rows (bio/index/companion appends are in other tables and don't move `eGlu`).
     fn eglu_placement(&self, team_id: u64) -> Result<SlotPlacement, EditError> {
         let model = self.model()?;
-        let team_slots: Vec<_> = model.slots.iter().filter(|s| s.team_id == team_id).collect();
+        let team_slots: Vec<_> = model
+            .slots
+            .iter()
+            .filter(|s| s.team_id == team_id)
+            .collect();
         // Prefer reusing a vacant slot already inside the team's block (an unoccupied `XSWT`): no
         // allocation, no shift, and the slot keeps its in-block `toWX` key.
         if let Some(vacant) = team_slots.iter().find(|s| s.index_key.is_none()) {
@@ -622,12 +811,22 @@ impl EditTransaction {
     /// it **inside** a [`with_repairing_transaction`](Self::with_repairing_transaction) so the audit
     /// still fires — `create_player` wraps a single one; a batch import wraps one around the *whole*
     /// cart so N creates cost one audit and roll back atomically.
-    fn create_player_inner(&mut self, team_id: u64, position: u64) -> Result<CreatedPlayer, EditError> {
+    fn create_player_inner(
+        &mut self,
+        team_id: u64,
+        position: u64,
+    ) -> Result<CreatedPlayer, EditError> {
         if position > 4 {
-            return Err(EditError::InvalidValue { what: "position", value: position as i64 });
+            return Err(EditError::InvalidValue {
+                what: "position",
+                value: position as i64,
+            });
         }
         if self.model()?.team(team_id).is_none() {
-            return Err(EditError::InvalidValue { what: "team_id (no such team)", value: team_id as i64 });
+            return Err(EditError::InvalidValue {
+                what: "team_id (no such team)",
+                value: team_id as i64,
+            });
         }
         let new_pid = self.mint_id(ids::BIO, ids::PLAYER_ID)?;
         let new_vfeq = self.mint_id(ids::INDEX, ids::INDEX_KEY)?;
@@ -672,7 +871,13 @@ impl EditTransaction {
             }
         };
 
-        Ok(CreatedPlayer { wbiz: new_pid, bio, companion_ai: ai_rec, goalie, edits: 7 + slot_edits })
+        Ok(CreatedPlayer {
+            wbiz: new_pid,
+            bio,
+            companion_ai: ai_rec,
+            goalie,
+            edits: 7 + slot_edits,
+        })
     }
 
     /// Apply a batch import — many creates and/or updates — as **one** audited transaction and **one**
@@ -689,24 +894,37 @@ impl EditTransaction {
             let mut total = OpOutcome::default();
             for op in ops {
                 match op {
-                    ImportOp::Create { team, position, writes } => {
+                    ImportOp::Create {
+                        team,
+                        position,
+                        writes,
+                    } => {
                         let c = tx.create_player_inner(*team, *position)?;
                         created.push(c.wbiz);
                         total.edits += c.edits;
-                        let companion = if c.goalie { ids::GOALIE_AI } else { ids::SKATER_AI };
+                        let companion = if c.goalie {
+                            ids::GOALIE_AI
+                        } else {
+                            ids::SKATER_AI
+                        };
                         for w in writes {
                             tx.apply_import_write(c.bio, c.companion_ai, companion, w)?;
                             total.edits += 1;
                         }
-                        total.repairs.push(format!("imported new player wBIz={}", c.wbiz));
+                        total
+                            .repairs
+                            .push(format!("imported new player wBIz={}", c.wbiz));
                     }
                     ImportOp::Update { player_id, writes } => {
-                        let (bio, companion_rec, companion) = tx.locate_player_records(*player_id)?;
+                        let (bio, companion_rec, companion) =
+                            tx.locate_player_records(*player_id)?;
                         for w in writes {
                             tx.apply_import_write(bio, companion_rec, companion, w)?;
                             total.edits += 1;
                         }
-                        total.repairs.push(format!("updated player wBIz={player_id}"));
+                        total
+                            .repairs
+                            .push(format!("updated player wBIz={player_id}"));
                     }
                 }
             }
@@ -718,7 +936,9 @@ impl EditTransaction {
     /// Resolve a player's `(bio_record, companion_record, companion_table)` from the current model.
     fn locate_player_records(&self, player_id: u64) -> Result<(u32, u32, &'static str), EditError> {
         let model = self.model()?;
-        let p = model.player(player_id).ok_or(EditError::NoSuchPlayer(player_id))?;
+        let p = model
+            .player(player_id)
+            .ok_or(EditError::NoSuchPlayer(player_id))?;
         let (rec, table) = match p.kind {
             PlayerKind::Skater => (p.skater_ai, ids::SKATER_AI),
             PlayerKind::Goalie => (p.goalie_ai, ids::GOALIE_AI),
@@ -772,16 +992,16 @@ impl EditTransaction {
             let src = model
                 .player(source_player)
                 .ok_or(EditError::NoSuchPlayer(source_player))?;
-            let (ai, equip, goalie) = if let (Some(ai), Some(eq)) = (src.goalie_ai, src.goalie_equip)
-            {
-                (ai, eq, true)
-            } else if let (Some(ai), Some(eq)) = (src.skater_ai, src.skater_equip) {
-                (ai, eq, false)
-            } else {
-                return Err(EditError::Entity(format!(
-                    "source player {source_player} is missing a companion pair to clone"
-                )));
-            };
+            let (ai, equip, goalie) =
+                if let (Some(ai), Some(eq)) = (src.goalie_ai, src.goalie_equip) {
+                    (ai, eq, true)
+                } else if let (Some(ai), Some(eq)) = (src.skater_ai, src.skater_equip) {
+                    (ai, eq, false)
+                } else {
+                    return Err(EditError::Entity(format!(
+                        "source player {source_player} is missing a companion pair to clone"
+                    )));
+                };
             (src.bio_record, ai, equip, goalie)
         };
         let new_pid = self.mint_id(ids::BIO, ids::PLAYER_ID)?;
@@ -857,7 +1077,8 @@ impl EditTransaction {
             //    this MUST be an ordered remove (slide later slots up, keeping each team's block
             //    contiguous and the table tiling) — swap-pop would drop a foreign team's tail slot into
             //    the hole and violate `towx_coherence` (docs/audits/towx-blocks.md).
-            edits += tx.remove_matching_ordered(ids::ROSTER_LINES, ids::SLOT_TO_INDEX, &index_keys)?;
+            edits +=
+                tx.remove_matching_ordered(ids::ROSTER_LINES, ids::SLOT_TO_INDEX, &index_keys)?;
             // 2. The player-index rows themselves.
             edits += tx.remove_matching(ids::INDEX, ids::INDEX_KEY, &index_keys)?;
             // 3. Every companion row sharing the wBIz (kind-agnostic, robust to stray rows).
@@ -885,9 +1106,10 @@ impl EditTransaction {
 
     /// Add one stock career season row for a player. `studio_table` must be one of
     /// [`CAREER_TABLES`]; the appended record starts zeroed (stat cells are edited afterwards
-    /// through the normal validated field path) with its identity set: the 1-indexed `wBIz` join
-    /// key (raw `0` is the "no player" sentinel — the tables store `bio wBIz + 1`), the season-end
-    /// year (`raw + 1900`), the 1-bit league flag, and the inline team-code string. Returns the new
+    /// through the normal validated field path) with its identity set: the schema's `wBIz` join
+    /// (zero-based on NHL07/08, +1 later), the season-end year (1959/1900 base),
+    /// the 1-bit league flag, and the inline team-code string when present. Schemas
+    /// without that field require an empty team code. Returns the new
     /// record index. Audited + undoable.
     pub fn add_career_season(
         &mut self,
@@ -900,6 +1122,18 @@ impl EditTransaction {
         career_table_guard(studio_table)?;
         if self.model()?.player(player_id).is_none() {
             return Err(EditError::NoSuchPlayer(player_id));
+        }
+        // NHL07/08 use compact (6/7-bit) years based at 1959 and a zero-based
+        // player join; the later 8-bit career schema uses 1900 and a +1 join.
+        let year_width = self.field_width(studio_table, CAREER_YEAR)?;
+        let early = matches!(year_width, 6 | 7);
+        let year_base = if early { 1959 } else { 1900 };
+        let join_raw = if early { player_id } else { player_id + 1 };
+        if early && !(year_base..=year_base + (1u64 << year_width) - 1).contains(&year_end) {
+            return Err(EditError::InvalidValue {
+                what: "season-end year outside this schema's encoded range",
+                value: year_end as i64,
+            });
         }
         if !(1901..=2155).contains(&year_end) {
             return Err(EditError::InvalidValue {
@@ -915,7 +1149,13 @@ impl EditTransaction {
         }
         // The team-code slot is an inline string of fixed byte width — reject an over-long code
         // up front rather than let the writer truncate it silently.
-        let width = self.field_byte_width(studio_table, CAREER_TEAMS)?;
+        // NHL18 omits the inline team code. An empty code can be omitted; never
+        // silently discard a caller's nonempty team label on such a schema.
+        let width = match self.field_byte_width(studio_table, CAREER_TEAMS) {
+            Ok(width) => width,
+            Err(EditError::UnknownField { .. }) if team.is_empty() => 0,
+            Err(error) => return Err(error),
+        };
         if team.len() > width {
             return Err(EditError::InvalidValue {
                 what: "team code length (exceeds the field's byte width)",
@@ -926,13 +1166,15 @@ impl EditTransaction {
         let mut record = 0;
         let outcome = self.with_repairing_transaction(|tx| {
             let rec = tx.append(studio_table)?;
-            tx.set_field(studio_table, rec, ids::PLAYER_ID, player_id + 1)?;
-            tx.set_field(studio_table, rec, CAREER_YEAR, year_end - 1900)?;
+            tx.set_field(studio_table, rec, ids::PLAYER_ID, join_raw)?;
+            tx.set_field(studio_table, rec, CAREER_YEAR, year_end - year_base)?;
             tx.set_field(studio_table, rec, CAREER_LEAGUE, league)?;
-            tx.set_field_str(studio_table, rec, CAREER_TEAMS, team)?;
+            if width > 0 {
+                tx.set_field_str(studio_table, rec, CAREER_TEAMS, team)?;
+            }
             record = rec;
             Ok(OpOutcome {
-                edits: 4,
+                edits: if width > 0 { 4 } else { 3 },
                 repairs: vec![format!(
                     "added {studio_table} season {year_end} for wBIz={player_id}"
                 )],
@@ -1064,6 +1306,16 @@ impl EditTransaction {
             .ok_or(EditError::NoSuchPlayer(player_id))
     }
 
+    /// The index key a free-agent list entry names for `player_id`: the slot-usable key when there
+    /// is one, else `0` when that is the player's only key (NHL 08 ships a free agent whose index
+    /// key is 0; the list is not a slot, so 0 does not mean "vacant" there).
+    fn player_pool_index_key(&self, player_id: u64) -> Result<u64, EditError> {
+        match self.player_slot_index_key(player_id) {
+            Err(EditError::NoSuchPlayer(_)) if self.player_index_keys(player_id)?.contains(&0) => Ok(0),
+            other => other,
+        }
+    }
+
     /// The storage bit-width of a studio field.
     fn field_width(&self, studio_table: &str, studio_field: &str) -> Result<u32, EditError> {
         let view = self.working.clone();
@@ -1193,8 +1445,71 @@ impl EditTransaction {
     /// the source side of a move.
     fn vacate_slot(&mut self, record: u32) -> Result<u32, EditError> {
         self.set_field(ids::ROSTER_LINES, record, ids::SLOT_TO_INDEX, 0)?;
-        self.set_field(ids::ROSTER_LINES, record, ids::SLOT_CAPTAINCY, captaincy::NONE)?;
+        self.set_field(
+            ids::ROSTER_LINES,
+            record,
+            ids::SLOT_CAPTAINCY,
+            captaincy::NONE,
+        )?;
         Ok(2)
+    }
+
+    /// Whether a roster slot can be emptied by zeroing its `XSWT`. Not when index key `0` is some
+    /// player's **only** key: then 0 names that player (measured over the anchors: NHL 08 alone,
+    /// whose game id 0 is a shipped free agent with index key 0; NHL 09-14 have no key-0 row, and
+    /// NHL 15+ key-0 rows belong to players who also have a real key). On such a layout a
+    /// membership leaves by removing its roster row and arrives by inserting one at its team's
+    /// block boundary: the delete / insert NHL 08's own roster saves declare for this table.
+    fn rows_carry_membership(&self) -> Result<bool, EditError> {
+        if self.uses_indexed_roster()? || self.field_width(ids::ROSTER_LINES, ids::SLOT_KEY).is_err() {
+            return Ok(false);
+        }
+        let db = TdbFile::parse(&self.working).map_err(|e| EditError::Parse(e.to_string()))?;
+        let Some(t) = db.table_canonical(ids::INDEX) else { return Ok(false) };
+        let find = |id: &str| t.fields.iter().find(|f| f.id.canonical(db.endian) == id);
+        let (Some(key), Some(bio)) = (find(ids::INDEX_KEY), find(ids::INDEX_TO_BIO)) else { return Ok(false) };
+        let rows: Vec<(Option<u64>, Option<u64>)> = (0..t.current_records as u32)
+            .map(|r| (db.read_u64(t, r, key), db.read_u64(t, r, bio)))
+            .collect();
+        Ok(rows.iter().any(|&(k, p)| {
+            k == Some(0) && p.is_some() && !rows.iter().any(|&(k2, p2)| p2 == p && k2 != Some(0))
+        }))
+    }
+
+    /// End a membership: remove the roster row where rows carry membership, else vacate the slot.
+    fn leave_slot(&mut self, record: u32) -> Result<u32, EditError> {
+        if self.rows_carry_membership()? {
+            self.remove_at_ordered(ids::ROSTER_LINES, record)?;
+            Ok(1)
+        } else {
+            self.vacate_slot(record)
+        }
+    }
+
+    /// A slot for a new membership on `team`: a vacant in-block slot, else (where rows carry
+    /// membership) a fresh row inserted at the block boundary with a newly minted key. Returns the
+    /// record and the field count written; [`EditError::TeamRosterFull`] otherwise.
+    fn membership_slot(&mut self, team: u64) -> Result<(u32, u32), EditError> {
+        let vacant = self
+            .model()?
+            .slots
+            .iter()
+            .find(|s| s.team_id == team && s.player_id.is_none())
+            .map(|s| s.record);
+        if let Some(record) = vacant {
+            return Ok((record, 0));
+        }
+        if !self.rows_carry_membership()? {
+            return Err(EditError::TeamRosterFull { team });
+        }
+        let key = self.mint_id(ids::ROSTER_LINES, ids::SLOT_KEY)?;
+        let SlotPlacement::Insert(at) = self.eglu_placement(team)? else {
+            return Err(EditError::TeamRosterFull { team });
+        };
+        self.insert_at(ids::ROSTER_LINES, at)?;
+        self.set_field(ids::ROSTER_LINES, at, ids::SLOT_KEY, key)?;
+        self.set_field(ids::ROSTER_LINES, at, ids::SLOT_TEAM, team)?;
+        Ok((at, 2))
     }
 
     /// Install a player index key into a slot as a **clean occupant**: set `XSWT`, clear captaincy, and
@@ -1202,7 +1517,12 @@ impl EditTransaction {
     /// per-slot fields must not leak onto the arriving player. Returns the field count.
     fn occupy_slot(&mut self, record: u32, vfeq: u64) -> Result<u32, EditError> {
         self.set_field(ids::ROSTER_LINES, record, ids::SLOT_TO_INDEX, vfeq)?;
-        self.set_field(ids::ROSTER_LINES, record, ids::SLOT_CAPTAINCY, captaincy::NONE)?;
+        self.set_field(
+            ids::ROSTER_LINES,
+            record,
+            ids::SLOT_CAPTAINCY,
+            captaincy::NONE,
+        )?;
         self.set_field(ids::ROSTER_LINES, record, ids::SLOT_JERSEY, 0)?;
         Ok(3)
     }
@@ -1267,11 +1587,31 @@ impl EditTransaction {
         Ok(Some((number, new)))
     }
 
+    /// NHL07 uses player-index-keyed, interleaved roster rows, not destination slot blocks.
+    /// Match the measured schema rather than treating any missing slot key as this layout.
+    fn uses_indexed_roster(&self) -> Result<bool, EditError> {
+        let db = TdbFile::parse(&self.working).map_err(|e| EditError::Parse(e.to_string()))?;
+        let width = |table: &str, field: &str| {
+            db.table_canonical(table).and_then(|t| t.fields.iter()
+                .find(|f| f.id.canonical(db.endian) == field)).map(|f| f.bit_width)
+        };
+        Ok(width(ids::ROSTER_LINES, ids::SLOT_KEY).is_none()
+            && width(ids::ROSTER_LINES, ids::SLOT_TO_INDEX) == Some(13)
+            && width(ids::ROSTER_LINES, ids::SLOT_TEAM) == Some(7)
+            && width(ids::ROSTER_LINES, ids::SLOT_JERSEY) == Some(7)
+            && width(ids::BIO, ids::PLAYER_ID) == Some(13)
+            && width(ids::BIO, ids::SLOT_TEAM) == Some(7)
+            && width(ids::BIO, ids::SLOT_JERSEY) == Some(7)
+            && width(ids::INDEX, ids::INDEX_KEY) == Some(13)
+            && width(ids::INDEX, ids::INDEX_TO_BIO) == Some(13))
+    }
+
     /// Move a player's **roster membership** from `from_team` to `to_team`. A player can hold several
     /// memberships at once (e.g. an NHL team *and* an all-star/national team — verified: ~6 % of
     /// players occupy >1 slot), so the move is keyed by `from_team` to pick the right one.
     ///
-    /// `eGlu` slots are fixed per-team containers laid out as contiguous, gap-free per-team blocks
+    /// In NHL07's measured indexed layout the existing row is retagged without allocating a slot.
+    /// In later layouts, `eGlu` slots are fixed per-team containers laid out as contiguous, gap-free per-team blocks
     /// (verified — see `docs/audits/towx-blocks.md`), so a move is **not** a team retag: it relocates
     /// the player's occupancy into a free slot in the destination team's block (`XSWT` index pointer +
     /// per-slot fields) and **vacates the source slot** by zeroing its `XSWT` (the game's own
@@ -1281,7 +1621,7 @@ impl EditTransaction {
     /// captaincy** on arrival (single-captain repair); if the player's jersey is already worn on the
     /// destination team the newcomer is **reassigned the lowest free number** (dup-on-team repair).
     ///
-    /// Errors with [`EditError::TeamRosterFull`] when the destination block has no free slot — growing
+    /// On block-based layouts, errors with [`EditError::TeamRosterFull`] when the destination has no free slot — growing
     /// the block (capacity normalization) is a later phase; until then use a two-player trade instead.
     pub fn move_player(
         &mut self,
@@ -1325,19 +1665,33 @@ impl EditTransaction {
                 });
             }
 
-            // A free (unoccupied) slot in the destination team's block.
-            let dest_record = model
-                .slots
-                .iter()
-                .find(|s| s.team_id == to_team && s.player_id.is_none())
-                .map(|s| s.record)
-                .ok_or(EditError::TeamRosterFull { team: to_team })?;
+            let indexed = tx.uses_indexed_roster()?;
+            if model.slots.iter().any(|s| s.team_id == to_team && s.player_id == Some(player_id)) {
+                return Err(EditError::Refused(format!("player {player_id} already has a membership on team {to_team}")));
+            }
+            // The early keyed layout moves its existing row; later layouts relocate the occupant.
             drop(model);
+            let rows = tx.rows_carry_membership()?;
 
-            // Relocate occupancy into the free destination slot, then vacate the source slot (zero its
-            // XSWT and clear captaincy so the emptied slot leaves no phantom captain behind).
-            let mut edits = tx.transplant_slot(source_record, dest_record)?;
-            edits += tx.vacate_slot(source_record)?;
+            // Relocate occupancy into a destination slot, then end the source membership: vacate
+            // the source slot (zero its XSWT, clear captaincy), or, where rows carry membership,
+            // move the row itself (remove it, then insert it in the destination block).
+            let dest_record;
+            let mut edits = if indexed {
+                dest_record = source_record;
+                tx.set_field(ids::ROSTER_LINES, source_record, ids::SLOT_TEAM, to_team)?;
+                1
+            } else if rows {
+                let occupant = tx.capture_occupant(source_record)?;
+                tx.remove_at_ordered(ids::ROSTER_LINES, source_record)?;
+                let (record, placed) = tx.membership_slot(to_team)?;
+                dest_record = record;
+                1 + placed + tx.apply_occupant(record, &occupant)?
+            } else {
+                let (record, _) = tx.membership_slot(to_team)?;
+                dest_record = record;
+                tx.transplant_slot(source_record, dest_record)? + tx.vacate_slot(source_record)?
+            };
 
             // Update the bio's team only if it was this (primary) membership.
             if tx.read_field(ids::BIO, bio_record, ids::SLOT_TEAM)? == Some(from_team) {
@@ -1362,6 +1716,14 @@ impl EditTransaction {
                 } else {
                     format!("reassigned jersey #{old} to #{new} on move to team {to_team} (#{old} already worn there)")
                 });
+            }
+
+            // Early bios also carry the primary jersey. A secondary/national membership must
+            // not overwrite it; use the final roster number after collision repair.
+            if indexed && tx.read_field(ids::BIO, bio_record, ids::SLOT_TEAM)? == Some(to_team) {
+                let number = tx.read_field(ids::ROSTER_LINES, dest_record, ids::SLOT_JERSEY)?.unwrap();
+                tx.set_field(ids::BIO, bio_record, ids::SLOT_JERSEY, number)?;
+                edits += 1;
             }
 
             Ok(OpOutcome { edits, repairs })
@@ -1484,7 +1846,21 @@ impl EditTransaction {
     /// `fan_out_entity`.
     ///
     /// Errors with [`EditError::NoSuchSlot`] if the player is not on `from_team`.
-    pub fn release_to_fa(&mut self, from_team: u64, player_id: u64) -> Result<OpOutcome, EditError> {
+    pub fn release_to_fa(
+        &mut self,
+        from_team: u64,
+        player_id: u64,
+    ) -> Result<OpOutcome, EditError> {
+        let mut explicit = explicit_free_agents(self.bytes())?;
+        if let Some(pool) = &mut explicit {
+            if pool.contains(&player_id) { return Err(EditError::Refused("Player is already a free agent".into())); }
+            let model = self.model()?;
+            let player = model.player(player_id).ok_or(EditError::NoSuchPlayer(player_id))?;
+            if self.read_field(ids::BIO, player.bio_record, ids::SLOT_TEAM)? != Some(from_team) {
+                return Err(EditError::Refused("Release the player's primary club; use Remove membership for additional teams".into()));
+            }
+            pool.push(player_id);
+        }
         {
             let model = self.model()?;
             if model.team(from_team).is_none() {
@@ -1509,7 +1885,13 @@ impl EditTransaction {
                 })?
                 .record;
             drop(model);
-            let edits = tx.vacate_slot(record)?;
+            let edits = tx.leave_slot(record)?;
+            if let Some(pool) = &explicit {
+                tx.set_free_agent_pool(pool)?;
+                let bio = tx.model()?.player(player_id).unwrap().bio_record;
+                // The original explicit-pool players carry zero in their primary-club field.
+                tx.set_field(ids::BIO, bio, ids::SLOT_TEAM, 0)?;
+            }
             Ok(OpOutcome {
                 edits,
                 repairs: vec![format!(
@@ -1530,6 +1912,10 @@ impl EditTransaction {
     /// move/trade), or [`EditError::TeamRosterFull`] when the destination block has no free slot —
     /// growing the block is capacity work (Phase 4.4); until then, free a slot first (release or trade).
     pub fn sign_from_fa(&mut self, player_id: u64, to_team: u64) -> Result<OpOutcome, EditError> {
+        let explicit = explicit_free_agents(self.bytes())?;
+        if explicit.as_ref().is_some_and(|pool| !pool.contains(&player_id)) {
+            return Err(EditError::Refused("Player is not in the free-agent list".into()));
+        }
         let vfeq = {
             let model = self.model()?;
             if model.team(to_team).is_none() {
@@ -1541,7 +1927,7 @@ impl EditTransaction {
             if model.player(player_id).is_none() {
                 return Err(EditError::NoSuchPlayer(player_id));
             }
-            if model.slots.iter().any(|s| s.player_id == Some(player_id)) {
+            if model.slots.iter().any(|s| s.player_id == Some(player_id) && (explicit.is_none() || s.team_id == to_team)) {
                 return Err(EditError::AlreadyRostered { player: player_id });
             }
             // The player's index key (`ZBac.vfEq`) to install as the slot occupant. Must be usable
@@ -1553,20 +1939,18 @@ impl EditTransaction {
         self.with_repairing_transaction(|tx| {
             let model = tx.model()?;
             let bio_record = model.player(player_id).unwrap().bio_record;
-            let dest_record = model
-                .slots
-                .iter()
-                .find(|s| s.team_id == to_team && s.player_id.is_none())
-                .map(|s| s.record)
-                .ok_or(EditError::TeamRosterFull { team: to_team })?;
             drop(model);
+            let (dest_record, placed) = tx.membership_slot(to_team)?;
 
             // Install the occupant into the free slot with a clean arrival state.
-            let mut edits = tx.occupy_slot(dest_record, vfeq)?;
+            let mut edits = placed + tx.occupy_slot(dest_record, vfeq)?;
             // The bio's primary team follows to the signing team.
             if tx.read_field(ids::BIO, bio_record, ids::SLOT_TEAM)? != Some(to_team) {
                 tx.set_field(ids::BIO, bio_record, ids::SLOT_TEAM, to_team)?;
                 edits += 1;
+            }
+            if let Some(pool) = &explicit {
+                tx.set_free_agent_pool(&pool.iter().copied().filter(|p| *p != player_id).collect::<Vec<_>>())?;
             }
             Ok(OpOutcome {
                 edits,
@@ -1611,16 +1995,8 @@ impl EditTransaction {
             self.player_slot_index_key(player_id)?
         };
         self.with_repairing_transaction(|tx| {
-            let model = tx.model()?;
-            let dest_record = model
-                .slots
-                .iter()
-                .find(|s| s.team_id == to_team && s.player_id.is_none())
-                .map(|s| s.record)
-                .ok_or(EditError::TeamRosterFull { team: to_team })?;
-            drop(model);
-
-            let edits = tx.occupy_slot(dest_record, vfeq)?;
+            let (dest_record, placed) = tx.membership_slot(to_team)?;
+            let edits = placed + tx.occupy_slot(dest_record, vfeq)?;
             Ok(OpOutcome {
                 edits,
                 repairs: vec![format!(
@@ -1667,7 +2043,7 @@ impl EditTransaction {
                 })?
                 .record;
             drop(model);
-            let edits = tx.vacate_slot(record)?;
+            let edits = tx.leave_slot(record)?;
             Ok(OpOutcome {
                 edits,
                 repairs: vec![format!(
@@ -1686,7 +2062,7 @@ impl EditTransaction {
         player_id: u64,
         number: u64,
     ) -> Result<OpOutcome, EditError> {
-        let max = (1u64 << self.field_width(ids::ROSTER_LINES, ids::SLOT_JERSEY)?) - 1;
+        let max = ((1u64 << self.field_width(ids::ROSTER_LINES, ids::SLOT_JERSEY)?) - 1).min(99);
         if number > max {
             return Err(EditError::InvalidValue {
                 what: "jersey number",
@@ -1714,8 +2090,16 @@ impl EditTransaction {
                 });
             }
             tx.set_field(ids::ROSTER_LINES, target_record, ids::SLOT_JERSEY, number)?;
+            let mut edits = 1;
+            if tx.uses_indexed_roster()? {
+                let bio = model.player(player_id).ok_or(EditError::NoSuchPlayer(player_id))?.bio_record;
+                if tx.read_field(ids::BIO, bio, ids::SLOT_TEAM)? == Some(team_id) {
+                    tx.set_field(ids::BIO, bio, ids::SLOT_JERSEY, number)?;
+                    edits += 1;
+                }
+            }
             Ok(OpOutcome {
-                edits: 1,
+                edits,
                 repairs: Vec::new(),
             })
         })
@@ -1740,8 +2124,11 @@ impl EditTransaction {
         for (team, mut slots) in by_team {
             slots.sort_by_key(|s| s.record);
             // Numbers currently in use on the team (kept ones stay reserved) plus any we newly assign.
-            let mut worn: HashSet<u64> =
-                slots.iter().filter_map(|s| s.jersey).filter(|&n| n != 0).collect();
+            let mut worn: HashSet<u64> = slots
+                .iter()
+                .filter_map(|s| s.jersey)
+                .filter(|&n| n != 0)
+                .collect();
             let mut kept: HashSet<u64> = HashSet::new();
             for s in slots {
                 let Some(number) = s.jersey.filter(|&n| n != 0) else {
@@ -1895,8 +2282,16 @@ impl EditTransaction {
             });
         }
         for (predicate, before_count, after_count) in [
-            ("single_captain", captains_before, single_captain(&healed).len()),
-            ("companion_presence", companions_before, companion_presence(&healed).len()),
+            (
+                "single_captain",
+                captains_before,
+                single_captain(&healed).len(),
+            ),
+            (
+                "companion_presence",
+                companions_before,
+                companion_presence(&healed).len(),
+            ),
             ("dup_on_team", dups_before, dup_on_team(&healed).len()),
         ] {
             if after_count > before_count {
@@ -1988,6 +2383,168 @@ impl EditTransaction {
         })
     }
 
+    /// Clone a jersey-registry row (`xjgw`) into a **new kit**: append a row at `current_records`
+    /// (the free-slot convention proven in the reference app — the physical row already exists in
+    /// the fixed-size table; "creating" it is the header bump plus the field writes), copy every
+    /// field from `source_record`, then stamp the new identity — destination `team` (`mCXg`,
+    /// 0-indexed), the `{style}_{art_id}_{variant}` asset id (`cVLR`/`GDQL`/`FccT`, with `ddOX`
+    /// mirroring `FccT` per the stock-data convention), and a per-team jersey index (`tYnx`;
+    /// `None` picks the smallest unused value so deletes leave reusable holes). Returns the new
+    /// record index. Errors when the table is full (`max_records` reached — `nhlng.db` ships
+    /// packed on some titles), the source is out of range, or a value exceeds its field width.
+    pub fn clone_jersey(
+        &mut self,
+        source_record: u32,
+        team: u64,
+        style: u64,
+        art_id: u64,
+        variant: u64,
+        jersey_index: Option<u64>,
+    ) -> Result<(u32, OpOutcome), EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(jerseys::TABLE)
+            .ok_or_else(|| EditError::UnknownTable(jerseys::TABLE.to_string()))?;
+        let (current, max) = (table.current_records as u32, table.max_records as u32);
+        if source_record >= current {
+            return Err(EditError::InvalidValue {
+                what: "source jersey record (out of range)",
+                value: source_record as i64,
+            });
+        }
+        if current >= max {
+            return Err(EditError::Alloc(format!(
+                "the jersey table is full ({current}/{max} rows) — this database has no headroom \
+                 for a new kit"
+            )));
+        }
+
+        // Snapshot every field of the source row (xjgw is all fixed-bit numeric — no strings).
+        let source: Vec<(String, u64)> = table
+            .fields
+            .iter()
+            .filter_map(|f| {
+                db.read_u64(table, source_record, f)
+                    .map(|v| (f.id.canonical(db.endian), v))
+            })
+            .collect();
+        let has_field = |id: &str| source.iter().any(|(f, _)| f == id);
+
+        // Per-team jersey index: smallest unused among the destination team's rows (not max+1, so
+        // deleted kits leave reusable holes). tYnx is 5-bit on the proven titles → 32-kit ceiling.
+        let idx_max = (1u64 << self.field_width(jerseys::TABLE, jerseys::INDEX)?) - 1;
+        let team_field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == jerseys::TEAM)
+            .ok_or_else(|| EditError::UnknownField {
+                table: jerseys::TABLE.to_string(),
+                field: jerseys::TEAM.to_string(),
+            })?;
+        let idx_field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == jerseys::INDEX)
+            .ok_or_else(|| EditError::UnknownField {
+                table: jerseys::TABLE.to_string(),
+                field: jerseys::INDEX.to_string(),
+            })?;
+        let occupied: HashSet<u64> = (0..current)
+            .filter(|&r| db.read_u64(table, r, team_field) == Some(team))
+            .filter_map(|r| db.read_u64(table, r, idx_field))
+            .collect();
+        let jersey_index = match jersey_index {
+            Some(i) if i > idx_max => {
+                return Err(EditError::InvalidValue {
+                    what: "jersey index (exceeds the field width)",
+                    value: i as i64,
+                })
+            }
+            Some(i) => i,
+            None => (0..=idx_max)
+                .find(|i| !occupied.contains(i))
+                .ok_or_else(|| {
+                    EditError::Alloc(format!(
+                        "no free jersey index — this team already carries the full {}-kit set",
+                        idx_max + 1
+                    ))
+                })?,
+        };
+
+        // Range-check the identity values against their field widths up front.
+        for (field, value, what) in [
+            (
+                jerseys::TEAM,
+                team,
+                "destination team (exceeds the field width)",
+            ),
+            (
+                jerseys::STYLE,
+                style,
+                "jersey style (exceeds the field width)",
+            ),
+            (
+                jerseys::ART_ID,
+                art_id,
+                "team art id (exceeds the field width)",
+            ),
+            (
+                jerseys::VARIANT,
+                variant,
+                "jersey variant (exceeds the field width)",
+            ),
+        ] {
+            let max_v = (1u64 << self.field_width(jerseys::TABLE, field)?) - 1;
+            if value > max_v {
+                return Err(EditError::InvalidValue {
+                    what,
+                    value: value as i64,
+                });
+            }
+        }
+
+        let dup_index = occupied.contains(&jersey_index);
+        let mut new_record = 0u32;
+        let outcome = self.with_repairing_transaction(|tx| {
+            let rec = tx.append(jerseys::TABLE)?;
+            new_record = rec;
+            let mut edits = 0u32;
+            for (field, value) in &source {
+                tx.set_field(jerseys::TABLE, rec, field, *value)?;
+                edits += 1;
+            }
+            // Stamp the new identity over the copied values. ddOX mirrors FccT (stock-data
+            // convention); it's written only when the loaded schema carries it.
+            let mut overrides: Vec<(&str, u64)> = vec![
+                (jerseys::TEAM, team),
+                (jerseys::INDEX, jersey_index),
+                (jerseys::STYLE, style),
+                (jerseys::ART_ID, art_id),
+                (jerseys::VARIANT, variant),
+            ];
+            if has_field(jerseys::FE_VARIANT) {
+                overrides.push((jerseys::FE_VARIANT, variant));
+            }
+            for (field, value) in overrides {
+                tx.set_field(jerseys::TABLE, rec, field, value)?;
+                edits += 1;
+            }
+            let mut repairs = vec![format!(
+                "cloned jersey row {source_record} into new kit {style}_{art_id}_{variant} \
+                 (row {rec}, team {team}, jersey index {jersey_index})"
+            )];
+            if dup_index {
+                repairs.push(format!(
+                    "note: jersey index {jersey_index} is already used on this team — the in-game \
+                     selector may not disambiguate the two kits"
+                ));
+            }
+            Ok(OpOutcome { edits, repairs })
+        })?;
+        Ok((new_record, outcome))
+    }
+
     /// Trade a future draft pick to another team: rewrite the pick's current owner
     /// (`qHav.Uwdb`, stored 1-indexed). The original owner (`GFcg`) is deliberately untouched —
     /// it's the provenance that renders "via trade from …" on the Draft Picks tab. Errors on an
@@ -2044,7 +2601,12 @@ impl EditTransaction {
                 .ok_or(EditError::NoSuchSlot { team_id, player_id })?
                 .record;
             drop(model);
-            tx.set_field(ids::ROSTER_LINES, slot_record, ids::SLOT_DRESSED, dressed as u64)?;
+            tx.set_field(
+                ids::ROSTER_LINES,
+                slot_record,
+                ids::SLOT_DRESSED,
+                dressed as u64,
+            )?;
             Ok(OpOutcome {
                 edits: 1,
                 repairs: Vec::new(),
@@ -2060,3 +2622,4 @@ impl EditTransaction {
         Ok(self.working)
     }
 }
+

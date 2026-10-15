@@ -17,7 +17,9 @@ use tdb_fhm::schema::{SCHEMA_SQL, SCHEMA_VERSION};
 use tdb_fhm::slug::person_slug;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn open_anchor() -> EditSession {
@@ -37,7 +39,11 @@ fn open_anchor() -> EditSession {
 fn synthetic_corpus() -> FhmCorpus {
     let conn = Connection::open_in_memory().unwrap();
     conn.execute_batch(SCHEMA_SQL).unwrap();
-    conn.execute("INSERT INTO meta(key,value) VALUES ('schema_version', ?1)", [SCHEMA_VERSION.to_string()]).unwrap();
+    conn.execute(
+        "INSERT INTO meta(key,value) VALUES ('schema_version', ?1)",
+        [SCHEMA_VERSION.to_string()],
+    )
+    .unwrap();
     let slug = person_slug("Historyman", "Imported", "1992-06-15");
     conn.execute(
         "INSERT INTO person(person_id, slug, first_name, last_name, dob, height, weight, hand,
@@ -49,12 +55,14 @@ fn synthetic_corpus() -> FhmCorpus {
         "INSERT INTO player_season(person_id, season_year, src_player_id, team_id, height, weight)
          VALUES (1, 2024, 10, -1, 74, 205)",
         [],
-    ).unwrap();
+    )
+    .unwrap();
     conn.execute(
         "INSERT INTO ratings_season(person_id, season_year, lw, ability, potential, attrs_json)
          VALUES (1, 2024, 82, 82.0, 82.0, '{}')",
         [],
-    ).unwrap();
+    )
+    .unwrap();
     FhmCorpus::from_conn(conn).unwrap()
 }
 
@@ -76,15 +84,23 @@ fn import_round_trip_preview_commit_validate_save_reload() {
         identity: ImportIdentity::CreateNew,
         jersey: Some(19),
     }];
-    let lowered = sess.lower_change_set(&corpus, &items, &profile, maxima.as_ref()).unwrap();
+    let lowered = sess
+        .lower_change_set(&corpus, &items, &profile, maxima.as_ref())
+        .unwrap();
     assert_eq!(lowered.ops.len(), 1, "the create lowered");
     assert!(!lowered.has_blockers(), "no blockers");
 
     // Preview: non-mutating, one net create, and the previewed state audits clean.
-    let preview = sess.preview_import(&lowered.ops, lowered.skipped.clone()).unwrap();
+    let preview = sess
+        .preview_import(&lowered.ops, lowered.skipped.clone())
+        .unwrap();
     assert_eq!(preview.players_after, preview.players_before + 1);
     assert_eq!(sess.undo_depth(), 0, "preview must not mutate");
-    assert!(preview.audit.is_clean(), "previewed state is clean: {:?}", preview.audit.findings.len());
+    assert!(
+        preview.audit.is_clean(),
+        "previewed state is clean: {:?}",
+        preview.audit.findings.len()
+    );
 
     // Commit for real → one undo entry.
     sess.commit_import(&lowered.ops).unwrap();
@@ -109,6 +125,13 @@ fn import_round_trip_preview_commit_validate_save_reload() {
     let saved = sess.save().unwrap();
     let reloaded = TdbFile::parse(&saved).unwrap();
     let model = RosterModel::build(&reloaded).expect("reloaded db builds a roster model");
-    assert_eq!(model.players.len(), before + 1, "the created player persists across save/reload");
-    assert!(model.player(created.player_id).is_some(), "the created wBIz survives the round-trip");
+    assert_eq!(
+        model.players.len(),
+        before + 1,
+        "the created player persists across save/reload"
+    );
+    assert!(
+        model.player(created.player_id).is_some(),
+        "the created wBIz survives the round-trip"
+    );
 }

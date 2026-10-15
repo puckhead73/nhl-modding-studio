@@ -1,0 +1,65 @@
+{
+  "date": "2026-09-28",
+  "scope": "Independent bounded coordinator review of receipt 65; no desktop, listening or game validation",
+  "tests": [
+    {
+      "failed": 0,
+      "passed": 11,
+      "seconds": 0.14,
+      "target": "studio-api --lib hockey_shop"
+    },
+    {
+      "failed": 0,
+      "passed": 1,
+      "seconds": 211.68,
+      "target": "studio-api --test ps4_head_reassign -- --include-ignored"
+    },
+    {
+      "failed": 0,
+      "passed": 1,
+      "seconds": 36.72,
+      "target": "studio-api --test recompiled_public_edits -- --include-ignored"
+    }
+  ],
+  "archive": {
+    "sha256": "6f88b5f7adeb36fbdcb324c20389c48ab8c847cc3dd283cbf73a5a4e690c56f5",
+    "check": "passed",
+    "path": "E:\\nhlms-release-candidate-20260928\\NHL Modding Studio rc-20260928-r64.zip",
+    "selftest_rerun": false
+  },
+  "metadata_probe": {
+    "metadata_key_unchanged": true,
+    "content_changed": true,
+    "scope": "metadata collision probe; not full Registry execution"
+  },
+  "source_hashes": [
+    {
+      "path": "crates/studio-api/src/hockey_shop.rs",
+      "sha256": "e6dcdd3b6eb6c4a4c4a48fe7d2eb98d1083c310a466cba52c160a5996336b9d7"
+    },
+    {
+      "path": "crates/studio-api/src/registry.rs",
+      "sha256": "b3212607731fac63212cd22e04a17cc6cea76422074a533cdde48d0f1cbdd378"
+    },
+    {
+      "path": "crates/studio-domain/src/player_reassign.rs",
+      "sha256": "0a4bfc098261d00d4953820886c0afd17a0f13a860cecce5e45567d6c715158b"
+    },
+    {
+      "path": "crates/studio-domain/src/ps4_heads.rs",
+      "sha256": "7f97471285d64b421bff2f69c9dc20fd320b025a9396dc7e62ad0c304880063e"
+    },
+    {
+      "path": "crates/studio-api/tests/ps4_head_reassign.rs",
+      "sha256": "2995d2bb3917d44b6d72562f09d81cfa23b20b6de9db9a35d477478526687b2f"
+    },
+    {
+      "path": "crates/studio-api/tests/recompiled_public_edits.rs",
+      "sha256": "54e8adfa29312d505a29475791e37c9a83bf2eed4039b4ef6872dd6aec6dba71"
+    }
+  ],
+  "limitations": [
+    "F2 is source inspection plus metadata-key collision, not full Registry stale-vault reproduction",
+    "No full workspace suite, Windows CI or release acceptance"
+  ]
+}

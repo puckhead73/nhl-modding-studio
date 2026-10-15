@@ -1,0 +1,476 @@
+{
+ "note": "R132c - PS3 companion of R132: logo packages on PS3 NHL 08 -> 11 (NHL 11 loose `fe/ion/artassets/<family>/*.big`; NHL 08 / 09 / 10\nmembers of the BIG4 `fe.big` under the same paths). Per package: wrapper, texture member (RW4ps3; w / h at descriptor +48 / +50 and the\nsignature words at +32 / +36 / +40 as R107 documents), and the same Apt rule check as R132 (288-byte `<n+1>` record vertices at +96 and\nmember `0` size words, big-endian). Studio already resizes loose RW4ps3 rasters (receipt 13); only the package form is measured here.\nUsage: python r132c_ps3_old_logo_packages.py <out.json>\n",
+ "trees": {
+  "ps3-nhl08": {
+   "leaguelogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 6,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 7
+    },
+    "forms": {
+     "ARGB8 mips 1 member stored": 7
+    },
+    "source": {
+     "data0.big member": 7
+    }
+   },
+   "leaguelogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 1
+    },
+    "wrappers": {
+     "plain BIGF": 1
+    },
+    "forms": {
+     "DXT5 mips 1 member stored": 1
+    },
+    "source": {
+     "data0.big member": 1
+    }
+   },
+   "leaguelogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 2
+    },
+    "wrappers": {
+     "plain BIGF": 2
+    },
+    "forms": {
+     "ARGB8 mips 1 member stored": 2
+    },
+    "source": {
+     "data0.big member": 2
+    }
+   },
+   "teamlogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 134,
+     "quad ok, member 0 size words differ": 1,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 136
+    },
+    "forms": {
+     "ARGB8 mips 1 member stored": 136
+    },
+    "source": {
+     "data0.big member": 136
+    }
+   },
+   "teamlogoscalendar": {
+    "classes": {
+     "display-crop quad": 135
+    },
+    "wrappers": {
+     "plain BIGF": 135
+    },
+    "forms": {
+     "ARGB8 mips 1 member stored": 135
+    },
+    "source": {
+     "data0.big member": 135
+    }
+   },
+   "teamlogosdynasty": {
+    "classes": {
+     "full-texture quad (rule holds)": 132,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 133
+    },
+    "forms": {
+     "ARGB8 mips 1 member stored": 133
+    },
+    "source": {
+     "data0.big member": 133
+    }
+   },
+   "teamlogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 135
+    },
+    "wrappers": {
+     "plain BIGF": 135
+    },
+    "forms": {
+     "ARGB8 mips 1 member stored": 135
+    },
+    "source": {
+     "data0.big member": 135
+    }
+   },
+   "teamlogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 132,
+     "display-crop quad": 3
+    },
+    "wrappers": {
+     "plain BIGF": 135
+    },
+    "forms": {
+     "ARGB8 mips 1 member stored": 135
+    },
+    "source": {
+     "data0.big member": 135
+    }
+   }
+  },
+  "ps3-nhl09": {
+   "leaguelogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 11
+    },
+    "wrappers": {
+     "plain BIGF": 11
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 11
+    },
+    "source": {
+     "fe.big member": 11
+    }
+   },
+   "leaguelogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 1
+    },
+    "wrappers": {
+     "plain BIGF": 1
+    },
+    "forms": {
+     "DXT5 mips 1 member refpack": 1
+    },
+    "source": {
+     "fe.big member": 1
+    }
+   },
+   "leaguelogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 2
+    },
+    "wrappers": {
+     "plain BIGF": 2
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 2
+    },
+    "source": {
+     "fe.big member": 2
+    }
+   },
+   "teamlogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 216,
+     "quad ok, member 0 size words differ": 1,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 218
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 218
+    },
+    "source": {
+     "fe.big member": 218
+    }
+   },
+   "teamlogoscalendar": {
+    "classes": {
+     "display-crop quad": 217
+    },
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 217
+    },
+    "source": {
+     "fe.big member": 217
+    }
+   },
+   "teamlogosdynasty": {
+    "classes": {
+     "full-texture quad (rule holds)": 215,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 216
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 216
+    },
+    "source": {
+     "fe.big member": 216
+    }
+   },
+   "teamlogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 217
+    },
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 217
+    },
+    "source": {
+     "fe.big member": 217
+    }
+   },
+   "teamlogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 214,
+     "display-crop quad": 3
+    },
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 217
+    },
+    "source": {
+     "fe.big member": 217
+    }
+   }
+  },
+  "ps3-nhl10": {
+   "leaguelogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 12
+    },
+    "wrappers": {
+     "plain BIGF": 12
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 12
+    },
+    "source": {
+     "fe.big member": 12
+    }
+   },
+   "leaguelogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 1
+    },
+    "wrappers": {
+     "plain BIGF": 1
+    },
+    "forms": {
+     "DXT5 mips 1 member refpack": 1
+    },
+    "source": {
+     "fe.big member": 1
+    }
+   },
+   "leaguelogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 10
+    },
+    "wrappers": {
+     "plain BIGF": 10
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 10
+    },
+    "source": {
+     "fe.big member": 10
+    }
+   },
+   "teamlogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 215,
+     "quad ok, member 0 size words differ": 1,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 217
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 217
+    },
+    "source": {
+     "fe.big member": 217
+    }
+   },
+   "teamlogoscalendar": {
+    "classes": {
+     "display-crop quad": 216
+    },
+    "wrappers": {
+     "plain BIGF": 216
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 216
+    },
+    "source": {
+     "fe.big member": 216
+    }
+   },
+   "teamlogosdynasty": {
+    "classes": {
+     "full-texture quad (rule holds)": 214,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 215
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 215
+    },
+    "source": {
+     "fe.big member": 215
+    }
+   },
+   "teamlogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 216
+    },
+    "wrappers": {
+     "plain BIGF": 216
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 216
+    },
+    "source": {
+     "fe.big member": 216
+    }
+   },
+   "teamlogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 219,
+     "display-crop quad": 3
+    },
+    "wrappers": {
+     "plain BIGF": 222
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 222
+    },
+    "source": {
+     "fe.big member": 222
+    }
+   }
+  },
+  "ps3-nhl11": {
+   "teamlogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 297,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 298
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 298
+    },
+    "source": {
+     "loose": 298
+    }
+   },
+   "teamlogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 297
+    },
+    "wrappers": {
+     "plain BIGF": 297
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 297
+    },
+    "source": {
+     "loose": 297
+    }
+   },
+   "teamlogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 297
+    },
+    "wrappers": {
+     "plain BIGF": 297
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 297
+    },
+    "source": {
+     "loose": 297
+    }
+   },
+   "teamlogosdynasty": {
+    "classes": {
+     "full-texture quad (rule holds)": 297,
+     "display-crop quad": 1
+    },
+    "wrappers": {
+     "plain BIGF": 298
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 298
+    },
+    "source": {
+     "loose": 298
+    }
+   },
+   "teamlogoscalendar": {
+    "classes": {
+     "display-crop quad": 297
+    },
+    "wrappers": {
+     "plain BIGF": 297
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 297
+    },
+    "source": {
+     "loose": 297
+    }
+   },
+   "leaguelogos": {
+    "classes": {
+     "full-texture quad (rule holds)": 14
+    },
+    "wrappers": {
+     "plain BIGF": 14
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 14
+    },
+    "source": {
+     "loose": 14
+    }
+   },
+   "leaguelogossmall": {
+    "classes": {
+     "full-texture quad (rule holds)": 12
+    },
+    "wrappers": {
+     "plain BIGF": 12
+    },
+    "forms": {
+     "DXT5 mips 1 member refpack": 12
+    },
+    "source": {
+     "loose": 12
+    }
+   },
+   "leaguelogoswide": {
+    "classes": {
+     "full-texture quad (rule holds)": 14
+    },
+    "wrappers": {
+     "plain BIGF": 14
+    },
+    "forms": {
+     "ARGB8 mips 1 member refpack": 14
+    },
+    "source": {
+     "loose": 14
+    }
+   }
+  }
+ }
+}

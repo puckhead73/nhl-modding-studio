@@ -2,30 +2,31 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    AssetExportSummary, AssetRoots, BrowseListing, ExportOptions, FileExportOptions,
-    FileExportSummary, HeadPreview, OutfitExportSummary, PlayerAssets,
-    ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, CellControl,
-    DbOverview, EntityFieldProfile, ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport,
-    ImportIdentity, ImportItem, ItemOutcome, LoweredItem, MatchCandidate, MatchConfidence,
-    TableCapacity,
-    InstallReport, LineEntry, LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader,
-    PlayerSummary, PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source,
-    TeamSummary, TeamView, TraitOption, TraitView, Workspace,
+    ArenaRef, ArenaSummary, ArenaView, AssetExportSummary, AssetRoots, AttributeView,
+    BrowseListing, Capabilities, CareerStats, CellControl, DbOverview, EntityFieldProfile,
+    ExportOptions, ExtractSummary, FieldRaw, FieldView, FileExportOptions, FileExportSummary,
+    HeadPreview, HumanFinding, HumanReport, ImportIdentity, ImportItem, InstallReport, ItemOutcome,
+    LineEntry, LinesView, LoweredItem, MatchCandidate, MatchConfidence, OpOutcome,
+    OutfitExportSummary, PlayerAssets, PlayerAttributes, PlayerData, PlayerHeader, PlayerSummary,
+    PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source, SurfaceCapabilities,
+    SurfaceCapability, SurfaceState, TableCapacity, TeamSummary, TeamView, TraitOption, TraitView,
+    Workspace,
 };
 
 use crate::dto::{
-    AssetExportSummaryDto, AssetRootsDto, BrowseEntryDto, BrowseListingDto, ExportOptionsDto,
-    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
-    PlayerAssetsDto, PreviewSubmeshDto, PreviewTextureDto,
-    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AttributeViewDto, CapabilitiesDto, CareerColumnDto,
-    CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto, EnumOptionDto,
-    EntityFieldProfileDto, EquipmentZoneDto, ExtractSummaryDto, FieldCellDto, FieldSectionDto,
-    FieldViewDto, FindingDto, InstallReportDto,
-    IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerAttributesDto, PlayerDataDto,
-    PlayerHeaderDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto,
-    SaveSlotDto, SlotFieldDto, StrategyCellDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto,
-    TeamStrategiesDto, TeamSummaryDto, TeamViewDto, TraitOptionDto, TraitViewDto,
-    ImportItemResultDto, MatchCandidateDto, TableCapacityDto,
+    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AssetExportSummaryDto, AssetRootsDto,
+    AttributeViewDto, BrowseEntryDto, BrowseListingDto, CapabilitiesDto, CareerColumnDto,
+    CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto,
+    EntityFieldProfileDto, EnumOptionDto, EquipmentSlotAssetDto, EquipmentSlotFileDto,
+    EquipmentZoneDto, ExportOptionsDto, ExtractSummaryDto, FieldCellDto, FieldSectionDto,
+    FieldViewDto, FileExportOptionsDto, FileExportSummaryDto, FindingDto, HeadPreviewDto,
+    ImportItemResultDto, InstallReportDto, IntegrityReportDto, KitPieceDto, KitPreviewDto,
+    LineEntryDto, LinesViewDto, MatchCandidateDto, OpOutcomeDto, OutfitExportSummaryDto,
+    PlayerAssetsDto, PlayerAttributesDto, PlayerDataDto, PlayerHeaderDto, PlayerSummaryDto,
+    PlayerViewDto, PreviewSubmeshDto, PreviewTextureDto, ProjectSummaryDto, RosterMembershipDto,
+    SaveSlotDto, SlotFieldDto, StrategyCellDto, SurfaceCapabilitiesDto, SurfaceCapabilityDto,
+    TableCapacityDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto, TeamStrategiesDto,
+    TeamSummaryDto, TeamViewDto, TraitOptionDto, TraitViewDto,
 };
 
 /// Map an install report to its DTO, attaching platform-aware display labels to each save slot and
@@ -47,6 +48,26 @@ pub fn install_report_dto(report: &InstallReport, has_existing_profile: bool) ->
         minimum_met: report.minimum_met,
         extract_needed: report.extract_needed,
         has_existing_profile,
+        game_dir: report.game_dir.clone(),
+        save_root: report.save_root.clone(),
+        game_candidates: report
+            .game_candidates
+            .iter()
+            .map(|c| crate::dto::GameCandidateDto {
+                path: c.path.clone(),
+                title: c.title.clone(),
+                title_id: c.title_id.clone(),
+                content_id: c.content_id.clone(),
+                app_version: c.app_version.clone(),
+                matches: c.matches,
+                reason: c.reason.clone(),
+            })
+            .collect(),
+        problems: report
+            .problems
+            .iter()
+            .map(|p| crate::dto::DiscoveryProblemDto { kind: p.kind.clone(), message: p.message.clone() })
+            .collect(),
     }
 }
 
@@ -69,6 +90,9 @@ fn save_slot_dto(slot: &SaveSlot, platform: &str) -> SaveSlotDto {
         path: slot.path.clone(),
         container_version: slot.container_version.clone(),
         writable: slot.writable,
+        profile: slot.profile.clone(),
+        title_id: slot.title_id.clone(),
+        problem: slot.problem.clone(),
     }
 }
 
@@ -100,6 +124,7 @@ pub fn project_summary_dto(
     let capabilities = capabilities_dto(&session.capabilities()?);
     Ok(ProjectSummaryDto {
         project_id,
+        dictionary_problem: ws.dictionary_problem().map(str::to_string),
         game_id: ws.game_id().map(str::to_string),
         platform: project.platform.as_str().to_string(),
         role: project.role.as_str().to_string(),
@@ -117,11 +142,82 @@ pub fn project_summary_dto(
         roster_aligned: ws.roster_aligned(),
         display_roster: ws.display_roster(),
         capabilities,
+        surfaces: surface_caps_dto(&session.surface_capabilities()?),
         // Experimental if either the canonical session or the (possibly v1) roster mirror writes
         // through an un-reversed integrity tag.
         write_experimental: write_experimental(project.source())
             || ws.roster_source().is_some_and(write_experimental),
+        workspace_revision: ws.revision().to_string(),
     })
+}
+
+/// ONB-003: the summary of an assets-only project folder — no database, no roster, no edit
+/// session. Every database surface is `not-applicable` with the reason, so the UI omits the
+/// database tabs rather than rendering blanks; the asset pages work from the linked assets root.
+pub fn asset_only_summary_dto(project_id: u32, game_id: &str, platform: studio_domain::Platform) -> ProjectSummaryDto {
+    const REASON: &str = "this project has no main database or roster save (assets only)";
+    let absent = || crate::dto::SurfaceCapabilityDto { state: "not-applicable".into(), reason: Some(REASON.into()) };
+    ProjectSummaryDto {
+        project_id,
+        dictionary_problem: None,
+        game_id: Some(game_id.to_string()),
+        platform: platform.as_str().to_string(),
+        role: "assets".into(),
+        source: "none".into(),
+        endian: "n/a".into(),
+        table_count: 0,
+        db_size: 0,
+        header_crc_ok: true,
+        size_ok: true,
+        dirty: false,
+        undo_depth: 0,
+        redo_depth: 0,
+        tables: Vec::new(),
+        roster_attached: false,
+        roster_aligned: false,
+        display_roster: false,
+        capabilities: CapabilitiesDto {
+            arena_link: false,
+            player_style: false,
+            year_ufa: false,
+            junior_team: false,
+            draft_team: false,
+            draft_year: false,
+            draft_round: false,
+            draft_pick: false,
+            rookie_ahl: false,
+            rookie_chl: false,
+            has_skater_equip: false,
+            has_goalie_equip: false,
+            skater_ratings_labelled: 0,
+            skater_ratings_total: 0,
+            goalie_ratings_labelled: 0,
+            goalie_ratings_total: 0,
+            main_team_offset: 0,
+        },
+        surfaces: SurfaceCapabilitiesDto {
+            players: absent(),
+            teams: absent(),
+            arenas: absent(),
+            career: absent(),
+            attributes: absent(),
+            traits: absent(),
+            lines: absent(),
+            strategies: absent(),
+            captaincy: absent(),
+            contracts: absent(),
+            draft_picks: absent(),
+            jerseys: absent(),
+            team_equipment: absent(),
+            player_equipment: absent(),
+            portraits: absent(),
+            logos: absent(),
+            heads: absent(),
+            audio: absent(),
+        },
+        write_experimental: false,
+        workspace_revision: "assets-only".into(),
+    }
 }
 
 /// Whether this project's on-disk write path is only experimentally supported: PS4 roster saves
@@ -156,6 +252,46 @@ fn capabilities_dto(c: &Capabilities) -> CapabilitiesDto {
         goalie_ratings_labelled: c.goalie_ratings_labelled,
         goalie_ratings_total: c.goalie_ratings_total,
         main_team_offset: c.main_team_offset,
+    }
+}
+
+fn surface_state_str(s: SurfaceState) -> &'static str {
+    match s {
+        SurfaceState::NotApplicable => "not-applicable",
+        SurfaceState::Readable => "readable",
+        SurfaceState::Editable => "editable",
+        SurfaceState::Disabled => "disabled",
+        SurfaceState::Unverified => "unverified",
+    }
+}
+
+fn surface_cap_dto(c: SurfaceCapability) -> SurfaceCapabilityDto {
+    SurfaceCapabilityDto {
+        state: surface_state_str(c.state).to_string(),
+        reason: c.reason.map(str::to_string),
+    }
+}
+
+fn surface_caps_dto(s: &SurfaceCapabilities) -> SurfaceCapabilitiesDto {
+    SurfaceCapabilitiesDto {
+        players: surface_cap_dto(s.players),
+        teams: surface_cap_dto(s.teams),
+        arenas: surface_cap_dto(s.arenas),
+        career: surface_cap_dto(s.career),
+        attributes: surface_cap_dto(s.attributes),
+        traits: surface_cap_dto(s.traits),
+        lines: surface_cap_dto(s.lines),
+        strategies: surface_cap_dto(s.strategies),
+        captaincy: surface_cap_dto(s.captaincy),
+        contracts: surface_cap_dto(s.contracts),
+        draft_picks: surface_cap_dto(s.draft_picks),
+        jerseys: surface_cap_dto(s.jerseys),
+        team_equipment: surface_cap_dto(s.team_equipment),
+        player_equipment: surface_cap_dto(s.player_equipment),
+        portraits: surface_cap_dto(s.portraits),
+        logos: surface_cap_dto(s.logos),
+        heads: surface_cap_dto(s.heads),
+        audio: surface_cap_dto(s.audio),
     }
 }
 
@@ -309,6 +445,8 @@ pub fn field_view_dto(fv: &FieldView) -> FieldViewDto {
         range_high: fv.range_high,
         editable: fv.editable,
         is_string: fv.is_string,
+        text_max_bytes: fv.text_max_bytes,
+        vocabulary_note: fv.vocabulary_note.clone(),
     }
 }
 
@@ -319,6 +457,7 @@ pub fn field_cell_dto(c: &ProfileCell) -> FieldCellDto {
         CellControl::Team { offset, none_label } => ("team", Some(*offset), none_label.clone()),
         CellControl::Arena => ("arena", None, None),
         CellControl::Derived => ("derived", None, None),
+        CellControl::Color => ("color", None, None),
     };
     FieldCellDto {
         label: c.label.clone(),
@@ -329,6 +468,7 @@ pub fn field_cell_dto(c: &ProfileCell) -> FieldCellDto {
         none_label,
         derived_display: c.derived_display.clone(),
         unverified: c.unverified.clone(),
+        color_fields: c.color_components.iter().map(field_view_dto).collect(),
     }
 }
 
@@ -363,6 +503,7 @@ pub fn player_summary_dto(s: &PlayerSummary) -> PlayerSummaryDto {
         contract_years: s.contract_years,
         contract_status: s.contract_status.clone(),
         is_two_way: s.is_two_way,
+        is_goalie: s.is_goalie,
     }
 }
 
@@ -448,13 +589,15 @@ fn trait_option_dto(o: &TraitOption) -> TraitOptionDto {
 fn player_attributes_dto(a: &PlayerAttributes) -> PlayerAttributesDto {
     PlayerAttributesDto {
         kind: a.kind.map(|k| k.to_string()),
-        overall: a.overall.as_ref().map(attribute_view_dto),
+        computed_overall: a.computed_overall,
+        stored_overall: a.stored_overall,
         style: a.style.as_ref().map(attribute_view_dto),
         potential_range: a.potential_range.as_ref().map(attribute_view_dto),
         potential_accuracy: a.potential_accuracy.as_ref().map(attribute_view_dto),
         flat: a.flat.iter().map(attribute_view_dto).collect(),
         traits: a.traits.iter().map(trait_view_dto).collect(),
         trait_options: a.trait_options.iter().map(trait_option_dto).collect(),
+        other_fields: a.other_fields.iter().map(field_view_dto).collect(),
     }
 }
 
@@ -470,6 +613,9 @@ pub fn player_view_dto(v: &PlayerView) -> PlayerViewDto {
         ratings: v.ratings.iter().map(field_view_dto).collect(),
         ratings_record: v.ratings_record,
         ratings_table: v.ratings_table.to_string(),
+        equipment: v.equipment.iter().map(field_view_dto).collect(),
+        equipment_record: v.equipment_record,
+        equipment_table: v.equipment_table.to_string(),
         memberships: v.memberships.iter().map(membership_dto).collect(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
         profile: entity_field_profile_dto(&v.profile),
@@ -482,6 +628,7 @@ pub fn career_stats_dto(c: &CareerStats) -> CareerStatsDto {
             .sections
             .iter()
             .map(|s| CareerSectionDto {
+                team_code_supported: Some(s.team_code_supported),
                 kind: s.kind.clone(),
                 title: s.title.clone(),
                 table: s.table.clone(),
@@ -501,7 +648,11 @@ pub fn career_stats_dto(c: &CareerStats) -> CareerStatsDto {
                         season_label: r.season_label.clone(),
                         league_label: r.league_label.clone(),
                         team: r.team.clone(),
-                        cells: r.cells.iter().map(|c| c.as_ref().map(field_view_dto)).collect(),
+                        cells: r
+                            .cells
+                            .iter()
+                            .map(|c| c.as_ref().map(field_view_dto))
+                            .collect(),
                     })
                     .collect(),
             })
@@ -601,8 +752,213 @@ pub fn team_equipment_dto(e: &studio_domain::TeamEquipment) -> TeamEquipmentDto 
                 red: z.red,
                 green: z.green,
                 blue: z.blue,
+                packed_field: z.packed_field.map(str::to_owned),
             })
             .collect(),
+    }
+}
+
+pub fn equipment_slot_asset_dto(
+    a: &studio_domain::EquipmentSlotAsset,
+    label: Option<String>,
+) -> EquipmentSlotAssetDto {
+    EquipmentSlotAssetDto {
+        id: a.id,
+        label,
+        files: a
+            .files
+            .iter()
+            .map(|relative_path| EquipmentSlotFileDto {
+                relative_path: relative_path.clone(),
+            })
+            .collect(),
+    }
+}
+
+fn raw_text(r: &studio_domain::FieldRaw) -> String {
+    match r {
+        studio_domain::FieldRaw::Int(v) => v.to_string(),
+        studio_domain::FieldRaw::Text(s) => s.clone(),
+    }
+}
+
+pub fn pending_file_dto(
+    role: &str,
+    label: &str,
+    path: &str,
+    p: &studio_domain::PendingChanges,
+) -> crate::dto::PendingFileDto {
+    crate::dto::PendingFileDto {
+        role: role.to_string(),
+        label: label.to_string(),
+        path: path.to_string(),
+        dirty: p.dirty,
+        cells: p
+            .cells
+            .iter()
+            .map(|c| crate::dto::PendingCellDto {
+                studio_table: c.studio_table.clone(),
+                table_name: c.table_name.clone(),
+                record: c.record,
+                entity: c.entity.clone(),
+                studio_field: c.studio_field.clone(),
+                field_name: c.field_name.clone(),
+                before: c.before.display.clone(),
+                after: c.after.display.clone(),
+                before_raw: raw_text(&c.before.raw),
+                after_raw: raw_text(&c.after.raw),
+            })
+            .collect(),
+        tables: p
+            .tables
+            .iter()
+            .map(|t| crate::dto::PendingTableDto {
+                studio_table: t.studio_table.clone(),
+                table_name: t.table_name.clone(),
+                before_records: t.before_records,
+                after_records: t.after_records,
+                note: t.note.clone(),
+                rows_only_in_working: t.rows_only_in_working.clone(),
+                rows_only_in_baseline: t.rows_only_in_baseline.clone(),
+            })
+            .collect(),
+        integrity: crate::dto::PendingIntegrityDto {
+            file_header: p.integrity.file_header,
+            table_headers: p.integrity.table_headers.clone(),
+            other_bytes: p.integrity.other_bytes,
+        },
+        total_cells: p.total_cells,
+        truncated: p.truncated,
+        error: p.error.clone(),
+    }
+}
+
+pub fn league_summary_dto(l: &studio_domain::LeagueIdentity) -> crate::dto::LeagueSummaryDto {
+    crate::dto::LeagueSummaryDto {
+        code: l.code as i64,
+        record: l.record,
+        name_key: l.name_key.clone(),
+        label: l.label.clone(),
+        display: l.display(),
+        confidence: l.confidence.map(|c| c.as_str().to_string()),
+        dictionary_key: l.dictionary_key.clone(),
+        dictionary_key_evidence: l.dictionary_key_evidence.clone(),
+        evidence: l.evidence.clone(),
+        member_teams: l.member_teams,
+        art_id: l.art_id,
+        render_id: l.render_id,
+        order_id: l.order_id,
+        primary_color: l.primary_color,
+        secondary_color: l.secondary_color,
+    }
+}
+
+pub fn league_catalog_dto(c: &studio_domain::LeagueCatalog) -> crate::dto::LeagueCatalogDto {
+    crate::dto::LeagueCatalogDto {
+        source: c.source.as_str().to_string(),
+        team_league_table: c.team_league_table.clone(),
+        vocabulary: c.vocabulary.clone(),
+        unresolved_reason: c.unresolved_reason.clone(),
+        name_edit_blocker: c.name_edit_blocker(),
+        dictionary: c.dictionary.as_ref().map(dictionary_ref_dto),
+        leagues: c.leagues.iter().map(league_summary_dto).collect(),
+    }
+}
+
+pub fn dictionary_ref_dto(d: &studio_domain::DictionaryRef) -> crate::dto::DictionaryRefDto {
+    crate::dto::DictionaryRefDto {
+        path: d.path.clone(),
+        locale: d.locale.clone(),
+        sha256: d.sha256.clone(),
+        rows: d.rows,
+    }
+}
+
+pub fn league_view_dto(v: &studio_domain::LeagueView) -> crate::dto::LeagueViewDto {
+    crate::dto::LeagueViewDto {
+        summary: league_summary_dto(&v.identity),
+        fields: v.fields.iter().map(field_view_dto).collect(),
+        row_table: v.row_table.clone(),
+        name_max_bytes: v.name_max_bytes,
+        members: v.members.iter().map(team_summary_dto).collect(),
+        name_edit_blocker: v.name_edit_blocker.clone(),
+        structure: v.structure.as_ref().map(league_structure_dto),
+        structure_blocker: v.structure_blocker.clone(),
+    }
+}
+
+pub fn competition_group_dto(g: &studio_domain::competition_groups::ResolvedGroup) -> crate::dto::CompetitionGroupDto {
+    crate::dto::CompetitionGroupDto {
+        id: g.id,
+        key: g.key.clone(),
+        kind: g.kind.clone(),
+        label: g.label.clone(),
+        label_source: g.label_source.to_string(),
+        used: g.used,
+        league_codes: g.league_codes.clone(),
+        evidence: g.evidence.clone(),
+        note: g.note.clone(),
+        hypothesis_key: g.hypothesis_key.clone(),
+    }
+}
+
+pub fn league_structure_dto(s: &studio_domain::leagues::LeagueStructure) -> crate::dto::LeagueStructureDto {
+    crate::dto::LeagueStructureDto {
+        evidence: s.evidence.clone(),
+        league_group: competition_group_dto(&s.league_group),
+        conferences: s.conferences.iter().map(competition_group_dto).collect(),
+        divisions: s.divisions.iter().map(competition_group_dto).collect(),
+        pools: s.pools.iter().map(competition_group_dto).collect(),
+        other: s.other.iter().map(competition_group_dto).collect(),
+        shared_keys: s.shared_keys.clone(),
+        shared_with: s.shared_with.clone(),
+        witness_notes: s.witness_notes.clone(),
+        pairs: s.pairs.clone(),
+        exceptional: s.exceptional.clone(),
+        provenance: s.provenance.clone(),
+    }
+}
+
+fn membership_choice_dto(c: &studio_domain::membership::Choice) -> crate::dto::MembershipChoiceDto {
+    crate::dto::MembershipChoiceDto {
+        value: c.value,
+        label: c.label.clone(),
+        evidence: c.evidence.clone(),
+    }
+}
+
+pub fn membership_state_dto(s: &studio_domain::membership::MembershipState) -> crate::dto::MembershipStateDto {
+    crate::dto::MembershipStateDto {
+        league_code: s.league_code,
+        league_label: s.league_label.clone(),
+        league_group: s.league_group.as_ref().map(membership_choice_dto),
+        conference: s.conference.as_ref().map(membership_choice_dto),
+        division: s.division.as_ref().map(membership_choice_dto),
+    }
+}
+
+pub fn membership_options_dto(o: &studio_domain::membership::MembershipOptions) -> crate::dto::MembershipOptionsDto {
+    crate::dto::MembershipOptionsDto {
+        team_id: o.team_id,
+        model: o.model.as_str().to_string(),
+        group_evidence: o.group_evidence.clone(),
+        current: membership_state_dto(&o.current),
+        leagues: o.leagues.iter().map(membership_choice_dto).collect(),
+        groups_by_league: o
+            .groups_by_league
+            .iter()
+            .map(|g| crate::dto::LeagueGroupsDto {
+                league_code: g.league_code,
+                league_group: g.league_group,
+                league_group_evidence: g.league_group_evidence.clone(),
+                conferences: g.conferences.iter().map(membership_choice_dto).collect(),
+                divisions: g.divisions.iter().map(membership_choice_dto).collect(),
+                pairs: g.pairs.clone(),
+                exceptional: g.exceptional.clone(),
+            })
+            .collect(),
+        notes: o.notes.clone(),
+        blocker: o.blocker.clone(),
     }
 }
 
@@ -628,11 +984,16 @@ fn arena_ref_dto(a: &ArenaRef) -> ArenaRefDto {
 pub fn team_view_dto(v: &TeamView) -> TeamViewDto {
     TeamViewDto {
         team_id: v.team_id,
+        name: v.name.clone(),
         record: v.record,
         identity: v.identity.iter().map(field_view_dto).collect(),
         arena: v.arena.as_ref().map(arena_ref_dto),
         roster_count: v.roster_count,
         retired_numbers: v.retired_numbers.clone(),
+        league: v.league,
+        league_label: v.league_label.clone(),
+        conference_label: v.conference_label.clone(),
+        division_label: v.division_label.clone(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
         profile: entity_field_profile_dto(&v.profile),
     }
@@ -691,33 +1052,60 @@ pub fn parse_raw_id(s: &str) -> Option<[u8; 4]> {
 
 // ---- Historical (FHM corpus) converters -----------------------------------
 
+use crate::dto::{
+    HistoricalAwardDto, HistoricalCareerRowDto, HistoricalContractDto, HistoricalDraftDto,
+    HistoricalFiltersDto, HistoricalLeagueOptionDto, HistoricalPersonDto,
+    HistoricalPersonSummaryDto, HistoricalRosterEntryDto, HistoricalSeasonOptionDto,
+    HistoricalSeasonRowDto, HistoricalStatCellDto, HistoricalTeamAffiliateDto,
+    HistoricalTeamBlockDto, HistoricalTeamContractDto, HistoricalTeamDto, HistoricalTeamFiltersDto,
+    HistoricalTeamFranchiseDto, HistoricalTeamIndexEntryDto, HistoricalTeamMemberDto,
+    HistoricalTeamSummaryDto,
+};
 use studio_domain::historical::{
     AwardRow, CareerStatRow, ContractRow, DraftRow, LeagueOption, PersonDetail, PersonSummary,
     PlayerSeasonRow, SeasonOption, TeamAffiliate, TeamContractLine, TeamFranchiseDetail,
     TeamIndexEntry, TeamRosterEntry, TeamRosterMember, TeamSeasonBlock, TeamSeasonDetail,
     TeamSeasonSummary,
 };
-use crate::dto::{
-    HistoricalAwardDto, HistoricalCareerRowDto, HistoricalContractDto, HistoricalDraftDto,
-    HistoricalFiltersDto, HistoricalLeagueOptionDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
-    HistoricalRosterEntryDto, HistoricalSeasonOptionDto, HistoricalSeasonRowDto,
-    HistoricalStatCellDto, HistoricalTeamAffiliateDto, HistoricalTeamBlockDto, HistoricalTeamContractDto,
-    HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
-    HistoricalTeamIndexEntryDto, HistoricalTeamMemberDto, HistoricalTeamSummaryDto,
-};
 
 /// Curated career-column display order (matches the FHM export layout); extras are appended after.
 const SKATER_COLS: &[&str] = &[
-    "GP", "G", "A", "PIM", "+/-", "PP G", "PP A", "SH G", "SH A", "GWG", "SOG", "GR", "FO", "FO W",
-    "HIT", "GvA", "TkA", "SB", "TOI", "PPTOI", "SHTOI", "Fights", "Fights Won",
+    "GP",
+    "G",
+    "A",
+    "PIM",
+    "+/-",
+    "PP G",
+    "PP A",
+    "SH G",
+    "SH A",
+    "GWG",
+    "SOG",
+    "GR",
+    "FO",
+    "FO W",
+    "HIT",
+    "GvA",
+    "TkA",
+    "SB",
+    "TOI",
+    "PPTOI",
+    "SHTOI",
+    "Fights",
+    "Fights Won",
 ];
-const GOALIE_COLS: &[&str] = &["GP", "GS", "Min", "W", "L", "T/OL", "ENG", "SO", "GA", "SA", "GR"];
+const GOALIE_COLS: &[&str] = &[
+    "GP", "GS", "Min", "W", "L", "T/OL", "ENG", "SO", "GA", "SA", "GR",
+];
 
 fn season_label(year: i64) -> String {
     format!("{}-{}", year - 1, year)
 }
 
-pub fn historical_filters_dto(seasons: &[SeasonOption], leagues: &[LeagueOption]) -> HistoricalFiltersDto {
+pub fn historical_filters_dto(
+    seasons: &[SeasonOption],
+    leagues: &[LeagueOption],
+) -> HistoricalFiltersDto {
     HistoricalFiltersDto {
         seasons: seasons
             .iter()
@@ -809,6 +1197,7 @@ fn historical_season_row_dto(s: &PlayerSeasonRow) -> HistoricalSeasonRowDto {
         league_abbr: s.league_abbr.clone(),
         height: s.height,
         weight: s.weight,
+        jersey: s.jersey,
         ability: s.ability,
         potential: s.potential,
     }
@@ -830,7 +1219,11 @@ fn historical_career_row_dto(c: &CareerStatRow) -> HistoricalCareerRowDto {
 fn stat_cells(kind: &str, stats_json: &str) -> Vec<HistoricalStatCellDto> {
     let map: serde_json::Map<String, serde_json::Value> =
         serde_json::from_str(stats_json).unwrap_or_default();
-    let order: &[&str] = if kind == "goalie" { GOALIE_COLS } else { SKATER_COLS };
+    let order: &[&str] = if kind == "goalie" {
+        GOALIE_COLS
+    } else {
+        SKATER_COLS
+    };
     let mut cells = Vec::new();
     let mut seen = std::collections::HashSet::new();
     for &label in order {
@@ -958,7 +1351,11 @@ pub fn historical_team_franchise_dto(d: &TeamFranchiseDetail) -> HistoricalTeamF
         notes: d.notes.clone(),
         seasons: d.seasons.clone(),
         season_year: d.season_year,
-        constituents: d.constituents.iter().map(historical_team_block_dto).collect(),
+        constituents: d
+            .constituents
+            .iter()
+            .map(historical_team_block_dto)
+            .collect(),
     }
 }
 
@@ -976,9 +1373,17 @@ fn historical_team_block_dto(b: &TeamSeasonBlock) -> HistoricalTeamBlockDto {
         primary_color: b.primary_color.clone(),
         secondary_color: b.secondary_color.clone(),
         text_color: b.text_color.clone(),
-        affiliates: b.affiliates.iter().map(historical_team_affiliate_dto).collect(),
+        affiliates: b
+            .affiliates
+            .iter()
+            .map(historical_team_affiliate_dto)
+            .collect(),
         roster: b.roster.iter().map(historical_team_member_dto).collect(),
-        contracts: b.contracts.iter().map(historical_team_contract_dto).collect(),
+        contracts: b
+            .contracts
+            .iter()
+            .map(historical_team_contract_dto)
+            .collect(),
     }
 }
 
@@ -1023,13 +1428,12 @@ fn historical_team_contract_dto(c: &TeamContractLine) -> HistoricalTeamContractD
 
 // ---- Formula engine (Stage 2) converters ----------------------------------
 
+use crate::dto::{
+    CareerSeasonOverallDto, EaComputedRatingsDto, EaRatingDto, FhmAttrDto, FhmGroupDto,
+    FhmValueDto, FormulaCatalogDto, FormulaProfileDto, HistoricalCareerRatingsDto, PrebuiltDto,
+};
 use studio_domain::formula::catalog as fcat;
 use studio_domain::{CareerRatings, ComputedRatings, FormulaProfile};
-use crate::dto::{
-    CareerSeasonOverallDto, EaComputedRatingsDto, EaRatingDto, FhmAttrDto, FhmGroupDto, FhmValueDto,
-    FormulaCatalogDto, HistoricalCareerRatingsDto,
-    FormulaProfileDto, PrebuiltDto,
-};
 
 /// Map a computed EA rating set (+ its raw FHM inputs) → wire DTO.
 pub fn ea_computed_ratings_dto(cr: &ComputedRatings) -> EaComputedRatingsDto {
@@ -1098,8 +1502,14 @@ pub fn formula_profile_from_dto(dto: &FormulaProfileDto) -> FormulaProfile {
 /// The static formula catalog for the Formulas UI.
 pub fn formula_catalog_dto() -> FormulaCatalogDto {
     FormulaCatalogDto {
-        skater_ea_attrs: fcat::SKATER_EA_ATTRS.iter().map(|s| s.to_string()).collect(),
-        goalie_ea_attrs: fcat::GOALIE_EA_ATTRS.iter().map(|s| s.to_string()).collect(),
+        skater_ea_attrs: fcat::SKATER_EA_ATTRS
+            .iter()
+            .map(|s| s.to_string())
+            .collect(),
+        goalie_ea_attrs: fcat::GOALIE_EA_ATTRS
+            .iter()
+            .map(|s| s.to_string())
+            .collect(),
         fhm_groups: fcat::FHM_ATTR_GROUPS
             .iter()
             .map(|(group, attrs)| FhmGroupDto {
@@ -1142,6 +1552,7 @@ pub fn player_assets_dto(p: &PlayerAssets) -> PlayerAssetsDto {
         head_id: p.head_id,
         bespoke_head: p.bespoke_head,
         pool_head: p.pool_head,
+        head_shared: p.head_shared,
         portrait_path: p.portrait_path.clone(),
         mesh_path: p.mesh_path.clone(),
         texture_paths: p.texture_paths.clone(),
@@ -1167,8 +1578,53 @@ pub fn asset_export_summary_dto(s: &AssetExportSummary) -> AssetExportSummaryDto
         raw_copied: s.raw_copied,
         portraits_skipped_generic: s.portraits_skipped_generic,
         skipped_no_slug: s.skipped_no_slug,
+        meshes_skipped_pool: s.meshes_skipped_pool,
+        meshes_skipped_shared: s.meshes_skipped_shared,
+        meshes_skipped_no_head: s.meshes_skipped_no_head,
+        meshes_skipped_missing: s.meshes_skipped_missing,
         failures: s.failures.clone(),
         bytes_written: s.bytes_written,
+    }
+}
+
+pub fn head_catalog_summary_dto(
+    s: &studio_domain::HeadCatalogSummary,
+) -> crate::dto::HeadCatalogSummaryDto {
+    crate::dto::HeadCatalogSummaryDto {
+        heads_written: s.heads_written,
+        hair_written: s.hair_written,
+        facial_hair_written: s.facial_hair_written,
+        textures_written: s.textures_written,
+        entry_count: s.entries.len(),
+        skipped_no_base: s.skipped_no_base,
+        manifest_file: s.manifest_file.clone(),
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+    }
+}
+
+pub fn catalog_manifest_dto(m: &studio_domain::CatalogManifest) -> crate::dto::CatalogManifestDto {
+    crate::dto::CatalogManifestDto {
+        version: m.version,
+        game: m.game.clone(),
+        head_count: m.head_count,
+        hair_count: m.hair_count,
+        facial_hair_count: m.facial_hair_count,
+        entries: m
+            .entries
+            .iter()
+            .map(|e| crate::dto::CatalogEntryDto {
+                name: e.name.clone(),
+                origin: e.origin.clone(),
+                class: e.class.clone(),
+                game: e.game.clone(),
+                mesh_file: e.mesh_file.clone(),
+                submeshes: e.submeshes.clone(),
+                textures: e.textures.clone(),
+                texture_sources: e.texture_sources.clone(),
+                source: e.source.clone(),
+            })
+            .collect(),
     }
 }
 
@@ -1281,6 +1737,48 @@ pub fn head_preview_dto(p: &HeadPreview) -> HeadPreviewDto {
     }
 }
 
+/// Map a decoded [`PreviewSubmesh`] to its DTO (shared by head + kit previews).
+fn preview_submesh_dto(s: &studio_domain::PreviewSubmesh) -> PreviewSubmeshDto {
+    PreviewSubmeshDto {
+        name: s.name.clone(),
+        positions: s.positions.clone(),
+        normals: s.normals.clone(),
+        uv1: s.uv1.clone(),
+        triangles: s.triangles.clone(),
+        material_index: s.material_index,
+        transparent: s.transparent,
+        render_order: s.render_order,
+    }
+}
+
+/// Map a decoded [`PreviewTexture`] to its DTO (shared by head + kit previews).
+fn preview_texture_dto(t: &studio_domain::PreviewTexture) -> PreviewTextureDto {
+    PreviewTextureDto {
+        name: t.name.clone(),
+        width: t.width,
+        height: t.height,
+        rgba_base64: t.rgba_base64.clone(),
+    }
+}
+
+pub fn kit_preview_dto(p: &studio_domain::KitPreview) -> KitPreviewDto {
+    KitPreviewDto {
+        pieces: p
+            .pieces
+            .iter()
+            .map(|piece| KitPieceDto {
+                kind: piece.kind.clone(),
+                label: piece.label.clone(),
+                source_path: piece.source_path.clone(),
+                submeshes: piece.submeshes.iter().map(preview_submesh_dto).collect(),
+            })
+            .collect(),
+        textures: p.textures.iter().map(preview_texture_dto).collect(),
+        center: p.center,
+        span: p.span,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::team_name_slug;
@@ -1292,5 +1790,906 @@ mod tests {
         assert_eq!(team_name_slug("St. Louis Blues"), "st_louis_blues"); // punctuation collapses
         assert_eq!(team_name_slug("  Anaheim  Ducks  "), "anaheim_ducks"); // trimmed + collapsed
         assert_eq!(team_name_slug("---"), ""); // no usable chars → empty (team skipped)
+    }
+}
+
+pub fn dictionary_row_dto(r: &studio_domain::dictionary_edit::DictionaryRow) -> crate::dto::DictionaryRowDto {
+    crate::dto::DictionaryRowDto {
+        record: r.record,
+        key: r.key.clone(),
+        hash: r.hash,
+        text: r.text.clone(),
+    }
+}
+
+pub fn dictionary_repoint_preview_dto(
+    p: &studio_domain::dictionary_edit::DictionaryRepointPreview,
+) -> crate::dto::DictionaryRepointPreviewDto {
+    crate::dto::DictionaryRepointPreviewDto {
+        dictionary_path: p.dictionary_path.clone(),
+        dictionary_sha256: p.dictionary_sha256.clone(),
+        endian_big: p.endian_big,
+        source: dictionary_row_dto(&p.source),
+        source_lookup: p.source_lookup.clone(),
+        donor: dictionary_row_dto(&p.donor),
+        donor_lookup: p.donor_lookup.clone(),
+        text_before: p.text_before.clone(),
+        text_after: p.text_after.clone(),
+        slot_offset: p.slot_offset,
+        old_pointer: p.old_pointer,
+        new_pointer: p.new_pointer,
+        hash_collisions: p.hash_collisions.iter().map(dictionary_row_dto).collect(),
+        sharing_old_text: p.sharing_old_text.iter().map(dictionary_row_dto).collect(),
+        sharing_new_text: p.sharing_new_text.iter().map(dictionary_row_dto).collect(),
+        warnings: p.warnings.clone(),
+    }
+}
+
+pub fn pending_dictionary_dto(
+    p: &studio_domain::dictionary_edit::PendingDictionary,
+) -> crate::dto::PendingDictionaryDto {
+    crate::dto::PendingDictionaryDto {
+        path: p.path.clone(),
+        baseline_sha256: p.baseline_sha256.clone(),
+        working_sha256: p.working_sha256.clone(),
+        kind: p.kind.clone(),
+        key: p.key.clone(),
+        before: p.before.clone(),
+        after: p.after.clone(),
+        donor_key: p.donor_key.clone(),
+        changed_bytes: p.changed_bytes,
+        changed_ranges: p
+            .changed_ranges
+            .iter()
+            .map(|r| format!("{:#x}..{:#x}", r.start, r.end))
+            .collect(),
+        crc_scopes_changed: p.crc_scopes_changed.clone(),
+        warnings: p.warnings.clone(),
+    }
+}
+
+pub fn schedule_table_dto(t: &studio_domain::schedules::ScheduleTableSummary) -> crate::dto::ScheduleTableDto {
+    crate::dto::ScheduleTableDto {
+        studio_table: t.studio_table.clone(),
+        name: t.name.clone(),
+        rows: t.rows,
+        max_records: t.max_records,
+        league_code: t.league_code,
+        league_label: t.league_label.clone(),
+        league_match: t.league_match.clone(),
+        role: t.role.to_string(),
+        shown_with_league: t.shown_with_league,
+    }
+}
+
+fn schedule_slot_dto(s: &studio_domain::schedules::SlotCount) -> crate::dto::ScheduleSlotDto {
+    crate::dto::ScheduleSlotDto {
+        slot: s.slot,
+        team: s.team.clone(),
+        team_id: s.team_id,
+        games: s.games,
+    }
+}
+
+fn scheduled_game_dto(g: &studio_domain::schedules::ScheduledGame) -> crate::dto::ScheduledGameDto {
+    crate::dto::ScheduledGameDto {
+        record: g.record,
+        index: g.index,
+        month: g.month,
+        day: g.day,
+        date: g.date.clone(),
+        round: g.round,
+        status: g.status,
+        home_slot: g.home_slot,
+        away_slot: g.away_slot,
+        home: g.home.clone(),
+        away: g.away.clone(),
+        round_label: g.round_label.clone(),
+        home_label: g.home_label.clone(),
+        away_label: g.away_label.clone(),
+    }
+}
+
+pub fn schedule_view_dto(v: &studio_domain::schedules::ScheduleView) -> crate::dto::ScheduleViewDto {
+    crate::dto::ScheduleViewDto {
+        table: schedule_table_dto(&v.table),
+        fields: v.fields.iter().map(|(k, f)| (k.clone(), f.clone())).collect(),
+        field_widths: v.layout.fields.iter().map(|f| (f.name.clone(), f.bit_width)).collect(),
+        slot_map: v
+            .slot_map
+            .entries
+            .iter()
+            .map(|e| crate::dto::ScheduleSlotEntryDto {
+                slot: e.slot,
+                team_id: e.team_id,
+                name: e.name.clone(),
+                abbrev: e.abbrev.clone(),
+                key: e.key.clone(),
+                global_index: e.global_index,
+            })
+            .collect(),
+        fingerprint: v.slot_map.fingerprint.clone(),
+        games: v.games.iter().map(scheduled_game_dto).collect(),
+        slots: v.slots.iter().map(schedule_slot_dto).collect(),
+        unresolved_slots: v.unresolved_slots.iter().map(schedule_slot_dto).collect(),
+        findings: v.findings.clone(),
+        tournament_note: v.tournament_note.clone(),
+        first_date: v.first_date.clone(),
+        last_date: v.last_date.clone(),
+    }
+}
+
+pub fn schedule_validation_dto(v: &studio_domain::schedule_edit::Validation) -> crate::dto::ScheduleValidationDto {
+    crate::dto::ScheduleValidationDto {
+        errors: v.errors.clone(),
+        warnings: v.warnings.clone(),
+        games_per_slot: v
+            .games_per_slot
+            .iter()
+            .map(|s| crate::dto::ScheduleSlotGamesDto {
+                slot: s.slot,
+                team: s.team.clone(),
+                team_id: s.team_id,
+                games: s.games,
+                home: s.home,
+                away: s.away,
+            })
+            .collect(),
+        first_date: v.first_date.clone(),
+        last_date: v.last_date.clone(),
+    }
+}
+
+pub fn schedule_change_plan_dto(ticket: &str, p: &studio_domain::schedule_edit::ChangePlan) -> crate::dto::ScheduleChangePlanDto {
+    crate::dto::ScheduleChangePlanDto {
+        ticket: ticket.to_string(),
+        studio_table: p.studio_table.clone(),
+        table_name: p.table_name.clone(),
+        league_label: p.league_label.clone(),
+        rows_changed: p.rows.len() as u32,
+        cells: p.cells as u32,
+        before: p.before.iter().map(scheduled_game_dto).collect(),
+        after: p.after.iter().map(scheduled_game_dto).collect(),
+        validation: schedule_validation_dto(&p.validation),
+        fingerprint: p.fingerprint.clone(),
+        notes: p.notes.clone(),
+    }
+}
+
+pub fn schedule_import_plan_dto(ticket: &str, p: &studio_domain::schedule_edit::ImportPlan) -> crate::dto::ScheduleImportPlanDto {
+    crate::dto::ScheduleImportPlanDto {
+        change: schedule_change_plan_dto(ticket, &p.change),
+        keys: p
+            .keys
+            .iter()
+            .map(|k| crate::dto::ScheduleKeyResolutionDto {
+                key: k.key.clone(),
+                team_id: k.team_id,
+                team: k.team.clone(),
+                slot: k.slot,
+                how: k.how.to_string(),
+                games: k.games,
+            })
+            .collect(),
+        rows_in_file: p.rows_in_file as u32,
+        rows_in_table: p.rows_in_table as u32,
+    }
+}
+
+pub fn schedule_generation_options_dto(
+    o: &studio_domain::schedule_edit::GenerationOptions,
+) -> crate::dto::ScheduleGenerationOptionsDto {
+    crate::dto::ScheduleGenerationOptionsDto {
+        members: o
+            .members
+            .iter()
+            .map(|m| crate::dto::ScheduleParticipantDto {
+                team_id: m.team_id,
+                slot: m.slot,
+                name: m.name.clone(),
+                abbrev: m.abbrev.clone(),
+                games: m.games,
+                default: m.default,
+            })
+            .collect(),
+        kept_rows: o.kept_rows as u32,
+        rows_to_fill: o.rows_to_fill as u32,
+        pairs: o.pairs as u32,
+        suggested_rounds: o.suggested_rounds,
+        suggested_start_month: o.suggested_start_month,
+        suggested_start_day: o.suggested_start_day,
+        suggested_days_between_matchdays: o.suggested_days_between_matchdays,
+        matchdays_per_round: o.matchdays_per_round,
+        blocker: o.blocker.clone(),
+        notes: o.notes.clone(),
+    }
+}
+
+pub fn schedule_generation_plan_dto(ticket: &str, p: &studio_domain::schedule_edit::GenerationPlan) -> crate::dto::ScheduleGenerationPlanDto {
+    crate::dto::ScheduleGenerationPlanDto {
+        change: schedule_change_plan_dto(ticket, &p.change),
+        participants: p.participants as u32,
+        rounds: p.rounds,
+        matchdays: p.matchdays,
+        generated_rows: p.generated_rows as u32,
+        kept_rows: p.kept_rows as u32,
+        games_per_participant: p.games_per_participant,
+    }
+}
+
+pub fn dictionary_retext_preview_dto(
+    p: &studio_domain::dictionary_edit::DictionaryRetextPreview,
+) -> crate::dto::DictionaryRetextPreviewDto {
+    let row = |r: &studio_domain::dictionary_edit::DictionaryRow| crate::dto::DictionaryRowDto {
+        record: r.record,
+        key: r.key.clone(),
+        hash: r.hash,
+        text: r.text.clone(),
+    };
+    crate::dto::DictionaryRetextPreviewDto {
+        dictionary_path: p.dictionary_path.clone(),
+        dictionary_sha256: p.dictionary_sha256.clone(),
+        endian_big: p.endian_big,
+        source: row(&p.source),
+        source_lookup: p.source_lookup.clone(),
+        text_before: p.text_before.clone(),
+        text_after: p.text_after.clone(),
+        pool_offset: p.pool_offset,
+        old_bits: p.old_bits,
+        old_extent_bytes: p.old_extent_bytes,
+        new_bits: p.new_bits,
+        new_extent_bytes: p.new_extent_bytes,
+        sharing_text: p.sharing_text.iter().map(row).collect(),
+        hash_collisions: p.hash_collisions.iter().map(row).collect(),
+        warnings: p.warnings.clone(),
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Phase 1.2 (D2) — settings catalogue
+// ---------------------------------------------------------------------------------------------
+
+fn setting_choice_dto(c: &studio_domain::settings_catalogue::Choice) -> crate::dto::SettingChoiceDto {
+    crate::dto::SettingChoiceDto { code: c.code, key: c.key.clone(), text: c.text.clone() }
+}
+
+fn stored_default_dto(d: &studio_domain::settings_catalogue::StoredDefault) -> crate::dto::StoredDefaultDto {
+    crate::dto::StoredDefaultDto {
+        code: d.code,
+        label: d.label.clone(),
+        cells: d.cells.clone(),
+        values: d.values.clone(),
+        paired: d.paired,
+        consistent: d.consistent,
+    }
+}
+
+pub fn settings_catalogue_result_dto(
+    r: &Result<studio_domain::settings_catalogue::SettingsCatalogue, studio_domain::settings_catalogue::SettingsBlocker>,
+) -> crate::dto::SettingsCatalogueResultDto {
+    match r {
+        Ok(c) => crate::dto::SettingsCatalogueResultDto { catalogue: Some(settings_catalogue_dto(c)), blocker_kind: None, blocker: None },
+        Err(b) => crate::dto::SettingsCatalogueResultDto { catalogue: None, blocker_kind: Some(b.kind.to_string()), blocker: Some(b.reason.clone()) },
+    }
+}
+
+pub fn settings_catalogue_dto(c: &studio_domain::settings_catalogue::SettingsCatalogue) -> crate::dto::SettingsCatalogueDto {
+    use studio_domain::settings_catalogue::{CatalogueSource, Eligibility};
+    let source = match &c.source {
+        CatalogueSource::Database { copy, database_sha256, tables } => crate::dto::SettingsSourceDto {
+            kind: "database".into(),
+            copy: Some(copy.clone()),
+            database_sha256: Some(database_sha256.clone()),
+            tables: tables
+                .iter()
+                .map(|t| crate::dto::SettingsTableDto { name: t.name.clone(), raw_id: t.raw_id.clone(), rows: t.rows as u32, max_records: t.max_records as u32 })
+                .collect(),
+            origin: None,
+            variant: None,
+            members: Vec::new(),
+        },
+        CatalogueSource::SettingCsv { origin, variant, members } => crate::dto::SettingsSourceDto {
+            kind: "setting-csv".into(),
+            copy: None,
+            database_sha256: None,
+            tables: Vec::new(),
+            origin: Some(origin.clone()),
+            variant: Some(variant.as_str().to_string()),
+            members: members
+                .iter()
+                .map(|m| crate::dto::SettingsMemberDto { path: m.path.clone(), plain_len: m.plain_len as u64, plain_sha256: m.plain_sha256.clone(), stored_form: m.stored_form.clone() })
+                .collect(),
+        },
+    };
+    crate::dto::SettingsCatalogueDto {
+        game: c.game.clone(),
+        platform: c.platform.clone(),
+        source,
+        contexts: c
+            .contexts
+            .iter()
+            .map(|x| crate::dto::SettingContextDto {
+                id: x.id,
+                name: x.name.clone(),
+                name_source: x.name_source.as_str().to_string(),
+                defaults_rows: x.defaults_rows as u32,
+                layout_rows: x.layout_rows as u32,
+                reserved: x.reserved,
+            })
+            .collect(),
+        groups: c
+            .groups
+            .iter()
+            .map(|g| crate::dto::SettingGroupDto { id: g.id, name: g.name.clone(), name_source: g.name_source.as_str().to_string(), parent: g.parent, members: g.members as u32 })
+            .collect(),
+        settings: c
+            .settings
+            .iter()
+            .map(|s| {
+                let (eligibility, role, reason) = match &s.eligibility {
+                    Eligibility::Eligible { role } => ("eligible", Some(role.clone()), None),
+                    Eligibility::Excluded { reason } => ("excluded", None, Some(reason.clone())),
+                    Eligibility::OutOfScope => ("out-of-scope", None, None),
+                };
+                crate::dto::SettingRowDto {
+                    legacy_id: s.legacy_id,
+                    name: s.name.clone(),
+                    label_key: s.label_key.clone(),
+                    label_text: s.label_text.clone(),
+                    setting_id: s.setting_id,
+                    siblings: s.siblings.clone(),
+                    is_choice: s.is_choice,
+                    min: s.min,
+                    max: s.max,
+                    size: s.size,
+                    global: s.global.as_ref().map(stored_default_dto),
+                    context_defaults: s
+                        .context_defaults
+                        .iter()
+                        .map(|d| crate::dto::SettingContextDefaultDto {
+                            context: d.context,
+                            context_name: d.context_name.clone(),
+                            stored: stored_default_dto(&d.stored),
+                            choices: d.choices.as_ref().map(|v| v.iter().map(setting_choice_dto).collect()),
+                            domain_note: d.domain_note.clone(),
+                            enabled: d.enabled,
+                            visible: d.visible,
+                            anomaly: d.anomaly.clone(),
+                        })
+                        .collect(),
+                    choices: s.choices.iter().map(setting_choice_dto).collect(),
+                    label_source: s.label_source.as_str().to_string(),
+                    groups: s.groups.clone(),
+                    dependents: s.dependents.clone(),
+                    eligibility: eligibility.to_string(),
+                    role,
+                    eligibility_reason: reason,
+                    anomalies: s.anomalies.clone(),
+                }
+            })
+            .collect(),
+        absent_eligible: c.absent_eligible.clone(),
+        anomalies: c.anomalies.clone(),
+        notes: c.notes.clone(),
+        dictionary: c.dictionary.clone(),
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Phase 1.2 (D3) — stored-default edit plans
+// ---------------------------------------------------------------------------------------------
+
+pub fn settings_csv_member_dto(m: &studio_domain::settings_csv_edit::CsvMemberEdit) -> crate::dto::SettingsCsvMemberDto {
+    crate::dto::SettingsCsvMemberDto {
+        member: m.member.clone(),
+        member_path: m.member_path.clone(),
+        stored_form: m.stored_form.clone(),
+        source_plain_sha256: m.source_plain_sha256.clone(),
+        source_stored_len: m.source_stored_len.map(|l| l as u64),
+        new_plain_sha256: m.new_plain_sha256.clone(),
+        new_stored_len: m.new_stored.len() as u64,
+        new_stored_sha256: m.new_stored_sha256.clone(),
+        cells: m.cells.iter().map(|c| (c.line as u32, c.column.clone(), c.before.clone(), c.after.clone())).collect(),
+        placement_prediction: m.placement_prediction.clone(),
+    }
+}
+
+pub fn settings_csv_plan_dto(ticket: &str, p: &studio_domain::settings_csv_edit::CsvDefaultPlan) -> crate::dto::SettingsEditPlanDto {
+    crate::dto::SettingsEditPlanDto {
+        kind: "csv".into(),
+        ticket: ticket.to_string(),
+        legacy_id: p.target.legacy_id,
+        context: p.target.context,
+        setting_name: p.setting_name.clone(),
+        label_text: p.label_text.clone(),
+        role: p.role.clone(),
+        context_name: p.context_name.clone(),
+        table_name: p.members.iter().map(|m| m.member.clone()).collect::<Vec<_>>().join(" + "),
+        record: p.members.first().and_then(|m| m.cells.first()).map(|c| c.line as u32).unwrap_or(0),
+        before: p.before,
+        before_label: p.before_label.clone(),
+        after: p.after,
+        after_label: p.after_label.clone(),
+        max: p.choices.iter().map(|c| c.code).max().unwrap_or(0),
+        label_source: p.label_source.clone(),
+        siblings: Vec::new(),
+        unchanged: p.unchanged.clone(),
+        copy: p.archive.clone().unwrap_or_default(),
+        no_op: p.no_op,
+        stock_anomalies: p.stock_anomalies.clone(),
+        description: p.description.clone(),
+        notes: p.notes.clone(),
+        paired: p.paired,
+        members: p.members.iter().map(settings_csv_member_dto).collect(),
+        archive: p.archive.clone(),
+    }
+}
+
+pub fn asset_member_plan_dto(ticket: &str, p: &studio_domain::asset_member_edit::AssetMemberPlan) -> crate::dto::AssetMemberPlanDto {
+    crate::dto::AssetMemberPlanDto {
+        ticket: ticket.to_string(),
+        archive_relative: p.archive_relative.clone(),
+        member_path: p.member_path.clone(),
+        container: p.container.clone(),
+        width: p.width,
+        height: p.height,
+        stored_form: p.member.stored_form.clone(),
+        source_stored_len: p.member.source_stored_len.unwrap_or(0) as u64,
+        new_stored_len: p.member.new_stored.len() as u64,
+        shared_with: p.shared_with.clone(),
+        scope: if p.whole_group { "whole-group".into() } else { "this-member".into() },
+        placement_prediction: p.placement_prediction.clone(),
+        description: p.description.clone(),
+        paired_loose: p.paired_loose.as_ref().map(|l| l.relative.clone()),
+        loose_must_be_absent: p.loose_must_be_absent.clone(),
+        notes: p.notes.clone(),
+    }
+}
+
+pub fn pending_settings_csv_dto(p: &studio_domain::settings_csv_edit::CsvDefaultPlan) -> crate::dto::PendingSettingsCsvDto {
+    crate::dto::PendingSettingsCsvDto {
+        setting_name: p.setting_name.clone(),
+        label_text: p.label_text.clone(),
+        context: p.target.context,
+        context_name: p.context_name.clone(),
+        before: p.before,
+        after: p.after,
+        before_label: p.before_label.clone(),
+        after_label: p.after_label.clone(),
+        paired: p.paired,
+        members: p.members.iter().map(settings_csv_member_dto).collect(),
+        description: p.description.clone(),
+    }
+}
+
+pub fn settings_edit_plan_dto(ticket: &str, p: &studio_domain::settings_edit::DefaultEditPlan) -> crate::dto::SettingsEditPlanDto {
+    crate::dto::SettingsEditPlanDto {
+        kind: "database".into(),
+        ticket: ticket.to_string(),
+        legacy_id: p.target.legacy_id,
+        context: p.target.context,
+        setting_name: p.setting_name.clone(),
+        label_text: p.label_text.clone(),
+        role: p.role.clone(),
+        context_name: p.context_name.clone(),
+        table_name: p.table_name.clone(),
+        record: p.record,
+        before: p.before,
+        before_label: p.before_label.clone(),
+        after: p.after,
+        after_label: p.after_label.clone(),
+        max: p.max,
+        label_source: p.label_source.clone(),
+        siblings: p.siblings.clone(),
+        unchanged: p.unchanged.clone(),
+        copy: p.copy.clone(),
+        no_op: p.no_op,
+        stock_anomalies: p.stock_anomalies.clone(),
+        description: p.description.clone(),
+        notes: p.notes.clone(),
+        paired: false,
+        members: Vec::new(),
+        archive: None,
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// LOC-W3 — dictionary growth
+// ---------------------------------------------------------------------------------------------
+
+pub fn growth_ops(ops: &[crate::dto::DictionaryGrowthOpDto]) -> Result<Vec<studio_domain::tdb_loc::GrowthOp>, crate::error::ApiError> {
+    ops.iter()
+        .map(|o| match o.kind.as_str() {
+            "text" => Ok(studio_domain::tdb_loc::GrowthOp::TextGrow { key: o.key.clone(), new_text: o.text.clone().unwrap_or_default(), all_sharers: o.all_sharers }),
+            "insert" => Ok(studio_domain::tdb_loc::GrowthOp::InsertKey { key: o.key.clone(), text: o.text.clone() }),
+            "null" => Ok(studio_domain::tdb_loc::GrowthOp::SetNull { key: o.key.clone() }),
+            other => Err(crate::error::ApiError::CopiedTarget(format!("unknown dictionary growth operation {other:?} (text / insert / null)"))),
+        })
+        .collect()
+}
+
+pub fn growth_serializer(options: Option<&crate::dto::DictionaryGrowthOptionsDto>) -> Result<studio_domain::dictionary_edit::GrowthSerializer, crate::error::ApiError> {
+    use studio_domain::dictionary_edit::GrowthSerializer;
+    match options.and_then(|o| o.serializer.as_deref()).unwrap_or("preserving") {
+        "preserving" => Ok(GrowthSerializer::Preserving),
+        "rebuild" => Ok(GrowthSerializer::CanonicalRebuild { force_tree: false }),
+        "rebuild-tree" => Ok(GrowthSerializer::CanonicalRebuild { force_tree: true }),
+        other => Err(crate::error::ApiError::CopiedTarget(format!("unknown dictionary growth serializer {other:?} (preserving / rebuild / rebuild-tree)"))),
+    }
+}
+
+pub fn dictionary_growth_preview_dto(p: &studio_domain::dictionary_edit::DictionaryGrowthPreview) -> crate::dto::DictionaryGrowthPreviewDto {
+    let row = |r: &studio_domain::dictionary_edit::DictionaryRow| crate::dto::DictionaryRowDto { record: r.record, key: r.key.clone(), hash: r.hash, text: r.text.clone() };
+    crate::dto::DictionaryGrowthPreviewDto {
+        dictionary_path: p.dictionary_path.clone(),
+        dictionary_sha256: p.dictionary_sha256.clone(),
+        endian_big: p.endian_big,
+        order_class: p.order_class.clone(),
+        descents: p.descents.clone(),
+        studio_touched: p.studio_touched,
+        rows_before: p.rows_before,
+        rows_after: p.rows_after,
+        appended_bytes: p.appended_bytes,
+        inserts: p.inserts.iter().map(|i| crate::dto::DictionaryGrowthInsertDto { key: i.key.clone(), hash: i.hash, text: i.text.clone(), position: i.position, output_record: i.output_record }).collect(),
+        edits: p.edits.iter().map(|e| crate::dto::DictionaryGrowthEditDto { row: row(&e.row), lookup: e.lookup.clone(), text_before: e.text_before.clone(), text_after: e.text_after.clone(), sharers: e.sharers.iter().map(row).collect(), all_sharers: e.all_sharers, records: e.records.clone() }).collect(),
+        warnings: p.warnings.clone(),
+        serializer: p.serializer.clone(),
+        new_symbols: p.new_symbols.clone(),
+        rebuild_accounting: p.rebuild_accounting.clone(),
+    }
+}
+
+/// Phase 2.5 — the arena venue inventory.
+pub fn arena_venue_dto(v: &studio_domain::arena_venue::ArenaVenueView) -> crate::dto::ArenaVenueDto {
+    crate::dto::ArenaVenueDto {
+        arena_id: v.arena_id,
+        record: v.record,
+        rows: v.rows,
+        fields: v
+            .fields
+            .iter()
+            .map(|f| crate::dto::VenueFieldDto {
+                name: f.name.clone(),
+                label: f.label.clone(),
+                class: f.class.clone(),
+                class_note: f.class_note.clone(),
+                value: f.value,
+                colour: f.colour.clone(),
+                distinct: f.distinct,
+                constant: f.constant,
+                resolved: f.resolved.clone(),
+                resolved_note: f.resolved_note.clone(),
+                resolved_key: f.resolved_key.clone(),
+                resolved_key_lookup: f.resolved_key_lookup.clone(),
+                bank_file: f.bank_file.clone(),
+                editable: f.editable,
+                refusal: f.refusal.clone(),
+            })
+            .collect(),
+        class_counts: v.class_counts.clone(),
+        notes: v.notes.clone(),
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Phase 2.6 (22 Sep 2026): kits joined to their textures
+// ---------------------------------------------------------------------------
+
+fn kit_component_dto(c: &studio_domain::kit_files::KitComponent, install_dir: Option<&std::path::Path>, install_rendering_root: Option<&str>) -> crate::dto::KitComponentDto {
+    use studio_domain::kit_files::ComponentStatus;
+    let install_rendering_root = install_rendering_root.map(str::to_string);
+    let rel_path = match (&c.path, install_dir) {
+        (Some(p), Some(root)) => std::path::Path::new(p).strip_prefix(root).ok().map(|r| r.to_string_lossy().replace('\\', "/")),
+        _ => None,
+    };
+    crate::dto::KitComponentDto {
+        part: c.part.as_str().to_string(),
+        label: c.label.clone(),
+        file_stem: c.file_stem.clone(),
+        path: c.path.clone(),
+        rel_path,
+        archive_member: c.archive_member.clone(),
+        // The archives sit beside `rendering/` — one level above the rendering root's directory.
+        archive_rel_path: c.archive.as_ref().and_then(|a| {
+            let rendering_parent = std::path::Path::new(&install_rendering_root?).parent()?.to_path_buf();
+            let root = install_dir?;
+            rendering_parent.join(a).strip_prefix(root).ok().map(|r| r.to_string_lossy().replace('\\', "/"))
+        }),
+        member_path: c.member_path.clone(),
+        status: match c.status {
+            ComponentStatus::Present => "present",
+            ComponentStatus::Missing => "missing",
+            ComponentStatus::Unknown => "unknown",
+        }
+        .to_string(),
+        reason: c.reason.clone(),
+    }
+}
+
+fn completeness_str(c: studio_domain::kit_files::Completeness) -> String {
+    use studio_domain::kit_files::Completeness;
+    match c {
+        Completeness::Complete => "complete",
+        Completeness::Incomplete => "incomplete",
+        Completeness::Unknown => "unknown",
+    }
+    .to_string()
+}
+
+pub fn team_kits_dto(v: &studio_domain::kit_files::TeamKitsView, install_dir: Option<&std::path::Path>) -> crate::dto::TeamKitsDto {
+    use studio_domain::kit_files::{DirEvidence, KitContract, SockGrammar};
+    let (contract_status, sock_grammar) = match &v.contract {
+        KitContract::Measured { sock, .. } => (
+            "measured",
+            Some(match sock {
+                SockGrammar::SingleFile => "single_file",
+                SockGrammar::TwoFile => "two_file",
+            }),
+        ),
+        KitContract::NoSelectorTable { .. } => ("no_selector_table", None),
+        KitContract::Unmeasured { .. } => ("unmeasured", None),
+    };
+    crate::dto::TeamKitsDto {
+        team_id: v.team_id,
+        team_art_id: v.team_art_id,
+        contract_status: contract_status.to_string(),
+        sock_grammar: sock_grammar.map(str::to_string),
+        contract: v.contract.describe(),
+        rendering_root: v.rendering_root.clone(),
+        directories: v
+            .directories
+            .iter()
+            .map(|(part, e)| {
+                let (status, files, reason, archive) = match e {
+                    DirEvidence::Listed { files } => ("listed", Some(*files), None, None),
+                    DirEvidence::Absent => ("absent", None, None, None),
+                    DirEvidence::Unreadable { reason } => ("unreadable", None, Some(reason.clone()), None),
+                    DirEvidence::Archived { archive, files } => ("archived", Some(*files), None, Some(archive.clone())),
+                };
+                crate::dto::KitDirectoryDto { part: part.as_str().to_string(), status: status.to_string(), files, reason, archive }
+            })
+            .collect(),
+        kits: v
+            .kits
+            .iter()
+            .map(|k| crate::dto::KitDto {
+                record: k.record,
+                jersey_index: k.jersey_index,
+                style: k.style,
+                team_art_id: k.team_art_id,
+                variant: k.variant,
+                is_default: k.is_default,
+                is_light_color: k.is_light_color,
+                has_tie: k.has_tie,
+                helmet_logo: k.helmet_logo,
+                helmet_numbers: k.helmet_numbers,
+                components: k.components.iter().map(|c| kit_component_dto(c, install_dir, v.rendering_root.as_deref())).collect(),
+                nameplate: k.nameplate.as_ref().map(|c| kit_component_dto(c, install_dir, v.rendering_root.as_deref())),
+                completeness: completeness_str(k.completeness),
+                refusal: k.refusal.clone(),
+            })
+            .collect(),
+        spares: v
+            .spares
+            .iter()
+            .map(|s| crate::dto::SpareKitDto {
+                style: s.style,
+                variant: s.variant,
+                components: s.components.iter().map(|c| kit_component_dto(c, install_dir, v.rendering_root.as_deref())).collect(),
+                completeness: completeness_str(s.completeness),
+            })
+            .collect(),
+        reassignment_supported: v.reassignment_supported,
+        reassignment_reason: v.reassignment_reason.clone(),
+        notes: v.notes.clone(),
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Phase 2.5 (22 Sep 2026): arena assets
+// ---------------------------------------------------------------------------
+
+pub fn arena_assets_dto(v: &studio_domain::arena_assets::ArenaAssetsView, install_dir: Option<&std::path::Path>) -> crate::dto::ArenaAssetsDto {
+    use studio_domain::arena_assets::{ArenaAssetContract, Binding};
+    use studio_domain::kit_files::ComponentStatus;
+    let file = |f: &studio_domain::arena_assets::AssetFile| crate::dto::AssetFileDto {
+        key: f.key,
+        key_source: f.key_source.clone(),
+        file_stem: f.file_stem.clone(),
+        path: f.path.clone(),
+        rel_path: match (&f.path, install_dir) {
+            (Some(p), Some(root)) => std::path::Path::new(p).strip_prefix(root).ok().map(|r| r.to_string_lossy().replace('\\', "/")),
+            _ => None,
+        },
+        status: match f.status {
+            ComponentStatus::Present => "present",
+            ComponentStatus::Missing => "missing",
+            ComponentStatus::Unknown => "unknown",
+        }
+        .to_string(),
+        reason: f.reason.clone(),
+    };
+    crate::dto::ArenaAssetsDto {
+        arena_id: v.arena_id,
+        arena_art_id: v.arena_art_id,
+        contract_status: match &v.contract {
+            ArenaAssetContract::Gen7 { .. } => "gen7",
+            ArenaAssetContract::Ps4VaultReference { .. } => "ps4_vault_reference",
+            ArenaAssetContract::Unmeasured { .. } => "unmeasured",
+        }
+        .to_string(),
+        contract: v.contract.describe(),
+        rendering_root: v.rendering_root.clone(),
+        ps4_venue: v.ps4_venue.as_ref().map(|l| crate::dto::Ps4VenueListingDto {
+            key_label: l.key_label.clone(),
+            class: l.class.as_str().to_string(),
+            reason: l.reason.clone(),
+            candidates: l
+                .candidates
+                .iter()
+                .map(|c| crate::dto::Ps4VenueCandidateDto {
+                    level_name: c.level_name.clone(),
+                    dir: c.dir.clone(),
+                    folder: match c.folder {
+                        studio_domain::arena_assets::FolderStatus::Present => "present",
+                        studio_domain::arena_assets::FolderStatus::Missing => "missing",
+                        studio_domain::arena_assets::FolderStatus::NoFolderShipped => "no_folder_shipped",
+                        studio_domain::arena_assets::FolderStatus::Unknown => "unknown",
+                    }
+                    .to_string(),
+                    members: c.members,
+                    texpacks: c.texpacks.iter().map(|t| crate::dto::Ps4TexpackRefDto { family: t.family.clone(), key: t.key, in_set: t.in_set }).collect(),
+                    rink_id: c.rink_id,
+                    arena_id_attr: c.arena_id_attr,
+                })
+                .collect(),
+            shared_content: l.shared_content.clone(),
+            dependencies: l.dependencies.clone(),
+            typed_refs: l.typed_refs.clone(),
+            reassignment_supported: l.reassignment_supported,
+            reassignment_reason: l.reassignment_reason.clone(),
+        }),
+        families: v
+            .families
+            .iter()
+            .map(|f| crate::dto::AssetFamilyDto {
+                family: f.family.clone(),
+                label: f.label.clone(),
+                dir: f.dir.clone(),
+                binding: match f.binding {
+                    Binding::Established => "established",
+                    Binding::ViaHomeTeam => "via_home_team",
+                    Binding::Candidate => "candidate",
+                    Binding::NoEstablishedBinding => "no_established_binding",
+                }
+                .to_string(),
+                rule: f.rule.clone(),
+                files: f.files.iter().map(file).collect(),
+                shipped_files: f.shipped_files,
+                spare_keys: f.spare_keys.clone(),
+                notes: f.notes.clone(),
+            })
+            .collect(),
+        venue_directories: v.venue_directories.clone(),
+        notes: v.notes.clone(),
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3 (22 Sep 2026): player containment
+// ---------------------------------------------------------------------------
+
+pub fn player_containment_dto(v: &studio_domain::player_containment::ContainmentView) -> crate::dto::PlayerContainmentViewDto {
+    use studio_domain::kit_files::ComponentStatus;
+    use studio_domain::player_containment::ContainmentContract;
+    let st = |s: ComponentStatus| match s {
+        ComponentStatus::Present => "present",
+        ComponentStatus::Missing => "missing",
+        ComponentStatus::Unknown => "unknown",
+    }
+    .to_string();
+    let s = &v.summary;
+    crate::dto::PlayerContainmentViewDto {
+        summary: crate::dto::ContainmentSummaryDto {
+            contract_status: match &s.contract {
+                ContainmentContract::Gen7 { .. } => "gen7",
+                ContainmentContract::Ps4 { .. } => "ps4",
+                ContainmentContract::Unmeasured { .. } => "unmeasured",
+            }
+            .to_string(),
+            contract: s.contract.describe(),
+            players: s.players,
+            bespoke: s.bespoke,
+            bespoke_head_present: s.bespoke_head_present,
+            bespoke_portrait_present: s.bespoke_portrait_present,
+            pool_players: s.pool_players,
+            pool_head_present: s.pool_head_present,
+            pool_floor: s.pool_floor,
+            flag1_file1: s.flag1_file1,
+            flag1_file0: s.flag1_file0,
+            flag0_file1: s.flag0_file1,
+            flag0_file0: s.flag0_file0,
+            has_flag_column: s.has_flag_column,
+            shipped_portraits: s.shipped_portraits,
+            shipped_heads: s.shipped_heads,
+            unused_portraits: s.unused_portraits,
+            unused_heads: s.unused_heads,
+            bespoke_missing_head: s.bespoke_missing_head.clone(),
+            bespoke_missing_portrait: s.bespoke_missing_portrait.clone(),
+            flagged_without_file: s.flagged_without_file.clone(),
+            notes: s.notes.clone(),
+        },
+        players: v
+            .players
+            .iter()
+            .map(|p| crate::dto::PlayerContainmentDto {
+                bio_record: p.bio_record,
+                full_name: p.full_name.clone(),
+                portrait_id: p.portrait_id,
+                head_id: p.head_id,
+                has_portrait_flag: p.has_portrait_flag,
+                class: p.class.clone(),
+                portrait: st(p.portrait),
+                head: st(p.head),
+                note: p.note.clone(),
+            })
+            .collect(),
+    }
+}
+
+/// P4 — a PS4 speech bank summary.
+pub fn ps4_speech_bank_dto(b: &studio_domain::ps4_speech_bank::BankSummary) -> crate::dto::Ps4SpeechBankDto {
+    crate::dto::Ps4SpeechBankDto {
+        file: b.file.clone(),
+        sbr_len: b.sbr_len,
+        sbr_sha256: b.sbr_sha256.clone(),
+        sbs_present: b.sbs_present,
+        sbs_len: b.sbs_len,
+        dsets: b.dsets as u32,
+        samples: b.samples as u32,
+        note: b.note.clone(),
+    }
+}
+
+/// Receipt 49 — the venue-art gallery view.
+pub fn venue_art_dto(v: &studio_domain::venue_art::VenueArtView) -> crate::dto::VenueArtDto {
+    
+    use crate::dto::*;
+    VenueArtDto {
+        arena_art_id: v.arena_art_id,
+        measured: v.measured,
+        scope: v.scope.clone(),
+        notes: v.notes.clone(),
+        packages: v
+            .packages
+            .iter()
+            .map(|p| VenuePackageDto {
+                file: p.file.clone(),
+                bytes: p.bytes,
+                sha256: p.sha256.clone(),
+                platform: p.platform.clone(),
+                other_materials: p.other_materials as u32,
+                notes: p.notes.clone(),
+                materials: p
+                    .materials
+                    .iter()
+                    .map(|m| VenueMaterialDto {
+                        name: m.name.clone(),
+                        class: m.class.clone(),
+                        shader: m.shader.clone(),
+                        slots: m
+                            .slots
+                            .iter()
+                            .map(|s| VenueSlotDto { raster: s.raster.map(|r| r as u32), raw: s.raw.map(|w| format!("{w:#x}")), unreadable: s.unreadable.clone() })
+                            .collect(),
+                    })
+                    .collect(),
+                rasters: p
+                    .rasters
+                    .iter()
+                    .map(|r| VenueRasterDto { ordinal: r.ordinal as u32, descriptor: r.descriptor as u32, width: r.width, height: r.height, format: r.format.clone(), previewable: r.previewable, note: r.note.clone(), used_by: r.used_by.clone() })
+                    .collect(),
+            })
+            .collect(),
     }
 }

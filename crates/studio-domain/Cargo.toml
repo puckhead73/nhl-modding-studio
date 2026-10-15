@@ -4,6 +4,7 @@ description = "NHL Modding Studio — GUI-agnostic edit/session orchestration ov
 edition.workspace = true
 rust-version.workspace = true
 publish.workspace = true
+license.workspace = true
 
 [dependencies]
 tdb-core = { path = "../tdb-core" }
@@ -14,17 +15,33 @@ tdb-domain-validation = { path = "../tdb-domain-validation" }
 tdb-edit = { path = "../tdb-edit" }
 tdb-savedata = { path = "../tdb-savedata" }
 tdb-archive-big = { path = "../tdb-archive-big" }
+tdb-speech = { path = "../tdb-speech" }
+tdb-snd = { path = "../tdb-snd" }
 tdb-archive-codec = { path = "../tdb-archive-codec" }
 tdb-rx2 = { path = "../tdb-rx2" }
 tdb-fhm = { path = "../tdb-fhm" }
 tdb-fhm-store = { path = "../tdb-fhm-store" }
 tdb-formula = { path = "../tdb-formula" }
+tdb-txn = { path = "../tdb-txn" }
+tdb-xiso = { path = "../tdb-xiso" }
+tdb-loc = { path = "../tdb-loc" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+sha2 = "0.10"
+tempfile = "3"
+# Curated appearance defs (the orphan/retired head-id → name table) are TOML.
+toml = "0.8"
 # Portrait/texture export only needs PNG encoding — the DDS side is ours.
 image = { version = "0.25", default-features = false, features = ["png"] }
+
+# ONB-002: free-space query for materialisation, deployment backups and extraction (Windows only).
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_Storage_FileSystem"] }
 
 [dev-dependencies]
 # Synthetic in-memory FHM corpus for the Roster Builder orchestration tests (bundled SQLite is
 # already compiled for `tdb-fhm-store`, so this adds no new native build).
 rusqlite = { version = "0.31", features = ["bundled"] }
+# Layer-A QA observation for the four matrix emitters (docs/plans/qa-evidence-contract.md). Test-only,
+# opt-in via QA_EVIDENCE_ROOT: with the variable unset nothing is written and no file is created.
+tdb-qa = { path = "../tdb-qa" }

@@ -1,0 +1,1770 @@
+{
+ "note": "R131b - X360 NHL 09 `.abk` ram (in-bank) EA-XMA records: full diagnostic decode-count sweep through the UNCHANGED R84 raw-segment route\n(u32 w0 | packets -> 0x800 padding -> RIFF XMA2 -> ffmpeg `xma2`), extending R84's 15 archived vectors to every ram segment of every\n`.abk` member of the title (R82 / R98: 186 members in `audioboot.big` / `data0.big`, stored; loose copies byte-identical where present).\nPer segment: R84 structure checks (w0 >> 2 = segment length; packet header frame count > 0, offset sane - on NHL 09 the header word is\nthe constant variant, R98b) and decoded samples vs the declared segment samples. > 2 channels: listed only. Loops recorded. Decoder = the\nlocal research oracle; decoder acceptance only; WAV output never kept. Segments that fail only R84's packet-header check (T2; NHL 10+\nsemantics) are decoded anyway and labelled, to measure whether that refusal applies to NHL 09's constant-header variant.\nUsage: python r131b_x360_09_abk_ram_sweep.py <out.json>\n",
+ "banks": {
+  "0004_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "000_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "000_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "000_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "001_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "001_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "001_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "002_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "002_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "002_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0031_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "003_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "003_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "003_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "004_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "004_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "004_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0059_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "005_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "R84-T2-refused header, exact": 1,
+    "loop exact": 1,
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "005_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "005_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "006_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "R84-T2-refused header, exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "006_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "006_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "007_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "007_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "007_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "008_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "008_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "008_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "009_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "009_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "009_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "010_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "010_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "010_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0119_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "011_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "R84-T2-refused header, exact": 1,
+    "loop exact": 1,
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "011_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "R84-T2-refused header, exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "011_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "012_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "012_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "012_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "013_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "013_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "013_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "014_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "014_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "014_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "015_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "015_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "015_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "016_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "016_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "016_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0170_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "017_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "017_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "017_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "018_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "018_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "018_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "019_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "019_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "019_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "020_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "R84-T2-refused header, loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "020_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "020_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0210_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0218_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "021_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "021_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "021_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "022_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "022_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "022_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "023_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "R84-T2-refused header, exact": 1,
+    "loop exact": 1,
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "023_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "R84-T2-refused header, exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "023_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "024_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "024_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "024_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "025_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "025_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "025_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0264_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "026_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "026_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "026_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0275_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "R84-T2-refused header, exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "027_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "027_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "027_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "028_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "028_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "R84-T2-refused header, exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "028_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0293_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "count mismatch": 1
+   },
+   "failures": [
+    {
+     "entry": 0,
+     "segment": 0,
+     "decoded": 273945,
+     "declared": 288281,
+     "loop": 0
+    }
+   ],
+   "failure_count": 1
+  },
+  "0298_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "029_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "029_goal.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "029_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0300_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0312_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0346_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "034_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "036_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "037_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "038_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "039_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "040_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "041_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0422_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "042_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "R84-T2-refused header, loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "043_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0440_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0445_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "044_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0457_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "R84-T2-refused header, exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "045_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "046_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "048_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "049_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "R84-T2-refused header, exact": 1,
+    "loop exact": 1,
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "051_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0521_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0524_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "052_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "053_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0547_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "054_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "exact": 2,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "055_chant.abk": {
+   "source": "data0.big",
+   "slots": 5,
+   "results": {
+    "loop exact": 8
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "056_chant.abk": {
+   "source": "data0.big",
+   "slots": 5,
+   "results": {
+    "loop exact": 8
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0574_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "R84-T2-refused header, exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "057_chant.abk": {
+   "source": "data0.big",
+   "slots": 4,
+   "results": {
+    "loop exact": 6
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "058_chant.abk": {
+   "source": "data0.big",
+   "slots": 5,
+   "results": {
+    "loop exact": 8
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "059_chant.abk": {
+   "source": "data0.big",
+   "slots": 5,
+   "results": {
+    "loop exact": 8
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "060_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "loop exact": 4
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "061_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "loop exact": 4
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0623_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "062_chant.abk": {
+   "source": "data0.big",
+   "slots": 4,
+   "results": {
+    "loop exact": 6
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "063_chant.abk": {
+   "source": "data0.big",
+   "slots": 5,
+   "results": {
+    "loop exact": 8
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "064_chant.abk": {
+   "source": "data0.big",
+   "slots": 4,
+   "results": {
+    "loop exact": 6
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "065_chant.abk": {
+   "source": "data0.big",
+   "slots": 3,
+   "results": {
+    "loop exact": 4
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0661_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "066_chant.abk": {
+   "source": "data0.big",
+   "slots": 4,
+   "results": {
+    "loop exact": 5,
+    "R84-T2-refused header, loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "067_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0681_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "068_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "069_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "070_chant.abk": {
+   "source": "data0.big",
+   "slots": 2,
+   "results": {
+    "loop exact": 4
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "071_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "R84-T2-refused header, loop exact": 1,
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "072_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "073_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "074_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "075_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "076_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0776_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "077_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "078_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "079_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 2
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0805_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0832_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0958_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "0982_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "100_goal.abk": {
+   "source": "data0.big",
+   "slots": 0,
+   "results": {},
+   "failures": [],
+   "failure_count": 0
+  },
+  "100_period.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "1011_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "1190_chant.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "ambientskatesandpunches.abk": {
+   "source": "audioboot.big",
+   "slots": 64,
+   "results": {
+    "exact": 64
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "colors1.abk": {
+   "source": "data0.big",
+   "slots": 443,
+   "results": {
+    "exact": 272,
+    "R84-T2-refused header, exact": 6,
+    "stream record (.ast)": 165
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "colors2.abk": {
+   "source": "data0.big",
+   "slots": 443,
+   "results": {
+    "exact": 269,
+    "R84-T2-refused header, exact": 9,
+    "stream record (.ast)": 165
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "controlcenter.abk": {
+   "source": "audioboot.big",
+   "slots": 0,
+   "results": {},
+   "failures": [],
+   "failure_count": 0
+  },
+  "createplayer.abk": {
+   "source": "data0.big",
+   "slots": 11,
+   "results": {
+    "stream record (.ast)": 11
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "crowds.abk": {
+   "source": "audioboot.big",
+   "slots": 243,
+   "results": {
+    "stream record (.ast)": 22,
+    "loop exact": 12,
+    "R84-T2-refused header, loop exact": 4,
+    "R84-T2-refused header, loop count mismatch": 1,
+    "exact": 197,
+    "> 2 channels: listed only": 4,
+    "R84-T2-refused header, exact": 3
+   },
+   "failures": [
+    {
+     "entry": 4,
+     "segment": 0,
+     "decoded": 676416,
+     "declared": 705600,
+     "loop": 1
+    }
+   ],
+   "failure_count": 1
+  },
+  "fe.abk": {
+   "source": "audioboot.big",
+   "slots": 55,
+   "results": {
+    "exact": 25,
+    "> 2 channels: listed only": 5,
+    "R84-T2-refused header, exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "horns.abk": {
+   "source": "audioboot.big",
+   "slots": 0,
+   "results": {},
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop000.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop001.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop002.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop003.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop004.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop005.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop006.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "loadloop007.abk": {
+   "source": "data0.big",
+   "slots": 1,
+   "results": {
+    "loop exact": 1
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "playercalls.abk": {
+   "source": "data0.big",
+   "slots": 347,
+   "results": {
+    "exact": 294,
+    "R84-T2-refused header, exact": 2,
+    "stream record (.ast)": 51
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "practicerink.abk": {
+   "source": "data0.big",
+   "slots": 26,
+   "results": {
+    "stream record (.ast)": 26
+   },
+   "failures": [],
+   "failure_count": 0
+  },
+  "sfx.abk": {
+   "source": "audioboot.big",
+   "slots": 510,
+   "results": {
+    "stream record (.ast)": 33,
+    "exact": 471,
+    "R84-T2-refused header, exact": 6
+   },
+   "failures": [],
+   "failure_count": 0
+  }
+ },
+ "totals": {
+  "exact": 1768,
+  "loop exact": 168,
+  "R84-T2-refused header, exact": 39,
+  "R84-T2-refused header, loop exact": 8,
+  "count mismatch": 1,
+  "stream record (.ast)": 473,
+  "R84-T2-refused header, loop count mismatch": 1,
+  "> 2 channels: listed only": 9
+ },
+ "banks_count": 186
+}

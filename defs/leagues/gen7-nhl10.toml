@@ -1,0 +1,157 @@
+# NHL 10 (PS3 / Xbox 360). European schedule tables appear; no CHL schedules yet.
+name = "gen7-nhl10"
+description = "NHL 10 team league codes"
+applies_to = ["nhl10"]
+
+[schema]
+league_table = "kOtt"
+league_field = "xMjj"
+league_width = 4
+required_fields = ["kOtt.rasz"]
+required_tables = ["vlni"]
+forbidden_tables = ["fsLK", "jEiu"]
+
+[source]
+kind = "anchor-measurement"
+description = "L1.1-A cross-tab of kOtt.xMjj against member-team abbreviations, nhlng.db e87b8c80...8d703"
+
+# Dictionary keys (LOC-W1, 2026-09-18): `dictionary_key` per code is a HYPOTHESIS — the key family
+# is present in this title's own `nhl_eng_us.db` (verified by hash-resolved lookup on both platform
+# anchors) and the same family is the traced table on NHL Legacy Xbox 360, but no executable of this
+# title was inspected. Codes without a key have no matching key in the dictionary.
+# R1 F5 + research handoff P1.1-X (2026-09-18, docs/research/overnight-2026-09-18/10-phase1-league-identity-xbox360.md): the code -> key table is a static
+# pointer table in each Xbox 360 executable, decrypted and read tonight; every key was resolved in the
+# title's own dictionary (each X: copy equals the committed Xbox 360 anchor). `traced` below is scoped by
+# [key_witness] to those Xbox targets; the PS3 copies of the same vocabulary show `by-reference` (their
+# executables are encrypted and were not inspected; the PS3 database/dictionary equal the Xbox bytes on
+# NHL 10-Legacy, which raises the prior but is not a trace). Which screens read a key is untraced everywhere.
+[key_witness]
+traced_on = [{ game = "nhl10", platform = "xbox" }]
+source = "Xbox 360 default.xex static league pointer table (nhl10 pointer table at VA 0x83333c3c (image cc98dbec41cc…)); research probes league_tables.py / ptr_table.py"
+otherwise = "by-reference"
+
+[[entries]]
+raw = 0
+label = "NHL"
+confidence = "candidate"
+evidence = "32 rows"
+dictionary_key = "NHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 1
+label = "AHL"
+confidence = "candidate"
+evidence = "29 rows: ABB, ADK, ALB, BNG ..."
+dictionary_key = "AHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 2
+label = "Elitserien (Sweden)"
+confidence = "candidate"
+evidence = "12 rows"
+dictionary_key = "elitserien"
+key_evidence = "traced"
+
+[[entries]]
+raw = 3
+label = "SM-liiga (Finland)"
+confidence = "candidate"
+evidence = "14 rows"
+dictionary_key = "SMLIIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 4
+label = "DEL (Germany)"
+confidence = "candidate"
+evidence = "15 rows"
+dictionary_key = "TXT_LEAGUE_DEL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 5
+label = "Extraliga (Czech)"
+confidence = "candidate"
+evidence = "14 rows: MBL, CBE, KVA ..."
+dictionary_key = "TXT_LEAGUE_O2_EXTRALIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 6
+label = "NLA (Switzerland)"
+confidence = "candidate"
+evidence = "12 rows: AMB, SCB, BIE, HCD, FRI, GSHC, KLO, LUG ..."
+dictionary_key = "TXT_LEAGUE_SWISS_LEAGUE"
+key_evidence = "traced"
+
+[[entries]]
+raw = 7
+label = "National Teams"
+confidence = "candidate"
+evidence = "21 rows"
+dictionary_key = "NATIONAL"
+key_evidence = "traced"
+# raw 8: one row (CEN) and raw 9: two rows (NAJ, WPR) - unidentified, left raw.
+
+[[entries]]
+raw = 10
+label = "Custom Teams"
+confidence = "candidate"
+evidence = "30 rows with empty abbreviations"
+dictionary_key = "CUSTOM_TEAMS"
+key_evidence = "traced"
+
+# Codes present in the executable enum with no stock team row on the anchors (P1.1-X §2): the
+# label is the traced key's text in the title's own dictionary. Whether a team assigned one of these
+# codes is accepted by the game is a runtime question.
+[[entries]]
+raw = 8
+label = "Historic Teams"
+confidence = "enum"
+evidence = "no team row on the anchors; NHL 10 pointer table entry 8 -> HISTORIC_TEAMS ('HISTORIC TEAM')"
+dictionary_key = "HISTORIC_TEAMS"
+key_evidence = "traced"
+
+[[entries]]
+raw = 9
+label = "Prospect Teams"
+confidence = "enum"
+evidence = "no team row on the anchors; NHL 10 pointer table entry 9 -> PROSPECT_TEAMS ('PROSPECT TEAMS'); confirms the batch's 'Top Prospects pair' lead"
+dictionary_key = "PROSPECT_TEAMS"
+key_evidence = "traced"
+
+# NHL 10 conference labels for the local 1-bit conference (`rasz`), research R133 (2026-09-26 handoff 26): this
+# title's executable lists each block's conference names as [Western, Eastern] (dictionary keys
+# `WesternConference` / `EasternConference`); position fits the membership (0 = the western clubs) on every
+# block that has two names. **Inferred by position** — the consumer that picks the name is not traced. Division
+# names are NOT assigned (position fails for the NHL divisions); Studio labels a division by its member clubs.
+
+[[groups]]
+field = "rasz"
+league_raw = 0
+raw = 0
+label = "Western Conference (inferred)"
+confidence = "candidate"
+
+[[groups]]
+field = "rasz"
+league_raw = 0
+raw = 1
+label = "Eastern Conference (inferred)"
+confidence = "candidate"
+
+[[groups]]
+field = "rasz"
+league_raw = 1
+raw = 0
+label = "Western Conference (inferred)"
+confidence = "candidate"
+
+[[groups]]
+field = "rasz"
+league_raw = 1
+raw = 1
+label = "Eastern Conference (inferred)"
+confidence = "candidate"

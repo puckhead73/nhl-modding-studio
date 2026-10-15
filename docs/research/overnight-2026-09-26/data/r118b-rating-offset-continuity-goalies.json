@@ -1,0 +1,848 @@
+{
+ "note": "R118 (Players 3.2; phase-3 matrix: six-bit rating scale \"+50 inferred, provisional\" on NHL 08-10, \"+36 provisional\" on NHL 11-13) - a\ncross-title continuity test that does not read any single title's distribution in isolation. The same skater appears in adjacent titles;\nif displayed ratings are roughly continuous from one season to the next, the median raw difference of matched players over the shared\nsix-bit rating fields estimates off(A) - off(B). Controls with independently known offsets: NHL 14 -> 15 and NHL 15 -> Legacy (both +36 in\ngame), X360 NHL 15 -> PS4 NHL 15 (PS4 stores 0..99 with offset 0; expected about +36 if the ratings are the same season's data), NHL 07 is\n+50 in game. Year-to-year rating change of real players is the noise; the controls measure it.\n\nMatching: exhibition player bio (`ubPc`) x exhibition skater ratings (`dSvy`) by `game_id` (PS4: the first shared id field of\ngame_id / playerid). Key = (first name, last name, calendar month, calendar day) using the measured index base (1-based NHL 07-10,\n0-based NHL 11+; R116); keys that occur twice in a title are dropped. Fields = rating fields by Studio's own rule (prefix p_ / g_ / c_, declared 0..63 or 0..99; not fighting,\nstyle, paddledown, potential; overall also excluded), matched by suffix across titles.\nOptional second argument `goalie` runs the same test on `exhibitiongoalieai` (goalie rating table `mHuy`).\nRead-only. Usage: python r118_rating_offset_continuity.py <out.json> [goalie]\n",
+ "rating_table": "exhibitiongoalieai",
+ "titles": {
+  "nhl07": {
+   "sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "join": "game_id",
+   "matched_skaters": 231,
+   "rating_fields": [
+    "5hole",
+    "agility",
+    "breakaway",
+    "endurance",
+    "gsh",
+    "gsl",
+    "intensity",
+    "passing",
+    "pokecheck",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "toughness"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl08": {
+   "sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "join": "game_id",
+   "matched_skaters": 285,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "floppiness",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl09": {
+   "sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "join": "game_id",
+   "matched_skaters": 385,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "durability",
+    "endurance",
+    "floppiness",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl10": {
+   "sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "join": "game_id",
+   "matched_skaters": 404,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "durability",
+    "endurance",
+    "floppiness",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl11": {
+   "sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "join": "game_id",
+   "matched_skaters": 520,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl12": {
+   "sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "join": "game_id",
+   "matched_skaters": 544,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl13": {
+   "sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "join": "game_id",
+   "matched_skaters": 507,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl14": {
+   "sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "join": "game_id",
+   "matched_skaters": 493,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhl15": {
+   "sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "join": "game_id",
+   "matched_skaters": 526,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "nhllegacy": {
+   "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "join": "game_id",
+   "matched_skaters": 536,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    6
+   ]
+  },
+  "ps4-nhl15": {
+   "sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "join": "game_id",
+   "matched_skaters": 529,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    7
+   ]
+  },
+  "ps4-nhl16": {
+   "sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "join": "game_id",
+   "matched_skaters": 536,
+   "rating_fields": [
+    "5hole",
+    "aggression",
+    "agility",
+    "breakaway",
+    "consistency",
+    "durability",
+    "endurance",
+    "gsh",
+    "gsl",
+    "passing",
+    "poise",
+    "pokecheck",
+    "positioning",
+    "puckplayfrequency",
+    "reboundcontrol",
+    "shotrecover",
+    "speed",
+    "ssh",
+    "ssl",
+    "vision"
+   ],
+   "width": [
+    7
+   ]
+  }
+ },
+ "pairs": [
+  {
+   "pair": [
+    "nhl07",
+    "nhl08"
+   ],
+   "matched_players": 197,
+   "common_fields": 13,
+   "median_diff_all_cells": 0,
+   "quartiles_all_cells": [
+    0.0,
+    0.0,
+    4.0
+   ],
+   "median_of_player_medians": 0,
+   "per_field_median": {
+    "5hole": 0,
+    "agility": 0,
+    "breakaway": 0,
+    "endurance": 0,
+    "gsh": 0,
+    "gsl": 0,
+    "passing": 0,
+    "pokecheck": 0,
+    "reboundcontrol": 0,
+    "shotrecover": 0,
+    "speed": 0,
+    "ssh": 0,
+    "ssl": 0
+   },
+   "per_field_median_range": [
+    0,
+    0
+   ]
+  },
+  {
+   "pair": [
+    "nhl08",
+    "nhl09"
+   ],
+   "matched_players": 213,
+   "common_fields": 20,
+   "median_diff_all_cells": 0.0,
+   "quartiles_all_cells": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "median_of_player_medians": 0.0,
+   "per_field_median": {
+    "5hole": 0,
+    "aggression": 0,
+    "agility": 0,
+    "breakaway": 0,
+    "durability": 0,
+    "endurance": 0,
+    "floppiness": -15,
+    "gsh": 0,
+    "gsl": 0,
+    "passing": 0,
+    "poise": 0,
+    "pokecheck": 0,
+    "positioning": 0,
+    "puckplayfrequency": 0,
+    "reboundcontrol": 0,
+    "shotrecover": 0,
+    "speed": 0,
+    "ssh": 0,
+    "ssl": 0,
+    "vision": 0
+   },
+   "per_field_median_range": [
+    -15,
+    0
+   ]
+  },
+  {
+   "pair": [
+    "nhl09",
+    "nhl10"
+   ],
+   "matched_players": 285,
+   "common_fields": 20,
+   "median_diff_all_cells": 0.0,
+   "quartiles_all_cells": [
+    0.0,
+    0.0,
+    2.0
+   ],
+   "median_of_player_medians": 0.0,
+   "per_field_median": {
+    "5hole": 0,
+    "aggression": 0,
+    "agility": 0,
+    "breakaway": 0,
+    "durability": 0,
+    "endurance": 0,
+    "floppiness": 0,
+    "gsh": 0,
+    "gsl": 0,
+    "passing": 0,
+    "poise": 0,
+    "pokecheck": 0,
+    "positioning": 0,
+    "puckplayfrequency": 0,
+    "reboundcontrol": 0,
+    "shotrecover": 0,
+    "speed": 0,
+    "ssh": 0,
+    "ssl": 0,
+    "vision": 0
+   },
+   "per_field_median_range": [
+    0,
+    0
+   ]
+  },
+  {
+   "pair": [
+    "nhl10",
+    "nhl11"
+   ],
+   "matched_players": 302,
+   "common_fields": 19,
+   "median_diff_all_cells": 14.0,
+   "quartiles_all_cells": [
+    12.0,
+    14.0,
+    15.0
+   ],
+   "median_of_player_medians": 14.0,
+   "per_field_median": {
+    "5hole": 14.0,
+    "aggression": 14.0,
+    "agility": 14.0,
+    "breakaway": 14.0,
+    "durability": 14.0,
+    "endurance": 14.0,
+    "gsh": 14.0,
+    "gsl": 14.0,
+    "passing": 14.0,
+    "poise": 14.0,
+    "pokecheck": 14.0,
+    "positioning": 14.0,
+    "puckplayfrequency": 14.0,
+    "reboundcontrol": 14.0,
+    "shotrecover": 14.0,
+    "speed": 14.0,
+    "ssh": 14.0,
+    "ssl": 14.0,
+    "vision": 14.0
+   },
+   "per_field_median_range": [
+    14.0,
+    14.0
+   ]
+  },
+  {
+   "pair": [
+    "nhl11",
+    "nhl12"
+   ],
+   "matched_players": 388,
+   "common_fields": 20,
+   "median_diff_all_cells": 1.0,
+   "quartiles_all_cells": [
+    0.0,
+    1.0,
+    4.0
+   ],
+   "median_of_player_medians": 1.0,
+   "per_field_median": {
+    "5hole": 2.0,
+    "aggression": 1.0,
+    "agility": 1.0,
+    "breakaway": 2.0,
+    "consistency": 0.0,
+    "durability": 2.0,
+    "endurance": 2.0,
+    "gsh": 0.0,
+    "gsl": 2.0,
+    "passing": 2.0,
+    "poise": 0.0,
+    "pokecheck": 1.0,
+    "positioning": 1.0,
+    "puckplayfrequency": 0.0,
+    "reboundcontrol": 1.0,
+    "shotrecover": 1.0,
+    "speed": 1.0,
+    "ssh": 0.0,
+    "ssl": 2.0,
+    "vision": 1.0
+   },
+   "per_field_median_range": [
+    0.0,
+    2.0
+   ]
+  },
+  {
+   "pair": [
+    "nhl12",
+    "nhl13"
+   ],
+   "matched_players": 383,
+   "common_fields": 20,
+   "median_diff_all_cells": 0.0,
+   "quartiles_all_cells": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "median_of_player_medians": 0.0,
+   "per_field_median": {
+    "5hole": 0,
+    "aggression": 0,
+    "agility": 0,
+    "breakaway": 0,
+    "consistency": 0,
+    "durability": 0,
+    "endurance": 0,
+    "gsh": 0,
+    "gsl": 0,
+    "passing": 0,
+    "poise": 0,
+    "pokecheck": 0,
+    "positioning": 0,
+    "puckplayfrequency": 0,
+    "reboundcontrol": 0,
+    "shotrecover": 0,
+    "speed": 0,
+    "ssh": 0,
+    "ssl": 0,
+    "vision": 0
+   },
+   "per_field_median_range": [
+    0,
+    0
+   ]
+  },
+  {
+   "pair": [
+    "nhl13",
+    "nhl14"
+   ],
+   "matched_players": 391,
+   "common_fields": 20,
+   "median_diff_all_cells": 0.0,
+   "quartiles_all_cells": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "median_of_player_medians": 0.0,
+   "per_field_median": {
+    "5hole": 0,
+    "aggression": 0,
+    "agility": 0,
+    "breakaway": 0,
+    "consistency": 0,
+    "durability": 0,
+    "endurance": 0,
+    "gsh": 0,
+    "gsl": 0,
+    "passing": 0,
+    "poise": 0,
+    "pokecheck": 0,
+    "positioning": 0,
+    "puckplayfrequency": 0,
+    "reboundcontrol": 0,
+    "shotrecover": 0,
+    "speed": 0,
+    "ssh": 0,
+    "ssl": 0,
+    "vision": 0
+   },
+   "per_field_median_range": [
+    0,
+    0
+   ]
+  },
+  {
+   "pair": [
+    "nhl14",
+    "nhl15"
+   ],
+   "matched_players": 349,
+   "common_fields": 20,
+   "median_diff_all_cells": 0.0,
+   "quartiles_all_cells": [
+    0.0,
+    0.0,
+    2.0
+   ],
+   "median_of_player_medians": 0.0,
+   "per_field_median": {
+    "5hole": 0,
+    "aggression": 0,
+    "agility": 0,
+    "breakaway": 0,
+    "consistency": 0,
+    "durability": 0,
+    "endurance": 0,
+    "gsh": 0,
+    "gsl": 0,
+    "passing": 0,
+    "poise": 0,
+    "pokecheck": 0,
+    "positioning": 0,
+    "puckplayfrequency": 0,
+    "reboundcontrol": 0,
+    "shotrecover": 0,
+    "speed": 0,
+    "ssh": 0,
+    "ssl": 0,
+    "vision": 0
+   },
+   "per_field_median_range": [
+    0,
+    0
+   ]
+  },
+  {
+   "pair": [
+    "nhl15",
+    "nhllegacy"
+   ],
+   "matched_players": 372,
+   "common_fields": 20,
+   "median_diff_all_cells": 0.0,
+   "quartiles_all_cells": [
+    0.0,
+    0.0,
+    2.0
+   ],
+   "median_of_player_medians": 0.0,
+   "per_field_median": {
+    "5hole": 0.0,
+    "aggression": 0.0,
+    "agility": 0.0,
+    "breakaway": 0.0,
+    "consistency": 0.0,
+    "durability": 0.0,
+    "endurance": 0.0,
+    "gsh": 0.0,
+    "gsl": 0.0,
+    "passing": 0.0,
+    "poise": 0.0,
+    "pokecheck": 0.0,
+    "positioning": 0.0,
+    "puckplayfrequency": 0.0,
+    "reboundcontrol": 0.0,
+    "shotrecover": 0.0,
+    "speed": 0.0,
+    "ssh": 0.0,
+    "ssl": 0.0,
+    "vision": 0.0
+   },
+   "per_field_median_range": [
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "pair": [
+    "nhl15",
+    "ps4-nhl15"
+   ],
+   "matched_players": 524,
+   "common_fields": 20,
+   "median_diff_all_cells": 36.0,
+   "quartiles_all_cells": [
+    36.0,
+    36.0,
+    38.0
+   ],
+   "median_of_player_medians": 36.0,
+   "per_field_median": {
+    "5hole": 36.0,
+    "aggression": 36.0,
+    "agility": 36.0,
+    "breakaway": 36.0,
+    "consistency": 0.0,
+    "durability": 36.0,
+    "endurance": 36.0,
+    "gsh": 36.0,
+    "gsl": 36.0,
+    "passing": 36.0,
+    "poise": 36.0,
+    "pokecheck": 36.0,
+    "positioning": 36.0,
+    "puckplayfrequency": 36.0,
+    "reboundcontrol": 36.0,
+    "shotrecover": 36.0,
+    "speed": 36.0,
+    "ssh": 36.0,
+    "ssl": 36.0,
+    "vision": 36.0
+   },
+   "per_field_median_range": [
+    0.0,
+    36.0
+   ]
+  },
+  {
+   "pair": [
+    "nhllegacy",
+    "ps4-nhl16"
+   ],
+   "matched_players": 536,
+   "common_fields": 20,
+   "median_diff_all_cells": 36.0,
+   "quartiles_all_cells": [
+    36.0,
+    36.0,
+    36.0
+   ],
+   "median_of_player_medians": 36.0,
+   "per_field_median": {
+    "5hole": 36.0,
+    "aggression": 36.0,
+    "agility": 36.0,
+    "breakaway": 36.0,
+    "consistency": 0.0,
+    "durability": 36.0,
+    "endurance": 36.0,
+    "gsh": 36.0,
+    "gsl": 36.0,
+    "passing": 36.0,
+    "poise": 36.0,
+    "pokecheck": 36.0,
+    "positioning": 36.0,
+    "puckplayfrequency": 36.0,
+    "reboundcontrol": 36.0,
+    "shotrecover": 36.0,
+    "speed": 36.0,
+    "ssh": 36.0,
+    "ssl": 36.0,
+    "vision": 36.0
+   },
+   "per_field_median_range": [
+    0.0,
+    36.0
+   ]
+  },
+  {
+   "pair": [
+    "nhl14",
+    "ps4-nhl15"
+   ],
+   "matched_players": 350,
+   "common_fields": 20,
+   "median_diff_all_cells": 37.0,
+   "quartiles_all_cells": [
+    36.0,
+    37.0,
+    40.0
+   ],
+   "median_of_player_medians": 37.5,
+   "per_field_median": {
+    "5hole": 38.0,
+    "aggression": 38.0,
+    "agility": 37.0,
+    "breakaway": 38.0,
+    "consistency": 0.0,
+    "durability": 36.0,
+    "endurance": 37.0,
+    "gsh": 38.0,
+    "gsl": 38.0,
+    "passing": 36.0,
+    "poise": 36.0,
+    "pokecheck": 37.0,
+    "positioning": 38.0,
+    "puckplayfrequency": 36.0,
+    "reboundcontrol": 38.0,
+    "shotrecover": 38.0,
+    "speed": 37.0,
+    "ssh": 38.0,
+    "ssl": 38.0,
+    "vision": 38.0
+   },
+   "per_field_median_range": [
+    0.0,
+    38.0
+   ]
+  }
+ ]
+}

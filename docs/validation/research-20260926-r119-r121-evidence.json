@@ -1,0 +1,93 @@
+{
+  "probe_reruns": {
+    "r120": {
+      "exit": 0,
+      "seconds": 14.33,
+      "sources": 19,
+      "published_json_equal": true
+    },
+    "r120b": {
+      "exit": 0,
+      "seconds": 0.06,
+      "sources": 18,
+      "published_json_equal": true
+    },
+    "r120c": {
+      "exit": 0,
+      "seconds": 13.19,
+      "sources": 19,
+      "published_json_equal": true
+    },
+    "r121": {
+      "exit": 0,
+      "seconds": 24.59,
+      "sources": 19,
+      "published_json_equal": false,
+      "comparison": "source metadata/distributions, pair populations, equal shares, flagged source codes and ranked count profiles identical; ordering and tied truncation choices differ only"
+    }
+  },
+  "style_descriptors": {
+    "nhl07": {
+      "table": "dSvy",
+      "field": "mQoE",
+      "bit_width": 3
+    },
+    "nhl08": {
+      "table": "dSvy",
+      "field": "mQoE",
+      "bit_width": 3
+    },
+    "nhl09": {
+      "table": "dSvy",
+      "field": "mQoE",
+      "bit_width": 3
+    },
+    "nhl10": {
+      "table": "dSvy",
+      "field": "mQoE",
+      "bit_width": 4
+    }
+  },
+  "r119_totals": {
+    "ps3-nhl09": {
+      "present": 2594,
+      "absent": 25,
+      "slots": 2619,
+      "r98_slots_including_copies": 2619
+    },
+    "ps3-nhl10": {
+      "present": 2748,
+      "absent": 24,
+      "slots": 2772,
+      "r98_slots_including_copies": 2772
+    },
+    "ps3-nhl12": {
+      "present": 4697,
+      "absent": 37,
+      "slots": 4734,
+      "r98_slots_including_copies": 4734
+    },
+    "ps3-nhl13": {
+      "present": 5117,
+      "absent": 43,
+      "slots": 5160,
+      "r98_slots_including_copies": 5160
+    },
+    "x360-nhl09": {
+      "present": 2426,
+      "absent": 25,
+      "slots": 2451,
+      "r98_slots_including_copies": 4902
+    }
+  },
+  "native_field_probe": "Did not execute: direct rustc linking against existing rlibs failed on MSVC CRT symbols in three attempts. No domain/desktop output claimed.",
+  "reviewed_hashes": {
+    "docs/research/overnight-2026-09-26/data/r120-identity-audit.json": "32660c3465f4bf0c082383c63bea0cef7edc7c7d2a03c28b8feedda893ac68f8",
+    "docs/research/overnight-2026-09-26/data/r120b-nationality-label-table.json": "fbe26742424074768d605ef7a59531ec851b24d3dac1fd1c8e4011953e8ce14e",
+    "docs/research/overnight-2026-09-26/data/r120c-position-line-slots.json": "db1df997156e8a0b03767ec496ef8cd5a092732cc2159694f332c59542dd9047",
+    "docs/research/overnight-2026-09-26/data/r121-unscoped-enum-continuity.json": "8071801b85f51cfbb938edf04642665e09cb7fc514e126abc097a04a6d0e4e9c",
+    "crates/studio-domain/src/attributes.rs": "1ab8749cbfb7bcab3ad68d50f8491a38bd928444261715aceb9315a950e16ffd",
+    "crates/studio-domain/src/view.rs": "164572cb8a3df90c77bd6dec949e11fd5975383a5c3e7517c10bc745089ade31",
+    "defs/enums/nationality.toml": "ea529c42b856b188b30e4fbb6e391262b659335a162165161a565edf7d94434a"
+  }
+}

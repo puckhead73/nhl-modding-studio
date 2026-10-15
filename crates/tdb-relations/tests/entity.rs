@@ -6,7 +6,12 @@ use tdb_core::TdbFile;
 use tdb_relations::{PlayerKind, Position, RosterModel};
 
 fn anchor(rel: &str) -> Vec<u8> {
-    std::fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../anchors").join(rel)).unwrap()
+    std::fs::read(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../anchors")
+            .join(rel),
+    )
+    .unwrap()
 }
 
 #[test]
@@ -80,12 +85,32 @@ fn nhl07_cluster_clean_without_equipment_tables() {
     );
 
     // The AI companion is still present and still required; the equipment half simply doesn't exist.
-    let skater = model.players.iter().find(|p| p.kind == PlayerKind::Skater).unwrap();
-    assert!(skater.skater_ai.is_some(), "skater keeps its AI companion (dSvy)");
-    assert!(skater.skater_equip.is_none(), "NHL07 has no skater equipment table");
-    let goalie = model.players.iter().find(|p| p.kind == PlayerKind::Goalie).unwrap();
-    assert!(goalie.goalie_ai.is_some(), "goalie keeps its AI companion (mHuy)");
-    assert!(goalie.goalie_equip.is_none(), "NHL07 has no goalie equipment table");
+    let skater = model
+        .players
+        .iter()
+        .find(|p| p.kind == PlayerKind::Skater)
+        .unwrap();
+    assert!(
+        skater.skater_ai.is_some(),
+        "skater keeps its AI companion (dSvy)"
+    );
+    assert!(
+        skater.skater_equip.is_none(),
+        "NHL07 has no skater equipment table"
+    );
+    let goalie = model
+        .players
+        .iter()
+        .find(|p| p.kind == PlayerKind::Goalie)
+        .unwrap();
+    assert!(
+        goalie.goalie_ai.is_some(),
+        "goalie keeps its AI companion (mHuy)"
+    );
+    assert!(
+        goalie.goalie_equip.is_none(),
+        "NHL07 has no goalie equipment table"
+    );
 }
 
 /// The roster→player two-hop bridge resolves for the overwhelming majority of slots, and each

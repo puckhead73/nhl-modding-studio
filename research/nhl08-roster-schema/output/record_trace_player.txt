@@ -1,0 +1,73 @@
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml cPbu 0 1 --where lastname=Crosby --only game_id,firstname,lastname,team,proteam,jersey,position,yeardrafted,contractdollars,headid,artid
+table cPbu = exhibitionplayerbiotable block=0x26df8 record_block=0x27020 rec=184B cur=2962 max=2962 alloc=2
+  [1977 @0x7fd18] team=23 headid=1082 yeardrafted=46 firstname='Sidney' lastname='Crosby' proteam=24 position=0 contractdollars=280 artid=1082 jersey=87 game_id=3109
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml caBZ 0 4 --where playerid=3109
+table caBZ = exhibitionplayers block=0xac110 record_block=0xac168 rec=4B cur=3257 max=3257 alloc=2
+  [2245 @0xae47c] table=0 index=2947 playerid=3109
+  [2246 @0xae480] table=0 index=2948 playerid=3109
+  [2247 @0xae484] table=0 index=2949 playerid=3109
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ulGe 0 2 --where playerindex=2947 --only key,playerindex,team,rosterstatus,jersey,captain,l1c,pp1c
+table ulGe = exhibitionrostertable block=0xaf44c record_block=0xaf8e4 rec=16B cur=2525 max=2525 alloc=2
+  [531 @0xb1a14] team=23 pp1c=1 playerindex=2947 key=593 l1c=1 rosterstatus=1 captain=1 jersey=87
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ulGe 0 2 --where playerindex=2948 --only key,playerindex,team,rosterstatus,jersey,captain,l1c,pp1c
+table ulGe = exhibitionrostertable block=0xaf44c record_block=0xaf8e4 rec=16B cur=2525 max=2525 alloc=2
+  [687 @0xb23d4] team=30 pp1c=1 playerindex=2948 key=769 l1c=1 rosterstatus=1 captain=2 jersey=87
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ulGe 0 2 --where playerindex=2949 --only key,playerindex,team,rosterstatus,jersey,captain,l1c,pp1c
+table ulGe = exhibitionrostertable block=0xaf44c record_block=0xaf8e4 rec=16B cur=2525 max=2525 alloc=2
+  [2073 @0xb7a74] team=89 pp1c=1 playerindex=2949 key=2248 l1c=1 rosterstatus=1 captain=0 jersey=87
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml yvSd 0 1 --where game_id=3109 --only game_id,p_speed,p_passing,p_potential,p_offawareness
+table yvSd = exhibitionskaterai block=0xb96fc record_block=0xb9904 rec=24B cur=2647 max=2647 alloc=2
+  [1779 @0xc3fcc] p_potential=45 p_passing=49 p_speed=42 p_offawareness=49 game_id=3109
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ajmx 0 1 --where game_id=3109
+table ajmx = exhibitionskaterequipment block=0xc912c record_block=0xc9264 rec=12B cur=2647 max=2647 alloc=2
+  [1779 @0xce5c8] visortype=0 pantstypecode=1 socktapestyle=0 sticktapecolor=0 visorcolor=0 gloves=0 sticktapestylecode=0 skatebrand=0 jerseytuck=0 skaterocker=1 stickcurve=2 helmetbrand=0 shoulderpads=0 stickflex=1 stick=7 skatesocktuck=3 game_id=3109
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ttOk 0 1 --where index=23 --only index,fullname,abbrname,league
+table ttOk = exhibitionteams block=0xd0ed0 record_block=0xd10e8 rec=204B cur=138 max=138 alloc=2
+  [23 @0xd233c] fullname='Pittsburgh Penguins®' league=0 abbrname='PIT' index=23
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ttOk 0 1 --where index=30 --only index,fullname,abbrname,league
+table ttOk = exhibitionteams block=0xd0ed0 record_block=0xd10e8 rec=204B cur=138 max=138 alloc=2
+  [30 @0xd28d0] fullname='Eastern All-Stars' league=0 abbrname='EAS' index=30
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ttOk 0 1 --where index=89 --only index,fullname,abbrname,league
+table ttOk = exhibitionteams block=0xd0ed0 record_block=0xd10e8 rec=204B cur=138 max=138 alloc=2
+  [89 @0xd57d4] fullname='Canada' league=4 abbrname='CAN' index=89
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml cPbu 0 1 --where game_id=150 --only game_id,firstname,lastname,team,proteam,jersey,position,yeardrafted,contractdollars,headid,artid
+table cPbu = exhibitionplayerbiotable block=0x26df8 record_block=0x27020 rec=184B cur=2962 max=2962 alloc=2
+  [129 @0x2ccd8] team=42 headid=10015 yeardrafted=127 firstname='Michael' lastname='Wall' proteam=8 position=4 contractdollars=19 artid=1419 jersey=31 game_id=150
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml yuHm 0 1 --where game_id=150 --only game_id,g_gsl,g_gsh,g_style,g_potential
+table yuHm = exhibitiongoalieai block=0x1fac8 record_block=0x1fc90 rec=20B cur=315 max=315 alloc=2
+  [0 @0x1fc90] g_potential=22 g_gsl=22 g_gsh=21 g_style=2 game_id=150
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml lVMf 0 1 --where game_id=150 --only game_id,stick,pads,blocker,trapper,masktype,keepcustomiftraded
+table lVMf = exhibitiongoalieequipment block=0x2152c record_block=0x21a04 rec=68B cur=315 max=315 alloc=2
+  [0 @0x21a04] pads=1 keepcustomiftraded=0 trapper=1 masktype=0 stick=0 game_id=150 blocker=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml nAUy 0 1 --where game_id=150 --only key,game_id,firstname,lastname,team,pads,blocker,trapper
+table nAUy = stockgoalieequipment block=0x130774 record_block=0x130c8c rec=148B cur=236 max=236 alloc=2
+  [0 @0x130c8c] pads=1 team=43 firstname='Michael' trapper=1 lastname='Wall' key=0 game_id=150 blocker=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml caBZ 0 1 --where index=152
+table caBZ = exhibitionplayers block=0xac110 record_block=0xac168 rec=4B cur=3257 max=3257 alloc=2
+  [131 @0xac374] table=0 index=152 playerid=147
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml cPbu 0 1 --where game_id=5000 --only game_id,firstname,lastname,team,proteam,jersey,position,yeardrafted,contractdollars,headid,artid
+table cPbu = exhibitionplayerbiotable block=0x26df8 record_block=0x27020 rec=184B cur=2962 max=2962 alloc=2
+  [2782 @0xa3fb0] team=0 headid=10000 yeardrafted=127 firstname='' lastname='' proteam=0 position=4 contractdollars=0 artid=0 jersey=0 game_id=5000
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml yvSd 0 1 --where game_id=5000 --only game_id,p_speed,p_passing,p_potential
+table yvSd = exhibitionskaterai block=0xb96fc record_block=0xb9904 rec=24B cur=2647 max=2647 alloc=2
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml Vzjq 0 1 --where playerid=5000
+table Vzjq = customfacetable block=0x2768 record_block=0x2860 rec=8B cur=180 max=180 alloc=2
+  [0 @0x2860] facialhairstyle=0 freckles=0 wrinkles=0 hairstyle=0 eyedetail=0 eyebrowshape=0 eyebrowcolor=0 cutsscars=0 blackeye=0 facialhaircolor=0 playerid=5000 haircolor=0 skintexture=0
+

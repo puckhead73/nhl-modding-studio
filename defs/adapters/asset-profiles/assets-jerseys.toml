@@ -1,0 +1,664 @@
+# Per-family asset output profile — uniforms / jersey kits (Q07a.1). Schema `asset-output-profile/4`.
+#
+# Package C0-REG2 (2026-09-15), revised by C0-AS4 (2026-09-15) to `asset-output-profile/4`.
+# REPRESENTATION, NOT ESTABLISHED COVERAGE. Every constraint block on every target is `unknown`; no
+# operation's requirements are met; nothing here decides a Build. The file registers the uniform
+# family against the contract from committed evidence so the gap is enumerated in the contract's
+# own terms. `/4` lets the two facts C0-REG2 could only put in prose be SPELLED — a composite kit
+# id built from named `xjgw` fields, and an ordered thumbnail fallback with shared-file write
+# exclusion — and C0-AS4 MEASURED the composite on the committed anchor (below). Spelling a fact is
+# not establishing it: both stay candidates, for the reasons each block gives.
+#
+# ---------------------------------------------------------------------------------------------
+# THE EVIDENCE THIS FILE RESTS ON, ALL OF IT COMMITTED
+#
+#   docs/audits/data/schema/xbox360-nhllegacy.json   the DB half of a kit, MEASURED: table `xjgw`
+#       (`stockteamjerseys`, 703 rows, 8 bytes/record) with `mCXg` teamid (key, 8 bits), `GDQL`
+#       teamartid (15 bits), `cVLR` style (1 bit), `FccT` variant (5 bits), `ddOX` fevariant,
+#       `yFSM` isdefault, `tYnx` jerseyindex; and on `kOtt`: `Rrgs` font (3 bits), `Kacu`
+#       jerseystyle, `tftz` pantsstyle, `nfzw` sockstyle, `Dwps` / `gNjt` jerseybackhome/away.
+#   docs/audits/data/assets/nhllegacy/xbox360/capability.csv   one row: uniforms, format "loose
+#       RX2 rasters (jersey/pant/sock)", "texlib::replace_* on extracted .rx2; same path as logos
+#       (2026-08-03)", install = external. A write in a derived tree; no file is named.
+#   docs/audits/data/assets/nhllegacy/xbox360/archives.csv     `nocacherender.big`: "rendering
+#       customization (jersey, czlogo, czhead, czhair...)" — the recorder's summary line.
+#   docs/receipts/data/c0-as7-x360-nocacherender-members.csv   (C0-AS7) that archive's MEMBER
+#       TABLE (3 237 literal paths, offsets, sizes, digests; archive SHA-256
+#       649cc6f223b147daeb8147e7a834fb5c2eda786d9447063e6a25a6d1da225cfd) and its sibling for
+#       `cacherender.big`, read through the committed EB reader from the title root's own copy;
+#       joined to the anchor in docs/receipts/data/c0-as7-x360-member-join.csv (re-derived by the
+#       named `tdb-canonical` case). All members `chunklzx`-stored; none decoded.
+#   crates/studio-domain/src/assets.rs   repository source: the outfit trees under `rendering/`
+#       (`jersey/`, `pant/`, `sock/`); on Legacy / 14 / 12 / 09 flat texlib bundles
+#       `rendering/jersey/texlib_{set}_{team}_{variant}.rx2` holding several rasters (`jersey_*`,
+#       `font_*` / `pant_*`), socks loose `sock_*_cm.rx2`; `outfit_output_name` /
+#       `derive_team_index` (the team-id token position is derived per folder at runtime because it
+#       varies by title). Synthetic naming tests only; the mounted-tree cases
+#       (`legacy_x360_list_team_outfits_surfaces_font_raster`, `…decode_from_extracted_tree`)
+#       skip in CI.
+#   WORKING TREE ONLY, NOT AT BASELINE 52a12fd (an experiment, cited as such and never as
+#       provenance): the FE jersey-select thumbnail `fe/ion/artassets/jerseys/jersey_{style}_{art}_{variant}.big`
+#       with the SHARED fallback chain `custom.big` -> `customhome.big` -> `customaway.big` that
+#       per-kit writes must never target (`jersey_thumbnail`), and `clone_kit_textures` (the file
+#       half of "Add New Jersey", paired with an uncommitted `xjgw` row clone in `workspace.rs`).
+#   app/src/lib/fontAtlas.ts   the nameplate glyph layout of a Legacy `font_*_cm` sheet (512x512,
+#       A–O / P–Z rows, big and small digits), used by the live nameplate preview — application
+#       source with a self-described verification, not a committed census.
+#   docs/receipts/c0-close-emit-development-transition.md §6.2   the inventory that placed these.
+#
+# WHAT NONE OF IT IS: a census of kit files, a decode recorded with codec and size, a member
+# listing of `nocacherender.big`, a load test, or any record on a target other than NHL Legacy
+# Xbox 360. Decision D7 (whether the `uniforms` rows are owned by this family or by the database
+# half) is still undecided, and this file does not decide it: it declares the DB fields as the
+# identity SOURCE, which is a reference, not an ownership claim.
+#
+# ---------------------------------------------------------------------------------------------
+# THE TWO C0-REG2 GAPS, NOW SPELLED (`/4`) — AND WHAT SPELLING THEM DOES NOT ESTABLISH
+#
+#   1. THE KIT ID is `[identity.candidate.value.composite]`: `{style}_{art}_{variant}` from
+#      `xjgw.cVLR`, `xjgw.GDQL`, `xjgw.FccT`, rendered decimal, and the families substitute
+#      `{composite-id}`. MEASURED on the committed anchor (C0-AS4, the named case): 703 rows render
+#      698 DISTINCT ids — three tuples are shared by more than one row (`1_19_3` by teams 19 and
+#      216, `1_21_4` by teams 21 and 217, `1_255_0` by four rows on teams 220 and 221), so the id
+#      is NOT unique and rows do NOT correspond one-to-one with files; `teamartid` equals the row's
+#      own team's `kOtt.lOnr` on all 703 rows; nine rows store `teamartid = 0` and they are the
+#      nine rows of team key 0 (whose `lOnr` is 0) — a value, not a missing part, and no part has
+#      an established null code. The identity stays a CANDIDATE: no committed record places a
+#      rendered id beside a real file (no member listing, `chunklzx` undecoded), and D7 is open.
+#   2. THE SHARED FALLBACK is `[[resolution_chain]] kit-thumbnail`: `fe-thumbnail` (owned), then
+#      `fe-thumbnail-custom` / `-customhome` / `-customaway` (shared), read-write. It is a CANDIDATE
+#      whose only source is WORKING-TREE code (`jersey_thumbnail`, not at any baseline); it enables
+#      no operation, and the `/4` rules already refuse a write to any shared step even if it were
+#      established. Chain order is a declared reading order; it says nothing about what the game
+#      loads — `[runtime_lookup]` is still unknown and still required.
+
+schema = "asset-output-profile/5"
+profile_version = 4
+family = "assets-jerseys"
+note = """
+Nothing on any target is established. One target is represented (NHL Legacy, Xbox 360): the DB
+half of a kit is measured in the committed snapshot and its composite id measured on the anchor
+(C0-AS4); since C0-AS7 (profile_version 4) the FILE half of the bundle and sock families is
+OBSERVED on the attributable shipping archives — every one of the 698 rendered composite ids names
+a `rendering/jersey/texlib_{id}.rx2` member of `nocacherender.big` and a
+`rendering/sock/sock_{id}_cm.rx2` member of `cacherender.big`. Every block is still unknown: the
+identity bundles an `ambiguity` policy and waits on D7, the discovery root cannot name two
+archives, and the FE thumbnails are in neither render archive. The composite identity and the
+thumbnail resolution chain are candidates.
+"""
+
+[[canonical_source]]
+role = "jersey-body"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The jersey colour map as authored (the `jersey_*_cm` raster of a kit), lossless RGBA, retained unmodified."
+
+[[canonical_source]]
+role = "pant"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The pant colour map of the kit."
+
+[[canonical_source]]
+role = "sock"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The sock colour map of the kit (a loose raster on the gen7 titles)."
+
+[[canonical_source]]
+role = "nameplate-font"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The kit's name-and-number glyph sheet (`font_*_cm`), from which the nameplate is composited. Carried inside the same texlib bundle as the body on Legacy."
+
+[[canonical_source]]
+role = "thumbnail"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The front-end jersey-select thumbnail (`fe/ion/artassets/jerseys/jersey_{id}.big`)."
+
+# =============================================================== NHL Legacy, Xbox 360
+
+[[target_profile]]
+target = "nhllegacy-xbox360"
+note = """
+Represented from committed records; nothing established. The same two corpora as the logo
+profile: the shipping archives (attributable; headers and a summary line) and the derived
+`_compiled` tree (not attributable; where the one recorded write happened).
+"""
+
+[[target_profile.corpus]]
+id = "xbox360-shipping-archives"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "incomplete"
+identity_source = "each archive's own `EB\\0\\3` header (version tag 0x00000400, the 16-byte-entry variant `tdb_archive_big::eb::KNOWN_VERSION_TAGS` names for this title), beside the title's XEX2 EXECUTION_INFO header (title id `454109EC`) recorded by C0-POR1 for the sibling tree"
+inspected_files = 13
+groups = ["shipping-archives"]
+limitations = [
+    "Thirteen archive HEADERS and their entry counts were recorded by the audit; at that stage no member name, offset, digest or payload was committed, so which archive held a given kit rested on the recorder's `primary_contents` summary (`nocacherender.big`: \"rendering customization (jersey, ...)\"). Since C0-AS7 two of the thirteen — `cacherender.big` (12 845 members) and `nocacherender.big` (3 237) — have their MEMBER TABLES committed (docs/receipts/data/c0-as7-x360-{cacherender,nocacherender}-members.csv: literal path, offset, stored size, stored SHA-256 per member; archive digests in the sibling .json), so placement inside THOSE TWO is measured; the other ELEVEN archives (boot, cache, nocache, data0, cacheboot, cachemovie, cacheoverlay, renderboot, audioboot, audioboot2, cacheaudio) are still headers and a summary line only, and every `fe/` family is in one of them. No member of either has been decoded.",
+    "In-archive payloads on this variant are `chunklzx`-wrapped where compressed, and Studio does not decode LZX. No archived kit texture has been decoded by Studio.",
+    "A title id plus an archive version tag is not a build.",
+    "No shipping manifest was checked; archive precedence was not examined.",
+]
+provenance = [
+    "docs/audits/data/assets/nhllegacy/xbox360/archives.csv",
+    "crates/tdb-archive-big/src/eb.rs#KNOWN_VERSION_TAGS",
+    "docs/receipts/c0-por1-portrait-measurements.md",
+]
+
+[[target_profile.corpus]]
+id = "xbox360-compiled-tree"
+kind = "derived-tree"
+attribution = "not-attributable"
+build_identification = "incomplete"
+identity_source = "the title's own XEX2 EXECUTION_INFO header — title id `454109EC`, media id `3CF2A23F`, executable `nhlzf.exe` — as recorded by C0-POR1 for this same tree"
+inspected_files = 1
+groups = ["current"]
+limitations = [
+    "A DERIVED tree: an extraction or a rebuild. No provenance bridge exists, so no placement fact can come from it.",
+    "For THIS family the committed record names no file: the capability row says a `texlib::replace_*` write on an extracted `.rx2` was verified on 2026-08-03 \"same path as logos\". `inspected_files = 1` records that one write happened; which kit it touched is not recorded.",
+    "The mounted-tree cases that would name files (`legacy_x360_list_team_outfits_surfaces_font_raster`, which finds the `font` piece in `texlib_0_10_0.rx2`) skip silently in CI (C0.2 §5.4 class) and are not evidence here.",
+]
+provenance = [
+    "docs/audits/data/assets/nhllegacy/xbox360/capability.csv#uniforms",
+    "docs/receipts/c0-por1-portrait-measurements.md",
+]
+
+# ---- the observed path shapes --------------------------------------------------------------
+
+[[target_profile.path_family]]
+id = "outfit-texlib"
+template = "rendering/jersey/texlib_{composite-id}.rx2"
+tokens = ["composite-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+`{composite-id}` is the rendered `[identity.candidate.value.composite]` — `{style}_{art}_{variant}`
+from the `xjgw` row. MEASURED (C0-AS4): rendering it for all 703 rows yields three path collisions
+under this template (`texlib_1_19_3.rx2`, `texlib_1_21_4.rx2`, `texlib_1_255_0.rx2`, each named by
+two or four rows), so a row does not own a bundle one-to-one; the identity's `ambiguity = "reject"`
+refuses to bind those rows. The bundle holds several named rasters (`jersey_*_cm`, `font_*_cm`, on
+some titles `pant_*`), so one file carries more than one canonical role. Template from repository
+source (`export_team_outfits` / `list_team_outfits`).
+
+C0-AS7 LOCATED THE FAMILY BY LITERAL NAME in `nocacherender.big` (the observed bucket below):
+`rendering/jersey/` holds 1 869 members — 905 `texlib_N_N_N.rx2`, 904 `name_N_N_N_cm.rx2` and 60
+`jersey_N_N_N_N_N_N.rx2`. Under this template all 698 rendered ids name a member (the three
+collisions included, each naming one member), and 207 members carry ids no `xjgw` row stores
+(listed in the join record). The `name_` shape matches the same 698 ids; the six-component
+`jersey_` shape is not spelled by any committed template. `bucket_resolution` stays unknown: the
+template names a real member for every row of this specimen, but the collisions mean it does not
+resolve a UNIQUE path per row, and nothing here is a rule the target enforces.
+"""
+
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/jersey"
+census = "docs/receipts/data/c0-as7-x360-nocacherender-members.csv"
+census_digest = "ffded0db30cf2539b50f434cb79c567cd4be08fbdc2d254550a80370aeb883bd"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "The directory inside `nocacherender.big`: 1 869 members in three name shapes, all stored `chunklzx`. Joined to the anchor's `xjgw` composite in docs/receipts/data/c0-as7-x360-member-join.csv. Membership, not a rule; listed, not decoded."
+
+[[target_profile.path_family]]
+id = "sock-loose"
+template = "rendering/sock/sock_{variant}_cm.rx2"
+tokens = ["variant"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+Loose single-raster socks. `{variant}` is again the kit-id stand-in; the sock name carries more
+tokens than the jersey bundle's on some titles (`sock_a_b_team_c_d_cm` on NHL 09). C0-AS7 observed
+the Legacy shape in `cacherender.big` — NOT in `nocacherender.big` beside the bundles:
+`rendering/sock/` holds 954 members, 946 of them `sock_N_N_N_cm.rx2`, and reading the three
+components as `{style}_{art}_{variant}` every one of the 698 rendered `xjgw` ids names one. That
+is an observation over one archive; the token shape is not thereby established for the target,
+and `{variant}` still stands for a composite the schema cannot spell on this family.
+"""
+
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/sock"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "The directory inside `cacherender.big` (the OTHER render archive): 946 `sock_N_N_N_cm.rx2` members plus 8 stragglers (`playersock_N_N`, `goaliesock_N_N`, `sock_N_{nm,rm,sm}`). Joined in docs/receipts/data/c0-as7-x360-member-join.csv."
+
+[[target_profile.path_family]]
+id = "fe-thumbnail"
+template = "fe/ion/artassets/jerseys/jersey_{composite-id}.big"
+tokens = ["composite-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+The jersey-select thumbnail a kit OWNS, named by the same composite id (and therefore carrying
+the same three measured collisions as the bundle). KNOWN FROM WORKING-TREE SOURCE ONLY
+(`jersey_thumbnail`, not at any baseline): the owned step of `[[resolution_chain]] kit-thumbnail`.
+Declared so the form has a place; nothing committed names one of these files on THIS target:
+C0-AS7 found no `fe/` member in either Legacy Xbox 360 render archive (the eleven other shipping
+archives were not opened). Fifteen members of exactly this shape (`jersey_0_81_4.big`, ...) were
+listed inside the PS3 copy's `patch.big` (docs/receipts/data/c0-as7-ps3-patch-members.csv) — a
+different target, recorded there and not transferred here.
+"""
+
+# The three SHARED fallback thumbnails. Literal templates (no token): the file is one file for every
+# kit that falls back to it, which is exactly why a per-kit write must never resolve to it. All
+# three are known from WORKING-TREE source only and establish nothing.
+[[target_profile.path_family]]
+id = "fe-thumbnail-custom"
+template = "fe/ion/artassets/jerseys/custom.big"
+case = "lower"
+bucket_resolution = "unknown"
+note = "Shared fallback (WORKING TREE ONLY, `jersey_thumbnail`). `bucket_resolution` stays unknown because no committed record shows the file exists in any tree."
+
+[[target_profile.path_family]]
+id = "fe-thumbnail-customhome"
+template = "fe/ion/artassets/jerseys/customhome.big"
+case = "lower"
+bucket_resolution = "unknown"
+note = "Shared fallback (WORKING TREE ONLY, `jersey_thumbnail`)."
+
+[[target_profile.path_family]]
+id = "fe-thumbnail-customaway"
+template = "fe/ion/artassets/jerseys/customaway.big"
+case = "lower"
+bucket_resolution = "unknown"
+note = "Shared fallback (WORKING TREE ONLY, `jersey_thumbnail`)."
+
+# ---- the declared reading order over those families (`/4`) ----------------------------------
+
+[[target_profile.resolution_chain]]
+id = "kit-thumbnail"
+purpose = "read-write"
+note = """
+The order the working-tree thumbnail code reads: the kit's own file, then the three shared
+defaults. Declared read-write so the `/4` write rule is visible on it: a write resolves ONLY the
+owned step (`fe-thumbnail`) — never a shared step, whatever a read found, and never a rendered
+path that equals any shared step's once separators are normalised; a path that differs from a
+shared one only in case is refused as undetermined, because declared casing is a rendering rule
+and says nothing about the destination's case sensitivity (C0-AS4-CLOSE). It
+creates a missing owned file only for the one shape the resolver can describe end to end: a
+`loose-file` [install] with [container] decided absent and no reference to update (C0-AS4-R1);
+a described archive install or container format, or an `updates_references` install, is reported
+as unsupported creation, not implied support. Chain order is a declared reading order; it is NOT
+evidence of the game's lookup, which stays with [runtime_lookup].
+"""
+
+[target_profile.resolution_chain.declared]
+state = "unknown"
+note = "UNKNOWN: the chain's only source is working-tree code that is not at any baseline, so it is recorded as a candidate and enables nothing. Promoting it needs, at least, a committed observation that the four files exist in an attributable corpus and that more than one kit resolves to each shared one."
+
+[target_profile.resolution_chain.declared.candidate]
+confidence = "asserted"
+provenance = [
+    "WORKING TREE ONLY, NOT AT BASELINE: crates/studio-domain/src/assets.rs#jersey_thumbnail (candidate list `jersey_{style}_{art_id}_{variant}.big`, `custom.big`, `customhome.big`, `customaway.big`, with a `stock` flag on the first)",
+]
+note = "PROPOSED, NOT OPERATIVE. Recorded from uncommitted source and labelled as such; that source's own comment claims the game's menu resolves the same way, and that claim is NOT carried here."
+
+[target_profile.resolution_chain.declared.candidate.value]
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail"
+ownership = "owned"
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail-custom"
+ownership = "shared"
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail-customhome"
+ownership = "shared"
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail-customaway"
+ownership = "shared"
+
+# ---- forms --------------------------------------------------------------------------------
+
+[[target_profile.variant]]
+id = "outfit-texlib"
+note = "The bundle form. Selected by path family."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "outfit-texlib"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "An RW4 texture library per repository source and per the logo specimen's sibling path; no kit bundle is named in a committed record."
+
+[target_profile.variant.container.candidate]
+confidence = "asserted"
+provenance = [
+    "crates/studio-domain/src/assets.rs#export_team_outfits",
+    "docs/audits/data/assets/nhllegacy/xbox360/capability.csv#uniforms",
+]
+note = "PROPOSED, NOT OPERATIVE. The outer `EB\\0\\3` layer inside the shipping title is not part of this proposal (see [container])."
+
+[target_profile.variant.container.candidate.value]
+outermost_layer_examined = false
+
+[[target_profile.variant.container.candidate.value.layer]]
+format = "rw4"
+index = "name-table"
+note = "Several named rasters per library — body, font sheet, on some titles pants."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "No committed record states the codec of any kit raster. The capability row's format column says only \"loose RX2 rasters\"."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded. The font sheet is described as 512x512 by `fontAtlas.ts`; the body map's size is not stated anywhere committed, and a bundle's rasters need not share one."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded; `texlib` de-tiles on decode, so a decode says nothing about storage."
+
+[[target_profile.variant]]
+id = "sock-loose"
+note = "The loose single-raster form. Selected by path family."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "sock-loose"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "A loose `.rx2` raster per repository source; nothing committed opened one."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded."
+
+[[target_profile.variant]]
+id = "fe-thumbnail"
+note = "The front-end thumbnail. Selected by path family. Working-tree source hands it to the portrait chain (BIGF -> RefPack -> XPR2); that is uncommitted code, so no candidate cites it and the chain stays unstated here."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "fe-thumbnail"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "Not recorded in any committed source or record."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded."
+
+# ---- target-level blocks ------------------------------------------------------------------
+
+[target_profile.discovery]
+state = "unknown"
+note = """
+C0-AS7 read both render archives' member tables (FR14): the jersey bundles are members of
+`nocacherender.big` (`rendering/jersey/`, 1 869), the socks are members of `cacherender.big`
+(`rendering/sock/`, 954), and neither archive holds any `fe/` member, so the thumbnails' archive
+is unnamed. The block stays unknown because `DiscoveryValue` is one root per target and this
+family's declared path families sit in two archives and one unobserved place. Extracted-tree
+placement under `rendering/` is what the code walks, and it is not archive placement.
+"""
+
+[target_profile.discovery.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+provenance = [
+    "docs/receipts/data/c0-as7-x360-nocacherender-members.csv",
+    "docs/receipts/data/c0-as7-x360-cacherender-members.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches",
+]
+note = "PROPOSED, NOT OPERATIVE. `archive-member` under `nocacherender.big` — MEASURED for the bundle family by the member listing; a proposal for the target because the socks are in `cacherender.big`, the thumbnails are elsewhere, and what the runtime reads is unobserved. Promoting it needs a per-family discovery in the contract or one archive shown to be the family's whole source, and `[runtime_lookup]`."
+
+[target_profile.discovery.candidate.value]
+scope = "archive-member"
+root = "nocacherender.big"
+recursive = true
+
+[target_profile.identity]
+state = "unknown"
+provenance = [
+    "docs/audits/data/schema/xbox360-nhllegacy.json#xjgw",
+    "docs/audits/data/schema/xbox360-nhllegacy.json#kOtt.Rrgs",
+    "crates/studio-domain/src/assets.rs#export_team_outfits",
+    "crates/studio-domain/src/team_tabs.rs#JERSEYS_TABLE",
+]
+note = """
+The DB half is MEASURED in the committed snapshot: a kit is an `xjgw` row keyed by team
+(`mCXg`), carrying `GDQL` teamartid, `cVLR` style and `FccT` variant, which together are the
+composite id the file names use — with `kOtt.Rrgs` (font), `Kacu` / `tftz` / `nfzw` (jersey /
+pants / sock style) and `Dwps` / `gNjt` (back home / away) as further team-level references. The
+file half — that `texlib_{style}_{art}_{variant}` is the bundle a row names — is repository
+source exercised by synthetic naming tests (`outfit_output_name…`), not a committed observation
+of a real file beside its row. `ambiguity` is a Studio behaviour choice and is not proposed.
+
+C0-AS4 (`/4`) carries the proposal as a candidate with a value: key `composite`, built from the
+three fields below, `ambiguity = "reject"` — the contract's own rule that an ambiguous match is
+never bound silently, which the measured collisions make a live case rather than a hypothetical.
+C0-AS7 placed every rendered id beside a real member: all 698 name a `texlib_` member of
+`nocacherender.big`, a `name_..._cm` member there, and a `sock_..._cm` member of `cacherender.big`
+(join record cited on the candidate). It stays a candidate because the value bundles an
+`ambiguity` policy that is a Studio behaviour choice, because 207 bundle members carry ids no row
+stores (so the file set is larger than the id set and the rule that assigns those is unobserved),
+and because D7 is undecided.
+"""
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "xbox360-shipping-archives"
+provenance = [
+    "docs/audits/data/schema/xbox360-nhllegacy.json#xjgw",
+    "crates/tdb-canonical/src/asset_resolution_tests.rs#legacy_x360_xjgw_composite_tuples_are_measured_not_assumed_unique",
+    "crates/studio-domain/src/assets.rs#export_team_outfits",
+    "docs/receipts/data/c0-as7-x360-member-join.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches",
+]
+note = """
+PROPOSED, NOT OPERATIVE. MEASURED on the committed anchor `anchors/xbox360/nhllegacy/databases/nhlng.db`
+by the named case (C0-AS4): `xjgw` has 703 rows; `cVLR` (style, 1 bit) stores 0..1, `GDQL`
+(teamartid, 15 bits) stores 0..421, `FccT` (variant, 5 bits) stores 0..20; neither field wider
+than one bit stores its all-ones pattern (the 1-bit style's all-ones is its value 1); rendering `{style}_{art}_{variant}` for every row gives 698 distinct ids — the
+tuples `1_19_3`, `1_21_4` and `1_255_0` are each shared by two or four rows (teams 19/216, 21/217,
+220/221), so the id is NOT unique and rows do not map one-to-one to files; `GDQL` equals the row's
+own team's `kOtt.lOnr` on all 703 rows; the nine rows with `GDQL = 0` are the nine rows of team key
+0, whose `lOnr` is 0 — a value. `scope = specimen-observation` and the shipping-archive corpus are
+named because the measurement was of the database bytes; C0-AS7 added the file side on the same
+corpus — every rendered id names a `rendering/jersey/texlib_{id}.rx2` member of `nocacherender.big`
+(905 members over 698 ids plus 207 ids no row stores), by literal member name, none decoded.
+`confidence = measured` describes both measurements. Still not promoted: the value's `ambiguity`
+is a policy, D7 is undecided, and a member listing is not the runtime's lookup.
+"""
+
+[target_profile.identity.candidate.value]
+key = "composite"
+source = "xjgw (stockteamjerseys): one row per kit, keyed by mCXg teamid"
+ambiguity = "reject"
+
+[target_profile.identity.candidate.value.composite]
+format = "{style}_{art}_{variant}"
+note = "Rendered decimal, unpadded, matching the working-tree and repository-source spellings `texlib_{style}_{art}_{variant}` / `jersey_{style}_{art_id}_{variant}`. No part declares a null code: no evidence establishes one, and the measured zeros are values."
+
+[[target_profile.identity.candidate.value.composite.part]]
+name = "style"
+table = "xjgw"
+field = "cVLR"
+render = "decimal"
+note = "`style`, 1 bit, stored 0..1 (290 rows 0, 413 rows 1)."
+
+[[target_profile.identity.candidate.value.composite.part]]
+name = "art"
+table = "xjgw"
+field = "GDQL"
+render = "decimal"
+note = "`teamartid`, 15 bits, stored 0..421; equals the row's team's `kOtt.lOnr` on every row. Nine rows store 0 (team key 0); no null code is established."
+
+[[target_profile.identity.candidate.value.composite.part]]
+name = "variant"
+table = "xjgw"
+field = "FccT"
+render = "decimal"
+note = "`variant`, 5 bits, stored 0..20 (173 rows 0). `ddOX` fevariant is a separate field with the same stored range and is not part of the id."
+
+[target_profile.container]
+state = "unknown"
+note = "Carried by the variants for the inner layers. The outer `EB\\0\\3` layer inside the shipping title is what the attributable corpus shows for its 13 archives; which one holds the kits is the summary line."
+
+[target_profile.path_rule]
+state = "unknown"
+note = "Every family is unresolved: the composite id is now spelled (`/4`) but no committed record binds a rendered id to a real file, and the three measured collisions mean the template alone cannot resolve a unique path for every row."
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.compression]
+state = "unknown"
+note = "Inside the shipping archives, compressed payloads on this EB variant are `chunklzx`, which Studio does not decode; no kit member has been opened. Extracted files carried no wrapper, which is a fact about extracted files."
+
+[target_profile.compression.candidate]
+confidence = "asserted"
+provenance = ["crates/tdb-archive-big/src/eb.rs#decode_payload"]
+note = "PROPOSED, NOT OPERATIVE: `lzx` for archived members on this EB variant."
+
+[target_profile.compression.candidate.value]
+payload = "lzx"
+deterministic = false
+
+[target_profile.atlas]
+state = "unknown"
+note = "A bundle carries body, font sheet and (on some titles) pants as separate named rasters: one FILE, several assets, and whether any SURFACE is shared between kits was not examined. The font sheet is itself a glyph atlas (`fontAtlas.ts` cell layout) — an atlas INSIDE one canonical role, which `[atlas]` describes for the family as a whole and cannot describe per role."
+
+[target_profile.install]
+state = "unknown"
+note = """
+`install = external`: the recorded write landed in an extracted tree through `import_texture`.
+Of the two facts a kit install needs, (a) — the shared fallback thumbnails (`custom*.big`) must
+never be written by a per-kit replace — is now spelled by `[[resolution_chain]] kit-thumbnail`
+(`/4`), whose write rule resolves only the owned step; (b) — an "Add New Jersey" is a DB row
+(`xjgw`) plus cloned files, `updates_references` in the other direction (the files follow the
+row) — still has no field. Both are exercised only by WORKING-TREE code (`jersey_thumbnail`,
+`clone_kit_textures`, an `xjgw` clone in `workspace.rs`) that is not at any baseline. The committed
+EB archive-write capability (`tdb_archive_big::eb::EbFile::replace_payload*`) is not wired to this
+family, and no archive installation is implemented or claimed.
+"""
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the game loads was not traced or load-tested. The thumbnail order is now spelled as `[[resolution_chain]] kit-thumbnail` (`/4`), and that chain is a declared reading order taken from working-tree source — it is NOT evidence of the game's lookup, which only a trace, a disassembly or a load test would be. This block stays unknown independently of the chain and every operation that needs it stays blocked."
+
+[[target_profile.operation]]
+operation = "discover"
+requires = ["discovery", "runtime_lookup"]
+
+[[target_profile.operation]]
+operation = "identify"
+requires = ["identity"]
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling", "mipmaps"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = [
+    "container",
+    "raster.codec",
+    "raster.color_space",
+    "dimensions",
+    "tiling",
+    "mipmaps",
+    "compression",
+    "atlas.kind",
+]
+note = "Q10: a release replacement preserves the original dimensions and encoded format."
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup", "resolution_chain:kit-thumbnail"]
+note = "The chain requirement is met only by an OPERATIVE chain; the candidate above does not meet it, and `runtime_lookup` is required independently of it."
+
+
+# ===================================================== NHL Legacy Recompiled (by reference)
+
+[[target_profile]]
+target = "legacyrecomp-recomp"
+reuses = "nhllegacy-xbox360"
+note = """
+Q47 (user direction, 2026-09-15; package C0-AS5): Legacy Recompiled uses the same jersey files and the
+same asset definitions as Legacy Xbox 360. This profile therefore inherits, BY REFERENCE and without
+a copy, the SHARED definitions of `nhllegacy-xbox360` — identity, container, path families and
+naming, the geometry/codec blocks, variants, resolution chains and the operation requirements
+(`asset_reuse::SHARED_BLOCKS` / `SHARED_TABLES`), with the corpora those blocks cite — in exactly
+the states they have there: what is a candidate or unknown on Legacy Xbox 360 is a candidate or
+unknown here, and nothing inherited becomes operative by being inherited. The reuse is the user's
+attributed decision, not a measurement: no Recompiled file was hashed or inspected for it, no corpus
+is declared here, and no provenance bridge is claimed. DESTINATION behaviour is this target's own
+and is UNKNOWN below: where a Recompiled installation keeps these files, how they are written there
+and what its runtime reads have not been inspected (FR4: no Recompiled installation, anchor or save
+fixture is committed). Nothing here says anything about Recompiled's database (its database unit
+stays absent from the registry) or about a reference-update capability. Qualification is not
+inherited: no automated case, evidence cell or runtime record of Legacy Xbox 360 applies here.
+"""
+
+[target_profile.discovery]
+state = "unknown"
+note = "Where a Legacy Recompiled installation keeps this family's files is not inspected (FR4). Not inherited from Legacy Xbox 360 by design: a destination root is the destination's own fact."
+
+[target_profile.install]
+state = "unknown"
+note = "How this family's files are written into a Recompiled installation is not inspected. Not inherited: an install kind, size policy or backup rule observed on an Xbox 360 tree is that tree's. While this is unknown, creation through any inherited resolution chain stays refused (`CreationSupport` reads this block, on this target)."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the Recompiled runtime reads for this family is not inspected. Not inherited: runtime evidence is a trace, a disassembly or a load test on the destination itself, never a folder listing and never another target's record."

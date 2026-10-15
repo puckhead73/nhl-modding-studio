@@ -1,0 +1,56 @@
+$ python research/nhl07-roster-schema/scripts/fieldset_match.py anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1 0x1c anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml
+DZfz/zfZD   16B nf=23 -> EXACT(ids+layout): FovP/PvoF[downloadgoalieai] cur=50, dDrd/drDd[exhibitiondownloadgoalieai] cur=50, yuHm/mHuy[exhibitiongoalieai] cur=235, TJKL/LKJT[stockgoalieai] cur=235
+YvhR/RhvY   20B nf=27 -> EXACT(ids+layout): dZCE/ECZd[downloadskaterai] cur=150, Raym/myaR[exhibitiondownloadskaterai] cur=150, yvSd/dSvy[exhibitionskaterai] cur=2015, LsXI/IXsL[stockskaterai] cur=2015
+znPC/CPnz    8B nf=11 -> EXACT(ids+layout): oYeE/EeYo[exhibitionteamstrategies] cur=93
+JhBt/tBhJ    4B nf= 1 -> NONE: 
+      partial: WluS/SulW[customarenatable] shares 1/1, YELf/fLEY[customteamtable] shares 1/1, AOIh/hIOA[defaultrosterversiontable] shares 1/1
+      fields: qEfv
+mASv/vSAm    8B nf=11 -> EXACT(ids+layout): oYeE/EeYo[exhibitionteamstrategies] cur=93
+eUOR/ROUe  508B nf=45 -> EXACT(ids+layout): MqdK/KdqM[customplayerbiotable] cur=0
+oCMe/eMCo    4B nf= 1 -> NONE: 
+      partial: YzeG/GezY[customgoalieai] shares 1/1, oDHy/yHDo[customplayerai] shares 1/1, MqdK/KdqM[customplayerbiotable] shares 1/1
+      fields: zIBw
+HHLk/kLHH  504B nf=44 -> NONE: 
+      partial: MqdK/KdqM[customplayerbiotable] shares 44/44, BojX/XjoB[downloadplayerbiotable] shares 44/44, EhOn/nOhE[exhibitiondownloadplayerbio] shares 44/44
+      fields: DVoL DaPp FVaN GDhI GPQs IIGk IxvQ JoGJ JzFM KfBC Nzao PQgy PedH QBpy QDTK RMbQ RZSz TJol TYDh VaWL WZNs aljv bkKW crfg dhKk dnFq feiZ fjUo hleL hruQ iPGg iwsK jqpY lXPP pLKJ pkRG rnOl sZqI tRVs vaGO vnCd xFXw zIBw zxmK
+MVOx/xOVM  504B nf=42 -> NONE: 
+      partial: MqdK/KdqM[customplayerbiotable] shares 42/42, BojX/XjoB[downloadplayerbiotable] shares 42/42, EhOn/nOhE[exhibitiondownloadplayerbio] shares 42/42
+      fields: DVoL FVaN GDhI GPQs IIGk IxvQ JoGJ JzFM KfBC Nzao PQgy PedH QBpy QDTK RMbQ RZSz TJol TYDh VaWL WZNs aljv bkKW crfg dhKk dnFq feiZ fjUo hleL hruQ iPGg iwsK jqpY lXPP pLKJ pkRG sZqI tRVs vaGO vnCd xFXw zIBw zxmK
+KboR/RobK   16B nf=23 -> EXACT(ids+layout): YzeG/GezY[customgoalieai] cur=0
+Exae/eaxE    4B nf= 1 -> NONE: 
+      partial: YzeG/GezY[customgoalieai] shares 1/1, oDHy/yHDo[customplayerai] shares 1/1, MqdK/KdqM[customplayerbiotable] shares 1/1
+      fields: zIBw
+rcpY/Ypcr   16B nf=23 -> EXACT(ids+layout): YzeG/GezY[customgoalieai] cur=0
+sAMA/AMAs    4B nf= 1 -> EXACT(ids+layout): TrVV/VVrT[defaultfreeagents] cur=74, QEoV/VoEQ[exhibitionfreeagents] cur=74
+mGOv/vOGm    4B nf= 1 -> EXACT(ids+layout): TrVV/VVrT[defaultfreeagents] cur=74, QEoV/VoEQ[exhibitionfreeagents] cur=74
+fyFF/FFyf    4B nf= 4 -> EXACT(ids+layout): ttOk/kOtt[exhibitionteams] cur=93
+dULq/qLUd    4B nf= 1 -> NONE: 
+      partial: WluS/SulW[customarenatable] shares 1/1, YELf/fLEY[customteamtable] shares 1/1, AOIh/hIOA[defaultrosterversiontable] shares 1/1
+      fields: qEfv
+LZbD/DbZL    4B nf= 3 -> EXACT(ids+layout): caBZ/ZBac[exhibitionplayers] cur=2790
+Frps/sprF    4B nf= 1 -> NONE: 
+      partial: WluS/SulW[customarenatable] shares 1/1, YELf/fLEY[customteamtable] shares 1/1, AOIh/hIOA[defaultrosterversiontable] shares 1/1
+      fields: qEfv
+ibGM/MGbi   16B nf=70 -> EXACT(ids+layout): Smgy/ygmS[defaultrostertable] cur=2516, ulGe/eGlu[exhibitionrostertable] cur=2516
+AtUj/jUtA    4B nf= 1 -> EXACT(ids+layout): TrVV/VVrT[defaultfreeagents] cur=74, QEoV/VoEQ[exhibitionfreeagents] cur=74
+vozd/dzov   16B nf=70 -> EXACT(ids+layout): Smgy/ygmS[defaultrostertable] cur=2516, ulGe/eGlu[exhibitionrostertable] cur=2516
+CvSu/uSvC  504B nf=43 -> NONE: 
+      partial: BojX/XjoB[downloadplayerbiotable] shares 43/43, EhOn/nOhE[exhibitiondownloadplayerbio] shares 43/43, cPbu/ubPc[exhibitionplayerbiotable] shares 43/43
+      fields: BSXd DVoL FVaN GDhI GPQs IIGk IxvQ JoGJ JzFM KfBC Nzao PQgy PedH QBpy QDTK RMbQ RZSz TJol TYDh VaWL WZNs aljv bkKW crfg dhKk dnFq feiZ fjUo hleL hruQ iPGg iwsK jqpY lXPP pLKJ pkRG sZqI tRVs vaGO vnCd xFXw zIBw zxmK
+tMYP/PYMt   68B nf= 2 -> EXACT(ids+layout): AOIh/hIOA[defaultrosterversiontable] cur=1, bZvB/BvZb[rosterversiontable] cur=1
+nGCg/gCGn    4B nf= 1 -> NONE: 
+      partial: WluS/SulW[customarenatable] shares 1/1, YELf/fLEY[customteamtable] shares 1/1, AOIh/hIOA[defaultrosterversiontable] shares 1/1
+      fields: qEfv
+Iblm/mlbI   68B nf= 2 -> EXACT(ids+layout): AOIh/hIOA[defaultrosterversiontable] cur=1, bZvB/BvZb[rosterversiontable] cur=1
+CTnc/cnTC    4B nf= 3 -> EXACT(ids+layout): OEtS/StEO[exhibitionarena] cur=93
+RosT/TsoR   20B nf=27 -> EXACT(ids+layout): dZCE/ECZd[downloadskaterai] cur=150, Raym/myaR[exhibitiondownloadskaterai] cur=150, yvSd/dSvy[exhibitionskaterai] cur=2015, LsXI/IXsL[stockskaterai] cur=2015
+uyGF/FGyu   16B nf=23 -> EXACT(ids+layout): FovP/PvoF[downloadgoalieai] cur=50, dDrd/drDd[exhibitiondownloadgoalieai] cur=50, yuHm/mHuy[exhibitiongoalieai] cur=235, TJKL/LKJT[stockgoalieai] cur=235
+KERl/lREK   20B nf=27 -> EXACT(ids+layout): oDHy/yHDo[customplayerai] cur=0
+wKzK/KzKw    4B nf= 1 -> NONE: 
+      partial: YzeG/GezY[customgoalieai] shares 1/1, oDHy/yHDo[customplayerai] shares 1/1, MqdK/KdqM[customplayerbiotable] shares 1/1
+      fields: zIBw
+zrsU/Usrz   20B nf=27 -> EXACT(ids+layout): oDHy/yHDo[customplayerai] cur=0
+
+A-only field ids: []
+overlap 179 of 179
+

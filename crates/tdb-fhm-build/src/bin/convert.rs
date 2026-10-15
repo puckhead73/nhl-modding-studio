@@ -70,113 +70,533 @@ const FRANCHISES: &[(&str, &str, &str, i64, &str)] = &[
     ("Anaheim Ducks", "Anaheim Ducks", "ANA", 0, ""),
     ("Boston Bruins", "Boston Bruins", "BOS", 0, ""),
     ("Buffalo Sabres", "Buffalo Sabres", "BUF", 0, ""),
-    ("Calgary Flames org", "Calgary Flames", "CGY", 0, "Includes Atlanta Flames"),
-    ("Carolina Hurricanes org", "Carolina Hurricanes", "CAR", 0, "Includes Hartford Whalers (WHA+NHL)"),
-    ("Chicago Blackhawks", "Chicago Blackhawks", "CHI", 0, "Includes Black Hawks era"),
-    ("Colorado Avalanche org", "Colorado Avalanche", "COL", 0, "Includes Quebec Nordiques (WHA+NHL)"),
-    ("Columbus Blue Jackets", "Columbus Blue Jackets", "CBJ", 0, ""),
-    ("Dallas Stars org", "Dallas Stars", "DAL", 0, "Includes Seals, Barons, Minnesota North Stars"),
-    ("Detroit Red Wings", "Detroit Red Wings", "DET", 0, "Includes Cougars and Falcons eras"),
-    ("Edmonton Oilers", "Edmonton Oilers", "EDM", 0, "Includes WHA era"),
+    (
+        "Calgary Flames org",
+        "Calgary Flames",
+        "CGY",
+        0,
+        "Includes Atlanta Flames",
+    ),
+    (
+        "Carolina Hurricanes org",
+        "Carolina Hurricanes",
+        "CAR",
+        0,
+        "Includes Hartford Whalers (WHA+NHL)",
+    ),
+    (
+        "Chicago Blackhawks",
+        "Chicago Blackhawks",
+        "CHI",
+        0,
+        "Includes Black Hawks era",
+    ),
+    (
+        "Colorado Avalanche org",
+        "Colorado Avalanche",
+        "COL",
+        0,
+        "Includes Quebec Nordiques (WHA+NHL)",
+    ),
+    (
+        "Columbus Blue Jackets",
+        "Columbus Blue Jackets",
+        "CBJ",
+        0,
+        "",
+    ),
+    (
+        "Dallas Stars org",
+        "Dallas Stars",
+        "DAL",
+        0,
+        "Includes Seals, Barons, Minnesota North Stars",
+    ),
+    (
+        "Detroit Red Wings",
+        "Detroit Red Wings",
+        "DET",
+        0,
+        "Includes Cougars and Falcons eras",
+    ),
+    (
+        "Edmonton Oilers",
+        "Edmonton Oilers",
+        "EDM",
+        0,
+        "Includes WHA era",
+    ),
     ("Florida Panthers", "Florida Panthers", "FLA", 0, ""),
     ("Los Angeles Kings", "Los Angeles Kings", "LAK", 0, ""),
     ("Minnesota Wild", "Minnesota Wild", "MIN", 0, ""),
     ("Montreal Canadiens", "Montreal Canadiens", "MTL", 0, ""),
     ("Nashville Predators", "Nashville Predators", "NSH", 0, ""),
-    ("New Jersey Devils org", "New Jersey Devils", "NJD", 0, "Includes Kansas City Scouts, Colorado Rockies"),
+    (
+        "New Jersey Devils org",
+        "New Jersey Devils",
+        "NJD",
+        0,
+        "Includes Kansas City Scouts, Colorado Rockies",
+    ),
     ("New York Islanders", "New York Islanders", "NYI", 0, ""),
     ("New York Rangers", "New York Rangers", "NYR", 0, ""),
-    ("Ottawa Senators org", "Ottawa Senators", "OTT", 0, "Includes original Senators, St. Louis Eagles"),
+    (
+        "Ottawa Senators org",
+        "Ottawa Senators",
+        "OTT",
+        0,
+        "Includes original Senators, St. Louis Eagles",
+    ),
     ("Philadelphia Flyers", "Philadelphia Flyers", "PHI", 0, ""),
     ("Pittsburgh Penguins", "Pittsburgh Penguins", "PIT", 0, ""),
     ("San Jose Sharks", "San Jose Sharks", "SJS", 0, ""),
     ("Seattle Kraken", "Seattle Kraken", "SEA", 0, ""),
     ("St. Louis Blues", "St. Louis Blues", "STL", 0, ""),
     ("Tampa Bay Lightning", "Tampa Bay Lightning", "TBL", 0, ""),
-    ("Toronto Maple Leafs", "Toronto Maple Leafs", "TOR", 0, "Includes Arenas and St. Patricks eras"),
+    (
+        "Toronto Maple Leafs",
+        "Toronto Maple Leafs",
+        "TOR",
+        0,
+        "Includes Arenas and St. Patricks eras",
+    ),
     ("Utah Mammoth", "Utah Mammoth", "UTA", 0, ""),
     ("Vancouver Canucks", "Vancouver Canucks", "VAN", 0, ""),
     ("Vegas Golden Knights", "Vegas Golden Knights", "VGK", 0, ""),
     ("Washington Capitals", "Washington Capitals", "WSH", 0, ""),
-    ("Winnipeg Jets org", "Winnipeg Jets", "WPG", 0, "Includes Atlanta Thrashers"),
-    ("Arizona Coyotes org", "Arizona Coyotes", "ARI", 1, "Winnipeg Jets (WHA+NHL) -> Phoenix -> Arizona"),
-    ("Montreal Wanderers", "Montreal Wanderers", "MWN", 1, "1917-18"),
+    (
+        "Winnipeg Jets org",
+        "Winnipeg Jets",
+        "WPG",
+        0,
+        "Includes Atlanta Thrashers",
+    ),
+    (
+        "Arizona Coyotes org",
+        "Arizona Coyotes",
+        "ARI",
+        1,
+        "Winnipeg Jets (WHA+NHL) -> Phoenix -> Arizona",
+    ),
+    (
+        "Montreal Wanderers",
+        "Montreal Wanderers",
+        "MWN",
+        1,
+        "1917-18",
+    ),
     ("Montreal Maroons", "Montreal Maroons", "MMR", 1, "1924-38"),
-    ("Brooklyn Americans org", "Brooklyn Americans", "BRA", 1, "Quebec Bulldogs -> Hamilton -> NY/Brooklyn Americans"),
-    ("Philadelphia Quakers org", "Philadelphia Quakers", "PHQ", 1, "Pittsburgh Pirates -> Philadelphia Quakers"),
+    (
+        "Brooklyn Americans org",
+        "Brooklyn Americans",
+        "BRA",
+        1,
+        "Quebec Bulldogs -> Hamilton -> NY/Brooklyn Americans",
+    ),
+    (
+        "Philadelphia Quakers org",
+        "Philadelphia Quakers",
+        "PHQ",
+        1,
+        "Pittsburgh Pirates -> Philadelphia Quakers",
+    ),
 ];
 
 /// `(franchise name, team_key, era_start (exclusive), era_end (inclusive; 0 = open), era_name)`.
 const FRANCHISE_MEMBERS: &[(&str, &str, i64, i64, &str)] = &[
-    ("Calgary Flames org", "nhl__atl", 1972, 1980, "Atlanta Flames"),
+    (
+        "Calgary Flames org",
+        "nhl__atl",
+        1972,
+        1980,
+        "Atlanta Flames",
+    ),
     ("Calgary Flames org", "nhl__cgy", 1980, 0, "Calgary Flames"),
-    ("Carolina Hurricanes org", "wha__new", 1972, 1979, "New England Whalers"),
-    ("Carolina Hurricanes org", "nhl__har", 1979, 1997, "Hartford Whalers"),
-    ("Carolina Hurricanes org", "nhl__car", 1997, 0, "Carolina Hurricanes"),
-    ("Colorado Avalanche org", "wha__que", 1972, 1979, "Quebec Nordiques (WHA)"),
-    ("Colorado Avalanche org", "nhl__que", 1979, 1995, "Quebec Nordiques"),
-    ("Colorado Avalanche org", "nhl__col", 1995, 0, "Colorado Avalanche"),
+    (
+        "Carolina Hurricanes org",
+        "wha__new",
+        1972,
+        1979,
+        "New England Whalers",
+    ),
+    (
+        "Carolina Hurricanes org",
+        "nhl__har",
+        1979,
+        1997,
+        "Hartford Whalers",
+    ),
+    (
+        "Carolina Hurricanes org",
+        "nhl__car",
+        1997,
+        0,
+        "Carolina Hurricanes",
+    ),
+    (
+        "Colorado Avalanche org",
+        "wha__que",
+        1972,
+        1979,
+        "Quebec Nordiques (WHA)",
+    ),
+    (
+        "Colorado Avalanche org",
+        "nhl__que",
+        1979,
+        1995,
+        "Quebec Nordiques",
+    ),
+    (
+        "Colorado Avalanche org",
+        "nhl__col",
+        1995,
+        0,
+        "Colorado Avalanche",
+    ),
     ("Dallas Stars org", "nhl__oak", 1967, 1970, "Oakland Seals"),
-    ("Dallas Stars org", "nhl__cal", 1970, 1976, "California Golden Seals"),
-    ("Dallas Stars org", "nhl__cle", 1976, 1978, "Cleveland Barons"),
-    ("Dallas Stars org", "nhl__min", 1967, 1993, "Minnesota North Stars"),
+    (
+        "Dallas Stars org",
+        "nhl__cal",
+        1970,
+        1976,
+        "California Golden Seals",
+    ),
+    (
+        "Dallas Stars org",
+        "nhl__cle",
+        1976,
+        1978,
+        "Cleveland Barons",
+    ),
+    (
+        "Dallas Stars org",
+        "nhl__min",
+        1967,
+        1993,
+        "Minnesota North Stars",
+    ),
     ("Dallas Stars org", "nhl__dal", 1993, 0, "Dallas Stars"),
-    ("New Jersey Devils org", "nhl__kcs", 1974, 1976, "Kansas City Scouts"),
-    ("New Jersey Devils org", "nhl__col", 1976, 1982, "Colorado Rockies"),
-    ("New Jersey Devils org", "nhl__njd", 1982, 0, "New Jersey Devils"),
-    ("Ottawa Senators org", "nha__ott", 1900, 1917, "Ottawa Senators (original)"),
-    ("Ottawa Senators org", "nhl__ott", 1917, 1934, "Ottawa Senators (original)"),
-    ("Ottawa Senators org", "nhl__stl", 1934, 1935, "St. Louis Eagles"),
-    ("Ottawa Senators org", "nhl__ott", 1991, 0, "Ottawa Senators"),
-    ("Winnipeg Jets org", "nhl__atl", 1999, 2011, "Atlanta Thrashers"),
+    (
+        "New Jersey Devils org",
+        "nhl__kcs",
+        1974,
+        1976,
+        "Kansas City Scouts",
+    ),
+    (
+        "New Jersey Devils org",
+        "nhl__col",
+        1976,
+        1982,
+        "Colorado Rockies",
+    ),
+    (
+        "New Jersey Devils org",
+        "nhl__njd",
+        1982,
+        0,
+        "New Jersey Devils",
+    ),
+    (
+        "Ottawa Senators org",
+        "nha__ott",
+        1900,
+        1917,
+        "Ottawa Senators (original)",
+    ),
+    (
+        "Ottawa Senators org",
+        "nhl__ott",
+        1917,
+        1934,
+        "Ottawa Senators (original)",
+    ),
+    (
+        "Ottawa Senators org",
+        "nhl__stl",
+        1934,
+        1935,
+        "St. Louis Eagles",
+    ),
+    (
+        "Ottawa Senators org",
+        "nhl__ott",
+        1991,
+        0,
+        "Ottawa Senators",
+    ),
+    (
+        "Winnipeg Jets org",
+        "nhl__atl",
+        1999,
+        2011,
+        "Atlanta Thrashers",
+    ),
     ("Winnipeg Jets org", "nhl__wpg", 2011, 0, "Winnipeg Jets"),
-    ("Arizona Coyotes org", "wha__wpg", 1972, 1979, "Winnipeg Jets (WHA)"),
-    ("Arizona Coyotes org", "nhl__wpg", 1979, 1996, "Winnipeg Jets (original)"),
-    ("Arizona Coyotes org", "nhl__phx", 1996, 2014, "Phoenix Coyotes"),
-    ("Arizona Coyotes org", "nhl__arz", 2014, 2024, "Arizona Coyotes"),
-    ("Brooklyn Americans org", "nha__que", 1900, 1920, "Quebec Bulldogs"),
-    ("Brooklyn Americans org", "nhl__que", 1919, 1920, "Quebec Bulldogs"),
-    ("Brooklyn Americans org", "nhl__ham", 1920, 1925, "Hamilton Tigers"),
-    ("Brooklyn Americans org", "nhl__nya", 1925, 1941, "New York Americans"),
-    ("Brooklyn Americans org", "nhl__bkn", 1941, 1942, "Brooklyn Americans"),
-    ("Philadelphia Quakers org", "nhl__pit", 1925, 1930, "Pittsburgh Pirates"),
-    ("Philadelphia Quakers org", "nhl__phi", 1930, 1931, "Philadelphia Quakers"),
-    ("Chicago Blackhawks", "nhl__chi", 1900, 1986, "Chicago Black Hawks"),
-    ("Chicago Blackhawks", "nhl__chi", 1986, 0, "Chicago Blackhawks"),
-    ("Detroit Red Wings", "nhl__det", 1926, 1930, "Detroit Cougars"),
-    ("Detroit Red Wings", "nhl__det", 1930, 1932, "Detroit Falcons"),
-    ("Detroit Red Wings", "nhl__det", 1932, 0, "Detroit Red Wings"),
-    ("Montreal Wanderers", "nha__mtw", 1900, 1917, "Montreal Wanderers"),
-    ("Montreal Wanderers", "nhl__mtw", 1917, 1918, "Montreal Wanderers"),
-    ("Montreal Maroons", "nhl__mtm", 1924, 1938, "Montreal Maroons"),
+    (
+        "Arizona Coyotes org",
+        "wha__wpg",
+        1972,
+        1979,
+        "Winnipeg Jets (WHA)",
+    ),
+    (
+        "Arizona Coyotes org",
+        "nhl__wpg",
+        1979,
+        1996,
+        "Winnipeg Jets (original)",
+    ),
+    (
+        "Arizona Coyotes org",
+        "nhl__phx",
+        1996,
+        2014,
+        "Phoenix Coyotes",
+    ),
+    (
+        "Arizona Coyotes org",
+        "nhl__arz",
+        2014,
+        2024,
+        "Arizona Coyotes",
+    ),
+    (
+        "Brooklyn Americans org",
+        "nha__que",
+        1900,
+        1920,
+        "Quebec Bulldogs",
+    ),
+    (
+        "Brooklyn Americans org",
+        "nhl__que",
+        1919,
+        1920,
+        "Quebec Bulldogs",
+    ),
+    (
+        "Brooklyn Americans org",
+        "nhl__ham",
+        1920,
+        1925,
+        "Hamilton Tigers",
+    ),
+    (
+        "Brooklyn Americans org",
+        "nhl__nya",
+        1925,
+        1941,
+        "New York Americans",
+    ),
+    (
+        "Brooklyn Americans org",
+        "nhl__bkn",
+        1941,
+        1942,
+        "Brooklyn Americans",
+    ),
+    (
+        "Philadelphia Quakers org",
+        "nhl__pit",
+        1925,
+        1930,
+        "Pittsburgh Pirates",
+    ),
+    (
+        "Philadelphia Quakers org",
+        "nhl__phi",
+        1930,
+        1931,
+        "Philadelphia Quakers",
+    ),
+    (
+        "Chicago Blackhawks",
+        "nhl__chi",
+        1900,
+        1986,
+        "Chicago Black Hawks",
+    ),
+    (
+        "Chicago Blackhawks",
+        "nhl__chi",
+        1986,
+        0,
+        "Chicago Blackhawks",
+    ),
+    (
+        "Detroit Red Wings",
+        "nhl__det",
+        1926,
+        1930,
+        "Detroit Cougars",
+    ),
+    (
+        "Detroit Red Wings",
+        "nhl__det",
+        1930,
+        1932,
+        "Detroit Falcons",
+    ),
+    (
+        "Detroit Red Wings",
+        "nhl__det",
+        1932,
+        0,
+        "Detroit Red Wings",
+    ),
+    (
+        "Montreal Wanderers",
+        "nha__mtw",
+        1900,
+        1917,
+        "Montreal Wanderers",
+    ),
+    (
+        "Montreal Wanderers",
+        "nhl__mtw",
+        1917,
+        1918,
+        "Montreal Wanderers",
+    ),
+    (
+        "Montreal Maroons",
+        "nhl__mtm",
+        1924,
+        1938,
+        "Montreal Maroons",
+    ),
     ("Anaheim Ducks", "nhl__ana", 1993, 0, "Anaheim Ducks"),
     ("Boston Bruins", "nhl__bos", 1924, 0, "Boston Bruins"),
     ("Buffalo Sabres", "nhl__buf", 1970, 0, "Buffalo Sabres"),
-    ("Columbus Blue Jackets", "nhl__cbj", 2000, 0, "Columbus Blue Jackets"),
-    ("Columbus Blue Jackets", "nhl__cbs", 2000, 0, "Columbus Blue Jackets"),
-    ("Columbus Blue Jackets", "nhl__columbus", 2000, 0, "Columbus Blue Jackets"),
-    ("Edmonton Oilers", "wha__edm", 1972, 1979, "Edmonton Oilers (WHA)"),
+    (
+        "Columbus Blue Jackets",
+        "nhl__cbj",
+        2000,
+        0,
+        "Columbus Blue Jackets",
+    ),
+    (
+        "Columbus Blue Jackets",
+        "nhl__cbs",
+        2000,
+        0,
+        "Columbus Blue Jackets",
+    ),
+    (
+        "Columbus Blue Jackets",
+        "nhl__columbus",
+        2000,
+        0,
+        "Columbus Blue Jackets",
+    ),
+    (
+        "Edmonton Oilers",
+        "wha__edm",
+        1972,
+        1979,
+        "Edmonton Oilers (WHA)",
+    ),
     ("Edmonton Oilers", "nhl__edm", 1979, 0, "Edmonton Oilers"),
     ("Florida Panthers", "nhl__fla", 1993, 0, "Florida Panthers"),
-    ("Los Angeles Kings", "nhl__lak", 1967, 0, "Los Angeles Kings"),
+    (
+        "Los Angeles Kings",
+        "nhl__lak",
+        1967,
+        0,
+        "Los Angeles Kings",
+    ),
     ("Minnesota Wild", "nhl__min", 2000, 0, "Minnesota Wild"),
-    ("Montreal Canadiens", "nha__mtl", 1900, 1917, "Montreal Canadiens"),
-    ("Montreal Canadiens", "nhl__mtl", 1917, 0, "Montreal Canadiens"),
-    ("Nashville Predators", "nhl__nas", 1998, 0, "Nashville Predators"),
-    ("Nashville Predators", "nhl__nsh", 1998, 0, "Nashville Predators"),
-    ("New York Islanders", "nhl__nyi", 1972, 0, "New York Islanders"),
+    (
+        "Montreal Canadiens",
+        "nha__mtl",
+        1900,
+        1917,
+        "Montreal Canadiens",
+    ),
+    (
+        "Montreal Canadiens",
+        "nhl__mtl",
+        1917,
+        0,
+        "Montreal Canadiens",
+    ),
+    (
+        "Nashville Predators",
+        "nhl__nas",
+        1998,
+        0,
+        "Nashville Predators",
+    ),
+    (
+        "Nashville Predators",
+        "nhl__nsh",
+        1998,
+        0,
+        "Nashville Predators",
+    ),
+    (
+        "New York Islanders",
+        "nhl__nyi",
+        1972,
+        0,
+        "New York Islanders",
+    ),
     ("New York Rangers", "nhl__nyr", 1926, 0, "New York Rangers"),
-    ("Philadelphia Flyers", "nhl__phi", 1967, 0, "Philadelphia Flyers"),
-    ("Pittsburgh Penguins", "nhl__pit", 1967, 0, "Pittsburgh Penguins"),
+    (
+        "Philadelphia Flyers",
+        "nhl__phi",
+        1967,
+        0,
+        "Philadelphia Flyers",
+    ),
+    (
+        "Pittsburgh Penguins",
+        "nhl__pit",
+        1967,
+        0,
+        "Pittsburgh Penguins",
+    ),
     ("San Jose Sharks", "nhl__sjs", 1991, 0, "San Jose Sharks"),
     ("Seattle Kraken", "nhl__sea", 2021, 0, "Seattle Kraken"),
     ("St. Louis Blues", "nhl__stl", 1967, 0, "St. Louis Blues"),
-    ("Tampa Bay Lightning", "nhl__tbl", 1992, 0, "Tampa Bay Lightning"),
-    ("Toronto Maple Leafs", "nhl__tor", 1917, 0, "Toronto Maple Leafs"),
+    (
+        "Tampa Bay Lightning",
+        "nhl__tbl",
+        1992,
+        0,
+        "Tampa Bay Lightning",
+    ),
+    (
+        "Toronto Maple Leafs",
+        "nhl__tor",
+        1917,
+        0,
+        "Toronto Maple Leafs",
+    ),
     ("Utah Mammoth", "nhl__uta", 2024, 0, "Utah Mammoth"),
-    ("Vancouver Canucks", "nhl__van", 1970, 0, "Vancouver Canucks"),
-    ("Vegas Golden Knights", "nhl__vgk", 2017, 0, "Vegas Golden Knights"),
-    ("Washington Capitals", "nhl__was", 1974, 0, "Washington Capitals"),
+    (
+        "Vancouver Canucks",
+        "nhl__van",
+        1970,
+        0,
+        "Vancouver Canucks",
+    ),
+    (
+        "Vegas Golden Knights",
+        "nhl__vgk",
+        2017,
+        0,
+        "Vegas Golden Knights",
+    ),
+    (
+        "Washington Capitals",
+        "nhl__was",
+        1974,
+        0,
+        "Washington Capitals",
+    ),
 ];
 
 fn main() -> Res<()> {
@@ -192,10 +612,7 @@ fn main() -> Res<()> {
     // per-season `draft_info.csv` instead — every league draft, joined to our persons by name+DOB slug.
     let fhm_root = args.next();
 
-    let src = Connection::open_with_flags(
-        &src_path,
-        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
-    )?;
+    let src = Connection::open_with_flags(&src_path, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY)?;
     if std::path::Path::new(&out_path).exists() {
         std::fs::remove_file(&out_path).map_err(|e| {
             format!("cannot overwrite {out_path}: {e} — close the app if it has this corpus open")
@@ -211,7 +628,7 @@ fn main() -> Res<()> {
         .prepare("SELECT end_year, season_id FROM seasons")?
         .query_map([], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?)))?
         .collect::<Result<_, _>>()?;
-    seasons.sort_by(|a, b| b.0.cmp(&a.0));
+    seasons.sort_by_key(|s| std::cmp::Reverse(s.0));
     if seasons.is_empty() {
         return Err("prior DB has no seasons".into());
     }
@@ -273,7 +690,9 @@ fn main() -> Res<()> {
         })?;
         for row in rows {
             let (slug, first, last, dob, retired, nat) = row?;
-            let dob = dob.filter(|d| !d.is_empty()).unwrap_or_else(|| "?".to_string());
+            let dob = dob
+                .filter(|d| !d.is_empty())
+                .unwrap_or_else(|| "?".to_string());
             let birth_year = dob.split('-').next().and_then(|y| y.parse().ok());
             let pid = persons.len() as i64;
             // Source-data mojibake fix-up (see tdb_fhm::fixups) — only applies to the handful of
@@ -329,7 +748,13 @@ fn main() -> Res<()> {
         for (tkey, (name, nick, abbr, lkey)) in &teams {
             let (lname, labbr) = leagues.get(lkey).cloned().unwrap_or_default();
             ins.execute(params![
-                tkey, opt(name), opt(nick), opt(abbr), opt(lkey), opt(&labbr), opt(&lname)
+                tkey,
+                opt(name),
+                opt(nick),
+                opt(abbr),
+                opt(lkey),
+                opt(&labbr),
+                opt(&lname)
             ])?;
         }
     }
@@ -365,7 +790,9 @@ fn main() -> Res<()> {
             let mut ins = tx.prepare(
                 "INSERT OR IGNORE INTO league_season(season_year, src_league_id, name, abbr) VALUES(?1,?2,?3,?4)",
             )?;
-            let mut stmt = src.prepare("SELECT fhm_league_id, league_key FROM season_leagues WHERE season_id=?1")?;
+            let mut stmt = src.prepare(
+                "SELECT fhm_league_id, league_key FROM season_leagues WHERE season_id=?1",
+            )?;
             let rows = stmt.query_map(params![sid], |r| {
                 Ok((r.get::<_, i64>(0)?, r.get::<_, Option<String>>(1)?))
             })?;
@@ -406,7 +833,18 @@ fn main() -> Res<()> {
                 let (name, nick, abbr, lkey) = teams.get(&tkey).cloned().unwrap_or_default();
                 let lid = league_key_to_id.get(&lkey).copied().unwrap_or(-1);
                 ins.execute(params![
-                    year, tid, opt(&tkey), lid, opt(&name), opt(&nick), opt(&abbr), pc, sc, tc, conf, div
+                    year,
+                    tid,
+                    opt(&tkey),
+                    lid,
+                    opt(&name),
+                    opt(&nick),
+                    opt(&abbr),
+                    pc,
+                    sc,
+                    tc,
+                    conf,
+                    div
                 ])?;
                 let disp = if abbr.is_empty() { name.clone() } else { abbr };
                 team_ref.insert((year, tid), (name, disp, lid));
@@ -419,7 +857,11 @@ fn main() -> Res<()> {
             )?;
             let mut stmt = src.prepare("SELECT fhm_league_id, fhm_conference_id, name FROM season_conferences WHERE season_id=?1")?;
             let rows = stmt.query_map(params![sid], |r| {
-                Ok((r.get::<_, i64>(0)?, r.get::<_, i64>(1)?, r.get::<_, Option<String>>(2)?))
+                Ok((
+                    r.get::<_, i64>(0)?,
+                    r.get::<_, i64>(1)?,
+                    r.get::<_, Option<String>>(2)?,
+                ))
             })?;
             for row in rows {
                 let (lid, cid, name) = row?;
@@ -432,7 +874,12 @@ fn main() -> Res<()> {
             )?;
             let mut stmt = src.prepare("SELECT fhm_league_id, fhm_conference_id, fhm_division_id, name FROM season_divisions WHERE season_id=?1")?;
             let rows = stmt.query_map(params![sid], |r| {
-                Ok((r.get::<_, i64>(0)?, r.get::<_, i64>(1)?, r.get::<_, i64>(2)?, r.get::<_, Option<String>>(3)?))
+                Ok((
+                    r.get::<_, i64>(0)?,
+                    r.get::<_, i64>(1)?,
+                    r.get::<_, i64>(2)?,
+                    r.get::<_, Option<String>>(3)?,
+                ))
             })?;
             for row in rows {
                 let (lid, cid, did, name) = row?;
@@ -449,7 +896,9 @@ fn main() -> Res<()> {
             let mut stmt = src.prepare(
                 "SELECT fhm_player_id, COUNT(*) FROM season_player_contract_years WHERE season_id=?1 GROUP BY fhm_player_id",
             )?;
-            let rows = stmt.query_map(params![sid], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, i64>(1)?)))?;
+            let rows = stmt.query_map(params![sid], |r| {
+                Ok((r.get::<_, i64>(0)?, r.get::<_, i64>(1)?))
+            })?;
             for row in rows {
                 let (pid, n) = row?;
                 term.insert(pid, n);
@@ -478,7 +927,9 @@ fn main() -> Res<()> {
                 let src_id: i64 = r.get(0)?;
                 let slug: Option<String> = r.get(1)?;
                 let Some(slug) = slug else { continue };
-                let Some(&pid) = slug_to_id.get(&slug) else { continue };
+                let Some(&pid) = slug_to_id.get(&slug) else {
+                    continue;
+                };
                 season_pid.insert(src_id, pid);
                 let rat = ratings.get(&src_id);
 
@@ -530,21 +981,55 @@ fn main() -> Res<()> {
                 ])?;
                 if let Some(rat) = rat {
                     ins_rs.execute(params![
-                        pid, year, rat.g, rat.ld, rat.rd, rat.lw, rat.c, rat.rw,
-                        rat.ability, rat.potential, rat.attrs_json
+                        pid,
+                        year,
+                        rat.g,
+                        rat.ld,
+                        rat.rd,
+                        rat.lw,
+                        rat.c,
+                        rat.rw,
+                        rat.ability,
+                        rat.potential,
+                        rat.attrs_json
                     ])?;
                 }
             }
         }
 
-        ingest_careers(&tx, year, sid, &src, &season_pid, &team_ref, &league_ref, &mut career_done)?;
+        ingest_careers(
+            &tx,
+            year,
+            sid,
+            &src,
+            &season_pid,
+            &team_ref,
+            &league_ref,
+            &mut career_done,
+        )?;
         // Drafts: from the prior DB only when no FHM CSV root was given (its picks are collapsed to one
         // per player). With the CSV root, drafts + draft names come from `ingest_drafts_from_csv` below.
         if fhm_root.is_none() {
-            ingest_draft(&tx, year, sid, &src, &season_pid, &team_ref, &mut draft_done)?;
+            ingest_draft(
+                &tx,
+                year,
+                sid,
+                &src,
+                &season_pid,
+                &team_ref,
+                &mut draft_done,
+            )?;
             ingest_season_drafts(&tx, year, sid, &src)?;
         }
-        ingest_contract(&tx, sid, &src, &season_pid, &team_ref, &term, &mut contract_done)?;
+        ingest_contract(
+            &tx,
+            sid,
+            &src,
+            &season_pid,
+            &team_ref,
+            &term,
+            &mut contract_done,
+        )?;
         ingest_awards(&tx, sid, &src, &season_pid, &league_ref, &mut award_done)?;
         // Full-parity per-season entities (no per-person dedup — every season is kept).
         ingest_season_contracts(&tx, year, sid, &src, &season_pid)?;
@@ -567,8 +1052,11 @@ fn main() -> Res<()> {
 
     // goalie-career fallback for ratings-less people
     {
-        let mut stmt = tx.prepare("SELECT DISTINCT person_id FROM career_stat WHERE kind='goalie'")?;
-        let goalies: HashSet<i64> = stmt.query_map([], |r| r.get(0))?.collect::<Result<_, _>>()?;
+        let mut stmt =
+            tx.prepare("SELECT DISTINCT person_id FROM career_stat WHERE kind='goalie'")?;
+        let goalies: HashSet<i64> = stmt
+            .query_map([], |r| r.get(0))?
+            .collect::<Result<_, _>>()?;
         for (pid, p) in persons.iter_mut().enumerate() {
             if p.position.is_empty() && goalies.contains(&(pid as i64)) {
                 p.position = "G".to_string();
@@ -604,8 +1092,16 @@ fn main() -> Res<()> {
                 opt(&p.birthcity),
                 opt(&p.birthstate),
                 p.retired as i64,
-                if p.first_year == i64::MAX { None } else { Some(p.first_year) },
-                if p.last_year == 0 { None } else { Some(p.last_year) },
+                if p.first_year == i64::MAX {
+                    None
+                } else {
+                    Some(p.first_year)
+                },
+                if p.last_year == 0 {
+                    None
+                } else {
+                    Some(p.last_year)
+                },
                 p.season_count,
                 p.is_goalie as i64,
                 opt(&p.position),
@@ -620,7 +1116,11 @@ fn main() -> Res<()> {
     write_meta(&tx, "schema_version", &SCHEMA_VERSION.to_string())?;
     write_meta(&tx, "source", &format!("converted from {src_path}"))?;
     write_meta(&tx, "season_count", &seasons.len().to_string())?;
-    write_meta(&tx, "person_count", &persons.iter().filter(|p| p.bio_done).count().to_string())?;
+    write_meta(
+        &tx,
+        "person_count",
+        &persons.iter().filter(|p| p.bio_done).count().to_string(),
+    )?;
     write_meta(&tx, "season_min", &seasons.last().unwrap().0.to_string())?;
     write_meta(&tx, "season_max", &seasons.first().unwrap().0.to_string())?;
 
@@ -669,7 +1169,9 @@ fn load_season_ratings(
             let pid: i64 = r.get(0)?;
             let col: i64 = r.get(1)?;
             let val: Option<String> = r.get(2)?;
-            let Some(name) = rating_cols.get(&col) else { continue };
+            let Some(name) = rating_cols.get(&col) else {
+                continue;
+            };
             attrs
                 .entry(pid)
                 .or_default()
@@ -686,22 +1188,43 @@ fn load_season_ratings(
         let ability = map.get("Ability").and_then(|v| v.as_f64());
         let potential = map.get("Potential").and_then(|v| v.as_f64());
         // inject position grades so attrs_json matches the CSV corpus
-        for (k, v) in [("G", g), ("LD", ld), ("RD", rd), ("LW", lw), ("C", c), ("RW", rw)] {
+        for (k, v) in [
+            ("G", g),
+            ("LD", ld),
+            ("RD", rd),
+            ("LW", lw),
+            ("C", c),
+            ("RW", rw),
+        ] {
             map.insert(k.to_string(), serde_json::Value::from(v));
         }
         // primary position: highest grade wins (FHM rates natural position 20); ties G>C>LW>RW>D
-        let cand = [("G", g), ("C", c), ("LW", lw), ("RW", rw), ("D", ld.max(rd))];
+        let cand = [
+            ("G", g),
+            ("C", c),
+            ("LW", lw),
+            ("RW", rw),
+            ("D", ld.max(rd)),
+        ];
         let maxv = cand.iter().map(|(_, v)| *v).max().unwrap_or(0);
         let position = if maxv <= 0 {
             String::new()
         } else {
-            cand.iter().find(|(_, v)| *v == maxv).map(|(l, _)| l.to_string()).unwrap_or_default()
+            cand.iter()
+                .find(|(_, v)| *v == maxv)
+                .map(|(l, _)| l.to_string())
+                .unwrap_or_default()
         };
         let is_goalie = position == "G";
         out.insert(
             pid,
             Ratings {
-                g, ld, rd, lw, c, rw,
+                g,
+                ld,
+                rd,
+                lw,
+                c,
+                rw,
                 ability,
                 potential,
                 attrs_json: serde_json::to_string(&map).unwrap_or_else(|_| "{}".into()),
@@ -795,11 +1318,24 @@ fn ingest_careers(
             team_abbr, league_abbr, gp, stats_json) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)",
     )?;
     for row in pending {
-        let team_abbr = row.team_id.and_then(|t| team_ref.get(&(year, t)).map(|x| x.1.clone()));
-        let league_abbr = row.league_id.and_then(|l| league_ref.get(&(year, l)).cloned());
+        let team_abbr = row
+            .team_id
+            .and_then(|t| team_ref.get(&(year, t)).map(|x| x.1.clone()));
+        let league_abbr = row
+            .league_id
+            .and_then(|l| league_ref.get(&(year, l)).cloned());
         ins.execute(params![
-            row.pid, row.kind, row.phase, row.year, year, row.team_id, row.league_id,
-            team_abbr, league_abbr, row.gp, row.stats_json
+            row.pid,
+            row.kind,
+            row.phase,
+            row.year,
+            year,
+            row.team_id,
+            row.league_id,
+            team_abbr,
+            league_abbr,
+            row.gp,
+            row.stats_json
         ])?;
     }
     career_done.extend(fresh);
@@ -837,9 +1373,16 @@ fn ingest_draft(
         let team_id: Option<i64> = r.get(5)?;
         let team_abbr = team_id.and_then(|t| team_ref.get(&(year, t)).map(|x| x.1.clone()));
         ins.execute(params![
-            pid, r.get::<_, Option<i64>>(1)?, r.get::<_, Option<i64>>(2)?, sentinel_pick(r.get(3)?),
-            r.get::<_, Option<i64>>(4)?, year, team_id, team_abbr,
-            r.get::<_, Option<i64>>(6)?, r.get::<_, Option<i64>>(7)?
+            pid,
+            r.get::<_, Option<i64>>(1)?,
+            r.get::<_, Option<i64>>(2)?,
+            sentinel_pick(r.get(3)?),
+            r.get::<_, Option<i64>>(4)?,
+            year,
+            team_id,
+            team_abbr,
+            r.get::<_, Option<i64>>(6)?,
+            r.get::<_, Option<i64>>(7)?
         ])?;
         seen.insert(pid);
     }
@@ -866,13 +1409,14 @@ fn ingest_drafts_from_csv(
     draft_done: &mut HashSet<i64>,
 ) -> Res<()> {
     let mut seasons = discover_seasons(Path::new(fhm_root))?;
-    seasons.sort_by(|a, b| b.0.cmp(&a.0)); // newest first
+    seasons.sort_by_key(|s| std::cmp::Reverse(s.0)); // newest first
     let mut ins = tx.prepare(
         "INSERT OR IGNORE INTO draft_info(person_id, year, round, pick, overall, src_season, team_id,
             team_abbr, draft_id, picked_from) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)",
     )?;
-    let mut ins_sd =
-        tx.prepare("INSERT OR IGNORE INTO season_draft(season_year, draft_id, name) VALUES(?1,?2,?3)")?;
+    let mut ins_sd = tx.prepare(
+        "INSERT OR IGNORE INTO season_draft(season_year, draft_id, name) VALUES(?1,?2,?3)",
+    )?;
     let mut total = 0i64;
     for (year, dir) in &seasons {
         // Draft-league names for this season (draft_index.csv can carry a duplicated header row — a
@@ -885,20 +1429,30 @@ fn ingest_drafts_from_csv(
             }
         }
         // PlayerId -> our person slug for this season.
-        let Some((mh, mrows)) = read_table(&dir.join("player_master.csv"))? else { continue };
+        let Some((mh, mrows)) = read_table(&dir.join("player_master.csv"))? else {
+            continue;
+        };
         let mut pid_slug: HashMap<i64, String> = HashMap::new();
         for r in &mrows {
             pid_slug.insert(
                 i0(g(&mh, r, "PlayerId")),
-                person_slug(g(&mh, r, "Last Name"), g(&mh, r, "First Name"), g(&mh, r, "Date Of Birth")),
+                person_slug(
+                    g(&mh, r, "Last Name"),
+                    g(&mh, r, "First Name"),
+                    g(&mh, r, "Date Of Birth"),
+                ),
             );
         }
-        let Some((dh, drows)) = read_table(&dir.join("draft_info.csv"))? else { continue };
+        let Some((dh, drows)) = read_table(&dir.join("draft_info.csv"))? else {
+            continue;
+        };
         // Insert every draft row for persons not already sourced from a newer season; finalize after so
         // all of this season's rows for a person are kept before older seasons are skipped.
         let mut seen: HashSet<i64> = HashSet::new();
         for r in &drows {
-            let Some(slug) = pid_slug.get(&i0(g(&dh, r, "PlayerId"))) else { continue };
+            let Some(slug) = pid_slug.get(&i0(g(&dh, r, "PlayerId"))) else {
+                continue;
+            };
             let pid = match our_slug_to_id.get(slug) {
                 Some(&p) if !draft_done.contains(&p) => p,
                 _ => continue,
@@ -922,7 +1476,10 @@ fn ingest_drafts_from_csv(
         }
         draft_done.extend(seen);
     }
-    eprintln!("  drafts (FHM CSV): {total} rows across {} persons", draft_done.len());
+    eprintln!(
+        "  drafts (FHM CSV): {total} rows across {} persons",
+        draft_done.len()
+    );
     Ok(())
 }
 
@@ -945,12 +1502,18 @@ fn discover_seasons(root: &Path) -> Res<Vec<(i64, PathBuf)>> {
     Ok(out)
 }
 
+/// A parsed semicolon CSV: the header's column-name -> index map, plus its data rows.
+type CsvTable = (HashMap<String, usize>, Vec<StringRecord>);
+
 /// Open a semicolon CSV; `None` if missing or header-only.
-fn read_table(path: &Path) -> Res<Option<(HashMap<String, usize>, Vec<StringRecord>)>> {
+fn read_table(path: &Path) -> Res<Option<CsvTable>> {
     if !path.exists() {
         return Ok(None);
     }
-    let mut rdr = csv::ReaderBuilder::new().delimiter(b';').flexible(true).from_path(path)?;
+    let mut rdr = csv::ReaderBuilder::new()
+        .delimiter(b';')
+        .flexible(true)
+        .from_path(path)?;
     let headers: HashMap<String, usize> = rdr
         .headers()?
         .iter()
@@ -1007,11 +1570,19 @@ fn ingest_season_contracts(
         )?;
         let mut rows = stmt.query(params![sid])?;
         while let Some(r) = rows.next()? {
-            let Some(&pid) = season_pid.get(&r.get::<_, i64>(0)?) else { continue };
+            let Some(&pid) = season_pid.get(&r.get::<_, i64>(0)?) else {
+                continue;
+            };
             ins.execute(params![
-                pid, year, r.get::<_, Option<i64>>(1)?, r.get::<_, Option<i64>>(2)?,
-                r.get::<_, Option<i64>>(3)?, r.get::<_, Option<i64>>(4)?, r.get::<_, Option<i64>>(5)?,
-                r.get::<_, Option<String>>(6)?.filter(|s| s != "-" && !s.is_empty()),
+                pid,
+                year,
+                r.get::<_, Option<i64>>(1)?,
+                r.get::<_, Option<i64>>(2)?,
+                r.get::<_, Option<i64>>(3)?,
+                r.get::<_, Option<i64>>(4)?,
+                r.get::<_, Option<i64>>(5)?,
+                r.get::<_, Option<String>>(6)?
+                    .filter(|s| s != "-" && !s.is_empty()),
                 r.get::<_, Option<i64>>(7)?
             ])?;
         }
@@ -1026,9 +1597,15 @@ fn ingest_season_contracts(
         )?;
         let mut rows = stmt.query(params![sid])?;
         while let Some(r) = rows.next()? {
-            let Some(&pid) = season_pid.get(&r.get::<_, i64>(0)?) else { continue };
+            let Some(&pid) = season_pid.get(&r.get::<_, i64>(0)?) else {
+                continue;
+            };
             ins.execute(params![
-                pid, year, r.get::<_, i64>(1)?, r.get::<_, Option<i64>>(2)?, r.get::<_, Option<i64>>(3)?
+                pid,
+                year,
+                r.get::<_, i64>(1)?,
+                r.get::<_, Option<i64>>(2)?,
+                r.get::<_, Option<i64>>(3)?
             ])?;
         }
     }
@@ -1051,8 +1628,15 @@ fn ingest_player_rights(
     )?;
     let mut rows = stmt.query(params![sid])?;
     while let Some(r) = rows.next()? {
-        let Some(&pid) = season_pid.get(&r.get::<_, i64>(0)?) else { continue };
-        ins.execute(params![pid, year, r.get::<_, Option<i64>>(1)?, r.get::<_, Option<i64>>(2)?])?;
+        let Some(&pid) = season_pid.get(&r.get::<_, i64>(0)?) else {
+            continue;
+        };
+        ins.execute(params![
+            pid,
+            year,
+            r.get::<_, Option<i64>>(1)?,
+            r.get::<_, Option<i64>>(2)?
+        ])?;
     }
     Ok(())
 }
@@ -1062,8 +1646,9 @@ fn ingest_team_parents(tx: &Connection, year: i64, sid: &str, src: &Connection) 
     let mut ins = tx.prepare(
         "INSERT OR IGNORE INTO team_parent(season_year, src_team_id, parent_team_id) VALUES(?1,?2,?3)",
     )?;
-    let mut stmt =
-        src.prepare("SELECT fhm_team_id, parent_team_id FROM season_team_parents WHERE season_id=?1")?;
+    let mut stmt = src.prepare(
+        "SELECT fhm_team_id, parent_team_id FROM season_team_parents WHERE season_id=?1",
+    )?;
     let mut rows = stmt.query(params![sid])?;
     while let Some(r) = rows.next()? {
         ins.execute(params![year, r.get::<_, i64>(0)?, r.get::<_, i64>(1)?])?;
@@ -1073,12 +1658,17 @@ fn ingest_team_parents(tx: &Connection, year: i64, sid: &str, src: &Connection) 
 
 /// Draft names for the season export.
 fn ingest_season_drafts(tx: &Connection, year: i64, sid: &str, src: &Connection) -> Res<()> {
-    let mut ins =
-        tx.prepare("INSERT OR IGNORE INTO season_draft(season_year, draft_id, name) VALUES(?1,?2,?3)")?;
+    let mut ins = tx.prepare(
+        "INSERT OR IGNORE INTO season_draft(season_year, draft_id, name) VALUES(?1,?2,?3)",
+    )?;
     let mut stmt = src.prepare("SELECT draft_id, name FROM season_drafts WHERE season_id=?1")?;
     let mut rows = stmt.query(params![sid])?;
     while let Some(r) = rows.next()? {
-        ins.execute(params![year, r.get::<_, i64>(0)?, r.get::<_, Option<String>>(1)?])?;
+        ins.execute(params![
+            year,
+            r.get::<_, i64>(0)?,
+            r.get::<_, Option<String>>(1)?
+        ])?;
     }
     Ok(())
 }
@@ -1097,10 +1687,18 @@ fn ingest_schedule(tx: &Connection, year: i64, sid: &str, src: &Connection) -> R
     let mut rows = stmt.query(params![sid])?;
     while let Some(r) = rows.next()? {
         ins.execute(params![
-            year, r.get::<_, Option<i64>>(0)?, r.get::<_, Option<String>>(1)?,
-            r.get::<_, Option<i64>>(2)?, r.get::<_, Option<i64>>(3)?, r.get::<_, Option<i64>>(4)?,
-            r.get::<_, Option<i64>>(5)?, r.get::<_, Option<String>>(6)?, r.get::<_, Option<i64>>(7)?,
-            r.get::<_, Option<i64>>(8)?, r.get::<_, Option<i64>>(9)?, r.get::<_, Option<i64>>(10)?
+            year,
+            r.get::<_, Option<i64>>(0)?,
+            r.get::<_, Option<String>>(1)?,
+            r.get::<_, Option<i64>>(2)?,
+            r.get::<_, Option<i64>>(3)?,
+            r.get::<_, Option<i64>>(4)?,
+            r.get::<_, Option<i64>>(5)?,
+            r.get::<_, Option<String>>(6)?,
+            r.get::<_, Option<i64>>(7)?,
+            r.get::<_, Option<i64>>(8)?,
+            r.get::<_, Option<i64>>(9)?,
+            r.get::<_, Option<i64>>(10)?
         ])?;
     }
     Ok(())
@@ -1122,9 +1720,16 @@ fn ingest_jersey_numbers(
     let mut rows = stmt.query([])?;
     while let Some(r) = rows.next()? {
         let slug: String = r.get(0)?;
-        let Some(&pid) = slug_to_id.get(&slug) else { continue };
+        let Some(&pid) = slug_to_id.get(&slug) else {
+            continue;
+        };
         let sy = end_year(&r.get::<_, String>(2)?);
-        ins.execute(params![pid, r.get::<_, Option<String>>(1)?, sy, r.get::<_, i64>(3)?])?;
+        ins.execute(params![
+            pid,
+            r.get::<_, Option<String>>(1)?,
+            sy,
+            r.get::<_, i64>(3)?
+        ])?;
     }
     Ok(())
 }
@@ -1145,16 +1750,27 @@ fn ingest_captaincy(
     let mut rows = stmt.query([])?;
     while let Some(r) = rows.next()? {
         let slug: String = r.get(0)?;
-        let Some(&pid) = slug_to_id.get(&slug) else { continue };
+        let Some(&pid) = slug_to_id.get(&slug) else {
+            continue;
+        };
         let sy = r.get::<_, Option<String>>(2)?.map(|s| end_year(&s));
-        ins.execute(params![pid, r.get::<_, Option<String>>(1)?, sy, r.get::<_, String>(3)?])?;
+        ins.execute(params![
+            pid,
+            r.get::<_, Option<String>>(1)?,
+            sy,
+            r.get::<_, String>(3)?
+        ])?;
     }
     Ok(())
 }
 
 /// End year of a `"YYYY-YYYY"` season id (0 when unparseable).
 fn end_year(season_id: &str) -> i64 {
-    season_id.split('-').nth(1).and_then(|s| s.parse().ok()).unwrap_or(0)
+    season_id
+        .split('-')
+        .nth(1)
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(0)
 }
 
 fn ingest_contract(
@@ -1176,7 +1792,11 @@ fn ingest_contract(
                 scholarship, average_salary FROM season_player_contracts WHERE season_id=?1",
     )?;
     // Resolve the season's end_year from the season id string ("YYYY-YYYY").
-    let sy: i64 = sid.split('-').nth(1).and_then(|s| s.parse().ok()).unwrap_or(0);
+    let sy: i64 = sid
+        .split('-')
+        .nth(1)
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(0);
     let mut rows = stmt.query(params![sid])?;
     while let Some(r) = rows.next()? {
         let src_id: i64 = r.get(0)?;
@@ -1193,7 +1813,8 @@ fn ingest_contract(
             r.get::<_, Option<i64>>(3)?.unwrap_or(0),
             r.get::<_, Option<i64>>(4)?.unwrap_or(0),
             r.get::<_, Option<i64>>(5)?.unwrap_or(0),
-            r.get::<_, Option<String>>(6)?.filter(|s| s != "-" && !s.is_empty()),
+            r.get::<_, Option<String>>(6)?
+                .filter(|s| s != "-" && !s.is_empty()),
             r.get::<_, Option<i64>>(7)?,
             term.get(&src_id).copied(),
             sy,
@@ -1203,6 +1824,9 @@ fn ingest_contract(
     Ok(())
 }
 
+/// One award row as grouped per person: (league id, year, name, description).
+type AwardRow = (Option<i64>, i64, Option<String>, Option<String>);
+
 fn ingest_awards(
     tx: &Connection,
     sid: &str,
@@ -1211,9 +1835,13 @@ fn ingest_awards(
     league_ref: &HashMap<(i64, i64), String>,
     award_done: &mut HashSet<i64>,
 ) -> Res<()> {
-    let sy: i64 = sid.split('-').nth(1).and_then(|s| s.parse().ok()).unwrap_or(0);
+    let sy: i64 = sid
+        .split('-')
+        .nth(1)
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(0);
     // group by person; source once per person (newest season)
-    let mut by_pid: HashMap<i64, Vec<(Option<i64>, i64, Option<String>, Option<String>)>> = HashMap::new();
+    let mut by_pid: HashMap<i64, Vec<AwardRow>> = HashMap::new();
     let mut stmt = src.prepare(
         "SELECT fhm_player_id, fhm_league_id, year, award_name, award_description FROM season_league_awards WHERE season_id=?1",
     )?;

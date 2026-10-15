@@ -1,0 +1,16 @@
+[package]
+name = "tdb-loc"
+description = "Reader for the EA NHL localization dictionaries (single-table TDB v6 with a Huffman varchar pool)."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[dependencies]
+tdb-core = { path = "../tdb-core" }
+sha2 = "0.10"
+
+[dev-dependencies]
+serde_json = "1"
+sha2 = "0.10"

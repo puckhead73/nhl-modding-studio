@@ -1,5 +1,7 @@
+import { TeamArtIdSelect } from "./TeamArtIdSelect";
 import type { ReactNode } from "react";
 import { ArenaSelect, EditableField, ReadonlyField, TeamSelect } from "./EditableField";
+import { ColorField } from "./ColorField";
 import type { EntityFieldProfileDto } from "../bindings/EntityFieldProfileDto";
 import type { FieldCellDto } from "../bindings/FieldCellDto";
 import type { TeamViewDto } from "../bindings/TeamViewDto";
@@ -30,12 +32,15 @@ export function ProfileSections({
   profile,
   teams,
   arena,
+  teamId,
   extras,
 }: {
   projectId: number;
   profile: EntityFieldProfileDto;
   teams: TeamOption[];
   arena?: TeamViewDto["arena"];
+  /** The team the profile belongs to — the arena cell's assignment preview is keyed by it. */
+  teamId?: number;
   extras?: Record<string, ReactNode>;
 }) {
   return (
@@ -43,13 +48,22 @@ export function ProfileSections({
       {profile.sections.map((s) => (
         <Section key={s.title} title={s.title}>
           {s.cells.map((c) => (
-            <ProfileCellView key={c.label} projectId={projectId} cell={c} teams={teams} arena={arena} />
+            <ProfileCellView key={cellKey(projectId, c)} projectId={projectId} cell={c} teams={teams} arena={arena} teamId={teamId} />
           ))}
           {extras?.[s.title]}
         </Section>
       ))}
     </div>
   );
+}
+
+/// R1 F2 (20 Sep 2026): a cell's React identity is its edit target — project, record and the
+/// field(s) it writes — not its label, so a control never keeps a draft or an in-flight edit across
+/// a change of team, project or field set that happens to render under the same label.
+export function cellKey(projectId: number, c: FieldCellDto): string {
+  const fields = c.control === "color" ? c.color_fields : c.field ? [c.field] : [];
+  const table = fields[0]?.studio_table ?? "";
+  return `${c.label}|${projectId}/${table}/${c.record}/${fields.map((f) => f.studio_field).join("+")}`;
 }
 
 /// One profile cell: dispatch on the control hint, then flag it when the loaded title's value
@@ -59,12 +73,17 @@ function ProfileCellView({
   cell,
   teams,
   arena,
+  teamId,
 }: {
   projectId: number;
   cell: FieldCellDto;
   teams: TeamOption[];
   arena?: TeamViewDto["arena"];
+  teamId?: number;
 }) {
+  if (teamId != null && cell.field?.name === "artid") {
+    return <TeamArtIdSelect key={`${projectId}/${teamId}`} projectId={projectId} teamId={teamId} />;
+  }
   let control: ReactNode;
   switch (cell.control) {
     case "team":
@@ -81,12 +100,20 @@ function ProfileCellView({
       );
       break;
     case "arena":
-      control = cell.field ? (
-        <ArenaSelect projectId={projectId} record={cell.record} field={cell.field} arena={arena ?? null} />
-      ) : null;
+      control =
+        cell.field && teamId != null ? (
+          <ArenaSelect projectId={projectId} teamId={teamId} record={cell.record} field={cell.field} arena={arena ?? null} />
+        ) : cell.field ? (
+          <ReadonlyField label={cell.label}>{arena ? `${arena.name}${arena.city ? ` — ${arena.city}` : ""}` : String(cell.field.display)}</ReadonlyField>
+        ) : null;
       break;
     case "derived":
       control = <ReadonlyField label={cell.label}>{cell.derived_display ?? ""}</ReadonlyField>;
+      break;
+    case "color":
+      control = (
+        <ColorField projectId={projectId} record={cell.record} components={cell.color_fields} label={cell.label} />
+      );
       break;
     default: // "field"
       control = cell.field ? (

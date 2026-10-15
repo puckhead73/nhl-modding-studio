@@ -1,0 +1,36 @@
+$ python research/nhl07-roster-schema/scripts/save_directory_order.py
+save directory order -> parent (meta document position), role
+  DZfz  -> dDrd  #2   exhibitiondownloadgoalieai   update
+  YvhR  -> Raym  #8   exhibitiondownloadskaterai   update
+  znPC  -> oYeE  #13  exhibitionteamstrategies     insert
+  JhBt  -> oYeE  #13  exhibitionteamstrategies     delete
+  mASv  -> oYeE  #13  exhibitionteamstrategies     update
+  eUOR  -> MqdK  #17  customplayerbiotable         insert
+  oCMe  -> MqdK  #17  customplayerbiotable         delete
+  HHLk  -> MqdK  #17  customplayerbiotable         update
+  MVOx  -> EhOn  #24  exhibitiondownloadplayerbio  update
+  KboR  -> YzeG  #29  customgoalieai               insert
+  Exae  -> YzeG  #29  customgoalieai               delete
+  rcpY  -> YzeG  #29  customgoalieai               update
+  sAMA  -> QEoV  #38  exhibitionfreeagents         insert
+  mGOv  -> QEoV  #38  exhibitionfreeagents         delete
+  fyFF  -> ttOk  #45  exhibitionteams              insert
+  dULq  -> ttOk  #45  exhibitionteams              delete
+  LZbD  -> caBZ  #55  exhibitionplayers            insert
+  Frps  -> caBZ  #55  exhibitionplayers            delete
+  ibGM  -> ulGe  #56  exhibitionrostertable        insert
+  AtUj  -> ulGe  #56  exhibitionrostertable        delete
+  vozd  -> ulGe  #56  exhibitionrostertable        update
+  CvSu  -> cPbu  #59  exhibitionplayerbiotable     update
+  tMYP  -> bZvB  #61  rosterversiontable           insert
+  nGCg  -> bZvB  #61  rosterversiontable           delete
+  Iblm  -> bZvB  #61  rosterversiontable           update
+  CTnc  -> OEtS  #64  exhibitionarena              insert
+  RosT  -> yvSd  #68  exhibitionskaterai           update
+  uyGF  -> yuHm  #73  exhibitiongoalieai           update
+  KERl  -> oDHy  #80  customplayerai               insert
+  wKzK  -> oDHy  #80  customplayerai               delete
+  zrsU  -> oDHy  #80  customplayerai               update
+parents appear in meta document order: True
+game DB directory order == meta document order: False
+

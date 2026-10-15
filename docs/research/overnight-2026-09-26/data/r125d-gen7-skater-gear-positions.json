@@ -1,0 +1,2911 @@
+{
+ "note": "R125d - gen7 skater gear: database value -> file position (package 4, after goalie gear). Same method as R125 (file-name containment per\nnumeric position; >= 90 % candidates kept, several = ambiguous) for `exhibitionskaterequipment` columns gloves, helmetbrand, skatebrand, stick,\nvisortype over `rendering/{glove, helmet, skate, stick, playerstick, visor}` (+ fe twins). Extends 2026-09-21 handoff 12 (NHL 11 / 13 / 15 /\nLegacy) to NHL 08 (archive member names), 09, 10, 12 and 14; the four earlier titles are re-run as controls. Naming evidence only.\nUsage: python r125d_gen7_skater_gear_positions.py <r53.json> <out.json>\n",
+ "titles": {
+  "nhl08": {
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "families": {
+    "feglove:texlib": 9,
+    "glove:glove": 6,
+    "glove:texlib": 9,
+    "helmet:chinstrap": 18,
+    "helmet:helmet": 42,
+    "skate:skate": 12,
+    "skate:skatelace": 6,
+    "skate:skatetongue": 18,
+    "skate:texlib": 10,
+    "stick:stick": 4,
+    "stick:sticktape": 4,
+    "stick:texlib": 15,
+    "visor:visor": 171
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "31",
+      5
+     ],
+     "distinct": 9,
+     "max": 11,
+     "best_own_family_positions": [
+      {
+       "family": "feglove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 9,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 9,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 5,
+       "found": 3,
+       "db_values": 9,
+       "position_values": 3,
+       "missing": [
+        1,
+        4,
+        5,
+        6,
+        10,
+        11
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 3,
+       "found": 2,
+       "db_values": 9,
+       "position_values": 2,
+       "missing": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "15",
+      4
+     ],
+     "distinct": 6,
+     "max": 5,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 3,
+       "found": 6,
+       "db_values": 6,
+       "position_values": 6,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 6,
+       "db_values": 6,
+       "position_values": 6,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 6,
+       "db_values": 6,
+       "position_values": 6,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 4,
+       "found": 4,
+       "db_values": 6,
+       "position_values": 4,
+       "missing": [
+        4,
+        5
+       ]
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "15",
+      4
+     ],
+     "distinct": 9,
+     "max": 10,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 10,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "skate",
+       "position": 4,
+       "found": 3,
+       "db_values": 9,
+       "position_values": 3,
+       "missing": [
+        1,
+        4,
+        6,
+        7,
+        9,
+        10
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 4,
+       "found": 3,
+       "db_values": 9,
+       "position_values": 3,
+       "missing": [
+        1,
+        4,
+        6,
+        7,
+        9,
+        10
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatetongue",
+       "position": 4,
+       "found": 3,
+       "db_values": 9,
+       "position_values": 3,
+       "missing": [
+        1,
+        4,
+        6,
+        7,
+        9,
+        10
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "190",
+      8
+     ],
+     "distinct": 12,
+     "max": 17,
+     "best_own_family_positions": [
+      {
+       "family": "stick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 12,
+       "db_values": 12,
+       "position_values": 15,
+       "missing": []
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 2,
+       "found": 1,
+       "db_values": 12,
+       "position_values": 1,
+       "missing": [
+        2,
+        4,
+        5,
+        7,
+        9,
+        10,
+        12,
+        13
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 4,
+       "found": 1,
+       "db_values": 12,
+       "position_values": 1,
+       "missing": [
+        2,
+        4,
+        5,
+        7,
+        9,
+        10,
+        12,
+        13
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 5,
+       "found": 1,
+       "db_values": 12,
+       "position_values": 1,
+       "missing": [
+        2,
+        4,
+        5,
+        7,
+        9,
+        10,
+        12,
+        13
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "15",
+      4
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 4,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 4,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 6,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 6,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 6,
+       "missing": []
+      }
+     ]
+    }
+   },
+   "archives": [
+    {
+     "archive": "data0.big",
+     "entries": 14162
+    },
+    {
+     "archive": "data1.big",
+     "entries": 4444
+    },
+    {
+     "archive": "boot.big",
+     "entries": 137
+    }
+   ]
+  },
+  "nhl09": {
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "families": {
+    "feglove:texlib": 11,
+    "glove:glove": 6,
+    "glove:texlib": 12,
+    "helmet:helmet": 45,
+    "skate:skate": 16,
+    "skate:skatelace": 6,
+    "skate:skatetongue": 18,
+    "skate:texlib": 16,
+    "stick:stick": 8,
+    "stick:sticktape": 8,
+    "stick:texlib": 25,
+    "visor:visor": 234
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "31",
+      5
+     ],
+     "distinct": 12,
+     "max": 19,
+     "best_own_family_positions": [
+      {
+       "family": "feglove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 11,
+       "db_values": 12,
+       "position_values": 11,
+       "missing": [
+        0
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 11,
+       "db_values": 12,
+       "position_values": 12,
+       "missing": [
+        0
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 5,
+       "found": 3,
+       "db_values": 12,
+       "position_values": 3,
+       "missing": [
+        1,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 3,
+       "found": 2,
+       "db_values": 12,
+       "position_values": 2,
+       "missing": [
+        2,
+        3,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "15",
+      4
+     ],
+     "distinct": 9,
+     "max": 15,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 8,
+       "db_values": 9,
+       "position_values": 9,
+       "missing": [
+        15
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 4,
+       "found": 3,
+       "db_values": 9,
+       "position_values": 4,
+       "missing": [
+        3,
+        4,
+        6,
+        7,
+        9,
+        15
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 1,
+       "db_values": 9,
+       "position_values": 1,
+       "missing": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        9,
+        15
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 1,
+       "db_values": 9,
+       "position_values": 1,
+       "missing": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        9,
+        15
+       ]
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "15",
+      4
+     ],
+     "distinct": 12,
+     "max": 15,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 12,
+       "db_values": 12,
+       "position_values": 16,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "skate",
+       "position": 4,
+       "found": 4,
+       "db_values": 12,
+       "position_values": 4,
+       "missing": [
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 4,
+       "found": 3,
+       "db_values": 12,
+       "position_values": 3,
+       "missing": [
+        4,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatetongue",
+       "position": 4,
+       "found": 3,
+       "db_values": 12,
+       "position_values": 3,
+       "missing": [
+        4,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "31",
+      5
+     ],
+     "distinct": 20,
+     "max": 26,
+     "best_own_family_positions": [
+      {
+       "family": "stick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 20,
+       "db_values": 20,
+       "position_values": 25,
+       "missing": []
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 1,
+       "found": 2,
+       "db_values": 20,
+       "position_values": 2,
+       "missing": [
+        2,
+        4,
+        7,
+        9,
+        10,
+        12,
+        13,
+        15
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 3,
+       "found": 2,
+       "db_values": 20,
+       "position_values": 2,
+       "missing": [
+        2,
+        4,
+        7,
+        9,
+        10,
+        12,
+        13,
+        15
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 6,
+       "found": 2,
+       "db_values": 20,
+       "position_values": 2,
+       "missing": [
+        0,
+        1,
+        7,
+        9,
+        10,
+        12,
+        13,
+        15
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 4,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 4,
+       "missing": []
+      },
+      {
+       "family": "visor",
+       "prefix": "visor",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 8,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 9,
+       "missing": []
+      },
+      {
+       "family": "visor",
+       "prefix": "visor",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 186,
+       "missing": []
+      }
+     ]
+    }
+   }
+  },
+  "nhl10": {
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "families": {
+    "feglove:texlib": 28,
+    "glove:glove": 6,
+    "glove:texlib": 22,
+    "helmet:chinstrap": 57,
+    "helmet:helmet": 158,
+    "helmet:jawprotector": 48,
+    "skate:skate": 16,
+    "skate:skatelace": 6,
+    "skate:skatetongue": 18,
+    "skate:texlib": 21,
+    "stick:stick": 8,
+    "stick:sticktape": 8,
+    "stick:texlib": 27,
+    "visor:visor": 101
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 11,
+     "max": 27,
+     "best_own_family_positions": [
+      {
+       "family": "glove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 11,
+       "db_values": 11,
+       "position_values": 22,
+       "missing": []
+      },
+      {
+       "family": "feglove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 11,
+       "db_values": 11,
+       "position_values": 28,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 3,
+       "found": 1,
+       "db_values": 11,
+       "position_values": 3,
+       "missing": [
+        11,
+        14,
+        15,
+        18,
+        20,
+        21,
+        23,
+        24
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 2,
+       "found": 0,
+       "db_values": 11,
+       "position_values": 1,
+       "missing": [
+        2,
+        11,
+        14,
+        15,
+        18,
+        20,
+        21,
+        23
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "255",
+      8
+     ],
+     "distinct": 9,
+     "max": 15,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 1,
+       "found": 8,
+       "db_values": 9,
+       "position_values": 19,
+       "missing": [
+        15
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 8,
+       "db_values": 9,
+       "position_values": 20,
+       "missing": [
+        15
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 8,
+       "db_values": 9,
+       "position_values": 21,
+       "missing": [
+        15
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "jawprotector",
+       "position": 1,
+       "found": 6,
+       "db_values": 9,
+       "position_values": 16,
+       "missing": [
+        7,
+        8,
+        15
+       ]
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 8,
+     "max": 22,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 8,
+       "db_values": 8,
+       "position_values": 21,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 4,
+       "found": 1,
+       "db_values": 8,
+       "position_values": 3,
+       "missing": [
+        7,
+        13,
+        14,
+        15,
+        16,
+        17,
+        22
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatetongue",
+       "position": 4,
+       "found": 1,
+       "db_values": 8,
+       "position_values": 3,
+       "missing": [
+        7,
+        13,
+        14,
+        15,
+        16,
+        17,
+        22
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatetongue",
+       "position": 5,
+       "found": 1,
+       "db_values": 8,
+       "position_values": 3,
+       "missing": [
+        7,
+        13,
+        14,
+        15,
+        16,
+        17,
+        22
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 14,
+     "max": 36,
+     "best_own_family_positions": [
+      {
+       "family": "stick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 14,
+       "db_values": 14,
+       "position_values": 27,
+       "missing": []
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 2,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 1,
+       "missing": [
+        18,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 4,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 1,
+       "missing": [
+        18,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 5,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 1,
+       "missing": [
+        18,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 4,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "jawprotector",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 16,
+       "missing": []
+      },
+      {
+       "family": "visor",
+       "prefix": "visor",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 18,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 19,
+       "missing": []
+      }
+     ]
+    }
+   }
+  },
+  "nhl11": {
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "families": {
+    "feglove:texlib": 17,
+    "glove:glove": 6,
+    "glove:texlib": 17,
+    "helmet:chinstrap": 27,
+    "helmet:helmet": 72,
+    "helmet:jawprotector": 18,
+    "skate:skate": 16,
+    "skate:skatelace": 6,
+    "skate:skatetongue": 18,
+    "skate:texlib": 17,
+    "stick:stick": 8,
+    "stick:sticktape": 8,
+    "stick:texlib": 28,
+    "visor:visor": 65
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 14,
+     "max": 40,
+     "best_own_family_positions": [
+      {
+       "family": "feglove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 14,
+       "db_values": 14,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 14,
+       "db_values": 14,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 2,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 1,
+       "missing": [
+        15,
+        18,
+        20,
+        21,
+        23,
+        24,
+        25,
+        27
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 1,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 2,
+       "missing": [
+        15,
+        18,
+        20,
+        21,
+        23,
+        24,
+        25,
+        27
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "255",
+      8
+     ],
+     "distinct": 7,
+     "max": 15,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 1,
+       "found": 7,
+       "db_values": 7,
+       "position_values": 9,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 7,
+       "db_values": 7,
+       "position_values": 10,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 7,
+       "db_values": 7,
+       "position_values": 11,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "jawprotector",
+       "position": 1,
+       "found": 6,
+       "db_values": 7,
+       "position_values": 6,
+       "missing": [
+        8
+       ]
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 8,
+     "max": 29,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 8,
+       "db_values": 8,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "skate",
+       "position": 3,
+       "found": 0,
+       "db_values": 8,
+       "position_values": 1,
+       "missing": [
+        7,
+        15,
+        16,
+        17,
+        24,
+        25,
+        28,
+        29
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 1,
+       "found": 0,
+       "db_values": 8,
+       "position_values": 1,
+       "missing": [
+        7,
+        15,
+        16,
+        17,
+        24,
+        25,
+        28,
+        29
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 3,
+       "found": 0,
+       "db_values": 8,
+       "position_values": 1,
+       "missing": [
+        7,
+        15,
+        16,
+        17,
+        24,
+        25,
+        28,
+        29
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 14,
+     "max": 47,
+     "best_own_family_positions": [
+      {
+       "family": "stick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 14,
+       "db_values": 14,
+       "position_values": 28,
+       "missing": []
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 2,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 1,
+       "missing": [
+        18,
+        24,
+        25,
+        26,
+        30,
+        32,
+        33,
+        34
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 4,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 1,
+       "missing": [
+        18,
+        24,
+        25,
+        26,
+        30,
+        32,
+        33,
+        34
+       ]
+      },
+      {
+       "family": "stick",
+       "prefix": "stick",
+       "position": 5,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 1,
+       "missing": [
+        18,
+        24,
+        25,
+        26,
+        30,
+        32,
+        33,
+        34
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 4,
+       "missing": []
+      },
+      {
+       "family": "visor",
+       "prefix": "visor",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 12,
+       "missing": []
+      },
+      {
+       "family": "visor",
+       "prefix": "visor",
+       "position": 2,
+       "found": 2,
+       "db_values": 3,
+       "position_values": 2,
+       "missing": [
+        2
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 2,
+       "found": 2,
+       "db_values": 3,
+       "position_values": 3,
+       "missing": [
+        1
+       ]
+      }
+     ]
+    }
+   }
+  },
+  "nhl12": {
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "families": {
+    "glove:feglove": 154,
+    "glove:glove": 214,
+    "helmet:chinstrap": 36,
+    "helmet:helmet": 99,
+    "helmet:jawprotector": 27,
+    "helmet:padding": 12,
+    "playerstick:playerstick": 4,
+    "playerstick:playersticktape": 4,
+    "playerstick:texlib": 32,
+    "skate:skate": 12,
+    "skate:skatelace": 6,
+    "skate:skatetongue": 18,
+    "skate:texlib": 15,
+    "visor:visor": 71
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 15,
+     "max": 48,
+     "best_own_family_positions": [
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 2,
+       "found": 15,
+       "db_values": 15,
+       "position_values": 27,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 2,
+       "found": 15,
+       "db_values": 15,
+       "position_values": 30,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 1,
+       "found": 0,
+       "db_values": 15,
+       "position_values": 2,
+       "missing": [
+        25,
+        27,
+        29,
+        30,
+        31,
+        38,
+        40,
+        41
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 1,
+       "found": 0,
+       "db_values": 15,
+       "position_values": 2,
+       "missing": [
+        25,
+        27,
+        29,
+        30,
+        31,
+        38,
+        40,
+        41
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "255",
+      8
+     ],
+     "distinct": 8,
+     "max": 99,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "padding",
+       "position": 1,
+       "found": 7,
+       "db_values": 8,
+       "position_values": 11,
+       "missing": [
+        99
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 1,
+       "found": 7,
+       "db_values": 8,
+       "position_values": 12,
+       "missing": [
+        99
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 7,
+       "db_values": 8,
+       "position_values": 13,
+       "missing": [
+        99
+       ]
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 7,
+       "db_values": 8,
+       "position_values": 14,
+       "missing": [
+        99
+       ]
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 7,
+     "max": 30,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 7,
+       "db_values": 7,
+       "position_values": 15,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "skate",
+       "position": 1,
+       "found": 0,
+       "db_values": 7,
+       "position_values": 2,
+       "missing": [
+        7,
+        16,
+        17,
+        24,
+        25,
+        29,
+        30
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skate",
+       "position": 2,
+       "found": 0,
+       "db_values": 7,
+       "position_values": 2,
+       "missing": [
+        7,
+        16,
+        17,
+        24,
+        25,
+        29,
+        30
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 1,
+       "found": 0,
+       "db_values": 7,
+       "position_values": 2,
+       "missing": [
+        7,
+        16,
+        17,
+        24,
+        25,
+        29,
+        30
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 16,
+     "max": 70,
+     "best_own_family_positions": [
+      {
+       "family": "playerstick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 16,
+       "db_values": 16,
+       "position_values": 32,
+       "missing": []
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 1,
+       "found": 0,
+       "db_values": 16,
+       "position_values": 2,
+       "missing": [
+        18,
+        25,
+        26,
+        35,
+        36,
+        38,
+        41,
+        46
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 2,
+       "found": 0,
+       "db_values": 16,
+       "position_values": 2,
+       "missing": [
+        18,
+        25,
+        26,
+        35,
+        36,
+        38,
+        41,
+        46
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playersticktape",
+       "position": 1,
+       "found": 0,
+       "db_values": 16,
+       "position_values": 2,
+       "missing": [
+        18,
+        25,
+        26,
+        35,
+        36,
+        38,
+        41,
+        46
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 5,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 13,
+       "missing": []
+      },
+      {
+       "family": "visor",
+       "prefix": "visor",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 13,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 14,
+       "missing": []
+      }
+     ]
+    }
+   }
+  },
+  "nhl13": {
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "families": {
+    "glove:feglove": 87,
+    "glove:glove": 119,
+    "helmet:chinstrap": 39,
+    "helmet:helmet": 104,
+    "helmet:jawprotector": 30,
+    "helmet:padding": 12,
+    "helmet:texlib": 15,
+    "helmet:visor": 65,
+    "playerstick:playerstick": 4,
+    "playerstick:playersticktape": 4,
+    "playerstick:texlib": 41,
+    "skate:goalieskate": 3,
+    "skate:playerskate": 3,
+    "skate:skatelace": 3,
+    "skate:skatetongue": 9,
+    "skate:texlib": 20
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 13,
+     "max": 50,
+     "best_own_family_positions": [
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 1,
+       "found": 13,
+       "db_values": 13,
+       "position_values": 29,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 1,
+       "found": 13,
+       "db_values": 13,
+       "position_values": 32,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 2,
+       "found": 0,
+       "db_values": 13,
+       "position_values": 3,
+       "missing": [
+        27,
+        29,
+        31,
+        38,
+        40,
+        41,
+        42,
+        43
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 2,
+       "found": 0,
+       "db_values": 13,
+       "position_values": 3,
+       "missing": [
+        27,
+        29,
+        31,
+        38,
+        40,
+        41,
+        42,
+        43
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "255",
+      8
+     ],
+     "distinct": 9,
+     "max": 17,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "padding",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 12,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 13,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 14,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 15,
+       "missing": []
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 10,
+     "max": 35,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 20,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "goalieskate",
+       "position": 1,
+       "found": 0,
+       "db_values": 10,
+       "position_values": 3,
+       "missing": [
+        16,
+        24,
+        25,
+        29,
+        30,
+        31,
+        32,
+        33
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "playerskate",
+       "position": 1,
+       "found": 0,
+       "db_values": 10,
+       "position_values": 3,
+       "missing": [
+        16,
+        24,
+        25,
+        29,
+        30,
+        31,
+        32,
+        33
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 1,
+       "found": 0,
+       "db_values": 10,
+       "position_values": 3,
+       "missing": [
+        16,
+        24,
+        25,
+        29,
+        30,
+        31,
+        32,
+        33
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 16,
+     "max": 64,
+     "best_own_family_positions": [
+      {
+       "family": "playerstick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 16,
+       "db_values": 16,
+       "position_values": 41,
+       "missing": []
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 1,
+       "found": 0,
+       "db_values": 16,
+       "position_values": 2,
+       "missing": [
+        35,
+        36,
+        38,
+        41,
+        50,
+        51,
+        52,
+        54
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 2,
+       "found": 0,
+       "db_values": 16,
+       "position_values": 2,
+       "missing": [
+        35,
+        36,
+        38,
+        41,
+        50,
+        51,
+        52,
+        54
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playersticktape",
+       "position": 1,
+       "found": 0,
+       "db_values": 16,
+       "position_values": 2,
+       "missing": [
+        35,
+        36,
+        38,
+        41,
+        50,
+        51,
+        52,
+        54
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 5,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "visor",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 13,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 14,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 15,
+       "missing": []
+      }
+     ]
+    }
+   }
+  },
+  "nhl14": {
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "families": {
+    "glove:feglove": 129,
+    "glove:glove": 172,
+    "helmet:chinstrap": 21,
+    "helmet:helmet": 94,
+    "helmet:jawprotector": 36,
+    "helmet:padding": 14,
+    "helmet:texlib": 16,
+    "helmet:visor": 77,
+    "playerstick:texlib": 55,
+    "skate:texlib": 26
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 15,
+     "max": 57,
+     "best_own_family_positions": [
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 1,
+       "found": 15,
+       "db_values": 15,
+       "position_values": 43,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 1,
+       "found": 15,
+       "db_values": 15,
+       "position_values": 43,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 2,
+       "found": 0,
+       "db_values": 15,
+       "position_values": 3,
+       "missing": [
+        27,
+        29,
+        31,
+        45,
+        47,
+        48,
+        49,
+        50
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 2,
+       "found": 0,
+       "db_values": 15,
+       "position_values": 3,
+       "missing": [
+        27,
+        29,
+        31,
+        45,
+        47,
+        48,
+        49,
+        50
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "255",
+      8
+     ],
+     "distinct": 9,
+     "max": 19,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "padding",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 14,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 16,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "jawprotector",
+       "position": 1,
+       "found": 8,
+       "db_values": 9,
+       "position_values": 12,
+       "missing": [
+        7
+       ]
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 9,
+     "max": 38,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 26,
+       "missing": []
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 20,
+     "max": 82,
+     "best_own_family_positions": [
+      {
+       "family": "playerstick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 20,
+       "db_values": 20,
+       "position_values": 55,
+       "missing": []
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 5,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "visor",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 15,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "visor",
+       "position": 2,
+       "found": 2,
+       "db_values": 3,
+       "position_values": 2,
+       "missing": [
+        2
+       ]
+      }
+     ]
+    }
+   }
+  },
+  "nhl15": {
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "families": {
+    "glove:feglove": 141,
+    "glove:glove": 191,
+    "helmet:chinstrap": 51,
+    "helmet:helmet": 132,
+    "helmet:jawprotector": 42,
+    "helmet:padding": 16,
+    "helmet:texlib": 19,
+    "helmet:visor": 89,
+    "playerstick:playerstick": 4,
+    "playerstick:playersticktape": 4,
+    "playerstick:texlib": 69,
+    "skate:goalieskate": 3,
+    "skate:playerskate": 3,
+    "skate:skatelace": 3,
+    "skate:skatetongue": 9,
+    "skate:texlib": 31
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 15,
+     "max": 62,
+     "best_own_family_positions": [
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 1,
+       "found": 15,
+       "db_values": 15,
+       "position_values": 47,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 1,
+       "found": 15,
+       "db_values": 15,
+       "position_values": 50,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 2,
+       "found": 0,
+       "db_values": 15,
+       "position_values": 3,
+       "missing": [
+        27,
+        29,
+        45,
+        48,
+        49,
+        51,
+        52,
+        53
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 2,
+       "found": 0,
+       "db_values": 15,
+       "position_values": 3,
+       "missing": [
+        27,
+        29,
+        45,
+        48,
+        49,
+        51,
+        52,
+        53
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "255",
+      8
+     ],
+     "distinct": 10,
+     "max": 21,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "padding",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 16,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 18,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 19,
+       "missing": []
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 9,
+     "max": 42,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 9,
+       "db_values": 9,
+       "position_values": 31,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "goalieskate",
+       "position": 1,
+       "found": 0,
+       "db_values": 9,
+       "position_values": 3,
+       "missing": [
+        32,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "playerskate",
+       "position": 1,
+       "found": 0,
+       "db_values": 9,
+       "position_values": 3,
+       "missing": [
+        32,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 1,
+       "found": 0,
+       "db_values": 9,
+       "position_values": 3,
+       "missing": [
+        32,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 19,
+     "max": 91,
+     "best_own_family_positions": [
+      {
+       "family": "playerstick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 19,
+       "db_values": 19,
+       "position_values": 69,
+       "missing": []
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 1,
+       "found": 0,
+       "db_values": 19,
+       "position_values": 2,
+       "missing": [
+        35,
+        36,
+        64,
+        67,
+        68,
+        71,
+        77,
+        78
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 2,
+       "found": 0,
+       "db_values": 19,
+       "position_values": 2,
+       "missing": [
+        35,
+        36,
+        64,
+        67,
+        68,
+        71,
+        77,
+        78
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playersticktape",
+       "position": 1,
+       "found": 0,
+       "db_values": 19,
+       "position_values": 2,
+       "missing": [
+        35,
+        36,
+        64,
+        67,
+        68,
+        71,
+        77,
+        78
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 5,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "visor",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 18,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 19,
+       "missing": []
+      }
+     ]
+    }
+   }
+  },
+  "legacy": {
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "families": {
+    "glove:feglove": 159,
+    "glove:glove": 215,
+    "helmet:chinstrap": 54,
+    "helmet:helmet": 159,
+    "helmet:jawprotector": 45,
+    "helmet:padding": 17,
+    "helmet:texlib": 20,
+    "helmet:visor": 95,
+    "playerstick:playerstick": 4,
+    "playerstick:playersticktape": 4,
+    "playerstick:texlib": 75,
+    "skate:goalieskate": 3,
+    "skate:playerskate": 3,
+    "skate:skatelace": 3,
+    "skate:skatetongue": 9,
+    "skate:texlib": 33
+   },
+   "columns": {
+    "gloves": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 14,
+     "max": 83,
+     "best_own_family_positions": [
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 1,
+       "found": 14,
+       "db_values": 14,
+       "position_values": 53,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 1,
+       "found": 14,
+       "db_values": 14,
+       "position_values": 56,
+       "missing": []
+      },
+      {
+       "family": "glove",
+       "prefix": "feglove",
+       "position": 2,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 3,
+       "missing": [
+        27,
+        45,
+        51,
+        53,
+        56,
+        57,
+        62,
+        65
+       ]
+      },
+      {
+       "family": "glove",
+       "prefix": "glove",
+       "position": 2,
+       "found": 0,
+       "db_values": 14,
+       "position_values": 3,
+       "missing": [
+        27,
+        45,
+        51,
+        53,
+        56,
+        57,
+        62,
+        65
+       ]
+      }
+     ]
+    },
+    "helmetbrand": {
+     "declared": [
+      "0",
+      "255",
+      8
+     ],
+     "distinct": 10,
+     "max": 25,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "padding",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 17,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "chinstrap",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 18,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 19,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 10,
+       "db_values": 10,
+       "position_values": 20,
+       "missing": []
+      }
+     ]
+    },
+    "skatebrand": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 8,
+     "max": 48,
+     "best_own_family_positions": [
+      {
+       "family": "skate",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 8,
+       "db_values": 8,
+       "position_values": 33,
+       "missing": []
+      },
+      {
+       "family": "skate",
+       "prefix": "goalieskate",
+       "position": 1,
+       "found": 0,
+       "db_values": 8,
+       "position_values": 3,
+       "missing": [
+        39,
+        41,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "playerskate",
+       "position": 1,
+       "found": 0,
+       "db_values": 8,
+       "position_values": 3,
+       "missing": [
+        39,
+        41,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+       ]
+      },
+      {
+       "family": "skate",
+       "prefix": "skatelace",
+       "position": 1,
+       "found": 0,
+       "db_values": 8,
+       "position_values": 3,
+       "missing": [
+        39,
+        41,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+       ]
+      }
+     ]
+    },
+    "stick": {
+     "declared": [
+      "0",
+      "127",
+      7
+     ],
+     "distinct": 19,
+     "max": 112,
+     "best_own_family_positions": [
+      {
+       "family": "playerstick",
+       "prefix": "texlib",
+       "position": 1,
+       "found": 19,
+       "db_values": 19,
+       "position_values": 75,
+       "missing": []
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 1,
+       "found": 0,
+       "db_values": 19,
+       "position_values": 2,
+       "missing": [
+        35,
+        82,
+        84,
+        85,
+        86,
+        87,
+        95,
+        98
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playerstick",
+       "position": 2,
+       "found": 0,
+       "db_values": 19,
+       "position_values": 2,
+       "missing": [
+        35,
+        82,
+        84,
+        85,
+        86,
+        87,
+        95,
+        98
+       ]
+      },
+      {
+       "family": "playerstick",
+       "prefix": "playersticktape",
+       "position": 1,
+       "found": 0,
+       "db_values": 19,
+       "position_values": 2,
+       "missing": [
+        35,
+        82,
+        84,
+        85,
+        86,
+        87,
+        95,
+        98
+       ]
+      }
+     ]
+    },
+    "visortype": {
+     "declared": [
+      "0",
+      "3",
+      2
+     ],
+     "distinct": 3,
+     "max": 2,
+     "best_own_family_positions": [
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 3,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 18,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "visor",
+       "position": 1,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 19,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "helmet",
+       "position": 2,
+       "found": 3,
+       "db_values": 3,
+       "position_values": 22,
+       "missing": []
+      },
+      {
+       "family": "helmet",
+       "prefix": "visor",
+       "position": 2,
+       "found": 2,
+       "db_values": 3,
+       "position_values": 2,
+       "missing": [
+        2
+       ]
+      }
+     ]
+    }
+   }
+  }
+ }
+}

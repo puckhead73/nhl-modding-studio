@@ -1,0 +1,1328 @@
+{
+ "generated_by": "league_tables.py",
+ "image_base": "0x82000000",
+ "titles": {
+  "nhl07": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)\\default.xex",
+   "image_sha256": "403a69a76bac9bdc60cd4eb4ccef114dfd5b3a7966c845e4def13545734a7107",
+   "table_kind": "literal",
+   "table_va": "0x820b3650",
+   "evidence": "literal-order (string literals following FE::CLeagueIonAdapter; reference mechanism untraced)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "5d3c0b0187b8d673b9642eaec4fabf346fc3451f9a3bf14e4e6bfb4cd61743c3",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 3952,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "NATIONAL",
+     "exact_key_present": false,
+     "resolved_row_key": "National",
+     "text": "National",
+     "resolution": "hash"
+    },
+    {
+     "code": 2,
+     "key": "CHTM_LEAGUE_SWEDISH",
+     "exact_key_present": false,
+     "resolved_row_key": null,
+     "text": null,
+     "resolution": "unresolved"
+    },
+    {
+     "code": 3,
+     "key": "CHTM_LEAGUE_FINNISH",
+     "exact_key_present": false,
+     "resolved_row_key": null,
+     "text": null,
+     "resolution": "unresolved"
+    },
+    {
+     "code": 4,
+     "key": "CHTM_LEAGUE_GERMAN",
+     "exact_key_present": false,
+     "resolved_row_key": null,
+     "text": null,
+     "resolution": "unresolved"
+    },
+    {
+     "code": 5,
+     "key": "CUSTOM TEAMS",
+     "exact_key_present": false,
+     "resolved_row_key": "Custom Teams",
+     "text": "Custom Teams",
+     "resolution": "hash"
+    }
+   ]
+  },
+  "nhl08": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)\\default.xex",
+   "image_sha256": "b7833355c04749618cb40b10f6ebecd605220840a025a43c8219c4e8b8dab443",
+   "table_kind": "literal",
+   "table_va": "0x82072dec",
+   "evidence": "literal-order (string literals following FE::CLeagueIonAdapter; reference mechanism untraced)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 5738,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": false,
+     "resolved_row_key": "ahl",
+     "text": "AHL",
+     "resolution": "hash"
+    },
+    {
+     "code": 2,
+     "key": "ELITSERIEN",
+     "exact_key_present": false,
+     "resolved_row_key": "elitserien",
+     "text": "Elitserien",
+     "resolution": "hash"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "SMLiiga",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "NATIONAL",
+     "exact_key_present": false,
+     "resolved_row_key": "National",
+     "text": "National",
+     "resolution": "hash"
+    },
+    {
+     "code": 5,
+     "key": "CUSTOM TEAMS",
+     "exact_key_present": false,
+     "resolved_row_key": "Custom Teams",
+     "text": "Custom Teams",
+     "resolution": "hash"
+    }
+   ]
+  },
+  "nhl09": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)\\default.xex",
+   "image_sha256": "18dceeb870b29c9d8cbfa68504375f7c2d145c45b7813ca8b103fd8060401a17",
+   "table_kind": "pointer",
+   "table_va": "0x83054ce0",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "d9e0463b1b6b49d744273803785469ae9781b21c838cbb226526d66028b8727e",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 9448,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": false,
+     "resolved_row_key": "ahl",
+     "text": "AHL",
+     "resolution": "hash"
+    },
+    {
+     "code": 2,
+     "key": "ELITSERIEN",
+     "exact_key_present": false,
+     "resolved_row_key": "elitserien",
+     "text": "Elitserien",
+     "resolution": "hash"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "SM-Liiga",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "O2 Extraliga",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SUPER_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SUPER_LEAGUE",
+     "text": "Superliga",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "NATIONAL",
+     "exact_key_present": false,
+     "resolved_row_key": "National",
+     "text": "National",
+     "resolution": "hash"
+    },
+    {
+     "code": 8,
+     "key": "HISTORIC_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "HISTORIC_TEAMS",
+     "text": "Historic Team",
+     "resolution": "exact"
+    },
+    {
+     "code": 9,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": false,
+     "resolved_row_key": "Custom_Teams",
+     "text": "Custom Teams",
+     "resolution": "hash"
+    }
+   ]
+  },
+  "nhl10": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\default.xex",
+   "image_sha256": "cc98dbec41cc8639ba5bcd2fc44a6d3b36acf2619845e2bc586ce7f6a6be218b",
+   "table_kind": "pointer",
+   "table_va": "0x83333c3c",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "f1a9a1dd9e8f2851053750fabb6f3b42aa53f3cf45e021449652fdea1c042671",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 12505,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": true,
+     "resolved_row_key": "AHL",
+     "text": "AHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 2,
+     "key": "elitserien",
+     "exact_key_present": false,
+     "resolved_row_key": "ELITSERIEN",
+     "text": "ELITSERIEN",
+     "resolution": "hash"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "SM-LIIGA",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "TXT_LEAGUE_DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "O2 EXTRALIGA",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "text": "NATIONAL LEAGUE",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "NATIONAL",
+     "exact_key_present": true,
+     "resolved_row_key": "NATIONAL",
+     "text": "NATIONAL",
+     "resolution": "exact"
+    },
+    {
+     "code": 8,
+     "key": "HISTORIC_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "HISTORIC_TEAMS",
+     "text": "HISTORIC TEAM",
+     "resolution": "exact"
+    },
+    {
+     "code": 9,
+     "key": "PROSPECT_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "PROSPECT_TEAMS",
+     "text": "PROSPECT TEAMS",
+     "resolution": "exact"
+    },
+    {
+     "code": 10,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "CUSTOM_TEAMS",
+     "text": "CUSTOM TEAMS",
+     "resolution": "exact"
+    }
+   ]
+  },
+  "nhl11": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\default.xex",
+   "image_sha256": "70e46586804282b98cfce483fd291bc76ad511d8d574e2aa94b2a8473a79daa4",
+   "table_kind": "pointer",
+   "table_va": "0x834a28a0",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "82520ab36988b7e384830c74c208cf7a7d8f80be34fd435242a5a067feedc22b",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 14920,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": true,
+     "resolved_row_key": "AHL",
+     "text": "AHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 2,
+     "key": "elitserien",
+     "exact_key_present": false,
+     "resolved_row_key": "ELITSERIEN",
+     "text": "ELITSERIEN",
+     "resolution": "hash"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "SM-LIIGA",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "TXT_LEAGUE_DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "O2 EXTRALIGA",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "text": "NATIONAL LEAGUE",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "NATIONAL",
+     "exact_key_present": true,
+     "resolved_row_key": "NATIONAL",
+     "text": "NATIONAL",
+     "resolution": "exact"
+    },
+    {
+     "code": 8,
+     "key": "OHL",
+     "exact_key_present": true,
+     "resolved_row_key": "OHL",
+     "text": "OHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 9,
+     "key": "QMJHL",
+     "exact_key_present": true,
+     "resolved_row_key": "QMJHL",
+     "text": "QMJHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 10,
+     "key": "WHL",
+     "exact_key_present": true,
+     "resolved_row_key": "WHL",
+     "text": "WHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 11,
+     "key": "PROSPECT_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "PROSPECT_TEAMS",
+     "text": "PROSPECT TEAMS",
+     "resolution": "exact"
+    },
+    {
+     "code": 12,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "CUSTOM_TEAMS",
+     "text": "CUSTOM TEAMS",
+     "resolution": "exact"
+    },
+    {
+     "code": 13,
+     "key": "CHL",
+     "exact_key_present": true,
+     "resolved_row_key": "CHL",
+     "text": "CHL",
+     "resolution": "exact"
+    }
+   ]
+  },
+  "nhl12": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\default.xex",
+   "image_sha256": "8842a990dbf2da579ed313df9c65ddc676e7d24205e5323ba33f3444196dfebb",
+   "table_kind": "pointer",
+   "table_va": "0x83705f18",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "354a1905582faf3d45ae8a5ba4d7bddb51645f7af144f7864939536c8cc01fd7",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 16787,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": true,
+     "resolved_row_key": "AHL",
+     "text": "AHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 2,
+     "key": "elitserien",
+     "exact_key_present": false,
+     "resolved_row_key": "ELITSERIEN",
+     "text": "ELITSERIEN",
+     "resolution": "hash"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "SM-LIIGA",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "TXT_LEAGUE_DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "EXTRALIGA LEDNIHO HOKEJE",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "text": "NATIONAL LEAGUE",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "NATIONAL",
+     "exact_key_present": true,
+     "resolved_row_key": "NATIONAL",
+     "text": "NATIONAL",
+     "resolution": "exact"
+    },
+    {
+     "code": 8,
+     "key": "OHL",
+     "exact_key_present": true,
+     "resolved_row_key": "OHL",
+     "text": "OHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 9,
+     "key": "QMJHL",
+     "exact_key_present": true,
+     "resolved_row_key": "QMJHL",
+     "text": "QMJHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 10,
+     "key": "WHL",
+     "exact_key_present": true,
+     "resolved_row_key": "WHL",
+     "text": "WHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 11,
+     "key": "PROSPECT_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "PROSPECT_TEAMS",
+     "text": "PROSPECT TEAMS",
+     "resolution": "exact"
+    },
+    {
+     "code": 12,
+     "key": "TXT_LEGEND_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEGEND_TEAMS",
+     "text": "LEGEND TEAM",
+     "resolution": "exact"
+    },
+    {
+     "code": 13,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "CUSTOM_TEAMS",
+     "text": "CUSTOM TEAMS",
+     "resolution": "exact"
+    },
+    {
+     "code": 14,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 15,
+     "key": "CHL",
+     "exact_key_present": true,
+     "resolved_row_key": "CHL",
+     "text": "CHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 16,
+     "key": "UnitedStates",
+     "exact_key_present": false,
+     "resolved_row_key": "UNITEDSTATES",
+     "text": "UNITED STATES",
+     "resolution": "hash"
+    },
+    {
+     "code": 17,
+     "key": "Russia",
+     "exact_key_present": false,
+     "resolved_row_key": "RUSSIA",
+     "text": "RUSSIA",
+     "resolution": "hash"
+    },
+    {
+     "code": 18,
+     "key": "TXT_ROW_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_ROW_LEAGUE",
+     "text": "REST OF WORLD",
+     "resolution": "exact"
+    },
+    {
+     "code": 19,
+     "key": "HUT",
+     "exact_key_present": true,
+     "resolved_row_key": "HUT",
+     "text": "HOCKEY ULTIMATE TEAM",
+     "resolution": "exact"
+    }
+   ]
+  },
+  "nhl13": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\default.xex",
+   "image_sha256": "5ef121e51ee0c6635441f72781239db970aa30c9caac7daf576438d81a143842",
+   "table_kind": "pointer",
+   "table_va": "0x837eea88",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "b93fa83f8b4fb760eb48e3a274e1f95a7aaf19d868ba63be59218c41063486e5",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 18826,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": false,
+     "resolved_row_key": "ahl",
+     "text": "AHL",
+     "resolution": "hash"
+    },
+    {
+     "code": 2,
+     "key": "elitserien",
+     "exact_key_present": true,
+     "resolved_row_key": "elitserien",
+     "text": "Elitserien",
+     "resolution": "exact"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "SM-Liiga",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "TXT_LEAGUE_DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "Extraliga ledniho hokeje",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "text": "National League",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "NATIONAL",
+     "exact_key_present": false,
+     "resolved_row_key": "National",
+     "text": "National",
+     "resolution": "hash"
+    },
+    {
+     "code": 8,
+     "key": "OHL",
+     "exact_key_present": true,
+     "resolved_row_key": "OHL",
+     "text": "OHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 9,
+     "key": "QMJHL",
+     "exact_key_present": true,
+     "resolved_row_key": "QMJHL",
+     "text": "QMJHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 10,
+     "key": "WHL",
+     "exact_key_present": true,
+     "resolved_row_key": "WHL",
+     "text": "WHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 11,
+     "key": "PROSPECT_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "PROSPECT_TEAMS",
+     "text": "Prospect Teams",
+     "resolution": "exact"
+    },
+    {
+     "code": 12,
+     "key": "TXT_LEGEND_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEGEND_TEAMS",
+     "text": "Legend Teams",
+     "resolution": "exact"
+    },
+    {
+     "code": 13,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": false,
+     "resolved_row_key": "Custom_Teams",
+     "text": "Custom Teams",
+     "resolution": "hash"
+    },
+    {
+     "code": 14,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 15,
+     "key": "CHL",
+     "exact_key_present": true,
+     "resolved_row_key": "CHL",
+     "text": "CHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 16,
+     "key": "UnitedStates",
+     "exact_key_present": true,
+     "resolved_row_key": "UnitedStates",
+     "text": "United States",
+     "resolution": "exact"
+    },
+    {
+     "code": 17,
+     "key": "Russia",
+     "exact_key_present": true,
+     "resolved_row_key": "Russia",
+     "text": "Russia",
+     "resolution": "exact"
+    },
+    {
+     "code": 18,
+     "key": "TXT_ROW_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_ROW_LEAGUE",
+     "text": "Rest Of World",
+     "resolution": "exact"
+    },
+    {
+     "code": 19,
+     "key": "HUT",
+     "exact_key_present": false,
+     "resolved_row_key": "hut",
+     "text": "Hockey Ultimate Team",
+     "resolution": "hash"
+    }
+   ]
+  },
+  "nhl14": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\default.xex",
+   "image_sha256": "27d86df1fc438ecb72fbc0525927a26194718980396123bd1f6a93e50666b9a9",
+   "table_kind": "pointer",
+   "table_va": "0x8398fc20",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "e5aff8285169e2ab0790f63f6def65c892f7cd42553bc71b622f42296c48ac74",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 24736,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": false,
+     "resolved_row_key": "ahl",
+     "text": "AHL",
+     "resolution": "hash"
+    },
+    {
+     "code": 2,
+     "key": "elitserien",
+     "exact_key_present": true,
+     "resolved_row_key": "elitserien",
+     "text": "SHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "SM-Liiga",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "TXT_LEAGUE_DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "Extraliga ledniho hokeje",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "text": "National League",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "NATIONAL",
+     "exact_key_present": false,
+     "resolved_row_key": "National",
+     "text": "National",
+     "resolution": "hash"
+    },
+    {
+     "code": 8,
+     "key": "OHL",
+     "exact_key_present": true,
+     "resolved_row_key": "OHL",
+     "text": "OHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 9,
+     "key": "QMJHL",
+     "exact_key_present": true,
+     "resolved_row_key": "QMJHL",
+     "text": "QMJHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 10,
+     "key": "WHL",
+     "exact_key_present": true,
+     "resolved_row_key": "WHL",
+     "text": "WHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 11,
+     "key": "PROSPECT_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "PROSPECT_TEAMS",
+     "text": "Prospect Teams",
+     "resolution": "exact"
+    },
+    {
+     "code": 12,
+     "key": "TXT_LEGEND_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEGEND_TEAMS",
+     "text": "Legend Teams",
+     "resolution": "exact"
+    },
+    {
+     "code": 13,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": false,
+     "resolved_row_key": "Custom_Teams",
+     "text": "Custom Teams",
+     "resolution": "hash"
+    },
+    {
+     "code": 14,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 15,
+     "key": "CHL",
+     "exact_key_present": true,
+     "resolved_row_key": "CHL",
+     "text": "CHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 16,
+     "key": "UnitedStates",
+     "exact_key_present": true,
+     "resolved_row_key": "UnitedStates",
+     "text": "United States",
+     "resolution": "exact"
+    },
+    {
+     "code": 17,
+     "key": "Russia",
+     "exact_key_present": true,
+     "resolved_row_key": "Russia",
+     "text": "Russia",
+     "resolution": "exact"
+    },
+    {
+     "code": 18,
+     "key": "TXT_ROW_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_ROW_LEAGUE",
+     "text": "Rest Of World",
+     "resolution": "exact"
+    },
+    {
+     "code": 19,
+     "key": "HUT",
+     "exact_key_present": false,
+     "resolved_row_key": "hut",
+     "text": "Hockey Ultimate Team",
+     "resolution": "hash"
+    }
+   ]
+  },
+  "nhl15": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\default.xex",
+   "image_sha256": "4ad8d3081a28e3fb22fb49cc9ba4dadc8d4c62c6443ecd1783f0dc42c4999cda",
+   "table_kind": "pointer",
+   "table_va": "0x839bbc30",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "86167614957bed34d9d829c0508d0e3ab2e533e59c424f56211d4383ab9cd614",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 25169,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": false,
+     "resolved_row_key": "ahl",
+     "text": "AHL",
+     "resolution": "hash"
+    },
+    {
+     "code": 2,
+     "key": "elitserien",
+     "exact_key_present": true,
+     "resolved_row_key": "elitserien",
+     "text": "SHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "Liiga",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "TXT_LEAGUE_DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "Extraliga ledniho hokeje",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "text": "National League",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "NATIONAL",
+     "exact_key_present": false,
+     "resolved_row_key": "National",
+     "text": "National",
+     "resolution": "hash"
+    },
+    {
+     "code": 8,
+     "key": "OHL",
+     "exact_key_present": true,
+     "resolved_row_key": "OHL",
+     "text": "OHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 9,
+     "key": "QMJHL",
+     "exact_key_present": true,
+     "resolved_row_key": "QMJHL",
+     "text": "QMJHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 10,
+     "key": "WHL",
+     "exact_key_present": true,
+     "resolved_row_key": "WHL",
+     "text": "WHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 11,
+     "key": "PROSPECT_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "PROSPECT_TEAMS",
+     "text": "Prospect Teams",
+     "resolution": "exact"
+    },
+    {
+     "code": 12,
+     "key": "TXT_LEGEND_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEGEND_TEAMS",
+     "text": "Legend Teams",
+     "resolution": "exact"
+    },
+    {
+     "code": 13,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": false,
+     "resolved_row_key": "Custom_Teams",
+     "text": "Custom Teams",
+     "resolution": "hash"
+    },
+    {
+     "code": 14,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 15,
+     "key": "CHL",
+     "exact_key_present": true,
+     "resolved_row_key": "CHL",
+     "text": "CHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 16,
+     "key": "UnitedStates",
+     "exact_key_present": true,
+     "resolved_row_key": "UnitedStates",
+     "text": "United States",
+     "resolution": "exact"
+    },
+    {
+     "code": 17,
+     "key": "Russia",
+     "exact_key_present": true,
+     "resolved_row_key": "Russia",
+     "text": "Russia",
+     "resolution": "exact"
+    },
+    {
+     "code": 18,
+     "key": "TXT_ROW_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_ROW_LEAGUE",
+     "text": "Rest Of World",
+     "resolution": "exact"
+    },
+    {
+     "code": 19,
+     "key": "HUT",
+     "exact_key_present": false,
+     "resolved_row_key": "hut",
+     "text": "Hockey Ultimate Team",
+     "resolution": "hash"
+    }
+   ]
+  },
+  "nhllegacy": {
+   "executable": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\default.xex",
+   "image_sha256": "5a720c17521b64fda6ec415f4c61838fd6ae0b3c9d9c83c0d2c8e9397ddd6c5a",
+   "table_kind": "pointer",
+   "table_va": "0x839b1230",
+   "evidence": "traced (static pointer table in the executable image)",
+   "dictionary": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\fe\\loc\\nhl_eng_us.db",
+   "dictionary_sha256": "f00926ceff27d46f1e5264385468369cd60f91d54d9944dd5c8584bf6d9b8f70",
+   "dictionary_equals_anchor": true,
+   "dictionary_rows": 25782,
+   "entries": [
+    {
+     "code": 0,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 1,
+     "key": "AHL",
+     "exact_key_present": false,
+     "resolved_row_key": "ahl",
+     "text": "AHL",
+     "resolution": "hash"
+    },
+    {
+     "code": 2,
+     "key": "elitserien",
+     "exact_key_present": true,
+     "resolved_row_key": "elitserien",
+     "text": "SHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 3,
+     "key": "SMLIIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "SMLIIGA",
+     "text": "Liiga",
+     "resolution": "exact"
+    },
+    {
+     "code": 4,
+     "key": "TXT_LEAGUE_DEL",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_DEL",
+     "text": "DEL",
+     "resolution": "exact"
+    },
+    {
+     "code": 5,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "text": "Extraliga ledniho hokeje",
+     "resolution": "exact"
+    },
+    {
+     "code": 6,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "text": "National League",
+     "resolution": "exact"
+    },
+    {
+     "code": 7,
+     "key": "TXT_LEAGUE_NORWAY",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEAGUE_NORWAY",
+     "text": "Norway",
+     "resolution": "exact"
+    },
+    {
+     "code": 8,
+     "key": "NATIONAL",
+     "exact_key_present": false,
+     "resolved_row_key": "National",
+     "text": "National",
+     "resolution": "hash"
+    },
+    {
+     "code": 9,
+     "key": "OHL",
+     "exact_key_present": true,
+     "resolved_row_key": "OHL",
+     "text": "OHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 10,
+     "key": "QMJHL",
+     "exact_key_present": true,
+     "resolved_row_key": "QMJHL",
+     "text": "QMJHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 11,
+     "key": "WHL",
+     "exact_key_present": true,
+     "resolved_row_key": "WHL",
+     "text": "WHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 12,
+     "key": "PROSPECT_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "PROSPECT_TEAMS",
+     "text": "Prospect Teams",
+     "resolution": "exact"
+    },
+    {
+     "code": 13,
+     "key": "CUSTOM_TEAMS",
+     "exact_key_present": false,
+     "resolved_row_key": "Custom_Teams",
+     "text": "Custom Teams",
+     "resolution": "hash"
+    },
+    {
+     "code": 14,
+     "key": "NHL",
+     "exact_key_present": true,
+     "resolved_row_key": "NHL",
+     "text": "NHL\u00c2\u00ae",
+     "resolution": "exact"
+    },
+    {
+     "code": 15,
+     "key": "EA_SPORTS_HOCKEY_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "EA_SPORTS_HOCKEY_LEAGUE",
+     "text": "EA SPORTS\u00e2\u201e\u00a2 Hockey League",
+     "resolution": "exact"
+    },
+    {
+     "code": 16,
+     "key": "CHL",
+     "exact_key_present": true,
+     "resolved_row_key": "CHL",
+     "text": "CHL",
+     "resolution": "exact"
+    },
+    {
+     "code": 17,
+     "key": "UnitedStates",
+     "exact_key_present": true,
+     "resolved_row_key": "UnitedStates",
+     "text": "United States",
+     "resolution": "exact"
+    },
+    {
+     "code": 18,
+     "key": "Russia",
+     "exact_key_present": true,
+     "resolved_row_key": "Russia",
+     "text": "Russia",
+     "resolution": "exact"
+    },
+    {
+     "code": 19,
+     "key": "TXT_ROW_LEAGUE",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_ROW_LEAGUE",
+     "text": "Rest Of World",
+     "resolution": "exact"
+    },
+    {
+     "code": 20,
+     "key": "HUT",
+     "exact_key_present": false,
+     "resolved_row_key": "hut",
+     "text": "Hockey Ultimate Team",
+     "resolution": "hash"
+    },
+    {
+     "code": 21,
+     "key": "TXT_LEGEND_TEAMS",
+     "exact_key_present": true,
+     "resolved_row_key": "TXT_LEGEND_TEAMS",
+     "text": "Legend Teams",
+     "resolution": "exact"
+    }
+   ]
+  }
+ }
+}

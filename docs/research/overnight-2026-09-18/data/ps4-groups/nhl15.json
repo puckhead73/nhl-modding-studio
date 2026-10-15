@@ -1,0 +1,215 @@
+{
+ "eboot": "H:/Emulators/ShadPS4/Games/CUSA00561/eboot.bin",
+ "format": "SELF",
+ "relative_relocs": 218993,
+ "tables": [
+  {
+   "va": 64322096,
+   "stride": 16,
+   "count": 50,
+   "west_index": 1,
+   "entries": [
+    {
+     "key": "NHL",
+     "word2": 0
+    },
+    {
+     "key": "WesternConference",
+     "word2": 0
+    },
+    {
+     "key": "EasternConference",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionA",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionB",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionC",
+     "word2": 0
+    },
+    {
+     "key": "NHLDivisionD",
+     "word2": 0
+    },
+    {
+     "key": "AHL",
+     "word2": 1
+    },
+    {
+     "key": "WesternConference",
+     "word2": 1
+    },
+    {
+     "key": "EasternConference",
+     "word2": 1
+    },
+    {
+     "key": "AtlanticDivision",
+     "word2": 1
+    },
+    {
+     "key": "EastDivision",
+     "word2": 1
+    },
+    {
+     "key": "MidwestDivision",
+     "word2": 1
+    },
+    {
+     "key": "NorthDivision",
+     "word2": 1
+    },
+    {
+     "key": "NortheastDivision",
+     "word2": 1
+    },
+    {
+     "key": "WestDivision",
+     "word2": 1
+    },
+    {
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "word2": 7
+    },
+    {
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "word2": 10
+    },
+    {
+     "key": "SMLIIGA",
+     "word2": 3
+    },
+    {
+     "key": "TXT_LEAGUE_DEL",
+     "word2": 6
+    },
+    {
+     "key": "elitserien",
+     "word2": 2
+    },
+    {
+     "key": "OHL",
+     "word2": 12
+    },
+    {
+     "key": "WesternConference",
+     "word2": 12
+    },
+    {
+     "key": "EasternConference",
+     "word2": 12
+    },
+    {
+     "key": "CentralDivision",
+     "word2": 12
+    },
+    {
+     "key": "EastDivision",
+     "word2": 12
+    },
+    {
+     "key": "MidwestDivision",
+     "word2": 12
+    },
+    {
+     "key": "WestDivision",
+     "word2": 12
+    },
+    {
+     "key": "QMJHL",
+     "word2": 13
+    },
+    {
+     "key": "EastDivision",
+     "word2": 13
+    },
+    {
+     "key": "MaritimesDivision",
+     "word2": 13
+    },
+    {
+     "key": "WestDivision",
+     "word2": 13
+    },
+    {
+     "key": "WHL",
+     "word2": 11
+    },
+    {
+     "key": "WesternConference",
+     "word2": 11
+    },
+    {
+     "key": "EasternConference",
+     "word2": 11
+    },
+    {
+     "key": "BcDivision",
+     "word2": 11
+    },
+    {
+     "key": "CentralDivision",
+     "word2": 11
+    },
+    {
+     "key": "EastDivision",
+     "word2": 11
+    },
+    {
+     "key": "UsDivision",
+     "word2": 11
+    },
+    {
+     "key": "TournamentFile",
+     "word2": 5
+    },
+    {
+     "key": "PoolA",
+     "word2": 5
+    },
+    {
+     "key": "PoolB",
+     "word2": 5
+    },
+    {
+     "key": "Playoffs",
+     "word2": 5
+    },
+    {
+     "key": "ConferenceA",
+     "word2": 5
+    },
+    {
+     "key": "ConferenceB",
+     "word2": 5
+    },
+    {
+     "key": "DivisionA",
+     "word2": 5
+    },
+    {
+     "key": "DivisionB",
+     "word2": 5
+    },
+    {
+     "key": "DivisionC",
+     "word2": 5
+    },
+    {
+     "key": "DivisionD",
+     "word2": 5
+    },
+    {
+     "key": "CUSTOM_TEAMS",
+     "word2": 5
+    }
+   ]
+  }
+ ]
+}

@@ -1,3 +1,4 @@
+import { assetRoot } from "../lib/assetRoot";
 // Player Assets — browse the art the game ships for each player: the front-end portrait, the
 // head mesh, and the head's textures. Master list; the preview lives in `PlayerAssetDetail`.
 //
@@ -13,9 +14,11 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
+import { PlayerContainmentCard } from "../components/PlayerContainmentCard";
 import { useProject } from "../lib/project";
 import { EntityList, type Column } from "../components/EntityList";
-import { EmptyState } from "../components/primitives";
+import { EmptyState, SelectPrompt } from "../components/primitives";
+import { EXTRACTION_GATE_REASON } from "../components/GateHint";
 import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 
 type Filter = "all" | "portrait" | "head" | "exportable";
@@ -40,7 +43,7 @@ export function isExportable(p: PlayerAssetsDto): boolean {
 export function usePlayerAssets() {
   const { project, install } = useProject();
   const projectId = project!.project_id;
-  const installDir = install?.install_dir ?? null;
+  const installDir = assetRoot(install) ?? null;
 
   // `platform` drives the on-disk art layout server-side (RenderWare vs the PS4
   // kettle tree), so it must travel with every asset call.
@@ -80,7 +83,7 @@ export function AssetGate({
     return (
       <EmptyState
         title="No install folder for this project"
-        hint="Asset tools need the game's install folder to find its art. Re-open the project through the root-folder onboarding flow rather than by picking a database file directly."
+        hint="Choose a game source folder under Project Overview → Game source folders to find player art. Your edits stay in this project."
       />
     );
   }
@@ -92,9 +95,8 @@ export function AssetGate({
           <>
             Expected <code className="text-slate-300">{roots.data.rendering}</code> and{" "}
             <code className="text-slate-300">{roots.data.fe}</code>. Asset editing requires all of
-            this install's <code>.big</code> archives to be fully extracted in place — run the
-            extraction step from onboarding first, then come back. Note: mesh (head model) editing
-            is only supported on Xbox 360.
+            this install's <code>.big</code> archives to be extracted in place. {EXTRACTION_GATE_REASON}{" "}
+            Database editing is independent of this. Note: mesh (head model) editing is only supported on Xbox 360.
           </>
         }
       />
@@ -154,8 +156,9 @@ export function PlayerAssetsPage() {
       key: "head",
       label: "Head",
       width: "60px",
-      sort: (r) => (r.mesh_path ? 0 : r.pool_head ? 1 : 2),
-      render: (r) => (r.mesh_path ? "✓" : r.pool_head ? "pool" : "—"),
+      sort: (r) => (r.mesh_path ? 0 : r.pool_head || r.head_shared ? 1 : 2),
+      render: (r) =>
+        r.mesh_path ? "✓" : r.pool_head || r.head_shared ? "shared" : "—",
       cellClass: (r) => (r.mesh_path ? "text-emerald-400" : "text-slate-600"),
     },
     {
@@ -203,3 +206,18 @@ export function PlayerAssetsPage() {
     />
   );
 }
+
+/** The index pane of the Player assets list (no player picked): the title-level portrait / head
+ *  containment summary (Phase 3, 22 Sep 2026) above the pick prompt. Read-only. */
+export function PlayerAssetsIndex() {
+  const { projectId, installDir, rootArgs, roots } = usePlayerAssets();
+  return (
+    <div className="space-y-3 p-3">
+      {installDir && roots.data?.complete ? (
+        <PlayerContainmentCard projectId={projectId} rootArgs={rootArgs} installDir={installDir} />
+      ) : null}
+      <SelectPrompt what="player" />
+    </div>
+  );
+}
+

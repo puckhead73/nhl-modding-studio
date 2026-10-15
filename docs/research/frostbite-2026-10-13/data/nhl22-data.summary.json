@@ -1,0 +1,93 @@
+{
+ "superbundles": {
+  "Gen4b/contentlaunchsb": {
+   "bundles": 9678,
+   "chunks_toc": 13911,
+   "ebx": 65115,
+   "res": 41733,
+   "bundle_chunks": 27927
+  },
+  "Gen4b/contentsb": {
+   "bundles": 27582,
+   "chunks_toc": 45073,
+   "ebx": 298030,
+   "res": 86278,
+   "bundle_chunks": 70093
+  },
+  "Gen4b/globals": {
+   "bundles": 42,
+   "chunks_toc": 23852,
+   "ebx": 941,
+   "res": 5295,
+   "bundle_chunks": 88
+  },
+  "Gen4b/globalsfull": {
+   "bundles": 1,
+   "chunks_toc": 38339,
+   "ebx": 1,
+   "res": 1,
+   "bundle_chunks": 1
+  },
+  "Gen4b/levels/game/game": {
+   "bundles": 1,
+   "chunks_toc": 1721,
+   "ebx": 6845,
+   "res": 5439,
+   "bundle_chunks": 1387
+  },
+  "Gen4b/movies": {
+   "bundles": 389,
+   "chunks_toc": 427,
+   "ebx": 1344,
+   "res": 6,
+   "bundle_chunks": 0
+  },
+  "Gen4b/ui": {
+   "bundles": 9,
+   "chunks_toc": 0,
+   "ebx": 134,
+   "res": 132,
+   "bundle_chunks": 1
+  },
+  "Gen4b/worldssb": {
+   "bundles": 5512,
+   "chunks_toc": 9248,
+   "ebx": 153302,
+   "res": 69278,
+   "bundle_chunks": 70260,
+   "bundle_errors": 1
+  }
+ },
+ "anomalies": [],
+ "errors": [
+  "Gen4b/worldssb#2073: manifest counts inconsistent"
+ ],
+ "missing_toc": [],
+ "magics": {
+  "0x9d798ed6": 43213
+ },
+ "cas_files": {
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_02\\cas_01.cas": 9678,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_10.cas": 3017,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_05.cas": 1512,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_03.cas": 2370,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_01.cas": 3700,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_04.cas": 1811,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_02.cas": 6977,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_06.cas": 1768,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_09.cas": 2343,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_08.cas": 2083,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_05\\cas_07.cas": 2001,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_00\\cas_01.cas": 51,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_06\\cas_01.cas": 1,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_01\\cas_01.cas": 1,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_03\\cas_01.cas": 389,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_04\\cas_01.cas": 3529,
+  "H:/Emulators/ShadPS4/Games/CUSA26280\\Data\\Gen4b\\superbundlelayout\\nhl_installpackage_04\\cas_02.cas": 1982
+ },
+ "flag_values": {
+  "1": 63175,
+  "0": 883670
+ },
+ "layout_base": null
+}

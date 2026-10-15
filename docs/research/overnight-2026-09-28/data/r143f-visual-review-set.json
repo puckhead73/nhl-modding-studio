@@ -1,0 +1,591 @@
+{
+ "note": "R143f - reproducible C38 visual review set (after-receipt-6 prompt): rebuilds the R143d / R143e contact sheets for the sampled ids\n(thumbnail N | tint mask N-1 | N | N+1) into a research-owned folder OUTSIDE the repository (proprietary images are never committed) and\nwrites a manifest with the SHA-256 of every source file used, the ids, the control neighbours and the research judgement. Read-only on the\ninstalls. Usage: python r143f_visual_review_set.py <image dir outside the repo> <manifest.json>",
+ "probe_sha256": "2bbe9040acdb066c29252611c6b361ea70914cb3a3bb161e3eee22113f378727",
+ "image_dir": "H:\\TEMP\\nhlms-research-c38-visual-2026-09-28",
+ "owner": "research lane (claim research-q11-reconcile-c38)",
+ "successor_dependency": "coordinator review of C38 / handoff 11 (research receipt 7); delete the image folder after that review",
+ "sets": [
+  {
+   "sheet": "legacy-pads.png",
+   "sheet_sha256": "1c42c0c7dddc8863556369d92348b5c9c07d94bbf32277b5c4ea48ac4efba084",
+   "title_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "family": "pads",
+   "ids": [
+    11,
+    12,
+    20,
+    31,
+    40,
+    44,
+    45,
+    46,
+    60,
+    77
+   ],
+   "controls": "columns: thumbnail N | tint mask N-1 | N | N+1 (grey = file absent)",
+   "judgement": {
+    "match_N": [
+     11,
+     12,
+     31,
+     44,
+     45,
+     46
+    ],
+    "plausible_N": [
+     20
+    ],
+    "undetermined": [
+     40,
+     60,
+     77
+    ]
+   },
+   "sources": [
+    {
+     "id": 11,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads11.big",
+     "thumbnail_sha256": "f0a6b6e35df5452e07f6162c445b3cc3025153f79d737f313689eeb4468691f6",
+     "tint_masks": {
+      "10": {
+       "file": "goaliepad_10_0_tm.rx2",
+       "sha256": null
+      },
+      "11": {
+       "file": "goaliepad_11_0_tm.rx2",
+       "sha256": "356b7c31c7a8c840e980076e7741dd25c5b25750cf9010d7903fa5559b520860"
+      },
+      "12": {
+       "file": "goaliepad_12_0_tm.rx2",
+       "sha256": "e50619d6462710163a9b70d1437db17c337dce607dcdc50d6dc43e0c940b05ce"
+      }
+     }
+    },
+    {
+     "id": 12,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads12.big",
+     "thumbnail_sha256": "c9df45b56316e54511e9d08c2b4bcf3c988496743a8774a1f405b5c7b4a30aea",
+     "tint_masks": {
+      "11": {
+       "file": "goaliepad_11_0_tm.rx2",
+       "sha256": "356b7c31c7a8c840e980076e7741dd25c5b25750cf9010d7903fa5559b520860"
+      },
+      "12": {
+       "file": "goaliepad_12_0_tm.rx2",
+       "sha256": "e50619d6462710163a9b70d1437db17c337dce607dcdc50d6dc43e0c940b05ce"
+      },
+      "13": {
+       "file": "goaliepad_13_0_tm.rx2",
+       "sha256": null
+      }
+     }
+    },
+    {
+     "id": 20,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads20.big",
+     "thumbnail_sha256": "ddb20d93f476fb74c9e644b673aa6729dbf520c8f731dac05144fe73b88c2620",
+     "tint_masks": {
+      "19": {
+       "file": "goaliepad_19_0_tm.rx2",
+       "sha256": "59c0f9ac67612644c38c0985522a40aa1f057ab3ecc62430638b3ef18784cfba"
+      },
+      "20": {
+       "file": "goaliepad_20_0_tm.rx2",
+       "sha256": "9e58acb675a619c3da257c0984fed5f0c4657d7df750945cf46f82f0ff2894e4"
+      },
+      "21": {
+       "file": "goaliepad_21_0_tm.rx2",
+       "sha256": "22c4b5a5900534bc80227245531a63879098977e7879e927aa7e109b454f4642"
+      }
+     }
+    },
+    {
+     "id": 31,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads31.big",
+     "thumbnail_sha256": "8456166d93f4dc139d5ef550e85cc676d395757cebe7bdf3d3708c07e700c41e",
+     "tint_masks": {
+      "30": {
+       "file": "goaliepad_30_0_tm.rx2",
+       "sha256": "d245b10ef08a994ba7a0ad212ef56c05913ec888a473d6f3954c14576f908f97"
+      },
+      "31": {
+       "file": "goaliepad_31_0_tm.rx2",
+       "sha256": "1932e4346b9ac06572c8faaace4ae3bd894c1f82ec00d3ef9788df120f6924a4"
+      },
+      "32": {
+       "file": "goaliepad_32_0_tm.rx2",
+       "sha256": "0e3f85032ebdbb36d41cc1f25d7150eda0958c0bc99fa9a4a5513cbf04c76af9"
+      }
+     }
+    },
+    {
+     "id": 40,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads40.big",
+     "thumbnail_sha256": "b80a0a44fe2f8b662b3858d44133ccf7d4cc7ef061d505b76e75afd7daa4f355",
+     "tint_masks": {
+      "39": {
+       "file": "goaliepad_39_0_tm.rx2",
+       "sha256": "642e5f8892c829b57d576d37b7f72b89379cd52dc042a04243a5ef77369b39a3"
+      },
+      "40": {
+       "file": "goaliepad_40_0_tm.rx2",
+       "sha256": "892edf8766c3926dab7c407a3d8216dfe5ae57a9d03a26d22820d43ef1ce0541"
+      },
+      "41": {
+       "file": "goaliepad_41_0_tm.rx2",
+       "sha256": null
+      }
+     }
+    },
+    {
+     "id": 44,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads44.big",
+     "thumbnail_sha256": "2f824ea73ce5bcbcb964df8566e27fcfc2c581362b84dd0762442d8d676226fd",
+     "tint_masks": {
+      "43": {
+       "file": "goaliepad_43_0_tm.rx2",
+       "sha256": "efe648b5d0e5856da3d34ecc6a2fab39d892d12bfbb3fd9f988b2cf7242cf4d8"
+      },
+      "44": {
+       "file": "goaliepad_44_0_tm.rx2",
+       "sha256": "0375e96c317ae8c36beda477a94c99fa8a37b52d228edc946eb63371a59f243e"
+      },
+      "45": {
+       "file": "goaliepad_45_0_tm.rx2",
+       "sha256": "4a9e67604870cebe2748a79e3d464d4a5b174e92d428bccfe986f1d40680cd73"
+      }
+     }
+    },
+    {
+     "id": 45,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads45.big",
+     "thumbnail_sha256": "b5880f776257b2615062081d3c6513809ce9a3c568dbff5790a317c65d919a10",
+     "tint_masks": {
+      "44": {
+       "file": "goaliepad_44_0_tm.rx2",
+       "sha256": "0375e96c317ae8c36beda477a94c99fa8a37b52d228edc946eb63371a59f243e"
+      },
+      "45": {
+       "file": "goaliepad_45_0_tm.rx2",
+       "sha256": "4a9e67604870cebe2748a79e3d464d4a5b174e92d428bccfe986f1d40680cd73"
+      },
+      "46": {
+       "file": "goaliepad_46_0_tm.rx2",
+       "sha256": "56cc9d9a36d1be636da1b6ec1cd9d741dc375193f02464de7e3ade8ba5532c68"
+      }
+     }
+    },
+    {
+     "id": 46,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads46.big",
+     "thumbnail_sha256": "e6c9f5f4d4adf531c5f955547d633df729b8e22f6ccd02c53a5505b2bdd32ad0",
+     "tint_masks": {
+      "45": {
+       "file": "goaliepad_45_0_tm.rx2",
+       "sha256": "4a9e67604870cebe2748a79e3d464d4a5b174e92d428bccfe986f1d40680cd73"
+      },
+      "46": {
+       "file": "goaliepad_46_0_tm.rx2",
+       "sha256": "56cc9d9a36d1be636da1b6ec1cd9d741dc375193f02464de7e3ade8ba5532c68"
+      },
+      "47": {
+       "file": "goaliepad_47_0_tm.rx2",
+       "sha256": null
+      }
+     }
+    },
+    {
+     "id": 60,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads60.big",
+     "thumbnail_sha256": "c2096722b459b69a4f33f88c145b96cec01b3124e62ab61d6c406754fa75552e",
+     "tint_masks": {
+      "59": {
+       "file": "goaliepad_59_0_tm.rx2",
+       "sha256": "02e27d03016b0956aeff43c425d5655f502147ae35c545f827ea1b92f3211fc0"
+      },
+      "60": {
+       "file": "goaliepad_60_0_tm.rx2",
+       "sha256": "4358e5d113570cc7bc04a937c9d2afba207f73459fb7aa923972f3acaa891183"
+      },
+      "61": {
+       "file": "goaliepad_61_0_tm.rx2",
+       "sha256": "1fd7e20e7ab0a2b808fab878a74bc90d3c9a61d7f06418e4ba1153b144b091a5"
+      }
+     }
+    },
+    {
+     "id": 77,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads77.big",
+     "thumbnail_sha256": "9dd9b06dca98a2ed88521e61941eb0e1bdef6ccb0b43f6d304a859e6991dd3e6",
+     "tint_masks": {
+      "76": {
+       "file": "goaliepad_76_0_tm.rx2",
+       "sha256": "265a3b0e9fe7d4984ac13e7d7c35d13effe7fca6ee6e0cdd8549bb2cb929389b"
+      },
+      "77": {
+       "file": "goaliepad_77_0_tm.rx2",
+       "sha256": "a5238cc839a5794492c31443d15cae79198fbcfc9f60d6ae43b104cf27041d94"
+      },
+      "78": {
+       "file": "goaliepad_78_0_tm.rx2",
+       "sha256": "76a7a1e1024ccb77a371807707ea3fdbed8dceb1baf917c8a7e6baf03425fe9c"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "sheet": "legacy-blocker.png",
+   "sheet_sha256": "4d56b9cf07ccf8c09fd58a50c729155673c24c701586265f0ee7aa8cc3b67e6b",
+   "title_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "family": "blocker",
+   "ids": [
+    11,
+    12,
+    31,
+    44
+   ],
+   "controls": "columns: thumbnail N | tint mask N-1 | N | N+1 (grey = file absent)",
+   "judgement": {
+    "match_N": [
+     11,
+     12,
+     31,
+     44
+    ]
+   },
+   "sources": [
+    {
+     "id": 11,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\blocker\\blocker11.big",
+     "thumbnail_sha256": "f4c15cf6ba08efdf08f32ee367fb9d8bbae90f9cebe77be0d509788eeaa8d8b8",
+     "tint_masks": {
+      "10": {
+       "file": "blocker_0_10_0_tm.rx2",
+       "sha256": null
+      },
+      "11": {
+       "file": "blocker_0_11_0_tm.rx2",
+       "sha256": "feeb7ee6261f6f5707a22d6f6371dea9b9e90e61534cead85a9f401297f7663a"
+      },
+      "12": {
+       "file": "blocker_0_12_0_tm.rx2",
+       "sha256": "cbfb0a0cbbe8df7187418271b8772fc8d9756e0553f82785ebd5b240f19dd2d1"
+      }
+     }
+    },
+    {
+     "id": 12,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\blocker\\blocker12.big",
+     "thumbnail_sha256": "d5c7dd1168cf8f6ecd52d3694851aa96dee38428997ffcbd058cccc808a034bd",
+     "tint_masks": {
+      "11": {
+       "file": "blocker_0_11_0_tm.rx2",
+       "sha256": "feeb7ee6261f6f5707a22d6f6371dea9b9e90e61534cead85a9f401297f7663a"
+      },
+      "12": {
+       "file": "blocker_0_12_0_tm.rx2",
+       "sha256": "cbfb0a0cbbe8df7187418271b8772fc8d9756e0553f82785ebd5b240f19dd2d1"
+      },
+      "13": {
+       "file": "blocker_0_13_0_tm.rx2",
+       "sha256": null
+      }
+     }
+    },
+    {
+     "id": 31,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\blocker\\blocker31.big",
+     "thumbnail_sha256": "04c1d45dc418f376f7f273608f5029f333a55c1e914ec1f537a66f54dbb88b46",
+     "tint_masks": {
+      "30": {
+       "file": "blocker_0_30_0_tm.rx2",
+       "sha256": "51dccd98b3ab8fef6dcc0c98e1dc2dee76c7c0901ea0c4ab8315dbea88ff4fd4"
+      },
+      "31": {
+       "file": "blocker_0_31_0_tm.rx2",
+       "sha256": "236fc036c4427054374e982057f50d005a274f0db2ee04986e3aa15843bb7c5f"
+      },
+      "32": {
+       "file": "blocker_0_32_0_tm.rx2",
+       "sha256": "6307d0e2c59883f8658cac24d56f76625a10241dd0e94fa05ab4ffaf8c0f8ca6"
+      }
+     }
+    },
+    {
+     "id": 44,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\blocker\\blocker44.big",
+     "thumbnail_sha256": "abfb86d59c68bfabf203a333677ef01191f30365050ed4b48b82aa334ad79b47",
+     "tint_masks": {
+      "43": {
+       "file": "blocker_0_43_0_tm.rx2",
+       "sha256": "86ff00b76e46a60decfc58ff9555b02e684cb2aaab29890e4c91cc343a236642"
+      },
+      "44": {
+       "file": "blocker_0_44_0_tm.rx2",
+       "sha256": "fed583848621208f36bcbc78c56cae85362644955cc2dd5d793c78eac2cd5b3e"
+      },
+      "45": {
+       "file": "blocker_0_45_0_tm.rx2",
+       "sha256": "587bb3c9d5abd5d3bfa7068e4b50af98da137afd776a050ced7da6dbc005cb6c"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "sheet": "legacy-trapper.png",
+   "sheet_sha256": "71ef0a28cf3af6b1f9888ee1038b3ab4126e632b4af14c8ba3915e8928e6ed90",
+   "title_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "family": "trapper",
+   "ids": [
+    11,
+    12,
+    31,
+    44
+   ],
+   "controls": "columns: thumbnail N | tint mask N-1 | N | N+1 (grey = file absent)",
+   "judgement": {
+    "plausible_N": [
+     31,
+     44
+    ],
+    "undetermined": [
+     11,
+     12
+    ]
+   },
+   "sources": [
+    {
+     "id": 11,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\trapper\\trapper11.big",
+     "thumbnail_sha256": "ed8a4c2993365b2a8194578e929be27ed782ba0e8729bd06425a91d3035906f2",
+     "tint_masks": {
+      "10": {
+       "file": "trapper_0_10_0_tm.rx2",
+       "sha256": null
+      },
+      "11": {
+       "file": "trapper_0_11_0_tm.rx2",
+       "sha256": "2c2e3c52eca4c7658bf05b82370804475a3aac671806a9abe3fc3a92c238c839"
+      },
+      "12": {
+       "file": "trapper_0_12_0_tm.rx2",
+       "sha256": "fe2b6a985e68a6f391f6048616e852519e02c5ccd63c768e0e593704d1357540"
+      }
+     }
+    },
+    {
+     "id": 12,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\trapper\\trapper12.big",
+     "thumbnail_sha256": "37fddac14e71e2d62dbb7b7a37150a0d1561dd5e3f83e02fc2c1d1f8fd221273",
+     "tint_masks": {
+      "11": {
+       "file": "trapper_0_11_0_tm.rx2",
+       "sha256": "2c2e3c52eca4c7658bf05b82370804475a3aac671806a9abe3fc3a92c238c839"
+      },
+      "12": {
+       "file": "trapper_0_12_0_tm.rx2",
+       "sha256": "fe2b6a985e68a6f391f6048616e852519e02c5ccd63c768e0e593704d1357540"
+      },
+      "13": {
+       "file": "trapper_0_13_0_tm.rx2",
+       "sha256": null
+      }
+     }
+    },
+    {
+     "id": 31,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\trapper\\trapper31.big",
+     "thumbnail_sha256": "e046bce05c82494435ff607c94a49dfb14c17663f59165c356d8737f890b45ed",
+     "tint_masks": {
+      "30": {
+       "file": "trapper_0_30_0_tm.rx2",
+       "sha256": "622ac91948d8cdaab757819d1ca3c34be430f30802bb826b69e3e4fb91990ad7"
+      },
+      "31": {
+       "file": "trapper_0_31_0_tm.rx2",
+       "sha256": "cd606008ec82645da4a1f253ba3303c7f9053e48d7d10f30e35758cf22ffbd2d"
+      },
+      "32": {
+       "file": "trapper_0_32_0_tm.rx2",
+       "sha256": "680688ad0cd82f439b85f8ebc75a30a96e51e3985de977d36ebdf08f45168908"
+      }
+     }
+    },
+    {
+     "id": 44,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\trapper\\trapper44.big",
+     "thumbnail_sha256": "ecb04359918b62268f4777e3b6ee7a7d507ddf1cdd9b716e7c99fe0e1370e0d0",
+     "tint_masks": {
+      "43": {
+       "file": "trapper_0_43_0_tm.rx2",
+       "sha256": "653dd88c3ca5a17244419ad637f6ba87ea088a0b101d9590a91b227a37ec75c4"
+      },
+      "44": {
+       "file": "trapper_0_44_0_tm.rx2",
+       "sha256": "bd63c7af1501c25f1827e00ef5d0c6a49a47263ed1dffe0a53c50be5af53a829"
+      },
+      "45": {
+       "file": "trapper_0_45_0_tm.rx2",
+       "sha256": "803d940a2c8ed627a4195c86d60e199806875b278f39047d642bd65272d97e3d"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "sheet": "nhl12-pads.png",
+   "sheet_sha256": "211687a0b1542ecd4ee6e9cf8b1096d5301e400f01f85aabd0c75b8c97bb0411",
+   "title_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12",
+   "family": "pads",
+   "ids": [
+    11,
+    12,
+    31,
+    44
+   ],
+   "controls": "columns: thumbnail N | tint mask N-1 | N | N+1 (grey = file absent)",
+   "judgement": {
+    "match_N": [
+     11,
+     12,
+     31,
+     44
+    ]
+   },
+   "sources": [
+    {
+     "id": 11,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads11.big",
+     "thumbnail_sha256": "a192f90cffed6203bc245c75fc24ebcb4d0a0da9117d2b0eb83138a6ac3c4bed",
+     "tint_masks": {
+      "10": {
+       "file": "fegoaliepad_0_10_0_tm.rx2",
+       "sha256": null
+      },
+      "11": {
+       "file": "fegoaliepad_0_11_0_tm.rx2",
+       "sha256": "d51caffff07d2082332729777cd7968cafaa38cf5e65c0f6884dbbcb32374b62"
+      },
+      "12": {
+       "file": "fegoaliepad_0_12_0_tm.rx2",
+       "sha256": "9c42352bd42f9daf422184866b2a62dc8ecb5952f1c4ab9db3c421b90c28da86"
+      }
+     }
+    },
+    {
+     "id": 12,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads12.big",
+     "thumbnail_sha256": "5ddc1517b8a91e06980ced1be6522f7cefe5146a26c8daa2b4979eb12ec20fd0",
+     "tint_masks": {
+      "11": {
+       "file": "fegoaliepad_0_11_0_tm.rx2",
+       "sha256": "d51caffff07d2082332729777cd7968cafaa38cf5e65c0f6884dbbcb32374b62"
+      },
+      "12": {
+       "file": "fegoaliepad_0_12_0_tm.rx2",
+       "sha256": "9c42352bd42f9daf422184866b2a62dc8ecb5952f1c4ab9db3c421b90c28da86"
+      },
+      "13": {
+       "file": "fegoaliepad_0_13_0_tm.rx2",
+       "sha256": null
+      }
+     }
+    },
+    {
+     "id": 31,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads31.big",
+     "thumbnail_sha256": "8d6160ea68b89a59a3e08b324549f40aef6cf2d1a354c18eee7e05e7f4ef6bce",
+     "tint_masks": {
+      "30": {
+       "file": "fegoaliepad_0_30_0_tm.rx2",
+       "sha256": "4843188bc7947a83b53027077debed9c06ed0500afc0ee30fdc3cbfe535db7a1"
+      },
+      "31": {
+       "file": "fegoaliepad_0_31_0_tm.rx2",
+       "sha256": "66ccf5110d54d3db6b4e85e2e41e9cf43c40279727c37f2878aabb91f5802c8e"
+      },
+      "32": {
+       "file": "fegoaliepad_0_32_0_tm.rx2",
+       "sha256": "0375d2e23acd360c0b6f873d6e5a1e5b58666fe3bf6b047a51d7033c93a5892d"
+      }
+     }
+    },
+    {
+     "id": 44,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads44.big",
+     "thumbnail_sha256": "d46dd95e8068c3c392ec1a353b00cd4b321c665ec74a3bf99fbbd8b6dbbdb2b3",
+     "tint_masks": {
+      "43": {
+       "file": "fegoaliepad_0_43_0_tm.rx2",
+       "sha256": "f36c15c4f91408a40d49fa6da384dbd46ba8b4c68a9aa5e0a3fd01cb83a6aaf8"
+      },
+      "44": {
+       "file": "fegoaliepad_0_44_0_tm.rx2",
+       "sha256": "4949b15dc3cd956c25196f2df037c5df693fd6e5dd1352080714e8b11c8083fb"
+      },
+      "45": {
+       "file": "fegoaliepad_0_45_0_tm.rx2",
+       "sha256": "e0eeff591f2d3b763a2272d9aec8d298325d1555e8fbc361d31a05cee501eb1d"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "sheet": "legacy-pads-stock-duplicate.png",
+   "sheet_sha256": "7b194d21a86d650c77034bd0ecc164bbcb210ef9851c9c35fa00062fc5c737ac",
+   "title_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "family": "pads-stock-duplicate",
+   "ids": [
+    37,
+    41
+   ],
+   "controls": "columns: thumbnail N | tint mask N-1 | N | N+1 (grey = file absent)",
+   "judgement": {
+    "note": "pads37.big == pads41.big byte-identical (R143b); tint masks compared for the record"
+   },
+   "sources": [
+    {
+     "id": 37,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads37.big",
+     "thumbnail_sha256": "c9f23969cc1ec34fa1885ace17dd36c738a6d87c6e3ca928f02193bfff460057",
+     "tint_masks": {
+      "36": {
+       "file": "goaliepad_36_0_tm.rx2",
+       "sha256": "9af49dfb9044938f771a73800676e52e3c1466c1a4ed1d8653d0f3e1162c29e2"
+      },
+      "37": {
+       "file": "goaliepad_37_0_tm.rx2",
+       "sha256": null
+      },
+      "38": {
+       "file": "goaliepad_38_0_tm.rx2",
+       "sha256": "91ca891e673f3b8aebc74ca48a716ea06ca67be122a6531057d91d4258ae7bbd"
+      }
+     }
+    },
+    {
+     "id": 41,
+     "thumbnail": "fe\\ion\\artassets\\createplayer\\pads\\pads41.big",
+     "thumbnail_sha256": "c9f23969cc1ec34fa1885ace17dd36c738a6d87c6e3ca928f02193bfff460057",
+     "tint_masks": {
+      "40": {
+       "file": "goaliepad_40_0_tm.rx2",
+       "sha256": "892edf8766c3926dab7c407a3d8216dfe5ae57a9d03a26d22820d43ef1ce0541"
+      },
+      "41": {
+       "file": "goaliepad_41_0_tm.rx2",
+       "sha256": null
+      },
+      "42": {
+       "file": "goaliepad_42_0_tm.rx2",
+       "sha256": "7eb9aacb0ec35b25501fa62be0f59fbeb2d669ad5d6065f0d68b65b5d9cd2025"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

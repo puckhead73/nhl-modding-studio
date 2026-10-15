@@ -1,0 +1,59 @@
+﻿{
+  "root": "\\\\?\\H:\\Emulators\\ShadPS4\\Games\\CUSA37933",
+  "layers": [
+    {
+      "name": "Data",
+      "head": 981806,
+      "base": null,
+      "superbundles": [
+        "Gen4b/contentlaunchsb",
+        "Gen4b/contentsb",
+        "Gen4b/globals",
+        "Gen4b/globalsfull",
+        "Gen4b/levels/game/game",
+        "Gen4b/movies",
+        "Gen4b/ui",
+        "Gen4b/worldssb"
+      ],
+      "initfs": "encrypted (opaque)",
+      "chunkmanifest": true
+    },
+    {
+      "name": "Patch",
+      "head": 1023354,
+      "base": 981806,
+      "superbundles": [
+        "Gen4b/contentlaunchsb",
+        "Gen4b/contentsb",
+        "Gen4b/globals",
+        "Gen4b/globalsfull",
+        "Gen4b/levels/game/game",
+        "Gen4b/movies",
+        "Gen4b/ui",
+        "Gen4b/worldssb"
+      ],
+      "initfs": "encrypted (opaque)",
+      "chunkmanifest": false
+    }
+  ],
+  "warnings": [
+    "Patch/Gen4b/ui.toc is missing",
+    "Read-only catalogue: roster editing and deployment are not enabled. Data and Patch are shown separately."
+  ]
+}
+{"base_name_matches":null,"bundles":78819,"layer":"Data","superbundle":"Gen4b/contentlaunchsb"}
+{"base_name_matches":null,"bundles":44249,"layer":"Data","superbundle":"Gen4b/contentsb"}
+{"base_name_matches":null,"bundles":42,"layer":"Data","superbundle":"Gen4b/globals"}
+{"base_name_matches":null,"bundles":767,"layer":"Data","superbundle":"Gen4b/globalsfull"}
+{"base_name_matches":null,"bundles":1,"layer":"Data","superbundle":"Gen4b/levels/game/game"}
+{"base_name_matches":null,"bundles":345,"layer":"Data","superbundle":"Gen4b/movies"}
+{"base_name_matches":null,"bundles":10,"layer":"Data","superbundle":"Gen4b/ui"}
+{"base_name_matches":null,"bundles":5482,"layer":"Data","superbundle":"Gen4b/worldssb"}
+{"base_name_matches":4412,"bundles":8074,"layer":"Patch","superbundle":"Gen4b/contentlaunchsb"}
+{"base_name_matches":7671,"bundles":10723,"layer":"Patch","superbundle":"Gen4b/contentsb"}
+{"base_name_matches":4,"bundles":4,"layer":"Patch","superbundle":"Gen4b/globals"}
+{"base_name_matches":467,"bundles":467,"layer":"Patch","superbundle":"Gen4b/globalsfull"}
+{"base_name_matches":1,"bundles":1,"layer":"Patch","superbundle":"Gen4b/levels/game/game"}
+{"base_name_matches":1,"bundles":8,"layer":"Patch","superbundle":"Gen4b/movies"}
+{"layer":"Patch","status":"missing TOC; no overlay inferred","superbundle":"Gen4b/ui"}
+{"base_name_matches":901,"bundles":910,"layer":"Patch","superbundle":"Gen4b/worldssb"}

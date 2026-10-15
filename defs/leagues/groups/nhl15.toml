@@ -1,0 +1,653 @@
+# Competition groups for nhl15 (NHL 12-Legacy family): the table the executable indexes with the team
+# row's global group ids `leaguegroup` (iIBl), `conferencegroup` (OwTu) and `divisiongroup` (CGMK).
+# Baked from research handoff P1.2-X (2026-09-18, docs/research/overnight-2026-09-18/
+# 12-phase1-competition-structure-and-schedules.md; data/xbox360-competition-groups.json): sequential
+# (dictionary key, league art id) pairs read from the nhl15 Xbox 360 `default.xex` at VA 0x83a1fd78;
+# `kind` and `league_code` are derived from how the anchor team rows use each id (block structure:
+# a league group heads a block, the following conference/division groups belong to it). Ids are
+# TITLE-SPECIFIC: a value copied from another title is silently wrong. Labels resolve through the
+# title's own dictionary (the `key`) when one is attached; `text` is the English text observed.
+# `used = false`: no anchor team row carries the id (tournament pools, unused divisions).
+game = "nhl15"
+applies_to = ["nhl15"]
+
+[fields]
+league = "iIBl"
+conference = "OwTu"
+division = "CGMK"
+
+[witness]
+game = "nhl15"
+platform = "xbox"
+source = "nhl15 default.xex group table at VA 0x83a1fd78 (P1.2-X, group_table.py); PS3 by identity of the database fields"
+
+[[groups]]
+id = 0
+key = "NHL"
+kind = "league"
+league_code = 0
+logo_index = 0
+text = "NHLÂ®"
+used = true
+[[groups]]
+id = 1
+key = "WesternConference"
+kind = "conference"
+league_code = 0
+logo_index = 0
+text = "Western Conference"
+used = true
+[[groups]]
+id = 2
+key = "EasternConference"
+kind = "conference"
+league_code = 0
+logo_index = 0
+text = "Eastern Conference"
+used = true
+[[groups]]
+id = 3
+key = "NHLDivisionA"
+kind = "division"
+league_code = 0
+logo_index = 0
+text = "Pacific Division"
+used = true
+[[groups]]
+id = 4
+key = "NHLDivisionB"
+kind = "division"
+league_code = 0
+logo_index = 0
+text = "Central Division"
+used = true
+[[groups]]
+id = 5
+key = "NHLDivisionC"
+kind = "division"
+league_code = 0
+logo_index = 0
+text = "Atlantic Division"
+used = true
+[[groups]]
+id = 6
+key = "NHLDivisionD"
+kind = "division"
+league_code = 0
+logo_index = 0
+text = "Metropolitan Division"
+used = true
+[[groups]]
+id = 7
+key = "AHL"
+kind = "league"
+league_code = 1
+logo_index = 1
+text = "AHL"
+used = true
+[[groups]]
+id = 8
+key = "WesternConference"
+kind = "conference"
+league_code = 1
+logo_index = 1
+text = "Western Conference"
+used = true
+[[groups]]
+id = 9
+key = "EasternConference"
+kind = "conference"
+league_code = 1
+logo_index = 1
+text = "Eastern Conference"
+used = true
+[[groups]]
+id = 10
+key = "AtlanticDivision"
+kind = "division"
+league_code = 1
+logo_index = 1
+text = "Atlantic Division"
+used = true
+[[groups]]
+id = 11
+key = "EastDivision"
+kind = "division"
+league_code = 1
+logo_index = 1
+text = "East Division"
+used = true
+[[groups]]
+id = 12
+key = "MidwestDivision"
+kind = "division"
+league_code = 1
+logo_index = 1
+text = "Midwest Division"
+used = true
+[[groups]]
+id = 13
+key = "NorthDivision"
+kind = "division"
+league_code = 1
+logo_index = 1
+text = "North Division"
+used = true
+[[groups]]
+id = 14
+key = "NortheastDivision"
+kind = "division"
+league_code = 1
+logo_index = 1
+text = "Northeast Division"
+used = true
+[[groups]]
+id = 15
+key = "WestDivision"
+kind = "division"
+league_code = 1
+logo_index = 1
+text = "West Division"
+used = true
+[[groups]]
+id = 16
+key = "TXT_LEAGUE_O2_EXTRALIGA"
+kind = "league"
+league_code = 5
+logo_index = 7
+text = "Extraliga ledniho hokeje"
+used = true
+[[groups]]
+id = 17
+key = "TXT_LEAGUE_SWISS_LEAGUE"
+kind = "league"
+league_code = 6
+logo_index = 10
+text = "National League"
+used = true
+[[groups]]
+id = 18
+key = "SMLIIGA"
+kind = "league"
+league_code = 3
+logo_index = 3
+text = "Liiga"
+used = true
+[[groups]]
+id = 19
+key = "TXT_LEAGUE_DEL"
+kind = "league"
+league_code = 4
+logo_index = 6
+text = "DEL"
+used = true
+[[groups]]
+id = 20
+key = "elitserien"
+kind = "league"
+league_code = 2
+logo_index = 2
+text = "SHL"
+used = true
+[[groups]]
+id = 21
+key = "OHL"
+kind = "league"
+league_code = 8
+logo_index = 12
+text = "OHL"
+used = true
+[[groups]]
+id = 22
+key = "WesternConference"
+kind = "conference"
+league_code = 8
+logo_index = 12
+text = "Western Conference"
+used = true
+[[groups]]
+id = 23
+key = "EasternConference"
+kind = "conference"
+league_code = 8
+logo_index = 12
+text = "Eastern Conference"
+used = true
+[[groups]]
+id = 24
+key = "CentralDivision"
+kind = "division"
+league_code = 8
+logo_index = 12
+text = "Central Division"
+used = true
+[[groups]]
+id = 25
+key = "EastDivision"
+kind = "division"
+league_code = 8
+logo_index = 12
+text = "East Division"
+used = true
+[[groups]]
+id = 26
+key = "MidwestDivision"
+kind = "division"
+league_code = 8
+logo_index = 12
+text = "Midwest Division"
+used = true
+[[groups]]
+id = 27
+key = "WestDivision"
+kind = "division"
+league_code = 8
+logo_index = 12
+text = "West Division"
+used = true
+[[groups]]
+id = 28
+key = "QMJHL"
+kind = "league"
+league_code = 9
+logo_index = 13
+text = "QMJHL"
+used = true
+[[groups]]
+id = 29
+key = "EastDivision"
+kind = "division"
+league_code = 9
+logo_index = 13
+text = "East Division"
+used = true
+[[groups]]
+id = 30
+key = "MaritimesDivision"
+kind = "division"
+league_code = 9
+logo_index = 13
+text = "Maritimes Division"
+used = true
+[[groups]]
+id = 31
+key = "WestDivision"
+kind = "division"
+league_code = 9
+logo_index = 13
+text = "West Division"
+used = true
+[[groups]]
+id = 32
+key = "WHL"
+kind = "league"
+league_code = 10
+logo_index = 11
+text = "WHL"
+used = true
+[[groups]]
+id = 33
+key = "WesternConference"
+kind = "conference"
+league_code = 10
+logo_index = 11
+text = "Western Conference"
+used = true
+[[groups]]
+id = 34
+key = "EasternConference"
+kind = "conference"
+league_code = 10
+logo_index = 11
+text = "Eastern Conference"
+used = true
+[[groups]]
+id = 35
+key = "BcDivision"
+kind = "division"
+league_code = 10
+logo_index = 11
+text = "B.C. Division"
+used = true
+[[groups]]
+id = 36
+key = "CentralDivision"
+kind = "division"
+league_code = 10
+logo_index = 11
+text = "Central Division"
+used = true
+[[groups]]
+id = 37
+key = "EastDivision"
+kind = "division"
+league_code = 10
+logo_index = 11
+text = "East Division"
+used = true
+[[groups]]
+id = 38
+key = "UsDivision"
+kind = "division"
+league_code = 10
+logo_index = 11
+text = "U.S. Division"
+used = true
+[[groups]]
+id = 39
+key = "TournamentFile"
+kind = "league"
+league_code = 7
+logo_index = 5
+text = "Tournament"
+used = true
+[[groups]]
+id = 40
+key = "PoolA"
+kind = "tournament"
+league_code = 7
+logo_index = 5
+text = "Pool A"
+used = false
+[[groups]]
+id = 41
+key = "PoolB"
+kind = "tournament"
+league_code = 7
+logo_index = 5
+text = "Pool B"
+used = false
+[[groups]]
+id = 42
+key = "Playoffs"
+kind = "tournament"
+league_code = 7
+logo_index = 5
+text = "Playoffs"
+used = false
+[[groups]]
+id = 43
+key = "ConferenceA"
+kind = "conference"
+league_code = 7
+logo_index = 5
+text = "Conference A"
+used = false
+[[groups]]
+id = 44
+key = "ConferenceB"
+kind = "conference"
+league_code = 7
+logo_index = 5
+text = "Conference B"
+used = false
+[[groups]]
+id = 45
+key = "DivisionA"
+kind = "division"
+league_code = 7
+logo_index = 5
+text = "Division A"
+used = false
+[[groups]]
+id = 46
+key = "DivisionB"
+kind = "division"
+league_code = 7
+logo_index = 5
+text = "Division B"
+used = false
+[[groups]]
+id = 47
+key = "DivisionC"
+kind = "division"
+league_code = 7
+logo_index = 5
+text = "Division C"
+used = false
+[[groups]]
+id = 48
+key = "DivisionD"
+kind = "division"
+league_code = 7
+logo_index = 5
+text = "Division D"
+used = false
+[[groups]]
+id = 49
+key = "CUSTOM_TEAMS"
+kind = "league"
+league_code = 11
+logo_index = 5
+text = "Custom Teams"
+used = true
+
+# ---- witnessed structure (generated by `competition-groups`; do not edit below) ----
+# Measured on the witness database named below. `[[pairs]]` are the (conference, division) arrangements its
+# stock rows carry per league block (`head` = the rows' leaguegroup); `regular` pairs are the choosable ones,
+# `exceptional` pairs are recorded with their rows and never offered. The signature identifies the title's
+# database structure independently of edits (table set, capacities); the known databases are recorded identities.
+[signature]
+tables = 134
+table_set_sha256 = "eb60b593e71417fa5d3684d1fd58f710c27e17284ba41eff479b789923a2558f"
+team_max_records = 246
+
+[[known_databases]]
+role = "base"
+sha256 = "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398"
+source = "anchors/xbox360/nhl15/databases/nhlng.db (Xbox 360 anchor; the PS3 anchor of this title is byte-identical)"
+
+[[pairs]]
+head = 0
+conference = 1
+division = 1
+rows = 1
+arrangement = "exceptional"
+leagues = [0]
+teams = [31]
+note = "a conference id carried in the division slot (All-Star / special squads)"
+[[pairs]]
+head = 0
+conference = 1
+division = 3
+rows = 7
+arrangement = "regular"
+leagues = [0]
+[[pairs]]
+head = 0
+conference = 1
+division = 4
+rows = 7
+arrangement = "regular"
+leagues = [0]
+[[pairs]]
+head = 0
+conference = 2
+division = 2
+rows = 1
+arrangement = "exceptional"
+leagues = [0]
+teams = [30]
+note = "a conference id carried in the division slot (All-Star / special squads)"
+[[pairs]]
+head = 0
+conference = 2
+division = 5
+rows = 8
+arrangement = "regular"
+leagues = [0]
+[[pairs]]
+head = 0
+conference = 2
+division = 6
+rows = 12
+arrangement = "regular"
+leagues = [0, 14]
+[[pairs]]
+head = 7
+conference = 8
+division = 12
+rows = 5
+arrangement = "regular"
+leagues = [1]
+[[pairs]]
+head = 7
+conference = 8
+division = 13
+rows = 5
+arrangement = "regular"
+leagues = [1]
+[[pairs]]
+head = 7
+conference = 8
+division = 15
+rows = 5
+arrangement = "regular"
+leagues = [1]
+[[pairs]]
+head = 7
+conference = 9
+division = 10
+rows = 5
+arrangement = "regular"
+leagues = [1]
+[[pairs]]
+head = 7
+conference = 9
+division = 11
+rows = 5
+arrangement = "regular"
+leagues = [1]
+[[pairs]]
+head = 7
+conference = 9
+division = 14
+rows = 5
+arrangement = "regular"
+leagues = [1]
+[[pairs]]
+head = 16
+conference = 16
+division = 16
+rows = 14
+arrangement = "regular"
+leagues = [5]
+[[pairs]]
+head = 17
+conference = 17
+division = 17
+rows = 12
+arrangement = "regular"
+leagues = [6]
+[[pairs]]
+head = 18
+conference = 18
+division = 18
+rows = 14
+arrangement = "regular"
+leagues = [3]
+[[pairs]]
+head = 19
+conference = 19
+division = 19
+rows = 14
+arrangement = "regular"
+leagues = [4]
+[[pairs]]
+head = 20
+conference = 20
+division = 20
+rows = 12
+arrangement = "regular"
+leagues = [2]
+[[pairs]]
+head = 21
+conference = 22
+division = 26
+rows = 5
+arrangement = "regular"
+leagues = [8]
+[[pairs]]
+head = 21
+conference = 22
+division = 27
+rows = 5
+arrangement = "regular"
+leagues = [8]
+[[pairs]]
+head = 21
+conference = 23
+division = 24
+rows = 5
+arrangement = "regular"
+leagues = [8]
+[[pairs]]
+head = 21
+conference = 23
+division = 25
+rows = 5
+arrangement = "regular"
+leagues = [8]
+[[pairs]]
+head = 28
+conference = 28
+division = 29
+rows = 6
+arrangement = "regular"
+leagues = [9]
+[[pairs]]
+head = 28
+conference = 28
+division = 30
+rows = 6
+arrangement = "regular"
+leagues = [9]
+[[pairs]]
+head = 28
+conference = 28
+division = 31
+rows = 6
+arrangement = "regular"
+leagues = [9]
+[[pairs]]
+head = 32
+conference = 33
+division = 35
+rows = 5
+arrangement = "regular"
+leagues = [10]
+[[pairs]]
+head = 32
+conference = 33
+division = 38
+rows = 5
+arrangement = "regular"
+leagues = [10]
+[[pairs]]
+head = 32
+conference = 34
+division = 36
+rows = 6
+arrangement = "regular"
+leagues = [10]
+[[pairs]]
+head = 32
+conference = 34
+division = 37
+rows = 6
+arrangement = "regular"
+leagues = [10]
+[[pairs]]
+head = 39
+conference = 39
+division = 39
+rows = 21
+arrangement = "regular"
+leagues = [7]
+[[pairs]]
+head = 49
+conference = 49
+division = 49
+rows = 33
+arrangement = "regular"
+leagues = [11, 12, 13]

@@ -1,0 +1,75 @@
+$ python research/nhl08-roster-schema/scripts/exhibition_vs_stock.py anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml
+family 'arena':
+   league     PSFv  rows     0 recB  104 nf 33 groups=league,dynasty,allloaded
+   exhibition OEtS  rows   138 recB  104 nf 33 groups=rosters,allloaded
+     PSFv vs OEtS: identical descriptors=False shared field ids=33/33|33
+family 'awardstable':
+   league     IALy  rows     0 recB   88 nf 10 groups=league,dynasty,allloaded
+   stock      Urkm  rows   225 recB   88 nf 10 groups=
+     IALy vs Urkm: identical descriptors=False shared field ids=10/10|10
+family 'freeagents':
+   league     kGzd  rows     0 recB    4 nf  2 groups=league,dynasty,allloaded
+   exhibition QEoV  rows   156 recB    4 nf  1 groups=currentrosters,rosters,defaultrosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+     kGzd vs QEoV: identical descriptors=False shared field ids=1/2|1
+family 'gmdata':
+              xZCi  rows     0 recB  140 nf 36 groups=allloaded
+   league     xLuM  rows     0 recB  140 nf 36 groups=dynasty,allloaded
+     xZCi vs xLuM: identical descriptors=False shared field ids=36/36|36
+family 'goalieai':
+   exhibition yuHm  rows   315 recB   20 nf 26 groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+   league     kPCA  rows     0 recB   48 nf 62 groups=league,dynasty,allloaded
+     yuHm vs kPCA: identical descriptors=False shared field ids=25/26|62
+family 'goalieequipment':
+   exhibition lVMf  rows   315 recB   68 nf 75 groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,allloaded
+   league     lqNn  rows     0 recB   64 nf 75 groups=league,dynasty,allloaded
+   stock      nAUy  rows   236 recB  148 nf 79 groups=rosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+     lVMf vs lqNn: identical descriptors=False shared field ids=74/75|75
+     lVMf vs nAUy: identical descriptors=False shared field ids=75/75|79
+     lqNn vs nAUy: identical descriptors=False shared field ids=74/75|79
+family 'options':
+   exhibition JLWf  rows     0 recB  256 nf  2 groups=settings,allloaded
+   league     vHJZ  rows     0 recB  256 nf  2 groups=league,dynasty,allloaded
+     JLWf vs vHJZ: identical descriptors=True shared field ids=2/2|2
+family 'playerbiotable':
+   exhibition cPbu  rows  2962 recB  184 nf 32 groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+   league     MMxP  rows     0 recB  188 nf 38 groups=league,dynasty,allloaded
+     cPbu vs MMxP: identical descriptors=False shared field ids=31/32|38
+family 'rostertable':
+   league     rgQY  rows     0 recB   16 nf 71 groups=league,dynasty,allloaded
+   exhibition ulGe  rows  2525 recB   16 nf 71 groups=currentrosters,rosters,defaultrosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+     rgQY vs ulGe: identical descriptors=False shared field ids=71/71|71
+family 'rules':
+   exhibition FKif  rows     0 recB  256 nf  2 groups=settings,allloaded
+   league     Icui  rows     0 recB  256 nf  2 groups=league,dynasty,allloaded
+     FKif vs Icui: identical descriptors=True shared field ids=2/2|2
+family 'skaterai':
+   exhibition yvSd  rows  2647 recB   24 nf 30 groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+   league     wiLv  rows     0 recB   52 nf 67 groups=league,dynasty,allloaded
+     yvSd vs wiLv: identical descriptors=False shared field ids=29/30|67
+family 'skaterequipment':
+   exhibition ajmx  rows  2647 recB   12 nf 17 groups=currentrosters,rosters,rosterupdate,defaultbiosattributes,rosterupdatenogoalieequipment,allloaded
+   league     CwnF  rows     0 recB   12 nf 17 groups=league,dynasty,allloaded
+     ajmx vs CwnF: identical descriptors=False shared field ids=16/17|17
+family 'states':
+   league     WRGI  rows     0 recB    8 nf  3 groups=league,dynasty,allloaded
+   exhibition FJTs  rows     0 recB    8 nf  3 groups=
+     WRGI vs FJTs: identical descriptors=False shared field ids=3/3|3
+family 'teamequipmenttable':
+   custom     NDEo  rows   600 recB   32 nf 32 groups=rosters,allloaded
+   stock      vbHh  rows  8000 recB   32 nf 33 groups=rosters,rosterupdate,rosterupdatenogoalieequipment,allloaded
+     NDEo vs vbHh: identical descriptors=False shared field ids=32/32|33
+family 'teams':
+   exhibition ttOk  rows   138 recB  204 nf 31 groups=rosters,allloaded
+   league     sbGR  rows     0 recB  208 nf 31 groups=league,dynasty,allloaded
+     ttOk vs sbGR: identical descriptors=False shared field ids=29/31|31
+family 'teamstrategies':
+   exhibition oYeE  rows   138 recB    8 nf 11 groups=rosters,allloaded
+   league     QfUJ  rows     0 recB    8 nf 11 groups=league,dynasty,allloaded
+     oYeE vs QfUJ: identical descriptors=False shared field ids=11/11|11
+family 'tweaks':
+   exhibition PwCR  rows     0 recB  256 nf  2 groups=settings,allloaded
+   league     wcLl  rows     0 recB  256 nf  2 groups=league,dynasty,allloaded
+     PwCR vs wcLl: identical descriptors=True shared field ids=2/2|2
+
+tables with no family partner: ['draftplayersfirstname', 'leaguetasks', 'draftplayerslastname', 'leaguetransactiontable', 'leaguecustomplayerremap', 'leagueretirementtable', 'leagueplayerseasonstats', 'stockseasonteamstats', 'custompalettetable', 'stockretirednumbertable', 'leaguerookiegoalieai', 'leaguerookieskaterai', 'ahlschedule', 'leaguegamestats', 'stockcareerplayoffplayerstats', 'leagueplayercareerplayoffsstats', 'stockcareerseasongoaliestats', 'stockplayoffteamstats', 'leaguerookieplayerbiotable', 'customfacetable', 'stockintltourneyplayerstats', 'leaguerookieskaterequipment', 'leaguecustompalettetable', 'leaguecustomfacetable', 'leagueteamseasonstats', 'leaguerookiegoalieequipment', 'exhibitionplayers', 'leagueteamplayoffsstats', 'exhibitioncontroller', 'leaguenews', 'leagueplayercareerseasonstats', 'stockteamjerseytable', 'leagueteampractice', 'leaguecustomteamequipmenttable', 'exhibitiondlc', 'nhlschedule', 'leagueemaildata', 'stockcareerplayoffgoaliestats', 'leaguescheduletable', 'stockcareerseasonplayerstats', 'stockteamcolorstable', 'leaguedraftpick', 'leagueplayerplayoffsstats', 'stockintltourneygoaliestats']
+

@@ -1,0 +1,12 @@
+$ python research/nhl07-roster-schema/scripts/key_graph.py anchors/xbox360/nhl07/databases/NHL07NG.db anchors/xbox360/nhl07/databases/NHL07NG-meta.xml
+exhibitionplayers: 2790 rows; table flag counts {0: 2790}; index range 0..3340; playerid range 0..3353; rows where index==playerid: 240
+  index unique: True  playerid unique: False
+exhibitionplayerbiotable game_id: 2250 rows, unique True, equals stockplayerbiotable game_id column: True
+  caBZ.playerid set == cPbu.game_id set: False | playerids not in bio: 200 | bio ids not in caBZ: 0
+exhibitionrostertable.playerindex: 2516 rows, all in caBZ.index: True, unique: True
+exhibitionfreeagents.playerindex: 74 rows, all in caBZ.index: True, overlap with roster: 0
+  roster + free agents cover caBZ.index: 2590 of 2790
+exhibitionrostertable.team range 0..92, all in exhibitionteams.index: True
+exhibitionteams: 93 rows, index==teamid everywhere: True, table flags {0: 93}
+exhibitionplayerbiotable.team equals roster team for the same player (via caBZ): mismatches 340 of 2516
+

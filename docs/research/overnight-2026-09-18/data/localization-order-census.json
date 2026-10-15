@@ -1,0 +1,1310 @@
+[
+ {
+  "label": "xbox360-nhl07-anchor",
+  "rows": 3952,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 0,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 3952
+  }
+ },
+ {
+  "label": "xbox360-nhl08-anchor",
+  "rows": 5738,
+  "descents": 2,
+  "descent_rows": [
+   2828,
+   3446
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 13,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 5738
+  }
+ },
+ {
+  "label": "xbox360-nhl09-anchor",
+  "rows": 9448,
+  "descents": 2,
+  "descent_rows": [
+   665,
+   8834
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 22,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9448
+  }
+ },
+ {
+  "label": "xbox360-nhl10-anchor",
+  "rows": 12505,
+  "descents": 7,
+  "descent_rows": [
+   183,
+   482,
+   888,
+   1080,
+   2045,
+   4739,
+   6033
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12505
+  }
+ },
+ {
+  "label": "xbox360-nhl11-anchor",
+  "rows": 14920,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 14920
+  }
+ },
+ {
+  "label": "xbox360-nhl12-anchor",
+  "rows": 16787,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16787
+  }
+ },
+ {
+  "label": "xbox360-nhl13-anchor",
+  "rows": 18826,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18826
+  }
+ },
+ {
+  "label": "xbox360-nhl14-anchor",
+  "rows": 24736,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24736
+  }
+ },
+ {
+  "label": "xbox360-nhl15-anchor",
+  "rows": 25169,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25169
+  }
+ },
+ {
+  "label": "xbox360-nhllegacy-anchor",
+  "rows": 25782,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25782
+  }
+ },
+ {
+  "label": "ps3-nhl07-anchor",
+  "rows": 3952,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 0,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 3952
+  }
+ },
+ {
+  "label": "ps3-nhl08-anchor",
+  "rows": 5738,
+  "descents": 2,
+  "descent_rows": [
+   2828,
+   3446
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 13,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 5738
+  }
+ },
+ {
+  "label": "ps3-nhl09-anchor",
+  "rows": 9448,
+  "descents": 2,
+  "descent_rows": [
+   665,
+   8834
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 22,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9448
+  }
+ },
+ {
+  "label": "ps3-nhl10-anchor",
+  "rows": 12559,
+  "descents": 8,
+  "descent_rows": [
+   889,
+   1082,
+   2049,
+   2343,
+   4750,
+   6044,
+   7537,
+   9961
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12559
+  }
+ },
+ {
+  "label": "ps3-nhl11-anchor",
+  "rows": 14630,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 14630
+  }
+ },
+ {
+  "label": "ps3-nhl12-anchor",
+  "rows": 16409,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16409
+  }
+ },
+ {
+  "label": "ps3-nhl13-anchor",
+  "rows": 18362,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18362
+  }
+ },
+ {
+  "label": "ps3-nhl14-anchor",
+  "rows": 24247,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24247
+  }
+ },
+ {
+  "label": "ps3-nhl15-anchor",
+  "rows": 25170,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25170
+  }
+ },
+ {
+  "label": "ps3-nhllegacy-anchor",
+  "rows": 25783,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25783
+  }
+ },
+ {
+  "label": "ps4-nhl15-anchor",
+  "rows": 24251,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 1,
+  "null_text_ptrs": 30,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24251
+  }
+ },
+ {
+  "label": "ps4-nhl16-anchor",
+  "rows": 27468,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 1,
+  "null_text_ptrs": 30,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 27468
+  }
+ },
+ {
+  "label": "ps4-nhl17-anchor",
+  "rows": 30799,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 1,
+  "null_text_ptrs": 31,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 30799
+  }
+ },
+ {
+  "label": "ps4-nhl18-anchor",
+  "rows": 33396,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 1,
+  "null_text_ptrs": 35,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 33396
+  }
+ },
+ {
+  "label": "ps4-nhl20-anchor",
+  "rows": 37734,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 1,
+  "null_text_ptrs": 37,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 37734
+  }
+ },
+ {
+  "label": "ps3-nhl08-eng_us",
+  "rows": 5718,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 13,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 5718
+  }
+ },
+ {
+  "label": "ps3-nhl09-eng_us",
+  "rows": 9434,
+  "descents": 2,
+  "descent_rows": [
+   664,
+   8953
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 22,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9434
+  }
+ },
+ {
+  "label": "ps3-nhl09-fre_fr",
+  "rows": 9434,
+  "descents": 3,
+  "descent_rows": [
+   1211,
+   2455,
+   3045
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 22,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9434
+  }
+ },
+ {
+  "label": "ps3-nhl10-eng_us",
+  "rows": 12559,
+  "descents": 8,
+  "descent_rows": [
+   889,
+   1082,
+   2049,
+   2343,
+   4750,
+   6044,
+   7537,
+   9961
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12559
+  }
+ },
+ {
+  "label": "ps3-nhl10-fre_fr",
+  "rows": 12559,
+  "descents": 10,
+  "descent_rows": [
+   175,
+   1312,
+   1587,
+   1781,
+   2044,
+   4420,
+   6291,
+   6976,
+   7538,
+   11782
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 34,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12559
+  }
+ },
+ {
+  "label": "ps3-nhl11-eng_us",
+  "rows": 14630,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 14630
+  }
+ },
+ {
+  "label": "ps3-nhl11-fre_fr",
+  "rows": 14630,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 14630
+  }
+ },
+ {
+  "label": "ps3-nhl12-eng_us",
+  "rows": 16409,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16409
+  }
+ },
+ {
+  "label": "ps3-nhl12-fre_fr",
+  "rows": 16409,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16409
+  }
+ },
+ {
+  "label": "ps3-nhl12-ger_de",
+  "rows": 16409,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 26,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16409
+  }
+ },
+ {
+  "label": "ps3-nhl12-rus_ru",
+  "rows": 16409,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16409
+  }
+ },
+ {
+  "label": "ps3-nhl13-eng_us",
+  "rows": 18362,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18362
+  }
+ },
+ {
+  "label": "ps3-nhl13-fre_fr",
+  "rows": 18362,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18362
+  }
+ },
+ {
+  "label": "ps3-nhl13-ger_de",
+  "rows": 18362,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18362
+  }
+ },
+ {
+  "label": "ps3-nhl13-rus_ru",
+  "rows": 18362,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18362
+  }
+ },
+ {
+  "label": "ps3-nhl14-eng_us",
+  "rows": 24247,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24247
+  }
+ },
+ {
+  "label": "ps3-nhl14-fre_fr",
+  "rows": 24247,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24247
+  }
+ },
+ {
+  "label": "ps3-nhl14-ger_de",
+  "rows": 24247,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 31,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24247
+  }
+ },
+ {
+  "label": "ps3-nhl14-rus_ru",
+  "rows": 24247,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24247
+  }
+ },
+ {
+  "label": "ps3-nhl15-eng_us",
+  "rows": 25170,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25170
+  }
+ },
+ {
+  "label": "ps3-nhl15-fre_fr",
+  "rows": 25170,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25170
+  }
+ },
+ {
+  "label": "ps3-nhl15-ger_de",
+  "rows": 25170,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 31,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25170
+  }
+ },
+ {
+  "label": "ps3-nhl15-rus_ru",
+  "rows": 25170,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25170
+  }
+ },
+ {
+  "label": "ps3-nhllegacy-eng_us",
+  "rows": 25783,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25783
+  }
+ },
+ {
+  "label": "ps3-nhllegacy-fre_fr",
+  "rows": 25783,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25783
+  }
+ },
+ {
+  "label": "ps3-nhllegacy-ger_de",
+  "rows": 25783,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 31,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25783
+  }
+ },
+ {
+  "label": "ps3-nhllegacy-rus_ru",
+  "rows": 25783,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25783
+  }
+ },
+ {
+  "label": "x360-nhl09-fre_fr",
+  "rows": 9448,
+  "descents": 8,
+  "descent_rows": [
+   1212,
+   2454,
+   3335,
+   4640,
+   4742,
+   5663,
+   7456,
+   8840
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 22,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9448
+  }
+ },
+ {
+  "label": "x360-nhl09-ger_de",
+  "rows": 9448,
+  "descents": 2,
+  "descent_rows": [
+   3331,
+   8829
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 21,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9448
+  }
+ },
+ {
+  "label": "x360-nhl09-rus_ru",
+  "rows": 9450,
+  "descents": 35,
+  "descent_rows": [
+   71,
+   224,
+   564,
+   722,
+   866,
+   1153,
+   1302,
+   1448,
+   1945,
+   2378,
+   2451,
+   2598
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 22,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9450
+  }
+ },
+ {
+  "label": "x360-nhl09-cze_cz",
+  "rows": 9450,
+  "descents": 3,
+  "descent_rows": [
+   3584,
+   5241,
+   8958
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 22,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9450
+  }
+ },
+ {
+  "label": "x360-nhl09-fin_fi",
+  "rows": 9448,
+  "descents": 5,
+  "descent_rows": [
+   3030,
+   3334,
+   3834,
+   5687,
+   8956
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 21,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9448
+  }
+ },
+ {
+  "label": "x360-nhl09-swe_se",
+  "rows": 9448,
+  "descents": 2,
+  "descent_rows": [
+   1364,
+   8955
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 21,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 9448
+  }
+ },
+ {
+  "label": "x360-nhl10-fre_fr",
+  "rows": 12505,
+  "descents": 8,
+  "descent_rows": [
+   175,
+   1307,
+   1772,
+   2034,
+   6270,
+   6947,
+   7512,
+   11733
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 34,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12505
+  }
+ },
+ {
+  "label": "x360-nhl11-fre_fr",
+  "rows": 14920,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 14920
+  }
+ },
+ {
+  "label": "x360-nhl12-fre_fr",
+  "rows": 16787,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16787
+  }
+ },
+ {
+  "label": "x360-nhl12-ger_de",
+  "rows": 16787,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16787
+  }
+ },
+ {
+  "label": "x360-nhl12-rus_ru",
+  "rows": 16787,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16787
+  }
+ },
+ {
+  "label": "x360-nhl12-cze_cz",
+  "rows": 16787,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16787
+  }
+ },
+ {
+  "label": "x360-nhl12-fin_fi",
+  "rows": 16787,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16787
+  }
+ },
+ {
+  "label": "x360-nhl12-swe_se",
+  "rows": 16787,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 16787
+  }
+ },
+ {
+  "label": "x360-nhl12-lng_lg",
+  "rows": 12363,
+  "descents": 22,
+  "descent_rows": [
+   77,
+   230,
+   305,
+   473,
+   554,
+   975,
+   1292,
+   1609,
+   2095,
+   2557,
+   3618,
+   3941
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12363
+  }
+ },
+ {
+  "label": "x360-nhl13-fre_fr",
+  "rows": 18826,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18826
+  }
+ },
+ {
+  "label": "x360-nhl13-ger_de",
+  "rows": 18826,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18826
+  }
+ },
+ {
+  "label": "x360-nhl13-rus_ru",
+  "rows": 18826,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18826
+  }
+ },
+ {
+  "label": "x360-nhl13-cze_cz",
+  "rows": 18826,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 29,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18826
+  }
+ },
+ {
+  "label": "x360-nhl13-fin_fi",
+  "rows": 18826,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18826
+  }
+ },
+ {
+  "label": "x360-nhl13-swe_se",
+  "rows": 18826,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 28,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 18826
+  }
+ },
+ {
+  "label": "x360-nhl13-lng_lg",
+  "rows": 12363,
+  "descents": 22,
+  "descent_rows": [
+   77,
+   230,
+   305,
+   473,
+   554,
+   975,
+   1292,
+   1609,
+   2095,
+   2557,
+   3618,
+   3941
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12363
+  }
+ },
+ {
+  "label": "x360-nhl14-fre_fr",
+  "rows": 24736,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24736
+  }
+ },
+ {
+  "label": "x360-nhl14-ger_de",
+  "rows": 24736,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 31,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24736
+  }
+ },
+ {
+  "label": "x360-nhl14-rus_ru",
+  "rows": 24736,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24736
+  }
+ },
+ {
+  "label": "x360-nhl14-cze_cz",
+  "rows": 24736,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24736
+  }
+ },
+ {
+  "label": "x360-nhl14-fin_fi",
+  "rows": 24736,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 32,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24736
+  }
+ },
+ {
+  "label": "x360-nhl14-swe_se",
+  "rows": 24736,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 32,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 24736
+  }
+ },
+ {
+  "label": "x360-nhl14-lng_lg",
+  "rows": 12363,
+  "descents": 22,
+  "descent_rows": [
+   77,
+   230,
+   305,
+   473,
+   554,
+   975,
+   1292,
+   1609,
+   2095,
+   2557,
+   3618,
+   3941
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12363
+  }
+ },
+ {
+  "label": "x360-nhl15-fre_fr",
+  "rows": 25169,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25169
+  }
+ },
+ {
+  "label": "x360-nhl15-ger_de",
+  "rows": 25169,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 31,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25169
+  }
+ },
+ {
+  "label": "x360-nhl15-rus_ru",
+  "rows": 25169,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25169
+  }
+ },
+ {
+  "label": "x360-nhl15-cze_cz",
+  "rows": 25169,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25169
+  }
+ },
+ {
+  "label": "x360-nhl15-fin_fi",
+  "rows": 25169,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 32,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25169
+  }
+ },
+ {
+  "label": "x360-nhl15-swe_se",
+  "rows": 25169,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 32,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25169
+  }
+ },
+ {
+  "label": "x360-nhl15-lng_lg",
+  "rows": 12363,
+  "descents": 22,
+  "descent_rows": [
+   77,
+   230,
+   305,
+   473,
+   554,
+   975,
+   1292,
+   1609,
+   2095,
+   2557,
+   3618,
+   3941
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12363
+  }
+ },
+ {
+  "label": "x360-nhllegacy-fre_fr",
+  "rows": 25782,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25782
+  }
+ },
+ {
+  "label": "x360-nhllegacy-ger_de",
+  "rows": 25782,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 31,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25782
+  }
+ },
+ {
+  "label": "x360-nhllegacy-rus_ru",
+  "rows": 25782,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25782
+  }
+ },
+ {
+  "label": "x360-nhllegacy-cze_cz",
+  "rows": 25782,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 33,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25782
+  }
+ },
+ {
+  "label": "x360-nhllegacy-fin_fi",
+  "rows": 25782,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 32,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25782
+  }
+ },
+ {
+  "label": "x360-nhllegacy-swe_se",
+  "rows": 25782,
+  "descents": 0,
+  "descent_rows": [],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 32,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 25782
+  }
+ },
+ {
+  "label": "x360-nhllegacy-lng_lg",
+  "rows": 12363,
+  "descents": 22,
+  "descent_rows": [
+   77,
+   230,
+   305,
+   473,
+   554,
+   975,
+   1292,
+   1609,
+   2095,
+   2557,
+   3618,
+   3941
+  ],
+  "duplicate_hashes": 0,
+  "null_text_ptrs": 27,
+  "shared_text_ptrs": 0,
+  "reserved_word_values": {
+   "00000000": 12363
+  }
+ }
+]

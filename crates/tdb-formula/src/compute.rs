@@ -157,15 +157,31 @@ mod tests {
         let maxes = BTreeMap::new();
         // Speed = FHM Speed ×1 / 20 → 36 + x/20×63.
         let top = fhm(&[("Speed", 20.0)]);
-        let set = compute(&p, PositionGroup::Forward, &top, &StatsContext::default(), &maxes);
+        let set = compute(
+            &p,
+            PositionGroup::Forward,
+            &top,
+            &StatsContext::default(),
+            &maxes,
+        );
         let speed = set.ratings.iter().find(|r| r.ea_key == "Speed").unwrap();
         assert_eq!(speed.value, Some(99));
         assert_eq!(speed.raw_offset, 36);
 
         let bottom = fhm(&[("Speed", 0.0)]);
-        let set = compute(&p, PositionGroup::Forward, &bottom, &StatsContext::default(), &maxes);
+        let set = compute(
+            &p,
+            PositionGroup::Forward,
+            &bottom,
+            &StatsContext::default(),
+            &maxes,
+        );
         assert_eq!(
-            set.ratings.iter().find(|r| r.ea_key == "Speed").unwrap().value,
+            set.ratings
+                .iter()
+                .find(|r| r.ea_key == "Speed")
+                .unwrap()
+                .value,
             Some(36)
         );
     }
@@ -175,8 +191,18 @@ mod tests {
         let p = FormulaProfile::default_preset();
         let maxes = BTreeMap::new();
         // No career stats → pass_shoot_bias sits at neutral 8, def_off_bias at 8.
-        let set = compute(&p, PositionGroup::Forward, &fhm(&[]), &StatsContext::default(), &maxes);
-        let bias = set.ratings.iter().find(|r| r.ea_key == "Shoot/Pass Bias").unwrap();
+        let set = compute(
+            &p,
+            PositionGroup::Forward,
+            &fhm(&[]),
+            &StatsContext::default(),
+            &maxes,
+        );
+        let bias = set
+            .ratings
+            .iter()
+            .find(|r| r.ea_key == "Shoot/Pass Bias")
+            .unwrap();
         assert_eq!(bias.value, Some(8));
         assert_eq!(bias.scale_min, 0);
         assert_eq!(bias.scale_max, 15);
@@ -201,7 +227,13 @@ mod tests {
             ("Hitting", 5.0),
             ("Strength", 10.0),
         ]);
-        let set = compute(&p, PositionGroup::Forward, &sniper, &StatsContext::default(), &maxes);
+        let set = compute(
+            &p,
+            PositionGroup::Forward,
+            &sniper,
+            &StatsContext::default(),
+            &maxes,
+        );
         // Overall is produced (sparse FHM input → a low but valid 1..99 value).
         assert!(set.overall.is_some());
         assert_eq!(set.archetype.unwrap().ea_raw, 7); // Sniper

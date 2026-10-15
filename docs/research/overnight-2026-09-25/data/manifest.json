@@ -1,0 +1,1753 @@
+{
+ "generated": "2026-09-25T06:21:17",
+ "inputs_used": {
+  "x360-nhl10/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\colors1.abk",
+   "size": 2732748,
+   "sha256": "ffaf33297e783000e95750cec3fb58f24a76503c2378626d8ca672b4efe21f35"
+  },
+  "x360-nhl10/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\colors1.ast",
+   "size": 4157888,
+   "sha256": "a0a638405a1d0ad1ee1cc82765c2dceea05031005d68599b0d10354ab0c25bd5"
+  },
+  "x360-nhl10/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\colors2.abk",
+   "size": 2862676,
+   "sha256": "c45d0cc3e3ee40e8038c66d6ea222f531f451667e0a469e49dbb2169bbcc4539"
+  },
+  "x360-nhl10/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\colors2.ast",
+   "size": 4265792,
+   "sha256": "71e9c85f1e5978b396f13abf9759568b951e6541bd7fc7f1ff33a5a537979df3"
+  },
+  "x360-nhl10/createplayer.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\createplayer.abk",
+   "size": 1292,
+   "sha256": "8a1e997c976a5d1205e3d0425d25904e95ba0463dcd6bd1ccbf40b8e8d1e2e64"
+  },
+  "x360-nhl10/createplayer.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\createplayer.ast",
+   "size": 1840896,
+   "sha256": "93522a3cd4c8d6a41f576d4a14797fb08cbe1cb34bb43659d4687cd1cfa30693"
+  },
+  "x360-nhl10/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\crowds.abk",
+   "size": 14191780,
+   "sha256": "467cc3a08847ad804c5a80634f102ee73c13a22f4adf17df9e0df41c4983f73a"
+  },
+  "x360-nhl10/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\crowds.ast",
+   "size": 13868672,
+   "sha256": "c0f28a60d9721160baa68d7e15151da78d1fd20caefe43941eecbe007c0c69a8"
+  },
+  "x360-nhl10/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\playercalls.abk",
+   "size": 2388752,
+   "sha256": "ec012c58bb5b01d0c8701f84e71c128997e6936f79f139023d3fa0fdd00cb4a9"
+  },
+  "x360-nhl10/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\playercalls.ast",
+   "size": 337664,
+   "sha256": "f81f87c0b18e28b693c272a9c0c96460ddc733d4d04fb1ac8285fb953ec921a8"
+  },
+  "x360-nhl10/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\practicerink.abk",
+   "size": 2788,
+   "sha256": "5a3da5b99adeb0d7b45dba5348d1126231406e3981bd1adcf4031ae9b59cb7d1"
+  },
+  "x360-nhl10/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\practicerink.ast",
+   "size": 5014464,
+   "sha256": "ecf9ba9d2839569a6a1875daed57348aee72c39355f50be9257f0fcee60f29c2"
+  },
+  "x360-nhl10/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\sfx.abk",
+   "size": 3209312,
+   "sha256": "b0781a99c88f5800a7a3542ac696ab5f8c778d41a40cef98cf2596f1544088b8"
+  },
+  "x360-nhl10/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\sfx.ast",
+   "size": 39483840,
+   "sha256": "b20480fbad15570da020c103d3736d1042e3c615fd0d5177f235e34261a9ab61"
+  },
+  "x360-nhl11/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\colors1.abk",
+   "size": 2732748,
+   "sha256": "ffaf33297e783000e95750cec3fb58f24a76503c2378626d8ca672b4efe21f35"
+  },
+  "x360-nhl11/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\colors1.ast",
+   "size": 4157888,
+   "sha256": "a0a638405a1d0ad1ee1cc82765c2dceea05031005d68599b0d10354ab0c25bd5"
+  },
+  "x360-nhl11/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\colors2.abk",
+   "size": 2862676,
+   "sha256": "c45d0cc3e3ee40e8038c66d6ea222f531f451667e0a469e49dbb2169bbcc4539"
+  },
+  "x360-nhl11/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\colors2.ast",
+   "size": 4265792,
+   "sha256": "71e9c85f1e5978b396f13abf9759568b951e6541bd7fc7f1ff33a5a537979df3"
+  },
+  "x360-nhl11/createplayer.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\createplayer.abk",
+   "size": 1292,
+   "sha256": "8a1e997c976a5d1205e3d0425d25904e95ba0463dcd6bd1ccbf40b8e8d1e2e64"
+  },
+  "x360-nhl11/createplayer.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\createplayer.ast",
+   "size": 1840896,
+   "sha256": "93522a3cd4c8d6a41f576d4a14797fb08cbe1cb34bb43659d4687cd1cfa30693"
+  },
+  "x360-nhl11/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\crowds.abk",
+   "size": 14536424,
+   "sha256": "e012387c5453933192614b171f32e0c0a7fbfc148c5a9197acaea52d1e6c4685"
+  },
+  "x360-nhl11/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\crowds.ast",
+   "size": 13958784,
+   "sha256": "6dbb161527fb428d1affd57a47a128972c1b102ea1ac5a0c1622a6f20e09d61d"
+  },
+  "x360-nhl11/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\playercalls.abk",
+   "size": 2380560,
+   "sha256": "49933453e9ef6addd983817fe903c0dc31b111b6f57d01eea26d6dca902f3525"
+  },
+  "x360-nhl11/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\playercalls.ast",
+   "size": 337664,
+   "sha256": "f81f87c0b18e28b693c272a9c0c96460ddc733d4d04fb1ac8285fb953ec921a8"
+  },
+  "x360-nhl11/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\practicerink.abk",
+   "size": 2788,
+   "sha256": "5a3da5b99adeb0d7b45dba5348d1126231406e3981bd1adcf4031ae9b59cb7d1"
+  },
+  "x360-nhl11/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\practicerink.ast",
+   "size": 5014464,
+   "sha256": "ecf9ba9d2839569a6a1875daed57348aee72c39355f50be9257f0fcee60f29c2"
+  },
+  "x360-nhl11/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\sfx.abk",
+   "size": 2931396,
+   "sha256": "136974d34f5d83f8766bdcb1d310d9fa425f66beadc6e33aef13e759043159a0"
+  },
+  "x360-nhl11/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\audio\\sfx\\sfx.ast",
+   "size": 39483840,
+   "sha256": "f86147159cd1de0f897e509e54853d1d9d9763b32b5f6bc0ef58853ce4e93500"
+  },
+  "x360-nhl12/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1277020,
+   "sha256": "cdeb0a62507732b6ed3791fff7d72da8ce3777a299b6aff2dd50150e39859430"
+  },
+  "x360-nhl12/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 6994560,
+   "sha256": "7f0865743608c5987985ef8fda1473594a60017beba120dd98b3e78876844319"
+  },
+  "x360-nhl12/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 18824,
+   "sha256": "54b64116103e75e652cf18a6739f69c8f1463cf5112bc645145aabaea9a84b98"
+  },
+  "x360-nhl12/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 7378944,
+   "sha256": "99e0076caa0b63d77f19a2fcc6fb16d8b5c1981d75ef3774b5d1756f50319332"
+  },
+  "x360-nhl12/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 11608,
+   "sha256": "1e385806355f5bef6b5a469f2c0fb9ed175828c548c03ffcc116bdce5b69686e"
+  },
+  "x360-nhl12/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 3936448,
+   "sha256": "65312bcbec6ac99d4c2ec8fbf4162ad7e7836818e27895d14b80de3ed9a56c6b"
+  },
+  "x360-nhl12/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 11956,
+   "sha256": "6740ee706b734f98eabcfa4815cb158651d9b677f748cd3a1c5c4488aceadb8e"
+  },
+  "x360-nhl12/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 8103872,
+   "sha256": "c7572cea5b1eff773940f49584bfdce04b821e72062d247117ce87fc2b529c8a"
+  },
+  "x360-nhl12/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7396,
+   "sha256": "e0733d837c0e7fbdfebe2c7e3b20c3d1cc059a158a1e0c09f3e185e22272648f"
+  },
+  "x360-nhl12/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 4409216,
+   "sha256": "ce30e0322bf6ee0ed9e001e51dc45a3e5bd0b5fa8928588ca4dd8696f568ad98"
+  },
+  "x360-nhl12/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 9948,
+   "sha256": "8d71da508fa2728b32fff9bff1839dfa16165d94781653a745bf6dcbd13996a8"
+  },
+  "x360-nhl12/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 5569152,
+   "sha256": "6502a5e7093db4d5d3d88142362b659ffd04ff751c182f962317692efefadf9a"
+  },
+  "x360-nhl12/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\colors1.abk",
+   "size": 2781884,
+   "sha256": "650da788ebda5b6da5c84904cbfba6863eb83d2c41e5e02c082a41691d08537d"
+  },
+  "x360-nhl12/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\colors1.ast",
+   "size": 4157888,
+   "sha256": "4efc9d4e912ff69b9922a31284550bdbb565de693ac0f29cb396295f72d98ad4"
+  },
+  "x360-nhl12/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\colors2.abk",
+   "size": 2911812,
+   "sha256": "3eb34399d7575a5aa54c209437da8871f4a67ba401c004335674dcae52e16659"
+  },
+  "x360-nhl12/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\colors2.ast",
+   "size": 4265792,
+   "sha256": "2b9dcbbf087d1609bbb7463645852a988a5adaf077d75fde27fd7c127c9b72c0"
+  },
+  "x360-nhl12/createplayer.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\createplayer.abk",
+   "size": 1292,
+   "sha256": "8a1e997c976a5d1205e3d0425d25904e95ba0463dcd6bd1ccbf40b8e8d1e2e64"
+  },
+  "x360-nhl12/createplayer.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\createplayer.ast",
+   "size": 1840896,
+   "sha256": "93522a3cd4c8d6a41f576d4a14797fb08cbe1cb34bb43659d4687cd1cfa30693"
+  },
+  "x360-nhl12/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\crowds.abk",
+   "size": 14575916,
+   "sha256": "228fd0048548cfd5060f8ffa0e1eb82fddbec81cd4c3b4adc2f8dd88999a3407"
+  },
+  "x360-nhl12/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\crowds.ast",
+   "size": 13914560,
+   "sha256": "1214decc24570964fb4fe33ce06fc64c4a637e63f543b7776db326c6c93a9c6e"
+  },
+  "x360-nhl12/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 15682192,
+   "sha256": "036f5af319341030713dcfabe8850e9a55021bd5c13422ae5fc282b19dc856e1"
+  },
+  "x360-nhl12/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 14597120,
+   "sha256": "9447c4f88d7ea0c7509331e5fc364bc319b8c83cfee136bd0968563cdc548f60"
+  },
+  "x360-nhl12/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\playercalls.abk",
+   "size": 81412,
+   "sha256": "b98d90fbd6119bff9346c1e6bb0942deb29fab83ddf6b735059f3a8befdebc20"
+  },
+  "x360-nhl12/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\playercalls.ast",
+   "size": 2676544,
+   "sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b"
+  },
+  "x360-nhl12/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\playercalls2.abk",
+   "size": 14384,
+   "sha256": "2a21f45f49c977671f068e04a2a66686ecef12867bf6adb826aaffa3a2dfe087"
+  },
+  "x360-nhl12/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\playercalls2.ast",
+   "size": 581312,
+   "sha256": "e051bd54cd95a8b0c1dcecc5af94f2280e1f5c5ee18e62c1f105f3c85c8734a5"
+  },
+  "x360-nhl12/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\practicerink.abk",
+   "size": 2788,
+   "sha256": "5a3da5b99adeb0d7b45dba5348d1126231406e3981bd1adcf4031ae9b59cb7d1"
+  },
+  "x360-nhl12/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\practicerink.ast",
+   "size": 5014464,
+   "sha256": "ecf9ba9d2839569a6a1875daed57348aee72c39355f50be9257f0fcee60f29c2"
+  },
+  "x360-nhl12/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\sfx.abk",
+   "size": 1998932,
+   "sha256": "400ba16f70f9a88caacd7a3923281dd1fcc13c3835b733d0cded361d4b496064"
+  },
+  "x360-nhl12/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\sfx.ast",
+   "size": 42635776,
+   "sha256": "89ed5618cdd9ad022472b929a332efae5a469ae3b8f19733024b7f77934d501d"
+  },
+  "x360-nhl13/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1283704,
+   "sha256": "08a1028c7f7f1867a40290cb7d71debcf7234d0ae4809cb80c264b543def14f7"
+  },
+  "x360-nhl13/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 6927360,
+   "sha256": "b07bb4dcf929fe91fba555e7e115008ca0334c896f924b0f9869e73b0997e553"
+  },
+  "x360-nhl13/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 18824,
+   "sha256": "54b64116103e75e652cf18a6739f69c8f1463cf5112bc645145aabaea9a84b98"
+  },
+  "x360-nhl13/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 7378944,
+   "sha256": "99e0076caa0b63d77f19a2fcc6fb16d8b5c1981d75ef3774b5d1756f50319332"
+  },
+  "x360-nhl13/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 11608,
+   "sha256": "1e385806355f5bef6b5a469f2c0fb9ed175828c548c03ffcc116bdce5b69686e"
+  },
+  "x360-nhl13/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 3936448,
+   "sha256": "65312bcbec6ac99d4c2ec8fbf4162ad7e7836818e27895d14b80de3ed9a56c6b"
+  },
+  "x360-nhl13/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 11956,
+   "sha256": "6740ee706b734f98eabcfa4815cb158651d9b677f748cd3a1c5c4488aceadb8e"
+  },
+  "x360-nhl13/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 8103872,
+   "sha256": "c7572cea5b1eff773940f49584bfdce04b821e72062d247117ce87fc2b529c8a"
+  },
+  "x360-nhl13/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7396,
+   "sha256": "e0733d837c0e7fbdfebe2c7e3b20c3d1cc059a158a1e0c09f3e185e22272648f"
+  },
+  "x360-nhl13/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 4409216,
+   "sha256": "ce30e0322bf6ee0ed9e001e51dc45a3e5bd0b5fa8928588ca4dd8696f568ad98"
+  },
+  "x360-nhl13/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 9948,
+   "sha256": "8d71da508fa2728b32fff9bff1839dfa16165d94781653a745bf6dcbd13996a8"
+  },
+  "x360-nhl13/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 5569152,
+   "sha256": "6502a5e7093db4d5d3d88142362b659ffd04ff751c182f962317692efefadf9a"
+  },
+  "x360-nhl13/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\colors1.abk",
+   "size": 2781884,
+   "sha256": "650da788ebda5b6da5c84904cbfba6863eb83d2c41e5e02c082a41691d08537d"
+  },
+  "x360-nhl13/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\colors1.ast",
+   "size": 4157888,
+   "sha256": "4efc9d4e912ff69b9922a31284550bdbb565de693ac0f29cb396295f72d98ad4"
+  },
+  "x360-nhl13/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\colors2.abk",
+   "size": 2911812,
+   "sha256": "3eb34399d7575a5aa54c209437da8871f4a67ba401c004335674dcae52e16659"
+  },
+  "x360-nhl13/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\colors2.ast",
+   "size": 4265792,
+   "sha256": "2b9dcbbf087d1609bbb7463645852a988a5adaf077d75fde27fd7c127c9b72c0"
+  },
+  "x360-nhl13/createplayer.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\createplayer.abk",
+   "size": 1292,
+   "sha256": "8a1e997c976a5d1205e3d0425d25904e95ba0463dcd6bd1ccbf40b8e8d1e2e64"
+  },
+  "x360-nhl13/createplayer.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\createplayer.ast",
+   "size": 1840896,
+   "sha256": "93522a3cd4c8d6a41f576d4a14797fb08cbe1cb34bb43659d4687cd1cfa30693"
+  },
+  "x360-nhl13/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\crowds.abk",
+   "size": 14540808,
+   "sha256": "d50226dde3e2861bc20c2c89b1cf809b75f0c514fa8cab5acac0b7a6aec46362"
+  },
+  "x360-nhl13/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\crowds.ast",
+   "size": 13196608,
+   "sha256": "b99b509f3ce8bcd8411f6e6f0f4e12d3ae538a7d08c4d89feb586c4d84b0cd87"
+  },
+  "x360-nhl13/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 14525020,
+   "sha256": "d96c0f76d0a289fe99504813a84392588da4076183f536e11481ecdd21bc095a"
+  },
+  "x360-nhl13/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 14252672,
+   "sha256": "bb7774708bc9037e1fae09d53b1feb15619b19d75fc5f022149227d5ac24a1d1"
+  },
+  "x360-nhl13/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\playercalls.abk",
+   "size": 81412,
+   "sha256": "b98d90fbd6119bff9346c1e6bb0942deb29fab83ddf6b735059f3a8befdebc20"
+  },
+  "x360-nhl13/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\playercalls.ast",
+   "size": 2676544,
+   "sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b"
+  },
+  "x360-nhl13/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\playercalls2.abk",
+   "size": 14384,
+   "sha256": "2a21f45f49c977671f068e04a2a66686ecef12867bf6adb826aaffa3a2dfe087"
+  },
+  "x360-nhl13/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\playercalls2.ast",
+   "size": 581312,
+   "sha256": "e051bd54cd95a8b0c1dcecc5af94f2280e1f5c5ee18e62c1f105f3c85c8734a5"
+  },
+  "x360-nhl13/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\practicerink.abk",
+   "size": 29500,
+   "sha256": "0a983c395dc8a043619d44a6909c5468ec65008a3ed68c068beeab28a8075035"
+  },
+  "x360-nhl13/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\practicerink.ast",
+   "size": 5014336,
+   "sha256": "c7e42d55567ab3ffc7903220883e3c9e811b712de4e07fdffe8d3ee1a20315d7"
+  },
+  "x360-nhl13/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\sfx.abk",
+   "size": 2025384,
+   "sha256": "7c1b349ec95ab3a82ba3654dd28b68763751789ee9ab161cbfd23605353bfc38"
+  },
+  "x360-nhl13/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\audio\\sfx\\sfx.ast",
+   "size": 43340608,
+   "sha256": "4f55b477ef4d94fd3575ebd63c82f8eed2221c1765ffaa8aaad09fb3284fe5ec"
+  },
+  "x360-nhl14/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1099788,
+   "sha256": "25e9bdc0b3d5cc7ac81f606c4237aefe3533796475cd4742e33caab45beb1bd3"
+  },
+  "x360-nhl14/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 6927360,
+   "sha256": "59007e9cabcf63e88b94483a9ee5e6961fa652f0e02d10018f84af1beb01835b"
+  },
+  "x360-nhl14/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 18824,
+   "sha256": "54b64116103e75e652cf18a6739f69c8f1463cf5112bc645145aabaea9a84b98"
+  },
+  "x360-nhl14/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 7378944,
+   "sha256": "99e0076caa0b63d77f19a2fcc6fb16d8b5c1981d75ef3774b5d1756f50319332"
+  },
+  "x360-nhl14/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 11608,
+   "sha256": "1e385806355f5bef6b5a469f2c0fb9ed175828c548c03ffcc116bdce5b69686e"
+  },
+  "x360-nhl14/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 3936448,
+   "sha256": "65312bcbec6ac99d4c2ec8fbf4162ad7e7836818e27895d14b80de3ed9a56c6b"
+  },
+  "x360-nhl14/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 11956,
+   "sha256": "6740ee706b734f98eabcfa4815cb158651d9b677f748cd3a1c5c4488aceadb8e"
+  },
+  "x360-nhl14/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 8103872,
+   "sha256": "c7572cea5b1eff773940f49584bfdce04b821e72062d247117ce87fc2b529c8a"
+  },
+  "x360-nhl14/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7396,
+   "sha256": "e0733d837c0e7fbdfebe2c7e3b20c3d1cc059a158a1e0c09f3e185e22272648f"
+  },
+  "x360-nhl14/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 4409216,
+   "sha256": "ce30e0322bf6ee0ed9e001e51dc45a3e5bd0b5fa8928588ca4dd8696f568ad98"
+  },
+  "x360-nhl14/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 9948,
+   "sha256": "8d71da508fa2728b32fff9bff1839dfa16165d94781653a745bf6dcbd13996a8"
+  },
+  "x360-nhl14/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 5569152,
+   "sha256": "6502a5e7093db4d5d3d88142362b659ffd04ff751c182f962317692efefadf9a"
+  },
+  "x360-nhl14/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\colors1.abk",
+   "size": 2781884,
+   "sha256": "650da788ebda5b6da5c84904cbfba6863eb83d2c41e5e02c082a41691d08537d"
+  },
+  "x360-nhl14/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\colors1.ast",
+   "size": 4157888,
+   "sha256": "4efc9d4e912ff69b9922a31284550bdbb565de693ac0f29cb396295f72d98ad4"
+  },
+  "x360-nhl14/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\colors2.abk",
+   "size": 2911812,
+   "sha256": "3eb34399d7575a5aa54c209437da8871f4a67ba401c004335674dcae52e16659"
+  },
+  "x360-nhl14/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\colors2.ast",
+   "size": 4265792,
+   "sha256": "2b9dcbbf087d1609bbb7463645852a988a5adaf077d75fde27fd7c127c9b72c0"
+  },
+  "x360-nhl14/createplayer.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\createplayer.abk",
+   "size": 1292,
+   "sha256": "8a1e997c976a5d1205e3d0425d25904e95ba0463dcd6bd1ccbf40b8e8d1e2e64"
+  },
+  "x360-nhl14/createplayer.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\createplayer.ast",
+   "size": 1840896,
+   "sha256": "93522a3cd4c8d6a41f576d4a14797fb08cbe1cb34bb43659d4687cd1cfa30693"
+  },
+  "x360-nhl14/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\crowds.abk",
+   "size": 14393228,
+   "sha256": "c375f2f5d3ee3353d4e43d76ae561ba9117c284e152e37a064e50c747fd89b91"
+  },
+  "x360-nhl14/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\crowds.ast",
+   "size": 13196608,
+   "sha256": "06ef0606a266e7aed80063441658e8bb49058b0f2e532252a4425e4074de4d94"
+  },
+  "x360-nhl14/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 14374716,
+   "sha256": "c5e138f94b09dff9ae178a296941074b2d93235f6d850cb25e85eb8771a44509"
+  },
+  "x360-nhl14/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 14252672,
+   "sha256": "814903cf41309504f4d5b912d9d2d8f42290b315d816d9dea9a6b271f35ae22f"
+  },
+  "x360-nhl14/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\playercalls.abk",
+   "size": 81412,
+   "sha256": "b98d90fbd6119bff9346c1e6bb0942deb29fab83ddf6b735059f3a8befdebc20"
+  },
+  "x360-nhl14/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\playercalls.ast",
+   "size": 2676544,
+   "sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b"
+  },
+  "x360-nhl14/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\playercalls2.abk",
+   "size": 14384,
+   "sha256": "2a21f45f49c977671f068e04a2a66686ecef12867bf6adb826aaffa3a2dfe087"
+  },
+  "x360-nhl14/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\playercalls2.ast",
+   "size": 581312,
+   "sha256": "e051bd54cd95a8b0c1dcecc5af94f2280e1f5c5ee18e62c1f105f3c85c8734a5"
+  },
+  "x360-nhl14/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\practicerink.abk",
+   "size": 29500,
+   "sha256": "0a983c395dc8a043619d44a6909c5468ec65008a3ed68c068beeab28a8075035"
+  },
+  "x360-nhl14/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\practicerink.ast",
+   "size": 5014336,
+   "sha256": "c7e42d55567ab3ffc7903220883e3c9e811b712de4e07fdffe8d3ee1a20315d7"
+  },
+  "x360-nhl14/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\sfx.abk",
+   "size": 1963280,
+   "sha256": "bde65367e13391bb66f1d40cfffaf2082b98f24b0851c22957c046c0e0fd4c36"
+  },
+  "x360-nhl14/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\audio\\sfx\\sfx.ast",
+   "size": 40594176,
+   "sha256": "e19f7dda2f4fc7279981d13594fc9eb8d2626b5024dc1c269dca0980d17748e4"
+  },
+  "x360-nhl15/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1099788,
+   "sha256": "25e9bdc0b3d5cc7ac81f606c4237aefe3533796475cd4742e33caab45beb1bd3"
+  },
+  "x360-nhl15/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 6927360,
+   "sha256": "59007e9cabcf63e88b94483a9ee5e6961fa652f0e02d10018f84af1beb01835b"
+  },
+  "x360-nhl15/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 18824,
+   "sha256": "54b64116103e75e652cf18a6739f69c8f1463cf5112bc645145aabaea9a84b98"
+  },
+  "x360-nhl15/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 7378944,
+   "sha256": "99e0076caa0b63d77f19a2fcc6fb16d8b5c1981d75ef3774b5d1756f50319332"
+  },
+  "x360-nhl15/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 11608,
+   "sha256": "1e385806355f5bef6b5a469f2c0fb9ed175828c548c03ffcc116bdce5b69686e"
+  },
+  "x360-nhl15/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 3936448,
+   "sha256": "65312bcbec6ac99d4c2ec8fbf4162ad7e7836818e27895d14b80de3ed9a56c6b"
+  },
+  "x360-nhl15/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 11956,
+   "sha256": "6740ee706b734f98eabcfa4815cb158651d9b677f748cd3a1c5c4488aceadb8e"
+  },
+  "x360-nhl15/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 8103872,
+   "sha256": "c7572cea5b1eff773940f49584bfdce04b821e72062d247117ce87fc2b529c8a"
+  },
+  "x360-nhl15/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7396,
+   "sha256": "e0733d837c0e7fbdfebe2c7e3b20c3d1cc059a158a1e0c09f3e185e22272648f"
+  },
+  "x360-nhl15/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 4409216,
+   "sha256": "ce30e0322bf6ee0ed9e001e51dc45a3e5bd0b5fa8928588ca4dd8696f568ad98"
+  },
+  "x360-nhl15/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 9948,
+   "sha256": "8d71da508fa2728b32fff9bff1839dfa16165d94781653a745bf6dcbd13996a8"
+  },
+  "x360-nhl15/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 5569152,
+   "sha256": "6502a5e7093db4d5d3d88142362b659ffd04ff751c182f962317692efefadf9a"
+  },
+  "x360-nhl15/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\colors1.abk",
+   "size": 2781884,
+   "sha256": "650da788ebda5b6da5c84904cbfba6863eb83d2c41e5e02c082a41691d08537d"
+  },
+  "x360-nhl15/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\colors1.ast",
+   "size": 4157888,
+   "sha256": "4efc9d4e912ff69b9922a31284550bdbb565de693ac0f29cb396295f72d98ad4"
+  },
+  "x360-nhl15/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\colors2.abk",
+   "size": 2911812,
+   "sha256": "3eb34399d7575a5aa54c209437da8871f4a67ba401c004335674dcae52e16659"
+  },
+  "x360-nhl15/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\colors2.ast",
+   "size": 4265792,
+   "sha256": "2b9dcbbf087d1609bbb7463645852a988a5adaf077d75fde27fd7c127c9b72c0"
+  },
+  "x360-nhl15/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\crowds.abk",
+   "size": 14393228,
+   "sha256": "c375f2f5d3ee3353d4e43d76ae561ba9117c284e152e37a064e50c747fd89b91"
+  },
+  "x360-nhl15/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\crowds.ast",
+   "size": 13196608,
+   "sha256": "06ef0606a266e7aed80063441658e8bb49058b0f2e532252a4425e4074de4d94"
+  },
+  "x360-nhl15/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 14374716,
+   "sha256": "c5e138f94b09dff9ae178a296941074b2d93235f6d850cb25e85eb8771a44509"
+  },
+  "x360-nhl15/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 14252672,
+   "sha256": "814903cf41309504f4d5b912d9d2d8f42290b315d816d9dea9a6b271f35ae22f"
+  },
+  "x360-nhl15/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\playercalls.abk",
+   "size": 81412,
+   "sha256": "b98d90fbd6119bff9346c1e6bb0942deb29fab83ddf6b735059f3a8befdebc20"
+  },
+  "x360-nhl15/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\playercalls.ast",
+   "size": 2676544,
+   "sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b"
+  },
+  "x360-nhl15/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\playercalls2.abk",
+   "size": 14384,
+   "sha256": "2a21f45f49c977671f068e04a2a66686ecef12867bf6adb826aaffa3a2dfe087"
+  },
+  "x360-nhl15/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\playercalls2.ast",
+   "size": 581312,
+   "sha256": "e051bd54cd95a8b0c1dcecc5af94f2280e1f5c5ee18e62c1f105f3c85c8734a5"
+  },
+  "x360-nhl15/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\practicerink.abk",
+   "size": 29500,
+   "sha256": "0a983c395dc8a043619d44a6909c5468ec65008a3ed68c068beeab28a8075035"
+  },
+  "x360-nhl15/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\practicerink.ast",
+   "size": 5014336,
+   "sha256": "c7e42d55567ab3ffc7903220883e3c9e811b712de4e07fdffe8d3ee1a20315d7"
+  },
+  "x360-nhl15/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\sfx.abk",
+   "size": 1963280,
+   "sha256": "bde65367e13391bb66f1d40cfffaf2082b98f24b0851c22957c046c0e0fd4c36"
+  },
+  "x360-nhl15/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\sfx.ast",
+   "size": 40594176,
+   "sha256": "e19f7dda2f4fc7279981d13594fc9eb8d2626b5024dc1c269dca0980d17748e4"
+  },
+  "x360-legacy/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1099788,
+   "sha256": "25e9bdc0b3d5cc7ac81f606c4237aefe3533796475cd4742e33caab45beb1bd3"
+  },
+  "x360-legacy/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 6927360,
+   "sha256": "59007e9cabcf63e88b94483a9ee5e6961fa652f0e02d10018f84af1beb01835b"
+  },
+  "x360-legacy/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 18824,
+   "sha256": "54b64116103e75e652cf18a6739f69c8f1463cf5112bc645145aabaea9a84b98"
+  },
+  "x360-legacy/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 7378944,
+   "sha256": "99e0076caa0b63d77f19a2fcc6fb16d8b5c1981d75ef3774b5d1756f50319332"
+  },
+  "x360-legacy/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 11608,
+   "sha256": "1e385806355f5bef6b5a469f2c0fb9ed175828c548c03ffcc116bdce5b69686e"
+  },
+  "x360-legacy/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 3936448,
+   "sha256": "65312bcbec6ac99d4c2ec8fbf4162ad7e7836818e27895d14b80de3ed9a56c6b"
+  },
+  "x360-legacy/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 11956,
+   "sha256": "6740ee706b734f98eabcfa4815cb158651d9b677f748cd3a1c5c4488aceadb8e"
+  },
+  "x360-legacy/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 8103872,
+   "sha256": "c7572cea5b1eff773940f49584bfdce04b821e72062d247117ce87fc2b529c8a"
+  },
+  "x360-legacy/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7396,
+   "sha256": "e0733d837c0e7fbdfebe2c7e3b20c3d1cc059a158a1e0c09f3e185e22272648f"
+  },
+  "x360-legacy/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 4409216,
+   "sha256": "ce30e0322bf6ee0ed9e001e51dc45a3e5bd0b5fa8928588ca4dd8696f568ad98"
+  },
+  "x360-legacy/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 9948,
+   "sha256": "8d71da508fa2728b32fff9bff1839dfa16165d94781653a745bf6dcbd13996a8"
+  },
+  "x360-legacy/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 5569152,
+   "sha256": "6502a5e7093db4d5d3d88142362b659ffd04ff751c182f962317692efefadf9a"
+  },
+  "x360-legacy/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\colors1.abk",
+   "size": 2781884,
+   "sha256": "650da788ebda5b6da5c84904cbfba6863eb83d2c41e5e02c082a41691d08537d"
+  },
+  "x360-legacy/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\colors1.ast",
+   "size": 4157888,
+   "sha256": "4efc9d4e912ff69b9922a31284550bdbb565de693ac0f29cb396295f72d98ad4"
+  },
+  "x360-legacy/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\colors2.abk",
+   "size": 2911812,
+   "sha256": "3eb34399d7575a5aa54c209437da8871f4a67ba401c004335674dcae52e16659"
+  },
+  "x360-legacy/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\colors2.ast",
+   "size": 4265792,
+   "sha256": "2b9dcbbf087d1609bbb7463645852a988a5adaf077d75fde27fd7c127c9b72c0"
+  },
+  "x360-legacy/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\crowds.abk",
+   "size": 14393228,
+   "sha256": "c375f2f5d3ee3353d4e43d76ae561ba9117c284e152e37a064e50c747fd89b91"
+  },
+  "x360-legacy/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\crowds.ast",
+   "size": 13196608,
+   "sha256": "06ef0606a266e7aed80063441658e8bb49058b0f2e532252a4425e4074de4d94"
+  },
+  "x360-legacy/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 14374716,
+   "sha256": "c5e138f94b09dff9ae178a296941074b2d93235f6d850cb25e85eb8771a44509"
+  },
+  "x360-legacy/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 14252672,
+   "sha256": "814903cf41309504f4d5b912d9d2d8f42290b315d816d9dea9a6b271f35ae22f"
+  },
+  "x360-legacy/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\playercalls.abk",
+   "size": 81412,
+   "sha256": "b98d90fbd6119bff9346c1e6bb0942deb29fab83ddf6b735059f3a8befdebc20"
+  },
+  "x360-legacy/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\playercalls.ast",
+   "size": 2676544,
+   "sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b"
+  },
+  "x360-legacy/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\playercalls2.abk",
+   "size": 14384,
+   "sha256": "2a21f45f49c977671f068e04a2a66686ecef12867bf6adb826aaffa3a2dfe087"
+  },
+  "x360-legacy/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\playercalls2.ast",
+   "size": 581312,
+   "sha256": "e051bd54cd95a8b0c1dcecc5af94f2280e1f5c5ee18e62c1f105f3c85c8734a5"
+  },
+  "x360-legacy/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\practicerink.abk",
+   "size": 29500,
+   "sha256": "0a983c395dc8a043619d44a6909c5468ec65008a3ed68c068beeab28a8075035"
+  },
+  "x360-legacy/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\practicerink.ast",
+   "size": 5014336,
+   "sha256": "c7e42d55567ab3ffc7903220883e3c9e811b712de4e07fdffe8d3ee1a20315d7"
+  },
+  "x360-legacy/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\sfx.abk",
+   "size": 1963280,
+   "sha256": "bde65367e13391bb66f1d40cfffaf2082b98f24b0851c22957c046c0e0fd4c36"
+  },
+  "x360-legacy/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\sfx.ast",
+   "size": 40594176,
+   "sha256": "e19f7dda2f4fc7279981d13594fc9eb8d2626b5024dc1c269dca0980d17748e4"
+  },
+  "ps3-nhl11/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.abk",
+   "size": 378264,
+   "sha256": "b83c30f7942b0181c8301cce104b6e533f26869642e4e2184a277536ead97635"
+  },
+  "ps3-nhl11/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.ast",
+   "size": 10112448,
+   "sha256": "cd84ddbd99e604e7ae57a88b0d4a7a28e3bf517e8cbdb3a47970da13917409ea"
+  },
+  "ps3-nhl11/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.abk",
+   "size": 378264,
+   "sha256": "577075b6722d962287351ffd37477db29adc6cdfd251cc03a38f3de768c58f18"
+  },
+  "ps3-nhl11/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.ast",
+   "size": 10384960,
+   "sha256": "c8d4527882de435ea00bc90761a36cb92c4c00e8c3b84f7b3a1443d88dc496c7"
+  },
+  "ps3-nhl11/createplayer.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\createplayer.abk",
+   "size": 1420,
+   "sha256": "61568e455eeac5aed74c193cfe414a71d89b4303537b2acb498be7e59e9063d0"
+  },
+  "ps3-nhl11/createplayer.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\createplayer.ast",
+   "size": 2244480,
+   "sha256": "bc03e43795d7701ad01a5df9bc7c359fa28c818c179a349e55a31f9785d5f7af"
+  },
+  "ps3-nhl11/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.abk",
+   "size": 5775332,
+   "sha256": "cce005becf52917301f9ea95482eec8a490109a2b7285524e06b9cc73005bd05"
+  },
+  "ps3-nhl11/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.ast",
+   "size": 30419776,
+   "sha256": "8b05e90584d2c9d320525c1b9ac88e72564c83ad9b2f6e088c915f16c743adb7"
+  },
+  "ps3-nhl11/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.abk",
+   "size": 3832360,
+   "sha256": "bd4b94ace717c4e16914b817c7fa8d9e4362ba5c4d4a005ab116afaa04821983"
+  },
+  "ps3-nhl11/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.ast",
+   "size": 440512,
+   "sha256": "82efd072a41bb0235aad1464e747c271a9f4c33a83809dfe966081996c28df8a"
+  },
+  "ps3-nhl11/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.abk",
+   "size": 3300,
+   "sha256": "b3e59825253776de59949919cb38d3cf29f79900ef4a6b094e474278d997310f"
+  },
+  "ps3-nhl11/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.ast",
+   "size": 5440320,
+   "sha256": "35da62588d5aaf01fb38957e9ff336b8758b049c5e67774b52c9af33b3081aab"
+  },
+  "ps3-nhl11/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.abk",
+   "size": 4040124,
+   "sha256": "cf986195c216a3147b3e13354c7a93d39d5828a7c8b4a71bec3c32a48f84bab4"
+  },
+  "ps3-nhl11/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.ast",
+   "size": 49326592,
+   "sha256": "efc6c9b569a71ba220714d5def4ea09557e24fb34477f8560624af3feb670044"
+  },
+  "ps3-nhl14/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1376808,
+   "sha256": "597e711527951cc678a3df2219fa10d11b2e1787965dee07398f985965cec8b5"
+  },
+  "ps3-nhl14/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 8667968,
+   "sha256": "8a6c78c13e84f900fb10f977a72a3f3904ae5111289c35ca7f01dd8d6539df99"
+  },
+  "ps3-nhl14/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 19720,
+   "sha256": "a93b538e3afe4ea742932f0707aa20a979eb5dc05c8d275cd5a0485593575b4f"
+  },
+  "ps3-nhl14/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 11468608,
+   "sha256": "9580b3b8202e2cc89c38f1c7efa67fe2c075a3dcf64ca6df95826258aa736f87"
+  },
+  "ps3-nhl14/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 12504,
+   "sha256": "020df0506938d4186838aaf59657375fcf23c68988a8bf1875a7f7bcfea9423b"
+  },
+  "ps3-nhl14/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 6067008,
+   "sha256": "41ed92f31fe49d8ac5814f90c8c9ce95d45d99c11b95c1cf140f5df44f94c0c4"
+  },
+  "ps3-nhl14/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 12340,
+   "sha256": "6a33d2cc2729412c4c95c986efcb6a48ca40c57673359db14615040cb3ae544f"
+  },
+  "ps3-nhl14/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 12396480,
+   "sha256": "a89484b519632c94c7e77356fcf5cb4515d825388d6430ef8ad9ba5aff926e7e"
+  },
+  "ps3-nhl14/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7780,
+   "sha256": "7fcf7a27a4fc083425a0f6347fb10b9637cc3f0c9f0cdf17a3e4b4bf7d434a8e"
+  },
+  "ps3-nhl14/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 6609920,
+   "sha256": "40b064628af10ceed47143cb50cd0accdd55b62385f366434fd42b2877f92bc6"
+  },
+  "ps3-nhl14/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 10332,
+   "sha256": "6ca1a4cc717fde94fef14604b8787eaa75046dbb6ee4f06e87b715f9ebcc7ae5"
+  },
+  "ps3-nhl14/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 8451072,
+   "sha256": "942b7b596e082daa5fd539ac6854921f4143ebc14dbaf8930784cb41a356ce9d"
+  },
+  "ps3-nhl14/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.abk",
+   "size": 381960,
+   "sha256": "eeafe5e595f0dffac46b5acfba3d113258a0a88a8e65f7e806e5b57331b9e578"
+  },
+  "ps3-nhl14/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.ast",
+   "size": 10208064,
+   "sha256": "056b1f17cf9a4a3c3849747614487a988646fafeeccdb3f89b305924a3ca0a11"
+  },
+  "ps3-nhl14/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.abk",
+   "size": 381960,
+   "sha256": "cacafb1721cc4188287ed86ef47c2132dc3c25c349223c44a17bc64c7383c5d7"
+  },
+  "ps3-nhl14/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.ast",
+   "size": 10480576,
+   "sha256": "ce0ab40b098971a725d89081368742959b17f00df831ec089873ed61aca335cb"
+  },
+  "ps3-nhl14/createplayer.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\createplayer.abk",
+   "size": 1420,
+   "sha256": "61568e455eeac5aed74c193cfe414a71d89b4303537b2acb498be7e59e9063d0"
+  },
+  "ps3-nhl14/createplayer.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\createplayer.ast",
+   "size": 2244480,
+   "sha256": "bc03e43795d7701ad01a5df9bc7c359fa28c818c179a349e55a31f9785d5f7af"
+  },
+  "ps3-nhl14/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.abk",
+   "size": 5606300,
+   "sha256": "4382317d3de2c754cf477274ea3ade7aef5b9fe40746e8c6ec28247dfe7a4594"
+  },
+  "ps3-nhl14/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.ast",
+   "size": 30080896,
+   "sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901"
+  },
+  "ps3-nhl14/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 4907712,
+   "sha256": "f228bc98c22ac388f6398f0240884def2cf691c15b3150785060bd1aad2ea55f"
+  },
+  "ps3-nhl14/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 27617408,
+   "sha256": "09804ed83625df419772eada2d91974c642d67f6e6e827b5299d85b1809ecde3"
+  },
+  "ps3-nhl14/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.abk",
+   "size": 92932,
+   "sha256": "317dc321afe5170272212f4949960a7ddfd42f6e17cda32e4b3eb192ad86d24c"
+  },
+  "ps3-nhl14/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.ast",
+   "size": 4274560,
+   "sha256": "baa988740d00cf0f9913ac8e1d693f954c5b530cdc2cf09ebaaa3fbbd73ace7d"
+  },
+  "ps3-nhl14/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls2.abk",
+   "size": 17200,
+   "sha256": "bc81f8eca307c89971d49ba94fe0bbdd2f03b335648c80bc8e4494e51a2e589c"
+  },
+  "ps3-nhl14/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls2.ast",
+   "size": 790016,
+   "sha256": "8a21fc68d764084a444f5367cd423d6c830785a8453154981844da14fac51baf"
+  },
+  "ps3-nhl14/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.abk",
+   "size": 30396,
+   "sha256": "0b46d3b44fd651feba71173688908541a45e746b026151a7854a8f5c73c4ce39"
+  },
+  "ps3-nhl14/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.ast",
+   "size": 5440320,
+   "sha256": "9bd2692dbc47c82e4080eec3fe6653489a98077c348a21e69c6574921c02c6c1"
+  },
+  "ps3-nhl14/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.abk",
+   "size": 2585052,
+   "sha256": "5659405d5d8250b79f7566e5f73b98ad921c5ffd98e2b4ed43e0dc7732b37556"
+  },
+  "ps3-nhl14/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.ast",
+   "size": 51518336,
+   "sha256": "d0ff4281682d175cb7df8fd747697607d1912a9d4f7656a09222cea6949a7a22"
+  },
+  "ps3-nhl15/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1376808,
+   "sha256": "597e711527951cc678a3df2219fa10d11b2e1787965dee07398f985965cec8b5"
+  },
+  "ps3-nhl15/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 8667968,
+   "sha256": "8a6c78c13e84f900fb10f977a72a3f3904ae5111289c35ca7f01dd8d6539df99"
+  },
+  "ps3-nhl15/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 19720,
+   "sha256": "a93b538e3afe4ea742932f0707aa20a979eb5dc05c8d275cd5a0485593575b4f"
+  },
+  "ps3-nhl15/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 11468608,
+   "sha256": "9580b3b8202e2cc89c38f1c7efa67fe2c075a3dcf64ca6df95826258aa736f87"
+  },
+  "ps3-nhl15/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 12504,
+   "sha256": "020df0506938d4186838aaf59657375fcf23c68988a8bf1875a7f7bcfea9423b"
+  },
+  "ps3-nhl15/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 6067008,
+   "sha256": "41ed92f31fe49d8ac5814f90c8c9ce95d45d99c11b95c1cf140f5df44f94c0c4"
+  },
+  "ps3-nhl15/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 12340,
+   "sha256": "6a33d2cc2729412c4c95c986efcb6a48ca40c57673359db14615040cb3ae544f"
+  },
+  "ps3-nhl15/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 12396480,
+   "sha256": "a89484b519632c94c7e77356fcf5cb4515d825388d6430ef8ad9ba5aff926e7e"
+  },
+  "ps3-nhl15/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7780,
+   "sha256": "7fcf7a27a4fc083425a0f6347fb10b9637cc3f0c9f0cdf17a3e4b4bf7d434a8e"
+  },
+  "ps3-nhl15/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 6609920,
+   "sha256": "40b064628af10ceed47143cb50cd0accdd55b62385f366434fd42b2877f92bc6"
+  },
+  "ps3-nhl15/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 10332,
+   "sha256": "6ca1a4cc717fde94fef14604b8787eaa75046dbb6ee4f06e87b715f9ebcc7ae5"
+  },
+  "ps3-nhl15/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 8451072,
+   "sha256": "942b7b596e082daa5fd539ac6854921f4143ebc14dbaf8930784cb41a356ce9d"
+  },
+  "ps3-nhl15/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.abk",
+   "size": 381960,
+   "sha256": "eeafe5e595f0dffac46b5acfba3d113258a0a88a8e65f7e806e5b57331b9e578"
+  },
+  "ps3-nhl15/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.ast",
+   "size": 10208064,
+   "sha256": "056b1f17cf9a4a3c3849747614487a988646fafeeccdb3f89b305924a3ca0a11"
+  },
+  "ps3-nhl15/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.abk",
+   "size": 381960,
+   "sha256": "cacafb1721cc4188287ed86ef47c2132dc3c25c349223c44a17bc64c7383c5d7"
+  },
+  "ps3-nhl15/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.ast",
+   "size": 10480576,
+   "sha256": "ce0ab40b098971a725d89081368742959b17f00df831ec089873ed61aca335cb"
+  },
+  "ps3-nhl15/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.abk",
+   "size": 5606300,
+   "sha256": "4382317d3de2c754cf477274ea3ade7aef5b9fe40746e8c6ec28247dfe7a4594"
+  },
+  "ps3-nhl15/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.ast",
+   "size": 30080896,
+   "sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901"
+  },
+  "ps3-nhl15/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 4907712,
+   "sha256": "f228bc98c22ac388f6398f0240884def2cf691c15b3150785060bd1aad2ea55f"
+  },
+  "ps3-nhl15/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 27617408,
+   "sha256": "09804ed83625df419772eada2d91974c642d67f6e6e827b5299d85b1809ecde3"
+  },
+  "ps3-nhl15/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.abk",
+   "size": 92932,
+   "sha256": "317dc321afe5170272212f4949960a7ddfd42f6e17cda32e4b3eb192ad86d24c"
+  },
+  "ps3-nhl15/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.ast",
+   "size": 4274560,
+   "sha256": "baa988740d00cf0f9913ac8e1d693f954c5b530cdc2cf09ebaaa3fbbd73ace7d"
+  },
+  "ps3-nhl15/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls2.abk",
+   "size": 17200,
+   "sha256": "bc81f8eca307c89971d49ba94fe0bbdd2f03b335648c80bc8e4494e51a2e589c"
+  },
+  "ps3-nhl15/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls2.ast",
+   "size": 790016,
+   "sha256": "8a21fc68d764084a444f5367cd423d6c830785a8453154981844da14fac51baf"
+  },
+  "ps3-nhl15/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.abk",
+   "size": 30396,
+   "sha256": "0b46d3b44fd651feba71173688908541a45e746b026151a7854a8f5c73c4ce39"
+  },
+  "ps3-nhl15/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.ast",
+   "size": 5440320,
+   "sha256": "9bd2692dbc47c82e4080eec3fe6653489a98077c348a21e69c6574921c02c6c1"
+  },
+  "ps3-nhl15/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.abk",
+   "size": 2585052,
+   "sha256": "5659405d5d8250b79f7566e5f73b98ad921c5ffd98e2b4ed43e0dc7732b37556"
+  },
+  "ps3-nhl15/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.ast",
+   "size": 51518336,
+   "sha256": "d0ff4281682d175cb7df8fd747697607d1912a9d4f7656a09222cea6949a7a22"
+  },
+  "ps3-legacy/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1376808,
+   "sha256": "597e711527951cc678a3df2219fa10d11b2e1787965dee07398f985965cec8b5"
+  },
+  "ps3-legacy/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 8667968,
+   "sha256": "8a6c78c13e84f900fb10f977a72a3f3904ae5111289c35ca7f01dd8d6539df99"
+  },
+  "ps3-legacy/bap_coach_feedback1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback1.abk",
+   "size": 19720,
+   "sha256": "a93b538e3afe4ea742932f0707aa20a979eb5dc05c8d275cd5a0485593575b4f"
+  },
+  "ps3-legacy/bap_coach_feedback1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback1.ast",
+   "size": 11468608,
+   "sha256": "9580b3b8202e2cc89c38f1c7efa67fe2c075a3dcf64ca6df95826258aa736f87"
+  },
+  "ps3-legacy/bap_coach_feedback2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback2.abk",
+   "size": 12504,
+   "sha256": "020df0506938d4186838aaf59657375fcf23c68988a8bf1875a7f7bcfea9423b"
+  },
+  "ps3-legacy/bap_coach_feedback2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coach_feedback2.ast",
+   "size": 6067008,
+   "sha256": "41ed92f31fe49d8ac5814f90c8c9ce95d45d99c11b95c1cf140f5df44f94c0c4"
+  },
+  "ps3-legacy/bap_coachtasks_assign.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_assign.abk",
+   "size": 12340,
+   "sha256": "6a33d2cc2729412c4c95c986efcb6a48ca40c57673359db14615040cb3ae544f"
+  },
+  "ps3-legacy/bap_coachtasks_assign.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_assign.ast",
+   "size": 12396480,
+   "sha256": "a89484b519632c94c7e77356fcf5cb4515d825388d6430ef8ad9ba5aff926e7e"
+  },
+  "ps3-legacy/bap_coachtasks_fbneg.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbneg.abk",
+   "size": 7780,
+   "sha256": "7fcf7a27a4fc083425a0f6347fb10b9637cc3f0c9f0cdf17a3e4b4bf7d434a8e"
+  },
+  "ps3-legacy/bap_coachtasks_fbneg.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbneg.ast",
+   "size": 6609920,
+   "sha256": "40b064628af10ceed47143cb50cd0accdd55b62385f366434fd42b2877f92bc6"
+  },
+  "ps3-legacy/bap_coachtasks_fbpos.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbpos.abk",
+   "size": 10332,
+   "sha256": "6ca1a4cc717fde94fef14604b8787eaa75046dbb6ee4f06e87b715f9ebcc7ae5"
+  },
+  "ps3-legacy/bap_coachtasks_fbpos.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\bap_coachtasks_fbpos.ast",
+   "size": 8451072,
+   "sha256": "942b7b596e082daa5fd539ac6854921f4143ebc14dbaf8930784cb41a356ce9d"
+  },
+  "ps3-legacy/colors1.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.abk",
+   "size": 381960,
+   "sha256": "eeafe5e595f0dffac46b5acfba3d113258a0a88a8e65f7e806e5b57331b9e578"
+  },
+  "ps3-legacy/colors1.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\colors1.ast",
+   "size": 10208064,
+   "sha256": "056b1f17cf9a4a3c3849747614487a988646fafeeccdb3f89b305924a3ca0a11"
+  },
+  "ps3-legacy/colors2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.abk",
+   "size": 381960,
+   "sha256": "cacafb1721cc4188287ed86ef47c2132dc3c25c349223c44a17bc64c7383c5d7"
+  },
+  "ps3-legacy/colors2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\colors2.ast",
+   "size": 10480576,
+   "sha256": "ce0ab40b098971a725d89081368742959b17f00df831ec089873ed61aca335cb"
+  },
+  "ps3-legacy/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.abk",
+   "size": 5606300,
+   "sha256": "4382317d3de2c754cf477274ea3ade7aef5b9fe40746e8c6ec28247dfe7a4594"
+  },
+  "ps3-legacy/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.ast",
+   "size": 30080896,
+   "sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901"
+  },
+  "ps3-legacy/crowds_winterclassic.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds_winterclassic.abk",
+   "size": 4907712,
+   "sha256": "f228bc98c22ac388f6398f0240884def2cf691c15b3150785060bd1aad2ea55f"
+  },
+  "ps3-legacy/crowds_winterclassic.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds_winterclassic.ast",
+   "size": 27617408,
+   "sha256": "09804ed83625df419772eada2d91974c642d67f6e6e827b5299d85b1809ecde3"
+  },
+  "ps3-legacy/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.abk",
+   "size": 92932,
+   "sha256": "317dc321afe5170272212f4949960a7ddfd42f6e17cda32e4b3eb192ad86d24c"
+  },
+  "ps3-legacy/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.ast",
+   "size": 4274560,
+   "sha256": "baa988740d00cf0f9913ac8e1d693f954c5b530cdc2cf09ebaaa3fbbd73ace7d"
+  },
+  "ps3-legacy/playercalls2.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls2.abk",
+   "size": 17200,
+   "sha256": "bc81f8eca307c89971d49ba94fe0bbdd2f03b335648c80bc8e4494e51a2e589c"
+  },
+  "ps3-legacy/playercalls2.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls2.ast",
+   "size": 790016,
+   "sha256": "8a21fc68d764084a444f5367cd423d6c830785a8453154981844da14fac51baf"
+  },
+  "ps3-legacy/practicerink.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.abk",
+   "size": 30396,
+   "sha256": "0b46d3b44fd651feba71173688908541a45e746b026151a7854a8f5c73c4ce39"
+  },
+  "ps3-legacy/practicerink.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\practicerink.ast",
+   "size": 5440320,
+   "sha256": "9bd2692dbc47c82e4080eec3fe6653489a98077c348a21e69c6574921c02c6c1"
+  },
+  "ps3-legacy/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.abk",
+   "size": 2585052,
+   "sha256": "5659405d5d8250b79f7566e5f73b98ad921c5ffd98e2b4ed43e0dc7732b37556"
+  },
+  "ps3-legacy/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.ast",
+   "size": 51518336,
+   "sha256": "d0ff4281682d175cb7df8fd747697607d1912a9d4f7656a09222cea6949a7a22"
+  },
+  "rink_ann_samples.sbs": {
+   "path": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\rink_announcer\\eng\\rink_ann_samples.sbs",
+   "size": 384,
+   "sha256": "d3d443d63a4e2d90840a092b510e73f3433125f0027060fc792ad56af8852755"
+  },
+  "rink_ann_samples_inxp.sbs": {
+   "path": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\rink_announcer\\eng\\rink_ann_samples_inxp.sbs",
+   "size": 218679088,
+   "sha256": "3be477fd63bf07dedd1c331709337d2a435258441dd1f42ecbf7a3ad1af2be8b"
+  },
+  "x360-nhl15/na_en_loadfile.xml": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\na_en_loadfile.xml",
+   "size": 32181,
+   "sha256": "b092050064bf0d1e7b9006989bdc546dbd391914e75a574302852cbda2879861"
+  },
+  "x360-nhl15/aemscrwd.csi": {
+   "path": "",
+   "size": 32248,
+   "sha256": "615ebc46ada781c0b9a9e59e0facc156c619a11f24f372fd6a2c93bf0754aae4"
+  },
+  "ps3-nhl15/na_en_loadfile.xml": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\na_en_loadfile.xml",
+   "size": 32099,
+   "sha256": "2947f2a17a5eee4f66fc8904f9f8fc57eb745f0099fd36a228cbd7900b458649"
+  },
+  "ps3-nhl15/aemscrwd.csi": {
+   "path": "",
+   "size": 46728,
+   "sha256": "7089a8c1d647ec3540dd34730fdc938024f7290c1591e99e98025fe9fc880993"
+  },
+  "x360-nhl10/na_en_loadfile.xml": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\na_en_loadfile.xml",
+   "size": 30576,
+   "sha256": "bbb66271a40e842843959b8c0614fc62ac671b7ec747b5d2384a4c64f16fecbf"
+  },
+  "x360-nhl10/aemscrwd.csi": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\aemscrwd.csi",
+   "size": 30820,
+   "sha256": "83311c31562993927d45b7e128c0adbd5106b0acc2b43334028182127e7fce5f"
+  },
+  "x360-nhl15/controlCenter.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\controlCenter.abk",
+   "size": 27084,
+   "sha256": "c94e05f4e4065aeabe0d9721177db3bf465cfb65fdc01a429ecf41bb5b923ebf"
+  },
+  "ps3-nhl15/controlCenter.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\controlCenter.abk",
+   "size": 32332,
+   "sha256": "6403dbd53c0b6b759c20b9de736a0d553b74aee376f18ac495cbd7c109f309d1"
+  }
+ },
+ "outputs": {
+  "local/runs/overnight-research-2026-09-25/probes/gen_docs.py": {
+   "size": 15563,
+   "sha256": "d7969f4f6ab49d606455ad82fcb3270dacfab5778e8f9f1b9c0468df77720634"
+  },
+  "local/runs/overnight-research-2026-09-25/probes/r91_ast_framing.py": {
+   "size": 36962,
+   "sha256": "edff0b842581df209cd7c9b433c2373b0615158b706d166b02c86d6af8d5355b"
+  },
+  "local/runs/overnight-research-2026-09-25/probes/r92_ast_decode.py": {
+   "size": 26280,
+   "sha256": "308df9555802f5f637599ffc9fee4f97564234711c9fce24e4313ab8d8332360"
+  },
+  "local/runs/overnight-research-2026-09-25/probes/r93_speex_outlier.py": {
+   "size": 9013,
+   "sha256": "bd1776e990691b215a96af729115cc66dba844638ef181f40d79822bda7908d8"
+  },
+  "local/runs/overnight-research-2026-09-25/probes/r94_abk_sx_hash.py": {
+   "size": 15179,
+   "sha256": "0e9a5ba3462436a1a99363e53f22b9e63a065ebe6520a2e9d9466ce9fe4adc3a"
+  },
+  "local/runs/overnight-research-2026-09-25/probes/r95_crowd_script.py": {
+   "size": 9463,
+   "sha256": "aea079551b94d8084f6d2b7970de47f9adb28c6623bf2ea5fa9a0d24c393059e"
+  },
+  "local/runs/overnight-research-2026-09-25/probes/r95b_controlcenter.py": {
+   "size": 9835,
+   "sha256": "35479813e59fb71364424b2d144d6035803932165ba5922668ec7ba33db5045e"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/A-ps3-15-playercalls-0-eal3-mono22k__stream__raw.wav": {
+   "size": 71468,
+   "sha256": "89a8b18c24ea66a5d21633151f64a1b97433b4993d6b00a1175caaca7fabdd12"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/A-ps3-15-playercalls-0-eal3-mono22k__stream__trimmed.wav": {
+   "size": 66458,
+   "sha256": "2916c0068bd4e0efa3eac80bf67178105e54e91290f8da94338102be6311d320"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/B-ps3-15-crowds-40-eal3-mono44k-multiblock__stream__raw.wav": {
+   "size": 265004,
+   "sha256": "0cd2a6af8caaee9a93ef5aca41a1467a92301e5e2e6954b8c7b014746fa9da62"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/B-ps3-15-crowds-40-eal3-mono44k-multiblock__stream__trimmed.wav": {
+   "size": 259594,
+   "sha256": "ca37d1e20e61b9713d35dc54b2429d06dd66834704e9344c0f49ca18d815500d"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/C-ps3-15-crowds-first-cc1-stereo__stream__raw.wav": {
+   "size": 2695724,
+   "sha256": "0341f1a070d5b4ea57683f5277ade1161c8e1e9ab4753294cf69e86a0b4849c6"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/C-ps3-15-crowds-first-cc1-stereo__stream__trimmed.wav": {
+   "size": 2682520,
+   "sha256": "dcaece60f62e7e16a5a8cdc0ecf677436c6836953b59ede55bd1f1a5cff00a77"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__body_s0__raw.wav": {
+   "size": 2769452,
+   "sha256": "aa500eb69d76199cce0841d689b5d8f356d66aa91ba719e89191b9e1a080b162"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__body_s0__trimmed.wav": {
+   "size": 2759880,
+   "sha256": "7ea3eb1a00ae24c1dd54c033d5e1b66b92df1fee3b22aacfc8242ca9c0603fb4"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__body_s1__raw.wav": {
+   "size": 2769452,
+   "sha256": "398b4636cb81848646d5b7c2e2bd46959eca04ccbf92d805630e5c30d5c0f72f"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__body_s1__trimmed.wav": {
+   "size": 2759880,
+   "sha256": "1ed9f91600e69a51857380920b660bc647ca290567c9c9757864b6818607a5a6"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__loop_x2_s0.wav": {
+   "size": 5519832,
+   "sha256": "fb330251c051822bd784e63d56d5239b17c85cc546be585825fc8e01318aa6b5"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__loop_x2_s1.wav": {
+   "size": 5519832,
+   "sha256": "4e65871c51b41217aaed064af33a0f8c29e4475d4967b6bff6bb6b2dde1522d0"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__stub_s0__raw.wav": {
+   "size": 13868,
+   "sha256": "6b440558d29cdde11ff449e446696bfc750a525b26a41bbfdd1c8257b3a541e8"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__stub_s0__trimmed.wav": {
+   "size": 160,
+   "sha256": "1ca235af80290735bebffe833b5b743f44f4661dced9b687d691ff38b57c018a"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__stub_s1__raw.wav": {
+   "size": 13868,
+   "sha256": "e9b142765cdbc700b73b9cde1d0872d642b440e98d6d81161c900ccdb83ba76e"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/D-ps3-15-crowds-0-loop-cc3-4ch__stub_s1__trimmed.wav": {
+   "size": 160,
+   "sha256": "1f1712245ae8c8e903c3605cb737c5f52b377e388447ce665ea8364b68776dce"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/E-ps3-15-first-loop-cc0or1-any-bank__body__raw.wav": {
+   "size": 3009068,
+   "sha256": "03633a61de89f33d4f5f8c06792560b511915fe23eb9ba0fe570b4a14c1fc446"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/E-ps3-15-first-loop-cc0or1-any-bank__body__trimmed.wav": {
+   "size": 2997432,
+   "sha256": "cb56206859843a514891c56a3f227f2a4761604f96f22dd7207b00a9f28452a6"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/E-ps3-15-first-loop-cc0or1-any-bank__loop_x2.wav": {
+   "size": 5994936,
+   "sha256": "6c4b5908c13c01c76486a34af04c03b4a7010e43017dc54a085ffc3eee863de6"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/E-ps3-15-first-loop-cc0or1-any-bank__stub__raw.wav": {
+   "size": 13868,
+   "sha256": "6b440558d29cdde11ff449e446696bfc750a525b26a41bbfdd1c8257b3a541e8"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/E-ps3-15-first-loop-cc0or1-any-bank__stub__trimmed.wav": {
+   "size": 160,
+   "sha256": "1ca235af80290735bebffe833b5b743f44f4661dced9b687d691ff38b57c018a"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/F-x360-15-playercalls-0-xma-mono22k__stream__raw.wav": {
+   "size": 66458,
+   "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/F-x360-15-playercalls-0-xma-mono22k__stream__trimmed.wav": {
+   "size": 66458,
+   "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/G-x360-15-crowds-58-xma-stereo-multiblock__stream__raw.wav": {
+   "size": 2189820,
+   "sha256": "8dac98a18c5f2d6ba8b50fe27b911f3990b2e52d3abdc1ea908f8953a1a7ceee"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/G-x360-15-crowds-58-xma-stereo-multiblock__stream__trimmed.wav": {
+   "size": 2189820,
+   "sha256": "8dac98a18c5f2d6ba8b50fe27b911f3990b2e52d3abdc1ea908f8953a1a7ceee"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__body_s0__raw.wav": {
+   "size": 2252972,
+   "sha256": "d4835e5151eb2d5f73c6be2d856db414d3fe51b874d979fe77291f0c4b638865"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__body_s0__trimmed.wav": {
+   "size": 2252972,
+   "sha256": "d4835e5151eb2d5f73c6be2d856db414d3fe51b874d979fe77291f0c4b638865"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__body_s1__raw.wav": {
+   "size": 2252972,
+   "sha256": "00a3bf670004478c1cbc4ff0a570f4bbba18f0c8618fcd15d4cb22208af1ac2e"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__body_s1__trimmed.wav": {
+   "size": 2252972,
+   "sha256": "00a3bf670004478c1cbc4ff0a570f4bbba18f0c8618fcd15d4cb22208af1ac2e"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__loop_x2_s0.wav": {
+   "size": 4505996,
+   "sha256": "5bb8f13b3ffd3cf3a4ff3b82e1ef979f7ac5a5db87a1df817235f075fa8630e0"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__loop_x2_s1.wav": {
+   "size": 4505996,
+   "sha256": "b971b15991406aa921cf603a15c6a665ea79b4e1be5dd4c2d161314ad1795139"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__stub_s0__raw.wav": {
+   "size": 140,
+   "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__stub_s0__trimmed.wav": {
+   "size": 140,
+   "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__stub_s1__raw.wav": {
+   "size": 140,
+   "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/H-x360-15-crowds-0-loop-xma-cc3__stub_s1__trimmed.wav": {
+   "size": 140,
+   "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I1-ps3-11-playercalls-first__stream__raw.wav": {
+   "size": 103724,
+   "sha256": "1f7cfab1c529912f004197fcc74b2292c29151af5e045de707496cc3a02050bd"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I1-ps3-11-playercalls-first__stream__trimmed.wav": {
+   "size": 98808,
+   "sha256": "03bfb8e488f3a7bbf522114ad052aa73f81c8036013fddc7385311abc1a248ce"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I2-x360-10-playercalls-first__stream__raw.wav": {
+   "size": 98808,
+   "sha256": "3307855e7294966c03274d86229eaddb40a592935afdc23025d9a7c9d0b6155b"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I2-x360-10-playercalls-first__stream__trimmed.wav": {
+   "size": 98808,
+   "sha256": "3307855e7294966c03274d86229eaddb40a592935afdc23025d9a7c9d0b6155b"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I3-ps3-legacy-crowds-40__stream__raw.wav": {
+   "size": 265004,
+   "sha256": "0cd2a6af8caaee9a93ef5aca41a1467a92301e5e2e6954b8c7b014746fa9da62"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I3-ps3-legacy-crowds-40__stream__trimmed.wav": {
+   "size": 259594,
+   "sha256": "ca37d1e20e61b9713d35dc54b2429d06dd66834704e9344c0f49ca18d815500d"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I4-x360-legacy-playercalls-0__stream__raw.wav": {
+   "size": 66458,
+   "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I4-x360-legacy-playercalls-0__stream__trimmed.wav": {
+   "size": 66458,
+   "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I5-ps3-14-sfx-first-stream__stream__raw.wav": {
+   "size": 27692,
+   "sha256": "d4b0eff78cc95e692aecb82cc1b1c500d86f158c3879b5612fc2b52972bd8055"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I5-ps3-14-sfx-first-stream__stream__trimmed.wav": {
+   "size": 22316,
+   "sha256": "725e344203c045215546a6e07d8eac19374f403ed657078ee1cbcd4bc86caacc"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I6-x360-12-sfx-first-stream__stream__raw.wav": {
+   "size": 22316,
+   "sha256": "b2e7ee5c82c2e34f6a2da9d41c4c84ea1cace5d963f552970db35090f74c2167"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/I6-x360-12-sfx-first-stream__stream__trimmed.wav": {
+   "size": 22316,
+   "sha256": "b2e7ee5c82c2e34f6a2da9d41c4c84ea1cace5d963f552970db35090f74c2167"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/OUTLIER-control_inxp-nhl21-rink_ann-rink_ann_samples_inxp-off32__libspeex__raw.wav": {
+   "size": 183084,
+   "sha256": "588e5fca0d1c2f28a5abb53c8c27b0807cb0b188a5994588934cfa2ad6bf5cf3"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/OUTLIER-control_inxp-nhl21-rink_ann-rink_ann_samples_inxp-off32__speex__raw.wav": {
+   "size": 183084,
+   "sha256": "eda06089d915eb9ddfb26d0900e30e0298e421836244cdf04d3bb6e3f3eec44e"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/OUTLIER-outlier-nhl21-rink_ann-rink_ann_samples-off32__libspeex__raw.wav": {
+   "size": 15404,
+   "sha256": "2ea33fb16a9c4b9aecad27adb9ab4f8f63ee31fcab955642c025c6e7c51116fa"
+  },
+  "local/runs/overnight-research-2026-09-25/previews/OUTLIER-outlier-nhl21-rink_ann-rink_ann_samples-off32__speex__raw.wav": {
+   "size": 15404,
+   "sha256": "7b38514d24c3dd8645179d93ce08f5d4d608324ff59d12a8bcb1f553a3fd87e2"
+  },
+  "local/runs/overnight-research-2026-09-25/blockmaps/r91-representative-crowds.json": {
+   "size": 10976,
+   "sha256": "d9e7a5c334c3e0b1e37606ef60fde500869dfd189b4334b23094e3b9d913fb21"
+  },
+  "local/runs/overnight-research-2026-09-25/blockmaps/r91-representative.json": {
+   "size": 59341,
+   "sha256": "f0bbf0a416502c5e2bcf228626d0b8da9f2d79833d88dc80c1f0d0e304463795"
+  },
+  "local/runs/overnight-research-2026-09-25/blockmaps/r91-streams.jsonl": {
+   "size": 16630623,
+   "sha256": "12a1cf32fa3ea12a52345e754f85ae68381b02388763f3e0fed07d555dca40b2"
+  },
+  "docs/research/overnight-2026-09-25/data/r91-ast-framing.json": {
+   "size": 244752,
+   "sha256": "9930d9f119cd803bf8914013be547064560e4736dd7833949e6879c28f61cadc"
+  },
+  "docs/research/overnight-2026-09-25/data/r92-ast-decode.json": {
+   "size": 82657,
+   "sha256": "0f46b0aa3268b135788691760b49007a989cab71d8604923fcc5a2a4ad28642a"
+  },
+  "docs/research/overnight-2026-09-25/data/r93-speex-outlier.json": {
+   "size": 75350,
+   "sha256": "b039f79d60f8e22569008852be09566e623124a941e6c104249b44e71618b481"
+  },
+  "docs/research/overnight-2026-09-25/data/r94-abk-sx-hash.json": {
+   "size": 17040,
+   "sha256": "6dbe95bd7ab976e53383e150d284b90ad2dee4626462f5fc999782d9946c70ad"
+  },
+  "docs/research/overnight-2026-09-25/data/r95-crowd-script.json": {
+   "size": 142949,
+   "sha256": "83f69df9d22260eca23c3f89a79535947dfe56e85fe98f0fb5f9f0be8371ccb8"
+  },
+  "docs/research/overnight-2026-09-25/data/r95b-controlcenter.json": {
+   "size": 34072,
+   "sha256": "00ffd5dc9d96cdb9ee0ba3db9a7ea5c56dd91110df69a46186998f479aa1171d"
+  },
+  "docs/research/overnight-2026-09-25/09-ast-framing-decode-previews-and-contract-extensions.md": {
+   "size": 10671,
+   "sha256": "e256c5453bde1acc93b9390146038c5ae1cdcd7171bf696c9ca1b27043df86c0"
+  },
+  "docs/research/overnight-2026-09-25/ABK_TREE_CONTRACT.md": {
+   "size": 7946,
+   "sha256": "6e1563edead66df552ebb453df2069b213f5b02ce8bbf2417b4aa180ea3e277b"
+  },
+  "docs/research/overnight-2026-09-25/AST_FRAMING.md": {
+   "size": 13049,
+   "sha256": "d8012a8beab40acff4090ac4bafe77a31d98e318def5e11c136bff8ca5928971"
+  },
+  "docs/research/overnight-2026-09-25/CHANT_SELECTION.md": {
+   "size": 5239,
+   "sha256": "16f3a4084468a9d06c4d7fb8e58bf842a52a68d89f875c6edaa6fa15510a7cd3"
+  },
+  "docs/research/overnight-2026-09-25/CHECKPOINT.md": {
+   "size": 4759,
+   "sha256": "7bf45f72d3943fc4e4aef40fbc1866a0a4aa39ebe518380f4eaeb4010ad0bfb9"
+  },
+  "docs/research/overnight-2026-09-25/COVERAGE.md": {
+   "size": 14926,
+   "sha256": "cfa0a8ff60c35bbe2f32e7104cf89b469843152b238733d16ec60a0b1271e3dd"
+  },
+  "docs/research/overnight-2026-09-25/DEVELOPER-QUEUE.md": {
+   "size": 3938,
+   "sha256": "6083b02ed251bc04ce57d8dd42dd56a6a142d4d5cbef2fdb895419a7ef72a607"
+  },
+  "docs/research/overnight-2026-09-25/PREVIEW_REVIEW.md": {
+   "size": 16096,
+   "sha256": "146e4ef217dfff8677adf0efef672f7acc5fb8ee0be603c6c68a24c98072823e"
+  },
+  "docs/research/overnight-2026-09-25/REPLACEMENT_READINESS.md": {
+   "size": 4529,
+   "sha256": "1ebadf4c567394beda107f49812e55a98b9393475a9c9a6155f54c64e9052d6f"
+  },
+  "docs/research/overnight-2026-09-25/STATUS.md": {
+   "size": 9769,
+   "sha256": "f27189a119d9d9135f7c45529f0ff84437b69374e593f96b20cccd67c11230a7"
+  },
+  "docs/research/overnight-2026-09-25/TASKS.md": {
+   "size": 3943,
+   "sha256": "f109c3cd61f203e9c67d3c2f3ba95c85de71cb9a9049c73efb12830853fdf1e8"
+  },
+  "docs/research/overnight-2026-09-25/USER-CARDS.md": {
+   "size": 3330,
+   "sha256": "f0cad698cf95464053aed00af7016ff8b1191a22450a9fcf55462022b9d03ed5"
+  }
+ },
+ "tools": {
+  "python": "3.12.10",
+  "numpy": "2.5.1",
+  "ffmpeg": "ffmpeg version 8.1.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+  "os": "Windows-11-10.0.26200-SP0",
+  "no_downloads": true,
+  "vgmstream": "absent",
+  "scipy": "absent"
+ },
+ "provenance_note": "inputs are read-only loose game files on X: (PS3 / X360 trees, title and platform in the key) and the PS4 NHL 21 extracted install on H: (CUSA18182, base); every hash computed at use time; anchors/ps4/nhl20 not used."
+}

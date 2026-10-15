@@ -3,16 +3,22 @@ import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { EntityList, type Column } from "../components/EntityList";
+import { EmptyState } from "../components/primitives";
+import { isAvailable } from "../lib/surfaces";
 
 type Row = { id: number; name: string; city: string; teams: number };
 
 export function ArenasPage() {
   const { project } = useProject();
   const projectId = project!.project_id;
+  // Direct-URL safety: a title whose schema has no named arena table (e.g. NHL 07) shows an explicit
+  // unavailable state instead of a name-less list — and never fires the query.
+  const arenasAvailable = isAvailable(project!.surfaces?.arenas);
 
   const arenas = useQuery({
     queryKey: ["arenas", projectId],
     queryFn: () => call("list_arenas", { projectId }),
+    enabled: arenasAvailable,
   });
 
   const rows: Row[] = useMemo(
@@ -25,6 +31,15 @@ export function ArenasPage() {
       })),
     [arenas.data],
   );
+
+  if (!arenasAvailable) {
+    return (
+      <EmptyState
+        title="Arenas aren’t available for this title"
+        hint={project!.surfaces?.arenas.reason ?? "This game's database doesn't carry a named arena table."}
+      />
+    );
+  }
 
   const columns: Column<Row>[] = [
     {

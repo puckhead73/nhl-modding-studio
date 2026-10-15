@@ -2,7 +2,7 @@
 
 > **Verification status: VERIFIED (read/extract).** Reversed and confirmed against the PS4 anchors
 > (nhl19). The inner roster TDB decompresses cleanly, its header CRC verifies, and its records decode
-> to real data (NHL city names). Write-back (recompress + rebuild) is deferred. PS4 is **little-endian
+> to real data (NHL city names). Structural repack is tested; game acceptance remains unverified. PS4 is **little-endian
 > TDB v6** ([tdb-v6-format.md](tdb-v6-format.md)).
 
 ## Save directory (Sony save-data export)
@@ -36,7 +36,19 @@ hash/timestamp — exact role TBD; needed for write-back). Observed records in a
 | 2 | JSON metadata `{"FileCreateDate":…}` |
 | 3 | **the main payload** (the roster) — see below |
 
-## Main payload = `[1-byte codec]? [LZ4 frame]` → LE TDB
+## Main payload: chunkzip or `[1-byte codec]? [LZ4 frame]` → LE TDB
+
+NHL15 uses the same record stream with a bare `chunkzip` roster payload. The committed
+`84f8102f - ROSTER/DATA` anchor is 739,913 bytes; its roster record starts at offset 52,
+has a native padded header (version word 2, 128 KiB window, 20 chunks), and decodes to
+2,510,592 bytes of little-endian TDB with a valid header CRC. The codec now reads this
+variant and repacks edited content using native chunk framing, preserving other records
+and all record headers. An unknown chunkzip framing is refused for repack.
+
+The October 3 overnight QA also passed the production mirrored database/roster edit,
+save and reopen test, then opened the written roster independently to check its edits.
+This establishes structural write-back, **not emulator or console acceptance**; header
+tag semantics and companion-file update requirements remain unverified in game.
 
 The big record's payload is an **LZ4 Frame** (magic `04 22 4D 18`), optionally preceded by a `01`
 codec-id byte. **NHL17–19+ use `[01][frame]`; NHL16 uses a bare `[frame]`** (no codec byte) — verified
@@ -56,7 +68,9 @@ Decompressing the frame yields a **little-endian TDB v6** at offset 0:
 
 - ✅ **Verified:** the directory layout, the record stream framing, the LZ4 payload, the inner LE TDB
   (header CRC + real-data decode).
-- ⏳ **Deferred (write-back):** LZ4 **re-compress** + rebuild the record stream; the 12-byte record
+- ✅ **Structurally verified:** chunkzip and LZ4 recompression, record-stream rebuild, preserved
+  non-roster records, and production NHL15 edit/save/reopen.
+- ⏳ **Deferred (runtime write-back qualification):** the 12-byte record
   header tag/hash semantics; updating `INDEX` / `sce_sys/param.sfo`. No PFD-style console encryption
   was observed (these are emulator/decrypted exports — confirm for real-console write-back).
 

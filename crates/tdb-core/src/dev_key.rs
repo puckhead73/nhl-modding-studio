@@ -96,7 +96,9 @@ pub fn is_well_formed_player_slug(slug: &str) -> bool {
             && s.chars().all(|c| c.is_ascii_digit())
             && s.parse::<u32>().is_ok_and(|v| (lo..=hi).contains(&v))
     };
-    digits_in(parts[2], 2, 1, 31) && digits_in(parts[3], 2, 1, 12) && digits_in(parts[4], 4, 1, 2100)
+    digits_in(parts[2], 2, 1, 31)
+        && digits_in(parts[3], 2, 1, 12)
+        && digits_in(parts[4], 4, 1, 2100)
 }
 
 /// Transliterate a name to lowercase ASCII alphanumeric only.

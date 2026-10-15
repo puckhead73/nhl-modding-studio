@@ -1,0 +1,68 @@
+# Reallusion CC5 skeleton → Legacy palette, for Path C's authored-weights mode.
+#
+# Path A joins NHL24's 433 named bones to the Legacy palette by NAME, because both rigs
+# use the same naming family. CC5 does not — its bones are `CC_Base_*` — so the join is
+# this explicit table. It is short because a CC5 head skin only ever touches a handful of
+# bones: on the reference character (dan-suckow, 2026-08-13) `Std_Skin_Head` weights
+# exactly 7, and every one of them is covered below.
+#
+# Targets are Legacy palette BONE NAMES, resolved through legacy-bone-names.toml with its
+# prefer/exclude flags — so "Neck" lands on the donor-used slot 6, never the excluded 5.
+#
+# What is deliberately NOT here: eyelid and lip bones. CC5 drives those with blend shapes,
+# not bones (verified: the 101-joint export has JawRoot, UpperJaw, both Eyes, Teeth and
+# Tongue, and no lid or lip bone at all). Eyelid weight therefore comes from the
+# `Eye_Blink_*` / `Eye_LowerLid_*` morph deltas instead — see crate::cc5.
+
+schema = "cc5-bone-map/1"
+
+[[bone]]
+source = "CC_Base_Head"
+target = "Head"
+notes = "82.3% of the reference head's mass."
+
+[[bone]]
+source = "CC_Base_FacialBone"
+target = "Head"
+notes = "Parent of the facial rig; rigid to the skull."
+
+[[bone]]
+source = "CC_Base_UpperJaw"
+target = "Head"
+notes = "The UPPER jaw does not move relative to the skull — mapping it to Jaw would make the whole midface open with the mouth."
+
+[[bone]]
+source = "CC_Base_JawRoot"
+target = "Jaw"
+notes = "10.6% of the reference head. This is the mouth fix: the lower lip follows the jaw because CC authored it, not because a crease was guessed."
+
+[[bone]]
+source = "CC_Base_NeckTwist01"
+target = "Neck"
+
+[[bone]]
+source = "CC_Base_NeckTwist02"
+target = "Neck"
+
+[[bone]]
+source = "CC_Base_Spine02"
+target = "Spine3"
+notes = "Shoulder-height spine; Legacy heads author their lowest mass on Spine3."
+
+[[bone]]
+source = "CC_Base_L_Clavicle"
+target = "Spine3"
+notes = "Trace mass (0.1%) where the head mesh reaches the shoulder line. Legacy's arm slots are census-excluded garbage, same reasoning as the LeftArm/RightArm overrides in bone-overrides.toml."
+
+[[bone]]
+source = "CC_Base_R_Clavicle"
+target = "Spine3"
+
+[[bone]]
+source = "CC_Base_L_Eye"
+target = "Head"
+notes = "Eyeball geometry is the donor's and never ships from CC; any stray head-surface mass on the eye bones belongs on the skull."
+
+[[bone]]
+source = "CC_Base_R_Eye"
+target = "Head"

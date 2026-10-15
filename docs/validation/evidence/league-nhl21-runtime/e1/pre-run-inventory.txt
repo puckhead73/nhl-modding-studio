@@ -1,0 +1,35 @@
+# E1 pre-run 2026-09-18T06:30:16Z
+be6decd22a15114dedc1a6360e4801d926f7b6f6ce695ff873a3897572e64fee */c/Users/puckh/AppData/Roaming/shadPS4/config.toml
+aeb048921e7749ef9dc580a6009bc0cbff08b193ae9f04cce209c9e7cf012790 */h/Emulators/ShadPS4/shadPS4.exe
+bb8c97e3377f029a0a2ead4e17c753c711041fd928f113e57fc40489640e56d4 */h/Emulators/ShadPS4/Games/CUSA18182/sce_sys/param.sfo
+fc95ca66cc65a45f6d125f5f02920c296d0c6ff1d7a65a727b6e6a25b1dd1731 */h/Emulators/ShadPS4/Games/CUSA18182/eboot.bin
+## profile
+total 14
+drwxr-xr-x 1 puckh 197121    0 Sep 17 23:14 .
+drwxr-xr-x 1 puckh 197121    0 Sep 17 23:14 ..
+-rw-r--r-- 1 puckh 197121 8239 Sep 17 23:18 DATA
+-rw-r--r-- 1 puckh 197121  352 Sep 17 23:18 INDEX
+-rw-r--r-- 1 puckh 197121    8 Sep 17 23:14 NAME
+drwxr-xr-x 1 puckh 197121    0 Sep 17 23:18 sce_sys
+1bc473ff7bcb890611d8967a0e2b168dbb2263568005649fd522cef13f601948 */c/Users/puckh/AppData/Roaming/shadPS4/savedata/1/CUSA18182/Profile0/DATA
+28fa1a7f87728ae1eb3d08179b61b049a51fec4f69c218f3df90835b3c8dc1f5 */c/Users/puckh/AppData/Roaming/shadPS4/savedata/1/CUSA18182/Profile0/INDEX
+## cache
+total 908
+drwxr-xr-x 1 puckh 197121      0 Sep 17 23:14 .
+drwxr-xr-x 1 puckh 197121      0 Sep 17 23:15 ..
+-rw-r--r-- 1 puckh 197121 924726 Sep 17 23:20 CUSA18182.zip
+682f30165cb6609a94ce2e69ee9b7aaa87e8a8954d7f56862b3e3ff365e694f3 */c/Users/puckh/AppData/Roaming/shadPS4/cache/CUSA18182.zip
+## screenshots present
+CUSA18182_20260917_231719_779_game_000000.png
+CUSA18182_20260917_231841_094_game_000001.png
+## loose game tree
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/common/config/memory.cfg
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/common/config/videoheap.cfg
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/kettle/config/eu_versioninfo.ini
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/kettle/config/titleinfo.ini
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/kettle/eawebkit.prx
+## databigs inxp_00*
+-rw-r--r-- 1 puckh 197121   777373328 Jun 25 19:45 inxp_00.big
+## last log head (which title)
+[Loader] <Info> (shadPS4:Main) emulator.cpp:272 Run: Game id: CUSA18182 Title: NHL™ 21
+[Loader] <Info> (shadPS4:Main) emulator.cpp:273 Run: Fw: 0x7508000 App Version: 01.00

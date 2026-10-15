@@ -1,0 +1,184 @@
+{
+ "note": "R149 - Legacy Recompiled team-header-logo inputs as archive members (after-receipt-8 prompt, continuation). Read-only.\n`decode_team_logo` (assets.rs) reads the FE crest `fe/ion/artassets/teamlogos/t<artid>.big` first, then falls back to\n`rendering/logo/texlib_<artid>_0_0.rx2` / `texlib_<artid>.rx2` / `texlib_<artid>_0.rx2`. For both folders: every member of the 13\ntop-level EB archives - archive, wrapper (8-byte head), duplicates within / across archives, name set vs the X360 NHL Legacy loose\nfolder, name shapes; how many crest ids also have each fallback candidate name; a deterministic in-memory byte sample (3 smallest + 3\nat even strides) unwrapped and compared with the X360 loose file. No logo meaning is inferred.\nUsage: python r149_recomp_team_header_logo.py <out.json>",
+ "recomp_root": "H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test\\game",
+ "x360_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+ "classes": {
+  "crest": {
+   "members": 320,
+   "per_archive": {
+    "cache.big": 320
+   },
+   "wrappers": {
+    "stored": 320
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 77296,
+   "x360_loose_files": 320,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "tN.big": 318,
+    "tcustom.big": 1,
+    "tblank.big": 1
+   },
+   "sample": [
+    {
+     "member": "fe/ion/artassets/teamlogos/tblank.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 880,
+     "unwrapped": 880,
+     "head4": "42494746",
+     "unwrapped_sha256": "8ad133cc44de868ba728e1f36704bab78fe576770c7b00ec21c5928f6e204853",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/teamlogos/t43.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 20016,
+     "unwrapped": 20016,
+     "head4": "42494746",
+     "unwrapped_sha256": "e8128dad9ac30d15203aaebd23f63b0e675a91192d37c92423704309d4e30846",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/teamlogos/t47.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 20720,
+     "unwrapped": 20720,
+     "head4": "42494746",
+     "unwrapped_sha256": "1b3f0b87841595289ebfed5d01932c8bc8c0ca116f80047c69f4c9980c3d9098",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/teamlogos/t95.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 36464,
+     "unwrapped": 36464,
+     "head4": "42494746",
+     "unwrapped_sha256": "186ae033cf891920d0d2d56cd047883270ca10f14fdbf0d5c8682b4cf4266ff7",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/teamlogos/t20007.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 43440,
+     "unwrapped": 43440,
+     "head4": "42494746",
+     "unwrapped_sha256": "3903a2e3294f5898bbcf363f59a33551924c08178a24062c6ecbbeeb1de0cb0c",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/teamlogos/t366.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 50992,
+     "unwrapped": 50992,
+     "head4": "42494746",
+     "unwrapped_sha256": "7fe0aa08636d03e75c69e28f1e48ba1379e65f545c88be7f55e1e58d99d2008b",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "rink_logo": {
+   "members": 1926,
+   "per_archive": {
+    "cacherender.big": 1926
+   },
+   "wrappers": {
+    "chunklzx": 1926
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 13674,
+   "x360_loose_files": 1926,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "texlib_N_N_N.rxN": 1926
+   },
+   "sample": [
+    {
+     "member": "rendering/logo/texlib_30_0_0.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 926,
+     "unwrapped": 200704,
+     "head4": "89525734",
+     "unwrapped_sha256": "4cad4102c4ee1df12a5272d3541152f2fe8afa03ddea9536b6929c3e21d967d4",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/logo/texlib_31_0_0.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 926,
+     "unwrapped": 200704,
+     "head4": "89525734",
+     "unwrapped_sha256": "afad20c6d41d2b581864d66798ccd8b53c6eb2dc86a639e79c0b6c54500ec75d",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/logo/texlib_31_1_1.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 926,
+     "unwrapped": 200704,
+     "head4": "89525734",
+     "unwrapped_sha256": "acdffcf35d8da89aae900405b161d3c5c1d1d07e9cfca7f348cd3b079ed7bea2",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/logo/texlib_83_0_2.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 958,
+     "unwrapped": 200704,
+     "head4": "89525734",
+     "unwrapped_sha256": "38613a80beca888831b4994b40dbff67f3c68c1494dee9a7edf8480cd0c16d7a",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/logo/texlib_393_0_1.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 960,
+     "unwrapped": 200704,
+     "head4": "89525734",
+     "unwrapped_sha256": "1625b1c59e71098fb76d7e2718ac463e6f7b1953f6cdb47979465c328f9e7d60",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/logo/texlib_2_1_0.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 6532,
+     "unwrapped": 200704,
+     "head4": "89525734",
+     "unwrapped_sha256": "9e8ebaec4a241778aec80632815a8fc1fe436dded151b39b624146b71f3f4346",
+     "equals_x360_loose": true
+    }
+   ]
+  }
+ },
+ "within_archive_duplicates": [],
+ "crest_ids": {
+  "count": 318,
+  "min": 0,
+  "max": 20087,
+  "non_numeric_crest_names": [
+   "tblank.big",
+   "tcustom.big"
+  ]
+ },
+ "fallback_candidates_for_crest_ids": {
+  "texlib_{}_0_0.rx2": 275,
+  "texlib_{}.rx2": 0,
+  "texlib_{}_0.rx2": 0
+ }
+}

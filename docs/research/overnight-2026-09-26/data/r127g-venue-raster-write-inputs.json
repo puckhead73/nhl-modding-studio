@@ -1,0 +1,233 @@
+{
+ "note": "R127g - writer-contract inputs for a same-size raster replacement inside a gen7 venue package (read-only). Per package:\n  * header fields (+0x20 file count, +0x30 file table, +0x44 hdr_size, +0x54 data_size, +0x1c arena id) and whether hdr_size + data_size\n    = file length;\n  * every 0x20003 descriptor's DW8 pixel-entry index (u32 at descriptor +32 >> 12, Studio's `descriptor_data_entry_index`): the addressed\n    file-table entry's type id, its size, and the base-level size the descriptor implies (DXT1 8 B / DXT3-5 16 B per 4x4 block, ARGB8 4 B /\n    texel, on pitch-aligned dimensions) - whether every raster's pixels live in exactly one addressed 0x10031 entry, and how many 0x10031\n    entries are NOT addressed by any descriptor (geometry / other buffers);\n  * checksum test: CRC-32 and Adler-32 of the data region and of the whole file compared with every u32 of the header (0 .. file table).\nUsage: python r127g_venue_raster_write_inputs.py <out.json> <package> [<package> ...]\n",
+ "packages": [
+  {
+   "package": "stadium_1_container_0.rx2",
+   "bytes": 11328576,
+   "file_count": 1495,
+   "hdr_size": 155648,
+   "data_size": 11172928,
+   "hdr_plus_data_eq_len": true,
+   "arena_id": "0x7b07661",
+   "rasters": 39,
+   "data_entries": 341,
+   "data_entries_addressed_by_descriptors": 39,
+   "all_dw8_hit_0x10031": true,
+   "all_entries_hold_base_level": true,
+   "checksum_words_found_in_header": {
+    "crc32_data": false,
+    "adler_data": false,
+    "crc32_file": false
+   },
+   "rasters_sample": [
+    {
+     "desc_chunk": 2,
+     "dw8_entry": 1,
+     "entry_type": "0x10031",
+     "entry_bytes": 131072,
+     "w": 256,
+     "h": 256,
+     "fmt": "0x53",
+     "base_level_bytes": 65536,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 4,
+     "dw8_entry": 3,
+     "entry_type": "0x10031",
+     "entry_bytes": 720896,
+     "w": 512,
+     "h": 2048,
+     "fmt": "0x52",
+     "base_level_bytes": 524288,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 6,
+     "dw8_entry": 5,
+     "entry_type": "0x10031",
+     "entry_bytes": 196608,
+     "w": 512,
+     "h": 512,
+     "fmt": "0x52",
+     "base_level_bytes": 131072,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 8,
+     "dw8_entry": 7,
+     "entry_type": "0x10031",
+     "entry_bytes": 16384,
+     "w": 32,
+     "h": 64,
+     "fmt": "0x52",
+     "base_level_bytes": 4096,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 10,
+     "dw8_entry": 9,
+     "entry_type": "0x10031",
+     "entry_bytes": 393216,
+     "w": 512,
+     "h": 512,
+     "fmt": "0x54",
+     "base_level_bytes": 262144,
+     "entry_ge_base": true
+    }
+   ]
+  },
+  {
+   "package": "stadium_2_container_0.rx2",
+   "bytes": 12656432,
+   "file_count": 1536,
+   "hdr_size": 159744,
+   "data_size": 12496688,
+   "hdr_plus_data_eq_len": true,
+   "arena_id": "0x7b07662",
+   "rasters": 41,
+   "data_entries": 353,
+   "data_entries_addressed_by_descriptors": 41,
+   "all_dw8_hit_0x10031": true,
+   "all_entries_hold_base_level": true,
+   "checksum_words_found_in_header": {
+    "crc32_data": false,
+    "adler_data": false,
+    "crc32_file": false
+   },
+   "rasters_sample": [
+    {
+     "desc_chunk": 2,
+     "dw8_entry": 1,
+     "entry_type": "0x10031",
+     "entry_bytes": 131072,
+     "w": 256,
+     "h": 256,
+     "fmt": "0x53",
+     "base_level_bytes": 65536,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 4,
+     "dw8_entry": 3,
+     "entry_type": "0x10031",
+     "entry_bytes": 720896,
+     "w": 512,
+     "h": 2048,
+     "fmt": "0x52",
+     "base_level_bytes": 524288,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 6,
+     "dw8_entry": 5,
+     "entry_type": "0x10031",
+     "entry_bytes": 196608,
+     "w": 512,
+     "h": 512,
+     "fmt": "0x52",
+     "base_level_bytes": 131072,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 8,
+     "dw8_entry": 7,
+     "entry_type": "0x10031",
+     "entry_bytes": 16384,
+     "w": 32,
+     "h": 64,
+     "fmt": "0x52",
+     "base_level_bytes": 4096,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 10,
+     "dw8_entry": 9,
+     "entry_type": "0x10031",
+     "entry_bytes": 393216,
+     "w": 512,
+     "h": 512,
+     "fmt": "0x54",
+     "base_level_bytes": 262144,
+     "entry_ge_base": true
+    }
+   ]
+  },
+  {
+   "package": "stadium_20_container_0.rx2",
+   "bytes": 11587888,
+   "file_count": 1591,
+   "hdr_size": 163840,
+   "data_size": 11424048,
+   "hdr_plus_data_eq_len": true,
+   "arena_id": "0xb0766b0",
+   "rasters": 41,
+   "data_entries": 365,
+   "data_entries_addressed_by_descriptors": 41,
+   "all_dw8_hit_0x10031": true,
+   "all_entries_hold_base_level": true,
+   "checksum_words_found_in_header": {
+    "crc32_data": false,
+    "adler_data": false,
+    "crc32_file": false
+   },
+   "rasters_sample": [
+    {
+     "desc_chunk": 2,
+     "dw8_entry": 1,
+     "entry_type": "0x10031",
+     "entry_bytes": 131072,
+     "w": 256,
+     "h": 256,
+     "fmt": "0x53",
+     "base_level_bytes": 65536,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 4,
+     "dw8_entry": 3,
+     "entry_type": "0x10031",
+     "entry_bytes": 720896,
+     "w": 512,
+     "h": 2048,
+     "fmt": "0x52",
+     "base_level_bytes": 524288,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 6,
+     "dw8_entry": 5,
+     "entry_type": "0x10031",
+     "entry_bytes": 196608,
+     "w": 512,
+     "h": 512,
+     "fmt": "0x52",
+     "base_level_bytes": 131072,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 8,
+     "dw8_entry": 7,
+     "entry_type": "0x10031",
+     "entry_bytes": 1441792,
+     "w": 1024,
+     "h": 1024,
+     "fmt": "0x54",
+     "base_level_bytes": 1048576,
+     "entry_ge_base": true
+    },
+    {
+     "desc_chunk": 10,
+     "dw8_entry": 9,
+     "entry_type": "0x10031",
+     "entry_bytes": 16384,
+     "w": 32,
+     "h": 64,
+     "fmt": "0x52",
+     "base_level_bytes": 4096,
+     "entry_ge_base": true
+    }
+   ]
+  }
+ ]
+}

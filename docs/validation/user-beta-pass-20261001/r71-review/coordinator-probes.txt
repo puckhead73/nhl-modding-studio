@@ -1,0 +1,84 @@
+warning: hiding a lifetime that's named elsewhere is confusing
+  --> crates\tdb-loc\src\retext.rs:67:44
+   |
+67 | fn pool_of<'a>(bytes: &'a [u8]) -> Result<(TdbFile, &'a [u8]), LocError> {
+   |                        --                  ^^^^^^^   -- the same lifetime is named here
+   |                        |                   |
+   |                        |                   the same lifetime is hidden here
+   |                        the lifetime is named here
+   |
+   = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+   = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: consistently use `'a`
+   |
+67 | fn pool_of<'a>(bytes: &'a [u8]) -> Result<(TdbFile<'a>, &'a [u8]), LocError> {
+   |                                                   ++++
+
+warning: `tdb-loc` (lib) generated 1 warning (run `cargo fix --lib -p tdb-loc` to apply 1 suggestion)
+warning: value assigned to `complete` is never read
+   --> crates\studio-domain\src\extract_service.rs:524:45
+    |
+524 | ...                   complete = false;
+    |                       ^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `write_range` is never used
+   --> crates\studio-domain\src\iso_patch.rs:220:4
+    |
+220 | fn write_range(image: &Path, start: u64, bytes: &[u8]) -> Result<()> {
+    |    ^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `studio-domain` (lib) generated 2 warnings
+   Compiling studio-api v0.0.0 (E:\Repositories\nhl-modding-studio\crates\studio-api)
+    Finished `test` profile [unoptimized] target(s) in 2.69s
+     Running tests\onb003_coordinator_probe.rs (target\debug\deps\onb003_coordinator_probe-5ebc40cd86a0f136.exe)
+
+running 6 tests
+
+thread 'coordinator_ps4_texture_package_uses_game_asset_root' (271516) panicked at crates\studio-api\tests\onb003_coordinator_probe.rs:576:26:
+called `Result::unwrap()` on an `Err` value: Workspace("this project has no main database or roster save, so database editing is unavailable; add one through Settings → Project (link inputs) or create a project with one")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test coordinator_ps4_texture_package_uses_game_asset_root ... FAILED
+
+thread 'coordinator_ps4_texture_with_database_uses_game_asset_root' (275416) panicked at crates\studio-api\tests\onb003_coordinator_probe.rs:612:5:
+Existing extracted texture should be found: ["fe/ion/artassets/leaguelogos/l0.png: the destination has no such file; a loose texture replacement needs the installed (extracted) file"]
+test coordinator_ps4_texture_with_database_uses_game_asset_root ... FAILED
+
+thread 'coordinator_main_db_only_does_not_change_recipient_roster' (275172) panicked at crates\studio-api\tests\onb003_coordinator_probe.rs:489:5:
+assertion `left == right` failed: A main_db-only package must preserve the unrelated roster
+  left: FileIdentity { len: 2456120, sha256: "cde2b7fb2f2b7d308460e63efc871badebf8f930d3d636d544ad942f09f2867a" }
+ right: FileIdentity { len: 2456120, sha256: "c079ec4b5ae7ce2aa5b678373a5cb250c5762eb333f7dfe8bb05a35080744cb9" }
+test coordinator_main_db_only_does_not_change_recipient_roster ... FAILED
+
+thread 'coordinator_both_roles_requires_roster' (8532) panicked at crates\studio-api\tests\onb003_coordinator_probe.rs:511:5:
+A both-roles package must not silently drop the missing roster: []
+test coordinator_both_roles_requires_roster ... FAILED
+First restore error: io error on "H:\\TEMP\\nhlms-onb003-pkg-coordinator-restore-262644\\content/ABCDEF0123456789/454109BE\\Headers\\00000001\\ROSTER 20260627060052.header": The process cannot access the file because it is being used by another process. (os error 32); DB/roster already restored=true header remains=true
+
+thread 'coordinator_restore_can_recover_after_sidecar_removal_failure' (265940) panicked at crates\studio-api\tests\onb003_coordinator_probe.rs:654:5:
+After releasing the fault, the recorded restore must be recoverable: Some(Workspace("Main database (nhlng.db): H:\\TEMP\\nhlms-onb003-pkg-coordinator-restore-262644\\recomp/game\\db\\nhlng.db is 2901504 bytes / 105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230 now, not the installed file (0a6a6200f8d737c79ffd31a03b614e4bc92201036b371583f41ea1e6b3817cca); it changed after the installation and is not touched — nothing restored"))
+test coordinator_restore_can_recover_after_sidecar_removal_failure ... FAILED
+
+thread 'coordinator_reordered_player_is_not_edited_by_old_row_number' (274596) panicked at crates\studio-api\tests\onb003_coordinator_probe.rs:555:5:
+assertion `left == right` failed: Unrelated player now at row 0 was edited; intended player moved to 7
+  left: Some(5)
+ right: Some(0)
+test coordinator_reordered_player_is_not_edited_by_old_row_number ... FAILED
+
+failures:
+
+failures:
+    coordinator_both_roles_requires_roster
+    coordinator_main_db_only_does_not_change_recipient_roster
+    coordinator_ps4_texture_package_uses_game_asset_root
+    coordinator_ps4_texture_with_database_uses_game_asset_root
+    coordinator_reordered_player_is_not_edited_by_old_row_number
+    coordinator_restore_can_recover_after_sidecar_removal_failure
+
+test result: FAILED. 0 passed; 6 failed; 0 ignored; 0 measured; 4 filtered out; finished in 18.47s
+
+error: test failed, to rerun pass `-p studio-api --test onb003_coordinator_probe`

@@ -3,4 +3,8 @@
 /**
  * A person's roster snapshot in one season (team resolved within that season's namespace).
  */
-export type HistoricalSeasonRowDto = { season_year: number, season_label: string, team_name: string | null, team_abbr: string | null, league_abbr: string | null, height: number | null, weight: number | null, ability: number | null, potential: number | null, };
+export type HistoricalSeasonRowDto = { season_year: number, season_label: string, team_name: string | null, team_abbr: string | null, league_abbr: string | null, height: number | null, weight: number | null, 
+/**
+ * The number worn that season (lowest, if several) — pre-fills the Roster Builder jersey.
+ */
+jersey: number | null, ability: number | null, potential: number | null, };

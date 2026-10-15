@@ -1,0 +1,112 @@
+﻿{
+    "date":  "2026-09-11",
+    "note":  "Reference source snapshot, not a standalone Rust workspace. Private geometry and installation packages remain at the paths in the playbook.",
+    "snapshot":  "H:\\TEMP\\nhl19-head-import-reference-2026-09-11",
+    "files":  [
+                  {
+                      "sha256":  "d9a6b19306818b1f38ec1f02421e994451f1403b39fb0b982f6c45fe7d53bfeb",
+                      "path":  "scripts/blender/uv_template_match.py"
+                  },
+                  {
+                      "sha256":  "2b27c046ea2818c2d628d1bb15970b96e8e6ac442994488e91b51714ff4b5a4c",
+                      "path":  "scripts/blender/nhl19_data_transfer_test.py"
+                  },
+                  {
+                      "sha256":  "adb00695dc38dc3fd04915ef7841b5eea412162ad189e861a8e98f7f7755f01f",
+                      "path":  "scripts/blender/nhl19_uv_correspondence_fit.py"
+                  },
+                  {
+                      "sha256":  "980ec290d0226f97d3e197983229a16e22503143f9396b221aaf0f3d97eb18f5",
+                      "path":  "scripts/blender/nhl19_finalize_game_mesh.py"
+                  },
+                  {
+                      "sha256":  "0893392dcf4edc44029e2ff35e7719b87c805edc5f12ea9d8dea63d1114ee689",
+                      "path":  "scripts/blender/head_scalp_placement.py"
+                  },
+                  {
+                      "sha256":  "a5d912de94d63d3dbc7f87dbe51c8f1c815188524e55425d78b6f6d919a83d07",
+                      "path":  "scripts/blender/nhl19_demitra_inspect.py"
+                  },
+                  {
+                      "sha256":  "8f370cc1d8259005b204502b8470441ca0d8ce384dabf0135991aa50f2f4ac88",
+                      "path":  "scripts/blender/nhl19_demitra_uv_probe.py"
+                  },
+                  {
+                      "sha256":  "8281376def41ca088db32c0c688b870668d993d080600550074249c9d8952c28",
+                      "path":  "scripts/blender/nhl19_demitra_fit.py"
+                  },
+                  {
+                      "sha256":  "bf6c1b8c888a22cccafd4a82d2e578c95749f25d1835fc829a15fa0588c2af4f",
+                      "path":  "scripts/blender/nhl19_demitra_finalize.py"
+                  },
+                  {
+                      "sha256":  "6c967285f8231a8586714f785dd4b78cca439377b3c4c076f06b1975e21f302d",
+                      "path":  "scripts/blender/nhl19_demitra_qc.py"
+                  },
+                  {
+                      "sha256":  "b7f328e3eda8808e7998cd3248c55555b6ceb783af8ed2688225713f8d669aae",
+                      "path":  "scripts/blender/nhl19_demitra_repair.py"
+                  },
+                  {
+                      "sha256":  "e1964af4baea8b2f0deb8367744301ae0c9033561c62e0ae92c91a7792da1a95",
+                      "path":  "scripts/blender/nhl19_demitra_diffuse_2k.py"
+                  },
+                  {
+                      "sha256":  "87f2fd6d026610003c4220d68bed286d1a7640b7c3371bbbc11ccbf4fa9e8b0d",
+                      "path":  "scripts/nhl19_build_test_package.py"
+                  },
+                  {
+                      "sha256":  "4b6323fa258725dcfb59cbbc43450d4408f8ce3a537057fb3ae6d297ad2f7bc7",
+                      "path":  "scripts/nhl19_test_install.py"
+                  },
+                  {
+                      "sha256":  "fb404118ffb6b583b5b84acd1dd780f8a4577f28ee11fbb36186efb3c57d953b",
+                      "path":  "scripts/nhl19_prepare_texture_only_test.py"
+                  },
+                  {
+                      "sha256":  "c41ec7ed6fc893b0b1582928c9d8b032eab6bd1da540aa43d704b96129c14772",
+                      "path":  "crates/tdb-rx2/examples/mcd_game_test_pack.rs"
+                  },
+                  {
+                      "sha256":  "56d145cd44a27d17ea25fda3b98db1c5a6eb6b9b8d07900551c936f51e7c0a4a",
+                      "path":  "crates/tdb-rx2/examples/mcd_donor_inspect.rs"
+                  },
+                  {
+                      "sha256":  "4d8833f3dcb55dae9e9aa6cae3126a4a106377b43edbbb4d29b9ae8237b2dc58",
+                      "path":  "crates/tdb-rx2/src/mcd_write.rs"
+                  },
+                  {
+                      "sha256":  "a14f3fc82a407944f159bbfb9438fe37ad043f2ea8b78932883aa6f766d79c43",
+                      "path":  "crates/tdb-archive-codec/src/lib.rs"
+                  },
+                  {
+                      "sha256":  "c02efdd6be9bf1e36e1cf6c41a522755589fb87fee72c1f523d214de6981a0c0",
+                      "path":  "crates/tdb-archive-big/examples/eb_extract.rs"
+                  },
+                  {
+                      "sha256":  "d67704130ae7fdee1e44bc29abf9f726e6425bf2ed01655b01c250b19adb1ae4",
+                      "path":  "crates/tdb-archive-big/examples/eb_find.rs"
+                  },
+                  {
+                      "sha256":  "dbb79b0aa8ff51beb53d8735e115e809e083003426d386157ecb7a03219cd8d2",
+                      "path":  "crates/tdb-archive-big/examples/eb_verify_append.rs"
+                  },
+                  {
+                      "sha256":  "b093e46181a2554c53c58b1085dd22ad13e47d16f84661af07fc83102b58092b",
+                      "path":  "crates/tdb-headmesh/examples/export_gnf_maps.rs"
+                  },
+                  {
+                      "sha256":  "5219acd475729eedb60aef22fb816c02b9afafec9f9282abc89b6df1dfc91a69",
+                      "path":  "crates/tdb-headmesh/examples/verify_nhl19_test_package.rs"
+                  },
+                  {
+                      "sha256":  "91b2210384caf76492baeb35e4e44067f46ec2ccc21b5d646426429bd96ff744",
+                      "path":  "Cargo.lock"
+                  },
+                  {
+                      "sha256":  "48c6864be63826ca4ee53b1c275aaef4fedbe3014e546b9a05a404922d9ddb8b",
+                      "path":  "docs/NHL19_HEAD_IMPORT_PLAYBOOK.md"
+                  }
+              ],
+    "repository":  "E:\\Repositories\\nhl-modding-studio"
+}

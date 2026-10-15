@@ -1,0 +1,32 @@
+$ python research/nhl07-roster-schema/scripts/update_table_match.py anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1 0x1c anchors/xbox360/nhl07/databases/NHL07NG.db anchors/xbox360/nhl07/databases/NHL07NG-meta.xml
+DZfz   16B nf=23 -> dDrd[exhibitiondownloadgoalieai] == update+key; YzeG[customgoalieai] == update+key; yuHm[exhibitiongoalieai] == update+key
+YvhR   20B nf=27 -> Raym[exhibitiondownloadskaterai] == update+key; yvSd[exhibitionskaterai] == update+key; oDHy[customplayerai] == update+key
+mASv    8B nf=11 -> oYeE[exhibitionteamstrategies] == update+key
+HHLk  504B nf=44 -> MqdK[customplayerbiotable] == update+key
+MVOx  504B nf=42 -> EhOn[exhibitiondownloadplayerbio] == update+key
+rcpY   16B nf=23 -> dDrd[exhibitiondownloadgoalieai] == update+key; YzeG[customgoalieai] == update+key; yuHm[exhibitiongoalieai] == update+key
+vozd   16B nf=70 -> ulGe[exhibitionrostertable] == update+key
+CvSu  504B nf=43 -> cPbu[exhibitionplayerbiotable] == update+key
+Iblm   68B nf= 2 -> bZvB[rosterversiontable] == update+key
+RosT   20B nf=27 -> Raym[exhibitiondownloadskaterai] == update+key; yvSd[exhibitionskaterai] == update+key; oDHy[customplayerai] == update+key
+uyGF   16B nf=23 -> dDrd[exhibitiondownloadgoalieai] == update+key; YzeG[customgoalieai] == update+key; yuHm[exhibitiongoalieai] == update+key
+zrsU   20B nf=27 -> Raym[exhibitiondownloadskaterai] == update+key; yvSd[exhibitionskaterai] == update+key; oDHy[customplayerai] == update+key
+
+update-field counts for roster-group parents:
+  exhibitiondownloadgoalieai     dDrd all=23 update=22 key=['zIBw']
+  exhibitiondownloadskaterai     Raym all=27 update=26 key=['zIBw']
+  exhibitionteamstrategies       oYeE all=11 update=10 key=['qEfv']
+  customplayerbiotable           MqdK all=45 update=43 key=['zIBw']
+  exhibitiondownloadplayerbio    EhOn all=46 update=41 key=['zIBw']
+  customgoalieai                 YzeG all=23 update=22 key=['zIBw']
+  exhibitionfreeagents           QEoV all=1 update=0 key=['TWSX']
+  exhibitionteams                ttOk all=4 update=0 key=['qEfv']
+  exhibitionplayers              caBZ all=3 update=0 key=['qEfv']
+  exhibitionrostertable          ulGe all=70 update=69 key=['TWSX']
+  exhibitionplayerbiotable       cPbu all=46 update=42 key=['zIBw']
+  rosterversiontable             bZvB all=2 update=1 key=['qEfv']
+  exhibitionarena                OEtS all=3 update=0 key=['qEfv']
+  exhibitionskaterai             yvSd all=27 update=26 key=['zIBw']
+  exhibitiongoalieai             yuHm all=23 update=22 key=['zIBw']
+  customplayerai                 oDHy all=27 update=26 key=['zIBw']
+

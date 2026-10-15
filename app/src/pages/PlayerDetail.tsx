@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
@@ -9,14 +9,20 @@ import { DetailTabs, type DetailTab } from "../components/DetailTabs";
 import { PlayerHeader } from "../components/PlayerHeader";
 import { AttributesTab } from "../components/AttributesTab";
 import { CareerStatsTab } from "../components/CareerStatsTab";
-import { EmptyState, Spinner } from "../components/primitives";
+import { PlayerEquipmentTab } from "../components/PlayerEquipmentTab";
+import { PlayerNameCallsCard } from "../components/PlayerNameCallsCard";
+import { Spinner } from "../components/primitives";
 import { useCrumbLabel } from "../lib/breadcrumbs";
+import { PLAYER_TABS, isAvailable, visibleTabKeys } from "../lib/surfaces";
+import { playerDataProfile } from "../lib/playerDataProfile";
 import type { PlayerViewDto } from "../bindings/PlayerViewDto";
 
 export function PlayerDetail() {
+  const [search] = useSearchParams();
   const { id } = useParams<{ id: string }>();
   const { project } = useProject();
   const projectId = project!.project_id;
+  const surfaces = project!.surfaces;
   const playerId = Number(id);
 
   const view = useQuery({
@@ -24,10 +30,13 @@ export function PlayerDetail() {
     queryFn: () => call("player_view", { projectId, playerId }),
     enabled: Number.isFinite(playerId),
   });
+  // Don't fetch a surface the schema lacks: skip the career query when this file carries no career
+  // tables (roster-save display, or a gen shape without them).
+  const careerAvailable = isAvailable(surfaces?.career);
   const career = useQuery({
     queryKey: ["career", projectId, playerId],
     queryFn: () => call("career_stats", { projectId, playerId }),
-    enabled: Number.isFinite(playerId),
+    enabled: Number.isFinite(playerId) && careerAvailable,
   });
   useCrumbLabel(view.data?.header.full_name);
   if (view.isLoading) return <Spinner label="Loading…" />;
@@ -59,24 +68,38 @@ export function PlayerDetail() {
       content: <AttributesTab projectId={projectId} player={player} />,
     },
     {
-      key: "portrait",
-      label: "Portrait",
-      content: (
-        <EmptyState
-          title="Portrait — preview only"
-          hint="Portrait preview and DDS↔PNG replace arrive with the Production Asset tools in a later phase."
-        />
-      ),
+      key: "equipment",
+      label: "Equipment",
+      content: <PlayerEquipmentTab projectId={projectId} player={player} />,
     },
   ];
+
+  // Gate the tab strip on the probed surface contract: omit tabs whose backing schema is absent (an
+  // absent feature is never rendered as an empty tab a user can't tell from a bug).
+  const visible = visibleTabKeys(PLAYER_TABS, surfaces);
+  const shownTabs = tabs.filter((t) => visible.has(t.key));
 
   return (
     <div className="max-w-6xl space-y-3">
       <PlayerHeader player={player} />
-      <DetailTabs tabs={tabs} />
+      <DetailTabs key={search.get("tab") ?? "default"} initial={search.get("tab") ?? undefined} tabs={shownTabs} />
     </div>
   );
 }
+
+/** Bio fields (by metadata name) the Misc drawer deliberately drops: every one of these is an asset
+ *  pointer that the appearance / portrait surfaces own and edit properly — `artid` (portrait art id)
+ *  and `hasportrait` on the Portraits side, `headid` / `skincolor` / `eyecolorcode` on the Appearance
+ *  side, `audioid` on the audio side. Editing a bare number here can only desync those, so the raw
+ *  ids stay off the Player Data tab entirely. */
+const SUPPRESSED_MISC_BIO = new Set([
+  "headid",
+  "hasportrait",
+  "audioid",
+  "eyecolorcode",
+  "artid",
+  "skincolor",
+]);
 
 /** The Player Data tab — resolved bio/roster/contract/draft/rookie values in the reference's
  *  sectioned, 4-column layout, inline-editable: enum fields render dropdowns, team FKs render team
@@ -89,6 +112,19 @@ function PlayerDataTab({ projectId, player }: { projectId: number; player: Playe
   });
   const teams = teamsQ.data ?? [];
 
+  // Fields already surfaced as editable cells in the curated sections above — the Misc drawer
+  // only carries what ISN'T shown yet, so nothing appears twice on the tab.
+  const curated = new Set(
+    player.profile.sections
+      .flatMap((s) => s.cells)
+      .flatMap((c) => (c.field ? [`${c.field.studio_table}.${c.field.studio_field}`] : [])),
+  );
+  const misc = player.all_fields.filter(
+    (f) =>
+      !curated.has(`${f.studio_table}.${f.studio_field}`) &&
+      !SUPPRESSED_MISC_BIO.has(f.name.toLowerCase()),
+  );
+
   // The curated sections come from the domain's per-game field profile: it emits exactly the fields
   // this title's schema carries (no "not in this game" placeholders) with correct labels/scales.
   // "Additional Teams" is a frontend-only membership editor that belongs in the Roster Data grid.
@@ -96,21 +132,25 @@ function PlayerDataTab({ projectId, player }: { projectId: number; player: Playe
     <div className="space-y-6">
       <ProfileSections
         projectId={projectId}
-        profile={player.profile}
+        profile={playerDataProfile(player)}
         teams={teams}
         extras={{ "Roster Data": <AdditionalTeams projectId={projectId} player={player} teams={teams} /> }}
       />
 
-      <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
-        <summary className="cursor-pointer text-xs font-semibold text-slate-300">
-          All bio fields ({player.all_fields.length}) — full editor
-        </summary>
-        <div className="mt-2 sm:grid sm:grid-cols-2 sm:gap-x-6">
-          {player.all_fields.map((f) => (
-            <FieldRow key={f.studio_field} projectId={projectId} record={player.bio_record} field={f} />
-          ))}
-        </div>
-      </details>
+      <PlayerNameCallsCard projectId={projectId} playerId={Number(player.player_id)} />
+
+      {misc.length > 0 && (
+        <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
+          <summary className="cursor-pointer text-xs font-semibold text-slate-300">
+            Misc bio fields ({misc.length}) — All fields not presented for editing above, only change if you know what you are doing.
+          </summary>
+          <div className="mt-2 sm:grid sm:grid-cols-2 sm:gap-x-6">
+            {misc.map((f) => (
+              <FieldRow key={f.studio_field} projectId={projectId} record={player.bio_record} field={f} />
+            ))}
+          </div>
+        </details>
+      )}
     </div>
   );
 }

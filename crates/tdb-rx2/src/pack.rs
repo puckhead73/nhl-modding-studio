@@ -115,14 +115,122 @@ pub fn quantize_weights(weights: [f32; 4]) -> [u8; 4] {
 /// Bergeron head vert 0 (`21 1F 23 8F` → (-0.221, -0.110, -0.969))
 /// and the mirror-image decoder in `playermesh`.
 fn write_packed_2_10_10_10_be(buf: &mut [u8], off: usize, n: [f32; 3]) {
-    let q = |v: f32| -> u32 {
-        let clamped = v.clamp(-1.0, 1.0);
-        let scaled = (clamped * 511.0).round() as i32;
-        let clipped = scaled.clamp(-511, 511);
-        (clipped as u32) & 0x3FF
-    };
-    let packed = (q(n[2]) << 20) | (q(n[1]) << 10) | q(n[0]);
-    buf[off..off + 4].copy_from_slice(&packed.to_be_bytes());
+    buf[off..off + 4].copy_from_slice(&crate::playermesh::pack_2_10_10_10_be(n));
+}
+
+/// Per-vertex tangents from UV-space derivatives (Lengyel's method), Gram–Schmidt
+/// orthogonalized against the vertex normal.
+///
+/// **Not optional.** Every vanilla Legacy vertex carries a non-zero tangent — 2623/2623
+/// on the `head_` submesh of `player_67` — and the slot used to be written as zeros here
+/// on the assumption the renderer tolerated it. It does not: a degenerate tangent basis
+/// makes the skin shader's tangent-space lighting produce structured noise that follows
+/// the UV/triangle layout, which reads in-game as geometric, tiled shading across the
+/// cheeks and neck.
+///
+/// Accumulated per vertex and **welded across coincident positions**, for the same reason
+/// normals are: a UV seam is a duplicated vertex, and letting each copy keep only its own
+/// side's contribution reintroduces a visible seam.
+///
+/// Degenerate inputs (zero-area UV triangles, a tangent parallel to the normal) fall back
+/// to an arbitrary vector perpendicular to the normal, which is what a DCC does.
+pub fn derive_tangents(
+    positions: &[[f32; 3]],
+    normals: &[[f32; 3]],
+    uvs: &[[f32; 2]],
+    triangles: &[[u32; 3]],
+) -> Vec<[f32; 3]> {
+    let mut acc = vec![[0f64; 3]; positions.len()];
+    for tri in triangles {
+        let (i0, i1, i2) = (tri[0] as usize, tri[1] as usize, tri[2] as usize);
+        let (Some(p0), Some(p1), Some(p2)) =
+            (positions.get(i0), positions.get(i1), positions.get(i2))
+        else {
+            continue;
+        };
+        let (Some(w0), Some(w1), Some(w2)) = (uvs.get(i0), uvs.get(i1), uvs.get(i2)) else {
+            continue;
+        };
+        let e1 = [p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]];
+        let e2 = [p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]];
+        let du1 = w1[0] - w0[0];
+        let dv1 = w1[1] - w0[1];
+        let du2 = w2[0] - w0[0];
+        let dv2 = w2[1] - w0[1];
+        let det = du1 * dv2 - du2 * dv1;
+        if det.abs() < 1e-12 {
+            continue; // degenerate in UV space — contributes nothing
+        }
+        let r = 1.0 / det;
+        let t = [
+            (dv2 * e1[0] - dv1 * e2[0]) * r,
+            (dv2 * e1[1] - dv1 * e2[1]) * r,
+            (dv2 * e1[2] - dv1 * e2[2]) * r,
+        ];
+        for &i in &[i0, i1, i2] {
+            for k in 0..3 {
+                acc[i][k] += f64::from(t[k]);
+            }
+        }
+    }
+
+    // Weld across coincident positions (see the doc comment).
+    let mut groups: std::collections::HashMap<[u32; 3], Vec<u32>> =
+        std::collections::HashMap::new();
+    for (i, p) in positions.iter().enumerate() {
+        groups
+            .entry([p[0].to_bits(), p[1].to_bits(), p[2].to_bits()])
+            .or_default()
+            .push(i as u32);
+    }
+    for members in groups.values() {
+        if members.len() < 2 {
+            continue;
+        }
+        let mut sum = [0f64; 3];
+        for &m in members {
+            for k in 0..3 {
+                sum[k] += acc[m as usize][k];
+            }
+        }
+        for &m in members {
+            acc[m as usize] = sum;
+        }
+    }
+
+    acc.iter()
+        .enumerate()
+        .map(|(i, t)| {
+            let n = normals.get(i).copied().unwrap_or([0.0, 0.0, 1.0]);
+            let mut v = [t[0] as f32, t[1] as f32, t[2] as f32];
+            // Gram-Schmidt: strip the component along the normal.
+            let d = v[0] * n[0] + v[1] * n[1] + v[2] * n[2];
+            for k in 0..3 {
+                v[k] -= n[k] * d;
+            }
+            let len = (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]).sqrt();
+            if len > 1e-9 {
+                return [v[0] / len, v[1] / len, v[2] / len];
+            }
+            // Fallback: any unit vector perpendicular to the normal.
+            let axis = if n[0].abs() < 0.9 {
+                [1.0, 0.0, 0.0]
+            } else {
+                [0.0, 1.0, 0.0]
+            };
+            let c = [
+                n[1] * axis[2] - n[2] * axis[1],
+                n[2] * axis[0] - n[0] * axis[2],
+                n[0] * axis[1] - n[1] * axis[0],
+            ];
+            let cl = (c[0] * c[0] + c[1] * c[1] + c[2] * c[2]).sqrt();
+            if cl > 1e-9 {
+                [c[0] / cl, c[1] / cl, c[2] / cl]
+            } else {
+                [1.0, 0.0, 0.0]
+            }
+        })
+        .collect()
 }
 
 /// Encode (joints, weights) pairs into the Legacy STORED influence
@@ -170,7 +278,7 @@ pub fn encode_influences(joints: [u16; 4], weights: [f32; 4]) -> ([u16; 4], [u8;
 /// ```text
 ///  0– 7: POSITION      4×fp16 BE (xyz + w=1.0 pad)
 ///  8–11: NORMAL        packed 2:10:10:10 BE
-/// 12–15: TANGENT       packed 2:10:10:10 BE (zeroed — no source)
+/// 12–15: TANGENT       packed 2:10:10:10 BE
 /// 16–19: TEXCOORD0     2×u16 BE (STORED convention — caller flips)
 /// 20–27: BLENDINDICES  4×u16 BE (shader-register indices)
 /// 28–31: BLENDWEIGHTS  4×u8, sum exactly 255
@@ -178,6 +286,7 @@ pub fn encode_influences(joints: [u16; 4], weights: [f32; 4]) -> ([u16; 4], [u8;
 fn pack_vert_stride32(
     pos: [f32; 3],
     normal: [f32; 3],
+    tangent: [f32; 3],
     uv: [f32; 2],
     joints: [u16; 4],
     weights: [f32; 4],
@@ -188,13 +297,13 @@ fn pack_vert_stride32(
     buf[4..6].copy_from_slice(&f32_to_half_be(pos[2]));
     buf[6..8].copy_from_slice(&f32_to_half_be(1.0));
     write_packed_2_10_10_10_be(&mut buf, 8, normal);
-    // TANGENT @ 12 — zeros (no source; renderer tolerates it).
+    write_packed_2_10_10_10_be(&mut buf, 12, tangent);
     buf[16..18].copy_from_slice(&f32_to_u16_be_norm(uv[0]));
     buf[18..20].copy_from_slice(&f32_to_u16_be_norm(uv[1]));
     let (j, w) = encode_influences(joints, weights);
-    for i in 0..4 {
+    for (i, joint) in j.iter().enumerate() {
         let off = 20 + i * 2;
-        buf[off..off + 2].copy_from_slice(&j[i].to_be_bytes());
+        buf[off..off + 2].copy_from_slice(&joint.to_be_bytes());
     }
     buf[28..32].copy_from_slice(&w);
     buf
@@ -205,6 +314,7 @@ fn pack_vert_stride32(
 fn pack_vert_stride36(
     pos: [f32; 3],
     normal: [f32; 3],
+    tangent: [f32; 3],
     uv: [f32; 2],
     joints: [u16; 4],
     weights: [f32; 4],
@@ -215,15 +325,15 @@ fn pack_vert_stride36(
     buf[4..6].copy_from_slice(&f32_to_half_be(pos[2]));
     buf[6..8].copy_from_slice(&f32_to_half_be(1.0));
     write_packed_2_10_10_10_be(&mut buf, 8, normal);
-    // TANGENT @ 12 — zeros.
+    write_packed_2_10_10_10_be(&mut buf, 12, tangent);
     buf[16..18].copy_from_slice(&f32_to_u16_be_norm(uv[0]));
     buf[18..20].copy_from_slice(&f32_to_u16_be_norm(uv[1]));
     buf[20..22].copy_from_slice(&f32_to_u16_be_norm(uv[0]));
     buf[22..24].copy_from_slice(&f32_to_u16_be_norm(uv[1]));
     let (j, w) = encode_influences(joints, weights);
-    for i in 0..4 {
+    for (i, joint) in j.iter().enumerate() {
         let off = 24 + i * 2;
-        buf[off..off + 2].copy_from_slice(&j[i].to_be_bytes());
+        buf[off..off + 2].copy_from_slice(&joint.to_be_bytes());
     }
     buf[32..36].copy_from_slice(&w);
     buf
@@ -231,9 +341,17 @@ fn pack_vert_stride36(
 
 /// Stride-52 layout (*roster* `haircap_`, e.g. player_67): 3 UV
 /// channels as 2×fp32 BE each (UV0 duplicated into all three).
+///
+/// **Lossy for this layout — do not substitute a vanilla stride-52 submesh.** Verified on
+/// `player_67`'s `haircap_`: UV1 matches UV0 on 709/758 vertices and UV2 on **0/758**
+/// (max deviation 2.2), so the donor carries genuinely distinct channels and this packer
+/// would flatten two of them. Deforming such a submesh must go through
+/// `patch_player_mesh`, which rewrites positions and shading in place and leaves every UV
+/// channel untouched.
 fn pack_vert_stride52(
     pos: [f32; 3],
     normal: [f32; 3],
+    tangent: [f32; 3],
     uv: [f32; 2],
     joints: [u16; 4],
     weights: [f32; 4],
@@ -244,16 +362,16 @@ fn pack_vert_stride52(
     buf[4..6].copy_from_slice(&f32_to_half_be(pos[2]));
     buf[6..8].copy_from_slice(&f32_to_half_be(1.0));
     write_packed_2_10_10_10_be(&mut buf, 8, normal);
-    // TANGENT @ 12 — zeros.
+    write_packed_2_10_10_10_be(&mut buf, 12, tangent);
     for ch in 0..3 {
         let off = 16 + ch * 8;
         buf[off..off + 4].copy_from_slice(&uv[0].to_be_bytes());
         buf[off + 4..off + 8].copy_from_slice(&uv[1].to_be_bytes());
     }
     let (j, w) = encode_influences(joints, weights);
-    for i in 0..4 {
+    for (i, joint) in j.iter().enumerate() {
         let off = 40 + i * 2;
-        buf[off..off + 2].copy_from_slice(&j[i].to_be_bytes());
+        buf[off..off + 2].copy_from_slice(&joint.to_be_bytes());
     }
     buf[48..52].copy_from_slice(&w);
     buf
@@ -616,17 +734,18 @@ pub fn substitute_submesh(
 
     // New vertex buffer payload.
     let vert_count = positions.len();
+    let tangents = derive_tangents(positions, normals, uvs, triangles);
     let mut vb_payload: Vec<u8> = Vec::with_capacity(vert_count * stride as usize);
-    for v_idx in 0..vert_count {
-        let p = positions[v_idx];
+    for (v_idx, &p) in positions.iter().enumerate() {
         let n = normals.get(v_idx).copied().unwrap_or([0.0, 0.0, 1.0]);
+        let tan = tangents.get(v_idx).copied().unwrap_or([1.0, 0.0, 0.0]);
         let u = uvs.get(v_idx).copied().unwrap_or([0.0, 0.0]);
         let j = joints.get(v_idx).copied().unwrap_or([0; 4]);
         let w = weights.get(v_idx).copied().unwrap_or([1.0, 0.0, 0.0, 0.0]);
         match stride {
-            32 => vb_payload.extend_from_slice(&pack_vert_stride32(p, n, u, j, w)),
-            36 => vb_payload.extend_from_slice(&pack_vert_stride36(p, n, u, j, w)),
-            52 => vb_payload.extend_from_slice(&pack_vert_stride52(p, n, u, j, w)),
+            32 => vb_payload.extend_from_slice(&pack_vert_stride32(p, n, tan, u, j, w)),
+            36 => vb_payload.extend_from_slice(&pack_vert_stride36(p, n, tan, u, j, w)),
+            52 => vb_payload.extend_from_slice(&pack_vert_stride52(p, n, tan, u, j, w)),
             other => return Err(PackError::UnsupportedStride { stride: other }),
         }
     }
@@ -635,8 +754,8 @@ pub fn substitute_submesh(
     // `(a, b, c, FFFF, d, e, f, FFFF, …)`, trailing FFFF omitted.
     let mut ib_payload: Vec<u8> = Vec::with_capacity(triangles.len() * 8);
     for (i, t) in triangles.iter().enumerate() {
-        for c in 0..3 {
-            ib_payload.extend_from_slice(&(t[c] as u16).to_be_bytes());
+        for &corner in t.iter() {
+            ib_payload.extend_from_slice(&(corner as u16).to_be_bytes());
         }
         if i + 1 < triangles.len() {
             ib_payload.extend_from_slice(&0xFFFFu16.to_be_bytes());
@@ -766,24 +885,25 @@ pub fn add_submesh(
 
     // ---- Encode the new VB/IB payloads. ----
     let vert_count = positions.len();
+    let tangents = derive_tangents(positions, normals, uvs, triangles);
     let mut vb_payload: Vec<u8> = Vec::with_capacity(vert_count * stride as usize);
-    for v in 0..vert_count {
-        let p = positions[v];
+    for (v, &p) in positions.iter().enumerate() {
         let n = normals.get(v).copied().unwrap_or([0.0, 0.0, 1.0]);
+        let tan = tangents.get(v).copied().unwrap_or([1.0, 0.0, 0.0]);
         let u = uvs.get(v).copied().unwrap_or([0.0, 0.0]);
         let j = joints.get(v).copied().unwrap_or([0; 4]);
         let w = weights.get(v).copied().unwrap_or([1.0, 0.0, 0.0, 0.0]);
         match stride {
-            32 => vb_payload.extend_from_slice(&pack_vert_stride32(p, n, u, j, w)),
-            36 => vb_payload.extend_from_slice(&pack_vert_stride36(p, n, u, j, w)),
-            52 => vb_payload.extend_from_slice(&pack_vert_stride52(p, n, u, j, w)),
+            32 => vb_payload.extend_from_slice(&pack_vert_stride32(p, n, tan, u, j, w)),
+            36 => vb_payload.extend_from_slice(&pack_vert_stride36(p, n, tan, u, j, w)),
+            52 => vb_payload.extend_from_slice(&pack_vert_stride52(p, n, tan, u, j, w)),
             other => return Err(PackError::UnsupportedStride { stride: other }),
         }
     }
     let mut ib_payload: Vec<u8> = Vec::with_capacity(triangles.len() * 8);
     for (i, t) in triangles.iter().enumerate() {
-        for c in 0..3 {
-            ib_payload.extend_from_slice(&(t[c] as u16).to_be_bytes());
+        for &corner in t.iter() {
+            ib_payload.extend_from_slice(&(corner as u16).to_be_bytes());
         }
         if i + 1 < triangles.len() {
             ib_payload.extend_from_slice(&0xFFFFu16.to_be_bytes());
@@ -978,7 +1098,7 @@ fn find_preceding_raw(chunks: &[crate::container::ChunkRef], idx: usize) -> Opti
 }
 
 fn pad_to_16(buf: &mut Vec<u8>) {
-    while buf.len() % 16 != 0 {
+    while !buf.len().is_multiple_of(16) {
         buf.push(0);
     }
 }
@@ -989,25 +1109,15 @@ fn pad_to_16(buf: &mut Vec<u8>) {
 mod tests {
     use super::*;
     use crate::container::parse;
-    use std::path::Path;
+    use crate::fixtures::{require, TEMPLATE_PLAYER_MESH};
 
-    type tdb_rx2_vertex = crate::playermesh::Vertex;
+    type TdbRx2Vertex = crate::playermesh::Vertex;
 
-    fn template_path() -> std::path::PathBuf {
-        Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("..")
-            .join("..")
-            .join("Working Assets")
-            .join("Template Mesh")
-            .join("player_20500.rx2")
-    }
-
-    fn load_template() -> Option<Vec<u8>> {
-        let p = template_path();
-        if !p.is_file() {
-            return None;
-        }
-        std::fs::read(p).ok()
+    /// The five-submesh head template is private game data. Every case
+    /// that needs it is `#[ignore]`d and fails loudly when selected
+    /// without a configured fixture root — see [`crate::fixtures`].
+    fn load_template() -> Vec<u8> {
+        require(TEMPLATE_PLAYER_MESH)
     }
 
     #[test]
@@ -1044,6 +1154,7 @@ mod tests {
         let buf = pack_vert_stride32(
             [0.0; 3],
             [0.0, 0.0, 1.0],
+            [1.0, 0.0, 0.0],
             [0.0, 0.0],
             [24, 108, 0, 0],
             [0.83, 0.17, 0.0, 0.0],
@@ -1076,6 +1187,7 @@ mod tests {
         let buf = pack_vert_stride32(
             [0.0; 3],
             [0.0, 0.0, 1.0],
+            [1.0, 0.0, 0.0],
             [0.25, 0.75],
             [0; 4],
             [1.0, 0.0, 0.0, 0.0],
@@ -1090,11 +1202,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "private fixture mesh/player_20500.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn template_lists_all_five_mesh_handles() {
-        let Some(data) = load_template() else {
-            eprintln!("skipping: template player_20500.rx2 not present");
-            return;
-        };
+        let data = load_template();
         let c = parse(&data).expect("parse");
         let names = list_mesh_handles(&c);
         for want in [
@@ -1112,11 +1222,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "private fixture mesh/player_20500.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn substitute_head_round_trips_geometry_weights_and_uvs() {
-        let Some(data) = load_template() else {
-            eprintln!("skipping: template player_20500.rx2 not present");
-            return;
-        };
+        let data = load_template();
         let mut c = parse(&data).expect("parse");
         // The template's own head geometry as a substitute — every
         // decoded field must survive the encode→decode round trip.
@@ -1164,7 +1272,7 @@ mod tests {
         // normalizes pad slots (repeat-last) and sorts dominant-first,
         // which is decode-equivalent but not byte-identical to every
         // donor pad pattern.
-        let actives = |v: &tdb_rx2_vertex| -> std::collections::BTreeMap<u16, f32> {
+        let actives = |v: &TdbRx2Vertex| -> std::collections::BTreeMap<u16, f32> {
             let mut m = std::collections::BTreeMap::new();
             for c in 0..4 {
                 if v.weights[c] > 0.0 {
@@ -1211,10 +1319,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "private fixture mesh/player_20500.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn substitute_with_different_counts_grows_and_reparses() {
-        let Some(data) = load_template() else {
-            return;
-        };
+        let data = load_template();
         let mut c = parse(&data).expect("parse");
         // A tiny 4-vert / 2-tri quad replaces the head — the loader
         // counts and buffer sizes must all follow.

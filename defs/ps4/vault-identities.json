@@ -1,0 +1,51 @@
+{
+ "about": "PS4 Attrib/VLT vault identities per title (the boot.big members nhl/data/common/database/attrib/*, unwrapped): research R7 (19 Sep 2026) full SHA-256 of the files research decoded, which R135a (28 Sep 2026) showed equal the boot.big members on all seven installs; no patch archive carries them. Studio reads a title's vault only when all four hashes match this table for the open project's title (receipt 51) \u2014 another title's vault is never borrowed.",
+ "from": "docs/research/overnight-2026-09-19/data/r7-ps4-vault-collections.json",
+ "from_sha256": "74b152819b2cd6ad359c9a423851f353924976d230a7e7c19a9d7d4eeb777d84",
+ "archive": "databigs/boot.big",
+ "member_dir": "nhl/data/common/database/attrib/",
+ "titles": {
+  "nhl15": {
+   "gccollections.vlt": "d1ec595c56b6d87692ac3c47919de739af41929847252669719f6584e5229c77",
+   "gccollections.bin": "0684ef978cbb8ae1e34ba8abb8c98f09187154544be44de5c647d2b96ec66bd2",
+   "gcschema.vlt": "5ca05db63fbcac60acf06c1212de1f4e8593fdc50ecd854fa349e5968a89c33e",
+   "gcschema.bin": "0223c45c73ef0fd16b19cd4f62c72bd16c55b3ee1d1bca9b026e3a10a1eb45d3"
+  },
+  "nhl16": {
+   "gccollections.vlt": "202035cfc80f9dbf283ea610cef13262b92a6314cbe1c2fbeb360bbedc394d7e",
+   "gccollections.bin": "b1217f4a536542607b61a49aaa65b31bb74cb95756a90e2dcbe0c1ba9e092571",
+   "gcschema.vlt": "304d2f87e5a13195fb34b3d91563a114ccf4cb72fb0955d05cf7b0b39e63c911",
+   "gcschema.bin": "ac1d8014934fd5258e9234b5c7138f1214cf0192fa49751fa405803274745dfd"
+  },
+  "nhl17": {
+   "gccollections.vlt": "df39aeaa7f10a97570d35159d0a031b33f4a66e4ea5f9cef7bf213a2ddf06531",
+   "gccollections.bin": "2da87ee854ea844aac1b1484b9fe1f688e71b622bdee86d0d5a3eddbf5de5811",
+   "gcschema.vlt": "ad1edb3625fcf9399eecfefe79a30a8cf672d454fc6deddbc118f4ac5076ce79",
+   "gcschema.bin": "31312e80917a5ea5e9f72b915a5ae3010ba996932b33ede23c8d42404adf7791"
+  },
+  "nhl18": {
+   "gccollections.vlt": "0a5e019da94855f20ebc9d389ffec8c538a9d464df2ea8b777c4b34746490fd8",
+   "gccollections.bin": "cf0cfab277acb2f5bb9598384e523f38ddf455c8e1bdee691677e2ce3f23999c",
+   "gcschema.vlt": "e6232c258ac236f53f06230082a282a66ddfd9a794cc13c3a77dbb63730505c2",
+   "gcschema.bin": "464ae27714777498e779787c0b8d34eb1d34a0c0d541042e98d26a32e0f32b63"
+  },
+  "nhl19": {
+   "gccollections.vlt": "6e537bb7b61f1832a88377757a3769586643f70d6452e9c4b61a76c2568146a1",
+   "gccollections.bin": "aece3f7a24bb26139472c0ec870d26909c3b9883838eef8997a76d32ee4c5a25",
+   "gcschema.vlt": "96e01d98621c0ad09ca8a2dc6d89a655aaf5fda7104889659c0dd086192c36e6",
+   "gcschema.bin": "1df5e941370e40f394ba3911038b9a7f7bc03a8737ce950293492fc3292ac659"
+  },
+  "nhl20": {
+   "gccollections.vlt": "31a2727f470d32262b9b0462378e1fc1bf907964f1b523ff954f4d49980e5a63",
+   "gccollections.bin": "e5266477c8c158653c4aa40f302a5fa2e782ec30ff48d9d10e8934013f8d3ef8",
+   "gcschema.vlt": "84b89a5cc4aeccfe5137b4a8dcd377d78eac75a70210f7544b9de4bfa6beea1a",
+   "gcschema.bin": "c102d02353180813638e65897eb33d317078574d48fcdbc6c39ee8709234a13c"
+  },
+  "nhl21": {
+   "gccollections.vlt": "dd4ceff033fd052a4e3a1e85c964d9b32a81778cd31e24c4f193e8fd54b4ea8d",
+   "gccollections.bin": "d668bbe104dbb441b2868a60fb3644537a3b4489b2bc30bad67f6056b22971db",
+   "gcschema.vlt": "04d0b43c5ad2b0ef7033d107912e95b39612daebf2a66dc99d731e7b05ff63d4",
+   "gcschema.bin": "772ccd15e3c7a8bd00d47d30cb1960af0ed82fe51c452878d367350d45d26e34"
+  }
+ }
+}

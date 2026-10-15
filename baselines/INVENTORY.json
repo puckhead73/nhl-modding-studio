@@ -1,0 +1,2316 @@
+{
+  "schema": "nhlms-baselines/1",
+  "generated_from": {
+    "head": "2e9ac1b8f2363559f4f7375f999f86f202fe3153",
+    "generator": "crates/studio-api/src/bin/baseline_inventory.rs",
+    "anchors_manifest": "docs/audits/data/anchors-manifest.csv"
+  },
+  "targets": [
+    {
+      "game_id": "nhl07",
+      "platform": "xbox",
+      "title": "NHL 07 (Xbox 360)",
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl07/databases/NHL07NG.db",
+          "file_name": "NHL07NG.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 4189776,
+          "sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl07/databases/NHL07NG-meta.xml",
+          "file_name": "NHL07NG-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 269813,
+          "sha256": "c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl07/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 182500,
+          "sha256": "5d3c0b0187b8d673b9642eaec4fabf346fc3451f9a3bf14e4e6bfb4cd61743c3",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl07/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 970,
+          "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        }
+      ],
+      "gaps": [
+        {
+          "component": "roster_save",
+          "reason": "NHL 07 stores roster changes relative to the game database. Editing this change-list save model is not yet enabled; the project opens the game database alone"
+        }
+      ]
+    },
+    {
+      "game_id": "nhl08",
+      "platform": "xbox",
+      "title": "NHL 08 (Xbox 360)",
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl08/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1556560,
+          "sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl08/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 243270,
+          "sha256": "d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl08/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 267068,
+          "sha256": "308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl08/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 970,
+          "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        }
+      ],
+      "gaps": [
+        {
+          "component": "roster_save",
+          "reason": "the committed roster save shares no database tables with this game's main database and cannot mirror its edits. The project opens the game database alone until a compatible roster save is supplied"
+        }
+      ]
+    },
+    {
+      "game_id": "nhl09",
+      "platform": "xbox",
+      "title": "NHL 09 (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl09/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1903376,
+          "sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl09/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 238947,
+          "sha256": "3c32238ac784dfc8c9fa555ca3944bcad413c68f5c0e338f325bd372b6d079f4",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl09/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 513564,
+          "sha256": "d9e0463b1b6b49d744273803785469ae9781b21c838cbb226526d66028b8727e",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl09/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 970,
+          "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhl09/savefiles/ROSTER1 20260717230804/ROSTER1 20260717230804",
+          "file_name": "ROSTER1 20260717230804",
+          "container_dir": "ROSTER1 20260717230804",
+          "container_relative": "ROSTER1 20260717230804",
+          "len": 1573216,
+          "sha256": "9133606dd85dff524b3267a95b142a66f0c6ee98fa393dc2a5319bde6ece5c60",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v3",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl10",
+      "platform": "xbox",
+      "title": "NHL 10 (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl10/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1998232,
+          "sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl10/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 274595,
+          "sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl10/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 667996,
+          "sha256": "f1a9a1dd9e8f2851053750fabb6f3b42aa53f3cf45e021449652fdea1c042671",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl10/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 970,
+          "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhl10/savefiles/ROSTER1 20260627045748/ROSTER1 20260627045748",
+          "file_name": "ROSTER1 20260627045748",
+          "container_dir": "ROSTER1 20260627045748",
+          "container_relative": "ROSTER1 20260627045748",
+          "len": 1610252,
+          "sha256": "96080b10e8bfc5b5ec10e8568a8c26257faaea414a2ee0356a5f50d015641bd8",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v1",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl11",
+      "platform": "xbox",
+      "title": "NHL 11 (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl11/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2739736,
+          "sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl11/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 382671,
+          "sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl11/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 811364,
+          "sha256": "82520ab36988b7e384830c74c208cf7a7d8f80be34fd435242a5a067feedc22b",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl11/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhl11/savefiles/ROSTER1 20260627054323/ROSTER1 20260627054323",
+          "file_name": "ROSTER1 20260627054323",
+          "container_dir": "ROSTER1 20260627054323",
+          "container_relative": "ROSTER1 20260627054323",
+          "len": 1935216,
+          "sha256": "8508fc99f2acee88e0399c78af3e6183ede2bdd36c2a55176f8a5dc7d23e011e",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v1",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl12",
+      "platform": "xbox",
+      "title": "NHL 12 (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl12/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 3043876,
+          "sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl12/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 397080,
+          "sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl12/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 936780,
+          "sha256": "354a1905582faf3d45ae8a5ba4d7bddb51645f7af144f7864939536c8cc01fd7",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl12/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhl12/savefiles/ROSTER 20260627052113/ROSTER 20260627052113",
+          "file_name": "ROSTER 20260627052113",
+          "container_dir": "ROSTER 20260627052113",
+          "container_relative": "ROSTER 20260627052113",
+          "len": 2350856,
+          "sha256": "5b361a29516a74c8ed328494783b8fa39fb872c25f050018f78b39c089f9a607",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v2",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl13",
+      "platform": "xbox",
+      "title": "NHL 13 (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl13/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2695068,
+          "sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl13/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 438494,
+          "sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl13/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1153044,
+          "sha256": "b93fa83f8b4fb760eb48e3a274e1f95a7aaf19d868ba63be59218c41063486e5",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl13/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhl13/savefiles/ROSTER 20260627051601/ROSTER 20260627051601",
+          "file_name": "ROSTER 20260627051601",
+          "container_dir": "ROSTER 20260627051601",
+          "container_relative": "ROSTER 20260627051601",
+          "len": 2180292,
+          "sha256": "d4bd2f7c3066da07bf1e9d742a1f97bf38ee952ed257ccf900f07970605fe52e",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v2",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl14",
+      "platform": "xbox",
+      "title": "NHL 14 (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl14/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2820656,
+          "sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl14/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 444989,
+          "sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl14/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1703204,
+          "sha256": "e5aff8285169e2ab0790f63f6def65c892f7cd42553bc71b622f42296c48ac74",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl14/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhl14/savefiles/ROSTER 20260627054746/ROSTER 20260627054746",
+          "file_name": "ROSTER 20260627054746",
+          "container_dir": "ROSTER 20260627054746",
+          "container_relative": "ROSTER 20260627054746",
+          "len": 2215156,
+          "sha256": "20f144d761b0ff6f838010e2e4cd10ff088226a99bcd7c431fe67f9f62dae4ae",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl15",
+      "platform": "xbox",
+      "title": "NHL 15 (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhl15/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2890040,
+          "sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhl15/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 445000,
+          "sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhl15/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1729660,
+          "sha256": "86167614957bed34d9d829c0508d0e3ab2e533e59c424f56211d4383ab9cd614",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhl15/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhl15/savefiles/ROSTER 20260627055422/ROSTER 20260627055422",
+          "file_name": "ROSTER 20260627055422",
+          "container_dir": "ROSTER 20260627055422",
+          "container_relative": "ROSTER 20260627055422",
+          "len": 2259432,
+          "sha256": "9c5401f809d142a11ef32c989667b1267b5e55b522afc456c27de5415e4127a5",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhllegacy",
+      "platform": "xbox",
+      "title": "NHL Legacy (Xbox 360)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhllegacy/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2901504,
+          "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1: re-hashed against the Xbox 360 Legacy loose tree and cacheboot.big member",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhllegacy/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 444404,
+          "sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1: re-hashed against the Xbox 360 Legacy loose tree and cacheboot.big member",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhllegacy/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1759044,
+          "sha256": "f00926ceff27d46f1e5264385468369cd60f91d54d9944dd5c8584bf6d9b8f70",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1: re-hashed against the Xbox 360 Legacy loose tree and cacheboot.big member",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhllegacy/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1: re-hashed against the Xbox 360 Legacy loose tree and cacheboot.big member",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhllegacy/savefiles/ROSTER 20260627060052/ROSTER 20260627060052",
+          "file_name": "ROSTER 20260627060052",
+          "container_dir": "ROSTER 20260627060052",
+          "container_relative": "ROSTER 20260627060052",
+          "len": 2456120,
+          "sha256": "65a04268a2d1321ee495bd0c2d1509748c2d12ec3495a038d7a567f616ad7d21",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl08",
+      "platform": "ps3",
+      "title": "NHL 08 (PS3)",
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl08/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1556560,
+          "sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl08/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 243270,
+          "sha256": "d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        }
+      ],
+      "gaps": [
+        {
+          "component": "dictionary",
+          "reason": "the committed PS3 anchor nhl_eng_us.db is the Xbox 360 file (REG-1); the genuine PS3 disc dictionary is a private fixture (NHL_STUDIO_FIXTURES databases/<title>/PS3_GAME/USRDIR/fe/loc/nhl_eng_us.db) and is not bundled. The project opens without a dictionary; names show as keys until one is attached"
+        },
+        {
+          "component": "dictionary_meta",
+          "reason": "the committed PS3 anchor nhl_eng_us.db is the Xbox 360 file (REG-1); the genuine PS3 disc dictionary is a private fixture (NHL_STUDIO_FIXTURES databases/<title>/PS3_GAME/USRDIR/fe/loc/nhl_eng_us.db) and is not bundled. The project opens without a dictionary; names show as keys until one is attached"
+        },
+        {
+          "component": "roster_save",
+          "reason": "the committed roster save shares no database tables with this game's main database and cannot mirror its edits. The project opens the game database alone until a compatible roster save is supplied"
+        }
+      ]
+    },
+    {
+      "game_id": "nhl09",
+      "platform": "ps3",
+      "title": "NHL 09 (PS3)",
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl09/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1903376,
+          "sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl09/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 238947,
+          "sha256": "3c32238ac784dfc8c9fa555ca3944bcad413c68f5c0e338f325bd372b6d079f4",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhl09/savefiles/BLUS3016802002026 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS3016802002026 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 1573216,
+          "sha256": "ee886e3447238e965cd711faa0c476613a00c8c1dadbda0a1b8440a29c1e7693",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v3",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl09/savefiles/BLUS3016802002026 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS3016802002026 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 95950,
+          "sha256": "8773652defb511d1f9c771a0092cf171bfbbb47162558bc3a1953ef468bd0d45",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl09/savefiles/BLUS3016802002026 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS3016802002026 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "7caafab07e29d1d93fd9719d4c1ac44f0eab432c18081f533502f5223911b3ee",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": [
+        {
+          "component": "dictionary",
+          "reason": "the committed PS3 anchor nhl_eng_us.db is the Xbox 360 file (REG-1); the genuine PS3 disc dictionary is a private fixture (NHL_STUDIO_FIXTURES databases/<title>/PS3_GAME/USRDIR/fe/loc/nhl_eng_us.db) and is not bundled. The project opens without a dictionary; names show as keys until one is attached"
+        },
+        {
+          "component": "dictionary_meta",
+          "reason": "the committed PS3 anchor nhl_eng_us.db is the Xbox 360 file (REG-1); the genuine PS3 disc dictionary is a private fixture (NHL_STUDIO_FIXTURES databases/<title>/PS3_GAME/USRDIR/fe/loc/nhl_eng_us.db) and is not bundled. The project opens without a dictionary; names show as keys until one is attached"
+        }
+      ]
+    },
+    {
+      "game_id": "nhl10",
+      "platform": "ps3",
+      "title": "NHL 10 (PS3)",
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl10/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1998232,
+          "sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl10/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 274595,
+          "sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+          "provenance": "cross-platform-schema",
+          "witness": "PS3 NHL 10 ships no meta XML; the committed ps3/nhl10 nhlng-meta.xml is the Xbox 360 NHL 10 anchor's schema (byte-identical file, 6c335a62…), admitted because the two titles' nhlng.db are byte-identical (anchors manifest)",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps3/nhl10/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 670780,
+          "sha256": "954d1617eb6eb4bb0ceeead2adeeca998289f9f8cd07801863cd7bb1a8d6824c",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhl10/savefiles/BLUS303450200 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS303450200 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 1610252,
+          "sha256": "ceba4776d80edd22ca31220f4c01074824a75a7f43ec61388f7e12fd3deee155",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v1",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl10/savefiles/BLUS303450200 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS303450200 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 132448,
+          "sha256": "dbcd90b905e4bb698ce3df8b54edbc2f1a51b975df3d94a3dc316816d11c42c7",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl10/savefiles/BLUS303450200 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS303450200 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "cc63af06283ea9c26c088f90d410f620cf1f23efa988e77c096ccdc6f66e12a1",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": [
+        {
+          "component": "dictionary_meta",
+          "reason": "no nhl_eng_us-meta.xml is committed for this PS3 title; the dictionary attaches without it"
+        }
+      ]
+    },
+    {
+      "game_id": "nhl11",
+      "platform": "ps3",
+      "title": "NHL 11 (PS3)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl11/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2739736,
+          "sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl11/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 382671,
+          "sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps3/nhl11/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 800348,
+          "sha256": "48e3cd43372c56c23c1ba83e54c69823c173c985d21f9410663c5db1265c7dfa",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps3/nhl11/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhl11/savefiles/BLUS305680200 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS305680200 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 1935216,
+          "sha256": "c18a39f683fa2438009c433854937dd423f107f128eb8195db522d167a35be9a",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v1",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl11/savefiles/BLUS305680200 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS305680200 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 112023,
+          "sha256": "62d4b92c9010408d596a558f76e24d42b894a23851282560518e9d2b2add4b47",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl11/savefiles/BLUS305680200 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS305680200 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "b539834f2ce468717f75e187f6f27cde298fba3b78acf89fe6ce03f9b5354936",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl12",
+      "platform": "ps3",
+      "title": "NHL 12 (PS3)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl12/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 3043876,
+          "sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl12/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 397080,
+          "sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps3/nhl12/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 921564,
+          "sha256": "3327bc3a43252bd3813a226e304dbe57c994f41f0e3e8a054dbe16425455e399",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps3/nhl12/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhl12/savefiles/BLUS307910200 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS307910200 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 2350856,
+          "sha256": "28132930801e92aedb82bb539c2314f35186399aeb1d169d2bfca74c8d00e3b1",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v2",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl12/savefiles/BLUS307910200 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS307910200 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 108023,
+          "sha256": "097232eeab2df10b5aa2965669a52d3237835b61bba39a797726e84b96f243f8",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl12/savefiles/BLUS307910200 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS307910200 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "ebbd7e21e4e0b8643e26d5e76fb6fb727bb223830a8cd8f21e4008ab5f179732",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl13",
+      "platform": "ps3",
+      "title": "NHL 13 (PS3)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl13/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2695068,
+          "sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl13/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 438494,
+          "sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps3/nhl13/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1130444,
+          "sha256": "69cc4f75c0fc345a3110918ab3c765dbb9773001a4710dd5cc86faf6bd4cc073",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps3/nhl13/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhl13/savefiles/BLUS310030200 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS310030200 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 2180292,
+          "sha256": "afa16f8f0033c6a78e49c0316c12b1b8f82ebf8a3258ce201d4772f5148347f2",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v2",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl13/savefiles/BLUS310030200 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS310030200 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 105661,
+          "sha256": "2bf284f4fe086613e3fdc27071c877b0ae957a7450f790ba663f07ff0a0730fc",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl13/savefiles/BLUS310030200 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS310030200 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "156582a9c73629ad6bcbfda39b5f54efb6bc6f046821f5984d2ad389d24cd12e",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl14",
+      "platform": "ps3",
+      "title": "NHL 14 (PS3)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl14/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2820656,
+          "sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl14/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 444989,
+          "sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps3/nhl14/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1679348,
+          "sha256": "d7bf2a6f7b579f200b6315fdc2878920dca2a19c7d537b76e7352851498be4cd",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps3/nhl14/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhl14/savefiles/BLUS311790200 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS311790200 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 2215156,
+          "sha256": "e54e9621f070402fb2294f468ba649fecb92b1b671bcf9633c25c5c0d3b48ce2",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl14/savefiles/BLUS311790200 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS311790200 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 84469,
+          "sha256": "065f64a34b28221528817d1e5b471b98f27dade10f7d8c06b1e51faf4ab76806",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl14/savefiles/BLUS311790200 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS311790200 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "0bfa06cf95601be11dbd80515395222aae3c924c90a6fd522b50161a4748365f",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl15",
+      "platform": "ps3",
+      "title": "NHL 15 (PS3)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhl15/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2890040,
+          "sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhl15/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 445000,
+          "sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps3/nhl15/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1728500,
+          "sha256": "5f3f8f203f5764ca43256941b72787360dee28f225800dc366afd0519ac50b8e",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps3/nhl15/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhl15/savefiles/BLUS314360200 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS314360200 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 2259432,
+          "sha256": "fd234dc030586fb1366ebace47cf805cfd1aa38ac49cf1f9d52783b3d3a2f98c",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl15/savefiles/BLUS314360200 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS314360200 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 75189,
+          "sha256": "d0090357fc6993f94917f6b05f47a0eb6ad83d6349801763f387d51dc40aa3d9",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhl15/savefiles/BLUS314360200 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS314360200 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "6c43928003a80e9d4427eb734e893a49bbe717a71b0a5875f2709a99ccf71160",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhllegacy",
+      "platform": "ps3",
+      "title": "NHL Legacy (PS3)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps3/nhllegacy/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2901504,
+          "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps3/nhllegacy/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 444404,
+          "sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps3/nhllegacy/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1758212,
+          "sha256": "708145517ee4f58c603b8f381e180e7249daf2331ebca0d0a58fc851699f8581",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps3/nhllegacy/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps3/nhllegacy/savefiles/BLUS315400200 - ROSTER/SYS-DATA",
+          "file_name": "SYS-DATA",
+          "container_dir": "BLUS315400200 - ROSTER",
+          "container_relative": "SYS-DATA",
+          "len": 2456120,
+          "sha256": "c079ec4b5ae7ce2aa5b678373a5cb250c5762eb333f7dfe8bb05a35080744cb9",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "v4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhllegacy/savefiles/BLUS315400200 - ROSTER/ICON0.PNG",
+          "file_name": "ICON0.PNG",
+          "container_dir": "BLUS315400200 - ROSTER",
+          "container_relative": "ICON0.PNG",
+          "len": 59081,
+          "sha256": "7a154ab6c1e326fe7d20e39cd73958adda86dd62a3d172cde6ae940c1727b192",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps3/nhllegacy/savefiles/BLUS315400200 - ROSTER/PARAM.SFO",
+          "file_name": "PARAM.SFO",
+          "container_dir": "BLUS315400200 - ROSTER",
+          "container_relative": "PARAM.SFO",
+          "len": 2812,
+          "sha256": "084ad9845cc179ff9e504826ee580492391e553111d69d71d527d8487ab2f617",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl15",
+      "platform": "ps4",
+      "title": "NHL 15 (PS4)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps4/nhl15/databases/nhl_game.db",
+          "file_name": "nhl_game.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 16981156,
+          "sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps4/nhl15/databases/nhl_game-meta.xml",
+          "file_name": "nhl_game-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 464038,
+          "sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps4/nhl15/databases/eng_us.db",
+          "file_name": "eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1646268,
+          "sha256": "fa65b9af56b51ab6fa10253dcb0d9b5cca48ea930d64ea6352ea916b35945017",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps4/nhl15/databases/eng_us-meta.xml",
+          "file_name": "eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps4/nhl15/savefiles/84f8102f - ROSTER/DATA",
+          "file_name": "DATA",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "DATA",
+          "len": 739913,
+          "sha256": "17bf9bfaafd8b6444ac56108a37f9e39923caf020e3514eae78ec9b6db833938",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "ps4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl15/savefiles/84f8102f - ROSTER/INDEX",
+          "file_name": "INDEX",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "INDEX",
+          "len": 320,
+          "sha256": "9a17a2372f3e02b0cf90ae7c5dba637557efae410b7511c70c522f90dd8a09ae",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl15/savefiles/84f8102f - ROSTER/NAME",
+          "file_name": "NAME",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "NAME",
+          "len": 13,
+          "sha256": "528c4242bc85c848d499e28e9b9c89597999b6d6c0f4ecc4efcaf1392805f789",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl15/savefiles/84f8102f - ROSTER/sce_sys/icon0.png",
+          "file_name": "icon0.png",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "sce_sys/icon0.png",
+          "len": 44797,
+          "sha256": "9e65e0ae9456f59a1f91bfbdcd92d9fcc14bdfd88a5b80592ab2458781aa81b9",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl15/savefiles/84f8102f - ROSTER/sce_sys/param.sfo",
+          "file_name": "param.sfo",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "sce_sys/param.sfo",
+          "len": 1596,
+          "sha256": "324546192f5d232f89452ab2ccc7a124a0f6b32cd6b45507f190f6565c8505d6",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl16",
+      "platform": "ps4",
+      "title": "NHL 16 (PS4)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps4/nhl16/databases/nhl_game.db",
+          "file_name": "nhl_game.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 18456008,
+          "sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps4/nhl16/databases/nhl_game-meta.xml",
+          "file_name": "nhl_game-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 528124,
+          "sha256": "6e497b08109bcabaca0a300447a712b4f80c0e99ca0b25355c742552bc38061a",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps4/nhl16/databases/eng_us.db",
+          "file_name": "eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1859156,
+          "sha256": "cb1f5d56be75827696b38132e405fa678ab34761026fed21fefd9a875beba231",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps4/nhl16/databases/eng_us-meta.xml",
+          "file_name": "eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps4/nhl16/savefiles/84f8102f - ROSTER/DATA",
+          "file_name": "DATA",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "DATA",
+          "len": 1221291,
+          "sha256": "7a01bf60992f22861670f71a77c5569ec6e55e9c79d8781e552e43fb838c6c5a",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "ps4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl16/savefiles/84f8102f - ROSTER/INDEX",
+          "file_name": "INDEX",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "INDEX",
+          "len": 328,
+          "sha256": "3073b9fce96a96f2e4a075a4659d22ce1d9e4d0841ae7b859dd7d0c80e0f63e9",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl16/savefiles/84f8102f - ROSTER/NAME",
+          "file_name": "NAME",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "NAME",
+          "len": 13,
+          "sha256": "528c4242bc85c848d499e28e9b9c89597999b6d6c0f4ecc4efcaf1392805f789",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl16/savefiles/84f8102f - ROSTER/sce_sys/icon0.png",
+          "file_name": "icon0.png",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "sce_sys/icon0.png",
+          "len": 36175,
+          "sha256": "2ca0366a123f620f1d7727e5a06bc909cacecd7ba2e12c23e10c024a3f4a171d",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl16/savefiles/84f8102f - ROSTER/sce_sys/param.sfo",
+          "file_name": "param.sfo",
+          "container_dir": "84f8102f - ROSTER",
+          "container_relative": "sce_sys/param.sfo",
+          "len": 1596,
+          "sha256": "780a26281c9e968fd1c1ce08f9f5d896fc461067ff49d3890b4a76704af483f5",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl17",
+      "platform": "ps4",
+      "title": "NHL 17 (PS4)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps4/nhl17/databases/nhl_game.db",
+          "file_name": "nhl_game.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 17798544,
+          "sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps4/nhl17/databases/nhl_game-meta.xml",
+          "file_name": "nhl_game-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 481304,
+          "sha256": "f4ddcd4b405e0724ec30d4ac4a2481b434b5c0780f680a9e4969b85b9b7a3a92",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps4/nhl17/databases/eng_us.db",
+          "file_name": "eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2074876,
+          "sha256": "035b3b30e34cd2c2f6fe2ef9cb76ef8c0a55d8d92e88898011ab55087b2e0e51",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps4/nhl17/databases/eng_us-meta.xml",
+          "file_name": "eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps4/nhl17/savefiles/RosterCustom0/DATA",
+          "file_name": "DATA",
+          "container_dir": "RosterCustom0",
+          "container_relative": "DATA",
+          "len": 1448394,
+          "sha256": "70143a1d6b6a021accdb1563d4e37badb3dd5f5c1ec51e2ee8ad8ef2c3fa663e",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "ps4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl17/savefiles/RosterCustom0/INDEX",
+          "file_name": "INDEX",
+          "container_dir": "RosterCustom0",
+          "container_relative": "INDEX",
+          "len": 320,
+          "sha256": "85da400213e485477d13f077daec3e9a5528a86537240e6d27cbec6ee0ea6f7c",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl17/savefiles/RosterCustom0/NAME",
+          "file_name": "NAME",
+          "container_dir": "RosterCustom0",
+          "container_relative": "NAME",
+          "len": 13,
+          "sha256": "528c4242bc85c848d499e28e9b9c89597999b6d6c0f4ecc4efcaf1392805f789",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl17/savefiles/RosterCustom0/sce_sys/icon0.png",
+          "file_name": "icon0.png",
+          "container_dir": "RosterCustom0",
+          "container_relative": "sce_sys/icon0.png",
+          "len": 55174,
+          "sha256": "1a4fdfdd74b4fe2946c2f84b3ceb37bf1c9e956a11c0a502e3daf0d93b5427f4",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl17/savefiles/RosterCustom0/sce_sys/param.sfo",
+          "file_name": "param.sfo",
+          "container_dir": "RosterCustom0",
+          "container_relative": "sce_sys/param.sfo",
+          "len": 1596,
+          "sha256": "75d2f30a7845dcb660e42bb7a7fb4c8e517304501e2bd3bff1a7143475e46677",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl18",
+      "platform": "ps4",
+      "title": "NHL 18 (PS4)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps4/nhl18/databases/nhl_game.db",
+          "file_name": "nhl_game.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 18171964,
+          "sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps4/nhl18/databases/nhl_game-meta.xml",
+          "file_name": "nhl_game-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 492716,
+          "sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps4/nhl18/databases/eng_us.db",
+          "file_name": "eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2250244,
+          "sha256": "12f1af46906c064670f3b536ef3876b6fb8921ac620e88785d359ff17ea7159f",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps4/nhl18/databases/eng_us-meta.xml",
+          "file_name": "eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps4/nhl18/savefiles/RosterCustom0/DATA",
+          "file_name": "DATA",
+          "container_dir": "RosterCustom0",
+          "container_relative": "DATA",
+          "len": 1514666,
+          "sha256": "32b5d8189d493ead57d75e7a8cdd13745e507a6212ba3f2aa366e8c958fb3422",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "ps4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl18/savefiles/RosterCustom0/INDEX",
+          "file_name": "INDEX",
+          "container_dir": "RosterCustom0",
+          "container_relative": "INDEX",
+          "len": 320,
+          "sha256": "d9ea401427deee62637e1e32aef32f53a2fff0770ea25910c447f02784ef69a9",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl18/savefiles/RosterCustom0/NAME",
+          "file_name": "NAME",
+          "container_dir": "RosterCustom0",
+          "container_relative": "NAME",
+          "len": 13,
+          "sha256": "528c4242bc85c848d499e28e9b9c89597999b6d6c0f4ecc4efcaf1392805f789",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl18/savefiles/RosterCustom0/sce_sys/icon0.png",
+          "file_name": "icon0.png",
+          "container_dir": "RosterCustom0",
+          "container_relative": "sce_sys/icon0.png",
+          "len": 54995,
+          "sha256": "732c2e67f5f2615f2550101e0ba876e02f0f898289c2afc914320a6da8129d8d",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl18/savefiles/RosterCustom0/sce_sys/param.sfo",
+          "file_name": "param.sfo",
+          "container_dir": "RosterCustom0",
+          "container_relative": "sce_sys/param.sfo",
+          "len": 1596,
+          "sha256": "b7548a326b041da752ebb042243b9536c543f4075c42391c74410efd7af68733",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "game_id": "nhl19",
+      "platform": "ps4",
+      "title": "NHL 19 (PS4)",
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps4/nhl19/databases/nhl_game.db",
+          "file_name": "nhl_game.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 10347860,
+          "sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps4/nhl19/databases/nhl_game-meta.xml",
+          "file_name": "nhl_game-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 478763,
+          "sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps4/nhl19/databases/eng_us-meta.xml",
+          "file_name": "eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "ps4/nhl19/savefiles/RosterCustom0/DATA",
+          "file_name": "DATA",
+          "container_dir": "RosterCustom0",
+          "container_relative": "DATA",
+          "len": 1734662,
+          "sha256": "1f2f83ee4bfe4b6a52ac5756d263571c7009d694f867651449f5657907171bb5",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": {
+            "container_version": "ps4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": true
+          }
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl19/savefiles/RosterCustom0/INDEX",
+          "file_name": "INDEX",
+          "container_dir": "RosterCustom0",
+          "container_relative": "INDEX",
+          "len": 320,
+          "sha256": "0a47bd3f45f71a3901b8a45ff68126bf7a6d2631cd5de286252eb6ad7750b19d",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl19/savefiles/RosterCustom0/NAME",
+          "file_name": "NAME",
+          "container_dir": "RosterCustom0",
+          "container_relative": "NAME",
+          "len": 13,
+          "sha256": "528c4242bc85c848d499e28e9b9c89597999b6d6c0f4ecc4efcaf1392805f789",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl19/savefiles/RosterCustom0/sce_sys/icon0.png",
+          "file_name": "icon0.png",
+          "container_dir": "RosterCustom0",
+          "container_relative": "sce_sys/icon0.png",
+          "len": 36945,
+          "sha256": "9b7f77e1bad65659a42aea25c9ef5f631a968fee5405ca04694f70f1b50a0203",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        },
+        {
+          "role": "roster_save_aux",
+          "path": "ps4/nhl19/savefiles/RosterCustom0/sce_sys/param.sfo",
+          "file_name": "param.sfo",
+          "container_dir": "RosterCustom0",
+          "container_relative": "sce_sys/param.sfo",
+          "len": 1596,
+          "sha256": "3a97f0077dfce6d5642e729f6261c4e8e8f710fa28fba9252946aa5d7d842c28",
+          "provenance": "verified-vanilla",
+          "witness": "committed vanilla save container (anchors manifest savefile inventory); codec probe recorded on this file",
+          "codec": null
+        }
+      ],
+      "gaps": [
+        {
+          "component": "dictionary",
+          "reason": "no eng_us.db is committed for NHL 19 (anchors manifest); the NHL 19 base and patch-56 dictionaries exist only as private fixtures (databases/nhl19-ps4-cusa11126/…/eng_us.db) and are not bundled. The project opens without a dictionary"
+        }
+      ]
+    },
+    {
+      "game_id": "nhl20",
+      "platform": "ps4",
+      "title": "NHL 20 (PS4)",
+      "status": "unavailable",
+      "components": [],
+      "gaps": [
+        {
+          "component": "main_db",
+          "reason": "the committed anchors/ps4/nhl20 database set is NHL 19 base bytes under an NHL 20 path (REG-1, anchors manifest). Genuine NHL 20 (CUSA15439 01.00) nhl_game.db 1e200478… and nhl_game-meta.xml 2fac0e73… exist only as private fixtures (databases/nhl20-ps4-cusa15439/inxp_00.big/…) and are not bundled; the alias is never bundled as NHL 20"
+        },
+        {
+          "component": "meta",
+          "reason": "see main_db: the committed nhl_game-meta.xml is NHL 19 base"
+        },
+        {
+          "component": "dictionary",
+          "reason": "the committed eng_us.db is the NHL 19 base dictionary (REG-1); NHL 20's own 0fc95ec8… is a private fixture, not bundled"
+        },
+        {
+          "component": "dictionary_meta",
+          "reason": "see dictionary"
+        },
+        {
+          "component": "roster_save",
+          "reason": "no vanilla roster save is committed for NHL 20 (BeAGM0, BeAPro0, Profile0, Season0, ThreeOnThree0 only)"
+        }
+      ]
+    },
+    {
+      "game_id": "nhl21",
+      "platform": "ps4",
+      "title": "NHL 21 (PS4)",
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps4/nhl21/databases/nhl_game.db",
+          "file_name": "nhl_game.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 11209672,
+          "sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps4/nhl21/databases/nhl_game-meta.xml",
+          "file_name": "nhl_game-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 495259,
+          "sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps4/nhl21/databases/eng_us-meta.xml",
+          "file_name": "eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        }
+      ],
+      "gaps": [
+        {
+          "component": "dictionary",
+          "reason": "no eng_us.db is committed for NHL 21; its own dictionary 24693e2f… (CUSA18182 inxp_00.big #1156) is a private fixture by coordinator decision (not committed) and is not bundled. The project opens without a dictionary"
+        },
+        {
+          "component": "roster_save",
+          "reason": "no vanilla roster save is committed for NHL 21 (BeAGM0, BeAPro0, Profile0, Season0, ThreeOnThree0 only; none of these is a roster container). The project opens the database alone; a roster save cannot be produced from it"
+        }
+      ]
+    },
+    {
+      "game_id": "legacyrecomp",
+      "platform": "recomp",
+      "title": "NHL Legacy Recompiled (Recompiled)",
+      "status": "available",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "xbox360/nhllegacy/databases/nhlng.db",
+          "file_name": "nhlng.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2901504,
+          "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+          "provenance": "derived",
+          "witness": "handoff R128 (research 2026-09-26 §21): the registered Recompiled install's cacheboot.big member db/nhlng.db hashes 105d2186… = this Xbox 360 Legacy anchor; scope is that install",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "xbox360/nhllegacy/databases/nhlng-meta.xml",
+          "file_name": "nhlng-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 444404,
+          "sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+          "provenance": "derived",
+          "witness": "handoff R128 (research 2026-09-26 §21): the registered Recompiled install's cacheboot.big member db/nhlng.db hashes 105d2186… = this Xbox 360 Legacy anchor; scope is that install",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "xbox360/nhllegacy/databases/nhl_eng_us.db",
+          "file_name": "nhl_eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 1759044,
+          "sha256": "f00926ceff27d46f1e5264385468369cd60f91d54d9944dd5c8584bf6d9b8f70",
+          "provenance": "derived",
+          "witness": "handoff R128: the Recompiled cacheboot.big is byte-identical to the Xbox 360 Legacy archive (member 3 = this dictionary, f00926ce…)",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "xbox360/nhllegacy/databases/nhl_eng_us-meta.xml",
+          "file_name": "nhl_eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "derived",
+          "witness": "handoff R128 (research 2026-09-26 §21): the registered Recompiled install's cacheboot.big member db/nhlng.db hashes 105d2186… = this Xbox 360 Legacy anchor; scope is that install",
+          "codec": null
+        },
+        {
+          "role": "roster_save",
+          "path": "xbox360/nhllegacy/savefiles/ROSTER 20260627060052/ROSTER 20260627060052",
+          "file_name": "ROSTER 20260627060052",
+          "container_dir": "ROSTER 20260627060052",
+          "container_relative": "ROSTER 20260627060052",
+          "len": 2456120,
+          "sha256": "65a04268a2d1321ee495bd0c2d1509748c2d12ec3495a038d7a567f616ad7d21",
+          "provenance": "derived",
+          "witness": "handoff R128 §1: the Recompiled saves are raw inner saves of the same layout and size (2 456 120 B) as this Xbox 360 Legacy anchor; the anchor's own bytes are the vanilla witness",
+          "codec": {
+            "container_version": "v4",
+            "kind": "roster",
+            "readable": true,
+            "writable": true,
+            "experimental": false
+          }
+        }
+      ],
+      "gaps": []
+    }
+  ]
+}

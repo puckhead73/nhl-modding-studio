@@ -1,6 +1,10 @@
 //! `studio-api` — the Tauri-facing surface: the session [`Registry`], the typed [`dto`]s (with
 //! generated TS counterparts), the domain↔DTO [`convert`] bridge, and the thin [`commands`].
 //!
+//! The generated TypeScript contract is owned by [`bindings`]: `cargo test` only *checks* it for
+//! drift; `cargo run -p studio-api --bin export-bindings -- --write` is the only path that writes
+//! `app/src/bindings`.
+//!
 //! It is the only crate that depends on Tauri; all real work lives in `studio-domain`. Register the
 //! commands and managed state from the Tauri app like so:
 //!
@@ -11,16 +15,20 @@
 //!     .run(tauri::generate_context!())
 //! ```
 
+pub mod about;
+pub mod bindings;
 pub mod commands;
+pub mod frostbite;
 pub mod convert;
 pub mod dto;
 mod error;
+pub mod hockey_shop;
 mod registry;
 
 pub use convert::{parse_raw_id, raw_id_to_string};
 pub use dto::*;
 pub use error::ApiError;
-pub use registry::{parse_platform, parse_role, Registry};
+pub use registry::{parse_platform, parse_role, ApplyPhase, IsoFault, Registry};
 
 /// Expands to the `tauri::generate_handler!` invocation listing every studio command, so the command
 /// set is maintained in one place (here) rather than duplicated in the Tauri app.
@@ -28,11 +36,58 @@ pub use registry::{parse_platform, parse_role, Registry};
 macro_rules! command_handler {
     () => {
         ::tauri::generate_handler![
+            $crate::frostbite::frostbite_inspect,
+            $crate::frostbite::frostbite_bundles,
+            $crate::frostbite::frostbite_assets,
+            $crate::frostbite::frostbite_export,
+            $crate::frostbite::frostbite_chunks,
+            $crate::frostbite::frostbite_export_chunk,
             $crate::commands::load_project,
             $crate::commands::open_project,
             $crate::commands::detect_install,
             $crate::commands::open_workspace,
-            $crate::commands::extract_big_files,
+            $crate::commands::ps4_save_root_suggestion,
+            $crate::commands::baseline_inventory,
+            $crate::commands::project_create_fresh,
+            $crate::commands::project_import_review,
+            $crate::commands::save_editor_identify,
+            $crate::commands::save_editor_open,
+            $crate::commands::save_editor_save,
+            $crate::commands::project_create_import,
+            $crate::commands::project_open,
+            $crate::commands::project_delete,
+            $crate::commands::project_set_view,
+            $crate::commands::project_relink,
+            $crate::commands::package_inventory,
+            $crate::commands::project_overview,
+            $crate::commands::project_revert_change,
+            $crate::commands::project_build,
+            $crate::commands::project_archive,
+            $crate::commands::project_archive_preview,
+            $crate::commands::project_import_archive,
+            $crate::commands::project_copy_to,
+            $crate::commands::mod_library_scan,
+            $crate::commands::mod_manager_check_target,
+            $crate::commands::project_set_details,
+            $crate::commands::package_build,
+            $crate::commands::package_inspect,
+            $crate::commands::package_preflight,
+            $crate::commands::package_apply,
+            $crate::commands::package_installs,
+            $crate::commands::package_restore,
+            $crate::commands::project_info,
+            $crate::commands::project_save,
+            $crate::commands::project_set_extraction,
+            $crate::commands::project_deploy_plan,
+            $crate::commands::project_deploy_apply,
+            $crate::commands::project_deploy_restore,
+            $crate::commands::project_deployments,
+            $crate::commands::extract_preflight,
+            $crate::commands::game_files_check,
+            $crate::commands::extract_start,
+            $crate::commands::extract_status,
+            $crate::commands::extract_cancel,
+            $crate::commands::extract_running_for,
             $crate::commands::close_project,
             $crate::commands::project_summary,
             $crate::commands::validate_project,
@@ -43,11 +98,86 @@ macro_rules! command_handler {
             $crate::commands::list_players,
             $crate::commands::list_free_agents,
             $crate::commands::player_view,
+            $crate::commands::player_assignments,
+            $crate::commands::set_player_assignment,
             $crate::commands::career_stats,
             $crate::commands::add_career_season,
             $crate::commands::delete_career_row,
             $crate::commands::list_teams,
             $crate::commands::team_view,
+            $crate::commands::pending_changes,
+            $crate::commands::attach_dictionary,
+            $crate::commands::detach_dictionary,
+            $crate::commands::iso_inspect,
+            $crate::commands::iso_open,
+            $crate::commands::disc_extract_start,
+            $crate::commands::pkg_extract_start,
+            $crate::commands::iso_plan,
+            $crate::commands::iso_apply,
+            $crate::commands::iso_restore,
+            $crate::commands::iso_records,
+            $crate::commands::iso_status,
+            $crate::commands::team_membership_options,
+            $crate::commands::set_team_membership,
+            $crate::commands::swap_team_memberships,
+            $crate::commands::settings_catalogue,
+            $crate::commands::settings_default_preview,
+            $crate::commands::settings_apply_review,
+            $crate::commands::settings_csv_undo,
+            $crate::commands::asset_member_preview,
+            $crate::commands::ps3_board_replacement_preview,
+            $crate::commands::asset_member_apply_review,
+            $crate::commands::asset_member_undo,
+            $crate::commands::schedule_tables,
+            $crate::commands::schedule_view,
+            $crate::commands::team_schedule_edit,
+            $crate::commands::schedule_edit_preview,
+            $crate::commands::schedule_apply_review,
+            $crate::commands::schedule_export,
+            $crate::commands::schedule_import_preview,
+            $crate::commands::schedule_generation_options,
+            $crate::commands::schedule_stock_groups,
+            $crate::commands::arena_venue_art,
+            $crate::commands::arena_venue_raster,
+            $crate::commands::ps4_goalie_mask_pair,
+            $crate::commands::ps4_skater_gear,
+            $crate::commands::ps4_gear_thumbnail,
+            $crate::commands::schedule_generate_preview,
+            $crate::commands::league_logo,
+            $crate::commands::league_imagery,
+            $crate::commands::speech_catalogue,
+            $crate::commands::team_name_calls,
+            $crate::commands::player_name_calls,
+            $crate::commands::player_equipment_files,
+            $crate::commands::team_goalie_masks,
+            $crate::commands::about_studio,
+            $crate::commands::about_licence_file,
+            $crate::commands::arena_venue_view,
+            $crate::commands::team_kits,
+            $crate::commands::arena_assets,
+            $crate::commands::player_containment,
+            $crate::commands::song_catalogue,
+            $crate::commands::context_catalogue,
+            $crate::commands::ps4_speech_banks,
+            $crate::commands::ps4_speech_samples,
+            $crate::commands::ps4_speech_preview,
+            $crate::commands::gen7_speech_preview,
+            $crate::commands::gen7_speech_preview_cancel,
+            $crate::commands::player_reassign,
+            $crate::commands::gen7_bank_samples,
+            $crate::commands::gen7_sfx_banks,
+            $crate::commands::gen7_sfx_bank_tree,
+            $crate::commands::gen7_sfx_preview,
+            $crate::commands::team_identity_dependencies,
+            $crate::commands::team_artid_options,
+            $crate::commands::team_artid_swap,
+            $crate::commands::dictionary_retext_preview,
+            $crate::commands::dictionary_growth_preview,
+            $crate::commands::dictionary_growth_set,
+            $crate::commands::dictionary_retext_set,
+            $crate::commands::team_text,
+            $crate::commands::list_leagues,
+            $crate::commands::league_view,
             $crate::commands::lines_view,
             $crate::commands::team_strategies,
             $crate::commands::team_draft_picks,
@@ -56,7 +186,10 @@ macro_rules! command_handler {
             $crate::commands::list_team_equipment,
             $crate::commands::list_arenas,
             $crate::commands::arena_view,
+            $crate::commands::arena_assignment_preview,
             $crate::commands::set_field,
+            $crate::commands::set_cells_int,
+            $crate::commands::set_team_roster,
             $crate::commands::set_captaincy,
             $crate::commands::set_player_trait,
             $crate::commands::create_player,
@@ -99,78 +232,70 @@ macro_rules! command_handler {
             $crate::commands::load_formula_profile,
             $crate::commands::save_formula_profile,
             $crate::commands::delete_formula_profile,
+            $crate::commands::export_player_manifest,
+            $crate::commands::compute_legends_preview,
+            $crate::commands::legends_status,
+            $crate::commands::set_active_profile,
+            $crate::commands::set_legends_pending,
+            $crate::commands::compute_legends_ratings,
+            $crate::commands::legends_teams,
+            $crate::commands::legends_roster,
             $crate::commands::asset_roots,
             $crate::commands::list_player_assets,
             $crate::commands::portrait_preview,
             $crate::commands::head_preview,
             $crate::commands::head_preview_paths,
+            $crate::commands::kit_preview_paths,
+            $crate::commands::team_kit_preview,
+            $crate::commands::equipment_slots,
+            $crate::commands::list_equipment_slot_assets,
+            $crate::commands::equipment_item_preview,
+            $crate::commands::hockey_shop_list,
+            $crate::commands::hockey_shop_sync,
+            $crate::commands::hockey_shop_import,
+            $crate::commands::hockey_shop_delete,
+            $crate::commands::hockey_shop_load_texture,
+            $crate::commands::hockey_shop_install_plan,
+            $crate::commands::hockey_shop_install_apply,
             $crate::commands::export_assets,
+            $crate::commands::export_head_catalog,
+            $crate::commands::read_catalog_manifest,
+            $crate::commands::catalog_entry_preview,
+            $crate::commands::read_png_data_url,
             $crate::commands::browse_install_files,
             $crate::commands::export_install_files,
             $crate::commands::export_team_outfits,
+            $crate::commands::import_texture,
+            $crate::commands::import_texture_bytes,
+            $crate::commands::texture_preview,
+            $crate::commands::texture_replace_plan,
+            $crate::commands::texture_replace_plan_bytes,
+            $crate::commands::archive_member_texture_preview,
+            $crate::commands::source_image_preview,
+            $crate::commands::team_logo,
+            $crate::commands::team_outfits,
+            $crate::commands::team_logo_set,
+            $crate::commands::portrait_header_preview,
+            $crate::commands::clone_jersey,
+            $crate::commands::team_jersey_thumbnail,
+            $crate::commands::clone_kit_textures,
+            $crate::commands::team_roster_ids,
+            $crate::commands::copied_target_root_for,
+            $crate::commands::copied_target_create_root,
+            $crate::commands::copied_target_review,
+            $crate::commands::copied_target_review_archive_member,
+            $crate::commands::copied_target_review_archive_members,
+            $crate::commands::dictionary_texts,
+            $crate::commands::dictionary_rename_preview,
+            $crate::commands::dictionary_rename_set,
+            $crate::commands::dictionary_rename_clear,
+            $crate::commands::copied_target_apply,
+            $crate::commands::copied_target_cancel,
+            $crate::commands::copied_target_discard,
+            $crate::commands::copied_target_status,
+            $crate::commands::copied_target_recover,
+            $crate::commands::copied_target_restore,
+            $crate::commands::copied_target_reload,
         ]
     };
-}
-
-#[cfg(test)]
-mod bindings {
-    use crate::dto::*;
-    use ts_rs::TS;
-
-    /// Generate the TypeScript DTO definitions into the frontend's bindings dir (the FE/BE contract).
-    #[test]
-    fn export_typescript() {
-        std::env::set_var(
-            "TS_RS_EXPORT_DIR",
-            concat!(env!("CARGO_MANIFEST_DIR"), "/../../app/src/bindings"),
-        );
-        ProjectSummaryDto::export_all().expect("export ProjectSummaryDto + deps");
-        InstallReportDto::export_all().expect("export InstallReportDto + deps");
-        ExtractSummaryDto::export_all().expect("export ExtractSummaryDto");
-        AssetRootsDto::export_all().expect("export AssetRootsDto");
-        AssetRootsArgsDto::export_all().expect("export AssetRootsArgsDto");
-        PlayerAssetsDto::export_all().expect("export PlayerAssetsDto");
-        ExportOptionsDto::export_all().expect("export ExportOptionsDto");
-        AssetExportSummaryDto::export_all().expect("export AssetExportSummaryDto");
-        BrowseListingDto::export_all().expect("export BrowseListingDto + deps");
-        FileExportOptionsDto::export_all().expect("export FileExportOptionsDto");
-        FileExportSummaryDto::export_all().expect("export FileExportSummaryDto");
-        OutfitExportSummaryDto::export_all().expect("export OutfitExportSummaryDto");
-        HeadPreviewDto::export_all().expect("export HeadPreviewDto + deps");
-        IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
-        AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
-        RepairBlocksSummaryDto::export_all().expect("export RepairBlocksSummaryDto");
-        CreatePlayerDto::export_all().expect("export CreatePlayerDto + deps");
-        OpOutcomeDto::export_all().expect("export OpOutcomeDto");
-        PlayerViewDto::export_all().expect("export PlayerViewDto + deps");
-        PlayerSummaryDto::export_all().expect("export PlayerSummaryDto");
-        TeamViewDto::export_all().expect("export TeamViewDto + deps");
-        TeamSummaryDto::export_all().expect("export TeamSummaryDto");
-        ArenaViewDto::export_all().expect("export ArenaViewDto + deps");
-        ArenaSummaryDto::export_all().expect("export ArenaSummaryDto");
-        LinesViewDto::export_all().expect("export LinesViewDto + deps");
-        CareerStatsDto::export_all().expect("export CareerStatsDto + deps");
-        AddCareerSeasonDto::export_all().expect("export AddCareerSeasonDto");
-        TeamStrategiesDto::export_all().expect("export TeamStrategiesDto + deps");
-        DraftPickDto::export_all().expect("export DraftPickDto");
-        TeamJerseyDto::export_all().expect("export TeamJerseyDto");
-        TeamEquipmentDto::export_all().expect("export TeamEquipmentDto + deps");
-        HistoricalFiltersDto::export_all().expect("export HistoricalFiltersDto + deps");
-        HistoricalPersonSummaryDto::export_all().expect("export HistoricalPersonSummaryDto");
-        HistoricalPersonDto::export_all().expect("export HistoricalPersonDto + deps");
-        HistoricalTeamSummaryDto::export_all().expect("export HistoricalTeamSummaryDto");
-        HistoricalTeamDto::export_all().expect("export HistoricalTeamDto + deps");
-        HistoricalTeamFiltersDto::export_all().expect("export HistoricalTeamFiltersDto + deps");
-        HistoricalTeamIndexEntryDto::export_all().expect("export HistoricalTeamIndexEntryDto");
-        HistoricalTeamFranchiseDto::export_all().expect("export HistoricalTeamFranchiseDto + deps");
-        EaComputedRatingsDto::export_all().expect("export EaComputedRatingsDto + deps");
-        HistoricalCareerRatingsDto::export_all().expect("export HistoricalCareerRatingsDto + deps");
-        FormulaProfileDto::export_all().expect("export FormulaProfileDto");
-        FormulaCatalogDto::export_all().expect("export FormulaCatalogDto + deps");
-        MatchCandidateDto::export_all().expect("export MatchCandidateDto");
-        ImportItemDto::export_all().expect("export ImportItemDto");
-        ChangeSetPreviewDto::export_all().expect("export ChangeSetPreviewDto + deps");
-        TableCapacityDto::export_all().expect("export TableCapacityDto");
-        ImportResultDto::export_all().expect("export ImportResultDto + deps");
-    }
 }

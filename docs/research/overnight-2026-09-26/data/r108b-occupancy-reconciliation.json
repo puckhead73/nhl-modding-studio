@@ -1,0 +1,103 @@
+{
+ "note": "R108b - (a) every internal raster name on PS3 NHL 12 / 13 whose numbers differ from its member's id tuple (from the R108 JSON);\n(b) like-for-like reconciliation of the R102 \"ids 0-1023 free in every team-art family\" figure: R102's stored per-family id sets (same\nfamilies: fe_crest, rink_logo, kit_pant, puck, kit_sock, nameplate_candidate, kit_jersey), with only the sock ids replaced by the ids\nparsed under the correct grammar (NHL 12 two-file `sock_{s}_{0|1}_{artid}_{v}_cm`, NHL 13 single-file). Read-only.\nUsage: python r108b_occupancy_reconciliation.py <out.json>\n",
+ "trees": {
+  "ps3-nhl12": {
+   "cross_id_internal_names": {},
+   "cross_member_count": 0,
+   "families": [
+    "fe_crest",
+    "rink_logo",
+    "kit_pant",
+    "puck",
+    "kit_sock",
+    "nameplate_candidate",
+    "kit_jersey"
+   ],
+   "sock_ids_r102": 2,
+   "sock_ids_corrected": 228,
+   "free_r102": 761,
+   "free_corrected": 761,
+   "free_corrected_first": [
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    98,
+    99,
+    100,
+    101,
+    102
+   ]
+  },
+  "ps3-nhl13": {
+   "cross_id_internal_names": {
+    "rendering/pant/texlib_1_421_2.rpsgl": [
+     "pant_1_400_2_cm.Raster",
+     "pant_1_400_2_nm.Raster",
+     "pant_1_400_2_sm.Raster"
+    ],
+    "rendering/sock/sock_1_421_2_cm.rpsgl": [
+     "sock_1_400_2_cm.Raster"
+    ],
+    "rendering/jersey/name_1_138_2_cm.rpsgl": [
+     "name_1_138_1_cm.Raster"
+    ],
+    "rendering/jersey/texlib_1_421_2.rpsgl": [
+     "font_1_400_2_cm.Raster",
+     "font_1_400_2_nm.Raster",
+     "font_1_400_2_sm.Raster",
+     "jersey_1_400_2_cm.Raster",
+     "jersey_1_400_2_sm.Raster",
+     "jersey_1_400_2_0_nm.Raster"
+    ]
+   },
+   "cross_member_count": 4,
+   "families": [
+    "fe_crest",
+    "rink_logo",
+    "kit_pant",
+    "puck",
+    "kit_sock",
+    "nameplate_candidate",
+    "kit_jersey"
+   ],
+   "sock_ids_r102": 215,
+   "sock_ids_corrected": 215,
+   "free_r102": 757,
+   "free_corrected": 757,
+   "free_corrected_first": [
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    98,
+    99,
+    100,
+    101,
+    102
+   ]
+  }
+ }
+}

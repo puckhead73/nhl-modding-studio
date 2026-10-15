@@ -1,0 +1,857 @@
+{
+ "note": "R125c - PS4 goalie gear selection keys through the vault (package 4). Read-only; reuses the 2026-09-19 vault reader (vlt_collections) and\nthe 2026-09-20 R16 DB loader (ps4_team_field_map) exactly as R16 did (genuine NHL 20 = CUSA15439 install).\nPer title, decoded records of the goalie texture-pack classes -> key tuples:\n  mask   ge_nhl_goaliehelmettexturepack : (GoalieMaskTexture, GoalieHelmetBrand)      vs DB (maskid, masktype)\n  stick  ge_nhl_goaliesticktexturepack  : (GoalieStickBrand, StickHandedness)\n  blocker / trapper texture packs       : (GoalieBrands, StickHandedness)\n  pads   goaliepadtexturepack + goaliemergedpadtexturepack : GoalieBrands (value overlap between the two classes)\n  throat ge_nhl_goaliethroatprotector   : (GoalieHelmetBrand, OnOff)\nReported: per DB row, whether (maskid, masktype) names exactly one mask record, a record under another brand only, or none; per\ncatalogue, brands carrying both handedness values; team mask slot values (exhibitionteams.goaliemask*) in the GoalieMaskTexture set.\nTyped-attribute joins are data joins; which record the runtime draws is not observed.\nUsage: python r125c_ps4_goalie_selection_keys.py <out.json> [titles...]\n",
+ "titles": {
+  "nhl15": {
+   "vault": {
+    "gccollections.vlt": "d1ec595c56b6d87692ac3c47919de739af41929847252669719f6584e5229c77",
+    "gccollections.bin": "0684ef978cbb8ae1e34ba8abb8c98f09187154544be44de5c647d2b96ec66bd2"
+   },
+   "db_source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl15\\databases\\nhl_game.db",
+   "goalie_rows": 559,
+   "catalogue_records": {
+    "mask": 506,
+    "stick": 29,
+    "blocker": 102,
+    "trapper": 98,
+    "pad": 9,
+    "mergedpad": 35,
+    "throat": 2
+   },
+   "mask_pair_resolution": {
+    "pair exactly one record": 559
+   },
+   "masktype_values": [
+    [
+     0,
+     416
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     140
+    ]
+   ],
+   "helmet_brands_in_catalogue": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "mask_textures_per_brand_max": 7,
+   "stick_brands": {
+    "catalogue": 29,
+    "with_both_hands": 0,
+    "db_values": 19,
+    "db_values_with_both_hands": 0,
+    "db_values_missing": []
+   },
+   "blocker_brands": {
+    "catalogue": 51,
+    "with_both_hands": 51,
+    "db_values": 29,
+    "db_values_with_both_hands": 29,
+    "db_values_missing": []
+   },
+   "trapper_brands": {
+    "catalogue": 49,
+    "with_both_hands": 49,
+    "db_values": 26,
+    "db_values_with_both_hands": 26,
+    "db_values_missing": []
+   },
+   "pads": {
+    "pad_class_values": 1,
+    "merged_class_values": 35,
+    "overlap": 0,
+    "db_values": 28,
+    "db_in_pad": 0,
+    "db_in_merged": 28,
+    "db_in_neither": []
+   },
+   "throat": [
+    [
+     0,
+     1
+    ],
+    [
+     2,
+     1
+    ]
+   ],
+   "neckprotector_values": [
+    [
+     0,
+     547
+    ],
+    [
+     1,
+     12
+    ]
+   ],
+   "team_slot_values": {
+    "distinct_nonzero": 225,
+    "in_mask_textures": 225,
+    "missing": []
+   }
+  },
+  "nhl16": {
+   "vault": {
+    "gccollections.vlt": "202035cfc80f9dbf283ea610cef13262b92a6314cbe1c2fbeb360bbedc394d7e",
+    "gccollections.bin": "b1217f4a536542607b61a49aaa65b31bb74cb95756a90e2dcbe0c1ba9e092571"
+   },
+   "db_source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl16\\databases\\nhl_game.db",
+   "goalie_rows": 566,
+   "catalogue_records": {
+    "mask": 492,
+    "stick": 68,
+    "blocker": 106,
+    "trapper": 102,
+    "pad": 4,
+    "mergedpad": 37,
+    "throat": 4
+   },
+   "mask_pair_resolution": {
+    "maskid not in catalogue": 7,
+    "pair exactly one record": 556,
+    "maskid under another brand only": 3
+   },
+   "masktype_values": [
+    [
+     0,
+     421
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     6,
+     144
+    ]
+   ],
+   "helmet_brands_in_catalogue": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "mask_textures_per_brand_max": 7,
+   "stick_brands": {
+    "catalogue": 34,
+    "with_both_hands": 34,
+    "db_values": 12,
+    "db_values_with_both_hands": 12,
+    "db_values_missing": []
+   },
+   "blocker_brands": {
+    "catalogue": 53,
+    "with_both_hands": 53,
+    "db_values": 29,
+    "db_values_with_both_hands": 29,
+    "db_values_missing": []
+   },
+   "trapper_brands": {
+    "catalogue": 51,
+    "with_both_hands": 51,
+    "db_values": 26,
+    "db_values_with_both_hands": 26,
+    "db_values_missing": []
+   },
+   "pads": {
+    "pad_class_values": 4,
+    "merged_class_values": 37,
+    "overlap": 4,
+    "db_values": 29,
+    "db_in_pad": 2,
+    "db_in_merged": 29,
+    "db_in_neither": []
+   },
+   "throat": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     1
+    ]
+   ],
+   "neckprotector_values": [
+    [
+     0,
+     561
+    ],
+    [
+     1,
+     5
+    ]
+   ],
+   "team_slot_values": {
+    "distinct_nonzero": 230,
+    "in_mask_textures": 224,
+    "missing": [
+     173,
+     198,
+     208,
+     248,
+     249,
+     261
+    ]
+   }
+  },
+  "nhl17": {
+   "vault": {
+    "gccollections.vlt": "df39aeaa7f10a97570d35159d0a031b33f4a66e4ea5f9cef7bf213a2ddf06531",
+    "gccollections.bin": "2da87ee854ea844aac1b1484b9fe1f688e71b622bdee86d0d5a3eddbf5de5811"
+   },
+   "db_source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl17\\databases\\nhl_game.db",
+   "goalie_rows": 601,
+   "catalogue_records": {
+    "mask": 526,
+    "stick": 76,
+    "blocker": 120,
+    "trapper": 116,
+    "pad": 0,
+    "mergedpad": 44,
+    "throat": 4
+   },
+   "mask_pair_resolution": {
+    "pair exactly one record": 596,
+    "maskid not in catalogue": 5
+   },
+   "masktype_values": [
+    [
+     0,
+     491
+    ],
+    [
+     6,
+     110
+    ]
+   ],
+   "helmet_brands_in_catalogue": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "mask_textures_per_brand_max": 7,
+   "stick_brands": {
+    "catalogue": 38,
+    "with_both_hands": 38,
+    "db_values": 13,
+    "db_values_with_both_hands": 13,
+    "db_values_missing": []
+   },
+   "blocker_brands": {
+    "catalogue": 60,
+    "with_both_hands": 60,
+    "db_values": 32,
+    "db_values_with_both_hands": 32,
+    "db_values_missing": []
+   },
+   "trapper_brands": {
+    "catalogue": 58,
+    "with_both_hands": 58,
+    "db_values": 28,
+    "db_values_with_both_hands": 28,
+    "db_values_missing": []
+   },
+   "pads": {
+    "pad_class_values": 0,
+    "merged_class_values": 44,
+    "overlap": 0,
+    "db_values": 32,
+    "db_in_pad": 0,
+    "db_in_merged": 32,
+    "db_in_neither": []
+   },
+   "throat": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     1
+    ]
+   ],
+   "neckprotector_values": [
+    [
+     0,
+     597
+    ],
+    [
+     1,
+     4
+    ]
+   ],
+   "team_slot_values": {
+    "distinct_nonzero": 254,
+    "in_mask_textures": 251,
+    "missing": [
+     208,
+     248,
+     249
+    ]
+   }
+  },
+  "nhl18": {
+   "vault": {
+    "gccollections.vlt": "0a5e019da94855f20ebc9d389ffec8c538a9d464df2ea8b777c4b34746490fd8",
+    "gccollections.bin": "cf0cfab277acb2f5bb9598384e523f38ddf455c8e1bdee691677e2ce3f23999c"
+   },
+   "db_source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl18\\databases\\nhl_game.db",
+   "goalie_rows": 714,
+   "catalogue_records": {
+    "mask": 578,
+    "stick": 84,
+    "blocker": 140,
+    "trapper": 136,
+    "pad": 0,
+    "mergedpad": 54,
+    "throat": 4
+   },
+   "mask_pair_resolution": {
+    "pair exactly one record": 714
+   },
+   "masktype_values": [
+    [
+     0,
+     647
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     6,
+     66
+    ]
+   ],
+   "helmet_brands_in_catalogue": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "mask_textures_per_brand_max": 7,
+   "stick_brands": {
+    "catalogue": 42,
+    "with_both_hands": 42,
+    "db_values": 16,
+    "db_values_with_both_hands": 16,
+    "db_values_missing": []
+   },
+   "blocker_brands": {
+    "catalogue": 70,
+    "with_both_hands": 70,
+    "db_values": 35,
+    "db_values_with_both_hands": 35,
+    "db_values_missing": []
+   },
+   "trapper_brands": {
+    "catalogue": 68,
+    "with_both_hands": 68,
+    "db_values": 34,
+    "db_values_with_both_hands": 34,
+    "db_values_missing": []
+   },
+   "pads": {
+    "pad_class_values": 0,
+    "merged_class_values": 54,
+    "overlap": 0,
+    "db_values": 35,
+    "db_in_pad": 0,
+    "db_in_merged": 35,
+    "db_in_neither": []
+   },
+   "throat": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     1
+    ]
+   ],
+   "neckprotector_values": [
+    [
+     0,
+     707
+    ],
+    [
+     1,
+     7
+    ]
+   ],
+   "team_slot_values": {
+    "distinct_nonzero": 286,
+    "in_mask_textures": 284,
+    "missing": [
+     248,
+     249
+    ]
+   }
+  },
+  "nhl19": {
+   "vault": {
+    "gccollections.vlt": "6e537bb7b61f1832a88377757a3769586643f70d6452e9c4b61a76c2568146a1",
+    "gccollections.bin": "aece3f7a24bb26139472c0ec870d26909c3b9883838eef8997a76d32ee4c5a25"
+   },
+   "db_source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl19\\databases\\nhl_game.db",
+   "goalie_rows": 747,
+   "catalogue_records": {
+    "mask": 940,
+    "stick": 168,
+    "blocker": 162,
+    "trapper": 158,
+    "pad": 1,
+    "mergedpad": 65,
+    "throat": 5
+   },
+   "mask_pair_resolution": {
+    "pair exactly one record": 743,
+    "maskid under another brand only": 4
+   },
+   "masktype_values": [
+    [
+     0,
+     704
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     5,
+     1
+    ],
+    [
+     6,
+     27
+    ],
+    [
+     99,
+     4
+    ]
+   ],
+   "helmet_brands_in_catalogue": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "mask_textures_per_brand_max": 8,
+   "stick_brands": {
+    "catalogue": 84,
+    "with_both_hands": 84,
+    "db_values": 22,
+    "db_values_with_both_hands": 22,
+    "db_values_missing": []
+   },
+   "blocker_brands": {
+    "catalogue": 81,
+    "with_both_hands": 81,
+    "db_values": 38,
+    "db_values_with_both_hands": 38,
+    "db_values_missing": []
+   },
+   "trapper_brands": {
+    "catalogue": 79,
+    "with_both_hands": 79,
+    "db_values": 37,
+    "db_values_with_both_hands": 37,
+    "db_values_missing": []
+   },
+   "pads": {
+    "pad_class_values": 1,
+    "merged_class_values": 65,
+    "overlap": 1,
+    "db_values": 37,
+    "db_in_pad": 1,
+    "db_in_merged": 37,
+    "db_in_neither": []
+   },
+   "throat": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     1
+    ],
+    [
+     8,
+     1
+    ]
+   ],
+   "neckprotector_values": [
+    [
+     0,
+     742
+    ],
+    [
+     1,
+     5
+    ]
+   ],
+   "team_slot_values": {
+    "distinct_nonzero": 287,
+    "in_mask_textures": 285,
+    "missing": [
+     248,
+     249
+    ]
+   }
+  },
+  "nhl20": {
+   "vault": {
+    "gccollections.vlt": "31a2727f470d32262b9b0462378e1fc1bf907964f1b523ff954f4d49980e5a63",
+    "gccollections.bin": "e5266477c8c158653c4aa40f302a5fa2e782ec30ff48d9d10e8934013f8d3ef8"
+   },
+   "db_source": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs\\inxp_00.big:nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+   "goalie_rows": 773,
+   "catalogue_records": {
+    "mask": 974,
+    "stick": 270,
+    "blocker": 246,
+    "trapper": 242,
+    "pad": 39,
+    "mergedpad": 107,
+    "throat": 5
+   },
+   "mask_pair_resolution": {
+    "pair exactly one record": 768,
+    "maskid under another brand only": 5
+   },
+   "masktype_values": [
+    [
+     0,
+     742
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     6
+    ],
+    [
+     3,
+     8
+    ],
+    [
+     4,
+     3
+    ],
+    [
+     5,
+     2
+    ],
+    [
+     6,
+     5
+    ],
+    [
+     99,
+     5
+    ]
+   ],
+   "helmet_brands_in_catalogue": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "mask_textures_per_brand_max": 8,
+   "stick_brands": {
+    "catalogue": 135,
+    "with_both_hands": 135,
+    "db_values": 24,
+    "db_values_with_both_hands": 24,
+    "db_values_missing": []
+   },
+   "blocker_brands": {
+    "catalogue": 123,
+    "with_both_hands": 123,
+    "db_values": 36,
+    "db_values_with_both_hands": 36,
+    "db_values_missing": []
+   },
+   "trapper_brands": {
+    "catalogue": 121,
+    "with_both_hands": 121,
+    "db_values": 34,
+    "db_values_with_both_hands": 34,
+    "db_values_missing": []
+   },
+   "pads": {
+    "pad_class_values": 39,
+    "merged_class_values": 107,
+    "overlap": 39,
+    "db_values": 34,
+    "db_in_pad": 0,
+    "db_in_merged": 34,
+    "db_in_neither": []
+   },
+   "throat": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     1
+    ],
+    [
+     8,
+     1
+    ]
+   ],
+   "neckprotector_values": [
+    [
+     0,
+     767
+    ],
+    [
+     1,
+     6
+    ]
+   ],
+   "team_slot_values": {
+    "distinct_nonzero": 286,
+    "in_mask_textures": 284,
+    "missing": [
+     248,
+     249
+    ]
+   }
+  },
+  "nhl21": {
+   "vault": {
+    "gccollections.vlt": "dd4ceff033fd052a4e3a1e85c964d9b32a81778cd31e24c4f193e8fd54b4ea8d",
+    "gccollections.bin": "d668bbe104dbb441b2868a60fb3644537a3b4489b2bc30bad67f6056b22971db"
+   },
+   "db_source": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-19\\probes\\..\\..\\..\\..\\anchors\\ps4\\nhl21\\databases\\nhl_game.db",
+   "goalie_rows": 749,
+   "catalogue_records": {
+    "mask": 991,
+    "stick": 280,
+    "blocker": 264,
+    "trapper": 260,
+    "pad": 42,
+    "mergedpad": 116,
+    "throat": 5
+   },
+   "mask_pair_resolution": {
+    "pair exactly one record": 744,
+    "maskid under another brand only": 5
+   },
+   "masktype_values": [
+    [
+     0,
+     712
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     10
+    ],
+    [
+     4,
+     3
+    ],
+    [
+     5,
+     2
+    ],
+    [
+     6,
+     5
+    ],
+    [
+     99,
+     5
+    ]
+   ],
+   "helmet_brands_in_catalogue": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "mask_textures_per_brand_max": 8,
+   "stick_brands": {
+    "catalogue": 140,
+    "with_both_hands": 140,
+    "db_values": 26,
+    "db_values_with_both_hands": 26,
+    "db_values_missing": []
+   },
+   "blocker_brands": {
+    "catalogue": 132,
+    "with_both_hands": 132,
+    "db_values": 43,
+    "db_values_with_both_hands": 43,
+    "db_values_missing": []
+   },
+   "trapper_brands": {
+    "catalogue": 130,
+    "with_both_hands": 130,
+    "db_values": 41,
+    "db_values_with_both_hands": 41,
+    "db_values_missing": []
+   },
+   "pads": {
+    "pad_class_values": 42,
+    "merged_class_values": 116,
+    "overlap": 42,
+    "db_values": 42,
+    "db_in_pad": 2,
+    "db_in_merged": 42,
+    "db_in_neither": []
+   },
+   "throat": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     1
+    ],
+    [
+     8,
+     1
+    ]
+   ],
+   "neckprotector_values": [
+    [
+     0,
+     742
+    ],
+    [
+     1,
+     7
+    ]
+   ],
+   "team_slot_values": {
+    "distinct_nonzero": 288,
+    "in_mask_textures": 286,
+    "missing": [
+     248,
+     249
+    ]
+   }
+  }
+ }
+}

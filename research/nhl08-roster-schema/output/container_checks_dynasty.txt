@@ -1,0 +1,130 @@
+$ python research/nhl08-roster-schema/scripts/container_checks.py "anchors/xbox360/nhl08/savefiles/DYNASTY1 20260718064632/DYNASTY1 20260718064632" anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml --group dynasty
+file anchors/xbox360/nhl08/savefiles/DYNASTY1 20260718064632/DYNASTY1 20260718064632
+size 2461712 (0x259010)
+magic 'Dynasties'  checksum_a stored 47530247 computed(crc32/ieee [0x1C..EOF]) 47530247 MATCH  version word 3  word@0x18 0
+embedded TDB headers: ['@0x8d9bc size 525416 tables 111']
+bytes between container header and TDB: 580000 (zero: 529283, nonzero: 50717)
+inner TDB @0x8d9bc: version 8 big_endian True db_size 525416 (0x80468) word@0x0C 0x0 tables 111
+inner CRCs: file header ok; prior_crc ok 111/111; table header_crc ok 111/111; EOF crc stored f4cd6622 computed f4cd6622 ok
+data_alloc_type distribution: {6: 27, 2: 84}
+(word@+0x10, word@+0x18, index_count, u16@+0x1E, word@+0x20) distribution: {(0, 65535, 0, 0, 0): 111}
+records: sum(current) 10889  sum(max) 10889  tables with cur>0: 27  tables with max>cur: 0  max==cur everywhere: True
+record_len_bits == record_len_bytes*8-1 for every table: True
+tail after inner TDB: 1356268 bytes (0x10de24..0x259010), all zero: True
+table blocks contiguous in directory order: yes ; last block ends at 0x10de20, db_size end 0x10de24 (EOF crc occupies the last 4 bytes: True)
+
+save  role    parent parent name                     recB capacity  capacity source                 bytes
+WExj  insert  HUMb  leaguetasks                        8       64  declared                          512
+oWfM  delete  HUMb  leaguetasks                        4        0  -1 (parent max_records)             0
+ioPQ  insert  kGzd  leaguefreeagents                   4      800  declared                         3200
+oiBf  delete  kGzd  leaguefreeagents                   4        0  -1 (parent max_records)             0
+HnSp  update  kGzd  leaguefreeagents                   4        0  -1 (parent max_records)             0
+Qvri  insert  ubnj  leaguetransactiontable             8      200  declared                         1600
+yNZN  delete  ubnj  leaguetransactiontable             4        0  -1 (parent max_records)             0
+xIOP  update  ubnj  leaguetransactiontable             8        0  declared                            0
+tXWz  insert  kKzq  leaguecustomplayerremap            4     3000  declared                        12000
+Ttsw  delete  kKzq  leaguecustomplayerremap            4        0  -1 (parent max_records)             0
+esMb  insert  IALy  leagueawardstable                 88      500  declared                        44000
+wiOU  delete  IALy  leagueawardstable                  4        0  -1 (parent max_records)             0
+xFwu  insert  WRGI  leaguestates                       8      256  declared                         2048
+TXSB  delete  WRGI  leaguestates                       4        0  -1 (parent max_records)             0
+cSVD  update  WRGI  leaguestates                       8        0  -1 (parent max_records)             0
+paEP  insert  xxMJ  leagueretirementtable             84      400  declared                        33600
+fwKg  delete  xxMJ  leagueretirementtable              4        0  -1 (parent max_records)             0
+KcZA  insert  CtBM  leagueplayerseasonstats           28    13500  declared                       378000
+EeDv  delete  CtBM  leagueplayerseasonstats            4        0  -1 (parent max_records)             0
+rbMB  update  CtBM  leagueplayerseasonstats           24        0  -1 (parent max_records)             0
+Pwkd  insert  rgQY  leaguerostertable                 16     1600  declared                        25600
+VeqS  delete  rgQY  leaguerostertable                  4        0  -1 (parent max_records)             0
+azBc  update  rgQY  leaguerostertable                 12        0  -1 (parent max_records)             0
+JVhE  insert  lqNn  leaguegoalieequipment             64      600  declared                        38400
+XDvr  delete  lqNn  leaguegoalieequipment              4        0  -1 (parent max_records)             0
+YGEl  update  lqNn  leaguegoalieequipment             64        0  -1 (parent max_records)             0
+MWzC  insert  CwnF  leagueskaterequipment             12     3000  declared                        36000
+CsRt  delete  CwnF  leagueskaterequipment              4        0  -1 (parent max_records)             0
+tZGn  update  CwnF  leagueskaterequipment             12        0  -1 (parent max_records)             0
+wtoq  insert  sziH  leaguerookiegoalieai              24       60  declared                         1440
+mXaF  delete  sziH  leaguerookiegoalieai               4        0  -1 (parent max_records)             0
+PjxU  insert  QfUJ  leagueteamstrategies               8       64  declared                          512
+BRfb  delete  QfUJ  leagueteamstrategies               4        0  -1 (parent max_records)             0
+ukol  update  QfUJ  leagueteamstrategies               8        0  -1 (parent max_records)             0
+yACS  insert  xLuM  leaguegmdata                     140       32  declared                         4480
+kOYd  delete  xLuM  leaguegmdata                       4        0  -1 (parent max_records)             0
+Lvfj  update  xLuM  leaguegmdata                     140        0  -1 (parent max_records)             0
+DbqI  insert  AebM  leaguerookieskaterai              28      160  declared                         4480
+hxYn  delete  AebM  leaguerookieskaterai               4        0  -1 (parent max_records)             0
+keBr  insert  kPYO  leaguegamestats                   16     2700  declared                        43200
+moPE  delete  kPYO  leaguegamestats                    4        0  -1 (parent max_records)             0
+Bqtt  insert  NFkQ  leagueplayercareerplayoffsstats    12     3000  declared                        36000
+PcXC  delete  NFkQ  leagueplayercareerplayoffsstats     4        0  -1 (parent max_records)             0
+gxsA  update  NFkQ  leagueplayercareerplayoffsstats    12        0  -1 (parent max_records)             0
+aakN  insert  XrSd  leaguerookieplayerbiotable       140      160  declared                        22400
+ksqi  delete  XrSd  leaguerookieplayerbiotable         4        0  -1 (parent max_records)             0
+LpZo  update  XrSd  leaguerookieplayerbiotable         4        0  -1 (parent max_records)             0
+JvZd  insert  wcLl  leaguetweaks                     256        4  declared                         1024
+zFDS  delete  wcLl  leaguetweaks                       4        0  -1 (parent max_records)             0
+wAMQ  update  wcLl  leaguetweaks                     256        0  -1 (parent max_records)             0
+eiHK  insert  PSFv  leaguearena                      104       64  declared                         6656
+coVl  delete  PSFv  leaguearena                        4        0  -1 (parent max_records)             0
+TVyb  update  PSFv  leaguearena                      104        0  declared                            0
+xRqk  insert  dDxH  leaguerookieskaterequipment       12      160  declared                         1920
+nzkL  delete  dDxH  leaguerookieskaterequipment        4        0  -1 (parent max_records)             0
+ikxE  insert  SsSL  leaguecustompalettetable           4       20  declared                           80
+sqTr  delete  SsSL  leaguecustompalettetable           4        0  -1 (parent max_records)             0
+DnUx  update  SsSL  leaguecustompalettetable           4        0  -1 (parent max_records)             0
+lWmS  insert  FekM  leaguecustomfacetable              8      180  declared                         1440
+rccd  delete  FekM  leaguecustomfacetable              4        0  -1 (parent max_records)             0
+EZbT  update  FekM  leaguecustomfacetable              4        0  declared                            0
+HPAr  insert  wFSR  leagueteamseasonstats             36     1600  declared                        57600
+BJaE  delete  wFSR  leagueteamseasonstats              4        0  -1 (parent max_records)             0
+uMRy  update  wFSR  leagueteamseasonstats             36        0  -1 (parent max_records)             0
+caki  insert  ulvZ  leaguerookiegoalieequipment       12       60  declared                          720
+qweN  delete  ulvZ  leaguerookiegoalieequipment        4        0  -1 (parent max_records)             0
+FdZT  update  ulvZ  leaguerookiegoalieequipment        4        0  declared                            0
+SbrI  insert  Ewsk  leagueteamplayoffsstats           36      800  declared                        28800
+wJln  delete  Ewsk  leagueteamplayoffsstats            4        0  -1 (parent max_records)             0
+zMit  update  Ewsk  leagueteamplayoffsstats           32        0  -1 (parent max_records)             0
+oiax  insert  ZXww  leaguenews                        32       64  declared                         2048
+egAy  delete  ZXww  leaguenews                         4        0  -1 (parent max_records)             0
+Rlnw  update  ZXww  leaguenews                        32        0  declared                            0
+OpEZ  insert  TKKI  leagueplayercareerseasonstats     16     3000  declared                        48000
+UfKW  delete  TKKI  leagueplayercareerseasonstats      4        0  -1 (parent max_records)             0
+byFg  update  TKKI  leagueplayercareerseasonstats     16        0  -1 (parent max_records)             0
+OcqD  insert  TlmR  leagueteampractice                 8       64  declared                          512
+UqYs  delete  TlmR  leagueteampractice                 4        0  -1 (parent max_records)             0
+bnru  update  TlmR  leagueteampractice                 8        0  -1 (parent max_records)             0
+DnxP  insert  sbGR  leagueteams                      208       64  declared                        13312
+dlfg  delete  sbGR  leagueteams                        4        0  -1 (parent max_records)             0
+SoUW  update  sbGR  leagueteams                        4        0  -1 (parent max_records)             0
+sFFn  insert  LwGR  leaguecustomteamequipmenttable    32      600  declared                        19200
+OTLI  delete  LwGR  leaguecustomteamequipmenttable     4        0  -1 (parent max_records)             0
+hygK  update  LwGR  leaguecustomteamequipmenttable    32        0  declared                            0
+naRH  insert  vHJZ  leagueoptions                    256        1  declared                          256
+lYzo  delete  vHJZ  leagueoptions                      4        0  -1 (parent max_records)             0
+KtUe  update  vHJZ  leagueoptions                    256        0  -1 (parent max_records)             0
+ZCvv  insert  uGze  leagueemaildata                    8     1200  declared                         9600
+zYhA  delete  uGze  leagueemaildata                    4        0  -1 (parent max_records)             0
+gTQc  insert  Icui  leaguerules                      256        2  declared                          512
+CpyT  delete  Icui  leaguerules                        4        0  -1 (parent max_records)             0
+tktN  update  Icui  leaguerules                      256        0  -1 (parent max_records)             0
+ULcv  insert  yvnq  leaguescheduletable                8     2700  declared                        21600
+CRmA  delete  yvnq  leaguescheduletable                4        0  -1 (parent max_records)             0
+tMBG  update  yvnq  leaguescheduletable                8        0  -1 (parent max_records)             0
+ogsK  insert  wiLv  leagueskaterai                    52     3000  declared                       156000
+eiil  delete  wiLv  leagueskaterai                     4        0  -1 (parent max_records)             0
+RPlb  update  wiLv  leagueskaterai                    52        0  -1 (parent max_records)             0
+vmSc  insert  kPCA  leaguegoalieai                    48      600  declared                        28800
+ZkIT  delete  kPCA  leaguegoalieai                     4        0  -1 (parent max_records)             0
+WpPN  update  kPCA  leaguegoalieai                    48        0  -1 (parent max_records)             0
+INYI  insert  sDbJ  leaguedraftpick                    4      150  declared                          600
+CHqn  delete  sDbJ  leaguedraftpick                    4        0  -1 (parent max_records)             0
+talx  update  sDbJ  leaguedraftpick                    4        0  -1 (parent max_records)             0
+fcdR  insert  MMxP  leagueplayerbiotable             188     3000  declared                       564000
+lWze  delete  MMxP  leagueplayerbiotable               4        0  -1 (parent max_records)             0
+Krok  update  MMxP  leagueplayerbiotable              12        0  -1 (parent max_records)             0
+aAMH  insert  juMS  leagueplayerplayoffsstats         28     7200  declared                       201600
+gSOo  delete  juMS  leagueplayerplayoffsstats          4        0  -1 (parent max_records)             0
+PPFi  update  juMS  leagueplayerplayoffsstats         24        0  -1 (parent max_records)             0
+sum(capacity x rec_bytes) = 1851752 ; zero tail = 1356268 ; difference = -495484 ; schema(db_size) + capacity = 2377168 ; file - TDB base = 1881684
+parents in save group 'dynasty' with no companion in this save: none
+

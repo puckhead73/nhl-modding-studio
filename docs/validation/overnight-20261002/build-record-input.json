@@ -1,0 +1,22 @@
+{
+  "candidate": "NHL Modding Studio rc-20261002-r74",
+  "built": "2026-10-02T13:17:01.1330873-06:00 .. 2026-10-02T13:23:50.038689-06:00",
+  "command": "npm run build (existing release profile and build cache)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 1052,
+  "dirty_manifest_sha256": "3ca771052f05511e84f74160dafe080beff292fa0d3b022939b0d5e651260e21",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "c0a061f77938955e8db70996b0edee8c593985fcdab1870a518f009bd7334a5e",
+  "exe_bytes": 53936128,
+  "defs_tree_sha256": "20c3b1833a4ce1125a2cc58d1b67a0cda2c6feaaf0b75b2ad0c0f711438fcf8b",
+  "frontend_dist_tree_sha256": "00ee68e6cdc0b1652fabb31d9085eb739ed2da02787e40188f98b27ab5169ba6",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "anchors_tree_sha256": "170fcc9a3b8b8cc57a90f71e418d072d0ca51a02a86410afbcbf6f9a815e1fb9",
+  "baseline_inventory_sha256": "a78c50ccd481db8b3ff430f371905ae95284d3eaf2a1e83b85535b48d1892aa7",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "r73 plus overnight 2026-10-02: native team naming, league lifecycle crash, asset roots and relink discovery, interface and error improvements. Full roadmap remains incomplete; see session receipt.",
+  "tree_sha_definition": "SHA-256 of '<relpath>\\t<sha256>\\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

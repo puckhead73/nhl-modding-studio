@@ -16,7 +16,9 @@ use tdb_enums::EnumRegistry;
 use tdb_savedata::SaveContainer;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 const DB: &str = "anchors/ps3/nhllegacy/databases/nhlng.db";
@@ -25,7 +27,14 @@ const DEFS: &str = "defs";
 const V4_SAVE: &str = "anchors/ps3/nhllegacy/savefiles/BLUS315400200 - ROSTER/SYS-DATA";
 
 fn load_nhlng() -> Project {
-    Project::load(repo(DB), Platform::Ps3, ProjectRole::Nhlng, repo(META), repo(DEFS)).unwrap()
+    Project::load(
+        repo(DB),
+        Platform::Ps3,
+        ProjectRole::Nhlng,
+        repo(META),
+        repo(DEFS),
+    )
+    .unwrap()
 }
 
 /// The first roster slot that resolves to a player — a valid `(team, player)` pair for edit ops.
@@ -53,12 +62,19 @@ fn strategy_edit_applies_and_jufq_mirror_noops_on_stock() {
         .iter()
         .find(|c| c.field.studio_field == "RBGh")
         .unwrap();
-    let new_value = if forecheck.field.decoded == Some(0) { 1 } else { 0 };
+    let new_value = if forecheck.field.decoded == Some(0) {
+        1
+    } else {
+        0
+    };
 
     let outcome = session
         .set_field("EeYo", strat.record, "RBGh", FieldValue::Int(new_value))
         .unwrap();
-    assert_eq!(outcome.edits, 1, "stock JUfQ is empty — the mirror must not fire");
+    assert_eq!(
+        outcome.edits, 1,
+        "stock JUfQ is empty — the mirror must not fire"
+    );
     assert!(
         !outcome.repairs.iter().any(|r| r.contains("JUfQ")),
         "no mirror note on a no-op"
@@ -71,7 +87,10 @@ fn strategy_edit_applies_and_jufq_mirror_noops_on_stock() {
         .find(|c| c.field.studio_field == "RBGh")
         .unwrap();
     assert_eq!(cell.field.decoded, Some(new_value), "the edit round-trips");
-    assert!(cell.field.enum_label.is_some(), "the new value resolves a label");
+    assert!(
+        cell.field.enum_label.is_some(),
+        "the new value resolves a label"
+    );
 }
 
 /// Load → save with no edit reproduces the raw `.db` file byte-for-byte (the round-trip gate).
@@ -136,7 +155,11 @@ fn undo_redo_restores_and_reapplies() {
 
     assert!(session.redo());
     assert!(session.is_dirty());
-    assert_eq!(session.bytes(), edited.as_slice(), "redo reproduces the edit");
+    assert_eq!(
+        session.bytes(),
+        edited.as_slice(),
+        "redo reproduces the edit"
+    );
     assert!(!session.redo(), "nothing left to redo");
 }
 
@@ -159,7 +182,10 @@ fn v4_container_save_spine_round_trips() {
     let saved = session.save().unwrap();
 
     let container = SaveContainer::parse(&saved).unwrap();
-    assert!(container.checksums_valid(), "repacked container checksums verify");
+    assert!(
+        container.checksums_valid(),
+        "repacked container checksums verify"
+    );
     assert_eq!(
         container.extract_db().unwrap(),
         inner,
@@ -200,12 +226,24 @@ fn generic_field_edit_validates_and_round_trips() {
     // Out-of-range integer is refused, working bytes untouched.
     let dirty_before = session.bytes().to_vec();
     let err = session.set_field("ubPc", record, "vjla", FieldValue::Int(99));
-    assert!(matches!(err, Err(DomainError::Edit(_))), "out-of-range rejected");
-    assert_eq!(session.bytes(), dirty_before.as_slice(), "rejected edit changed nothing");
+    assert!(
+        matches!(err, Err(DomainError::Edit(_))),
+        "out-of-range rejected"
+    );
+    assert_eq!(
+        session.bytes(),
+        dirty_before.as_slice(),
+        "rejected edit changed nothing"
+    );
 
     // String edit round-trips through a save + reparse.
     session
-        .set_field("ubPc", record, &first_field, FieldValue::Text("Wayne".into()))
+        .set_field(
+            "ubPc",
+            record,
+            &first_field,
+            FieldValue::Text("Wayne".into()),
+        )
         .unwrap();
     let saved = session.save().unwrap();
     let db2 = TdbFile::parse(&saved).unwrap();
@@ -273,7 +311,16 @@ fn ps4_save_roster_opens_and_repacks() {
 
     // Save repacks the DATA stream; the inner roster survives the LZ4 round-trip.
     let saved = session.save().unwrap();
-    assert_eq!(tdb_savedata::ps4_extract_roster(&saved).unwrap(), inner);
+    let payload = tdb_savedata::ps4_extract_roster(&saved).unwrap();
+    assert_eq!(&payload[..inner.len()], inner);
+    let original = tdb_savedata::ps4_extract_roster(&std::fs::read(repo(PS4_DATA)).unwrap()).unwrap();
+    assert_eq!(payload, original, "the opaque trailer also survives the no-op save");
+    if let Source::Ps4Save { trailer, .. } = session.project().source() {
+        assert!(!trailer.is_empty(), "NHL19 fixture must exercise the trailer boundary");
+        let mut grown = inner.clone();
+        grown.push(0);
+        assert!(session.project().package(&grown).is_err(), "growth must not move the opaque trailer");
+    }
 }
 
 /// NHL16 is the bridge PS4 title: its save uses the **bare-frame** variant (no `01` codec byte) and a
@@ -283,10 +330,20 @@ fn ps4_nhl16_bare_frame_save_opens_and_repacks() {
     const DATA: &str = "anchors/ps4/nhl16/savefiles/84f8102f - ROSTER/DATA";
     const META: &str = "anchors/ps4/nhl16/databases/nhl_game-meta.xml";
 
-    let project = Project::load(repo(DATA), Platform::Ps4, ProjectRole::Roster, repo(META), repo(DEFS)).unwrap();
+    let project = Project::load(
+        repo(DATA),
+        Platform::Ps4,
+        ProjectRole::Roster,
+        repo(META),
+        repo(DEFS),
+    )
+    .unwrap();
     assert!(matches!(project.source(), Source::Ps4Save { .. }));
     let inner = project.db_bytes().to_vec();
-    assert!(project.db_bytes().len() > 1_000_000, "a substantial inner roster");
+    assert!(
+        project.db_bytes().len() > 1_000_000,
+        "a substantial inner roster"
+    );
 
     let session = EditSession::begin(project);
     let saved = session.save().unwrap();
@@ -337,8 +394,16 @@ fn career_season_add_edit_delete_round_trip() {
 
     let after = session.career_stats(player).unwrap();
     assert_eq!(rows_before(&after), n0 + 1, "one new season row");
-    let sec = after.sections.iter().find(|s| s.kind == "skater_season").unwrap();
-    let row = sec.rows.iter().find(|r| r.record == record).expect("new row visible");
+    let sec = after
+        .sections
+        .iter()
+        .find(|s| s.kind == "skater_season")
+        .unwrap();
+    let row = sec
+        .rows
+        .iter()
+        .find(|r| r.record == record)
+        .expect("new row visible");
     assert_eq!(row.season_label, "2015-16");
     assert_eq!(row.league_label, "AHL");
     assert_eq!(row.team, "PIT");
@@ -358,7 +423,11 @@ fn career_season_add_edit_delete_round_trip() {
         )
         .unwrap();
     let edited = session.career_stats(player).unwrap();
-    let sec = edited.sections.iter().find(|s| s.kind == "skater_season").unwrap();
+    let sec = edited
+        .sections
+        .iter()
+        .find(|s| s.kind == "skater_season")
+        .unwrap();
     let row = sec.rows.iter().find(|r| r.record == record).unwrap();
     assert_eq!(row.cells[g].as_ref().unwrap().decoded, Some(30));
 
@@ -377,5 +446,8 @@ fn career_season_add_edit_delete_round_trip() {
 
     // Fully undoable: three ops staged → three undos return to the pristine bytes.
     assert!(session.undo() && session.undo() && session.undo());
-    assert!(!session.is_dirty(), "undo restores the pristine working bytes");
+    assert!(
+        !session.is_dirty(),
+        "undo restores the pristine working bytes"
+    );
 }

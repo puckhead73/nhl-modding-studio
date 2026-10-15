@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router-dom";
 import { ProjectProvider } from "./lib/project";
 import { SettingsProvider } from "./lib/settings";
 import { RosterCartProvider } from "./lib/rosterCart";
+import { WindowCloseGuard } from "./components/WindowCloseGuard";
 import { router } from "./routes";
 import "./index.css";
 
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <SettingsProvider>
         <ProjectProvider>
+          <WindowCloseGuard />
           <RosterCartProvider>
             <RouterProvider router={router} />
           </RosterCartProvider>

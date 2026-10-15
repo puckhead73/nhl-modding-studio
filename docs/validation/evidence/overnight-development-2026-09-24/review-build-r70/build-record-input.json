@@ -1,0 +1,22 @@
+{
+  "candidate": "NHL Modding Studio rc-20261001-r70",
+  "built": "2026-10-01T16:29:23-06:00 .. 2026-10-01T16:32:50-06:00",
+  "command": "CARGO_INCREMENTAL=0 npm run build -- --no-bundle (repo root; tauri build; existing target\\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 1011,
+  "dirty_manifest_sha256": "2e570b843879d478fe3b8232a206ec496370c35f1261242140d81c5ae3700d9e",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "56af771f2e484a95d7202dafe0e8124735d24312ab175e4c9f64a94a6d5ecb09",
+  "exe_bytes": 52530688,
+  "defs_tree_sha256": "20c3b1833a4ce1125a2cc58d1b67a0cda2c6feaaf0b75b2ad0c0f711438fcf8b",
+  "frontend_dist_tree_sha256": "be4a903fd6106166f3f8823b552c72a9ae6376e1cb05605059c35ad2530f3830",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "anchors_tree_sha256": "170fcc9a3b8b8cc57a90f71e418d072d0ca51a02a86410afbcbf6f9a815e1fb9",
+  "baseline_inventory_sha256": "a78c50ccd481db8b3ff430f371905ae95284d3eaf2a1e83b85535b48d1892aa7",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "r69 contents (developer receipts through 70) plus 71: ONB-002 \u2014 project folders (bundled baseline inventory, Start fresh / Use my own files, project-owned staging and save, write guards, reviewed deployment with backups and restore, hardened extraction service with Settings \u2192 Tools). Also includes the unrelated pre-existing Cargo.toml dev/test profile change (release profile unchanged).",
+  "tree_sha_definition": "SHA-256 of '<relpath>\\t<sha256>\\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

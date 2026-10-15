@@ -1,0 +1,225 @@
+schema = "appearance-orphan-heads/1"
+name = "Retired / orphan head models"
+notes = """
+Head assets that ship on disk as `player_<id>.rx2` but are assigned to no
+roster player in the title's DB — leftovers from an earlier game/roster whose
+player was since removed. Because no bio row references them, the studio's
+head census can't read their name from the database, so the appearance
+sweep would otherwise file them as bare `generic_<id>`. This table restores
+their real identity: a swept head whose id matches an entry here is named for
+the player it modelled and tagged `retired`.
+
+Provenance: adapted from an operator-curated head-id registry (roster
+"head IDs.txt", 2015-16 era) — specifically its hand-named orphan section,
+which identified these from reference data. IDs are per-title (a head id is
+assigned per roster), so every entry is scoped to the `game` its ids were
+verified against. Only add a (game, id) pair once it is confirmed both
+unreferenced in that title's DB and present on disk as `player_<id>.rx2`.
+"""
+
+# NHL Legacy (RenderWare, GEN7). Generated against the Legacy-era nhlng.db;
+# not assumed to hold for any other title until separately verified.
+
+[[head]]
+game = "nhllegacy"
+id = 66
+last = "Beaulieu"
+first = "Nathan"
+
+[[head]]
+game = "nhllegacy"
+id = 103
+last = "Boyes"
+first = "Brad"
+
+[[head]]
+game = "nhllegacy"
+id = 108
+last = "Brashear"
+first = "Donald"
+
+[[head]]
+game = "nhllegacy"
+id = 173
+last = "Cole"
+first = "Erik"
+
+[[head]]
+game = "nhllegacy"
+id = 177
+last = "Connolly"
+first = "Tim"
+
+[[head]]
+game = "nhllegacy"
+id = 178
+last = "Conroy"
+first = "Craig"
+
+[[head]]
+game = "nhllegacy"
+id = 179
+last = "Cooke"
+first = "Matt"
+
+[[head]]
+game = "nhllegacy"
+id = 186
+last = "Cullen"
+first = "Matt"
+
+[[head]]
+game = "nhllegacy"
+id = 194
+last = "Cumiskey"
+first = "Kyle"
+
+[[head]]
+game = "nhllegacy"
+id = 260
+last = "Fedotenko"
+first = "Ruslan"
+
+[[head]]
+game = "nhllegacy"
+id = 281
+last = "Forsberg"
+first = "Peter"
+
+[[head]]
+game = "nhllegacy"
+id = 346
+last = "Hasek"
+first = "Dominik"
+
+[[head]]
+game = "nhllegacy"
+id = 383
+last = "Hossa"
+first = "Marcel"
+
+[[head]]
+game = "nhllegacy"
+id = 430
+last = "Kariya"
+first = "Paul"
+
+[[head]]
+game = "nhllegacy"
+id = 532
+last = "Liles"
+first = "John-Michael"
+
+[[head]]
+game = "nhllegacy"
+id = 565
+last = "Malik"
+first = "Marek"
+
+[[head]]
+game = "nhllegacy"
+id = 575
+last = "Markov"
+first = "Andrei"
+
+[[head]]
+game = "nhllegacy"
+id = 629
+last = "Modin"
+first = "Fredrik"
+
+[[head]]
+game = "nhllegacy"
+id = 675
+last = "Niedermayer"
+first = "Rob"
+
+[[head]]
+game = "nhllegacy"
+id = 676
+last = "Niedermayer"
+first = "Scott"
+
+[[head]]
+game = "nhllegacy"
+id = 692
+last = "Nylander"
+first = "Michael"
+
+[[head]]
+game = "nhllegacy"
+id = 815
+last = "Rucinsky"
+first = "Martin"
+
+[[head]]
+game = "nhllegacy"
+id = 909
+last = "Staios"
+first = "Stephen"
+
+[[head]]
+game = "nhllegacy"
+id = 939
+last = "Sutton"
+first = "Andy"
+
+[[head]]
+game = "nhllegacy"
+id = 940
+last = "Svatos"
+first = "Marek"
+
+[[head]]
+game = "nhllegacy"
+id = 946
+last = "Sykora"
+first = "Petr"
+
+[[head]]
+game = "nhllegacy"
+id = 951
+last = "Tanguay"
+first = "Alex"
+
+[[head]]
+game = "nhllegacy"
+id = 962
+last = "Thomas"
+first = "Tim"
+
+[[head]]
+game = "nhllegacy"
+id = 1000
+last = "Vanek"
+first = "Thomas"
+
+[[head]]
+game = "nhllegacy"
+id = 1011
+last = "Vokoun"
+first = "Tomas"
+
+[[head]]
+game = "nhllegacy"
+id = 1066
+last = "Yzerman"
+first = "Steve"
+
+[[head]]
+game = "nhllegacy"
+id = 8274
+last = "Stevens"
+first = "Scott"
+
+[[head]]
+game = "nhllegacy"
+id = 8323
+last = "Hull"
+first = "Brett"
+
+[[head]]
+game = "nhllegacy"
+id = 10273
+last = "Tarasenko"
+first = "Vladimir"

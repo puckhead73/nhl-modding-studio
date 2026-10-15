@@ -1,0 +1,213 @@
+// @vitest-environment jsdom
+//
+// N21-001 — PS4 onboarding with an independent game folder and save-data folder: the fields shown,
+// the suggested save-data folder, that both paths and the chosen roster save reach the backend
+// commands, the remembered entry, an older emulator-folder entry, several game folders, distinct
+// problems and a stale remembered roster. Component evidence only (jsdom); discovery and opening
+// are the Rust suites' job (studio-domain discovery, studio-api ps4_onboarding_paths).
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MemoryRouter } from "react-router-dom";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { InstallReportDto } from "../bindings/InstallReportDto";
+import type { SaveSlotDto } from "../bindings/SaveSlotDto";
+
+const calls: Array<{ cmd: string; args: any }> = [];
+const handlers: Record<string, (args: any) => unknown> = {};
+vi.mock("../lib/client", () => ({
+  call: (cmd: string, args: unknown) => {
+    calls.push({ cmd, args });
+    const h = handlers[cmd];
+    if (!h) return Promise.reject(new Error(`unmocked command ${cmd}`));
+    return Promise.resolve().then(() => h(args));
+  },
+}));
+const opened: unknown[] = [];
+vi.mock("../lib/project", () => ({
+  useProject: () => ({ project: null, open: (...a: unknown[]) => opened.push(a) }),
+}));
+vi.mock("@tauri-apps/plugin-dialog", () => ({ open: vi.fn() }));
+vi.mock("../components/IsoOpenPanel", () => ({ IsoOpenPanel: () => null }));
+vi.mock("../components/LingeringProjectNotice", () => ({ LingeringProjectNotice: () => null }));
+
+import { OpenProject } from "./OpenProject";
+import { SettingsProvider } from "../lib/settings";
+
+const SUGGESTED = "C:\\Users\\tester\\AppData\\Roaming\\shadPS4\\savedata";
+const GAME = "D:\\PS4 Games\\hockey twenty-one";
+const STORAGE_KEY = "nhl-modding-studio.settings.v1";
+
+function roster(profile: string, save = "RosterCustom0"): SaveSlotDto {
+  return {
+    kind: "roster",
+    label: "Roster",
+    path: `${SUGGESTED}\\${profile}\\CUSA18182\\${save}\\DATA`,
+    container_version: "ps4",
+    writable: true,
+    profile,
+    title_id: "CUSA18182",
+    problem: null,
+  };
+}
+
+function report(over: Partial<InstallReportDto> = {}): InstallReportDto {
+  return {
+    game_id: "nhl21",
+    platform: "ps4",
+    picked_root: GAME,
+    install_dir: `${GAME}\\nhl\\data\\common\\gamemodes\\database\\t3db`,
+    nhlng_path: `${GAME}\\nhl\\data\\common\\gamemodes\\database\\t3db\\nhl_game.db`,
+    localization_path: null,
+    meta_xml_path: `${GAME}\\nhl\\data\\common\\gamemodes\\database\\t3db\\nhl_game-meta.xml`,
+    saves: [roster("1"), roster("2")],
+    minimum_met: true,
+    extract_needed: false,
+    has_existing_profile: false,
+    game_dir: GAME,
+    save_root: SUGGESTED,
+    game_candidates: [
+      { path: GAME, title: "NHL™ 21", title_id: "CUSA18182", content_id: "EP0006-CUSA18182_00-NHLICEHOCKEY2021", app_version: "01.00", matches: true, reason: null },
+    ],
+    problems: [],
+    ...over,
+  };
+}
+
+function renderPage() {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+  return render(
+    <QueryClientProvider client={qc}>
+      <SettingsProvider>
+        <MemoryRouter>
+          <OpenProject />
+        </MemoryRouter>
+      </SettingsProvider>
+    </QueryClientProvider>,
+  );
+}
+
+const lastCall = (cmd: string) => [...calls].reverse().find((c) => c.cmd === cmd);
+const gameInput = () => screen.getByPlaceholderText("e.g. D:/PS4 Games/CUSA18182") as HTMLInputElement;
+const saveInput = () => screen.getByLabelText("Save-data folder") as HTMLInputElement;
+const openButton = () => screen.getByRole("button", { name: "Open project" }) as HTMLButtonElement;
+
+beforeEach(() => {
+  calls.length = 0;
+  opened.length = 0;
+  localStorage.clear();
+  for (const k of Object.keys(handlers)) delete handlers[k];
+  handlers.ps4_save_root_suggestion = () => ({ path: SUGGESTED, exists: true });
+  handlers.detect_install = () => report();
+  handlers.open_workspace = () => ({ project_id: 1 });
+});
+afterEach(() => cleanup());
+
+describe("PS4 onboarding (N21-001)", () => {
+  it("asks for the game folder and a separate save-data folder, and sends both plus the chosen roster", async () => {
+    renderPage();
+    fireEvent.click(screen.getByText("NHL 21"));
+    expect(screen.getByText("Game folder")).toBeTruthy();
+    expect(screen.queryByText(/shadPS4\.exe/)).toBeNull();
+    // A fresh setup starts from this user's suggested save-data folder.
+    await waitFor(() => expect(saveInput().value).toBe(SUGGESTED));
+
+    fireEvent.change(gameInput(), { target: { value: GAME } });
+    await waitFor(() => expect(lastCall("detect_install")).toBeTruthy());
+    expect(lastCall("detect_install")!.args).toEqual({ gameId: "nhl21", platform: "ps4", root: GAME, savePath: SUGGESTED });
+
+    // Two roster saves: nothing opens until one is chosen.
+    await screen.findByText(/Several roster saves were found/);
+    expect(screen.getByText(/NHL™ 21 · CUSA18182 · Europe · v01.00/)).toBeTruthy();
+    expect(openButton().disabled).toBe(true);
+    fireEvent.click(screen.getAllByRole("radio")[1]);
+    expect(openButton().disabled).toBe(false);
+    fireEvent.click(openButton());
+    await waitFor(() => expect(lastCall("open_workspace")).toBeTruthy());
+    expect(lastCall("open_workspace")!.args).toMatchObject({ root: GAME, savePath: SUGGESTED, rosterSave: roster("2").path });
+    await waitFor(() => expect(opened.length).toBe(1));
+
+    // Both locations and the roster choice are remembered for the next start.
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY)!);
+    expect(stored.paths["nhl21:ps4"]).toEqual({ root: GAME, savePath: SUGGESTED, saveFile: roster("2").path });
+  });
+
+  it("keeps an older emulator-folder entry as it was and offers the suggested save-data folder", async () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ defaultGameId: null, defaultPlatform: null, paths: { "nhl21:ps4": { root: "H:\\Emulators\\ShadPS4", savePath: "" } } }));
+    handlers.detect_install = () => report({ saves: [roster("1")], save_root: "H:\\Emulators\\ShadPS4\\user\\savedata" });
+    renderPage();
+    fireEvent.click(screen.getByText("NHL 21"));
+    await waitFor(() => expect(lastCall("detect_install")).toBeTruthy());
+    expect(lastCall("detect_install")!.args).toMatchObject({ root: "H:\\Emulators\\ShadPS4", savePath: null });
+    expect(saveInput().value).toBe("");
+    await screen.findByText(/older shadPS4-folder setup/);
+    // A single roster needs no choice.
+    expect(openButton().disabled).toBe(false);
+
+    fireEvent.click(screen.getByRole("button", { name: "Use it" }));
+    expect(saveInput().value).toBe(SUGGESTED);
+    await waitFor(() => expect(lastCall("detect_install")!.args.savePath).toBe(SUGGESTED));
+  });
+
+  it("lists several matching game folders without choosing one, and shows each problem separately", async () => {
+    const second = "D:\\PS4 Games\\NHL 21 copy";
+    handlers.detect_install = ({ root }: { root: string }) =>
+      root === "D:\\PS4 Games"
+        ? report({
+            game_dir: null,
+            nhlng_path: null,
+            meta_xml_path: null,
+            install_dir: null,
+            minimum_met: false,
+            saves: [],
+            game_candidates: [
+              { path: GAME, title: "NHL™ 21", title_id: "CUSA18182", content_id: "EP0006-CUSA18182_00-NHLICEHOCKEY2021", app_version: "01.00", matches: true, reason: null },
+              { path: second, title: "NHL™ 21", title_id: "CUSA18182", content_id: "UP0006-CUSA18182_00-NHLICEHOCKEY2021", app_version: "01.02", matches: true, reason: null },
+            ],
+            problems: [
+              { kind: "game_ambiguous", message: "2 NHL 21 game folders were found in D:\\PS4 Games. Choose the one to open." },
+              { kind: "saves_other_title", message: "No NHL 21 saves were found; the saves there belong to CUSA15439 (expected CUSA18182)." },
+            ],
+          })
+        : report({ picked_root: root, game_dir: root });
+    renderPage();
+    fireEvent.click(screen.getByText("NHL 21"));
+    fireEvent.change(gameInput(), { target: { value: "D:\\PS4 Games" } });
+    await screen.findByText(/2 NHL 21 game folders were found/);
+    const problems = screen.getByRole("list", { name: "Problems" }).querySelectorAll("li");
+    expect([...problems].map((li) => li.getAttribute("data-kind"))).toEqual(["game_ambiguous", "saves_other_title"]);
+    expect(openButton().disabled).toBe(true);
+    expect(screen.getByText(/North America · v01.02/)).toBeTruthy();
+
+    fireEvent.click(screen.getAllByRole("button", { name: "Use this folder" })[1]);
+    expect(gameInput().value).toBe(second);
+    await waitFor(() => expect(lastCall("detect_install")!.args.root).toBe(second));
+  });
+
+  it("flags a remembered roster save that is no longer listed and asks for a new choice", async () => {
+    handlers.detect_install = () => report({ saves: [roster("1")] });
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ defaultGameId: null, defaultPlatform: null, paths: { "nhl21:ps4": { root: GAME, savePath: SUGGESTED, saveFile: `${SUGGESTED}\\3\\CUSA18182\\RosterCustom0\\DATA` } } }),
+    );
+    renderPage();
+    fireEvent.click(screen.getByText("NHL 21"));
+    await screen.findByText(/isn't in this save-data folder any more/);
+    expect(openButton().disabled).toBe(true);
+    fireEvent.click(screen.getAllByRole("radio")[0]);
+    expect(screen.queryByText(/isn't in this save-data folder any more/)).toBeNull();
+    fireEvent.click(openButton());
+    await waitFor(() => expect(lastCall("open_workspace")!.args.rosterSave).toBe(roster("1").path));
+  });
+
+  it("leaves the Xbox route unchanged: required save location, no PS4 suggestion", async () => {
+    renderPage();
+    fireEvent.click(screen.getByText("NHL 14"));
+    fireEvent.click(screen.getByText("Xbox 360"));
+    expect(screen.getByText("Save file location")).toBeTruthy();
+    fireEvent.change(screen.getByPlaceholderText("e.g. C:/Games/NHL14"), { target: { value: "E:\\x360\\NHL14" } });
+    await new Promise((r) => setTimeout(r, 600));
+    expect(calls.some((c) => c.cmd === "detect_install")).toBe(false);
+    expect(calls.some((c) => c.cmd === "ps4_save_root_suggestion")).toBe(false);
+  });
+});
+

@@ -2,8 +2,14 @@
 
 > **Status:** 📋 scoped 2026-07-26. Sequenced by dependency; each sub-phase is gated by *verified*
 > round-trip per (title, platform) — **proven-first, never big-bang**. Follows Phase 5 (Roster
-> Builder + manual construction). Architecture: [../DESIGN.md](../DESIGN.md); roadmap slot:
+> Builder + manual construction). Architecture: [../DESIGN.md](../DESIGN.md); original roadmap slot:
 > [../ROADMAP.md](../ROADMAP.md) Phase 6.
+>
+> **Sequencing update (2026-09-07):** current execution order for this work lives in the
+> [project completion roadmap](project-completion-roadmap.md) — milestones C3/C3a (shared asset
+> writes and Ignite archive-backed texture editing), C4 (2D workflows), C5 (mesh, Appearance Studio,
+> Hockey Shop, headmesh) and C7 (audio). The sub-phase content below remains the detailed plan; its
+> 6.x numbering is historical. Nothing here is game-verified.
 
 ## Cross-cutting principles (apply to every sub-phase)
 
@@ -37,16 +43,15 @@ encode/replace direction and the matcher, not decoding.
   existing decode (X360 re-tile→XPR2→RefPack→BIGF; PS4 flat-PNG; PS4 BC7 GNF), byte-identical on a
   vanilla raster then in-game load on a modified one. Output: per-target support rows + fallthrough
   (import-disabled where unproven). *Gates the converter + `portrait_import`/`logo_import`.*
-- **P-S2 — Portrait slug grammar + match key.** Catalogue source-file slug conventions (last, first,
-  DOB, team, disambiguators), reuse `tdb_fhm::slug` folding, and pin the ranked match key
-  (last+DOB → any-fragment → manual browse). Output: slug parser + ambiguity policy. *Gates
-  `portrait_search` + the matcher UX.*
+- **P-S2 — Portrait source index + match review.** Reuse the implemented
+  `tdb-core::dev_key` universal asset slug (`lastname_firstname_dd_mm_yyyy`) and existing EA/FHM
+  bridge. Build the searchable source index and ambiguity/manual-resolution policy; do not reopen
+  slug normalization. *Gates `portrait_search` + the matcher UX.*
 
 ### 6.1 backend
 - **Portrait/Logo asset DB** (SQLite sidecar): index imported source assets with parsed slug fields.
-- **Fuzzy matcher** (the UX you specified): rank candidates by **last-name + DOB** first (high-confidence
-  head of list), fall back to **any-slug-fragment** matches, then **manual browse**. Returns
-  ambiguity-aware candidates, resolved to real subject names.
+- **Portrait matcher/review:** exact universal-slug matches first, then ambiguity/unmatched review and
+  manual browse, resolved to real subject names. It calls the existing bridge-key implementation.
 - **On-import converter:** source (DDS/PNG/…) → the **selected game's format** (P-S1), including
   mip/atlas/pool-vs-bespoke placement. Round-trip proven per target before enabling.
 - **Logo icon generator:** derive each game's required icon/variant set from a source logo, honouring

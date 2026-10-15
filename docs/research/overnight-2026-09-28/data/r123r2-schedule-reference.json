@@ -1,0 +1,4798 @@
+{
+ "note": "R123 revision 2 (28 Sep 2026, research package 2) - research-only REFERENCE validator for grouped / pair-matrix schedule generation.\nNOT Studio code, not the developer's generator and not the game's scheduling algorithm. Revision 1 (`overnight-research-2026-09-26/probes/\nr123_schedule_generation_contract.py`, unchanged) stays the recorded coordinator-replayed result; this file imports its matrix / vector\nhelpers and replaces the request / proposal checks.\n\nChanges from revision 1 (coordinator review 2026-09-28 finding 3):\n  * Q11 validates the odd-host rule by VALUE: allowed 'lower_slot' | 'higher_slot' | 'balance' | {\"a,b\": host}. Codes:\n      Q11  odd counts and no rule;           Q11r unsupported rule text / type ('balance' also refused on phased requests);\n      Q11m malformed or non-canonical key;   Q11h host not one of the pair's two slots, or not an integer;\n      Q11k an odd pair has no key;           Q11x a key names an even pair or a non-participant.\n    JSON duplicate keys collapse in any dict parser - a production reader must reject them at parse time; this reference cannot see them.\n  * 'balance' = a transcription of the developer's documented algorithm (schedule_edit.rs `OddHome::Balance`, read 28 Sep): home totals start\n    at floor(count / 2) per pair; pairs i < j in participant order; host = the club with fewer home games so far, ties to the lower\n    (count, slot) tuple; the host's total grows by one. The reference checks a proposal against that algorithm; it is not a game rule.\n  * Rows carry their ORIGINAL POSITION (list position) and a STORED KEY (`index`) separately. The request table gives `stored_keys`\n    (the source's key at every position; default = positions, for the revision-1 vectors). Kept rows carry `pos`.\n      R2  kept rows: every stored value unchanged at the same position;\n      R3  (revised) every row keeps the source's stored key of its position - a key is never rewritten to force key == position;\n      Q13 the request's kept rows / stored keys are inconsistent with each other (position range, duplicate positions, key mismatch).\n  * R5 now FAILS when an odd pair's host cannot be resolved (revision 1 silently skipped the host check for an unrecognised rule).\n  * R11 (new) a generated game shares a date with a KEPT game of one of its clubs (stock mode: warning). Kept-only double bookings are\n    reported as 'R9-retained' warnings, never failures. R9 keeps its revision-1 meaning (generated vs generated).\n  * No date-packing rule around kept rows is checked (the developer's conservative packer is an implementation choice).\nStock replay (revision 2): reads each shipped table's stored `index` column (revision 1 used the position as the key), reports whether\nstored keys equal positions, the generated-vs-kept and kept-only collisions, the relaxed checks and the fact that quotas / odd hosts are\nderived from the same rows; Austrian phased tables get a static fact record (rows, tags, dates, pairs vs the R113 groups).\nUsage: python r123r2_schedule_reference.py <r113.json> <out.json>\n",
+ "rev1_vectors": [
+  {
+   "vector": "V1 valid partition 2x2, within 2 / across 1, odd pairs hosted by the lower slot",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "V2 valid matrix (3 clubs) with a kept All-Star row; explicit odd hosts",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "V3 valid two-phase request (round 0 full round robin, round 1 within-group block dated after it)",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "F-Q1 non-zero diagonal",
+   "kind": "full",
+   "expected": [
+    "Q1"
+   ],
+   "got": [
+    "Q1"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "matrix must be square over the participants with a zero diagonal"
+   ]
+  },
+  {
+   "vector": "F-Q2 negative entry",
+   "kind": "full",
+   "expected": [
+    "Q2"
+   ],
+   "got": [
+    "Q2"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "matrix entries must be non-negative integers"
+   ]
+  },
+  {
+   "vector": "F-Q2 non-integer entry",
+   "kind": "full",
+   "expected": [
+    "Q2"
+   ],
+   "got": [
+    "Q2"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "matrix entries must be non-negative integers"
+   ]
+  },
+  {
+   "vector": "F-Q3 asymmetric",
+   "kind": "full",
+   "expected": [
+    "Q3"
+   ],
+   "got": [
+    "Q3"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "matrix must be symmetric"
+   ]
+  },
+  {
+   "vector": "F-Q4 total != current_records - kept",
+   "kind": "full",
+   "expected": [
+    "Q4"
+   ],
+   "got": [
+    "Q4"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "upper-triangle total 4 != current_records - kept rows = 5"
+   ]
+  },
+  {
+   "vector": "F-Q5 partition misses a participant",
+   "kind": "full",
+   "expected": [
+    "Q5"
+   ],
+   "got": [
+    "Q5"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "partition must cover every participant exactly once with no empty group"
+   ]
+  },
+  {
+   "vector": "F-Q6 participant not in the slot map",
+   "kind": "full",
+   "expected": [
+    "Q6"
+   ],
+   "got": [
+    "Q6"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "participants must be distinct, at least two, and members of the current slot map"
+   ]
+  },
+  {
+   "vector": "F-Q7 slot beyond a 1-bit field",
+   "kind": "full",
+   "expected": [
+    "Q7"
+   ],
+   "got": [
+    "Q7"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "a slot does not fit the 1-bit home / away field"
+   ]
+  },
+  {
+   "vector": "F-Q8 stale mapping",
+   "kind": "full",
+   "expected": [
+    "Q8"
+   ],
+   "got": [
+    "Q8"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "stale mapping: the slot map changed since the request was built"
+   ]
+  },
+  {
+   "vector": "F-Q9 stock option on another source",
+   "kind": "full",
+   "expected": [
+    "Q9"
+   ],
+   "got": [
+    "Q9"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "stock-shaped option only for the exact source and slot map of its contract; offer user quotas instead"
+   ]
+  },
+  {
+   "vector": "F-Q10 two-phase source flattened to one round tag",
+   "kind": "full",
+   "expected": [
+    "Q10"
+   ],
+   "got": [
+    "Q10"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "this source ships a round-tagged two-phase table; request the phases explicitly or refuse the stock-shaped option"
+   ]
+  },
+  {
+   "vector": "F-Q11 odd counts without a host rule",
+   "kind": "full",
+   "expected": [
+    "Q11"
+   ],
+   "got": [
+    "Q11"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "odd pair counts need a declared rule for which club hosts the extra game"
+   ]
+  },
+  {
+   "vector": "F-Q12 a participant with no games",
+   "kind": "full",
+   "expected": [
+    "Q12"
+   ],
+   "got": [
+    "Q12"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "a participant has no games"
+   ]
+  },
+  {
+   "vector": "F-R1 a row missing (necessarily also a pair count, R4)",
+   "kind": "full",
+   "expected": [
+    "R1",
+    "R4"
+   ],
+   "got": [
+    "R1",
+    "R4"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "7 rows != current_records 8",
+    "round 0: 1 unordered pairs off the requested count, first [(1, 2)]"
+   ]
+  },
+  {
+   "vector": "F-R2 kept row altered",
+   "kind": "full",
+   "expected": [
+    "R2"
+   ],
+   "got": [
+    "R2"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "kept row at position 4 changed or moved"
+   ]
+  },
+  {
+   "vector": "F-R3 index != position",
+   "kind": "full",
+   "expected": [
+    "R3"
+   ],
+   "got": [
+    "R3"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "a row's stored key differs from the source key at its position (keys are never rewritten)"
+   ]
+  },
+  {
+   "vector": "F-R4 pair count off (game moved to another pair)",
+   "kind": "full",
+   "expected": [
+    "R4"
+   ],
+   "got": [
+    "R4"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "round 0: 2 unordered pairs off the requested count, first [(0, 2), (0, 3)]"
+   ]
+  },
+  {
+   "vector": "F-R5 even pair not split",
+   "kind": "full",
+   "expected": [
+    "R5"
+   ],
+   "got": [
+    "R5"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "round 0: 1 pairs break the home / away rule, first [(0, 1, 2, 0)]"
+   ]
+  },
+  {
+   "vector": "F-R5 odd pair hosted by the undeclared side",
+   "kind": "full",
+   "expected": [
+    "R5"
+   ],
+   "got": [
+    "R5"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "round 0: 1 pairs break the home / away rule, first [(0, 2, 0, 1)]"
+   ]
+  },
+  {
+   "vector": "F-R6 self game (necessarily also a pair count, R4)",
+   "kind": "full",
+   "expected": [
+    "R4",
+    "R6"
+   ],
+   "got": [
+    "R4",
+    "R6"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "generated rows: self game or a non-participant slot",
+    "round 0: 1 unordered pairs off the requested count, first [(0, 1)]"
+   ]
+  },
+  {
+   "vector": "F-R7 phase row with the wrong round tag (leaves its phase, R4)",
+   "kind": "full",
+   "expected": [
+    "R4",
+    "R7"
+   ],
+   "got": [
+    "R4",
+    "R7"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "a generated row carries a round tag of no requested phase",
+    "round 1: 1 unordered pairs off the requested count, first [(2, 3)]"
+   ]
+  },
+  {
+   "vector": "F-R8 status written where the field is absent",
+   "kind": "full",
+   "expected": [
+    "R8"
+   ],
+   "got": [
+    "R8"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "status must be written (0) exactly where the field exists"
+   ]
+  },
+  {
+   "vector": "F-R9 generated same-day double booking",
+   "kind": "full",
+   "expected": [
+    "R9"
+   ],
+   "got": [
+    "R9"
+   ],
+   "warnings": [
+    "order"
+   ],
+   "ok": true,
+   "messages": [
+    "2 slot-dates with two generated games, first [(9, 0, 0), (9, 0, 1)]"
+   ]
+  },
+  {
+   "vector": "F-R10 phase 1 dated inside phase 0",
+   "kind": "full",
+   "expected": [
+    "R10"
+   ],
+   "got": [
+    "R10"
+   ],
+   "warnings": [
+    "order"
+   ],
+   "ok": true,
+   "messages": [
+    "phase 1 starts before phase 0 ends"
+   ]
+  }
+ ],
+ "rev2_vectors": [
+  {
+   "vector": "C-1 coordinator case: 2 clubs, 1 game, odd_home=\"invalid-rule\" (request)",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "unsupported odd-host rule 'invalid-rule'; allowed: lower_slot, higher_slot, balance, or a per-pair host map"
+   ]
+  },
+  {
+   "vector": "C-2 same case, proposal checked on its own (no silent host skip)",
+   "kind": "proposal",
+   "expected": [
+    "R5"
+   ],
+   "got": [
+    "R5"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "round 0: 1 odd pairs have no resolvable host (rule 'invalid-rule'), first [(0, 1)]"
+   ]
+  },
+  {
+   "vector": "V4a same shape with lower_slot, proposal 0 hosts",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "F-R5 same shape with lower_slot, proposal 1 hosts",
+   "kind": "full",
+   "expected": [
+    "R5"
+   ],
+   "got": [
+    "R5"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "round 0: 1 pairs break the home / away rule, first [(0, 1, 0, 1)]"
+   ]
+  },
+  {
+   "vector": "F-Q11r rule value 1",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "odd-host rule of type int is not a rule name or a per-pair map"
+   ]
+  },
+  {
+   "vector": "F-Q11r rule value True",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "odd-host rule of type bool is not a rule name or a per-pair map"
+   ]
+  },
+  {
+   "vector": "F-Q11r rule value ['lower_slot']",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "odd-host rule of type list is not a rule name or a per-pair map"
+   ]
+  },
+  {
+   "vector": "F-Q11r rule value 'Lower_Slot'",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "unsupported odd-host rule 'Lower_Slot'; allowed: lower_slot, higher_slot, balance, or a per-pair host map"
+   ]
+  },
+  {
+   "vector": "F-Q11r rule value ' lower_slot'",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "unsupported odd-host rule ' lower_slot'; allowed: lower_slot, higher_slot, balance, or a per-pair host map"
+   ]
+  },
+  {
+   "vector": "F-Q11r rule value ''",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "unsupported odd-host rule ''; allowed: lower_slot, higher_slot, balance, or a per-pair host map"
+   ]
+  },
+  {
+   "vector": "V2r valid explicit map (revision-1 V2 with kept pos)",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "F-Q11k map: missing key 1,2",
+   "kind": "full",
+   "expected": [
+    "Q11k"
+   ],
+   "got": [
+    "Q11k"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "1 odd pairs have no host, first [(1, 2)]"
+   ]
+  },
+  {
+   "vector": "F-Q11x map: extra key for the even pair 0,1",
+   "kind": "full",
+   "expected": [
+    "Q11x"
+   ],
+   "got": [
+    "Q11x"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "host-map key 0,1 names no odd pair of the participants"
+   ]
+  },
+  {
+   "vector": "F-Q11x map: key with a non-participant 2,5",
+   "kind": "full",
+   "expected": [
+    "Q11x"
+   ],
+   "got": [
+    "Q11x"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "host-map key 2,5 names no odd pair of the participants"
+   ]
+  },
+  {
+   "vector": "F-Q11h map: host outside the pair",
+   "kind": "full",
+   "expected": [
+    "Q11h"
+   ],
+   "got": [
+    "Q11h"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "host 1 for pair 0,2 is not one of the pair's two slots"
+   ]
+  },
+  {
+   "vector": "F-Q11h map: host as text",
+   "kind": "full",
+   "expected": [
+    "Q11h"
+   ],
+   "got": [
+    "Q11h"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "host '2' for pair 0,2 is not one of the pair's two slots"
+   ]
+  },
+  {
+   "vector": "F-Q11h map: host as bool",
+   "kind": "full",
+   "expected": [
+    "Q11h"
+   ],
+   "got": [
+    "Q11h"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "host True for pair 0,2 is not one of the pair's two slots"
+   ]
+  },
+  {
+   "vector": "F-Q11m map: non-canonical key 2,0",
+   "kind": "full",
+   "expected": [
+    "Q11k",
+    "Q11m"
+   ],
+   "got": [
+    "Q11k",
+    "Q11m"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "host-map key '2,0' is not a canonical \"lower,higher\" slot pair",
+    "1 odd pairs have no host, first [(0, 2)]"
+   ]
+  },
+  {
+   "vector": "F-Q11m map: malformed key 0-2",
+   "kind": "full",
+   "expected": [
+    "Q11k",
+    "Q11m"
+   ],
+   "got": [
+    "Q11k",
+    "Q11m"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "host-map key '0-2' is not a canonical \"lower,higher\" slot pair",
+    "1 odd pairs have no host, first [(0, 2)]"
+   ]
+  },
+  {
+   "vector": "V5 balance: hosts follow the transcribed algorithm",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "F-R5 balance: pair 0,2 hosted by 0 (algorithm says 2)",
+   "kind": "full",
+   "expected": [
+    "R5"
+   ],
+   "got": [
+    "R5"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "round 0: 1 pairs break the home / away rule, first [(0, 2, 1, 0)]"
+   ]
+  },
+  {
+   "vector": "F-Q11r balance on a phased request",
+   "kind": "full",
+   "expected": [
+    "Q11r"
+   ],
+   "got": [
+    "Q11r"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "'balance' is defined for single-phase requests only (reference transcription of the developer's algorithm)"
+   ]
+  },
+  {
+   "vector": "V6 rule text with no odd pairs is harmless",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "V7 non-positional stored keys kept; kept row at position 5 (key 4)",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [],
+   "ok": true,
+   "messages": []
+  },
+  {
+   "vector": "F-R3 keys rewritten to positions",
+   "kind": "full",
+   "expected": [
+    "R3"
+   ],
+   "got": [
+    "R3"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "a row's stored key differs from the source key at its position (keys are never rewritten)"
+   ]
+  },
+  {
+   "vector": "F-R2 kept row moved one position (own key -> R3; the displaced game and the moved row are misread -> R4, R6)",
+   "kind": "full",
+   "expected": [
+    "R2",
+    "R3",
+    "R4",
+    "R6"
+   ],
+   "got": [
+    "R2",
+    "R3",
+    "R4",
+    "R6"
+   ],
+   "warnings": [
+    "order"
+   ],
+   "ok": true,
+   "messages": [
+    "kept row at position 5 changed or moved",
+    "a row's stored key differs from the source key at its position (keys are never rewritten)",
+    "generated rows: self game or a non-participant slot",
+    "round 0: 1 unordered pairs off the requested count, first [(1, 3)]"
+   ]
+  },
+  {
+   "vector": "F-Q13 kept row key disagrees with the stored key of its position",
+   "kind": "full",
+   "expected": [
+    "Q13"
+   ],
+   "got": [
+    "Q13"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "kept rows / stored keys inconsistent with the source table (position range, duplicate position or key mismatch)"
+   ]
+  },
+  {
+   "vector": "F-R11 generated game 0 v 2 on the kept game date of club 0",
+   "kind": "full",
+   "expected": [
+    "R11"
+   ],
+   "got": [
+    "R11"
+   ],
+   "warnings": [],
+   "ok": true,
+   "messages": [
+    "1 slot-dates where a generated game meets a kept game of the same club, first [(9, 5, 0)]"
+   ]
+  },
+  {
+   "vector": "V8 kept-only double booking is a warning, not a failure",
+   "kind": "full",
+   "expected": [],
+   "got": [],
+   "warnings": [
+    "R9-retained",
+    "order"
+   ],
+   "ok": true,
+   "messages": []
+  }
+ ],
+ "rev1_all_ok": true,
+ "rev2_all_ok": true,
+ "stock_replay": [
+  {
+   "source": "xbox360-nhl07",
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "table": "intldelschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl07",
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "table": "intlelitserienschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl07",
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "table": "intlsmliigaschedule",
+   "model": "irregular",
+   "members": 13,
+   "participants": 13,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 7 pairs break the home / away rule, first [(1, 2, 0, 2), (5, 14, 2, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 17,
+   "participants": 17,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 7 pairs break the home / away rule, first [(0, 4, 1, 3), (1, 13, 4, 1)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 0, 2), (1, 21, 0, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(6, 13, 3, 1)]"
+    ],
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R9",
+     "21 slot-dates with two generated games, first [(0, 1, 1), (0, 1, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R9"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 2, 0), (1, 5, 2, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 7 pairs break the home / away rule, first [(1, 20, 0, 2), (1, 21, 0, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "finnishschedule",
+   "model": "irregular",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(0, 3, 4, 2)]"
+    ],
+    [
+     "R9",
+     "1 slot-dates with two generated games, first [(0, 26, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5",
+    "R9"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 2, 0), (1, 21, 2, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 0, 2), (1, 5, 0, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "finnishschedule",
+   "model": "irregular",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(0, 3, 4, 2)]"
+    ],
+    [
+     "R9",
+     "1 slot-dates with two generated games, first [(0, 26, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5",
+    "R9"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 2, 0), (1, 21, 2, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 4, 0, 2), (1, 5, 0, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 77 pairs break the home / away rule, first [(0, 5, 0, 2), (0, 6, 2, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 10 pairs break the home / away rule, first [(1, 4, 2, 0), (1, 12, 2, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 87 pairs break the home / away rule, first [(0, 6, 3, 0), (0, 12, 0, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 0, 2), (1, 21, 0, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 58 pairs break the home / away rule, first [(0, 5, 0, 3), (0, 13, 4, 6)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(4, 12, 4, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 11,
+   "participants": 11,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 26,
+   "participants": 26,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 6,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 56 pairs break the home / away rule, first [(0, 1, 2, 0), (0, 13, 10, 8)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 11,
+   "participants": 11,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 26,
+   "participants": 26,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 6,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 56 pairs break the home / away rule, first [(0, 1, 2, 0), (0, 13, 10, 8)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "order",
+     "rows are not in season-date order (no evidence that order matters at run time)"
+    ]
+   ],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "austrianschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0,
+    1
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "echlschedule",
+   "model": "irregular",
+   "members": 27,
+   "participants": 27,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 58 pairs break the home / away rule, first [(0, 5, 0, 3), (0, 13, 4, 6)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "finnishschedule",
+   "model": "stock_partition",
+   "members": 15,
+   "participants": 15,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(4, 12, 4, 2)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "swedish2ndschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "czechschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "finnishschedule",
+   "model": "irregular",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 1 pairs break the home / away rule, first [(0, 3, 4, 2)]"
+    ],
+    [
+     "R9",
+     "1 slot-dates with two generated games, first [(0, 26, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5",
+    "R9"
+   ],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "germanschedule",
+   "model": "round_robin",
+   "members": 14,
+   "participants": 14,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "ohlschedule",
+   "model": "irregular",
+   "members": 20,
+   "participants": 20,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "qmjhlschedule",
+   "model": "irregular",
+   "members": 18,
+   "participants": 18,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "swedishschedule",
+   "model": "round_robin",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "swissschedule",
+   "model": "stock_partition",
+   "members": 12,
+   "participants": 12,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 4,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [],
+   "relaxed": [],
+   "self_derived": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "table": "whlschedule",
+   "model": "irregular",
+   "members": 22,
+   "participants": 22,
+   "kept_rows": 0,
+   "kept_examples": [],
+   "round_tags": [
+    0
+   ],
+   "slot_width": 5,
+   "has_index_field": true,
+   "stored_keys_equal_positions": true,
+   "nonpositional_rows": 0,
+   "nonpositional_first": [],
+   "duplicate_keys": 0,
+   "request_failures": [],
+   "proposal_failures": [],
+   "stock_warnings": [
+    [
+     "R5",
+     "round 0: 9 pairs break the home / away rule, first [(1, 20, 2, 0), (1, 21, 2, 0)]"
+    ]
+   ],
+   "relaxed": [
+    "R5"
+   ],
+   "self_derived": true
+  }
+ ],
+ "austrian_phase_facts": [
+  {
+   "source": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "table": "austrianschedule",
+   "rows": 324,
+   "round_tags": [
+    0,
+    1
+   ],
+   "phase1_rows": 60,
+   "phase1_first_last_position": [
+    264,
+    323
+   ],
+   "phase1_contiguous": true,
+   "phase0_last_date": [
+    1,
+    0,
+    27
+   ],
+   "phase1_first_date": [
+    1,
+    1,
+    1
+   ],
+   "phase1_pairs": 30,
+   "phase1_games_within_r113_groups": 60,
+   "r113_groups": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    [
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   ],
+   "phase1_games_per_club": {
+    "0": 10,
+    "1": 10,
+    "2": 10,
+    "3": 10,
+    "4": 10,
+    "5": 10,
+    "6": 10,
+    "7": 10,
+    "8": 10,
+    "9": 10,
+    "10": 10,
+    "11": 10
+   }
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "table": "austrianschedule",
+   "rows": 324,
+   "round_tags": [
+    0,
+    1
+   ],
+   "phase1_rows": 60,
+   "phase1_first_last_position": [
+    264,
+    323
+   ],
+   "phase1_contiguous": true,
+   "phase0_last_date": [
+    1,
+    1,
+    2
+   ],
+   "phase1_first_date": [
+    1,
+    1,
+    22
+   ],
+   "phase1_pairs": 30,
+   "phase1_games_within_r113_groups": 60,
+   "r113_groups": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    [
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   ],
+   "phase1_games_per_club": {
+    "0": 10,
+    "1": 10,
+    "2": 10,
+    "3": 10,
+    "4": 10,
+    "5": 10,
+    "6": 10,
+    "7": 10,
+    "8": 10,
+    "9": 10,
+    "10": 10,
+    "11": 10
+   }
+  },
+  {
+   "source": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "table": "austrianschedule",
+   "rows": 270,
+   "round_tags": [
+    0,
+    1
+   ],
+   "phase1_rows": 50,
+   "phase1_first_last_position": [
+    220,
+    269
+   ],
+   "phase1_contiguous": true,
+   "phase0_last_date": [
+    1,
+    0,
+    25
+   ],
+   "phase1_first_date": [
+    1,
+    1,
+    11
+   ],
+   "phase1_pairs": 25,
+   "phase1_games_within_r113_groups": 50,
+   "r113_groups": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    [
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ]
+   ],
+   "phase1_games_per_club": {
+    "0": 8,
+    "1": 8,
+    "2": 8,
+    "3": 8,
+    "4": 8,
+    "5": 10,
+    "6": 10,
+    "7": 10,
+    "8": 10,
+    "9": 10,
+    "10": 10
+   }
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "table": "austrianschedule",
+   "rows": 270,
+   "round_tags": [
+    0,
+    1
+   ],
+   "phase1_rows": 50,
+   "phase1_first_last_position": [
+    220,
+    269
+   ],
+   "phase1_contiguous": true,
+   "phase0_last_date": [
+    1,
+    0,
+    25
+   ],
+   "phase1_first_date": [
+    1,
+    1,
+    11
+   ],
+   "phase1_pairs": 25,
+   "phase1_games_within_r113_groups": 50,
+   "r113_groups": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    [
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ]
+   ],
+   "phase1_games_per_club": {
+    "0": 8,
+    "1": 8,
+    "2": 8,
+    "3": 8,
+    "4": 8,
+    "5": 10,
+    "6": 10,
+    "7": 10,
+    "8": 10,
+    "9": 10,
+    "10": 10
+   }
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "table": "austrianschedule",
+   "rows": 324,
+   "round_tags": [
+    0,
+    1
+   ],
+   "phase1_rows": 60,
+   "phase1_first_last_position": [
+    264,
+    323
+   ],
+   "phase1_contiguous": true,
+   "phase0_last_date": [
+    1,
+    1,
+    2
+   ],
+   "phase1_first_date": [
+    1,
+    1,
+    11
+   ],
+   "phase1_pairs": 30,
+   "phase1_games_within_r113_groups": 60,
+   "r113_groups": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    [
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   ],
+   "phase1_games_per_club": {
+    "0": 10,
+    "1": 10,
+    "2": 10,
+    "3": 10,
+    "4": 10,
+    "5": 10,
+    "6": 10,
+    "7": 10,
+    "8": 10,
+    "9": 10,
+    "10": 10,
+    "11": 10
+   }
+  }
+ ]
+}

@@ -1,0 +1,520 @@
+{
+ "note": "R145 - Legacy Recompiled speech-catalogue inputs as archive members (after-receipt-7 prompt, package 3). Read-only.\nFor every `audio/speech/*` and `audio/context/*` member of the registered Recompiled install's EB archives (directories via the research\neb_list parser; 8-byte payload head read by offset): archive, member path, stored size, wrapper (stored / chunklzx / chunkzip / refpack by\nhead), duplicates across archives; against the X360 NHL Legacy loose tree: loose file present, loose size; for members <= 16 MiB the\nunwrapped bytes are hashed and compared with the loose file (chunklzx via the research decoder, as R138); larger members size-only.\nAlso: which of the files Studio's speech consumers name (speech_catalogue.rs) exist as members.\nUsage: python r145_recomp_speech_members.py <out.json>",
+ "recomp_root": "H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test\\game",
+ "x360_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+ "archives": {
+  "audioboot.big": 9,
+  "audioboot2.big": 0,
+  "boot.big": 0,
+  "cache.big": 0,
+  "cacheaudio.big": 0,
+  "cacheboot.big": 0,
+  "cachemovie.big": 0,
+  "cacheoverlay.big": 0,
+  "cacherender.big": 0,
+  "data0.big": 0,
+  "nocache.big": 21,
+  "nocacherender.big": 0,
+  "renderboot.big": 0
+ },
+ "members": [
+  {
+   "archive": "audioboot.big",
+   "member": "audio/context/crowds_contexteventdef.csi",
+   "offset": 482000,
+   "stored": 1452,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 1452,
+   "codec_decoded": "stored",
+   "unwrapped_size": 1452,
+   "unwrapped_sha256": "b8c630565b3afda1f90694aa54d3ecc1a35ef780a9664ec817b25bdcdc3127ac",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/speech/pbp_eng_speecheventdef.csi",
+   "offset": 515712,
+   "stored": 168960,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 168960,
+   "codec_decoded": "stored",
+   "unwrapped_size": 168960,
+   "unwrapped_sha256": "6fa1f9707872537da7e1a5c7689f2cb7375303bf673e54c9e2a8e2264f3f0f6d",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/context/pbp_eng_contexteventdef.csi",
+   "offset": 684672,
+   "stored": 6480,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 6480,
+   "codec_decoded": "stored",
+   "unwrapped_size": 6480,
+   "unwrapped_sha256": "91974c3e5ce7345cfb90b49542dcb4207d7294ae19976a6e3ceba2e19c982111",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/speech/pbp_eng_samples.sbr",
+   "offset": 691152,
+   "stored": 289818,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 916492,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 916492,
+   "unwrapped_sha256": "a4660efd4d1fa0e1bd01e073e5337dfdd7480fd5c3d3829be6d9b678cd90db6c",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/speech/pbp_eng_speechmoduledef.xml",
+   "offset": 980976,
+   "stored": 702,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 2202,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 2202,
+   "unwrapped_sha256": "c0b97452d27c41b0df75057aba5742368f27eeb0f23d196aa9b657f5c29e184d",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/speech/pbp_eng_speecheventsubscr.bin",
+   "offset": 981680,
+   "stored": 53132,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 374640,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 374640,
+   "unwrapped_sha256": "52f4aceffd8b5e0e3fbbf2cc3fef78b6c4f1431b48f5b6ea03ac398e519e2f0d",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/speech/pbp_eng_graffitidata.bin",
+   "offset": 1034816,
+   "stored": 255398,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 737800,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 737800,
+   "unwrapped_sha256": "24d03653e8b9cb70a86184de4464d9287854d4b3abccb9ac3ba26934a21fed32",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/speech/pbp_eng_sentencedata.bin",
+   "offset": 1290224,
+   "stored": 91030,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 455704,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 455704,
+   "unwrapped_sha256": "40e69ad3681370d28b6cea70ef140c73db15c7ed5bc89ceaebcd522e64abcfba",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "audioboot.big",
+   "member": "audio/speech/pbp_eng_repetitionpools.bin",
+   "offset": 1381264,
+   "stored": 540,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 1632,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 1632,
+   "unwrapped_sha256": "db264ce29a05f8d67b5a91cb65f4bf50741332aae4c74a5e05043d5efa70a63a",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_samples.sbs",
+   "offset": 298050416,
+   "stored": 129156980,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 129156980,
+   "compared": "size only (> 16 MiB)",
+   "stored_equals_loose_size": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/pbp_eng_samples.sbs",
+   "offset": 427207408,
+   "stored": 789000896,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 789000896,
+   "compared": "size only (> 16 MiB)",
+   "stored_equals_loose_size": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/crowds_contexteventsubscr.bin",
+   "offset": 1229050080,
+   "stored": 2304,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 7760,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 7760,
+   "unwrapped_sha256": "a201907b40231ddbf72c7cd2c5e8c25c0446768ba77e34c87a28f4fe5ddf5ba1",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/crowds_contextgasscript.gas",
+   "offset": 1229052384,
+   "stored": 11224,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 164080,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 164080,
+   "unwrapped_sha256": "61056a0603151500d7421f6afbdfe9d07a33625c8076880e46c03c577b707667",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/crowds_contextmoduledef.xml",
+   "offset": 1229063616,
+   "stored": 350,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 350,
+   "codec_decoded": "stored",
+   "unwrapped_size": 350,
+   "unwrapped_sha256": "2e08e7368ce0ff604cd3ba0b41963a5af1271fdc1c9aefbee90f98fcacabfda0",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/crowds_contexts.bin",
+   "offset": 1229063968,
+   "stored": 80706,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 336505,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 336505,
+   "unwrapped_sha256": "79777595c79692ec543690bf55ced4f5fb0c68f59ee0adfc40a52fcf60fbd279",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/pbp_eng_contexteventsubscr.bin",
+   "offset": 1229144688,
+   "stored": 16568,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 66560,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 66560,
+   "unwrapped_sha256": "a40a787079e8c6b65df7dfa7d7344f0167a7ecc298e24e1d06b23e570b3c9fd9",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/pbp_eng_contextgasscript.gas",
+   "offset": 1229161264,
+   "stored": 75300,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 1614652,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 1614652,
+   "unwrapped_sha256": "c7d03710e9118bbeec7c86b5571edd5597c74c2ef3263d8650fae120b55e0ae0",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/pbp_eng_contextmoduledef.xml",
+   "offset": 1229236576,
+   "stored": 514,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 514,
+   "codec_decoded": "stored",
+   "unwrapped_size": 514,
+   "unwrapped_sha256": "583acec7fe18cbb92350807562fe779636f689d2c4888e3140c8f3aea9ff3b66",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/context/pbp_eng_contexts.bin",
+   "offset": 1229237104,
+   "stored": 310226,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 1390880,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 1390880,
+   "unwrapped_sha256": "95ed9350ea04dfdfa2c99033bcc7d314f371fc644a89b50f0286231d612382dd",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_graffitidata.bin",
+   "offset": 1351293088,
+   "stored": 145648,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 495288,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 495288,
+   "unwrapped_sha256": "755281a7b3fddb2abfe26b39b1163c479fb0eb3e133e2aba9d97068978e6c764",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_repetitionpools.bin",
+   "offset": 1351438736,
+   "stored": 144,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 144,
+   "codec_decoded": "stored",
+   "unwrapped_size": 144,
+   "unwrapped_sha256": "01e1639c28e8d99f90053cdbb53895fb65a6eddacb62d4c8ffd0360822b56cc9",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_samples.sbr",
+   "offset": 1351438880,
+   "stored": 155860,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 486102,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 486102,
+   "unwrapped_sha256": "5ac95bcd0158f64abc1931a5ea5bd99d2e0da3de19d1d9209f7c8315ddefb50a",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_sentencedata.bin",
+   "offset": 1351594752,
+   "stored": 4372,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 36588,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 36588,
+   "unwrapped_sha256": "69dbdcb261e5e6576a04801f5f64bce3f193a4fdb2dd09e21082358973c0895e",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_speecheventdef.csi",
+   "offset": 1351599136,
+   "stored": 356,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 356,
+   "codec_decoded": "stored",
+   "unwrapped_size": 356,
+   "unwrapped_sha256": "99144cf8ce03c138158b8f2c6794d4348d80d6ae747f913833279f2204eeee7f",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_speecheventsubscr.bin",
+   "offset": 1351599504,
+   "stored": 1214,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 3460,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 3460,
+   "unwrapped_sha256": "cac3dec594fdb8127ca9ad0228b1f26a42cd8419198b9ca609bfde5eaf0691cf",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/ann_eng_speechmoduledef.xml",
+   "offset": 1351600720,
+   "stored": 498,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 1190,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 1190,
+   "unwrapped_sha256": "d2a7db503f23d3a427ae4cfe656752b3d2ec2ff734125012130d591215b57456",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/pbp_eng_acmedata.bin",
+   "offset": 1351601232,
+   "stored": 1256,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 6824,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 6824,
+   "unwrapped_sha256": "751a258c9418976288fe39b87b2cd100a1c919071189c2a34fc523b99c3d2a52",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/pbp_eng_acmemoduledef.xml",
+   "offset": 1351602496,
+   "stored": 165,
+   "wrapper": "stored",
+   "loose_present": true,
+   "loose_size": 165,
+   "codec_decoded": "stored",
+   "unwrapped_size": 165,
+   "unwrapped_sha256": "e6ca559bbc256bfdf5f140ac748f5b1d34ca6b0db7fb2b1ce79e95c13e6f347d",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/pbp_eng_acmevents.bin",
+   "offset": 1351602672,
+   "stored": 730,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 2236,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 2236,
+   "unwrapped_sha256": "448c52e5379ac19f01c39639e0124924837815438d524e417c7375137971202c",
+   "equals_x360_loose": true
+  },
+  {
+   "archive": "nocache.big",
+   "member": "audio/speech/pbp_eng_keywords.bin",
+   "offset": 1351603408,
+   "stored": 46762,
+   "wrapper": "chunklzx",
+   "loose_present": true,
+   "loose_size": 208572,
+   "codec_decoded": "chunklzx",
+   "unwrapped_size": 208572,
+   "unwrapped_sha256": "6ab1a512d88ec6a41ec6663e86993fcedd8272806b19d7428f9dcf0c70403c40",
+   "equals_x360_loose": true
+  }
+ ],
+ "duplicates": {},
+ "summary": {
+  "members": 30,
+  "wrappers": {
+   "stored": 10,
+   "chunklzx": 20
+  },
+  "byte_compared": 28,
+  "equal": 28,
+  "size_only": 2,
+  "loose_absent": 0
+ },
+ "named_by_studio": {
+  "audio/speech/pbp_eng_speecheventsubscr.bin": [
+   [
+    "audioboot.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/pbp_eng_speecheventdef.csi": [
+   [
+    "audioboot.big",
+    "stored",
+    true
+   ]
+  ],
+  "audio/speech/pbp_eng_sentencedata.bin": [
+   [
+    "audioboot.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/pbp_eng_graffitidata.bin": [
+   [
+    "audioboot.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/pbp_eng_samples.sbr": [
+   [
+    "audioboot.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/pbp_eng_keywords.bin": [
+   [
+    "nocache.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/ann_eng_graffitidata.bin": [
+   [
+    "nocache.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/ann_eng_samples.sbr": [
+   [
+    "nocache.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/ann_eng_speecheventsubscr.bin": [
+   [
+    "nocache.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/context/pbp_eng_contexts.bin": [
+   [
+    "nocache.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/context/pbp_eng_contexteventdef.csi": [
+   [
+    "audioboot.big",
+    "stored",
+    true
+   ]
+  ],
+  "audio/context/pbp_eng_contexteventsubscr.bin": [
+   [
+    "nocache.big",
+    "chunklzx",
+    true
+   ]
+  ],
+  "audio/speech/pbp_eng_samples.sbs": [
+   [
+    "nocache.big",
+    "stored",
+    null
+   ]
+  ],
+  "audio/speech/ann_eng_samples.sbs": [
+   [
+    "nocache.big",
+    "stored",
+    null
+   ]
+  ]
+ }
+}

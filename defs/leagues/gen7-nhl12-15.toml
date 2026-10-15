@@ -1,0 +1,196 @@
+# NHL 12, 13, 14, 15 (PS3 / Xbox 360). Group-id classification fields; no stockleagues table.
+# This fingerprint is shared with NHL Legacy, so the session's game id decides between the two;
+# without a game id the codes stay raw.
+name = "gen7-nhl12-15"
+description = "NHL 12-15 team league codes"
+applies_to = ["nhl12", "nhl13", "nhl14", "nhl15"]
+
+[schema]
+league_table = "kOtt"
+league_field = "xMjj"
+league_width = 4
+required_fields = ["kOtt.iIBl", "kOtt.OwTu", "kOtt.CGMK"]
+forbidden_tables = ["fsLK"]
+
+[source]
+kind = "anchor-measurement"
+description = "L1.1-A cross-tab on the NHL 12/13/14/15 anchors; corroborated by NHL 15 PS4 stockleagues (ae9d1d56...78d8), whose kOtt.xMjj distribution is identical to NHL 15 PS3/X360"
+
+# Dictionary keys (LOC-W1, 2026-09-18): `dictionary_key` per code is a HYPOTHESIS — the key family
+# is present in this title's own `nhl_eng_us.db` (verified by hash-resolved lookup on both platform
+# anchors) and the same family is the traced table on NHL Legacy Xbox 360, but no executable of this
+# title was inspected. Codes without a key have no matching key in the dictionary.
+# R1 F5 + research handoff P1.1-X (2026-09-18, docs/research/overnight-2026-09-18/10-phase1-league-identity-xbox360.md): the code -> key table is a static
+# pointer table in each Xbox 360 executable, decrypted and read tonight; every key was resolved in the
+# title's own dictionary (each X: copy equals the committed Xbox 360 anchor). `traced` below is scoped by
+# [key_witness] to those Xbox targets; the PS3 copies of the same vocabulary show `by-reference` (their
+# executables are encrypted and were not inspected; the PS3 database/dictionary equal the Xbox bytes on
+# NHL 10-Legacy, which raises the prior but is not a trace). Which screens read a key is untraced everywhere.
+[key_witness]
+traced_on = [{ game = "nhl12", platform = "xbox" }, { game = "nhl13", platform = "xbox" }, { game = "nhl14", platform = "xbox" }, { game = "nhl15", platform = "xbox" }]
+source = "Xbox 360 default.xex static league pointer table (nhl12 pointer table at VA 0x83705f18 (image 8842a990dbf2…); nhl13 pointer table at VA 0x837eea88 (image 5ef121e51ee0…); nhl14 pointer table at VA 0x8398fc20 (image 27d86df1fc43…); nhl15 pointer table at VA 0x839bbc30 (image 4ad8d3081a28…)); research probes league_tables.py / ptr_table.py"
+otherwise = "by-reference"
+
+[[entries]]
+raw = 0
+label = "NHL"
+confidence = "corroborated"
+evidence = "32 rows; NHL 15 PS4 stockleagues 0 = NHL"
+dictionary_key = "NHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 1
+label = "AHL"
+confidence = "corroborated"
+evidence = "30 rows; stockleagues 1 = AHL"
+dictionary_key = "AHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 2
+label = "SHL (Sweden)"
+confidence = "corroborated"
+evidence = "12 rows; stockleagues 2 = elitserien (dictionary text SHL on NHL 15 PS4)"
+dictionary_key = "elitserien"
+key_evidence = "traced"
+
+[[entries]]
+raw = 3
+label = "Liiga (Finland)"
+confidence = "corroborated"
+evidence = "14 rows; stockleagues 3 = SMLIIGA (dictionary text Liiga)"
+dictionary_key = "SMLIIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 4
+label = "DEL (Germany)"
+confidence = "corroborated"
+evidence = "14 rows; stockleagues 4 = TXT_LEAGUE_DEL"
+dictionary_key = "TXT_LEAGUE_DEL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 5
+label = "Extraliga (Czech)"
+confidence = "corroborated"
+evidence = "14 rows; stockleagues 5 = TXT_LEAGUE_O2_EXTRALIGA"
+dictionary_key = "TXT_LEAGUE_O2_EXTRALIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 6
+label = "National League (Switzerland)"
+confidence = "corroborated"
+evidence = "12 rows; stockleagues 6 = TXT_LEAGUE_SWISS_LEAGUE"
+dictionary_key = "TXT_LEAGUE_SWISS_LEAGUE"
+key_evidence = "traced"
+
+[[entries]]
+raw = 7
+label = "National Teams"
+confidence = "corroborated"
+evidence = "21 rows: AUS, BEL, CAN ...; stockleagues 7 = NATIONAL"
+dictionary_key = "NATIONAL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 8
+label = "OHL"
+confidence = "corroborated"
+evidence = "20 rows; stockleagues 8 = OHL"
+dictionary_key = "OHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 9
+label = "QMJHL"
+confidence = "corroborated"
+evidence = "17-18 rows; stockleagues 9 = QMJHL"
+dictionary_key = "QMJHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 10
+label = "WHL"
+confidence = "corroborated"
+evidence = "22 rows; stockleagues 10 = WHL"
+dictionary_key = "WHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 11
+label = "Top Prospects"
+confidence = "corroborated"
+evidence = "2 rows TPR/TPW; stockleagues 11 = PROSPECT_TEAMS"
+dictionary_key = "PROSPECT_TEAMS"
+key_evidence = "traced"
+
+[[entries]]
+raw = 12
+label = "Legend Teams"
+confidence = "corroborated"
+evidence = "1-3 rows (LEG; NHL 13 adds RUGG, WICK); stockleagues 12 = TXT_LEGEND_TEAMS"
+dictionary_key = "TXT_LEGEND_TEAMS"
+key_evidence = "traced"
+
+[[entries]]
+raw = 13
+label = "Custom Teams"
+confidence = "corroborated"
+evidence = "30 rows with empty abbreviations; stockleagues 13 = CUSTOM_TEAMS"
+dictionary_key = "CUSTOM_TEAMS"
+key_evidence = "traced"
+
+[[entries]]
+raw = 14
+label = "Winter Classic"
+confidence = "candidate"
+evidence = "2-4 NHL rows (PIT, WSH; later NYR, PHI, PIT, WSH); stockleagues 14 = NHL with artid 0 - the outdoor-game copies"
+dictionary_key = "NHL"
+key_evidence = "traced"
+
+# Codes present in the executable enum with no stock team row on the anchors (P1.1-X §2): the
+# label is the traced key's text in the title's own dictionary. Whether a team assigned one of these
+# codes is accepted by the game is a runtime question.
+[[entries]]
+raw = 15
+label = "CHL"
+confidence = "enum"
+evidence = "no team row on the anchors; identical 20-key table on NHL 12/13/14/15 Xbox 360"
+dictionary_key = "CHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 16
+label = "United States"
+confidence = "enum"
+evidence = "no team row on the anchors; identical 20-key table on NHL 12/13/14/15 Xbox 360"
+dictionary_key = "UnitedStates"
+key_evidence = "traced"
+
+[[entries]]
+raw = 17
+label = "Russia"
+confidence = "enum"
+evidence = "no team row on the anchors; identical 20-key table on NHL 12/13/14/15 Xbox 360"
+dictionary_key = "Russia"
+key_evidence = "traced"
+
+[[entries]]
+raw = 18
+label = "Rest Of World"
+confidence = "enum"
+evidence = "no team row on the anchors; identical 20-key table on NHL 12/13/14/15 Xbox 360"
+dictionary_key = "TXT_ROW_LEAGUE"
+key_evidence = "traced"
+
+[[entries]]
+raw = 19
+label = "Hockey Ultimate Team"
+confidence = "enum"
+evidence = "no team row on the anchors; identical 20-key table on NHL 12/13/14/15 Xbox 360"
+dictionary_key = "HUT"
+key_evidence = "traced"
+

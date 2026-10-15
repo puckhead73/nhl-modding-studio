@@ -1,0 +1,901 @@
+# Per-family asset output profile — player equipment (Q07a.1). Schema `asset-output-profile/5`.
+#
+# Package C0-AS6 (2026-09-16). REPRESENTATION, NOT ESTABLISHED COVERAGE. Every constraint block
+# on every target is `unknown`; no operation's requirements are met; nothing here decides a Build.
+# The file registers the equipment family against the existing contract from the evidence the
+# repository already holds — the database half MEASURED on the committed anchor, the file half
+# taken from repository source and one operator record — so the gap is enumerated in the
+# contract's own terms and the next measurement has a block to promote.
+#
+# ---------------------------------------------------------------------------------------------
+# WHAT "EQUIPMENT" IS ON THESE TITLES, AND WHY ONE PROFILE IS EIGHT SLOTS
+#
+#   A skater's equipment row (`xmja`) carries four asset ids and a goalie's (`fMVl`) four more,
+#   each keying a SET of render files to a slot-specific filename grammar:
+#
+#     slot           DB field      folder under rendering/   file grammar (HEAD source)
+#     stick          xmja.wXFx     playerstick               texlib_{id}
+#     goalie stick   xmja.wXFx     goaliestick               goaliestick_{id}_{map}   (shares wXFx)
+#     gloves         xmja.NmUR     glove                     glove_{id}_* / feglove_{id}_* / glove_{id} mesh
+#     helmet         xmja.YUZp     helmet                    texlib_{id} / helmet_{id}_{v} / helmet_0_{id}_*_{map}
+#     skates         xmja.AOOe     skate                     texlib_{id}   (mesh shared: playerskate_*)
+#     blocker        fMVl.Kmxz     blocker                   blocker_{model}_{id}_* (2nd number)
+#     trapper        fMVl.OTJR     trapper                   trapper_{model}_{id}_*  (2nd number)
+#     pads           fMVl.mIUA     goaliepad                 goaliepad_{id}_*
+#     goalie helmet  fMVl.JOlt     goaliehelmet              goaliehelmet_{style}_{id}_cm (paint design)
+#
+#   The contract carries ONE `[identity]` per target. Eight id sources cannot be spelled in it,
+#   and no candidate value below pretends otherwise: `[identity]` stays unknown with the measured
+#   facts in its note and the per-slot shape recorded as a SCHEMA GAP (like the portrait profile's
+#   missing computed-directory token). This package does not extend the schema for it, because
+#   nothing an extension would spell could become operative today — the file half of every slot is
+#   unobserved in any committed record.
+#
+# ---------------------------------------------------------------------------------------------
+# THE EVIDENCE THIS FILE RESTS ON
+#
+#   anchors/xbox360/nhllegacy/databases/nhlng.db + anchors/ps3/nhllegacy/databases/nhlng.db
+#       MEASURED by the named case
+#       crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_equipment_id_fields_are_measured_on_the_anchor
+#       (C0-AS6): the two main DBs are byte-identical (one SHA-256), so one measurement speaks for
+#       the DB side of both Legacy platforms. The eight fields, their metadata names, bit widths
+#       and stored value sets are in that case and summarised under [identity] below.
+#   docs/audits/data/schema/xbox360-nhllegacy.json / ps3-nhllegacy.json   the committed snapshots
+#       the case cross-checks the metadata names against.
+#   crates/studio-domain/src/equipment_slots.rs#SLOT_SPECS (HEAD cc913f9)   repository source: the
+#       filename grammar above, the per-slot `max_id` (127 / 255 / 511 — equal to the anchor's bit
+#       widths on Legacy and NOT per-title: NHL 08 stores the stick in 8 bits and the other present
+#       slots in 4–5, NHL 21 PS4 stores all of them in 10),
+#       the FE createplayer thumbnail prefixes, and the statement that cloning an id "copies each
+#       of its files byte-for-byte to the target ID's filenames. No DB edits". Source prose is
+#       cited here as ASSERTED.
+#   crates/studio-domain/src/equipment_texture.rs (HEAD)   repository source: glove/helmet `_tm`
+#       files are ZONE MASKS painted from the team's `hHbv` zone colours — a database dependency of
+#       the preview, recorded under [identity] as a reference, not an identity.
+#   docs/audits/data/assets/nhllegacy/xbox360/capability.csv#equipment   one row: format "loose RX2
+#       rasters (helmet/glove/blocker/trapper/goaliepad/goaliehelmet/goaliestick/playerstick)",
+#       "texlib::replace_* on extracted .rx2; identify partial (brand-keyed) (2026-08-03)", install
+#       = external. A write in a derived tree; no file is named.
+#   docs/audits/data/assets/nhllegacy/xbox360/archives.csv#cacherender.big   the recorder's summary
+#       line "rendering (stock logos texlib, players, equipment)".
+#   docs/receipts/data/c0-as7-x360-cacherender-members.csv   (C0-AS7) that archive's MEMBER TABLE
+#       (12 845 literal paths, offsets, sizes, digests; archive SHA-256
+#       e05179835ff2099b01a3085c335f6b8d6cb8de52cd5cf7ecee23e948d586d6d2) read through the
+#       committed EB reader from the title root's own copy; every equipment slot folder is in it.
+#       Joined slot by slot to the anchor in docs/receipts/data/c0-as7-x360-member-join.csv,
+#       re-derived by the named `tdb-canonical` case. All members `chunklzx`-stored; none decoded.
+#   docs/receipts/data/c0-as7-ps3-patch-members.csv   (C0-AS7) the PS3 copy's `patch.big` member
+#       table: 328 `rendering/*.rpsgl` members across the goalie and skater slot folders — and NONE
+#       under `rendering/playerstick/` or `fe/ion/artassets/createplayer/sticks/`.
+#   defs/enums/stick-model.toml (committed operator record, NHL Legacy PS3)   the ONE file record
+#       for this family on PS3: 106 `stick{N}.big` thumbnails under
+#       `USRDIR/fe/ion/artassets/createplayer/sticks/` (ids listed), 74 `texlib_{N}.rpsgl` under
+#       `USRDIR/rendering/playerstick/` (ids enumerated as the enum's entries), and a 2026-05-18
+#       on-ice test: writing `xmja.wXFx = N` (with the NISO/jmjk/MMuu/FCNk cascade zeroed) to
+#       `USRDIR/db/nhlng.db` renders the stick painted in `texlib_N.rpsgl`. Prose with counts and
+#       id lists, no digests, no census artefact: cited as ASSERTED. It is nonetheless the only
+#       record in this repository of any asset family's runtime binding being exercised in a game.
+#   defs/enums/{glove,helmet,skate}-model.toml   operator catalog CSVs naming ids and models on
+#       `xmja.NmUR` / `YUZp` / `AOOe`; they name NO file and are cited only for the field bindings.
+#
+# WHAT NONE OF IT IS: a census of equipment files with digests, a decode recorded with codec and
+# size, a member listing of `cacherender.big`, a load test recorded as an artefact, or any record
+# on a target other than the two NHL Legacy platforms (Recompiled is registered by reference).
+# The mounted-tree case `legacy_x360_outfit_and_equipment_decode_from_extracted_tree` skips
+# silently in CI (C0.2 §5.4 class) and is not evidence here.
+
+schema = "asset-output-profile/5"
+profile_version = 2
+family = "assets-equipment"
+note = """
+Nothing on any target is established. Two targets are represented (NHL Legacy Xbox 360 and PS3)
+and one is registered by reference (Legacy Recompiled, Q47). The database half of every slot is
+measured on the committed anchor — eight id fields, their bit widths and the ids the vanilla
+roster actually stores. Since C0-AS7 (profile_version 2) the FILE half of ALL EIGHT measured
+fields is OBSERVED on the attributable Xbox 360 shipping archive `cacherender.big`: every stored
+id of the stick, skate, helmet, glove, pad, mask-paint, blocker and trapper fields names a member
+under its slot folder by the grammar HEAD source declares. A NINTH comparison — the goalie-stick
+folder against `xmja.wXFx`, the field HEAD source says the goalie stick SHARES with the skater
+stick — is CONTRADICTED by the listing (members named 6..43 against stored ids 35..112, one in
+common); that is a finding about the source's shared-field claim, not a ninth field failing.
+Every block is still unknown: one `[identity]` cannot carry eight
+sources, one discovery root cannot cover the create-player thumbnails (in neither render
+archive), and no runtime lookup is observed. The candidates carry the evidence at the scope it
+actually has.
+"""
+
+[[canonical_source]]
+role = "stick-texture"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The painted stick artwork of one stick model (the `texlib_{id}` bundle's colour raster), lossless RGBA, retained unmodified."
+
+[[canonical_source]]
+role = "skate-texture"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The colour raster of one skate model (`skate/texlib_{id}`)."
+
+[[canonical_source]]
+role = "helmet-texture"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The colour raster of one skater helmet model. On Legacy the shipped `_tm` files are zone MASKS coloured at runtime from the team's `hHbv` record; the canonical source is the mask as authored, and Studio's preview compositor is not an authoring step."
+
+[[canonical_source]]
+role = "glove-texture"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The colour/zone-mask raster of one glove model (`glove_{id}_*`)."
+
+[[canonical_source]]
+role = "goalie-gear-texture"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The colour raster of one goalie blocker, trapper, pad, stick or mask paint design. One role for the five goalie slots: the record distinguishes them by slot, not by canonical form."
+
+[[canonical_source]]
+role = "thumbnail"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The front-end create-player thumbnail of one equipment id (`fe/ion/artassets/createplayer/<slot>/<prefix>{id}.big`)."
+
+# =============================================================== NHL Legacy, Xbox 360
+
+[[target_profile]]
+target = "nhllegacy-xbox360"
+note = """
+Represented from committed records; nothing established. The same two corpora as the logo and
+jersey profiles: the shipping archives (attributable; headers and a summary line) and the derived
+`_compiled` tree (not attributable; where the one recorded write happened). The DB side is
+measured on the committed anchor and summarised under [identity].
+"""
+
+[[target_profile.corpus]]
+id = "xbox360-shipping-archives"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "incomplete"
+identity_source = "each archive's own `EB\\0\\3` header (version tag 0x00000400, the 16-byte-entry variant `tdb_archive_big::eb::KNOWN_VERSION_TAGS` names for this title), beside the title's XEX2 EXECUTION_INFO header (title id `454109EC`) recorded by C0-POR1 for the sibling tree"
+inspected_files = 13
+groups = ["shipping-archives"]
+limitations = [
+    "Thirteen archive HEADERS and their entry counts were recorded by the audit; at that stage no member name, offset, digest or payload was committed, so which archive held a given equipment file rested on the recorder's `primary_contents` summary (`cacherender.big`: \"rendering (stock logos texlib, players, equipment)\"). Since C0-AS7 two of the thirteen — `cacherender.big` (12 845 members) and `nocacherender.big` (3 237) — have their MEMBER TABLES committed (docs/receipts/data/c0-as7-x360-{cacherender,nocacherender}-members.csv: literal path, offset, stored size, stored SHA-256 per member; archive digests in the sibling .json), so placement inside THOSE TWO is measured; the other ELEVEN archives (boot, cache, nocache, data0, cacheboot, cachemovie, cacheoverlay, renderboot, audioboot, audioboot2, cacheaudio) are still headers and a summary line only, and every `fe/` family is in one of them. No member of either has been decoded.",
+    "In-archive payloads on this variant are `chunklzx`-wrapped where compressed, and Studio does not decode LZX. No archived equipment texture has been decoded by Studio.",
+    "A title id plus an archive version tag is not a build.",
+    "No shipping manifest was checked; archive precedence was not examined.",
+]
+provenance = [
+    "docs/audits/data/assets/nhllegacy/xbox360/archives.csv",
+    "crates/tdb-archive-big/src/eb.rs#KNOWN_VERSION_TAGS",
+    "docs/receipts/c0-por1-portrait-measurements.md",
+]
+
+[[target_profile.corpus]]
+id = "xbox360-compiled-tree"
+kind = "derived-tree"
+attribution = "not-attributable"
+build_identification = "incomplete"
+identity_source = "the title's own XEX2 EXECUTION_INFO header — title id `454109EC`, media id `3CF2A23F`, executable `nhlzf.exe` — as recorded by C0-POR1 for this same tree"
+inspected_files = 1
+groups = ["current"]
+limitations = [
+    "A DERIVED tree: an extraction or a rebuild. No provenance bridge exists, so no placement fact can come from it.",
+    "For THIS family the committed record names no file: the capability row says a `texlib::replace_*` write on an extracted `.rx2` was verified on 2026-08-03 and that `identify` is only partial (brand-keyed). `inspected_files = 1` records that one write happened; which slot and id it touched is not recorded.",
+    "The mounted-tree case that would name files (`legacy_x360_outfit_and_equipment_decode_from_extracted_tree`) skips silently in CI (C0.2 §5.4 class) and is not evidence here.",
+]
+provenance = [
+    "docs/audits/data/assets/nhllegacy/xbox360/capability.csv#equipment",
+    "docs/receipts/c0-por1-portrait-measurements.md",
+]
+
+# ---- the observed path shapes (repository source; no committed census names one file) ------
+#
+# `{numeric-id}` is the slot's equipment id from the field named in the family's note. `{variant}`
+# stands for the ONE further component a declared template carries beside the id — the trailing
+# map suffix (`cm`/`dm`/`tm`/`am`/`nm`/`sm`) on the per-map families, the mask style on the paint
+# family; the contract has no token for either, and one stand-in is declared rather than inventing
+# a vocabulary nothing observed. A token substitutes ONE value everywhere it appears, so a shape
+# with two independent components beside the id — the helmet's `helmet_0_{id}[_{team}]_{map}`,
+# the blocker's and trapper's `{prefix}_{model}_{id}_{map}` — CANNOT be spelled as a template
+# (`helmet_0_15_am`, `blocker_1_80_nm` are unreachable by any substitution) and is left in prose
+# on the nearest declared family until the schema has independently addressable tokens (C0-AS6
+# review finding P2). `bucket_resolution` is unknown on every family: C0-AS7's member listing
+# shows each slot folder inside `cacherender.big` (the [[observed_bucket]] entries below) and
+# that the stored ids name members, which is membership in one archive, not a rule the target
+# enforces — and the per-map families' declared templates cover only the single-suffix maps
+# (`_am` / `_nm` / `_sm`); the `_dm` / `_tm` members carry a further numeric component
+# (`glove_{id}_{n}_{map}`) that no template spells.
+
+[[target_profile.path_family]]
+id = "stick-texlib"
+template = "rendering/playerstick/texlib_{numeric-id}.rx2"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "`{numeric-id}` = `xmja.wXFx`. One texture library per stick model (HEAD `SLOT_SPECS`, matcher `texlib_<id>`). The tape mesh `playersticktape_*` sits beside it and is not a raster. C0-AS7: `rendering/playerstick/` in `cacherender.big` holds exactly 74 members, all `texlib_N.rx2`, ids 18-112; all 19 ids the anchor stores name one, and the 74 member ids are exactly the 74 ids `defs/enums/stick-model.toml` catalogues — two committed records agreeing with a third."
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/playerstick"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "74 `texlib_N.rx2` members inside `cacherender.big`. Joined to `xmja.wXFx` and to the stick-model enum in docs/receipts/data/c0-as7-x360-member-join.csv."
+
+[[target_profile.path_family]]
+id = "skate-texlib"
+template = "rendering/skate/texlib_{numeric-id}.rx2"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "`{numeric-id}` = `xmja.AOOe`. The `playerskate_*` mesh is shared across ids and is excluded by the `texlib_` prefix (HEAD source). C0-AS7: 32 `texlib_N.rx2` members (ids 7-75) in `cacherender.big`; all 8 stored ids name one."
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/skate"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "32 `texlib_N.rx2` members inside `cacherender.big`."
+
+[[target_profile.path_family]]
+id = "helmet-texlib"
+template = "rendering/helmet/texlib_{numeric-id}.rx2"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+`{numeric-id}` = `xmja.YUZp`. This family carries the texlib alone. The helmet slot's OTHER shapes
+(HEAD `SLOT_SPECS`, four further matchers) are NOT declared as templates because the contract
+cannot spell them: `helmet_{id}_{v}` (no map suffix, id first), `helmet_0_{id}[_{team}]_{map}`
+(map suffix, id in the SECOND numeric position behind a literal `0` and before an optional team
+token — two independent components beside the id), `chinstrap_{id}_*` and `padding_{id}_*`. They
+are recorded here in prose; see the block comment above. C0-AS7: `rendering/helmet/` in
+`cacherender.big` holds 348 members in ten name shapes, 19 of them `texlib_N.rx2` (ids 1-110);
+all 10 stored `YUZp` ids name a texlib member. The other nine shapes are listed in
+docs/receipts/data/c0-as7-member-shapes.csv.
+"""
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/helmet"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "348 members in ten shapes inside `cacherender.big`; 19 are the declared `texlib_N.rx2`."
+
+[[target_profile.path_family]]
+id = "glove-map"
+template = "rendering/glove/glove_{numeric-id}_{variant}.rx2"
+tokens = ["numeric-id", "variant"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "`{numeric-id}` = `xmja.NmUR`; `{variant}` = the map suffix. A `feglove_{id}_*` sibling (front-end form) and a `glove_{id}` mesh share the id (HEAD source); one family is declared for the mapped textures. C0-AS7: `rendering/glove/` in `cacherender.big` holds 575 members — this template matches 159 (`glove_N_{am,nm,sm}`, 53 ids 15-101); a further 212 are `glove_N_N_{dm,tm}` with a component no template spells, and 204 are the `feglove_` sibling. All 14 stored ids name a member under both shapes."
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/glove"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "575 members inside `cacherender.big`: 159 under the declared template, 212 `glove_N_N_*` (an extra component), 204 `feglove_*`."
+
+[[target_profile.path_family]]
+id = "goalie-stick-map"
+template = "rendering/goaliestick/goaliestick_{numeric-id}_{variant}.rx2"
+tokens = ["numeric-id", "variant"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+`{numeric-id}` = `xmja.wXFx` per HEAD source — the goalie stick SHARES the skater stick field and
+the engine picks the folder by position; `{variant}` = the map suffix. Per-map textures, no texlib;
+the two-token `goaliestick_{a}_{b}` mesh is excluded by an exact-token rule.
+
+C0-AS7 CONTRADICTS THAT BINDING ON THE LISTING: `rendering/goaliestick/` in `cacherender.big`
+holds 78 members, 76 of them `goaliestick_N_{dm,tm}` over 38 ids 6-43 (plus one `goaliestick_goaliestick_*`
+pair). The anchor's `xmja.wXFx` stores 19 ids in 35..112; ONE of them (35) meets a
+member and 18 (82..112) do not, while 37 member ids are stored by no `wXFx` row. Either the goalie stick is
+keyed by another field, or the id space is remapped; this profile records the mismatch and
+proposes nothing. The declared template is kept because it is HEAD source; the note is the finding.
+"""
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/goaliestick"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "78 members inside `cacherender.big`; 76 match the declared shape over ids 6-43, which the stored `xmja.wXFx` ids (35..112) do not name."
+
+# The BLOCKER (`fMVl.Kmxz`) and TRAPPER (`fMVl.OTJR`) grammars — `blocker_{model}_{id}_{map}` /
+# `feblocker_…` and `trapper_{model}_{id}_{map}` / `fetrapper_…`, the id in the SECOND numeric
+# position behind a model number (HEAD `SLOT_SPECS`, `id_index = 1`) — carry two independent
+# components beside the id and are NOT declared as templates (see the block comment above). Their
+# fields are measured under [identity]; their files have no path family until the schema can
+# address the model number and the map suffix separately. C0-AS7 located them nonetheless, by the
+# HEAD grammar applied to the member listing of `cacherender.big`: `rendering/blocker/` holds
+# 1 296 members (264 `blocker_N_N_{nm,sm}`, 516 `blocker_N_N_N_{dm,tm}`, 516 `feblocker_*`) over
+# 68 second-component ids 1-84, and `rendering/trapper/` 1 288 (264 / 512 / 512) over 66; every
+# stored `Kmxz` id (29) and `OTJR` id (26) names a member. Recorded in the join record, with no
+# path family to attach an observed bucket to — the schema gap this comment already names.
+
+[[target_profile.path_family]]
+id = "goaliepad-map"
+template = "rendering/goaliepad/goaliepad_{numeric-id}_{variant}.rx2"
+tokens = ["numeric-id", "variant"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "`{numeric-id}` = `fMVl.mIUA`; `{variant}` = the map suffix. `fegoaliepad_` is the front-end sibling. C0-AS7: `rendering/goaliepad/` in `cacherender.big` holds 650 members — 134 under this template (`goaliepad_N_{nm,sm}`, 67 ids 1-84), 258 `goaliepad_N_N_{dm,tm}` with an extra component, 258 `fegoaliepad_*`; all 29 stored ids name a member under both shapes."
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/goaliepad"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "650 members inside `cacherender.big`: 134 under the declared template, 258 `goaliepad_N_N_*`, 258 `fegoaliepad_*`."
+
+[[target_profile.path_family]]
+id = "goalie-helmet-paint"
+template = "rendering/goaliehelmet/goaliehelmet_{variant}_{numeric-id}_cm.rx2"
+tokens = ["variant", "numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "`{numeric-id}` = `fMVl.JOlt` (maskid), the second numeric token; the first is the mask style. Paint-design files only: the mask MESH ships as `helmet_{a}_{b}` plus `cage_{a}_{b}_{c}` and is not `goaliehelmet_*` (HEAD source). C0-AS7: `rendering/goaliehelmet/` in `cacherender.big` holds 575 members, 539 under this template over 280 second-component ids 0-291; all 173 stored `JOlt` values name one — including 0, which the anchor stores on 36 rows and which names `goaliehelmet_N_0_cm` members, so the 36 zeros are consistent with a value rather than an absence code (not thereby established as one)."
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/goaliehelmet"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "575 members inside `cacherender.big`; 539 under the declared template, plus mesh (`helmet_N_N`, `cage_N_N_N`, `throatprotector_N_N_N`), 8 `texlib_N` and 4 `goaliehelmet_N_{am,nm}`."
+
+[[target_profile.path_family]]
+id = "fe-thumbnail-stick"
+template = "fe/ion/artassets/createplayer/sticks/stick{numeric-id}.big"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "The create-player thumbnail of one stick id (HEAD `SLOT_SPECS.thumbnail_prefix`). The other slots follow the same shape under `createplayer/{gloves/gloves,helmet/helmet,skates/skates,blocker/blocker,trapper/trapper,pads/pads,mask/mask,sticks/goaliestick}{id}.big`; one family is declared because it is the one form a committed record (the PS3 operator record, see the PS3 profile) actually counts. Not observed in any Xbox 360 record: C0-AS7 found no `fe/` member in either render archive, and the eleven other shipping archives were not opened."
+
+# ---- forms, kept apart -----------------------------------------------------------------------
+
+[[target_profile.variant]]
+id = "stick-texlib"
+note = "The texture-library form, selected by path family. The one committed record of a write for this family (`texlib::replace_*`) is of this form on SOME slot; which one is not recorded."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "stick-texlib"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "A RenderWare `RW4` texture library per repository source and per the capability row's `texlib::replace_*`; no equipment bundle is named in a committed record."
+
+[target_profile.variant.container.candidate]
+confidence = "asserted"
+provenance = [
+    "crates/studio-domain/src/equipment_slots.rs#SLOT_SPECS",
+    "docs/audits/data/assets/nhllegacy/xbox360/capability.csv#equipment",
+]
+note = "PROPOSED, NOT OPERATIVE. The outer `EB\\0\\3` layer inside the shipping title is not part of this proposal (see [container])."
+
+[target_profile.variant.container.candidate.value]
+outermost_layer_examined = false
+
+[[target_profile.variant.container.candidate.value.layer]]
+format = "rw4"
+index = "name-table"
+note = "A texture library: one or more named rasters."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "No committed record states the codec of any equipment raster. The capability row's format column says only \"loose RX2 rasters\"."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded; `texlib` de-tiles on decode, so a decode says nothing about storage."
+
+[[target_profile.variant]]
+id = "glove-map"
+note = "The loose per-map raster form (`_cm` / `_dm` / `_tm` ...), selected by path family. Declared for the glove because HEAD `equipment_texture.rs` describes its `_tm` file as a zone mask; the other per-map slots have the same shape and no record of their own."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "glove-map"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "A loose `.rx2` per repository source; nothing committed opened one, and whether the loose file is an `RW4` library holding one raster or a bare raster container was not recorded."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Not recorded. Repository source treats the `_tm` map's R/G/B channels as zone FLAGS (up to nine zones over three files) rather than colour — a semantic the `[raster]` vocabulary has no term for; if it is ever measured, the block will need a note beside its codec."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded."
+
+[[target_profile.variant]]
+id = "fe-thumbnail-stick"
+note = "The front-end thumbnail. Selected by path family. Nothing committed opened one on this target."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "fe-thumbnail-stick"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "Not recorded in any committed source or record for this family. The portrait chain (BIGF -> RefPack -> XPR2) is what other `fe/ion/artassets/*.big` files carry; carrying it here would be an analogy."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded."
+
+# ---- target-level blocks ------------------------------------------------------------------
+
+[target_profile.discovery]
+state = "unknown"
+note = """
+C0-AS7 read the member table of `cacherender.big` (FR14): every equipment slot folder the HEAD
+grammar names — `rendering/playerstick`, `skate`, `helmet`, `glove`, `goaliestick`, `goaliepad`,
+`goaliehelmet`, `blocker`, `trapper` — is a directory inside it, and `nocacherender.big` holds none
+of them. Neither archive holds any `fe/` member, so where the create-player thumbnails sit inside
+the shipping title is still unnamed, and the block stays unknown: one root would misdescribe the
+thumbnail family. Extracted-tree placement is what the code walks, and it is not archive placement.
+"""
+
+[target_profile.discovery.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+provenance = [
+    "docs/receipts/data/c0-as7-x360-cacherender-members.csv",
+    "docs/receipts/data/c0-as7-x360-nocacherender-members.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches",
+]
+note = "PROPOSED, NOT OPERATIVE. `archive-member` under `cacherender.big` — MEASURED for the nine render slot folders by the member listing; a proposal for the target because the thumbnails are elsewhere and what the runtime reads is unobserved. Promoting it needs a per-family discovery in the contract or the thumbnail archive located, and `[runtime_lookup]`."
+
+[target_profile.discovery.candidate.value]
+scope = "archive-member"
+root = "cacherender.big"
+recursive = true
+
+[target_profile.identity]
+state = "unknown"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_equipment_id_fields_are_measured_on_the_anchor",
+    "docs/audits/data/schema/xbox360-nhllegacy.json#xmja",
+    "docs/audits/data/schema/xbox360-nhllegacy.json#fMVl",
+    "crates/studio-domain/src/equipment_slots.rs#SLOT_SPECS",
+    "crates/studio-domain/src/equipment_texture.rs",
+    "defs/enums/stick-model.toml",
+]
+note = """
+The DB half is MEASURED on the committed anchor (`anchors/xbox360/nhllegacy/databases/nhlng.db`,
+byte-identical to the PS3 anchor) by the named case (C0-AS6). Skater rows (`xmja`, 5 066 rows):
+`wXFx` stick 7 bits, 19 distinct ids stored (35..112); `NmUR` gloves 7 bits, 14 distinct
+(27..83); `YUZp` helmetbrand 8 bits, 10 distinct (1..25); `AOOe` skatebrand 7 bits, 8 distinct
+(39..48). Goalie rows (`fMVl`, 566 rows): `Kmxz` blocker 7 bits, 29 distinct (11..82); `OTJR`
+trapper 7 bits, 26 distinct (11..82); `mIUA` pads 7 bits, 29 distinct (11..82); `JOlt` maskid
+9 bits, 173 distinct (0..290, 36 rows store 0). No field stores its all-ones pattern on any row,
+and no null code is established for any of them (the 36 `maskid = 0` rows are a value until shown
+otherwise). The HEAD `SLOT_SPECS` ceilings 127 / 255 / 511 equal `2^bits - 1` for these widths —
+on Legacy; on NHL 08 the stick field is 8 bits wide and the other present slots 4–5, and on
+NHL 21 PS4 all of them are 10 bits wide (see
+docs/receipts/data/c0-as6-asset-db-references.csv), so the constants are Legacy facts carried as
+code, not a per-title rule. The 19 stored stick ids are all among the 74 ids
+`defs/enums/stick-model.toml` names as having a `texlib_N` texture — a consistency check between
+two committed records, not a file observation.
+
+The FILE half — that `texlib_{id}` / `glove_{id}_*` / `blocker_{model}_{id}_*` are the files a
+row's id names — was repository source (HEAD `SLOT_SPECS`) until C0-AS7 applied that grammar to
+the member table of `cacherender.big` (docs/receipts/data/c0-as7-x360-member-join.csv, re-derived by
+crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches):
+for ALL EIGHT measured fields — stick, skate, helmet, glove, pad, mask-paint, blocker and
+trapper — EVERY stored id names a member under its slot folder (19 / 8 / 10 / 14 / 29 / 173 /
+29 / 26 ids), by literal member name, none decoded. A ninth comparison, the goalie-stick folder
+against the `xmja.wXFx` field HEAD source claims it shares, FAILS: 38 member ids 6-43 against 19
+stored ids 35..112, one in common — a finding about the shared-field claim, not a field failing. That is a
+specimen observation on an attributable corpus; the capability row's `identify = partial
+(brand-keyed)` still describes what Studio does.
+
+WHY NO CANDIDATE VALUE: the contract carries one `[identity]` per target with one `source`, and
+this family keys EIGHT slots to eight fields (nine grammars, the goalie stick sharing `wXFx`).
+That is a schema gap, recorded here rather than papered over with a single `source` string; it
+is not extended in this package because no slot's file half could make an extended identity
+operative today. `ambiguity` is a Studio behaviour choice and is not proposed.
+
+A further DATABASE DEPENDENCY, not an identity: HEAD `equipment_texture.rs` paints glove and
+helmet `_tm` zone masks from the team's `hHbv` zone colours for the preview. A replacement of
+such a mask changes what those colours land on; the Q06 review of an equipment write therefore
+has a database reference to show even where the write itself touches no row.
+"""
+
+[target_profile.container]
+state = "unknown"
+note = "Carried by the variants for the inner layers (RW4 for the texlib form; unrecorded for the loose maps and the thumbnail). The outer `EB\\0\\3` layer inside the shipping title is what the attributable corpus shows for its 13 archives; which one holds equipment is the summary line."
+
+[target_profile.path_rule]
+state = "unknown"
+note = "Every family is unresolved: the grammar is repository source and no committed record binds a rendered path to a real file. The blocker/trapper/goalie-helmet grammars put the id in the SECOND numeric position behind a model or style number that no database field is known to supply, so even a known template could not be rendered from the row alone."
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.compression]
+state = "unknown"
+note = "Inside the shipping archives, compressed payloads on this EB variant are `chunklzx`, which Studio does not decode; no equipment member has been opened. Extracted files carried no wrapper, which is a fact about extracted files."
+
+[target_profile.compression.candidate]
+confidence = "asserted"
+provenance = ["crates/tdb-archive-big/src/eb.rs#decode_payload"]
+note = "PROPOSED, NOT OPERATIVE: `lzx` for archived members on this EB variant."
+
+[target_profile.compression.candidate.value]
+payload = "lzx"
+deterministic = false
+
+[target_profile.atlas]
+state = "unknown"
+note = "A texlib bundle may hold several named rasters and a glove or helmet set spreads its zones over up to three mask FILES (HEAD `equipment_texture.rs`): one asset, several files. Whether any SURFACE is shared between ids was not examined."
+
+[target_profile.install]
+state = "unknown"
+note = """
+`install = external`: the recorded write landed in an extracted tree through `import_texture`.
+Two further shapes exist in HEAD source and neither is a committed observation of the game:
+(a) the Hockey Shop keeps a per-slot store OUTSIDE the install (`studio_api::hockey_shop`,
+`<store_root>/<store_dir>/store.json` + PNGs) and installs a store item by writing into a texlib —
+a loose-file write; (b) cloning an equipment id "copies each of its files byte-for-byte to the
+target ID's filenames. No DB edits" (`equipment_slots.rs`) — a whole-file loose write with
+`updates_references = false`. No value is proposed: which of those paths a Build takes, and
+whether the shipping archive rather than a loose tree is the destination at all, is undecided
+and unmeasured. The committed EB archive-write capability (`EbFile::replace_payload*`) is not
+wired to this family.
+"""
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the game loads — an archive member of `cacherender.big`, a loose file a modder dropped beside it, or a patched copy — was not traced, disassembled or load-tested on this platform. Blocks `discover` and `install`."
+
+[[target_profile.operation]]
+operation = "discover"
+requires = ["discovery", "runtime_lookup"]
+
+[[target_profile.operation]]
+operation = "identify"
+requires = ["identity"]
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+note = "For the glove and helmet zone masks a preview additionally needs the team's `hHbv` colours; that is a database read, not a format fact, and is recorded under [identity]."
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling", "mipmaps"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = [
+    "container",
+    "raster.codec",
+    "raster.color_space",
+    "dimensions",
+    "tiling",
+    "mipmaps",
+    "compression",
+    "atlas.kind",
+]
+note = "Q10: a release replacement preserves the original dimensions and encoded format."
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
+
+# =================================================================== NHL Legacy, PS3
+
+[[target_profile]]
+target = "nhllegacy-ps3"
+note = """
+Represented from one committed operator record and the anchor; nothing established. The record
+(`defs/enums/stick-model.toml`) is the only place in this repository where an asset family's
+runtime binding was exercised in a game — a stick id written to the database rendered the matching
+texture on ice — and it is prose: counts and id lists without digests or a census artefact. It is
+carried here as ASSERTED candidates so the observation has a block, and so the next measurement
+knows exactly which copy to return to.
+"""
+
+[[target_profile.corpus]]
+id = "ps3-operator-copy"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "incomplete"
+identity_source = "NOT READ: the record names the copy only by its own layout — `USRDIR/db/nhlng.db`, `USRDIR/rendering/playerstick/texlib_{N}.rpsgl`, `USRDIR/fe/ion/artassets/createplayer/sticks/` — and by its own statement that the title restarted was NHL Legacy. No PARAM.SFO, title id or version field is recorded; attribution rests on the record, and `build_identification` says so."
+inspected_files = 180
+groups = ["operator-catalogued"]
+limitations = [
+    "Prose with counts and id lists: 106 `stick{N}.big` thumbnails (ids 1-9, 12-13, 15-79, 81-95, 98-112) and 74 `texlib_{N}.rpsgl` (the enum's 74 entries). No digest, header read or census artefact was recorded, so nothing here can be a corpus invariant; `inspected_files` is the record's own count.",
+    "Whether this copy is the same installed copy C0-POR1 inventoried (`H:\\Emulators\\RPCS3\\dev_hdd0\\game\\BLUS31540\\USRDIR`) is not established; the two records were made months apart and neither cites the other.",
+    "The on-ice test (2026-05-18) wrote 55 orphan ids to the copy's `nhlng.db`, so the copy is NOT pristine, and the test's result is the operator's visual report, not a captured frame or trace.",
+    "Only the STICK slot has any file observation. The glove, helmet and skate enum files rest on a catalog CSV and name no file; the goalie slots have no record on this platform at all.",
+]
+provenance = [
+    "defs/enums/stick-model.toml",
+    "defs/enums/glove-model.toml",
+    "defs/enums/helmet-model.toml",
+    "defs/enums/skate-model.toml",
+]
+
+[[target_profile.path_family]]
+id = "stick-texlib"
+template = "rendering/playerstick/texlib_{numeric-id}.rpsgl"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "`{numeric-id}` = `xmja.wXFx`. The record counts 74 such files and enumerates their ids as the enum's entries; 32 further ids that have a thumbnail have no texlib and \"fall back to vanilla on-ice\" per the record. `bucket_resolution` stays unknown: a listed id is not a resolved path until a committed observation places the file."
+
+[[target_profile.path_family]]
+id = "fe-thumbnail-stick"
+template = "fe/ion/artassets/createplayer/sticks/stick{numeric-id}.big"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "The record counts 106 such files and lists their ids. The same caveat: a count in prose, not a census."
+
+[[target_profile.variant]]
+id = "stick-texlib"
+note = "The PS3 texture-library form (`.rpsgl`). Selected by path family. HEAD source carries no codec for `.rpsgl` (`equipment_piece.rs`: \"PS3 `.rpsgl` caches carry no mesh codec in this app\"), so no chain is proposed."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "stick-texlib"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "Not recorded. Nothing committed opens a `.rpsgl`, and no analogy to the Xbox 360 `RW4` library is carried."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Not recorded. The record says the painted artwork was READ (brand and model identified from each texture), which shows the files decode in some tool; it records no codec."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded."
+
+[[target_profile.variant]]
+id = "fe-thumbnail-stick"
+note = "The front-end thumbnail form. Selected by path family. Nothing recorded beyond the count and the ids."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "fe-thumbnail-stick"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not recorded."
+
+[target_profile.discovery]
+state = "unknown"
+note = "The record places the stick files as LOOSE files under `USRDIR/rendering/playerstick/` and `USRDIR/fe/ion/artassets/createplayer/sticks/`. Placement in one copy, in prose. The candidate below carries it. C0-AS7 opened the `patch.big` at USRDIR root of the C0-POR1 PS3 copy (docs/receipts/data/c0-as7-ps3-patch-members.csv): it holds 328 `rendering/*.rpsgl` members under `blocker`, `glove`, `goaliehelmet`, `goaliepad`, `goaliestick`, `helmet`, `jersey`, `logo`, `pant`, `player`, `sock` and `trapper`, and 13 `fe/ion/artassets/createplayer/{blocker,gloves,pads,trapper}/*.big` thumbnails — and NO member under `rendering/playerstick/` or `createplayer/sticks/`. On that copy, then, the stick family has no patch layer to be shadowed by; whether that copy is the operator's copy is still not established, and a listing is not the runtime's lookup."
+
+[target_profile.discovery.candidate]
+confidence = "asserted"
+scope = "specimen-observation"
+corpus = "ps3-operator-copy"
+provenance = ["defs/enums/stick-model.toml"]
+note = "PROPOSED, NOT OPERATIVE. Observed loose placement in one copy, offered as a proposal; promoting it needs a census of the folder with digests and evidence about what the game loads."
+
+[target_profile.discovery.candidate.value]
+scope = "loose-tree"
+root = "rendering/playerstick"
+recursive = false
+
+[target_profile.identity]
+state = "unknown"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_equipment_id_fields_are_measured_on_the_anchor",
+    "docs/audits/data/schema/ps3-nhllegacy.json#xmja",
+    "defs/enums/stick-model.toml",
+]
+note = """
+The DB half is the same measurement as on Xbox 360: the PS3 anchor is byte-identical to the
+Xbox 360 anchor (asserted on the bytes by the named case), so the eight fields, their widths and
+the stored id sets are the same. See the Xbox 360 profile's [identity] for the figures.
+
+For the STICK slot alone the file half is ASSERTED by the operator record: `xmja.wXFx = N`
+selects `rendering/playerstick/texlib_N.rpsgl`, shown on ice for 74 ids on 2026-05-18 after
+zeroing the NISO / jmjk / MMuu / FCNk cascade. That is a binding observed in a running game — the
+only such observation for any family in this repository — and it is prose. It is not carried as
+a candidate VALUE for the same reason as on Xbox 360: one `[identity]` cannot spell eight slot
+sources, and a stick-only value would read as the family's identity. The cascade itself (four
+further `xmja` fields the record says must be zeroed for the assignment to take effect) is a
+database dependency of any stick assignment and is not described by any block here.
+"""
+
+[target_profile.container]
+state = "unknown"
+note = "Carried by the variants; nothing committed opens a `.rpsgl` or a create-player `.big` on this platform."
+
+[target_profile.path_rule]
+state = "unknown"
+note = "Both families are unresolved: the record lists ids, and a list of ids in prose is not a rendered path beside a hashed file."
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.compression]
+state = "unknown"
+note = "Not recorded. Whether a `.rpsgl` carries a stream wrapper was not examined."
+
+[target_profile.atlas]
+state = "unknown"
+note = "Not examined."
+
+[target_profile.install]
+state = "unknown"
+note = "No equipment file was written on this platform by any recorded package. The record's own edit was a DATABASE write (`USRDIR/db/nhlng.db`, with the note that the repository's `default.db` \"is never loaded by the running game\") — an install fact about the database unit, recorded where it belongs (the `nhllegacy-ps3` adapter), not an asset install."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = """
+The record's on-ice test is the closest thing this repository holds to runtime evidence for any
+asset family: the game rendered `texlib_N.rpsgl` for `wXFx = N` on 74 ids, and rendered the
+vanilla stick for the 32 thumbnail-only ids. That establishes that the running game READ a
+loose `rendering/playerstick/texlib_N.rpsgl` for those ids on that copy — as the operator saw it.
+No value is proposed: `patch_precedence` is unmeasured — C0-AS7 listed the `patch.big` of the
+C0-POR1 PS3 copy (docs/receipts/data/c0-as7-ps3-patch-overlap.csv) and found no
+`playerstick` or `createplayer/sticks` member in it, so on THAT copy no patch member competes with
+the loose stick files, but the copy's identity with the operator's is not established and a listing
+is not a lookup — the observation is a visual report rather than a trace or capture, and it covers
+one slot. What would promote this block: the same test recorded with the copy's identity, a hashed
+file list, and a capture — or a trace of the file opens.
+"""
+
+[[target_profile.operation]]
+operation = "discover"
+requires = ["discovery", "runtime_lookup"]
+
+[[target_profile.operation]]
+operation = "identify"
+requires = ["identity"]
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling", "mipmaps"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = [
+    "container",
+    "raster.codec",
+    "raster.color_space",
+    "dimensions",
+    "tiling",
+    "mipmaps",
+    "compression",
+    "atlas.kind",
+]
+note = "Q10: a release replacement preserves the original dimensions and encoded format."
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
+
+# ===================================================== NHL Legacy Recompiled (by reference)
+
+[[target_profile]]
+target = "legacyrecomp-recomp"
+reuses = "nhllegacy-xbox360"
+note = """
+Q47 (user direction, 2026-09-15; package C0-AS5): Legacy Recompiled uses the same asset files and
+the same asset definitions as Legacy Xbox 360. This profile therefore inherits, BY REFERENCE and
+without a copy, the SHARED definitions of `nhllegacy-xbox360` — identity, container, path families
+and naming, the geometry/codec blocks, variants and the operation requirements
+(`asset_reuse::SHARED_BLOCKS` / `SHARED_TABLES`), with the corpora those blocks cite — in exactly
+the states they have there: what is a candidate or unknown on Legacy Xbox 360 is a candidate or
+unknown here, and nothing inherited becomes operative by being inherited. The reuse is the user's
+attributed decision, not a measurement: no Recompiled file was hashed or inspected for it, no corpus
+is declared here, and no provenance bridge is claimed. DESTINATION behaviour is this target's own
+and is UNKNOWN below: where a Recompiled installation keeps these files, how they are written there
+and what its runtime reads have not been inspected (FR4: no Recompiled installation, anchor or save
+fixture is committed). Nothing here says anything about Recompiled's database (its database unit
+stays absent from the registry) or about a reference-update capability. Qualification is not
+inherited: no automated case, evidence cell or runtime record of Legacy Xbox 360 applies here.
+"""
+
+[target_profile.discovery]
+state = "unknown"
+note = "Where a Legacy Recompiled installation keeps this family's files is not inspected (FR4). Not inherited from Legacy Xbox 360 by design: a destination root is the destination's own fact."
+
+[target_profile.install]
+state = "unknown"
+note = "How this family's files are written into a Recompiled installation is not inspected. Not inherited: an install kind, size policy or backup rule observed on an Xbox 360 tree is that tree's."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the Recompiled runtime reads for this family is not inspected. Not inherited: runtime evidence is a trace, a disassembly or a load test on the destination itself, never a folder listing and never another target's record."

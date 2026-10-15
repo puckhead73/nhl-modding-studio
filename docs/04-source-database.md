@@ -26,7 +26,7 @@ FHM corpus (SQLite) ──► formula engine ──► import pipeline ──►
 
 - The corpus is read-mostly SQLite (`rusqlite`).
 - The **formula engine** computes EA ratings from FHM/biographical data (normalisation modes,
-  archetype classification, saved profiles) — ratings scales differ across NHL 10–21.
+  archetype classification, saved profiles) — ratings scales differ across NHL 07–21.
 - The **import pipeline** is two-phase **preview → commit** over an `ImportChangeSet` PLAN; preview
   and commit lower through the *same* code path so they are byte-identical (a golden-test invariant).
 - The **instance registry** (separate SQLite sidecar) ledgers imported player-season instances for

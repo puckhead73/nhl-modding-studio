@@ -3,4 +3,4 @@
 /**
  * One colour zone of a stock-equipment row, decoded to RGB.
  */
-export type EquipmentZoneDto = { red: number, green: number, blue: number, };
+export type EquipmentZoneDto = { red: number, green: number, blue: number, packed_field?: string, };

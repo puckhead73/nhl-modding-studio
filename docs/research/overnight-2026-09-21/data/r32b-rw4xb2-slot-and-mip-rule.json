@@ -1,0 +1,157 @@
+{
+ "note": "R32b \u2014 RW4xb2 slot / mip-address rule census (scratch script over the loose rendering trees; logic: DW8 bits 12+ == 2 x descriptor index; DW12 bits 12+ x 4096 == tiled base-mip bytes (32x32-element tiles), 6x for cubes, 0 for single-mip; examples give (file, w, h, format, mips, dw12_field, expected)).",
+ "titles": {
+  "legacy": {
+   "counts": {
+    "DW8 base==2*slot": 26118,
+    "DW12 normal ok": 24820,
+    "DW12 mips1 zero": 2491,
+    "DW12 small ok": 127,
+    "DW12 small zero": 75,
+    "DW12 cube ok6x": 71,
+    "DW12 normal zero": 1,
+    "DW8 base!=2*slot": 2627
+   },
+   "examples": {
+    "DW12 small zero": [
+     "boot\\texlib_4.rx2",
+     4,
+     4,
+     "DXT1",
+     3,
+     0,
+     8192
+    ],
+    "DW12 normal zero": [
+     "ice\\texlib_0.rx2",
+     16,
+     256,
+     "DXT1",
+     9,
+     0,
+     16384
+    ],
+    "DW8 ex": [
+     "stadium\\ice_intl_container_0.rx2",
+     0,
+     1,
+     6
+    ]
+   }
+  },
+  "nhl11": {
+   "counts": {
+    "DW8 base==2*slot": 20057,
+    "DW12 normal ok": 20120,
+    "DW12 mips1 zero": 1036,
+    "DW12 small ok": 149,
+    "DW12 cube ok6x": 5,
+    "DW12 normal zero": 1,
+    "DW12 small zero": 58,
+    "DW8 base!=2*slot": 2072
+   },
+   "examples": {
+    "DW12 normal zero": [
+     "ice\\texlib_0.rx2",
+     16,
+     256,
+     "DXT3",
+     9,
+     0,
+     32768
+    ],
+    "DW12 small zero": [
+     "player_common\\head_csm.rx2",
+     4,
+     4,
+     "DXT1",
+     3,
+     0,
+     8192
+    ],
+    "DW8 ex": [
+     "stadium\\ice_intl_container_0.rx2",
+     0,
+     1,
+     6
+    ]
+   }
+  },
+  "nhl09": {
+   "counts": {
+    "DW8 base==2*slot": 15985,
+    "DW12 normal ok": 16064,
+    "DW12 mips1 zero": 902,
+    "DW12 small ok": 206,
+    "DW12 small zero": 18,
+    "DW12 cube ok6x": 4,
+    "DW12 normal zero": 1,
+    "DW8 base!=2*slot": 1695
+   },
+   "examples": {
+    "DW12 small zero": [
+     "coachhead\\hair_100_0_aa.rx2",
+     4,
+     4,
+     "DXT1",
+     3,
+     0,
+     8192
+    ],
+    "DW12 normal zero": [
+     "ice\\texlib_0.rx2",
+     16,
+     256,
+     "DXT3",
+     9,
+     0,
+     32768
+    ],
+    "DW8 ex": [
+     "indicator\\orig_indicator_0_cm.rx2",
+     0,
+     1,
+     1
+    ]
+   }
+  },
+  "nhl15": {
+   "counts": {
+    "DW8 base==2*slot": 22650,
+    "DW12 normal ok": 21718,
+    "DW12 mips1 zero": 2346,
+    "DW12 small ok": 127,
+    "DW12 small zero": 73,
+    "DW12 cube ok6x": 71,
+    "DW12 normal zero": 1,
+    "DW8 base!=2*slot": 2625
+   },
+   "examples": {
+    "DW12 small zero": [
+     "boot\\texlib_4.rx2",
+     4,
+     4,
+     "DXT1",
+     3,
+     0,
+     8192
+    ],
+    "DW12 normal zero": [
+     "ice\\texlib_0.rx2",
+     16,
+     256,
+     "DXT1",
+     9,
+     0,
+     16384
+    ],
+    "DW8 ex": [
+     "stadium\\ice_intl_container_0.rx2",
+     0,
+     1,
+     6
+    ]
+   }
+  }
+ }
+}

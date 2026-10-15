@@ -1,0 +1,2739 @@
+{
+ "titles": {
+  "nhl10": {
+   "table_va": "0x8333f948",
+   "groups": [],
+   "team_table_groups_by_league": {
+    "0": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 32
+    },
+    "1": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 29
+    },
+    "2": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 12
+    },
+    "3": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 14
+    },
+    "4": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 15
+    },
+    "5": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 14
+    },
+    "6": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 12
+    },
+    "7": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 21
+    },
+    "8": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 1
+    },
+    "9": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 2
+    },
+    "10": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 30
+    }
+   }
+  },
+  "nhl11": {
+   "table_va": "0x834cef70",
+   "groups": [],
+   "team_table_groups_by_league": {
+    "0": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 32
+    },
+    "1": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 30
+    },
+    "2": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 12
+    },
+    "3": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 14
+    },
+    "4": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 15
+    },
+    "5": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 14
+    },
+    "6": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 12
+    },
+    "7": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 21
+    },
+    "8": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 20
+    },
+    "9": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 18
+    },
+    "10": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 22
+    },
+    "11": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 2
+    },
+    "12": {
+     "leaguegroup": {},
+     "conferencegroup": {},
+     "divisiongroup": {},
+     "teams": 30
+    }
+   }
+  },
+  "nhl12": {
+   "table_va": "0x837b5040",
+   "groups": [
+    {
+     "group_id": 0,
+     "key": "NHL",
+     "logo_index": 0,
+     "text": "NHL\u00c2\u00ae"
+    },
+    {
+     "group_id": 1,
+     "key": "WesternConference",
+     "logo_index": 0,
+     "text": "WESTERN CONFERENCE"
+    },
+    {
+     "group_id": 2,
+     "key": "EasternConference",
+     "logo_index": 0,
+     "text": "EASTERN CONFERENCE"
+    },
+    {
+     "group_id": 3,
+     "key": "NorthwestDivision",
+     "logo_index": 0,
+     "text": "NORTHWEST DIVISION"
+    },
+    {
+     "group_id": 4,
+     "key": "PacificDivision",
+     "logo_index": 0,
+     "text": "PACIFIC DIVISION"
+    },
+    {
+     "group_id": 5,
+     "key": "CentralDivision",
+     "logo_index": 0,
+     "text": "CENTRAL DIVISION"
+    },
+    {
+     "group_id": 6,
+     "key": "SoutheastDivision",
+     "logo_index": 0,
+     "text": "SOUTHEAST DIVISION"
+    },
+    {
+     "group_id": 7,
+     "key": "AtlanticDivision",
+     "logo_index": 0,
+     "text": "ATLANTIC DIVISION"
+    },
+    {
+     "group_id": 8,
+     "key": "NortheastDivision",
+     "logo_index": 0,
+     "text": "NORTHEAST DIVISION"
+    },
+    {
+     "group_id": 9,
+     "key": "AHL",
+     "logo_index": 1,
+     "text": "AHL"
+    },
+    {
+     "group_id": 10,
+     "key": "WesternConference",
+     "logo_index": 1,
+     "text": "WESTERN CONFERENCE"
+    },
+    {
+     "group_id": 11,
+     "key": "EasternConference",
+     "logo_index": 1,
+     "text": "EASTERN CONFERENCE"
+    },
+    {
+     "group_id": 12,
+     "key": "AtlanticDivision",
+     "logo_index": 1,
+     "text": "ATLANTIC DIVISION"
+    },
+    {
+     "group_id": 13,
+     "key": "EastDivision",
+     "logo_index": 1,
+     "text": "EAST DIVISION"
+    },
+    {
+     "group_id": 14,
+     "key": "MidwestDivision",
+     "logo_index": 1,
+     "text": "MIDWEST DIVISION"
+    },
+    {
+     "group_id": 15,
+     "key": "NorthDivision",
+     "logo_index": 1,
+     "text": "NORTH DIVISION"
+    },
+    {
+     "group_id": 16,
+     "key": "NortheastDivision",
+     "logo_index": 1,
+     "text": "NORTHEAST DIVISION"
+    },
+    {
+     "group_id": 17,
+     "key": "WestDivision",
+     "logo_index": 1,
+     "text": "WEST DIVISION"
+    },
+    {
+     "group_id": 18,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "logo_index": 7,
+     "text": "EXTRALIGA LEDNIHO HOKEJE"
+    },
+    {
+     "group_id": 19,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "logo_index": 10,
+     "text": "NATIONAL LEAGUE"
+    },
+    {
+     "group_id": 20,
+     "key": "SMLIIGA",
+     "logo_index": 3,
+     "text": "SM-LIIGA"
+    },
+    {
+     "group_id": 21,
+     "key": "TXT_LEAGUE_DEL",
+     "logo_index": 6,
+     "text": "DEL"
+    },
+    {
+     "group_id": 22,
+     "key": "elitserien",
+     "logo_index": 2,
+     "text": "ELITSERIEN"
+    },
+    {
+     "group_id": 23,
+     "key": "OHL",
+     "logo_index": 12,
+     "text": "OHL"
+    },
+    {
+     "group_id": 24,
+     "key": "WesternConference",
+     "logo_index": 12,
+     "text": "WESTERN CONFERENCE"
+    },
+    {
+     "group_id": 25,
+     "key": "EasternConference",
+     "logo_index": 12,
+     "text": "EASTERN CONFERENCE"
+    },
+    {
+     "group_id": 26,
+     "key": "CentralDivision",
+     "logo_index": 12,
+     "text": "CENTRAL DIVISION"
+    },
+    {
+     "group_id": 27,
+     "key": "EastDivision",
+     "logo_index": 12,
+     "text": "EAST DIVISION"
+    },
+    {
+     "group_id": 28,
+     "key": "MidwestDivision",
+     "logo_index": 12,
+     "text": "MIDWEST DIVISION"
+    },
+    {
+     "group_id": 29,
+     "key": "WestDivision",
+     "logo_index": 12,
+     "text": "WEST DIVISION"
+    },
+    {
+     "group_id": 30,
+     "key": "QMJHL",
+     "logo_index": 13,
+     "text": "QMJHL"
+    },
+    {
+     "group_id": 31,
+     "key": "EastDivision",
+     "logo_index": 13,
+     "text": "EAST DIVISION"
+    },
+    {
+     "group_id": 32,
+     "key": "MaritimesDivision",
+     "logo_index": 13,
+     "text": "MARITIMES DIVISION"
+    },
+    {
+     "group_id": 33,
+     "key": "WestDivision",
+     "logo_index": 13,
+     "text": "WEST DIVISION"
+    },
+    {
+     "group_id": 34,
+     "key": "WHL",
+     "logo_index": 11,
+     "text": "WHL"
+    },
+    {
+     "group_id": 35,
+     "key": "WesternConference",
+     "logo_index": 11,
+     "text": "WESTERN CONFERENCE"
+    },
+    {
+     "group_id": 36,
+     "key": "EasternConference",
+     "logo_index": 11,
+     "text": "EASTERN CONFERENCE"
+    },
+    {
+     "group_id": 37,
+     "key": "BcDivision",
+     "logo_index": 11,
+     "text": "B.C. DIVISION"
+    },
+    {
+     "group_id": 38,
+     "key": "CentralDivision",
+     "logo_index": 11,
+     "text": "CENTRAL DIVISION"
+    },
+    {
+     "group_id": 39,
+     "key": "EastDivision",
+     "logo_index": 11,
+     "text": "EAST DIVISION"
+    },
+    {
+     "group_id": 40,
+     "key": "UsDivision",
+     "logo_index": 11,
+     "text": "U.S. DIVISION"
+    },
+    {
+     "group_id": 41,
+     "key": "TournamentFile",
+     "logo_index": 5,
+     "text": "TOURNAMENT"
+    },
+    {
+     "group_id": 42,
+     "key": "PoolA",
+     "logo_index": 5,
+     "text": "POOL A"
+    },
+    {
+     "group_id": 43,
+     "key": "PoolB",
+     "logo_index": 5,
+     "text": "POOL B"
+    },
+    {
+     "group_id": 44,
+     "key": "Playoffs",
+     "logo_index": 5,
+     "text": "PLAYOFFS"
+    },
+    {
+     "group_id": 45,
+     "key": "ConferenceA",
+     "logo_index": 5,
+     "text": "CONFERENCE A"
+    },
+    {
+     "group_id": 46,
+     "key": "ConferenceB",
+     "logo_index": 5,
+     "text": "CONFERENCE B"
+    },
+    {
+     "group_id": 47,
+     "key": "DivisionA",
+     "logo_index": 5,
+     "text": "DIVISION A"
+    },
+    {
+     "group_id": 48,
+     "key": "DivisionB",
+     "logo_index": 5,
+     "text": "DIVISION B"
+    },
+    {
+     "group_id": 49,
+     "key": "DivisionC",
+     "logo_index": 5,
+     "text": "DIVISION C"
+    },
+    {
+     "group_id": 50,
+     "key": "DivisionD",
+     "logo_index": 5,
+     "text": "DIVISION D"
+    },
+    {
+     "group_id": 51,
+     "key": "CUSTOM_TEAMS",
+     "logo_index": 5,
+     "text": "CUSTOM TEAMS"
+    }
+   ],
+   "team_table_groups_by_league": {
+    "0": {
+     "leaguegroup": {
+      "0": 32
+     },
+     "conferencegroup": {
+      "1": 16,
+      "2": 16
+     },
+     "divisiongroup": {
+      "1": 1,
+      "2": 1,
+      "3": 5,
+      "4": 5,
+      "5": 5,
+      "6": 5,
+      "7": 5,
+      "8": 5
+     },
+     "teams": 32
+    },
+    "1": {
+     "leaguegroup": {
+      "9": 30
+     },
+     "conferencegroup": {
+      "10": 15,
+      "11": 15
+     },
+     "divisiongroup": {
+      "12": 5,
+      "13": 5,
+      "14": 5,
+      "15": 5,
+      "16": 5,
+      "17": 5
+     },
+     "teams": 30
+    },
+    "2": {
+     "leaguegroup": {
+      "22": 12
+     },
+     "conferencegroup": {
+      "22": 12
+     },
+     "divisiongroup": {
+      "22": 12
+     },
+     "teams": 12
+    },
+    "3": {
+     "leaguegroup": {
+      "20": 14
+     },
+     "conferencegroup": {
+      "20": 14
+     },
+     "divisiongroup": {
+      "20": 14
+     },
+     "teams": 14
+    },
+    "4": {
+     "leaguegroup": {
+      "21": 14
+     },
+     "conferencegroup": {
+      "21": 14
+     },
+     "divisiongroup": {
+      "21": 14
+     },
+     "teams": 14
+    },
+    "5": {
+     "leaguegroup": {
+      "18": 14
+     },
+     "conferencegroup": {
+      "18": 14
+     },
+     "divisiongroup": {
+      "18": 14
+     },
+     "teams": 14
+    },
+    "6": {
+     "leaguegroup": {
+      "19": 12
+     },
+     "conferencegroup": {
+      "19": 12
+     },
+     "divisiongroup": {
+      "19": 12
+     },
+     "teams": 12
+    },
+    "7": {
+     "leaguegroup": {
+      "41": 21
+     },
+     "conferencegroup": {
+      "41": 21
+     },
+     "divisiongroup": {
+      "41": 21
+     },
+     "teams": 21
+    },
+    "8": {
+     "leaguegroup": {
+      "23": 20
+     },
+     "conferencegroup": {
+      "24": 10,
+      "25": 10
+     },
+     "divisiongroup": {
+      "26": 5,
+      "27": 5,
+      "28": 5,
+      "29": 5
+     },
+     "teams": 20
+    },
+    "9": {
+     "leaguegroup": {
+      "30": 17
+     },
+     "conferencegroup": {
+      "30": 17
+     },
+     "divisiongroup": {
+      "31": 5,
+      "32": 6,
+      "33": 6
+     },
+     "teams": 17
+    },
+    "10": {
+     "leaguegroup": {
+      "34": 22
+     },
+     "conferencegroup": {
+      "35": 10,
+      "36": 12
+     },
+     "divisiongroup": {
+      "37": 5,
+      "38": 6,
+      "39": 6,
+      "40": 5
+     },
+     "teams": 22
+    },
+    "11": {
+     "leaguegroup": {
+      "51": 2
+     },
+     "conferencegroup": {
+      "51": 2
+     },
+     "divisiongroup": {
+      "51": 2
+     },
+     "teams": 2
+    },
+    "12": {
+     "leaguegroup": {
+      "51": 1
+     },
+     "conferencegroup": {
+      "51": 1
+     },
+     "divisiongroup": {
+      "51": 1
+     },
+     "teams": 1
+    },
+    "14": {
+     "leaguegroup": {
+      "0": 2
+     },
+     "conferencegroup": {
+      "2": 2
+     },
+     "divisiongroup": {
+      "6": 1,
+      "7": 1
+     },
+     "teams": 2
+    },
+    "13": {
+     "leaguegroup": {
+      "51": 30
+     },
+     "conferencegroup": {
+      "51": 30
+     },
+     "divisiongroup": {
+      "51": 30
+     },
+     "teams": 30
+    }
+   }
+  },
+  "nhl13": {
+   "table_va": "0x8383d250",
+   "groups": [
+    {
+     "group_id": 0,
+     "key": "NHL",
+     "logo_index": 0,
+     "text": "NHL\u00c2\u00ae"
+    },
+    {
+     "group_id": 1,
+     "key": "WesternConference",
+     "logo_index": 0,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 2,
+     "key": "EasternConference",
+     "logo_index": 0,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 3,
+     "key": "NorthwestDivision",
+     "logo_index": 0,
+     "text": "Northwest Division"
+    },
+    {
+     "group_id": 4,
+     "key": "PacificDivision",
+     "logo_index": 0,
+     "text": "Pacific Division"
+    },
+    {
+     "group_id": 5,
+     "key": "CentralDivision",
+     "logo_index": 0,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 6,
+     "key": "SoutheastDivision",
+     "logo_index": 0,
+     "text": "Southeast Division"
+    },
+    {
+     "group_id": 7,
+     "key": "AtlanticDivision",
+     "logo_index": 0,
+     "text": "Atlantic Division"
+    },
+    {
+     "group_id": 8,
+     "key": "NortheastDivision",
+     "logo_index": 0,
+     "text": "Northeast Division"
+    },
+    {
+     "group_id": 9,
+     "key": "AHL",
+     "logo_index": 1,
+     "text": "AHL"
+    },
+    {
+     "group_id": 10,
+     "key": "WesternConference",
+     "logo_index": 1,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 11,
+     "key": "EasternConference",
+     "logo_index": 1,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 12,
+     "key": "AtlanticDivision",
+     "logo_index": 1,
+     "text": "Atlantic Division"
+    },
+    {
+     "group_id": 13,
+     "key": "EastDivision",
+     "logo_index": 1,
+     "text": "East Division"
+    },
+    {
+     "group_id": 14,
+     "key": "MidwestDivision",
+     "logo_index": 1,
+     "text": "Midwest Division"
+    },
+    {
+     "group_id": 15,
+     "key": "NorthDivision",
+     "logo_index": 1,
+     "text": "North Division"
+    },
+    {
+     "group_id": 16,
+     "key": "NortheastDivision",
+     "logo_index": 1,
+     "text": "Northeast Division"
+    },
+    {
+     "group_id": 17,
+     "key": "SouthDivision",
+     "logo_index": 1,
+     "text": "South Division"
+    },
+    {
+     "group_id": 18,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "logo_index": 7,
+     "text": "Extraliga ledniho hokeje"
+    },
+    {
+     "group_id": 19,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "logo_index": 10,
+     "text": "National League"
+    },
+    {
+     "group_id": 20,
+     "key": "SMLIIGA",
+     "logo_index": 3,
+     "text": "SM-Liiga"
+    },
+    {
+     "group_id": 21,
+     "key": "TXT_LEAGUE_DEL",
+     "logo_index": 6,
+     "text": "DEL"
+    },
+    {
+     "group_id": 22,
+     "key": "elitserien",
+     "logo_index": 2,
+     "text": "Elitserien"
+    },
+    {
+     "group_id": 23,
+     "key": "OHL",
+     "logo_index": 12,
+     "text": "OHL"
+    },
+    {
+     "group_id": 24,
+     "key": "WesternConference",
+     "logo_index": 12,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 25,
+     "key": "EasternConference",
+     "logo_index": 12,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 26,
+     "key": "CentralDivision",
+     "logo_index": 12,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 27,
+     "key": "EastDivision",
+     "logo_index": 12,
+     "text": "East Division"
+    },
+    {
+     "group_id": 28,
+     "key": "MidwestDivision",
+     "logo_index": 12,
+     "text": "Midwest Division"
+    },
+    {
+     "group_id": 29,
+     "key": "WestDivision",
+     "logo_index": 12,
+     "text": "West Division"
+    },
+    {
+     "group_id": 30,
+     "key": "QMJHL",
+     "logo_index": 13,
+     "text": "QMJHL"
+    },
+    {
+     "group_id": 31,
+     "key": "EastDivision",
+     "logo_index": 13,
+     "text": "East Division"
+    },
+    {
+     "group_id": 32,
+     "key": "MaritimesDivision",
+     "logo_index": 13,
+     "text": "Maritimes Division"
+    },
+    {
+     "group_id": 33,
+     "key": "WestDivision",
+     "logo_index": 13,
+     "text": "West Division"
+    },
+    {
+     "group_id": 34,
+     "key": "WHL",
+     "logo_index": 11,
+     "text": "WHL"
+    },
+    {
+     "group_id": 35,
+     "key": "WesternConference",
+     "logo_index": 11,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 36,
+     "key": "EasternConference",
+     "logo_index": 11,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 37,
+     "key": "BcDivision",
+     "logo_index": 11,
+     "text": "B.C. Division"
+    },
+    {
+     "group_id": 38,
+     "key": "CentralDivision",
+     "logo_index": 11,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 39,
+     "key": "EastDivision",
+     "logo_index": 11,
+     "text": "East Division"
+    },
+    {
+     "group_id": 40,
+     "key": "UsDivision",
+     "logo_index": 11,
+     "text": "U.S. Division"
+    },
+    {
+     "group_id": 41,
+     "key": "TournamentFile",
+     "logo_index": 5,
+     "text": "Tournament"
+    },
+    {
+     "group_id": 42,
+     "key": "PoolA",
+     "logo_index": 5,
+     "text": "Pool A"
+    },
+    {
+     "group_id": 43,
+     "key": "PoolB",
+     "logo_index": 5,
+     "text": "Pool B"
+    },
+    {
+     "group_id": 44,
+     "key": "Playoffs",
+     "logo_index": 5,
+     "text": "Playoffs"
+    },
+    {
+     "group_id": 45,
+     "key": "ConferenceA",
+     "logo_index": 5,
+     "text": "Conference A"
+    },
+    {
+     "group_id": 46,
+     "key": "ConferenceB",
+     "logo_index": 5,
+     "text": "Conference B"
+    },
+    {
+     "group_id": 47,
+     "key": "DivisionA",
+     "logo_index": 5,
+     "text": "Division A"
+    },
+    {
+     "group_id": 48,
+     "key": "DivisionB",
+     "logo_index": 5,
+     "text": "Division B"
+    },
+    {
+     "group_id": 49,
+     "key": "DivisionC",
+     "logo_index": 5,
+     "text": "Division C"
+    },
+    {
+     "group_id": 50,
+     "key": "DivisionD",
+     "logo_index": 5,
+     "text": "Division D"
+    },
+    {
+     "group_id": 51,
+     "key": "CUSTOM_TEAMS",
+     "logo_index": 5,
+     "text": "Custom Teams"
+    }
+   ],
+   "team_table_groups_by_league": {
+    "0": {
+     "leaguegroup": {
+      "0": 32
+     },
+     "conferencegroup": {
+      "1": 16,
+      "2": 16
+     },
+     "divisiongroup": {
+      "1": 1,
+      "2": 1,
+      "3": 5,
+      "4": 5,
+      "5": 5,
+      "6": 5,
+      "7": 5,
+      "8": 5
+     },
+     "teams": 32
+    },
+    "1": {
+     "leaguegroup": {
+      "9": 30
+     },
+     "conferencegroup": {
+      "10": 15,
+      "11": 15
+     },
+     "divisiongroup": {
+      "12": 5,
+      "13": 5,
+      "14": 5,
+      "15": 5,
+      "16": 5,
+      "17": 5
+     },
+     "teams": 30
+    },
+    "2": {
+     "leaguegroup": {
+      "22": 12
+     },
+     "conferencegroup": {
+      "22": 12
+     },
+     "divisiongroup": {
+      "22": 12
+     },
+     "teams": 12
+    },
+    "3": {
+     "leaguegroup": {
+      "20": 14
+     },
+     "conferencegroup": {
+      "20": 14
+     },
+     "divisiongroup": {
+      "20": 14
+     },
+     "teams": 14
+    },
+    "4": {
+     "leaguegroup": {
+      "21": 14
+     },
+     "conferencegroup": {
+      "21": 14
+     },
+     "divisiongroup": {
+      "21": 14
+     },
+     "teams": 14
+    },
+    "5": {
+     "leaguegroup": {
+      "18": 14
+     },
+     "conferencegroup": {
+      "18": 14
+     },
+     "divisiongroup": {
+      "18": 14
+     },
+     "teams": 14
+    },
+    "6": {
+     "leaguegroup": {
+      "19": 12
+     },
+     "conferencegroup": {
+      "19": 12
+     },
+     "divisiongroup": {
+      "19": 12
+     },
+     "teams": 12
+    },
+    "7": {
+     "leaguegroup": {
+      "41": 21
+     },
+     "conferencegroup": {
+      "41": 21
+     },
+     "divisiongroup": {
+      "41": 21
+     },
+     "teams": 21
+    },
+    "8": {
+     "leaguegroup": {
+      "23": 20
+     },
+     "conferencegroup": {
+      "24": 10,
+      "25": 10
+     },
+     "divisiongroup": {
+      "26": 5,
+      "27": 5,
+      "28": 5,
+      "29": 5
+     },
+     "teams": 20
+    },
+    "9": {
+     "leaguegroup": {
+      "30": 18
+     },
+     "conferencegroup": {
+      "30": 18
+     },
+     "divisiongroup": {
+      "31": 6,
+      "32": 6,
+      "33": 6
+     },
+     "teams": 18
+    },
+    "10": {
+     "leaguegroup": {
+      "34": 22
+     },
+     "conferencegroup": {
+      "35": 10,
+      "36": 12
+     },
+     "divisiongroup": {
+      "37": 5,
+      "38": 6,
+      "39": 6,
+      "40": 5
+     },
+     "teams": 22
+    },
+    "11": {
+     "leaguegroup": {
+      "51": 2
+     },
+     "conferencegroup": {
+      "51": 2
+     },
+     "divisiongroup": {
+      "51": 2
+     },
+     "teams": 2
+    },
+    "12": {
+     "leaguegroup": {
+      "51": 3
+     },
+     "conferencegroup": {
+      "51": 3
+     },
+     "divisiongroup": {
+      "51": 3
+     },
+     "teams": 3
+    },
+    "14": {
+     "leaguegroup": {
+      "0": 4
+     },
+     "conferencegroup": {
+      "2": 4
+     },
+     "divisiongroup": {
+      "6": 1,
+      "7": 3
+     },
+     "teams": 4
+    },
+    "13": {
+     "leaguegroup": {
+      "51": 30
+     },
+     "conferencegroup": {
+      "51": 30
+     },
+     "divisiongroup": {
+      "51": 30
+     },
+     "teams": 30
+    }
+   }
+  },
+  "nhl14": {
+   "table_va": "0x839f3428",
+   "groups": [
+    {
+     "group_id": 0,
+     "key": "NHL",
+     "logo_index": 0,
+     "text": "NHL\u00c2\u00ae"
+    },
+    {
+     "group_id": 1,
+     "key": "WesternConference",
+     "logo_index": 0,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 2,
+     "key": "EasternConference",
+     "logo_index": 0,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 3,
+     "key": "NHLDivisionA",
+     "logo_index": 0,
+     "text": "Division A"
+    },
+    {
+     "group_id": 4,
+     "key": "NHLDivisionB",
+     "logo_index": 0,
+     "text": "Division B"
+    },
+    {
+     "group_id": 5,
+     "key": "NHLDivisionC",
+     "logo_index": 0,
+     "text": "Division C"
+    },
+    {
+     "group_id": 6,
+     "key": "NHLDivisionD",
+     "logo_index": 0,
+     "text": "Division D"
+    },
+    {
+     "group_id": 7,
+     "key": "AHL",
+     "logo_index": 1,
+     "text": "AHL"
+    },
+    {
+     "group_id": 8,
+     "key": "WesternConference",
+     "logo_index": 1,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 9,
+     "key": "EasternConference",
+     "logo_index": 1,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 10,
+     "key": "AtlanticDivision",
+     "logo_index": 1,
+     "text": "Atlantic Division"
+    },
+    {
+     "group_id": 11,
+     "key": "EastDivision",
+     "logo_index": 1,
+     "text": "East Division"
+    },
+    {
+     "group_id": 12,
+     "key": "MidwestDivision",
+     "logo_index": 1,
+     "text": "Midwest Division"
+    },
+    {
+     "group_id": 13,
+     "key": "NorthDivision",
+     "logo_index": 1,
+     "text": "North Division"
+    },
+    {
+     "group_id": 14,
+     "key": "NortheastDivision",
+     "logo_index": 1,
+     "text": "Northeast Division"
+    },
+    {
+     "group_id": 15,
+     "key": "WestDivision",
+     "logo_index": 1,
+     "text": "West Division"
+    },
+    {
+     "group_id": 16,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "logo_index": 7,
+     "text": "Extraliga ledniho hokeje"
+    },
+    {
+     "group_id": 17,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "logo_index": 10,
+     "text": "National League"
+    },
+    {
+     "group_id": 18,
+     "key": "SMLIIGA",
+     "logo_index": 3,
+     "text": "SM-Liiga"
+    },
+    {
+     "group_id": 19,
+     "key": "TXT_LEAGUE_DEL",
+     "logo_index": 6,
+     "text": "DEL"
+    },
+    {
+     "group_id": 20,
+     "key": "elitserien",
+     "logo_index": 2,
+     "text": "SHL"
+    },
+    {
+     "group_id": 21,
+     "key": "OHL",
+     "logo_index": 12,
+     "text": "OHL"
+    },
+    {
+     "group_id": 22,
+     "key": "WesternConference",
+     "logo_index": 12,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 23,
+     "key": "EasternConference",
+     "logo_index": 12,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 24,
+     "key": "CentralDivision",
+     "logo_index": 12,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 25,
+     "key": "EastDivision",
+     "logo_index": 12,
+     "text": "East Division"
+    },
+    {
+     "group_id": 26,
+     "key": "MidwestDivision",
+     "logo_index": 12,
+     "text": "Midwest Division"
+    },
+    {
+     "group_id": 27,
+     "key": "WestDivision",
+     "logo_index": 12,
+     "text": "West Division"
+    },
+    {
+     "group_id": 28,
+     "key": "QMJHL",
+     "logo_index": 13,
+     "text": "QMJHL"
+    },
+    {
+     "group_id": 29,
+     "key": "EastDivision",
+     "logo_index": 13,
+     "text": "East Division"
+    },
+    {
+     "group_id": 30,
+     "key": "MaritimesDivision",
+     "logo_index": 13,
+     "text": "Maritimes Division"
+    },
+    {
+     "group_id": 31,
+     "key": "WestDivision",
+     "logo_index": 13,
+     "text": "West Division"
+    },
+    {
+     "group_id": 32,
+     "key": "WHL",
+     "logo_index": 11,
+     "text": "WHL"
+    },
+    {
+     "group_id": 33,
+     "key": "WesternConference",
+     "logo_index": 11,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 34,
+     "key": "EasternConference",
+     "logo_index": 11,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 35,
+     "key": "BcDivision",
+     "logo_index": 11,
+     "text": "B.C. Division"
+    },
+    {
+     "group_id": 36,
+     "key": "CentralDivision",
+     "logo_index": 11,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 37,
+     "key": "EastDivision",
+     "logo_index": 11,
+     "text": "East Division"
+    },
+    {
+     "group_id": 38,
+     "key": "UsDivision",
+     "logo_index": 11,
+     "text": "U.S. Division"
+    },
+    {
+     "group_id": 39,
+     "key": "TournamentFile",
+     "logo_index": 5,
+     "text": "Tournament"
+    },
+    {
+     "group_id": 40,
+     "key": "PoolA",
+     "logo_index": 5,
+     "text": "Pool A"
+    },
+    {
+     "group_id": 41,
+     "key": "PoolB",
+     "logo_index": 5,
+     "text": "Pool B"
+    },
+    {
+     "group_id": 42,
+     "key": "Playoffs",
+     "logo_index": 5,
+     "text": "Playoffs"
+    },
+    {
+     "group_id": 43,
+     "key": "ConferenceA",
+     "logo_index": 5,
+     "text": "Conference A"
+    },
+    {
+     "group_id": 44,
+     "key": "ConferenceB",
+     "logo_index": 5,
+     "text": "Conference B"
+    },
+    {
+     "group_id": 45,
+     "key": "DivisionA",
+     "logo_index": 5,
+     "text": "Division A"
+    },
+    {
+     "group_id": 46,
+     "key": "DivisionB",
+     "logo_index": 5,
+     "text": "Division B"
+    },
+    {
+     "group_id": 47,
+     "key": "DivisionC",
+     "logo_index": 5,
+     "text": "Division C"
+    },
+    {
+     "group_id": 48,
+     "key": "DivisionD",
+     "logo_index": 5,
+     "text": "Division D"
+    },
+    {
+     "group_id": 49,
+     "key": "CUSTOM_TEAMS",
+     "logo_index": 5,
+     "text": "Custom Teams"
+    }
+   ],
+   "team_table_groups_by_league": {
+    "0": {
+     "leaguegroup": {
+      "0": 32
+     },
+     "conferencegroup": {
+      "1": 15,
+      "2": 17
+     },
+     "divisiongroup": {
+      "1": 1,
+      "2": 1,
+      "3": 7,
+      "4": 7,
+      "5": 8,
+      "6": 8
+     },
+     "teams": 32
+    },
+    "1": {
+     "leaguegroup": {
+      "7": 30
+     },
+     "conferencegroup": {
+      "8": 15,
+      "9": 15
+     },
+     "divisiongroup": {
+      "10": 5,
+      "11": 5,
+      "12": 5,
+      "13": 5,
+      "14": 5,
+      "15": 5
+     },
+     "teams": 30
+    },
+    "2": {
+     "leaguegroup": {
+      "20": 12
+     },
+     "conferencegroup": {
+      "20": 12
+     },
+     "divisiongroup": {
+      "20": 12
+     },
+     "teams": 12
+    },
+    "3": {
+     "leaguegroup": {
+      "18": 14
+     },
+     "conferencegroup": {
+      "18": 14
+     },
+     "divisiongroup": {
+      "18": 14
+     },
+     "teams": 14
+    },
+    "4": {
+     "leaguegroup": {
+      "19": 14
+     },
+     "conferencegroup": {
+      "19": 14
+     },
+     "divisiongroup": {
+      "19": 14
+     },
+     "teams": 14
+    },
+    "5": {
+     "leaguegroup": {
+      "16": 14
+     },
+     "conferencegroup": {
+      "16": 14
+     },
+     "divisiongroup": {
+      "16": 14
+     },
+     "teams": 14
+    },
+    "6": {
+     "leaguegroup": {
+      "17": 12
+     },
+     "conferencegroup": {
+      "17": 12
+     },
+     "divisiongroup": {
+      "17": 12
+     },
+     "teams": 12
+    },
+    "7": {
+     "leaguegroup": {
+      "39": 21
+     },
+     "conferencegroup": {
+      "39": 21
+     },
+     "divisiongroup": {
+      "39": 21
+     },
+     "teams": 21
+    },
+    "8": {
+     "leaguegroup": {
+      "21": 20
+     },
+     "conferencegroup": {
+      "22": 10,
+      "23": 10
+     },
+     "divisiongroup": {
+      "24": 5,
+      "25": 5,
+      "26": 5,
+      "27": 5
+     },
+     "teams": 20
+    },
+    "9": {
+     "leaguegroup": {
+      "28": 18
+     },
+     "conferencegroup": {
+      "28": 18
+     },
+     "divisiongroup": {
+      "29": 6,
+      "30": 6,
+      "31": 6
+     },
+     "teams": 18
+    },
+    "10": {
+     "leaguegroup": {
+      "32": 22
+     },
+     "conferencegroup": {
+      "33": 10,
+      "34": 12
+     },
+     "divisiongroup": {
+      "35": 5,
+      "36": 6,
+      "37": 6,
+      "38": 5
+     },
+     "teams": 22
+    },
+    "11": {
+     "leaguegroup": {
+      "49": 2
+     },
+     "conferencegroup": {
+      "49": 2
+     },
+     "divisiongroup": {
+      "49": 2
+     },
+     "teams": 2
+    },
+    "12": {
+     "leaguegroup": {
+      "49": 1
+     },
+     "conferencegroup": {
+      "49": 1
+     },
+     "divisiongroup": {
+      "49": 1
+     },
+     "teams": 1
+    },
+    "14": {
+     "leaguegroup": {
+      "0": 4
+     },
+     "conferencegroup": {
+      "2": 4
+     },
+     "divisiongroup": {
+      "6": 4
+     },
+     "teams": 4
+    },
+    "13": {
+     "leaguegroup": {
+      "49": 30
+     },
+     "conferencegroup": {
+      "49": 30
+     },
+     "divisiongroup": {
+      "49": 30
+     },
+     "teams": 30
+    }
+   }
+  },
+  "nhl15": {
+   "table_va": "0x83a1fd78",
+   "groups": [
+    {
+     "group_id": 0,
+     "key": "NHL",
+     "logo_index": 0,
+     "text": "NHL\u00c2\u00ae"
+    },
+    {
+     "group_id": 1,
+     "key": "WesternConference",
+     "logo_index": 0,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 2,
+     "key": "EasternConference",
+     "logo_index": 0,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 3,
+     "key": "NHLDivisionA",
+     "logo_index": 0,
+     "text": "Pacific Division"
+    },
+    {
+     "group_id": 4,
+     "key": "NHLDivisionB",
+     "logo_index": 0,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 5,
+     "key": "NHLDivisionC",
+     "logo_index": 0,
+     "text": "Atlantic Division"
+    },
+    {
+     "group_id": 6,
+     "key": "NHLDivisionD",
+     "logo_index": 0,
+     "text": "Metropolitan Division"
+    },
+    {
+     "group_id": 7,
+     "key": "AHL",
+     "logo_index": 1,
+     "text": "AHL"
+    },
+    {
+     "group_id": 8,
+     "key": "WesternConference",
+     "logo_index": 1,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 9,
+     "key": "EasternConference",
+     "logo_index": 1,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 10,
+     "key": "AtlanticDivision",
+     "logo_index": 1,
+     "text": "Atlantic Division"
+    },
+    {
+     "group_id": 11,
+     "key": "EastDivision",
+     "logo_index": 1,
+     "text": "East Division"
+    },
+    {
+     "group_id": 12,
+     "key": "MidwestDivision",
+     "logo_index": 1,
+     "text": "Midwest Division"
+    },
+    {
+     "group_id": 13,
+     "key": "NorthDivision",
+     "logo_index": 1,
+     "text": "North Division"
+    },
+    {
+     "group_id": 14,
+     "key": "NortheastDivision",
+     "logo_index": 1,
+     "text": "Northeast Division"
+    },
+    {
+     "group_id": 15,
+     "key": "WestDivision",
+     "logo_index": 1,
+     "text": "West Division"
+    },
+    {
+     "group_id": 16,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "logo_index": 7,
+     "text": "Extraliga ledniho hokeje"
+    },
+    {
+     "group_id": 17,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "logo_index": 10,
+     "text": "National League"
+    },
+    {
+     "group_id": 18,
+     "key": "SMLIIGA",
+     "logo_index": 3,
+     "text": "Liiga"
+    },
+    {
+     "group_id": 19,
+     "key": "TXT_LEAGUE_DEL",
+     "logo_index": 6,
+     "text": "DEL"
+    },
+    {
+     "group_id": 20,
+     "key": "elitserien",
+     "logo_index": 2,
+     "text": "SHL"
+    },
+    {
+     "group_id": 21,
+     "key": "OHL",
+     "logo_index": 12,
+     "text": "OHL"
+    },
+    {
+     "group_id": 22,
+     "key": "WesternConference",
+     "logo_index": 12,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 23,
+     "key": "EasternConference",
+     "logo_index": 12,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 24,
+     "key": "CentralDivision",
+     "logo_index": 12,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 25,
+     "key": "EastDivision",
+     "logo_index": 12,
+     "text": "East Division"
+    },
+    {
+     "group_id": 26,
+     "key": "MidwestDivision",
+     "logo_index": 12,
+     "text": "Midwest Division"
+    },
+    {
+     "group_id": 27,
+     "key": "WestDivision",
+     "logo_index": 12,
+     "text": "West Division"
+    },
+    {
+     "group_id": 28,
+     "key": "QMJHL",
+     "logo_index": 13,
+     "text": "QMJHL"
+    },
+    {
+     "group_id": 29,
+     "key": "EastDivision",
+     "logo_index": 13,
+     "text": "East Division"
+    },
+    {
+     "group_id": 30,
+     "key": "MaritimesDivision",
+     "logo_index": 13,
+     "text": "Maritimes Division"
+    },
+    {
+     "group_id": 31,
+     "key": "WestDivision",
+     "logo_index": 13,
+     "text": "West Division"
+    },
+    {
+     "group_id": 32,
+     "key": "WHL",
+     "logo_index": 11,
+     "text": "WHL"
+    },
+    {
+     "group_id": 33,
+     "key": "WesternConference",
+     "logo_index": 11,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 34,
+     "key": "EasternConference",
+     "logo_index": 11,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 35,
+     "key": "BcDivision",
+     "logo_index": 11,
+     "text": "B.C. Division"
+    },
+    {
+     "group_id": 36,
+     "key": "CentralDivision",
+     "logo_index": 11,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 37,
+     "key": "EastDivision",
+     "logo_index": 11,
+     "text": "East Division"
+    },
+    {
+     "group_id": 38,
+     "key": "UsDivision",
+     "logo_index": 11,
+     "text": "U.S. Division"
+    },
+    {
+     "group_id": 39,
+     "key": "TournamentFile",
+     "logo_index": 5,
+     "text": "Tournament"
+    },
+    {
+     "group_id": 40,
+     "key": "PoolA",
+     "logo_index": 5,
+     "text": "Pool A"
+    },
+    {
+     "group_id": 41,
+     "key": "PoolB",
+     "logo_index": 5,
+     "text": "Pool B"
+    },
+    {
+     "group_id": 42,
+     "key": "Playoffs",
+     "logo_index": 5,
+     "text": "Playoffs"
+    },
+    {
+     "group_id": 43,
+     "key": "ConferenceA",
+     "logo_index": 5,
+     "text": "Conference A"
+    },
+    {
+     "group_id": 44,
+     "key": "ConferenceB",
+     "logo_index": 5,
+     "text": "Conference B"
+    },
+    {
+     "group_id": 45,
+     "key": "DivisionA",
+     "logo_index": 5,
+     "text": "Division A"
+    },
+    {
+     "group_id": 46,
+     "key": "DivisionB",
+     "logo_index": 5,
+     "text": "Division B"
+    },
+    {
+     "group_id": 47,
+     "key": "DivisionC",
+     "logo_index": 5,
+     "text": "Division C"
+    },
+    {
+     "group_id": 48,
+     "key": "DivisionD",
+     "logo_index": 5,
+     "text": "Division D"
+    },
+    {
+     "group_id": 49,
+     "key": "CUSTOM_TEAMS",
+     "logo_index": 5,
+     "text": "Custom Teams"
+    }
+   ],
+   "team_table_groups_by_league": {
+    "0": {
+     "leaguegroup": {
+      "0": 32
+     },
+     "conferencegroup": {
+      "1": 15,
+      "2": 17
+     },
+     "divisiongroup": {
+      "1": 1,
+      "2": 1,
+      "3": 7,
+      "4": 7,
+      "5": 8,
+      "6": 8
+     },
+     "teams": 32
+    },
+    "1": {
+     "leaguegroup": {
+      "7": 30
+     },
+     "conferencegroup": {
+      "8": 15,
+      "9": 15
+     },
+     "divisiongroup": {
+      "10": 5,
+      "11": 5,
+      "12": 5,
+      "13": 5,
+      "14": 5,
+      "15": 5
+     },
+     "teams": 30
+    },
+    "2": {
+     "leaguegroup": {
+      "20": 12
+     },
+     "conferencegroup": {
+      "20": 12
+     },
+     "divisiongroup": {
+      "20": 12
+     },
+     "teams": 12
+    },
+    "3": {
+     "leaguegroup": {
+      "18": 14
+     },
+     "conferencegroup": {
+      "18": 14
+     },
+     "divisiongroup": {
+      "18": 14
+     },
+     "teams": 14
+    },
+    "4": {
+     "leaguegroup": {
+      "19": 14
+     },
+     "conferencegroup": {
+      "19": 14
+     },
+     "divisiongroup": {
+      "19": 14
+     },
+     "teams": 14
+    },
+    "5": {
+     "leaguegroup": {
+      "16": 14
+     },
+     "conferencegroup": {
+      "16": 14
+     },
+     "divisiongroup": {
+      "16": 14
+     },
+     "teams": 14
+    },
+    "6": {
+     "leaguegroup": {
+      "17": 12
+     },
+     "conferencegroup": {
+      "17": 12
+     },
+     "divisiongroup": {
+      "17": 12
+     },
+     "teams": 12
+    },
+    "7": {
+     "leaguegroup": {
+      "39": 21
+     },
+     "conferencegroup": {
+      "39": 21
+     },
+     "divisiongroup": {
+      "39": 21
+     },
+     "teams": 21
+    },
+    "8": {
+     "leaguegroup": {
+      "21": 20
+     },
+     "conferencegroup": {
+      "22": 10,
+      "23": 10
+     },
+     "divisiongroup": {
+      "24": 5,
+      "25": 5,
+      "26": 5,
+      "27": 5
+     },
+     "teams": 20
+    },
+    "9": {
+     "leaguegroup": {
+      "28": 18
+     },
+     "conferencegroup": {
+      "28": 18
+     },
+     "divisiongroup": {
+      "29": 6,
+      "30": 6,
+      "31": 6
+     },
+     "teams": 18
+    },
+    "10": {
+     "leaguegroup": {
+      "32": 22
+     },
+     "conferencegroup": {
+      "33": 10,
+      "34": 12
+     },
+     "divisiongroup": {
+      "35": 5,
+      "36": 6,
+      "37": 6,
+      "38": 5
+     },
+     "teams": 22
+    },
+    "11": {
+     "leaguegroup": {
+      "49": 2
+     },
+     "conferencegroup": {
+      "49": 2
+     },
+     "divisiongroup": {
+      "49": 2
+     },
+     "teams": 2
+    },
+    "12": {
+     "leaguegroup": {
+      "49": 1
+     },
+     "conferencegroup": {
+      "49": 1
+     },
+     "divisiongroup": {
+      "49": 1
+     },
+     "teams": 1
+    },
+    "14": {
+     "leaguegroup": {
+      "0": 4
+     },
+     "conferencegroup": {
+      "2": 4
+     },
+     "divisiongroup": {
+      "6": 4
+     },
+     "teams": 4
+    },
+    "13": {
+     "leaguegroup": {
+      "49": 30
+     },
+     "conferencegroup": {
+      "49": 30
+     },
+     "divisiongroup": {
+      "49": 30
+     },
+     "teams": 30
+    }
+   }
+  },
+  "nhllegacy": {
+   "table_va": "0x83a150c8",
+   "groups": [
+    {
+     "group_id": 0,
+     "key": "NHL",
+     "logo_index": 0,
+     "text": "NHL\u00c2\u00ae"
+    },
+    {
+     "group_id": 1,
+     "key": "WesternConference",
+     "logo_index": 0,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 2,
+     "key": "EasternConference",
+     "logo_index": 0,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 3,
+     "key": "NHLDivisionA",
+     "logo_index": 0,
+     "text": "Pacific Division"
+    },
+    {
+     "group_id": 4,
+     "key": "NHLDivisionB",
+     "logo_index": 0,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 5,
+     "key": "NHLDivisionC",
+     "logo_index": 0,
+     "text": "Atlantic Division"
+    },
+    {
+     "group_id": 6,
+     "key": "NHLDivisionD",
+     "logo_index": 0,
+     "text": "Metropolitan Division"
+    },
+    {
+     "group_id": 7,
+     "key": "AHL",
+     "logo_index": 1,
+     "text": "AHL"
+    },
+    {
+     "group_id": 8,
+     "key": "WesternConference",
+     "logo_index": 1,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 9,
+     "key": "EasternConference",
+     "logo_index": 1,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 10,
+     "key": "AtlanticDivision",
+     "logo_index": 1,
+     "text": "Atlantic Division"
+    },
+    {
+     "group_id": 11,
+     "key": "NorthDivision",
+     "logo_index": 1,
+     "text": "North Division"
+    },
+    {
+     "group_id": 12,
+     "key": "CentralDivision",
+     "logo_index": 1,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 13,
+     "key": "PacificDivision",
+     "logo_index": 1,
+     "text": "Pacific Division"
+    },
+    {
+     "group_id": 14,
+     "key": "TXT_LEAGUE_O2_EXTRALIGA",
+     "logo_index": 7,
+     "text": "Extraliga ledniho hokeje"
+    },
+    {
+     "group_id": 15,
+     "key": "TXT_LEAGUE_SWISS_LEAGUE",
+     "logo_index": 10,
+     "text": "National League"
+    },
+    {
+     "group_id": 16,
+     "key": "SMLIIGA",
+     "logo_index": 3,
+     "text": "Liiga"
+    },
+    {
+     "group_id": 17,
+     "key": "TXT_LEAGUE_DEL",
+     "logo_index": 6,
+     "text": "DEL"
+    },
+    {
+     "group_id": 18,
+     "key": "elitserien",
+     "logo_index": 2,
+     "text": "SHL"
+    },
+    {
+     "group_id": 19,
+     "key": "TXT_LEAGUE_NORWAY",
+     "logo_index": 15,
+     "text": "Norway"
+    },
+    {
+     "group_id": 20,
+     "key": "OHL",
+     "logo_index": 12,
+     "text": "OHL"
+    },
+    {
+     "group_id": 21,
+     "key": "WesternConference",
+     "logo_index": 12,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 22,
+     "key": "EasternConference",
+     "logo_index": 12,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 23,
+     "key": "CentralDivision",
+     "logo_index": 12,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 24,
+     "key": "EastDivision",
+     "logo_index": 12,
+     "text": "East Division"
+    },
+    {
+     "group_id": 25,
+     "key": "MidwestDivision",
+     "logo_index": 12,
+     "text": "Midwest Division"
+    },
+    {
+     "group_id": 26,
+     "key": "WestDivision",
+     "logo_index": 12,
+     "text": "West Division"
+    },
+    {
+     "group_id": 27,
+     "key": "QMJHL",
+     "logo_index": 13,
+     "text": "QMJHL"
+    },
+    {
+     "group_id": 28,
+     "key": "EastDivision",
+     "logo_index": 13,
+     "text": "East Division"
+    },
+    {
+     "group_id": 29,
+     "key": "MaritimesDivision",
+     "logo_index": 13,
+     "text": "Maritimes Division"
+    },
+    {
+     "group_id": 30,
+     "key": "WestDivision",
+     "logo_index": 13,
+     "text": "West Division"
+    },
+    {
+     "group_id": 31,
+     "key": "WHL",
+     "logo_index": 11,
+     "text": "WHL"
+    },
+    {
+     "group_id": 32,
+     "key": "WesternConference",
+     "logo_index": 11,
+     "text": "Western Conference"
+    },
+    {
+     "group_id": 33,
+     "key": "EasternConference",
+     "logo_index": 11,
+     "text": "Eastern Conference"
+    },
+    {
+     "group_id": 34,
+     "key": "BcDivision",
+     "logo_index": 11,
+     "text": "B.C. Division"
+    },
+    {
+     "group_id": 35,
+     "key": "CentralDivision",
+     "logo_index": 11,
+     "text": "Central Division"
+    },
+    {
+     "group_id": 36,
+     "key": "EastDivision",
+     "logo_index": 11,
+     "text": "East Division"
+    },
+    {
+     "group_id": 37,
+     "key": "UsDivision",
+     "logo_index": 11,
+     "text": "U.S. Division"
+    },
+    {
+     "group_id": 38,
+     "key": "TournamentFile",
+     "logo_index": 5,
+     "text": "Tournament"
+    },
+    {
+     "group_id": 39,
+     "key": "PoolA",
+     "logo_index": 5,
+     "text": "Pool A"
+    },
+    {
+     "group_id": 40,
+     "key": "PoolB",
+     "logo_index": 5,
+     "text": "Pool B"
+    },
+    {
+     "group_id": 41,
+     "key": "Playoffs",
+     "logo_index": 5,
+     "text": "Playoffs"
+    },
+    {
+     "group_id": 42,
+     "key": "ConferenceA",
+     "logo_index": 5,
+     "text": "Conference A"
+    },
+    {
+     "group_id": 43,
+     "key": "ConferenceB",
+     "logo_index": 5,
+     "text": "Conference B"
+    },
+    {
+     "group_id": 44,
+     "key": "DivisionA",
+     "logo_index": 5,
+     "text": "Division A"
+    },
+    {
+     "group_id": 45,
+     "key": "DivisionB",
+     "logo_index": 5,
+     "text": "Division B"
+    },
+    {
+     "group_id": 46,
+     "key": "DivisionC",
+     "logo_index": 5,
+     "text": "Division C"
+    },
+    {
+     "group_id": 47,
+     "key": "DivisionD",
+     "logo_index": 5,
+     "text": "Division D"
+    },
+    {
+     "group_id": 48,
+     "key": "CUSTOM_TEAMS",
+     "logo_index": 5,
+     "text": "Custom Teams"
+    }
+   ],
+   "team_table_groups_by_league": {
+    "0": {
+     "leaguegroup": {
+      "0": 32
+     },
+     "conferencegroup": {
+      "1": 15,
+      "2": 17
+     },
+     "divisiongroup": {
+      "1": 1,
+      "2": 1,
+      "3": 7,
+      "4": 7,
+      "5": 8,
+      "6": 8
+     },
+     "teams": 32
+    },
+    "1": {
+     "leaguegroup": {
+      "7": 30
+     },
+     "conferencegroup": {
+      "8": 15,
+      "9": 15
+     },
+     "divisiongroup": {
+      "10": 8,
+      "11": 7,
+      "12": 8,
+      "13": 7
+     },
+     "teams": 30
+    },
+    "2": {
+     "leaguegroup": {
+      "18": 14
+     },
+     "conferencegroup": {
+      "18": 14
+     },
+     "divisiongroup": {
+      "18": 14
+     },
+     "teams": 14
+    },
+    "3": {
+     "leaguegroup": {
+      "16": 15
+     },
+     "conferencegroup": {
+      "16": 15
+     },
+     "divisiongroup": {
+      "16": 15
+     },
+     "teams": 15
+    },
+    "4": {
+     "leaguegroup": {
+      "17": 14
+     },
+     "conferencegroup": {
+      "17": 14
+     },
+     "divisiongroup": {
+      "17": 14
+     },
+     "teams": 14
+    },
+    "5": {
+     "leaguegroup": {
+      "14": 14
+     },
+     "conferencegroup": {
+      "14": 14
+     },
+     "divisiongroup": {
+      "14": 14
+     },
+     "teams": 14
+    },
+    "6": {
+     "leaguegroup": {
+      "15": 12
+     },
+     "conferencegroup": {
+      "15": 12
+     },
+     "divisiongroup": {
+      "15": 12
+     },
+     "teams": 12
+    },
+    "7": {
+     "leaguegroup": {
+      "19": 2
+     },
+     "conferencegroup": {
+      "19": 2
+     },
+     "divisiongroup": {
+      "19": 2
+     },
+     "teams": 2
+    },
+    "8": {
+     "leaguegroup": {
+      "38": 21
+     },
+     "conferencegroup": {
+      "38": 21
+     },
+     "divisiongroup": {
+      "38": 21
+     },
+     "teams": 21
+    },
+    "9": {
+     "leaguegroup": {
+      "20": 20
+     },
+     "conferencegroup": {
+      "21": 10,
+      "22": 10
+     },
+     "divisiongroup": {
+      "23": 5,
+      "24": 5,
+      "25": 5,
+      "26": 5
+     },
+     "teams": 20
+    },
+    "10": {
+     "leaguegroup": {
+      "27": 18
+     },
+     "conferencegroup": {
+      "27": 18
+     },
+     "divisiongroup": {
+      "28": 6,
+      "29": 6,
+      "30": 6
+     },
+     "teams": 18
+    },
+    "11": {
+     "leaguegroup": {
+      "31": 22
+     },
+     "conferencegroup": {
+      "32": 10,
+      "33": 12
+     },
+     "divisiongroup": {
+      "34": 5,
+      "35": 6,
+      "36": 6,
+      "37": 5
+     },
+     "teams": 22
+    },
+    "12": {
+     "leaguegroup": {
+      "48": 2
+     },
+     "conferencegroup": {
+      "48": 2
+     },
+     "divisiongroup": {
+      "48": 2
+     },
+     "teams": 2
+    },
+    "14": {
+     "leaguegroup": {
+      "0": 4
+     },
+     "conferencegroup": {
+      "2": 4
+     },
+     "divisiongroup": {
+      "6": 4
+     },
+     "teams": 4
+    },
+    "15": {
+     "leaguegroup": {
+      "48": 2
+     },
+     "conferencegroup": {
+      "48": 2
+     },
+     "divisiongroup": {
+      "48": 2
+     },
+     "teams": 2
+    },
+    "13": {
+     "leaguegroup": {
+      "48": 30
+     },
+     "conferencegroup": {
+      "48": 30
+     },
+     "divisiongroup": {
+      "48": 30
+     },
+     "teams": 30
+    }
+   }
+  }
+ }
+}

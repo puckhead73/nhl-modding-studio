@@ -1,0 +1,97 @@
+# League logo art index for nhl15: the executable's second small table, league code -> logo index,
+# which names the frontend packages `fe/ion/artassets/leaguelogos{,big,small,wide}/l<index>.big`
+# (Xbox 360 and, by identity of the file names, PS3). Baked from research handoff P1.4-X
+# (2026-09-18, docs/research/overnight-2026-09-18/14-phase1-league-logo-assets.md;
+# data/xbox360-league-logo-map.json): u32 BE array at VA 0x82036a20 in the nhl15 Xbox 360 default.xex,
+# one entry per league code, located by the unique sequence 0,1,2,3,6,7 and tied to the key table by
+# length. The index is one family-wide enum (PS4 stores it in `stockleagues.artid`). Several codes
+# share one logo on purpose. What each index depicts is the research lane's reading of the decoded
+# Legacy previews — queued for the user's visual check; screen consumers are untraced.
+game = "nhl15"
+applies_to = ["nhl15"]
+
+[witness]
+game = "nhl15"
+platform = "xbox"
+source = "nhl15 default.xex logo-index table at VA 0x82036a20 (P1.4-X, league_logo_map.py)"
+
+[[codes]]
+code = 0
+key = "NHL"
+logo_index = 0
+[[codes]]
+code = 1
+key = "AHL"
+logo_index = 1
+[[codes]]
+code = 2
+key = "elitserien"
+logo_index = 2
+[[codes]]
+code = 3
+key = "SMLIIGA"
+logo_index = 3
+[[codes]]
+code = 4
+key = "TXT_LEAGUE_DEL"
+logo_index = 6
+[[codes]]
+code = 5
+key = "TXT_LEAGUE_O2_EXTRALIGA"
+logo_index = 7
+[[codes]]
+code = 6
+key = "TXT_LEAGUE_SWISS_LEAGUE"
+logo_index = 10
+[[codes]]
+code = 7
+key = "NATIONAL"
+logo_index = 4
+[[codes]]
+code = 8
+key = "OHL"
+logo_index = 12
+[[codes]]
+code = 9
+key = "QMJHL"
+logo_index = 13
+[[codes]]
+code = 10
+key = "WHL"
+logo_index = 11
+[[codes]]
+code = 11
+key = "PROSPECT_TEAMS"
+logo_index = 14
+[[codes]]
+code = 12
+key = "TXT_LEGEND_TEAMS"
+logo_index = 5
+[[codes]]
+code = 13
+key = "CUSTOM_TEAMS"
+logo_index = 5
+[[codes]]
+code = 14
+key = "NHL"
+logo_index = 0
+[[codes]]
+code = 15
+key = "CHL"
+logo_index = 14
+[[codes]]
+code = 16
+key = "UnitedStates"
+logo_index = 0
+[[codes]]
+code = 17
+key = "Russia"
+logo_index = 0
+[[codes]]
+code = 18
+key = "TXT_ROW_LEAGUE"
+logo_index = 0
+[[codes]]
+code = 19
+key = "HUT"
+logo_index = 0

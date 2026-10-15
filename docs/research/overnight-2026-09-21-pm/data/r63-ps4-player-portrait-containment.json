@@ -1,0 +1,764 @@
+{
+ "note": "R63 \u2014 PS4 player portrait containment (Players 3.4, parity with the gen7 handoff 11): for NHL 15\u201321, every `exhibitionplayerbiotable`\nrow's `artid` (and `hasportrait`) joined to the shipped portrait members (`nhl/ui/kettle_assets/playerportraits/p<artid>.gnf` on 16-21, `nhl/ui/assets/portraits/p<artid>.png` on 15) listed from the\ninstall archives, plus the same for `customplayerbiotable` where present. Read-only archive listings (no extraction, no decoding).\n\nReported per title: rows, portrait members, rows whose art id has a member, rows flagged `hasportrait` that have none and rows not flagged\nthat do (the gen7 contradiction check), portrait members that no row references, the art-id ranges, and the `headid` / `hairid` value\nspaces for reference (their asset binding is the vault work of the 2026-09-20 handoff 08, not repeated here).\nUsage: python r63_ps4_player_asset_containment.py <out.json> [--titles nhl21,nhl20]\n",
+ "titles": {
+  "nhl15": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA00561\\databigs",
+   "anchor": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl15\\databases\\nhl_game-meta.xml",
+   "portrait_members": 8381,
+   "portrait_ids": 8377,
+   "portrait_archives": {
+    "game10.big": 8334,
+    "inxp10.big": 40,
+    "patch_game00.big": 7
+   },
+   "duplicated_ids": 4,
+   "formats": {
+    "png": 8381
+   },
+   "coach_portrait_ids": 0,
+   "portrait_id_min": 1,
+   "portrait_id_max": 65535,
+   "tables": {
+    "exhibitionplayerbiotable": {
+     "rows": 5555,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 5555,
+     "rows_with_portrait_file": 4379,
+     "distinct_artids": 5376,
+     "distinct_with_file": 4379,
+     "artid_min": 0,
+     "artid_max": 11688,
+     "unreferenced_portrait_ids": 3998,
+     "unreferenced_sample": [
+      3,
+      5,
+      6,
+      7,
+      9,
+      13,
+      15,
+      23,
+      24,
+      25,
+      27,
+      28,
+      29,
+      31,
+      33,
+      34,
+      35,
+      41,
+      43,
+      44
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 3,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "1": 4376,
+      "0": 1179
+     },
+     "headid": {
+      "distinct": 439,
+      "min": 10,
+      "max": 60182,
+      "zero_rows": 0
+     }
+    },
+    "customplayerbiotable": null
+   }
+  },
+  "nhl16": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA01909\\databigs",
+   "anchor": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl16\\databases\\nhl_game-meta.xml",
+   "portrait_members": 9246,
+   "portrait_ids": 9246,
+   "portrait_archives": {
+    "game_60.big": 9195,
+    "inxp_10.big": 51
+   },
+   "duplicated_ids": 0,
+   "formats": {
+    "gnf": 9246
+   },
+   "coach_portrait_ids": 28,
+   "portrait_id_min": 1,
+   "portrait_id_max": 65535,
+   "tables": {
+    "exhibitionplayerbiotable": {
+     "rows": 5632,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 5632,
+     "rows_with_portrait_file": 4515,
+     "distinct_artids": 5450,
+     "distinct_with_file": 4512,
+     "artid_min": 0,
+     "artid_max": 12814,
+     "unreferenced_portrait_ids": 4734,
+     "unreferenced_sample": [
+      15,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      31,
+      33,
+      34,
+      35,
+      36,
+      37,
+      39,
+      41,
+      43,
+      44,
+      47,
+      49
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 137,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "1": 4378,
+      "0": 1254
+     },
+     "headid": {
+      "distinct": 448,
+      "min": 20,
+      "max": 60210,
+      "zero_rows": 0
+     }
+    },
+    "customplayerbiotable": null
+   }
+  },
+  "nhl17": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA04326\\databigs",
+   "anchor": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl17\\databases\\nhl_game-meta.xml",
+   "portrait_members": 10282,
+   "portrait_ids": 10282,
+   "portrait_archives": {
+    "game_60.big": 10231,
+    "inxp_10.big": 51
+   },
+   "duplicated_ids": 0,
+   "formats": {
+    "gnf": 10282
+   },
+   "coach_portrait_ids": 28,
+   "portrait_id_min": 1,
+   "portrait_id_max": 92078,
+   "tables": {
+    "exhibitionplayerbiotable": {
+     "rows": 6128,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 6128,
+     "rows_with_portrait_file": 4961,
+     "distinct_artids": 6125,
+     "distinct_with_file": 4958,
+     "artid_min": 1,
+     "artid_max": 14266,
+     "unreferenced_portrait_ids": 5324,
+     "unreferenced_sample": [
+      15,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      31,
+      33,
+      34,
+      35,
+      36,
+      37,
+      39,
+      41,
+      43,
+      44,
+      47,
+      49
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 14,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "1": 4947,
+      "0": 1181
+     },
+     "headid": {
+      "distinct": 483,
+      "min": 20,
+      "max": 60210,
+      "zero_rows": 0
+     },
+     "hairid": {
+      "distinct": 54,
+      "min": 0,
+      "max": 62,
+      "zero_rows": 284
+     }
+    },
+    "customplayerbiotable": {
+     "rows": 1208,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 1208,
+     "rows_with_portrait_file": 0,
+     "distinct_artids": 1,
+     "distinct_with_file": 0,
+     "artid_min": 0,
+     "artid_max": 0,
+     "unreferenced_portrait_ids": 10282,
+     "unreferenced_sample": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      12,
+      13,
+      15,
+      16,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 0,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "0": 1208
+     },
+     "headid": {
+      "distinct": 1,
+      "min": 60000,
+      "max": 60000,
+      "zero_rows": 0
+     },
+     "hairid": {
+      "distinct": 1,
+      "min": 0,
+      "max": 0,
+      "zero_rows": 1208
+     }
+    }
+   }
+  },
+  "nhl18": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA07569\\databigs",
+   "anchor": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl18\\databases\\nhl_game-meta.xml",
+   "portrait_members": 11442,
+   "portrait_ids": 11442,
+   "portrait_archives": {
+    "game_60.big": 11386,
+    "inxp_10.big": 56
+   },
+   "duplicated_ids": 0,
+   "formats": {
+    "gnf": 11442
+   },
+   "coach_portrait_ids": 29,
+   "portrait_id_min": 0,
+   "portrait_id_max": 100022,
+   "tables": {
+    "exhibitionplayerbiotable": {
+     "rows": 7236,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 7236,
+     "rows_with_portrait_file": 5584,
+     "distinct_artids": 7095,
+     "distinct_with_file": 5443,
+     "artid_min": 1,
+     "artid_max": 16287,
+     "unreferenced_portrait_ids": 5999,
+     "unreferenced_sample": [
+      0,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      31,
+      33,
+      34,
+      35,
+      37,
+      39,
+      41,
+      43,
+      44,
+      47,
+      49
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 15,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "1": 5569,
+      "0": 1667
+     },
+     "headid": {
+      "distinct": 492,
+      "min": 0,
+      "max": 60210,
+      "zero_rows": 54
+     },
+     "hairid": {
+      "distinct": 54,
+      "min": 0,
+      "max": 62,
+      "zero_rows": 394
+     }
+    },
+    "customplayerbiotable": {
+     "rows": 1208,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 1208,
+     "rows_with_portrait_file": 1208,
+     "distinct_artids": 1,
+     "distinct_with_file": 1,
+     "artid_min": 0,
+     "artid_max": 0,
+     "unreferenced_portrait_ids": 11441,
+     "unreferenced_sample": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      12,
+      13,
+      15,
+      16,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 1208,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "0": 1208
+     },
+     "headid": {
+      "distinct": 1,
+      "min": 60000,
+      "max": 60000,
+      "zero_rows": 0
+     },
+     "hairid": {
+      "distinct": 1,
+      "min": 0,
+      "max": 0,
+      "zero_rows": 1208
+     }
+    }
+   }
+  },
+  "nhl19": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA11126\\databigs",
+   "anchor": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl19\\databases\\nhl_game-meta.xml",
+   "portrait_members": 7876,
+   "portrait_ids": 7865,
+   "portrait_archives": {
+    "game_60.big": 7786,
+    "inxp_10-010.big": 52,
+    "patch_game_91.big": 27,
+    "patch_game_93.big": 3,
+    "patch_game_94.big": 6,
+    "patch_game_95.big": 2
+   },
+   "duplicated_ids": 11,
+   "formats": {
+    "gnf": 7876
+   },
+   "coach_portrait_ids": 29,
+   "portrait_id_min": 1,
+   "portrait_id_max": 100033,
+   "tables": {
+    "exhibitionplayerbiotable": {
+     "rows": 7136,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 7136,
+     "rows_with_portrait_file": 6164,
+     "distinct_artids": 7134,
+     "distinct_with_file": 6162,
+     "artid_min": 1,
+     "artid_max": 18400,
+     "unreferenced_portrait_ids": 1703,
+     "unreferenced_sample": [
+      15,
+      36,
+      41,
+      51,
+      54,
+      61,
+      63,
+      65,
+      66,
+      70,
+      74,
+      100,
+      103,
+      107,
+      125,
+      131,
+      132,
+      143,
+      146,
+      150
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 25,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "1": 6139,
+      "0": 997
+     },
+     "headid": {
+      "distinct": 536,
+      "min": 0,
+      "max": 60210,
+      "zero_rows": 28
+     },
+     "hairid": {
+      "distinct": 58,
+      "min": 0,
+      "max": 62,
+      "zero_rows": 354
+     }
+    },
+    "customplayerbiotable": {
+     "rows": 1214,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 1214,
+     "rows_with_portrait_file": 0,
+     "distinct_artids": 1,
+     "distinct_with_file": 0,
+     "artid_min": 0,
+     "artid_max": 0,
+     "unreferenced_portrait_ids": 7865,
+     "unreferenced_sample": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      12,
+      13,
+      15,
+      16,
+      25,
+      29,
+      36,
+      39,
+      40,
+      41,
+      46
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 0,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "0": 1214
+     },
+     "headid": {
+      "distinct": 1,
+      "min": 60000,
+      "max": 60000,
+      "zero_rows": 0
+     },
+     "hairid": {
+      "distinct": 1,
+      "min": 0,
+      "max": 0,
+      "zero_rows": 1214
+     }
+    }
+   }
+  },
+  "nhl20": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs",
+   "anchor": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl20\\databases\\nhl_game-meta.xml",
+   "portrait_members": 9149,
+   "portrait_ids": 9149,
+   "portrait_archives": {
+    "game_60.big": 9100,
+    "inxp_10.big": 49
+   },
+   "duplicated_ids": 0,
+   "formats": {
+    "gnf": 9149
+   },
+   "coach_portrait_ids": 235,
+   "portrait_id_min": 1,
+   "portrait_id_max": 100033,
+   "tables": {
+    "exhibitionplayerbiotable": {
+     "rows": 7136,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 7136,
+     "rows_with_portrait_file": 6590,
+     "distinct_artids": 7134,
+     "distinct_with_file": 6588,
+     "artid_min": 1,
+     "artid_max": 18400,
+     "unreferenced_portrait_ids": 2561,
+     "unreferenced_sample": [
+      15,
+      20,
+      34,
+      36,
+      41,
+      51,
+      54,
+      61,
+      62,
+      63,
+      65,
+      66,
+      70,
+      74,
+      100,
+      103,
+      107,
+      113,
+      117,
+      125
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 451,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "1": 6139,
+      "0": 997
+     },
+     "headid": {
+      "distinct": 536,
+      "min": 0,
+      "max": 60210,
+      "zero_rows": 28
+     },
+     "hairid": {
+      "distinct": 58,
+      "min": 0,
+      "max": 62,
+      "zero_rows": 354
+     }
+    },
+    "customplayerbiotable": {
+     "rows": 1214,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 1214,
+     "rows_with_portrait_file": 0,
+     "distinct_artids": 1,
+     "distinct_with_file": 0,
+     "artid_min": 0,
+     "artid_max": 0,
+     "unreferenced_portrait_ids": 9149,
+     "unreferenced_sample": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      12,
+      13,
+      15,
+      16,
+      20,
+      25,
+      29,
+      34,
+      36,
+      39,
+      40
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 0,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "0": 1214
+     },
+     "headid": {
+      "distinct": 1,
+      "min": 60000,
+      "max": 60000,
+      "zero_rows": 0
+     },
+     "hairid": {
+      "distinct": 1,
+      "min": 0,
+      "max": 0,
+      "zero_rows": 1214
+     }
+    }
+   }
+  },
+  "nhl21": {
+   "archive_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs",
+   "anchor": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl21\\databases\\nhl_game-meta.xml",
+   "portrait_members": 10421,
+   "portrait_ids": 10421,
+   "portrait_archives": {
+    "game_60.big": 10368,
+    "inxp_10.big": 53
+   },
+   "duplicated_ids": 0,
+   "formats": {
+    "gnf": 10421
+   },
+   "coach_portrait_ids": 235,
+   "portrait_id_min": 1,
+   "portrait_id_max": 100033,
+   "tables": {
+    "exhibitionplayerbiotable": {
+     "rows": 7247,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 7247,
+     "rows_with_portrait_file": 6481,
+     "distinct_artids": 7244,
+     "distinct_with_file": 6478,
+     "artid_min": 1,
+     "artid_max": 21813,
+     "unreferenced_portrait_ids": 3943,
+     "unreferenced_sample": [
+      15,
+      36,
+      39,
+      40,
+      46,
+      51,
+      54,
+      61,
+      63,
+      65,
+      66,
+      70,
+      73,
+      74,
+      100,
+      107,
+      125,
+      132,
+      138,
+      142
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 12,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "1": 6469,
+      "0": 778
+     },
+     "headid": {
+      "distinct": 605,
+      "min": 0,
+      "max": 60209,
+      "zero_rows": 29
+     },
+     "hairid": {
+      "distinct": 58,
+      "min": 0,
+      "max": 62,
+      "zero_rows": 424
+     }
+    },
+    "customplayerbiotable": {
+     "rows": 1214,
+     "artid_column": "artid",
+     "has_hasportrait": true,
+     "rows_with_artid": 1214,
+     "rows_with_portrait_file": 0,
+     "distinct_artids": 1,
+     "distinct_with_file": 0,
+     "artid_min": 0,
+     "artid_max": 0,
+     "unreferenced_portrait_ids": 10421,
+     "unreferenced_sample": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      12,
+      13,
+      15,
+      16,
+      20,
+      25,
+      29,
+      34,
+      36,
+      39,
+      40
+     ],
+     "hasportrait_set_but_no_file": 0,
+     "hasportrait_clear_but_file": 0,
+     "hasportrait_set_but_no_file_sample": [],
+     "hasportrait_census": {
+      "0": 1214
+     },
+     "headid": {
+      "distinct": 1,
+      "min": 60000,
+      "max": 60000,
+      "zero_rows": 0
+     },
+     "hairid": {
+      "distinct": 1,
+      "min": 0,
+      "max": 0,
+      "zero_rows": 1214
+     }
+    }
+   }
+  }
+ }
+}

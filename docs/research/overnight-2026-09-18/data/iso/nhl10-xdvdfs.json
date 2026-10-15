@@ -1,0 +1,513 @@
+{
+ "iso": "X:/Games/Emulation/Roms/XBOX360/NHL 10/NHL 10 (USA).iso",
+ "layout": "xgd2",
+ "base": 265879552,
+ "root_sector": 1783934,
+ "root_size": 2048,
+ "entries": [
+  {
+   "path": "$SystemUpdate",
+   "sector": 1783935,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "$SystemUpdate/su20076000_00000000",
+   "sector": 1776025,
+   "size": 7938048,
+   "attr": 128
+  },
+  {
+   "path": "$SystemUpdate/system.manifest",
+   "sector": 1779901,
+   "size": 2100,
+   "attr": 0
+  },
+  {
+   "path": "audio",
+   "sector": 1859305,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "audio/music",
+   "sector": 2784173,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "audio/music/music_samples.sbs",
+   "sector": 2784174,
+   "size": 303393560,
+   "attr": 128
+  },
+  {
+   "path": "audio/sfx",
+   "sector": 1859306,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "audio/sfx/colors1.ast",
+   "sector": 1859307,
+   "size": 4157888,
+   "attr": 128
+  },
+  {
+   "path": "audio/sfx/colors2.ast",
+   "sector": 1861338,
+   "size": 4265792,
+   "attr": 128
+  },
+  {
+   "path": "audio/sfx/crowds.ast",
+   "sector": 1863421,
+   "size": 13868672,
+   "attr": 128
+  },
+  {
+   "path": "audio/sfx/playerCalls.ast",
+   "sector": 1870193,
+   "size": 337664,
+   "attr": 128
+  },
+  {
+   "path": "audio/speech",
+   "sector": 1870358,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "audio/speech/ann_eng_samples.sbs",
+   "sector": 1870359,
+   "size": 186155272,
+   "attr": 128
+  },
+  {
+   "path": "audio/speech/ann_fin_samples.sbs",
+   "sector": 1961256,
+   "size": 115982428,
+   "attr": 128
+  },
+  {
+   "path": "audio/speech/ann_swe_samples.sbs",
+   "sector": 2017889,
+   "size": 84733328,
+   "attr": 128
+  },
+  {
+   "path": "audio/speech/pbp_eng_samples.sbs",
+   "sector": 2059263,
+   "size": 1484614140,
+   "attr": 128
+  },
+  {
+   "path": "audio.bh",
+   "sector": 1775244,
+   "size": 3504,
+   "attr": 128
+  },
+  {
+   "path": "audio.big",
+   "sector": 2932316,
+   "size": 100506471,
+   "attr": 128
+  },
+  {
+   "path": "audioboot.bh",
+   "sector": 1775247,
+   "size": 464,
+   "attr": 128
+  },
+  {
+   "path": "audioboot.big",
+   "sector": 1772701,
+   "size": 2923107,
+   "attr": 128
+  },
+  {
+   "path": "audioboot2.bh",
+   "sector": 1775246,
+   "size": 112,
+   "attr": 128
+  },
+  {
+   "path": "audioboot2.big",
+   "sector": 1763560,
+   "size": 18720612,
+   "attr": 128
+  },
+  {
+   "path": "boot.bh",
+   "sector": 1775248,
+   "size": 2336,
+   "attr": 128
+  },
+  {
+   "path": "boot.big",
+   "sector": 1774129,
+   "size": 1922376,
+   "attr": 128
+  },
+  {
+   "path": "data0.bh",
+   "sector": 1775157,
+   "size": 1072,
+   "attr": 128
+  },
+  {
+   "path": "data0.big",
+   "sector": 1626039,
+   "size": 2551468,
+   "attr": 128
+  },
+  {
+   "path": "db",
+   "sector": 1762883,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "db/nhlng.db",
+   "sector": 1761907,
+   "size": 1998232,
+   "attr": 128
+  },
+  {
+   "path": "default.xex",
+   "sector": 1780138,
+   "size": 7774208,
+   "attr": 128
+  },
+  {
+   "path": "fe",
+   "sector": 1763559,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "fe/loc",
+   "sector": 1763558,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "fe/loc/nhl_eng_us.db",
+   "sector": 1763231,
+   "size": 667996,
+   "attr": 128
+  },
+  {
+   "path": "fe/loc/nhl_fre_fr.db",
+   "sector": 1762884,
+   "size": 708964,
+   "attr": 128
+  },
+  {
+   "path": "fe/movies",
+   "sector": 2981392,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "fe/movies/ntsc",
+   "sector": 2981393,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "fe/movies/ntsc/attract.sub",
+   "sector": 2981394,
+   "size": 280,
+   "attr": 128
+  },
+  {
+   "path": "fe/movies/ntsc/attract.vp6",
+   "sector": 2981395,
+   "size": 43232552,
+   "attr": 128
+  },
+  {
+   "path": "fe/movies/ntsc/bootflow_1_eng.vp6",
+   "sector": 3002505,
+   "size": 6337944,
+   "attr": 128
+  },
+  {
+   "path": "fe/movies/ntsc/bootflow_1_fre.vp6",
+   "sector": 3005600,
+   "size": 6232640,
+   "attr": 128
+  },
+  {
+   "path": "fe/movies/ntsc/bootflow_2_eng.vp6",
+   "sector": 3008644,
+   "size": 9697912,
+   "attr": 128
+  },
+  {
+   "path": "fe/movies/ntsc/bootflow_2_fre.vp6",
+   "sector": 3013380,
+   "size": 9697912,
+   "attr": 128
+  },
+  {
+   "path": "fe.bh",
+   "sector": 1775158,
+   "size": 176096,
+   "attr": 128
+  },
+  {
+   "path": "fe.big",
+   "sector": 1641060,
+   "size": 247494615,
+   "attr": 128
+  },
+  {
+   "path": "gamedata",
+   "sector": 1775081,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "gamedata/aidata.bh",
+   "sector": 1775080,
+   "size": 192,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/aidata.big",
+   "sector": 1640964,
+   "size": 194197,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim",
+   "sector": 1775074,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "gamedata/anim/anim.cba",
+   "sector": 1632920,
+   "size": 16473872,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim/crowd.cba",
+   "sector": 1632496,
+   "size": 867056,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim/faceposer.bh",
+   "sector": 1775068,
+   "size": 11904,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim/faceposer.big",
+   "sector": 1627285,
+   "size": 10672128,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/gps.big",
+   "sector": 1641059,
+   "size": 713,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/nis.bh",
+   "sector": 1775075,
+   "size": 8384,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/nis.big",
+   "sector": 1783936,
+   "size": 119924736,
+   "attr": 128
+  },
+  {
+   "path": "nxeart",
+   "sector": 1775251,
+   "size": 1585152,
+   "attr": 128
+  },
+  {
+   "path": "options.viv",
+   "sector": 1775250,
+   "size": 284,
+   "attr": 128
+  },
+  {
+   "path": "player.bh",
+   "sector": 1775141,
+   "size": 26560,
+   "attr": 128
+  },
+  {
+   "path": "player.big",
+   "sector": 1252832,
+   "size": 434783215,
+   "attr": 128
+  },
+  {
+   "path": "rendercache.bh",
+   "sector": 1775082,
+   "size": 76592,
+   "attr": 128
+  },
+  {
+   "path": "rendercache.big",
+   "sector": 442781,
+   "size": 381835795,
+   "attr": 128
+  },
+  {
+   "path": "rendering",
+   "sector": 1842493,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "rendering/spotlight",
+   "sector": 1842494,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "rendering/spotlight/spotlight_video_0.vp6",
+   "sector": 1842495,
+   "size": 6933268,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition",
+   "sector": 1845881,
+   "size": 2048,
+   "attr": 16
+  },
+  {
+   "path": "rendering/transition/Alpha_Wipe_Col_2secs_1024_fullA.vp6",
+   "sector": 1845882,
+   "size": 1112796,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/Alpha_Wipe_Col_2secs_1024_halfA.vp6",
+   "sector": 1846426,
+   "size": 956136,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_AHL.vp6",
+   "sector": 1846893,
+   "size": 1836152,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_DEL.vp6",
+   "sector": 1847790,
+   "size": 1822372,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_EAS.vp6",
+   "sector": 1848680,
+   "size": 1763188,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_EASHL.vp6",
+   "sector": 1849541,
+   "size": 1843056,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_EASHLFR.vp6",
+   "sector": 1850441,
+   "size": 1866244,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_EHL.vp6",
+   "sector": 1851353,
+   "size": 1775632,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_ELH.vp6",
+   "sector": 1852221,
+   "size": 1866304,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_ELT.vp6",
+   "sector": 1853133,
+   "size": 1822332,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_INT.vp6",
+   "sector": 1854023,
+   "size": 1753616,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_MTL.vp6",
+   "sector": 1854880,
+   "size": 1829484,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_NHL.vp6",
+   "sector": 1855774,
+   "size": 1820912,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_NHLplayoff.vp6",
+   "sector": 1856664,
+   "size": 1775632,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_SML.vp6",
+   "sector": 1857532,
+   "size": 1804724,
+   "attr": 128
+  },
+  {
+   "path": "rendering/transition/transition_SWS.vp6",
+   "sector": 1858414,
+   "size": 1824656,
+   "attr": 128
+  },
+  {
+   "path": "rendernocache.bh",
+   "sector": 1775120,
+   "size": 41136,
+   "attr": 128
+  },
+  {
+   "path": "rendernocache.big",
+   "sector": 629225,
+   "size": 1277146177,
+   "attr": 128
+  },
+  {
+   "path": "stadium.bh",
+   "sector": 1775154,
+   "size": 5520,
+   "attr": 128
+  },
+  {
+   "path": "stadium.big",
+   "sector": 1465129,
+   "size": 329542464,
+   "attr": 128
+  }
+ ]
+}

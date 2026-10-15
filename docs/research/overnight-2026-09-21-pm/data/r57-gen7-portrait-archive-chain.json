@@ -1,0 +1,2161 @@
+{
+ "note": "R57 \u2014 gen7 player portrait archives: the container chain per title (`fe/ion/artassets/playerheads/p<bucket>/p<id>.big`), sampled on\nthe first N archives of the `p0_4000` bucket per Xbox 360 title 09\u2013Legacy (read-only). Per archive: outer magic (BIGF), the member list\n(name, stored size, RefPack-wrapped or raw, inner magic, plain size); the census of member signatures per title.\nUsage: python r57_gen7_portrait_archive_chain.py <out.json> [--per-title 40]\n",
+ "titles": {
+  "nhl09": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     4
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       296
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     1
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       304
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     1
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       312
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     1
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     1
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       328
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     1
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "raw",
+      "\u0089RW4",
+      135168
+     ],
+     60
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 296,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 296,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    },
+    {
+     "name": "16",
+     "stored": 135168,
+     "wrap": "raw",
+     "magic": "89525734",
+     "magic_text": "\u0089RW4",
+     "plain": 135168,
+     "decoded": true
+    },
+    {
+     "name": "17",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    }
+   ]
+  },
+  "nhl10": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     6
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       248
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       304
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       312
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       328
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ],
+      [
+       "raw",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ]
+     ],
+     2
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "raw",
+      "\u0089RW4",
+      135168
+     ],
+     60
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 240,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 240,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    },
+    {
+     "name": "2",
+     "stored": 135168,
+     "wrap": "raw",
+     "magic": "89525734",
+     "magic_text": "\u0089RW4",
+     "plain": 135168,
+     "decoded": true
+    },
+    {
+     "name": "3",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    }
+   ]
+  },
+  "nhl11": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     5
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       248
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     4
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       304
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       312
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       256
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "\u0089RW4",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "refpack",
+      "\u0089RW4",
+      135168
+     ],
+     60
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 240,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 240,
+     "decoded": true
+    },
+    {
+     "name": "3",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    },
+    {
+     "name": "sg1",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "2",
+     "stored": 22747,
+     "wrap": "refpack",
+     "magic": "89525734",
+     "magic_text": "\u0089RW4",
+     "plain": 135168,
+     "decoded": true
+    },
+    {
+     "name": "sg2",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    }
+   ]
+  },
+  "nhl12": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     7
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       248
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       256
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       280
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       344
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "refpack",
+      "XPR2",
+      131168
+     ],
+     34
+    ],
+    [
+     [
+      "refpack",
+      "XPR2",
+      262240
+     ],
+     26
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 240,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 240,
+     "decoded": true
+    },
+    {
+     "name": "3",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    },
+    {
+     "name": "sg1",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "2",
+     "stored": 22783,
+     "wrap": "refpack",
+     "magic": "58505232",
+     "magic_text": "XPR2",
+     "plain": 131168,
+     "decoded": true
+    },
+    {
+     "name": "sg2",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    }
+   ]
+  },
+  "nhl13": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     14
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       256
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       280
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       264
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       352
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "refpack",
+      "XPR2",
+      262240
+     ],
+     32
+    ],
+    [
+     [
+      "refpack",
+      "XPR2",
+      131168
+     ],
+     28
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 240,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 240,
+     "decoded": true
+    },
+    {
+     "name": "3",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    },
+    {
+     "name": "sg1",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "2",
+     "stored": 22783,
+     "wrap": "refpack",
+     "magic": "58505232",
+     "magic_text": "XPR2",
+     "plain": 131168,
+     "decoded": true
+    },
+    {
+     "name": "sg2",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    }
+   ]
+  },
+  "nhl14": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     13
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       280
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       352
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       288
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       296
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "refpack",
+      "XPR2",
+      262240
+     ],
+     35
+    ],
+    [
+     [
+      "refpack",
+      "XPR2",
+      131168
+     ],
+     25
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 240,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 240,
+     "decoded": true
+    },
+    {
+     "name": "3",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    },
+    {
+     "name": "sg1",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "2",
+     "stored": 22783,
+     "wrap": "refpack",
+     "magic": "58505232",
+     "magic_text": "XPR2",
+     "plain": 131168,
+     "decoded": true
+    },
+    {
+     "name": "sg2",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    }
+   ]
+  },
+  "nhl15": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     4
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       256
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       296
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       248
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       280
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "refpack",
+      "XPR2",
+      262240
+     ],
+     38
+    ],
+    [
+     [
+      "refpack",
+      "XPR2",
+      131168
+     ],
+     22
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 240,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 240,
+     "decoded": true
+    },
+    {
+     "name": "3",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    },
+    {
+     "name": "sg1",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "2",
+     "stored": 20591,
+     "wrap": "refpack",
+     "magic": "58505232",
+     "magic_text": "XPR2",
+     "plain": 262240,
+     "decoded": true
+    },
+    {
+     "name": "sg2",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    }
+   ]
+  },
+  "legacy": {
+   "sampled": 60,
+   "outer": {
+    "BIGF": 60
+   },
+   "member_signatures": [
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       240
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     4
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       248
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       296
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     3
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       256
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       320
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ],
+    [
+     [
+      [
+       "raw",
+       "Apt ",
+       352
+      ],
+      [
+       "raw",
+       "\u0000\u0000\u0001 ",
+       288
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "refpack",
+       "XPR2",
+       "var"
+      ],
+      [
+       "raw",
+       "",
+       "var"
+      ],
+      [
+       "raw",
+       "Apt ",
+       32
+      ]
+     ],
+     2
+    ]
+   ],
+   "texture_member": [
+    [
+     [
+      "refpack",
+      "XPR2",
+      262240
+     ],
+     39
+    ],
+    [
+     [
+      "refpack",
+      "XPR2",
+      131168
+     ],
+     21
+    ]
+   ],
+   "example": [
+    {
+     "name": "0",
+     "stored": 240,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 240,
+     "decoded": true
+    },
+    {
+     "name": "3",
+     "stored": 288,
+     "wrap": "raw",
+     "magic": "00000120",
+     "magic_text": "\u0000\u0000\u0001 ",
+     "plain": 288,
+     "decoded": true
+    },
+    {
+     "name": "sg1",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "2",
+     "stored": 20591,
+     "wrap": "refpack",
+     "magic": "58505232",
+     "magic_text": "XPR2",
+     "plain": 262240,
+     "decoded": true
+    },
+    {
+     "name": "sg2",
+     "stored": 0,
+     "wrap": "raw",
+     "magic": "",
+     "magic_text": "",
+     "plain": 0,
+     "decoded": true
+    },
+    {
+     "name": "1",
+     "stored": 32,
+     "wrap": "raw",
+     "magic": "41707420",
+     "magic_text": "Apt ",
+     "plain": 32,
+     "decoded": true
+    }
+   ]
+  }
+ }
+}

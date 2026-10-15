@@ -1,0 +1,38 @@
+$ python research/nhl07-roster-schema/scripts/schema_compare.py anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1 0x1c anchors/xbox360/nhl07/databases/NHL07NG.db 0
+A.raw  A.can   recB  nf | exact-signature matches in B (raw/canon rec max cur)
+DZfz   zfZD      16  23 | FovP/PvoF 16B max=50 cur=50, dDrd/drDd 16B max=50 cur=50, yuHm/mHuy 16B max=235 cur=235, TJKL/LKJT 16B max=235 cur=235
+YvhR   RhvY      20  27 | dZCE/ECZd 20B max=150 cur=150, Raym/myaR 20B max=150 cur=150, yvSd/dSvy 20B max=2015 cur=2015, LsXI/IXsL 20B max=2015 cur=2015
+znPC   CPnz       8  11 | oYeE/EeYo 8B max=93 cur=93
+JhBt   tBhJ       4   1 | NONE
+mASv   vSAm       8  11 | oYeE/EeYo 8B max=93 cur=93
+eUOR   ROUe     508  45 | MqdK/KdqM 508B max=0 cur=0
+oCMe   eMCo       4   1 | NONE
+HHLk   kLHH     504  44 | NONE
+MVOx   xOVM     504  42 | NONE
+KboR   RobK      16  23 | YzeG/GezY 16B max=0 cur=0
+Exae   eaxE       4   1 | NONE
+rcpY   Ypcr      16  23 | YzeG/GezY 16B max=0 cur=0
+sAMA   AMAs       4   1 | TrVV/VVrT 4B max=74 cur=74, QEoV/VoEQ 4B max=74 cur=74
+mGOv   vOGm       4   1 | TrVV/VVrT 4B max=74 cur=74, QEoV/VoEQ 4B max=74 cur=74
+fyFF   FFyf       4   4 | ttOk/kOtt 4B max=93 cur=93
+dULq   qLUd       4   1 | NONE
+LZbD   DbZL       4   3 | caBZ/ZBac 4B max=2790 cur=2790
+Frps   sprF       4   1 | TrVV/VVrT 4B max=74 cur=74, QEoV/VoEQ 4B max=74 cur=74
+ibGM   MGbi      16  70 | Smgy/ygmS 16B max=2516 cur=2516, ulGe/eGlu 16B max=2516 cur=2516
+AtUj   jUtA       4   1 | TrVV/VVrT 4B max=74 cur=74, QEoV/VoEQ 4B max=74 cur=74
+vozd   dzov      16  70 | Smgy/ygmS 16B max=2516 cur=2516, ulGe/eGlu 16B max=2516 cur=2516
+CvSu   uSvC     504  43 | NONE
+tMYP   PYMt      68   2 | AOIh/hIOA 68B max=1 cur=1, bZvB/BvZb 68B max=1 cur=1
+nGCg   gCGn       4   1 | NONE
+Iblm   mlbI      68   2 | AOIh/hIOA 68B max=1 cur=1, bZvB/BvZb 68B max=1 cur=1
+CTnc   cnTC       4   3 | OEtS/StEO 4B max=93 cur=93
+RosT   TsoR      20  27 | dZCE/ECZd 20B max=150 cur=150, Raym/myaR 20B max=150 cur=150, yvSd/dSvy 20B max=2015 cur=2015, LsXI/IXsL 20B max=2015 cur=2015
+uyGF   FGyu      16  23 | FovP/PvoF 16B max=50 cur=50, dDrd/drDd 16B max=50 cur=50, yuHm/mHuy 16B max=235 cur=235, TJKL/LKJT 16B max=235 cur=235
+KERl   lREK      20  27 | oDHy/yHDo 20B max=0 cur=0
+wKzK   KzKw       4   1 | NONE
+zrsU   Usrz      20  27 | oDHy/yHDo 20B max=0 cur=0
+
+raw table-id overlap: []
+raw field-id overlap: ['AAai', 'Adsx', 'AkyJ', 'ArKB', 'Auad', 'BERR', 'BSHP', 'BSXd', 'BWVK', 'BboH', 'BcVZ', 'BnOW', 'BvDt', 'CKPw', 'CLEN', 'DOmH', 'DVoL', 'DaPp', 'EGLX', 'EKlF', 'EMLM', 'EcHG', 'EksY', 'EoQm', 'Ewap', 'FGkk', 'FIRe', 'FMkb', 'FVaN', 'GDhI', 'GLub', 'GPQs', 'GrVN', 'GtFK', 'IBOA', 'IIGk', 'IOYn', 'IkTY', 'Imzy', 'IxvQ', 'Jmcc', 'JoGJ', 'JzFM', 'KfBC', 'Kusi', 'LtqK', 'MDFs', 'MgKo', 'MykP', 'NUxf', 'NYLL', 'Nzao', 'OHVx', 'OQOd', 'OdSs', 'Onyv', 'OsHB', 'OwPC', 'PGhZ', 'PQgy', 'PedH', 'Plxr', 'PufE', 'QBpy', 'QDTK', 'RMbQ', 'RZSz', 'RbJp', 'SVTT', 'Sxps', 'TJol', 'TWSX', 'TYDh', 'TbGw', 'VSQu', 'VaWL', 'VvqE', 'WPGf', 'WZNs', 'WZZk', 'XBWz', 'XUMR', 'Xegx', 'YWPq', 'ZBLA', 'ZCsF', 'ZjQo', 'ZpNt', 'aAvX', 'aDub', 'aRgN', 'aiFP', 'ajIB', 'aljv', 'bNDE', 'bSAb', 'baRY', 'bjni', 'bkKW', 'cnVI', 'crfg', 'ctKP', 'dCEG', 'dhKk', 'dnFq', 'emab', 'eodJ', 'feiZ', 'fjUo', 'gXCm', 'hleL', 'hlsv', 'hruQ', 'iBQX', 'iPGg', 'iXft', 'irsI', 'iwsK', 'jWgU', 'jZSh', 'jlIL', 'jmPC', 'joMD', 'jqpY', 'jxQx', 'kMSG', 'kOdX', 'kQGw', 'lIbD', 'lXPP', 'lcCm', 'lxRC', 'mxhB', 'nRPv', 'ntSb', 'oNkI', 'oOKP', 'opNr', 'pLKJ', 'pOUV', 'pPkW', 'pfiv', 'pkRG', 'pter', 'pxVU', 'qEfv', 'qFky', 'qQvX', 'qTeq', 'qiGO', 'reKr', 'rnOl', 'rrTM', 'ryzV', 'sFgQ', 'sKFN', 'sNcy', 'sVvS', 'sZqI', 'soMM', 'suJw', 'tIqR', 'tRVs', 'tmxm', 'uAxS', 'uVsH', 'uhFJ', 'uklz', 'vBOv', 'vaGO', 'vnCd', 'vvKx', 'wHvH', 'xFXw', 'yPzN', 'yoNB', 'zIBw', 'zNcV', 'zxmK']
+A field ids: 179 B field ids: 610
+

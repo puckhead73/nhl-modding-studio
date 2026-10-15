@@ -13,12 +13,67 @@
 //! `historical_head` module (name-keyed: `hair`→hair maps, `eye`→eye maps,
 //! `mouth`→mouth/head, else head).
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
 use crate::assets::linear_to_rgba;
 use crate::{DomainError, Result};
+
+/// Decode a player's eye texture: the `eyes_{colour}_cm` raster from the shared
+/// `player_common/texlib_999.rx2` common library. The `eyel_`/`eyer_` submeshes
+/// are UV-mapped to it, but it ships **separately** from the per-player texlib,
+/// so the eyes render bare unless it's added. `eye_color` is the bio `Zufj`
+/// value (0..=6, clamped). Returned as a single [`PreviewTexture`] named
+/// `eyes_cm` so the eye submeshes bind it — decoding only the chosen raster (not
+/// the whole common library) keeps its head/hair rasters out of the pool. `None`
+/// when the library or an `eyes_*` raster is absent.
+pub fn decode_eye_texture(rendering_root: &Path, eye_color: Option<u32>) -> Option<PreviewTexture> {
+    let mut path = rendering_root.join("player_common").join("texlib_999.rx2");
+    if !path.is_file() {path.set_extension("rpsgl");}
+    if !path.is_file() {
+        // NHL08/09 keep shared eye colours as loose rasters in player/.
+        let colour = eye_color.unwrap_or(0).min(6);
+        for colour in [colour, 0] {
+            for ext in ["rx2", "rpsgl"] {
+                let loose = ["player", "player_common"].into_iter().map(|dir| rendering_root.join(dir).join(format!("eyes_{colour}_cm.{ext}"))).find(|p|p.is_file());
+                let Some(loose) = loose else {continue};
+                if !loose.is_file() { continue; }
+                let bytes = crate::assets::read_asset_file(&loose).ok()?;
+                let (_, img) = crate::assets::decode_texture_bytes(bytes, &loose, None).ok()?;
+                return Some(PreviewTexture { name: "eyes_cm".into(), width: img.width, height: img.height, rgba_base64: base64_encode(&img.rgba) });
+            }
+        }
+    }
+    let bytes = crate::assets::read_asset_file(&path).ok()?;
+    if bytes.starts_with(tdb_rx2::texlib_ps3::MAGIC) {
+        let lib=tdb_rx2::texlib_ps3::parse(&bytes).ok()?;
+        let want=format!("eyes_{}_cm",eye_color.unwrap_or(0).min(6));
+        let index=lib.textures.iter().position(|t|t.name.to_ascii_lowercase().contains(&want)).or_else(||lib.textures.iter().position(|t|{let n=t.name.to_ascii_lowercase();n.contains("eyes_")&&n.contains("_cm")}))?;
+        let (_,img)=crate::assets::decode_texture_bytes(bytes,&path,Some(index)).ok()?;
+        return Some(PreviewTexture{name:"eyes_cm".into(),width:img.width,height:img.height,rgba_base64:base64_encode(&img.rgba)});
+    }
+    let lib = tdb_rx2::texlib::parse(&bytes).ok()?;
+    let want = format!("eyes_{}_cm", eye_color.unwrap_or(0).min(6));
+    let tex = lib
+        .textures
+        .iter()
+        .find(|t| t.name.to_ascii_lowercase().contains(&want))
+        // Fall back to any `eyes_*_cm` raster if the exact colour isn't present.
+        .or_else(|| {
+            lib.textures.iter().find(|t| {
+                let n = t.name.to_ascii_lowercase();
+                n.contains("eyes_") && n.contains("_cm")
+            })
+        })?;
+    let rgba = linear_to_rgba(tex.format, tex.width, tex.height, &tex.base_mip_linear).ok()?;
+    Some(PreviewTexture {
+        name: "eyes_cm".to_string(),
+        width: tex.width,
+        height: tex.height,
+        rgba_base64: base64_encode(&rgba),
+    })
+}
 
 /// One decoded texlib raster, as RGBA8 for upload to a `DataTexture`.
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -80,12 +135,16 @@ pub struct HeadPreview {
 pub fn decode_head_preview(
     mesh_paths: &[PathBuf],
     texture_paths: &[String],
+    extra_textures: &[PreviewTexture],
 ) -> Result<HeadPreview> {
     let head_path = mesh_paths
         .first()
         .ok_or_else(|| DomainError::Extract("no head mesh path given".into()))?;
 
-    let textures = decode_textures(texture_paths);
+    // Textures decoded from files, plus any pre-decoded ones (the eye raster,
+    // pulled from the common library) — the submesh binding sees them together.
+    let mut textures = decode_textures(texture_paths);
+    textures.extend(extra_textures.iter().cloned());
 
     let mut submeshes = Vec::new();
     let mut min = [f32::MAX; 3];
@@ -101,8 +160,7 @@ pub fn decode_head_preview(
         // failing strict doesn't change it (its rig isn't what we edit). The PS4
         // `.mcd` rig is external, so there's no multi-skin ambiguity to flag.
         if i == 0 {
-            strict_ok = is_mcd
-                || tdb_rx2::playermesh::parse_player_mesh(&mesh_bytes).is_ok();
+            strict_ok = is_mcd || (!mesh_bytes.starts_with(tdb_rx2::ps3_mesh::MAGIC) && tdb_rx2::playermesh::parse_player_mesh(&mesh_bytes).is_ok());
         }
         let asset = crate::assets::parse_head_mesh(mesh_path, &mesh_bytes, true)?;
 
@@ -164,10 +222,59 @@ pub fn decode_head_preview(
     })
 }
 
+/// Decode a head, then keep only the submeshes named in `keep` and reframe the
+/// camera over just those — the path the Appearance-catalog browser takes.
+///
+/// A catalog asset (a head, or a merged hair, or facial hair) is a *subset* of the
+/// submeshes in its source container: on NHL 10 → Legacy one `player_*.rx2` carries
+/// both the head-core and the bundled hair, so the head and hair assets share a
+/// source and are told apart only by which submesh names each owns. Decoding the
+/// whole container and retaining the entry's own names gives a faithful preview of
+/// that one asset (framed to it), with no glTF re-reader needed. An empty `keep`
+/// returns the whole head unchanged.
+pub fn decode_head_preview_named(
+    mesh_paths: &[PathBuf],
+    texture_paths: &[String],
+    extra_textures: &[PreviewTexture],
+    keep: &[String],
+) -> Result<HeadPreview> {
+    let mut preview = decode_head_preview(mesh_paths, texture_paths, extra_textures)?;
+    if keep.is_empty() {
+        return Ok(preview);
+    }
+    let keep: std::collections::HashSet<&str> = keep.iter().map(String::as_str).collect();
+    preview.submeshes.retain(|s| keep.contains(s.name.as_str()));
+
+    // Reframe over the retained geometry so a hair-only asset isn't framed for a
+    // whole head (which would leave it tiny in a corner).
+    let mut min = [f32::MAX; 3];
+    let mut max = [f32::MIN; 3];
+    for sm in &preview.submeshes {
+        for p in &sm.positions {
+            for a in 0..3 {
+                min[a] = min[a].min(p[a]);
+                max[a] = max[a].max(p[a]);
+            }
+        }
+    }
+    if min[0] <= max[0] {
+        preview.center = [
+            (min[0] + max[0]) * 0.5,
+            (min[1] + max[1]) * 0.5,
+            (min[2] + max[2]) * 0.5,
+        ];
+        preview.span = (0..3)
+            .map(|a| max[a] - min[a])
+            .fold(0.0_f32, f32::max)
+            .max(f32::MIN_POSITIVE);
+    }
+    Ok(preview)
+}
+
 /// Decode every raster in the given texlib containers to RGBA. A container that
 /// fails to read or parse is skipped rather than sinking the whole preview —
 /// the mesh still renders, just untextured for the affected maps.
-fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
+pub(crate) fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
     let mut out = Vec::new();
     for path in texture_paths {
         let p = std::path::Path::new(path);
@@ -189,6 +296,17 @@ fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
                         height: tex.height,
                         rgba_base64: base64_encode(&rgba),
                     });
+                }
+            }
+            continue;
+        }
+        if bytes.starts_with(tdb_rx2::texlib_ps3::MAGIC) {
+            if let Ok(lib)=tdb_rx2::texlib_ps3::parse(&bytes) {
+                for (i,t) in lib.textures.iter().enumerate() {
+                    if let Ok((_,img))=crate::assets::decode_texture_bytes(bytes.clone(),p,Some(i)) {
+                        let name=if t.name.starts_with("texture_") && lib.textures.len()==1 {p.file_stem().unwrap_or_default().to_string_lossy().into_owned()}else{t.name.clone()};
+                        out.push(PreviewTexture{name,width:img.width,height:img.height,rgba_base64:base64_encode(&img.rgba)});
+                    }
                 }
             }
             continue;
@@ -229,7 +347,7 @@ fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
 /// Blend classification by submesh name, ported from the prior app: hair
 /// shells/cards are alpha-cutout and draw after the opaque head (cards after
 /// the haircap), so layered hair composites correctly.
-fn submesh_blend_mode(name: &str) -> (bool, i32) {
+pub(crate) fn submesh_blend_mode(name: &str) -> (bool, i32) {
     let n = name.to_ascii_lowercase();
     if n.contains("cards") {
         (true, 2)
@@ -245,7 +363,7 @@ fn submesh_blend_mode(name: &str) -> (bool, i32) {
 /// `pick_submesh_texture`: `hair`/`cards`→hair maps, `eye`→eye maps (no head
 /// fallback — eye UVs are authored against a standalone eye raster), `mouth`→
 /// mouth/teeth/tongue then head, else head.
-fn pick_submesh_texture(submesh_name: &str, textures: &[PreviewTexture]) -> Option<u32> {
+pub(crate) fn pick_submesh_texture(submesh_name: &str, textures: &[PreviewTexture]) -> Option<u32> {
     let n = submesh_name.to_ascii_lowercase();
     let is_eye = n.contains("eye");
     let keywords: &[&str] = if n.contains("hair") || n.contains("cards") {
@@ -283,7 +401,7 @@ fn pick_submesh_texture(submesh_name: &str, textures: &[PreviewTexture]) -> Opti
 
 /// Standard base64 (no line breaks) — the payloads cross the Tauri boundary as
 /// one string per texture. Kept local so the module has no base64 dependency.
-fn base64_encode(bytes: &[u8]) -> String {
+pub(crate) fn base64_encode(bytes: &[u8]) -> String {
     const T: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     let mut out = String::with_capacity(bytes.len().div_ceil(3) * 4);
     for chunk in bytes.chunks(3) {
@@ -324,7 +442,7 @@ mod tests {
             return;
         }
         let preview =
-            decode_head_preview(&[PathBuf::from(path)], &[]).expect("mcd head must preview");
+            decode_head_preview(&[PathBuf::from(path)], &[], &[]).expect("mcd head must preview");
         assert!(!preview.submeshes.is_empty(), "submeshes present");
         assert!(preview.span > 0.0, "framing computed");
         // Named submeshes drive texture binding downstream.
@@ -340,6 +458,53 @@ mod tests {
                 assert!(t.iter().all(|&i| (i as usize) < s.positions.len()));
             }
         }
+    }
+
+    /// Real Legacy head: with the eye raster decoded from the common library
+    /// (`player_common/texlib_999.rx2` → `eyes_{colour}_cm`) passed as an extra
+    /// texture, the `eyel_`/`eyer_` submeshes bind it (bare without it). The eye
+    /// texture is `eyes_*` and the head map is `head_*`, so they don't cross-bind.
+    /// Mount-gated.
+    #[test]
+    fn legacy_x360_head_eyes_bind_with_eye_texture() {
+        let root = std::path::Path::new(
+            r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy\rendering",
+        );
+        if !root.is_dir() {
+            eprintln!("skipping: no mount");
+            return;
+        }
+        let mesh = root.join("player").join("player_10.rx2");
+        if !mesh.is_file() {
+            eprintln!("skipping: player_10 absent");
+            return;
+        }
+        let eye = decode_eye_texture(root, Some(3)).expect("eye raster decodes from texlib_999");
+        assert_eq!(eye.name, "eyes_cm");
+        assert!(
+            eye.width >= 32 && !eye.rgba_base64.is_empty(),
+            "eye raster decoded"
+        );
+
+        let mut texs = Vec::new();
+        let texlib = root.join("player").join("texlib_10.rx2");
+        if texlib.is_file() {
+            texs.push(texlib.to_string_lossy().into_owned());
+        }
+        let preview =
+            decode_head_preview(&[mesh], &texs, std::slice::from_ref(&eye)).expect("head previews");
+        let eye_sm = preview
+            .submeshes
+            .iter()
+            .find(|s| s.name.to_ascii_lowercase().contains("eye"))
+            .expect("an eye submesh exists");
+        let bound = eye_sm
+            .material_index
+            .expect("eye submesh binds a texture (was bare before)");
+        assert_eq!(
+            preview.textures[bound as usize].name, "eyes_cm",
+            "eye binds the eye raster, not the head map"
+        );
     }
 
     fn tex(name: &str) -> PreviewTexture {
@@ -387,5 +552,221 @@ mod tests {
         assert_eq!(base64_encode(b"fo"), "Zm8=");
         assert_eq!(base64_encode(b"foo"), "Zm9v");
         assert_eq!(base64_encode(b"foobar"), "Zm9vYmFy");
+    }
+
+    // ---------------------------------------------------------------
+    // Phase 5.1 — NHL Legacy Xbox 360 texture-variant confirmation.
+    //
+    // These prove the Xbox-360 `RW4xb2` texture path (`texlib::parse` +
+    // Xbox tiling + 16-bit-pair swap + DXT/Argb decode) and the BIGF
+    // portrait chain (`decode_portrait`) actually decode the *real*
+    // extracted-tree assets to sane, non-degenerate images — the
+    // `preview`/`export` half of the capability model. They drive the
+    // same production functions the app uses; nothing here re-implements
+    // decode. Skipped when the extracted tree isn't mounted (CI /
+    // clean-room), matching `ps4_mcd_head_decodes_for_preview`. Set
+    // `QA_ASSET_OUT` to a directory to dump PNGs for eyeball review.
+    // ---------------------------------------------------------------
+
+    /// Root of the user-provided, read-only NHL Legacy Xbox 360 extracted tree.
+    const LEGACY_X360_ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+
+    /// Distinct-color count over an RGBA8 buffer, capped so a large image
+    /// doesn't allocate an unbounded set. A correctly de-tiled/de-swizzled
+    /// texture has many colors; a decode that produced a flat or garbage
+    /// buffer collapses to a handful.
+    fn distinct_colors(rgba: &[u8], cap: usize) -> usize {
+        let mut seen = std::collections::HashSet::new();
+        for px in rgba.chunks_exact(4) {
+            seen.insert([px[0], px[1], px[2], px[3]]);
+            if seen.len() >= cap {
+                break;
+            }
+        }
+        seen.len()
+    }
+
+    /// Optional PNG dump target (`QA_ASSET_OUT`), created on first use.
+    fn dump_dir() -> Option<std::path::PathBuf> {
+        let d = std::env::var_os("QA_ASSET_OUT")?;
+        let p = std::path::PathBuf::from(d);
+        std::fs::create_dir_all(&p).ok()?;
+        Some(p)
+    }
+
+    fn dump_png(dir: &Option<std::path::PathBuf>, name: &str, img: &crate::assets::DecodedImage) {
+        if let Some(dir) = dir {
+            if let Ok(png) = img.to_png() {
+                let _ = std::fs::write(dir.join(format!("{name}.png")), png);
+            }
+        }
+    }
+
+    /// The first `n` files in `dir` whose name matches `pred`, sorted for
+    /// determinism.
+    fn sample_files(
+        dir: &std::path::Path,
+        n: usize,
+        pred: impl Fn(&str) -> bool,
+    ) -> Vec<std::path::PathBuf> {
+        let Ok(rd) = std::fs::read_dir(dir) else {
+            return Vec::new();
+        };
+        let mut names: Vec<std::path::PathBuf> = rd
+            .filter_map(|e| e.ok().map(|e| e.path()))
+            .filter(|p| p.file_name().and_then(|s| s.to_str()).is_some_and(&pred))
+            .collect();
+        names.sort();
+        names.truncate(n);
+        names
+    }
+
+    #[test]
+    fn legacy_x360_logos_decode_from_extracted_tree() {
+        use crate::assets::{linear_to_rgba, DecodedImage};
+
+        let logo_dir = std::path::Path::new(LEGACY_X360_ROOT)
+            .join("rendering")
+            .join("logo");
+        if !logo_dir.is_dir() {
+            eprintln!("skipping: {} not present", logo_dir.display());
+            return;
+        }
+        let files = sample_files(&logo_dir, 24, |n| {
+            n.starts_with("texlib_") && n.ends_with(".rx2")
+        });
+        assert!(!files.is_empty(), "extracted logo tree has texlib_*.rx2");
+
+        let out = dump_dir();
+        let mut decoded_rasters = 0usize;
+        // A texlib bundles a rich color map plus low-color companions (alpha /
+        // mask / normal rasters that are legitimately near-binary), so richness
+        // is asserted in aggregate: the color content must decode somewhere, and
+        // no raster may collapse to a single flat fill (the all-zero-buffer /
+        // wrong-offset signature of a broken de-tile).
+        let mut max_colors = 0usize;
+        let mut rich_rasters = 0usize;
+        for path in &files {
+            let bytes = crate::assets::read_asset_file(path).expect("read logo rx2");
+            let lib = tdb_rx2::texlib::parse(&bytes)
+                .unwrap_or_else(|e| panic!("{}: texlib parse — {e}", path.display()));
+            assert!(
+                !lib.textures.is_empty(),
+                "{}: texlib carried no textures",
+                path.display()
+            );
+            for (i, t) in lib.textures.iter().enumerate() {
+                // Dimensions must be sane and the linear base mip the exact
+                // size the format+dims imply — a mis-read descriptor or a
+                // wrong tiling stride shows up here immediately.
+                assert!(
+                    (8..=4096).contains(&t.width) && (8..=4096).contains(&t.height),
+                    "{} [{}]: implausible dims {}x{}",
+                    path.display(),
+                    t.name,
+                    t.width,
+                    t.height
+                );
+                let rgba = linear_to_rgba(t.format, t.width, t.height, &t.base_mip_linear)
+                    .unwrap_or_else(|e| panic!("{} [{}]: to rgba — {e}", path.display(), t.name));
+                assert_eq!(rgba.len(), (t.width as usize) * (t.height as usize) * 4);
+                let colors = distinct_colors(&rgba, 64);
+                let stem_dbg = path.file_stem().unwrap().to_string_lossy();
+                eprintln!(
+                    "  {stem_dbg} [{}] {}x{} {:?} — {colors} colors, px0={:?}",
+                    t.name,
+                    t.width,
+                    t.height,
+                    t.format,
+                    &rgba[..4]
+                );
+                max_colors = max_colors.max(colors);
+                if colors >= 16 {
+                    rich_rasters += 1;
+                }
+                let stem = path.file_stem().unwrap().to_string_lossy();
+                dump_png(
+                    &out,
+                    &format!("logo_{stem}_{i}_{}", t.name.replace('.', "_")),
+                    &DecodedImage {
+                        width: t.width,
+                        height: t.height,
+                        rgba,
+                    },
+                );
+                decoded_rasters += 1;
+            }
+        }
+        // Real logo color maps decode to full-color images (the Xbox tiling +
+        // 16-bit swap + DXT/Argb path is right), and most texlibs carry at least
+        // one such map.
+        assert!(
+            max_colors >= 32,
+            "no richly-colored logo raster decoded (max {max_colors} colors) — de-tile suspect"
+        );
+        assert!(
+            rich_rasters >= files.len() / 2,
+            "only {rich_rasters} rich rasters across {} texlibs — de-tile suspect",
+            files.len()
+        );
+        eprintln!(
+            "legacy x360 logos: {} texlib files, {decoded_rasters} rasters decoded OK \
+             ({rich_rasters} rich, max {max_colors} colors)",
+            files.len()
+        );
+    }
+
+    #[test]
+    fn legacy_x360_portraits_decode_from_extracted_tree() {
+        use crate::assets::decode_portrait;
+
+        let dir = std::path::Path::new(LEGACY_X360_ROOT)
+            .join("fe")
+            .join("ion")
+            .join("artassets")
+            .join("playerheadssmall")
+            .join("p0_4000");
+        if !dir.is_dir() {
+            eprintln!("skipping: {} not present", dir.display());
+            return;
+        }
+        let files = sample_files(&dir, 24, |n| n.starts_with('p') && n.ends_with(".big"));
+        assert!(
+            !files.is_empty(),
+            "extracted portrait tree has p*.big bundles"
+        );
+
+        let out = dump_dir();
+        let mut ok = 0usize;
+        for path in &files {
+            let img = decode_portrait(path)
+                .unwrap_or_else(|e| panic!("{}: portrait decode — {e}", path.display()));
+            assert!(
+                (8..=1024).contains(&img.width) && (8..=1024).contains(&img.height),
+                "{}: implausible portrait dims {}x{}",
+                path.display(),
+                img.width,
+                img.height
+            );
+            assert_eq!(
+                img.rgba.len(),
+                (img.width as usize) * (img.height as usize) * 4
+            );
+            // A real portrait face has plenty of skin/hair tones; a broken
+            // de-tile collapses to a flat or single-block image.
+            let colors = distinct_colors(&img.rgba, 64);
+            assert!(
+                colors >= 16,
+                "{}: only {colors} distinct colors — portrait decode looks degenerate",
+                path.display()
+            );
+            let stem = path.file_stem().unwrap().to_string_lossy();
+            dump_png(&out, &format!("portrait_{stem}"), &img);
+            ok += 1;
+        }
+        eprintln!(
+            "legacy x360 portraits: {ok}/{} bundles decoded OK",
+            files.len()
+        );
     }
 }

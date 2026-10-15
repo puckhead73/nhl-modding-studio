@@ -1,0 +1,705 @@
+# Arena venue-field classes — developer-owned.
+#
+# Transcribed from research 2026-09-21 pm handoff R51 (`research-r51-arena-venue-inventory`,
+# `data/r51-arena-venue-field-inventory.json`), which inventoried every field of the arena table on
+# all 27 anchors: 159 distinct fields in seven era signatures, with a **name-based candidate class**
+# per field. Studio reads this map; it never reads the research lane's JSON at runtime.
+#
+# What a class is and is not: it is a grouping candidate derived from the field's name and its
+# observed value space. It is **not** an established consumer semantic — no field here has a traced
+# runtime effect (handoff R51 §3: "nothing here says which fields the game reads at runtime").
+# `unknown` therefore means "not even a name guess", and Studio refuses to edit those fields.
+#
+# Which titles carry which field, and whether it is constant, are **not** recorded here: Studio
+# computes both from the open database, so a title outside the anchor set still reports correctly.
+#
+# `colour = true` marks a field whose observed values are 24-bit RGB (handoff R51 §2) and which the
+# UI renders as a swatch. Zone fields whose observed space never exceeds 8 bits are not marked.
+
+# identity — the arena's own name / id / index — edited through the identity card, not here
+[[field]]
+name = "arenaid"
+class = "identity"
+
+[[field]]
+name = "arenaname"
+class = "identity"
+
+[[field]]
+name = "cityname"
+class = "identity"
+
+[[field]]
+name = "index"
+class = "identity"
+
+# reference — points at another table's row
+[[field]]
+name = "arenaartid"
+class = "reference"
+
+[[field]]
+name = "arenatype"
+class = "reference"
+
+# capacity — attendance and crowd figures
+[[field]]
+name = "avgattendance"
+class = "capacity"
+
+[[field]]
+name = "crowdtype"
+class = "capacity"
+
+[[field]]
+name = "maxattendance"
+class = "capacity"
+
+[[field]]
+name = "powerplaycrowdreaction"
+class = "capacity"
+
+[[field]]
+name = "seat1zone1"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat1zone2"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat1zone3"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat1zone4"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat1zone5"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat1zone6"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat2zone1"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat2zone2"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat2zone3"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat2zone4"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat2zone5"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seat2zone6"
+class = "capacity"
+colour = true
+
+[[field]]
+name = "seathigh"
+class = "capacity"
+
+[[field]]
+name = "seatlow"
+class = "capacity"
+
+[[field]]
+name = "seatmedium"
+class = "capacity"
+
+[[field]]
+name = "seatpatternid"
+class = "capacity"
+
+# audio — an audio id (arena, city, chant) — the catalogue join is per title
+[[field]]
+name = "arenaaudioid"
+class = "audio"
+
+[[field]]
+name = "chantaudioid"
+class = "audio"
+
+[[field]]
+name = "cityaudioid"
+class = "audio"
+
+[[field]]
+name = "goalsongid"
+class = "audio"
+
+[[field]]
+name = "intromusicid"
+class = "audio"
+
+[[field]]
+name = "powerplaysongid"
+class = "audio"
+
+[[field]]
+name = "winsongid"
+class = "audio"
+
+# horn — goal / period horn selection and the NHL 19+ horn-builder columns (value space = the catalogue rows of handoff R50)
+[[field]]
+name = "goalhorn"
+class = "horn"
+
+[[field]]
+name = "goalhornblast1length"
+class = "horn"
+
+[[field]]
+name = "goalhornblast2length"
+class = "horn"
+
+[[field]]
+name = "goalhornblast3length"
+class = "horn"
+
+[[field]]
+name = "goalhornblastsnum"
+class = "horn"
+
+[[field]]
+name = "goalhornelement1"
+class = "horn"
+
+[[field]]
+name = "goalhornelement2"
+class = "horn"
+
+[[field]]
+name = "goalhornelement3"
+class = "horn"
+
+[[field]]
+name = "goalhornflair"
+class = "horn"
+
+[[field]]
+name = "goalhorniscustom"
+class = "horn"
+
+[[field]]
+name = "goalhornpause1length"
+class = "horn"
+
+[[field]]
+name = "goalhornpause2length"
+class = "horn"
+
+[[field]]
+name = "periodhorn"
+class = "horn"
+
+# lighting — goal light, spotlights and netting colour
+[[field]]
+name = "goallightid"
+class = "lighting"
+
+[[field]]
+name = "goalpostcolor"
+class = "lighting"
+
+[[field]]
+name = "goalspotlightid"
+class = "lighting"
+
+[[field]]
+name = "goalspotlightzone1"
+class = "lighting"
+colour = true
+
+[[field]]
+name = "nettingcolorid"
+class = "lighting"
+
+[[field]]
+name = "skaterspotlightid"
+class = "lighting"
+
+[[field]]
+name = "skaterspotlightzone1"
+class = "lighting"
+colour = true
+
+# presentation — scoreboard, jumbotron, logos and songs
+[[field]]
+name = "doorlogo"
+class = "presentation"
+
+[[field]]
+name = "outropresentationid"
+class = "presentation"
+
+[[field]]
+name = "signatureintroeffect2id"
+class = "presentation"
+
+[[field]]
+name = "signatureintroeffect3id"
+class = "presentation"
+
+[[field]]
+name = "signatureintroeffect4id"
+class = "presentation"
+
+[[field]]
+name = "signatureintroeffect5id"
+class = "presentation"
+
+[[field]]
+name = "signatureintroeffectid"
+class = "presentation"
+
+# venue_geometry — seats, walls, tunnels, roof, railings, stairs — the custom-arena palette and dressing selectors
+[[field]]
+name = "boardad"
+class = "venue_geometry"
+
+[[field]]
+name = "boardadshown"
+class = "venue_geometry"
+
+[[field]]
+name = "boardtrim"
+class = "venue_geometry"
+
+[[field]]
+name = "boardtrimzone1"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "boardtrimzone2"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "boardtrimzone3"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "centericelogo"
+class = "venue_geometry"
+
+[[field]]
+name = "centericelogostyle"
+class = "venue_geometry"
+
+[[field]]
+name = "centericelogotype"
+class = "venue_geometry"
+
+[[field]]
+name = "icead1"
+class = "venue_geometry"
+
+[[field]]
+name = "icead2"
+class = "venue_geometry"
+
+[[field]]
+name = "icead3"
+class = "venue_geometry"
+
+[[field]]
+name = "icelogo"
+class = "venue_geometry"
+
+[[field]]
+name = "icelogoshown"
+class = "venue_geometry"
+
+[[field]]
+name = "icequality"
+class = "venue_geometry"
+
+[[field]]
+name = "jumbotron"
+class = "venue_geometry"
+
+[[field]]
+name = "railingzone1"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "railingzone2"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "railingzone3"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "roof"
+class = "venue_geometry"
+
+[[field]]
+name = "roofzone1"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "roofzone2"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "roofzone3"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "roofzone4"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "roofzone5"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "roofzone6"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "scoreboardid"
+class = "venue_geometry"
+
+[[field]]
+name = "scoreboardzone1"
+class = "venue_geometry"
+
+[[field]]
+name = "scoreboardzone2"
+class = "venue_geometry"
+
+[[field]]
+name = "scoreboardzone3"
+class = "venue_geometry"
+
+[[field]]
+name = "scoreboardzone4"
+class = "venue_geometry"
+
+[[field]]
+name = "scoreboardzone5"
+class = "venue_geometry"
+
+[[field]]
+name = "scoreboardzone6"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect2zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect2zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect2zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect3zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect3zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect3zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect4zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect4zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect4zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect5zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect5zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffect5zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffectzone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffectzone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signaturegoaleffectzone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect2zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect2zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect2zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect3zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect3zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect3zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect4zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect4zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect4zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect5zone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect5zone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffect5zone3"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffectzone1"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffectzone2"
+class = "venue_geometry"
+
+[[field]]
+name = "signatureintroeffectzone3"
+class = "venue_geometry"
+
+[[field]]
+name = "stairzone1"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "stairzone2"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "stairzone3"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "tunnelzone1"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "tunnelzone2"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "tunnelzone3"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "tunnelzone4"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "tunnelzone5"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "tunnelzone6"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "wallzone1"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "wallzone2"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "wallzone3"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "wallzone4"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "wallzone5"
+class = "venue_geometry"
+colour = true
+
+[[field]]
+name = "wallzone6"
+class = "venue_geometry"
+colour = true
+
+# flag — a two-valued switch
+[[field]]
+name = "isoutdoor"
+class = "flag"
+
+# unknown — not classified: neither the name nor the value space suggests a meaning — Studio refuses to edit these
+[[field]]
+name = "announcer"
+class = "unknown"
+
+[[field]]
+name = "architectureid"
+class = "unknown"
+
+[[field]]
+name = "bouncemap"
+class = "unknown"
+
+[[field]]
+name = "centerline"
+class = "unknown"
+
+[[field]]
+name = "crease"
+class = "unknown"
+
+[[field]]
+name = "powerring"
+class = "unknown"
+
+[[field]]
+name = "propid"
+class = "unknown"
+
+[[field]]
+name = "puck"
+class = "unknown"
+
+[[field]]
+name = "redline"
+class = "unknown"
+
+[[field]]
+name = "signaturegoaleffect2id"
+class = "unknown"
+
+[[field]]
+name = "signaturegoaleffect3id"
+class = "unknown"
+
+[[field]]
+name = "signaturegoaleffect4id"
+class = "unknown"
+
+[[field]]
+name = "signaturegoaleffect5id"
+class = "unknown"
+
+[[field]]
+name = "signaturegoaleffectid"
+class = "unknown"
+
+[[field]]
+name = "stanchion"
+class = "unknown"
+
+[[field]]
+name = "step"
+class = "unknown"
+
+[[field]]
+name = "table"
+class = "unknown"
+
+[[field]]
+name = "timeofday"
+class = "unknown"
+
+[[field]]
+name = "walls"
+class = "unknown"
+
+[[field]]
+name = "yearopened"
+class = "unknown"
+

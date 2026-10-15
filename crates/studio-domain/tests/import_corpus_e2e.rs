@@ -9,13 +9,13 @@
 
 use std::path::{Path, PathBuf};
 
-use studio_domain::{
-    import, EditSession, FhmCorpus, Platform, Project, ProjectRole,
-};
+use studio_domain::{import, EditSession, FhmCorpus, Platform, Project, ProjectRole};
 use tdb_core::TdbFile;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn open_anchor() -> EditSession {
@@ -70,22 +70,48 @@ fn corpus_person_imports_into_anchor() {
 
     assert!(!ps.last_name.is_empty(), "resolved a name");
     assert_eq!(ps.last_name, person.last_name);
-    assert!(!ps.ratings.is_empty(), "computed ratings mapped to target dSvy fields");
+    assert!(
+        !ps.ratings.is_empty(),
+        "computed ratings mapped to target dSvy fields"
+    );
     println!(
         "  -> {} {}  h={:?} w={:?} dob={:?} pos={} hand={:?} nat={:?} style={:?} ratings={}",
-        ps.first_name, ps.last_name, ps.height_inches, ps.weight_lb, ps.birthdate, ps.position,
-        ps.handedness, ps.nationality, ps.style, ps.ratings.len()
+        ps.first_name,
+        ps.last_name,
+        ps.height_inches,
+        ps.weight_lb,
+        ps.birthdate,
+        ps.position,
+        ps.handedness,
+        ps.nationality,
+        ps.style,
+        ps.ratings.len()
     );
 
     // Lower + apply into the anchor.
-    let (op, skipped) =
-        import::lower_create(&db, sess.project().meta(), sess.project().enums(), &ps, team).unwrap();
+    let (op, skipped) = import::lower_create(
+        &db,
+        sess.project().meta(),
+        sess.project().enums(),
+        &ps,
+        team,
+    )
+    .unwrap();
     // A resolved skater style must reach the companion as a QgFs write.
     if ps.style.is_some() {
-        let studio_domain::ImportOp::Create { writes, .. } = &op else { panic!("create op") };
-        assert!(writes.iter().any(|w| w.field == "QgFs"), "style lowered to QgFs");
+        let studio_domain::ImportOp::Create { writes, .. } = &op else {
+            panic!("create op")
+        };
+        assert!(
+            writes.iter().any(|w| w.field == "QgFs"),
+            "style lowered to QgFs"
+        );
     }
-    println!("  lowered: {} skipped {:?}", ps.ratings.len(), skipped.iter().map(|s| &s.field).collect::<Vec<_>>());
+    println!(
+        "  lowered: {} skipped {:?}",
+        ps.ratings.len(),
+        skipped.iter().map(|s| &s.field).collect::<Vec<_>>()
+    );
     drop(db);
     sess.apply_import(&[op]).unwrap();
 

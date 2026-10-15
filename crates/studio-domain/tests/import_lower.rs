@@ -13,7 +13,9 @@ use studio_domain::{
 use tdb_core::TdbFile;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn open(title: &str) -> EditSession {
@@ -34,12 +36,27 @@ fn companion_rating_field(sess: &EditSession) -> String {
     let bytes = sess.bytes().to_vec();
     let db = TdbFile::parse(&bytes).unwrap();
     let model = sess.model().unwrap();
-    let rec = model.players.iter().find_map(|p| p.skater_ai).expect("a skater companion");
-    let fields = entity_fields(&db, sess.project().meta(), sess.project().enums(), "dSvy", rec);
-    build_player_attributes(&fields, "dSvy")
+    let rec = model
+        .players
+        .iter()
+        .find_map(|p| p.skater_ai)
+        .expect("a skater companion");
+    let fields = entity_fields(
+        &db,
+        sess.project().meta(),
+        sess.project().enums(),
+        "dSvy",
+        rec,
+    );
+    build_player_attributes(&fields, "dSvy", false)
         .flat
         .iter()
-        .find_map(|a| a.field.as_ref().filter(|_| a.is_rating).map(|f| f.studio_field.clone()))
+        .find_map(|a| {
+            a.field
+                .as_ref()
+                .filter(|_| a.is_rating)
+                .map(|f| f.studio_field.clone())
+        })
         .expect("a dSvy rating field")
 }
 
@@ -48,13 +65,18 @@ fn companion_rating_field(sess: &EditSession) -> String {
 /// are exercised, not just nhl14's.
 fn round_trips_on(title: &str) {
     let mut sess = open(title);
-    let team = sess.team_summaries().unwrap().first().expect("a team").team_id;
+    let team = sess
+        .team_summaries()
+        .unwrap()
+        .first()
+        .expect("a team")
+        .team_id;
     let rating_field = companion_rating_field(&sess);
 
     let person = import::PersonSeason {
         first_name: "Synthetic".into(),
         last_name: "Playerton".into(),
-        position: 1, // skater
+        position: 1,             // skater
         height_inches: Some(73), // 6'1"
         weight_lb: Some(195),
         birthdate: Some((1990, 5, 15)),
@@ -66,26 +88,53 @@ fn round_trips_on(title: &str) {
     // Lower against the current db, then apply as one cart.
     let bytes = sess.bytes().to_vec();
     let db = TdbFile::parse(&bytes).unwrap();
-    let (op, skipped) =
-        import::lower_create(&db, sess.project().meta(), sess.project().enums(), &person, team)
-            .expect("lowering produced an op");
-    assert!(skipped.is_empty(), "all fields exist on nhl14, none should skip: {skipped:?}");
+    let (op, skipped) = import::lower_create(
+        &db,
+        sess.project().meta(),
+        sess.project().enums(),
+        &person,
+        team,
+    )
+    .expect("lowering produced an op");
+    assert!(
+        skipped.is_empty(),
+        "all fields exist on nhl14, none should skip: {skipped:?}"
+    );
     drop(db);
 
     sess.apply_import(&[op]).unwrap();
 
     // Locate the created player.
     let summaries = sess.player_summaries().unwrap();
-    let created = summaries.iter().find(|p| p.last_name == "Playerton").expect("created player present");
+    let created = summaries
+        .iter()
+        .find(|p| p.last_name == "Playerton")
+        .expect("created player present");
     assert_eq!(created.first_name, "Synthetic");
-    assert_eq!(created.team_id, Some(team), "player landed on the target team's roster");
+    assert_eq!(
+        created.team_id,
+        Some(team),
+        "player landed on the target team's roster"
+    );
 
     // Read every field back through the display path — must equal the input.
     let view = sess.player_view(created.player_id).unwrap().unwrap();
     assert_eq!(view.header.full_name, "Synthetic Playerton");
-    assert_eq!(view.header.height.as_deref(), Some("6'1\""), "height +54 round-trips");
-    assert_eq!(view.header.weight.as_deref(), Some("195 lb"), "weight base round-trips");
-    assert_eq!(view.header.birthdate.as_deref(), Some("1990-05-15"), "birthdate 0-index round-trips");
+    assert_eq!(
+        view.header.height.as_deref(),
+        Some("6'1\""),
+        "height +54 round-trips"
+    );
+    assert_eq!(
+        view.header.weight.as_deref(),
+        Some("195 lb"),
+        "weight base round-trips"
+    );
+    assert_eq!(
+        view.header.birthdate.as_deref(),
+        Some("1990-05-15"),
+        "birthdate 0-index round-trips"
+    );
     assert_eq!(view.header.jersey_number, Some(91));
 
     // The rating decodes back to the human value via its edit_offset (Spike S1).
@@ -93,12 +142,21 @@ fn round_trips_on(title: &str) {
     let ai = model.player(created.player_id).unwrap().skater_ai.unwrap();
     let bytes = sess.bytes().to_vec();
     let db = TdbFile::parse(&bytes).unwrap();
-    let fields = entity_fields(&db, sess.project().meta(), sess.project().enums(), "dSvy", ai);
+    let fields = entity_fields(
+        &db,
+        sess.project().meta(),
+        sess.project().enums(),
+        "dSvy",
+        ai,
+    );
     let rating = fields
         .iter()
         .find(|f| f.studio_field == rating_field)
         .expect("the rating field on the new companion");
-    assert_eq!(rating.display, "88", "rating round-trips through edit_offset");
+    assert_eq!(
+        rating.display, "88",
+        "rating round-trips through edit_offset"
+    );
 }
 
 #[test]

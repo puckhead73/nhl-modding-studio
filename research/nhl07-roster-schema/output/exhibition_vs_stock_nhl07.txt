@@ -1,0 +1,11 @@
+$ python research/nhl07-roster-schema/scripts/exhibition_vs_stock.py
+exhibitionplayerbiotable vs stockplayerbiotable            schema identical=True rows 2250/2250 record block byte-identical=True differing records=0
+exhibitionrostertable vs defaultrostertable                schema identical=True rows 2516/2516 record block byte-identical=True differing records=0
+exhibitiongoalieai vs stockgoalieai                        schema identical=True rows 235/235 record block byte-identical=True differing records=0
+exhibitionskaterai vs stockskaterai                        schema identical=True rows 2015/2015 record block byte-identical=True differing records=0
+exhibitionfreeagents vs defaultfreeagents                  schema identical=True rows 74/74 record block byte-identical=True differing records=0
+exhibitiondownloadplayerbio vs downloadplayerbiotable      schema identical=True rows 200/200 record block byte-identical=True differing records=0
+exhibitiondownloadskaterai vs downloadskaterai             schema identical=True rows 150/150 record block byte-identical=True differing records=0
+exhibitiondownloadgoalieai vs downloadgoalieai             schema identical=True rows 50/50 record block byte-identical=True differing records=0
+rosterversiontable vs defaultrosterversiontable            schema identical=True rows 1/1 record block byte-identical=True differing records=0
+

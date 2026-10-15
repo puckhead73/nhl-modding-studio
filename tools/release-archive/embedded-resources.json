@@ -1,0 +1,74 @@
+{
+ "_about": "Non-code files the frontend build embeds in nhl-studio.exe (receipt 46), and what is recorded about their rights. `rights` = 'first-party' (Studio-owned, covered by Studio's licence), 'third-party' (licence named in `terms`), or 'unrecorded'. Only a recorded user / coordinator answer may change an 'unrecorded' row; the assembler never infers one. Any unrecorded file keeps the candidate from being release-ready.",
+ "entries": [
+  {
+   "match": "assets/nhl0*.png",
+   "also": [
+    "assets/nhl1*.png",
+    "assets/nhl2*.png",
+    "assets/nhlleg-*.png",
+    "assets/legacyrecomp-*.png"
+   ],
+   "source": "app/src/assets/ui/nhl07..nhl21.png, nhlleg.png, legacyrecomp.png",
+   "description": "Title picker tiles: game box art of the EA NHL titles, user-edited to a matched set (commit 086e0f0, 28 Jun 2026)",
+   "rights": "unrecorded",
+   "group": "title-tiles",
+   "replacement": "required before external release, unless separately documented rights are recorded; not started"
+  },
+  {
+   "match": "assets/360-*.png",
+   "also": [
+    "assets/PS3-*.png",
+    "assets/ps4-*.png"
+   ],
+   "source": "app/src/assets/ui/360.png, PS3.png, ps4.png",
+   "description": "Platform picker tiles: console platform artwork, user-edited (commit 086e0f0)",
+   "rights": "unrecorded",
+   "group": "platform-tiles",
+   "replacement": "required before external release, unless separately documented rights are recorded; not started"
+  },
+  {
+   "match": "strategies/*.gif",
+   "source": "app/public/strategies/*.gif",
+   "description": "Line strategy diagrams shown beside strategy fields; they appear to be captured from an EA NHL game's strategy screens",
+   "rights": "unrecorded",
+   "group": "strategy-diagrams",
+   "replacement": "required before external release, unless separately documented rights are recorded; not started"
+  },
+  {
+   "match": "assets/NHL Modding Studio Header-*.png",
+   "source": "app/src/assets/ui/NHL Modding Studio Header.png",
+   "description": "Studio header logo",
+   "rights": "unrecorded",
+   "group": "header-logo",
+   "replacement": "required before external release, unless separately documented rights are recorded; not started"
+  },
+  {
+   "match": "assets/rink background-*.png",
+   "also": [
+    "assets/rink-background-*.png"
+   ],
+   "source": "app/src/assets/rink-background.png / ui/rink background.png",
+   "description": "Rink backdrop behind the 3D mesh viewers",
+   "rights": "unrecorded",
+   "group": "rink-backdrop",
+   "replacement": "required before external release, unless separately documented rights are recorded; not started"
+  }
+ ],
+ "executable_resources": [
+  {
+   "source": "src-tauri/icons/icon.ico",
+   "description": "Application icon embedded in nhl-studio.exe",
+   "rights": "unrecorded",
+   "group": "app-icon",
+   "replacement": "required before external release, unless separately documented rights are recorded; not started"
+  }
+ ],
+ "internal_bundling": {
+  "decided": "2026-09-28",
+  "by": "user",
+  "decision": "for now we will bundle the assets with it, to be replaced before external release",
+  "record": "docs/plans/beta-20261001-scope-decisions.md (28 September clarification — artwork in internal builds)",
+  "scope": "internal research / team builds only; this is a packaging permission, not a provenance or external-distribution-rights finding — every `rights` value stays as recorded"
+ }
+}

@@ -1,0 +1,6349 @@
+{
+ "note": "R46 \u2014 `CTX0` record header words censused across both file versions (v3.1 NHL 11 / 12 by the r41 parser; v4.5 NHL 13\u2013Legacy by the r24\nparser), both sets (`pbp_eng`, `crowds`), with the `*_contextmoduledef.xml` attributes of each title, so the undecoded words can be\nidentified version-to-version and given candidate labels without runtime claims. Read-only.\n\nPer (tree, set): value census of v3.1 `w0 w1 w2 w3 w4` / v4.5 `w1 w3 w4_hi w4_lo w2_b2 w2_b3`; cross-tabs against trigger presence\nand condition count; the XML `Module` attributes; the exact record count vs `maxNumContexts`; the crowd set's field values compared across\ntitles (identity test).\nUsage: python r46_ctx0_header_words_census.py <out.json>\n",
+ "v31": {
+  "x360-nhl11": {
+   "pbp_eng": {
+    "records": 2833,
+    "groups_A": 104,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumContexts": "2800",
+     "maxNumGroups": "120",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "200",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w0": {
+     "distinct": 173,
+     "min": 1,
+     "max": 6000,
+     "top": [
+      [
+       100,
+       362
+      ],
+      [
+       120,
+       184
+      ],
+      [
+       200,
+       180
+      ],
+      [
+       400,
+       167
+      ],
+      [
+       300,
+       165
+      ],
+      [
+       101,
+       153
+      ],
+      [
+       140,
+       137
+      ],
+      [
+       800,
+       111
+      ],
+      [
+       150,
+       109
+      ],
+      [
+       350,
+       73
+      ],
+      [
+       801,
+       64
+      ],
+      [
+       205,
+       63
+      ]
+     ]
+    },
+    "w1": {
+     "distinct": 19,
+     "min": 0,
+     "max": 600,
+     "top": [
+      [
+       60,
+       584
+      ],
+      [
+       300,
+       505
+      ],
+      [
+       30,
+       429
+      ],
+      [
+       180,
+       353
+      ],
+      [
+       120,
+       305
+      ],
+      [
+       240,
+       209
+      ],
+      [
+       0,
+       134
+      ],
+      [
+       10,
+       102
+      ],
+      [
+       200,
+       68
+      ],
+      [
+       90,
+       57
+      ],
+      [
+       600,
+       42
+      ],
+      [
+       20,
+       19
+      ]
+     ]
+    },
+    "w2": {
+     "distinct": 3,
+     "min": 1,
+     "max": 3,
+     "top": [
+      [
+       1,
+       2752
+      ],
+      [
+       3,
+       41
+      ],
+      [
+       2,
+       40
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       2833
+      ]
+     ]
+    },
+    "w4": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       2833
+      ]
+     ]
+    },
+    "w2_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      2699
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      53
+     ],
+     [
+      [
+       3,
+       false
+      ],
+      41
+     ],
+     [
+      [
+       2,
+       false
+      ],
+      40
+     ]
+    ],
+    "w1_zero_x_w2": [
+     [
+      [
+       false,
+       1
+      ],
+      2699
+     ],
+     [
+      [
+       true,
+       1
+      ],
+      53
+     ],
+     [
+      [
+       true,
+       3
+      ],
+      41
+     ],
+     [
+      [
+       true,
+       2
+      ],
+      40
+     ]
+    ],
+    "w0_w1_top": [
+     [
+      [
+       120,
+       180
+      ],
+      177
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      122
+     ],
+     [
+      [
+       140,
+       60
+      ],
+      119
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      108
+     ],
+     [
+      [
+       300,
+       300
+      ],
+      98
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      82
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      70
+     ],
+     [
+      [
+       200,
+       300
+      ],
+      67
+     ],
+     [
+      [
+       400,
+       120
+      ],
+      63
+     ],
+     [
+      [
+       801,
+       240
+      ],
+      61
+     ]
+    ],
+    "w2_examples": {
+     "1": [
+      "Cup_End_Cup_Presentation_QMJHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_CHL",
+      "Cup_End_Cup_Presentation_OHL",
+      "Cup_End_Cup_Presentation_AHL"
+     ],
+     "2": [
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Score_0_0",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Chances_Both_Low_Score_Close",
+      "Acmem_Follow_2_Rush_Tm_Ft_Rush_Good_Score_Lead",
+      "_Acmem_Follow_Pp_Tm_V_Pim_Tm_Ft_Is_Pim_Penalties_Many_Goals_Many_Score_Lead"
+     ],
+     "3": [
+      "Playoff_End_OHL_JRossRobertson_Won_NONIS_2",
+      "Playoff_End_WHL_EdChynoweth_Won_NONIS_2",
+      "Playoff_End_QMJHL_PresidentsCup_Won_NONIS_2",
+      "DYN_PRESEASON_Intro_lstGM_soFar_Unbeaten",
+      "DYN_PRESEASON_Intro_lstGM_soFar_Winless"
+     ]
+    }
+   },
+   "crowds": {
+    "records": 1164,
+    "groups_A": 85,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumContexts": "1200",
+     "maxNumGroups": "100",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w0": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       78
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       59
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       38
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w1": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1062
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       15
+      ]
+     ]
+    },
+    "w2": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w1_zero_x_w2": [
+     [
+      [
+       false,
+       1
+      ],
+      1077
+     ],
+     [
+      [
+       true,
+       4
+      ],
+      46
+     ],
+     [
+      [
+       true,
+       1
+      ],
+      41
+     ]
+    ],
+    "w0_w1_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      77
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      59
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      37
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w2_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    }
+   }
+  },
+  "ps3-nhl11": {
+   "pbp_eng": {
+    "records": 2833,
+    "groups_A": 104,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumContexts": "2800",
+     "maxNumGroups": "120",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "200",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w0": {
+     "distinct": 173,
+     "min": 1,
+     "max": 6000,
+     "top": [
+      [
+       100,
+       362
+      ],
+      [
+       120,
+       184
+      ],
+      [
+       200,
+       180
+      ],
+      [
+       400,
+       167
+      ],
+      [
+       300,
+       165
+      ],
+      [
+       101,
+       153
+      ],
+      [
+       140,
+       137
+      ],
+      [
+       800,
+       111
+      ],
+      [
+       150,
+       109
+      ],
+      [
+       350,
+       73
+      ],
+      [
+       801,
+       64
+      ],
+      [
+       205,
+       63
+      ]
+     ]
+    },
+    "w1": {
+     "distinct": 19,
+     "min": 0,
+     "max": 600,
+     "top": [
+      [
+       60,
+       584
+      ],
+      [
+       300,
+       505
+      ],
+      [
+       30,
+       429
+      ],
+      [
+       180,
+       353
+      ],
+      [
+       120,
+       305
+      ],
+      [
+       240,
+       209
+      ],
+      [
+       0,
+       134
+      ],
+      [
+       10,
+       102
+      ],
+      [
+       200,
+       68
+      ],
+      [
+       90,
+       57
+      ],
+      [
+       600,
+       42
+      ],
+      [
+       20,
+       19
+      ]
+     ]
+    },
+    "w2": {
+     "distinct": 3,
+     "min": 1,
+     "max": 3,
+     "top": [
+      [
+       1,
+       2752
+      ],
+      [
+       3,
+       41
+      ],
+      [
+       2,
+       40
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       2833
+      ]
+     ]
+    },
+    "w4": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       2833
+      ]
+     ]
+    },
+    "w2_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      2699
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      53
+     ],
+     [
+      [
+       3,
+       false
+      ],
+      41
+     ],
+     [
+      [
+       2,
+       false
+      ],
+      40
+     ]
+    ],
+    "w1_zero_x_w2": [
+     [
+      [
+       false,
+       1
+      ],
+      2699
+     ],
+     [
+      [
+       true,
+       1
+      ],
+      53
+     ],
+     [
+      [
+       true,
+       3
+      ],
+      41
+     ],
+     [
+      [
+       true,
+       2
+      ],
+      40
+     ]
+    ],
+    "w0_w1_top": [
+     [
+      [
+       120,
+       180
+      ],
+      177
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      122
+     ],
+     [
+      [
+       140,
+       60
+      ],
+      119
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      108
+     ],
+     [
+      [
+       300,
+       300
+      ],
+      98
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      82
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      70
+     ],
+     [
+      [
+       200,
+       300
+      ],
+      67
+     ],
+     [
+      [
+       400,
+       120
+      ],
+      63
+     ],
+     [
+      [
+       801,
+       240
+      ],
+      61
+     ]
+    ],
+    "w2_examples": {
+     "1": [
+      "Cup_End_Cup_Presentation_QMJHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_CHL",
+      "Cup_End_Cup_Presentation_OHL",
+      "Cup_End_Cup_Presentation_AHL"
+     ],
+     "2": [
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Score_0_0",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Chances_Both_Low_Score_Close",
+      "Acmem_Follow_2_Rush_Tm_Ft_Rush_Good_Score_Lead",
+      "_Acmem_Follow_Pp_Tm_V_Pim_Tm_Ft_Is_Pim_Penalties_Many_Goals_Many_Score_Lead"
+     ],
+     "3": [
+      "Playoff_End_OHL_JRossRobertson_Won_NONIS_2",
+      "Playoff_End_WHL_EdChynoweth_Won_NONIS_2",
+      "Playoff_End_QMJHL_PresidentsCup_Won_NONIS_2",
+      "DYN_PRESEASON_Intro_lstGM_soFar_Unbeaten",
+      "DYN_PRESEASON_Intro_lstGM_soFar_Winless"
+     ]
+    }
+   },
+   "crowds": {
+    "records": 1164,
+    "groups_A": 85,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumContexts": "1200",
+     "maxNumGroups": "100",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w0": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       78
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       59
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       38
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w1": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1062
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       15
+      ]
+     ]
+    },
+    "w2": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w1_zero_x_w2": [
+     [
+      [
+       false,
+       1
+      ],
+      1077
+     ],
+     [
+      [
+       true,
+       4
+      ],
+      46
+     ],
+     [
+      [
+       true,
+       1
+      ],
+      41
+     ]
+    ],
+    "w0_w1_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      77
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      59
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      37
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w2_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    }
+   }
+  },
+  "x360-nhl12": {
+   "pbp_eng": {
+    "records": 3339,
+    "groups_A": 123,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumContexts": "2800",
+     "maxNumGroups": "120",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "200",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w0": {
+     "distinct": 180,
+     "min": 1,
+     "max": 6000,
+     "top": [
+      [
+       100,
+       394
+      ],
+      [
+       400,
+       391
+      ],
+      [
+       120,
+       184
+      ],
+      [
+       200,
+       180
+      ],
+      [
+       101,
+       171
+      ],
+      [
+       300,
+       165
+      ],
+      [
+       401,
+       152
+      ],
+      [
+       140,
+       137
+      ],
+      [
+       150,
+       112
+      ],
+      [
+       800,
+       111
+      ],
+      [
+       350,
+       93
+      ],
+      [
+       801,
+       64
+      ]
+     ]
+    },
+    "w1": {
+     "distinct": 23,
+     "min": 0,
+     "max": 2000,
+     "top": [
+      [
+       60,
+       973
+      ],
+      [
+       300,
+       508
+      ],
+      [
+       30,
+       444
+      ],
+      [
+       180,
+       360
+      ],
+      [
+       120,
+       311
+      ],
+      [
+       240,
+       209
+      ],
+      [
+       0,
+       139
+      ],
+      [
+       10,
+       102
+      ],
+      [
+       90,
+       93
+      ],
+      [
+       200,
+       88
+      ],
+      [
+       600,
+       43
+      ],
+      [
+       20,
+       24
+      ]
+     ]
+    },
+    "w2": {
+     "distinct": 3,
+     "min": 1,
+     "max": 3,
+     "top": [
+      [
+       1,
+       3258
+      ],
+      [
+       3,
+       41
+      ],
+      [
+       2,
+       40
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       3339
+      ]
+     ]
+    },
+    "w4": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       3339
+      ]
+     ]
+    },
+    "w2_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      3200
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      58
+     ],
+     [
+      [
+       3,
+       false
+      ],
+      41
+     ],
+     [
+      [
+       2,
+       false
+      ],
+      40
+     ]
+    ],
+    "w1_zero_x_w2": [
+     [
+      [
+       false,
+       1
+      ],
+      3200
+     ],
+     [
+      [
+       true,
+       1
+      ],
+      58
+     ],
+     [
+      [
+       true,
+       3
+      ],
+      41
+     ],
+     [
+      [
+       true,
+       2
+      ],
+      40
+     ]
+    ],
+    "w0_w1_top": [
+     [
+      [
+       400,
+       60
+      ],
+      239
+     ],
+     [
+      [
+       120,
+       180
+      ],
+      177
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      141
+     ],
+     [
+      [
+       140,
+       60
+      ],
+      119
+     ],
+     [
+      [
+       401,
+       60
+      ],
+      118
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      108
+     ],
+     [
+      [
+       300,
+       300
+      ],
+      98
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      82
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      71
+     ],
+     [
+      [
+       200,
+       300
+      ],
+      67
+     ]
+    ],
+    "w2_examples": {
+     "1": [
+      "Cup_End_Cup_Presentation_OHL",
+      "Cup_End_Cup_Presentation_AHL",
+      "Cup_End_Cup_Presentation_CHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_QMJHL"
+     ],
+     "2": [
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Score_0_0",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Chances_Both_Low_Score_Close",
+      "Acmem_Follow_2_Off_Tm_Both_Goals_Few_Score_Close_Low",
+      "Acmem_Follow_2_PP_Tm_No_Penalties_Score_Close"
+     ],
+     "3": [
+      "Playoff_End_OHL_JRossRobertson_Won_NONIS_2",
+      "Playoff_End_WHL_EdChynoweth_Won_NONIS_2",
+      "Playoff_End_QMJHL_PresidentsCup_Won_NONIS_2",
+      "DYN_PRESEASON_Intro_lstGM_soFar_Unbeaten",
+      "DYN_PRESEASON_Intro_lstGM_soFar_Winless"
+     ]
+    }
+   },
+   "crowds": {
+    "records": 1164,
+    "groups_A": 85,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumContexts": "1200",
+     "maxNumGroups": "100",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w0": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       59
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w1": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1062
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       15
+      ]
+     ]
+    },
+    "w2": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w1_zero_x_w2": [
+     [
+      [
+       false,
+       1
+      ],
+      1077
+     ],
+     [
+      [
+       true,
+       4
+      ],
+      46
+     ],
+     [
+      [
+       true,
+       1
+      ],
+      41
+     ]
+    ],
+    "w0_w1_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      59
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w2_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    }
+   }
+  }
+ },
+ "v45": {
+  "ps3-nhl11": {
+   "pbp_eng": {
+    "records": 0,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumContexts": "2800",
+     "maxNumGroups": "120",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "200",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w1": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_hi": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b2": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo_x_has_trigger": [],
+    "w3_x_has_trigger": [],
+    "w1_w4hi_top": [],
+    "w4_lo_examples": {},
+    "w3_flag_examples": []
+   },
+   "crowds": {
+    "records": 0,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumContexts": "1200",
+     "maxNumGroups": "100",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w1": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_hi": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b2": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo_x_has_trigger": [],
+    "w3_x_has_trigger": [],
+    "w1_w4hi_top": [],
+    "w4_lo_examples": {},
+    "w3_flag_examples": []
+   }
+  },
+  "ps3-nhl14": {
+   "pbp_eng": {
+    "records": 3583,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 204,
+     "min": 1,
+     "max": 6000,
+     "top": [
+      [
+       400,
+       401
+      ],
+      [
+       100,
+       308
+      ],
+      [
+       200,
+       195
+      ],
+      [
+       101,
+       188
+      ],
+      [
+       120,
+       173
+      ],
+      [
+       401,
+       163
+      ],
+      [
+       150,
+       149
+      ],
+      [
+       500,
+       133
+      ],
+      [
+       800,
+       118
+      ],
+      [
+       300,
+       112
+      ],
+      [
+       350,
+       96
+      ],
+      [
+       140,
+       93
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 2,
+     "min": 0,
+     "max": 16777216,
+     "top": [
+      [
+       0,
+       3455
+      ],
+      [
+       16777216,
+       128
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 28,
+     "min": 0,
+     "max": 6000,
+     "top": [
+      [
+       60,
+       1107
+      ],
+      [
+       300,
+       522
+      ],
+      [
+       30,
+       478
+      ],
+      [
+       180,
+       348
+      ],
+      [
+       120,
+       309
+      ],
+      [
+       240,
+       208
+      ],
+      [
+       200,
+       132
+      ],
+      [
+       0,
+       116
+      ],
+      [
+       2000,
+       75
+      ],
+      [
+       600,
+       72
+      ],
+      [
+       90,
+       64
+      ],
+      [
+       10,
+       60
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 4,
+     "min": 1,
+     "max": 28,
+     "top": [
+      [
+       1,
+       3467
+      ],
+      [
+       20,
+       55
+      ],
+      [
+       25,
+       31
+      ],
+      [
+       28,
+       30
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       3583
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       3583
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      3467
+     ],
+     [
+      [
+       20,
+       false
+      ],
+      55
+     ],
+     [
+      [
+       25,
+       false
+      ],
+      31
+     ],
+     [
+      [
+       28,
+       false
+      ],
+      30
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      3342
+     ],
+     [
+      [
+       16777216,
+       true
+      ],
+      125
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      113
+     ],
+     [
+      [
+       16777216,
+       false
+      ],
+      3
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       400,
+       60
+      ],
+      240
+     ],
+     [
+      [
+       120,
+       180
+      ],
+      166
+     ],
+     [
+      [
+       401,
+       60
+      ],
+      118
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      108
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      107
+     ],
+     [
+      [
+       150,
+       60
+      ],
+      82
+     ],
+     [
+      [
+       140,
+       60
+      ],
+      81
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      77
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      74
+     ],
+     [
+      [
+       200,
+       300
+      ],
+      67
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "Cup_End_Cup_Presentation_QMJHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_OHL",
+      "Cup_End_Cup_Presentation_AHL",
+      "Cup_End_Cup_Presentation_CHL"
+     ],
+     "20": [
+      "Playoff_End_OHL_JRossRobertson_Won_NONIS_2",
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Pass_Winter_Classic_Conditions",
+      "Save_AZ_C_NHL_Network_Promo",
+      "Save_AZ_Mask_C"
+     ],
+     "25": [
+      "Playoff_End_QMJHL_PresidentsCup_Won_NONIS_2",
+      "Allow_Passives_Dynasty",
+      "Save_Winter_Classic_Conditions",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Score_0_0",
+      "_Acmem_Follow_Pp_Tm_V_Pim_Tm_Ft_Is_Pim_Penalties_Many_Goals_Many_Score_Lead"
+     ],
+     "28": [
+      "Playoff_End_WHL_EdChynoweth_Won_NONIS_2",
+      "Injury_Winter_Classic_Conditions",
+      "Save_Winter_Classic_Conditions_Endurance",
+      "Save_AZ_Desperation_C",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Chances_Both_Low_Score_Close"
+     ]
+    },
+    "w3_flag_examples": [
+     "EOP_Replay_Single_Focus",
+     "Playoff_End_Tornament_Happy_Sad_Final_CPU",
+     "Playoff_End_Stanley_Cup_Happy_Sad_Final_CPU",
+     "Playoff_End_Calder_Cup_Happy_Sad_Final_CPU",
+     "Playoff_End_Calder_Cup_Presentation_CPU",
+     "Playoff_End_Stanley_Cup_Presentation_CPU",
+     "Playoff_End_Stanley_Cup_Won_CPU",
+     "Playoff_End_Handshake_CPU"
+    ]
+   },
+   "crowds": {
+    "records": 1164,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "maxContextEvaluationTime": "3",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       61
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1064
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       13
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       1164
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      86
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      61
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    },
+    "w3_flag_examples": []
+   }
+  },
+  "ps3-nhl15": {
+   "pbp_eng": {
+    "records": 3866,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 224,
+     "min": 10,
+     "max": 9999,
+     "top": [
+      [
+       400,
+       343
+      ],
+      [
+       10,
+       300
+      ],
+      [
+       100,
+       280
+      ],
+      [
+       200,
+       188
+      ],
+      [
+       120,
+       168
+      ],
+      [
+       150,
+       154
+      ],
+      [
+       101,
+       133
+      ],
+      [
+       500,
+       124
+      ],
+      [
+       800,
+       116
+      ],
+      [
+       401,
+       112
+      ],
+      [
+       350,
+       104
+      ],
+      [
+       300,
+       97
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 2,
+     "min": 0,
+     "max": 16777216,
+     "top": [
+      [
+       0,
+       3663
+      ],
+      [
+       16777216,
+       203
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 32,
+     "min": 0,
+     "max": 6000,
+     "top": [
+      [
+       60,
+       1071
+      ],
+      [
+       30,
+       667
+      ],
+      [
+       300,
+       654
+      ],
+      [
+       120,
+       386
+      ],
+      [
+       180,
+       267
+      ],
+      [
+       240,
+       212
+      ],
+      [
+       200,
+       128
+      ],
+      [
+       600,
+       86
+      ],
+      [
+       90,
+       71
+      ],
+      [
+       2000,
+       62
+      ],
+      [
+       75,
+       55
+      ],
+      [
+       0,
+       51
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 4,
+     "min": 1,
+     "max": 28,
+     "top": [
+      [
+       1,
+       3815
+      ],
+      [
+       20,
+       35
+      ],
+      [
+       25,
+       9
+      ],
+      [
+       28,
+       7
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       3866
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       3866
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      3815
+     ],
+     [
+      [
+       20,
+       false
+      ],
+      35
+     ],
+     [
+      [
+       25,
+       false
+      ],
+      9
+     ],
+     [
+      [
+       28,
+       false
+      ],
+      7
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      3613
+     ],
+     [
+      [
+       16777216,
+       true
+      ],
+      202
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      50
+     ],
+     [
+      [
+       16777216,
+       false
+      ],
+      1
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       400,
+       60
+      ],
+      168
+     ],
+     [
+      [
+       120,
+       180
+      ],
+      160
+     ],
+     [
+      [
+       10,
+       30
+      ],
+      122
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      107
+     ],
+     [
+      [
+       150,
+       60
+      ],
+      99
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      91
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      87
+     ],
+     [
+      [
+       10,
+       60
+      ],
+      78
+     ],
+     [
+      [
+       405,
+       300
+      ],
+      75
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      72
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "Cup_End_Present_Cup_NHL_Conference",
+      "Cup_End_Cup_Presentation_NHL",
+      "Cup_End_Cup_Presentation_AHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_QMJHL"
+     ],
+     "20": [
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Save_AZ_Mask_C",
+      "PP_Setup_C_Teams_Many_Oppotunities_0_Goals",
+      "Fight_Pbp_Weak_Player_Comeback_Initiator",
+      "Fight_Pbp_Weak_Player_Comeback_Accepter"
+     ],
+     "25": [
+      "Allow_Passives_Dynasty",
+      "PP_Setup_C_Many_Shots",
+      "PP_Setup_C_Top_Rated_First",
+      "Time_Last_Minute_Period_Third_Blowout",
+      "Time_Last_Minute_Period_OT"
+     ],
+     "28": [
+      "PP_Setup_C_Team_Down_One",
+      "PP_Setup_C_Top_Rated_Trailing",
+      "Time_Last_Minute_Period_Third_Close",
+      "PK_SETUP_MANY_TRAILING",
+      "Time_Last_Minute_Period_Second"
+     ]
+    },
+    "w3_flag_examples": [
+     "Cup_End_Special_Stanley_Cup_Won_and_Happy_Sad",
+     "Playoff_End_Stanley_Cup_Won_OT",
+     "Playoff_End_EA_Cup_Won_OT",
+     "Playoff_End_Tournament_Won_OT",
+     "Playoff_End_EA_Cup_Won",
+     "Playoff_End_Stanley_Cup_Won",
+     "Gameover_Won_Stanley_Cup",
+     "Playoff_End_Tournament_Won"
+    ]
+   },
+   "crowds": {
+    "records": 1164,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "maxContextEvaluationTime": "3",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       61
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1064
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       13
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       1164
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      86
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      61
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    },
+    "w3_flag_examples": []
+   }
+  },
+  "ps3-legacy": {
+   "pbp_eng": {
+    "records": 4183,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 249,
+     "min": 10,
+     "max": 9999,
+     "top": [
+      [
+       400,
+       345
+      ],
+      [
+       200,
+       292
+      ],
+      [
+       10,
+       286
+      ],
+      [
+       100,
+       206
+      ],
+      [
+       120,
+       176
+      ],
+      [
+       150,
+       138
+      ],
+      [
+       500,
+       137
+      ],
+      [
+       101,
+       123
+      ],
+      [
+       401,
+       117
+      ],
+      [
+       800,
+       116
+      ],
+      [
+       350,
+       89
+      ],
+      [
+       405,
+       86
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 2,
+     "min": 0,
+     "max": 16777216,
+     "top": [
+      [
+       0,
+       3894
+      ],
+      [
+       16777216,
+       289
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 26,
+     "min": 0,
+     "max": 4000,
+     "top": [
+      [
+       60,
+       1137
+      ],
+      [
+       30,
+       786
+      ],
+      [
+       300,
+       712
+      ],
+      [
+       180,
+       489
+      ],
+      [
+       120,
+       404
+      ],
+      [
+       240,
+       223
+      ],
+      [
+       90,
+       87
+      ],
+      [
+       360,
+       61
+      ],
+      [
+       75,
+       60
+      ],
+      [
+       600,
+       59
+      ],
+      [
+       0,
+       57
+      ],
+      [
+       18,
+       50
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 20,
+     "top": [
+      [
+       1,
+       4126
+      ],
+      [
+       20,
+       57
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 2,
+     "min": 0,
+     "max": 1,
+     "top": [
+      [
+       0,
+       4161
+      ],
+      [
+       1,
+       22
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       4183
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      4126
+     ],
+     [
+      [
+       20,
+       false
+      ],
+      57
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      3838
+     ],
+     [
+      [
+       16777216,
+       true
+      ],
+      288
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      56
+     ],
+     [
+      [
+       16777216,
+       false
+      ],
+      1
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       120,
+       180
+      ],
+      161
+     ],
+     [
+      [
+       400,
+       60
+      ],
+      160
+     ],
+     [
+      [
+       10,
+       30
+      ],
+      128
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      107
+     ],
+     [
+      [
+       200,
+       60
+      ],
+      89
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      86
+     ],
+     [
+      [
+       200,
+       30
+      ],
+      86
+     ],
+     [
+      [
+       400,
+       180
+      ],
+      84
+     ],
+     [
+      [
+       150,
+       60
+      ],
+      84
+     ],
+     [
+      [
+       10,
+       60
+      ],
+      78
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "Cup_End_Present_Cup_NHL_Conference",
+      "Cup_End_Cup_Presentation_NHL",
+      "Cup_End_Cup_Presentation_CHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_QMJHL"
+     ],
+     "20": [
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Allow_Passives_Dynasty",
+      "Time_Last_Minute_Period_Third_Tied_Inside_60_Seconds",
+      "PP_Setup_C_Many_Attempts_Few_Chances",
+      "Fight_Pbp_Strong_Player_Comeback_Accepter"
+     ]
+    },
+    "w3_flag_examples": [
+     "GAMEOVER_WON_THE_STANLEY_CUP_GENERIC",
+     "Playoff_End_Stanley_Cup_Won_OT",
+     "Playoff_End_EA_Cup_Won_OT",
+     "Playoff_End_Tournament_Won_OT",
+     "Playoff_End_Stanley_Cup_Won",
+     "Playoff_End_EA_Cup_Won",
+     "Playoff_End_Tournament_Won",
+     "Gameover_Won_Stanley_Cup"
+    ]
+   },
+   "crowds": {
+    "records": 1164,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "maxContextEvaluationTime": "3",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       61
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1064
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       13
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       1164
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      86
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      61
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    },
+    "w3_flag_examples": []
+   }
+  },
+  "x360-nhl11": {
+   "pbp_eng": {
+    "records": 0,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumContexts": "2800",
+     "maxNumGroups": "120",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "200",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w1": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_hi": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b2": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo_x_has_trigger": [],
+    "w3_x_has_trigger": [],
+    "w1_w4hi_top": [],
+    "w4_lo_examples": {},
+    "w3_flag_examples": []
+   },
+   "crowds": {
+    "records": 0,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumContexts": "1200",
+     "maxNumGroups": "100",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w1": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_hi": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b2": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo_x_has_trigger": [],
+    "w3_x_has_trigger": [],
+    "w1_w4hi_top": [],
+    "w4_lo_examples": {},
+    "w3_flag_examples": []
+   }
+  },
+  "x360-nhl12": {
+   "pbp_eng": {
+    "records": 0,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumContexts": "2800",
+     "maxNumGroups": "120",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "200",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w1": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_hi": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b2": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo_x_has_trigger": [],
+    "w3_x_has_trigger": [],
+    "w1_w4hi_top": [],
+    "w4_lo_examples": {},
+    "w3_flag_examples": []
+   },
+   "crowds": {
+    "records": 0,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumContexts": "1200",
+     "maxNumGroups": "100",
+     "maxNumValidContexts": "500",
+     "maxNumTriggeredContexts": "300",
+     "numPassives": "100",
+     "priorityDecayRate": "1000000",
+     "maxContextsToEvaluate": "500"
+    },
+    "w1": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_hi": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b2": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w2_b3": {
+     "distinct": 0,
+     "min": null,
+     "max": null,
+     "top": []
+    },
+    "w4_lo_x_has_trigger": [],
+    "w3_x_has_trigger": [],
+    "w1_w4hi_top": [],
+    "w4_lo_examples": {},
+    "w3_flag_examples": []
+   }
+  },
+  "x360-nhl13": {
+   "pbp_eng": {
+    "records": 3371,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 189,
+     "min": 1,
+     "max": 6000,
+     "top": [
+      [
+       400,
+       383
+      ],
+      [
+       100,
+       340
+      ],
+      [
+       200,
+       187
+      ],
+      [
+       120,
+       173
+      ],
+      [
+       101,
+       167
+      ],
+      [
+       300,
+       166
+      ],
+      [
+       401,
+       151
+      ],
+      [
+       500,
+       133
+      ],
+      [
+       800,
+       117
+      ],
+      [
+       150,
+       113
+      ],
+      [
+       350,
+       98
+      ],
+      [
+       140,
+       94
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 2,
+     "min": 0,
+     "max": 16777216,
+     "top": [
+      [
+       0,
+       3245
+      ],
+      [
+       16777216,
+       126
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 25,
+     "min": 0,
+     "max": 6000,
+     "top": [
+      [
+       60,
+       930
+      ],
+      [
+       300,
+       521
+      ],
+      [
+       30,
+       475
+      ],
+      [
+       180,
+       348
+      ],
+      [
+       120,
+       311
+      ],
+      [
+       240,
+       216
+      ],
+      [
+       200,
+       125
+      ],
+      [
+       0,
+       102
+      ],
+      [
+       600,
+       76
+      ],
+      [
+       2000,
+       75
+      ],
+      [
+       90,
+       64
+      ],
+      [
+       10,
+       52
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 1,
+     "min": 1,
+     "max": 1,
+     "top": [
+      [
+       1,
+       3371
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       3371
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       3371
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      3269
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      102
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      3146
+     ],
+     [
+      [
+       16777216,
+       true
+      ],
+      123
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      99
+     ],
+     [
+      [
+       16777216,
+       false
+      ],
+      3
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       400,
+       60
+      ],
+      227
+     ],
+     [
+      [
+       120,
+       180
+      ],
+      166
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      134
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      108
+     ],
+     [
+      [
+       401,
+       60
+      ],
+      106
+     ],
+     [
+      [
+       300,
+       300
+      ],
+      97
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      83
+     ],
+     [
+      [
+       140,
+       60
+      ],
+      82
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      76
+     ],
+     [
+      [
+       200,
+       300
+      ],
+      67
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "Cup_End_Cup_Presentation_OHL",
+      "Cup_End_Cup_Presentation_CHL",
+      "Cup_End_Cup_Presentation_AHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_QMJHL"
+     ]
+    },
+    "w3_flag_examples": [
+     "EOP_Replay_Single_Focus",
+     "Playoff_End_Tornament_Happy_Sad_Final_CPU",
+     "Playoff_End_Calder_Cup_Happy_Sad_Final_CPU",
+     "Playoff_End_Stanley_Cup_Happy_Sad_Final_CPU",
+     "Playoff_End_Stanley_Cup_Presentation_CPU",
+     "Playoff_End_Calder_Cup_Presentation_CPU",
+     "Playoff_End_Handshake_CPU",
+     "Playoff_End_Tournament_Presentation_CPU"
+    ]
+   },
+   "crowds": {
+    "records": 1164,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       59
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1062
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       15
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       1164
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      86
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      59
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    },
+    "w3_flag_examples": []
+   }
+  },
+  "x360-nhl14": {
+   "pbp_eng": {
+    "records": 3583,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 204,
+     "min": 1,
+     "max": 6000,
+     "top": [
+      [
+       400,
+       401
+      ],
+      [
+       100,
+       308
+      ],
+      [
+       200,
+       195
+      ],
+      [
+       101,
+       188
+      ],
+      [
+       120,
+       173
+      ],
+      [
+       401,
+       163
+      ],
+      [
+       150,
+       149
+      ],
+      [
+       500,
+       133
+      ],
+      [
+       800,
+       118
+      ],
+      [
+       300,
+       112
+      ],
+      [
+       350,
+       96
+      ],
+      [
+       140,
+       93
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 2,
+     "min": 0,
+     "max": 16777216,
+     "top": [
+      [
+       0,
+       3455
+      ],
+      [
+       16777216,
+       128
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 28,
+     "min": 0,
+     "max": 6000,
+     "top": [
+      [
+       60,
+       1107
+      ],
+      [
+       300,
+       522
+      ],
+      [
+       30,
+       478
+      ],
+      [
+       180,
+       348
+      ],
+      [
+       120,
+       309
+      ],
+      [
+       240,
+       208
+      ],
+      [
+       200,
+       132
+      ],
+      [
+       0,
+       116
+      ],
+      [
+       2000,
+       75
+      ],
+      [
+       600,
+       72
+      ],
+      [
+       90,
+       64
+      ],
+      [
+       10,
+       60
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 4,
+     "min": 1,
+     "max": 28,
+     "top": [
+      [
+       1,
+       3467
+      ],
+      [
+       20,
+       55
+      ],
+      [
+       25,
+       31
+      ],
+      [
+       28,
+       30
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       3583
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       3583
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      3467
+     ],
+     [
+      [
+       20,
+       false
+      ],
+      55
+     ],
+     [
+      [
+       25,
+       false
+      ],
+      31
+     ],
+     [
+      [
+       28,
+       false
+      ],
+      30
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      3342
+     ],
+     [
+      [
+       16777216,
+       true
+      ],
+      125
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      113
+     ],
+     [
+      [
+       16777216,
+       false
+      ],
+      3
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       400,
+       60
+      ],
+      240
+     ],
+     [
+      [
+       120,
+       180
+      ],
+      166
+     ],
+     [
+      [
+       401,
+       60
+      ],
+      118
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      108
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      107
+     ],
+     [
+      [
+       150,
+       60
+      ],
+      82
+     ],
+     [
+      [
+       140,
+       60
+      ],
+      81
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      77
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      74
+     ],
+     [
+      [
+       200,
+       300
+      ],
+      67
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "Cup_End_Cup_Presentation_QMJHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_OHL",
+      "Cup_End_Cup_Presentation_AHL",
+      "Cup_End_Cup_Presentation_CHL"
+     ],
+     "20": [
+      "Playoff_End_OHL_JRossRobertson_Won_NONIS_2",
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Pass_Winter_Classic_Conditions",
+      "Save_AZ_C_NHL_Network_Promo",
+      "Save_AZ_Mask_C"
+     ],
+     "25": [
+      "Playoff_End_QMJHL_PresidentsCup_Won_NONIS_2",
+      "Allow_Passives_Dynasty",
+      "Save_Winter_Classic_Conditions",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Score_0_0",
+      "_Acmem_Follow_Pp_Tm_V_Pim_Tm_Ft_Is_Pim_Penalties_Many_Goals_Many_Score_Lead"
+     ],
+     "28": [
+      "Playoff_End_WHL_EdChynoweth_Won_NONIS_2",
+      "Injury_Winter_Classic_Conditions",
+      "Save_Winter_Classic_Conditions_Endurance",
+      "Save_AZ_Desperation_C",
+      "Acmem_Follow_2_Def_Tm_Both_Def_Well_Chances_Both_Low_Score_Close"
+     ]
+    },
+    "w3_flag_examples": [
+     "EOP_Replay_Single_Focus",
+     "Playoff_End_Tornament_Happy_Sad_Final_CPU",
+     "Playoff_End_Stanley_Cup_Happy_Sad_Final_CPU",
+     "Playoff_End_Calder_Cup_Happy_Sad_Final_CPU",
+     "Playoff_End_Calder_Cup_Presentation_CPU",
+     "Playoff_End_Stanley_Cup_Presentation_CPU",
+     "Playoff_End_Stanley_Cup_Won_CPU",
+     "Playoff_End_Handshake_CPU"
+    ]
+   },
+   "crowds": {
+    "records": 1164,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       61
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1064
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       13
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       1164
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      86
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      61
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    },
+    "w3_flag_examples": []
+   }
+  },
+  "x360-nhl15": {
+   "pbp_eng": {
+    "records": 3866,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 224,
+     "min": 10,
+     "max": 9999,
+     "top": [
+      [
+       400,
+       343
+      ],
+      [
+       10,
+       300
+      ],
+      [
+       100,
+       280
+      ],
+      [
+       200,
+       188
+      ],
+      [
+       120,
+       168
+      ],
+      [
+       150,
+       154
+      ],
+      [
+       101,
+       133
+      ],
+      [
+       500,
+       124
+      ],
+      [
+       800,
+       116
+      ],
+      [
+       401,
+       112
+      ],
+      [
+       350,
+       104
+      ],
+      [
+       300,
+       97
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 2,
+     "min": 0,
+     "max": 16777216,
+     "top": [
+      [
+       0,
+       3663
+      ],
+      [
+       16777216,
+       203
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 32,
+     "min": 0,
+     "max": 6000,
+     "top": [
+      [
+       60,
+       1071
+      ],
+      [
+       30,
+       667
+      ],
+      [
+       300,
+       654
+      ],
+      [
+       120,
+       386
+      ],
+      [
+       180,
+       267
+      ],
+      [
+       240,
+       212
+      ],
+      [
+       200,
+       128
+      ],
+      [
+       600,
+       86
+      ],
+      [
+       90,
+       71
+      ],
+      [
+       2000,
+       62
+      ],
+      [
+       75,
+       55
+      ],
+      [
+       0,
+       51
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 4,
+     "min": 1,
+     "max": 28,
+     "top": [
+      [
+       1,
+       3815
+      ],
+      [
+       20,
+       35
+      ],
+      [
+       25,
+       9
+      ],
+      [
+       28,
+       7
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       3866
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       3866
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      3815
+     ],
+     [
+      [
+       20,
+       false
+      ],
+      35
+     ],
+     [
+      [
+       25,
+       false
+      ],
+      9
+     ],
+     [
+      [
+       28,
+       false
+      ],
+      7
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      3613
+     ],
+     [
+      [
+       16777216,
+       true
+      ],
+      202
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      50
+     ],
+     [
+      [
+       16777216,
+       false
+      ],
+      1
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       400,
+       60
+      ],
+      168
+     ],
+     [
+      [
+       120,
+       180
+      ],
+      160
+     ],
+     [
+      [
+       10,
+       30
+      ],
+      122
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      107
+     ],
+     [
+      [
+       150,
+       60
+      ],
+      99
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      91
+     ],
+     [
+      [
+       100,
+       60
+      ],
+      87
+     ],
+     [
+      [
+       10,
+       60
+      ],
+      78
+     ],
+     [
+      [
+       405,
+       300
+      ],
+      75
+     ],
+     [
+      [
+       100,
+       30
+      ],
+      72
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "Cup_End_Present_Cup_NHL_Conference",
+      "Cup_End_Cup_Presentation_NHL",
+      "Cup_End_Cup_Presentation_AHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_QMJHL"
+     ],
+     "20": [
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Save_AZ_Mask_C",
+      "PP_Setup_C_Teams_Many_Oppotunities_0_Goals",
+      "Fight_Pbp_Weak_Player_Comeback_Initiator",
+      "Fight_Pbp_Weak_Player_Comeback_Accepter"
+     ],
+     "25": [
+      "Allow_Passives_Dynasty",
+      "PP_Setup_C_Many_Shots",
+      "PP_Setup_C_Top_Rated_First",
+      "Time_Last_Minute_Period_Third_Blowout",
+      "Time_Last_Minute_Period_OT"
+     ],
+     "28": [
+      "PP_Setup_C_Team_Down_One",
+      "PP_Setup_C_Top_Rated_Trailing",
+      "Time_Last_Minute_Period_Third_Close",
+      "PK_SETUP_MANY_TRAILING",
+      "Time_Last_Minute_Period_Second"
+     ]
+    },
+    "w3_flag_examples": [
+     "Cup_End_Special_Stanley_Cup_Won_and_Happy_Sad",
+     "Playoff_End_Stanley_Cup_Won_OT",
+     "Playoff_End_EA_Cup_Won_OT",
+     "Playoff_End_Tournament_Won_OT",
+     "Playoff_End_EA_Cup_Won",
+     "Playoff_End_Stanley_Cup_Won",
+     "Gameover_Won_Stanley_Cup",
+     "Playoff_End_Tournament_Won"
+    ]
+   },
+   "crowds": {
+    "records": 1164,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       61
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1064
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       13
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       1164
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      86
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      61
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    },
+    "w3_flag_examples": []
+   }
+  },
+  "x360-legacy": {
+   "pbp_eng": {
+    "records": 4183,
+    "xml": {
+     "name": "SpeechContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 249,
+     "min": 10,
+     "max": 9999,
+     "top": [
+      [
+       400,
+       345
+      ],
+      [
+       200,
+       292
+      ],
+      [
+       10,
+       286
+      ],
+      [
+       100,
+       206
+      ],
+      [
+       120,
+       176
+      ],
+      [
+       150,
+       138
+      ],
+      [
+       500,
+       137
+      ],
+      [
+       101,
+       123
+      ],
+      [
+       401,
+       117
+      ],
+      [
+       800,
+       116
+      ],
+      [
+       350,
+       89
+      ],
+      [
+       405,
+       86
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 2,
+     "min": 0,
+     "max": 16777216,
+     "top": [
+      [
+       0,
+       3894
+      ],
+      [
+       16777216,
+       289
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 26,
+     "min": 0,
+     "max": 4000,
+     "top": [
+      [
+       60,
+       1137
+      ],
+      [
+       30,
+       786
+      ],
+      [
+       300,
+       712
+      ],
+      [
+       180,
+       489
+      ],
+      [
+       120,
+       404
+      ],
+      [
+       240,
+       223
+      ],
+      [
+       90,
+       87
+      ],
+      [
+       360,
+       61
+      ],
+      [
+       75,
+       60
+      ],
+      [
+       600,
+       59
+      ],
+      [
+       0,
+       57
+      ],
+      [
+       18,
+       50
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 20,
+     "top": [
+      [
+       1,
+       4126
+      ],
+      [
+       20,
+       57
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 2,
+     "min": 0,
+     "max": 1,
+     "top": [
+      [
+       0,
+       4161
+      ],
+      [
+       1,
+       22
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       4183
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      4126
+     ],
+     [
+      [
+       20,
+       false
+      ],
+      57
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      3838
+     ],
+     [
+      [
+       16777216,
+       true
+      ],
+      288
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      56
+     ],
+     [
+      [
+       16777216,
+       false
+      ],
+      1
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       120,
+       180
+      ],
+      161
+     ],
+     [
+      [
+       400,
+       60
+      ],
+      160
+     ],
+     [
+      [
+       10,
+       30
+      ],
+      128
+     ],
+     [
+      [
+       800,
+       240
+      ],
+      107
+     ],
+     [
+      [
+       200,
+       60
+      ],
+      89
+     ],
+     [
+      [
+       350,
+       300
+      ],
+      86
+     ],
+     [
+      [
+       200,
+       30
+      ],
+      86
+     ],
+     [
+      [
+       400,
+       180
+      ],
+      84
+     ],
+     [
+      [
+       150,
+       60
+      ],
+      84
+     ],
+     [
+      [
+       10,
+       60
+      ],
+      78
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "Cup_End_Present_Cup_NHL_Conference",
+      "Cup_End_Cup_Presentation_NHL",
+      "Cup_End_Cup_Presentation_CHL",
+      "Cup_End_Cup_Presentation_WHL",
+      "Cup_End_Cup_Presentation_QMJHL"
+     ],
+     "20": [
+      "Cup_End_Special_Stanley_Team_Photo_Follow",
+      "Allow_Passives_Dynasty",
+      "Time_Last_Minute_Period_Third_Tied_Inside_60_Seconds",
+      "PP_Setup_C_Many_Attempts_Few_Chances",
+      "Fight_Pbp_Strong_Player_Comeback_Accepter"
+     ]
+    },
+    "w3_flag_examples": [
+     "GAMEOVER_WON_THE_STANLEY_CUP_GENERIC",
+     "Playoff_End_Stanley_Cup_Won_OT",
+     "Playoff_End_EA_Cup_Won_OT",
+     "Playoff_End_Tournament_Won_OT",
+     "Playoff_End_Stanley_Cup_Won",
+     "Playoff_End_EA_Cup_Won",
+     "Playoff_End_Tournament_Won",
+     "Gameover_Won_Stanley_Cup"
+    ]
+   },
+   "crowds": {
+    "records": 1164,
+    "xml": {
+     "name": "CrowdContext",
+     "type": "ContextModule",
+     "maxNumValidContexts": "1000",
+     "maxNumTriggeredContexts": "500",
+     "numPassives": "200",
+     "maxContextEvaluationTime": "30",
+     "maxNumWindows": "25"
+    },
+    "w1": {
+     "distinct": 129,
+     "min": 0,
+     "max": 2100,
+     "top": [
+      [
+       100,
+       168
+      ],
+      [
+       200,
+       119
+      ],
+      [
+       300,
+       79
+      ],
+      [
+       500,
+       63
+      ],
+      [
+       600,
+       61
+      ],
+      [
+       250,
+       51
+      ],
+      [
+       120,
+       37
+      ],
+      [
+       400,
+       32
+      ],
+      [
+       140,
+       29
+      ],
+      [
+       700,
+       28
+      ],
+      [
+       450,
+       26
+      ],
+      [
+       440,
+       22
+      ]
+     ]
+    },
+    "w3": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w4_hi": {
+     "distinct": 3,
+     "min": 0,
+     "max": 30,
+     "top": [
+      [
+       10,
+       1064
+      ],
+      [
+       0,
+       87
+      ],
+      [
+       30,
+       13
+      ]
+     ]
+    },
+    "w4_lo": {
+     "distinct": 2,
+     "min": 1,
+     "max": 4,
+     "top": [
+      [
+       1,
+       1118
+      ],
+      [
+       4,
+       46
+      ]
+     ]
+    },
+    "w2_b2": {
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1164
+      ]
+     ]
+    },
+    "w2_b3": {
+     "distinct": 1,
+     "min": 100,
+     "max": 100,
+     "top": [
+      [
+       100,
+       1164
+      ]
+     ]
+    },
+    "w4_lo_x_has_trigger": [
+     [
+      [
+       1,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       4,
+       false
+      ],
+      46
+     ],
+     [
+      [
+       1,
+       false
+      ],
+      40
+     ]
+    ],
+    "w3_x_has_trigger": [
+     [
+      [
+       0,
+       true
+      ],
+      1078
+     ],
+     [
+      [
+       0,
+       false
+      ],
+      86
+     ]
+    ],
+    "w1_w4hi_top": [
+     [
+      [
+       100,
+       10
+      ],
+      129
+     ],
+     [
+      [
+       200,
+       10
+      ],
+      107
+     ],
+     [
+      [
+       300,
+       10
+      ],
+      78
+     ],
+     [
+      [
+       600,
+       10
+      ],
+      61
+     ],
+     [
+      [
+       500,
+       10
+      ],
+      57
+     ],
+     [
+      [
+       250,
+       10
+      ],
+      51
+     ],
+     [
+      [
+       100,
+       0
+      ],
+      39
+     ],
+     [
+      [
+       120,
+       10
+      ],
+      36
+     ],
+     [
+      [
+       400,
+       10
+      ],
+      31
+     ],
+     [
+      [
+       140,
+       10
+      ],
+      29
+     ]
+    ],
+    "w4_lo_examples": {
+     "1": [
+      "GOAL_awayOwnGoalOT",
+      "GOAL_homeOwnGoalOT",
+      "GOAL_homeOwnGoalHomeLosingLastSeconds",
+      "GOAL_awayOwnGoalAwayLosingLastSeconds",
+      "GOAL_awayOwnGoalTieGameLastSeconds"
+     ],
+     "4": [
+      "XCITE_offHomeGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAheadLateThird",
+      "XCITE_offAwayGoalGoAheadLateThird",
+      "XCITE_offAwayGoalTiedLateThird",
+      "XCITE_offHomeGoalGoAhead"
+     ]
+    },
+    "w3_flag_examples": []
+   }
+  }
+ },
+ "crowds_identity": {
+  "x360-nhl11": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 88
+  },
+  "ps3-nhl11": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 88
+  },
+  "x360-nhl12": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 93
+  },
+  "ps3-nhl14": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 1164
+  },
+  "ps3-nhl15": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 1164
+  },
+  "ps3-legacy": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 1164
+  },
+  "x360-nhl13": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 93
+  },
+  "x360-nhl14": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 1164
+  },
+  "x360-nhl15": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 1164
+  },
+  "x360-legacy": {
+   "records": 1164,
+   "equal_to_ps3-legacy_in_order": 1164
+  }
+ }
+}

@@ -44,9 +44,7 @@
 //!
 //! Everything is little-endian (PS4), unlike the big-endian RX2 reader.
 
-use crate::playermesh::{
-    BonePalette, PlayerAsset, PositionFormat, Submesh, UvFormat, Vertex,
-};
+use crate::playermesh::{BonePalette, PlayerAsset, PositionFormat, Submesh, UvFormat, Vertex};
 
 use thiserror::Error;
 
@@ -78,7 +76,11 @@ pub enum McdError {
     #[error("no geometry (GEOM/STRM) chunk found in the RSF stream")]
     NoGeometry,
     #[error("submesh {sub}: vertex stream runs past EOF (needs {needed} bytes, have {have})")]
-    TruncatedVertexBuffer { sub: usize, needed: usize, have: usize },
+    TruncatedVertexBuffer {
+        sub: usize,
+        needed: usize,
+        have: usize,
+    },
     #[error("submesh {sub}: could not locate a valid index buffer")]
     NoIndexBuffer { sub: usize },
     #[error("submesh {sub}: vertex format (VFMT) declared no POSITION attribute")]
@@ -382,7 +384,10 @@ fn walk_geometry(data: &[u8]) -> Vec<RawGeom> {
         // Match a VFMT by its lead (stream-0) stride: prefer the next such
         // format ahead of the cursor, else reuse the last matching one (shared
         // formats, e.g. the paired eyes).
-        let vfmt = match vfmts[vi..].iter().position(|v| v.lead_stride() == lead.stride) {
+        let vfmt = match vfmts[vi..]
+            .iter()
+            .position(|v| v.lead_stride() == lead.stride)
+        {
             Some(rel) => {
                 vi += rel + 1;
                 &vfmts[vi - 1]
@@ -473,7 +478,7 @@ fn walk_geometry(data: &[u8]) -> Vec<RawGeom> {
 /// keeping the first where every index is `< vertex_count` — self-validating.
 fn read_indices(data: &[u8], tag: usize, vertex_count: usize) -> Option<Vec<[u32; 3]>> {
     let count = read_u32_le(data, tag + CHUNK_COUNT_OFF)? as usize;
-    if count == 0 || count % 3 != 0 {
+    if count == 0 || !count.is_multiple_of(3) {
         return None;
     }
     // Reversed "ID16"/"ID32" token within the header.
@@ -609,9 +614,9 @@ fn half_to_f32(h: u16) -> f32 {
 /// Read `count` components of `comp` starting at `off`.
 fn read_components(data: &[u8], off: usize, count: usize, comp: CompType) -> [f32; 4] {
     let mut out = [0.0f32; 4];
-    for i in 0..count.min(4) {
+    for (i, slot) in out.iter_mut().enumerate().take(count.min(4)) {
         let p = off + i * comp.size();
-        out[i] = match comp {
+        *slot = match comp {
             CompType::F32 => data
                 .get(p..p + 4)
                 .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))
@@ -634,8 +639,8 @@ fn read_components(data: &[u8], off: usize, count: usize, comp: CompType) -> [f3
 /// index, not a normalized fraction).
 fn read_u8s(data: &[u8], off: usize, count: usize) -> [u16; 4] {
     let mut out = [0u16; 4];
-    for i in 0..count.min(4) {
-        out[i] = data.get(off + i).copied().unwrap_or(0) as u16;
+    for (i, slot) in out.iter_mut().enumerate().take(count.min(4)) {
+        *slot = data.get(off + i).copied().unwrap_or(0) as u16;
     }
     out
 }
@@ -665,7 +670,12 @@ fn uv_format_of(attrs: &[Attr]) -> UvFormat {
 }
 
 /// Build a [`Submesh`] from one raw geometry block.
-fn decode_submesh(data: &[u8], geom: &RawGeom, name: String, sub: usize) -> Result<Submesh, McdError> {
+fn decode_submesh(
+    data: &[u8],
+    geom: &RawGeom,
+    name: String,
+    sub: usize,
+) -> Result<Submesh, McdError> {
     let pos_attr = geom
         .attrs
         .iter()
@@ -822,7 +832,11 @@ mod tests {
         assert_eq!(attrs[2].offset, 0x14);
         assert_eq!(attrs[2].comp, CompType::F16);
         // stride = max(offset + size) = 0x14 + 2*2 = 0x18
-        let stride = attrs.iter().map(|a| a.offset + a.byte_size()).max().unwrap();
+        let stride = attrs
+            .iter()
+            .map(|a| a.offset + a.byte_size())
+            .max()
+            .unwrap();
         assert_eq!(stride, 0x18);
     }
 
@@ -906,8 +920,16 @@ mod tests {
 
         // Vertex 0 verified by hand: pos ≈ (0.0120, -0.5103, 0.0235).
         let v0 = &sm.vertices[0];
-        assert!((v0.position[0] - 0.0120).abs() < 0.001, "v0.x = {}", v0.position[0]);
-        assert!((v0.position[1] + 0.5103).abs() < 0.001, "v0.y = {}", v0.position[1]);
+        assert!(
+            (v0.position[0] - 0.0120).abs() < 0.001,
+            "v0.x = {}",
+            v0.position[0]
+        );
+        assert!(
+            (v0.position[1] + 0.5103).abs() < 0.001,
+            "v0.y = {}",
+            v0.position[1]
+        );
 
         // Every position finite and in a sane object-space range.
         for v in &sm.vertices {

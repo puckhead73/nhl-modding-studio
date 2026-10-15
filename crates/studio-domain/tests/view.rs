@@ -7,23 +7,36 @@ use studio_domain::{
     arena_summaries, arena_view, career_stats, entity_fields, lines_view, player_summaries,
     player_view, probe_main_team_encoding, team_summaries, team_view, FieldKind, MainTeamEncoding,
 };
+use studio_domain::{LeagueCatalog, LeagueVocabularies};
 use tdb_core::TdbFile;
 use tdb_defs::FieldMetaIndex;
 use tdb_enums::EnumRegistry;
 use tdb_relations::{PlayerKind, Position, RosterModel};
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 const DB: &str = "anchors/ps3/nhllegacy/databases/nhlng.db";
 const META: &str = "anchors/ps3/nhllegacy/databases/nhlng-meta.xml";
 const DEFS: &str = "defs";
 
+
+/// The league catalog for a test database, resolved with the game id the fixture belongs to.
+fn leagues_for(db: &TdbFile, meta: &FieldMetaIndex, game_id: Option<&str>) -> LeagueCatalog {
+    let vocabs = LeagueVocabularies::from_dir(repo("defs").join("leagues")).unwrap();
+    LeagueCatalog::build(db, meta, &vocabs, game_id)
+}
+
 fn fixtures() -> (Vec<u8>, FieldMetaIndex, EnumRegistry) {
     let bytes = std::fs::read(repo(DB)).unwrap();
     let meta = FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(META)).unwrap()).unwrap();
-    let enums = EnumRegistry::from_dir(repo(DEFS).join("enums")).unwrap();
+    let mut enums = EnumRegistry::from_dir(repo(DEFS).join("enums")).unwrap();
+    // The anchor is NHL Legacy (PS3); title-scoped vocabularies (nationality, player style) resolve
+    // only once the title is known, as a project sets it.
+    enums.set_scope(Some("nhllegacy"), "ps3");
     (bytes, meta, enums)
 }
 
@@ -110,7 +123,11 @@ fn player_summaries_cover_the_model() {
     assert_eq!(summaries.len(), model.players.len(), "one row per player");
 
     let named = summaries.iter().filter(|s| !s.last_name.is_empty()).count();
-    assert!(named > summaries.len() / 2, "most players have a last name ({named}/{})", summaries.len());
+    assert!(
+        named > summaries.len() / 2,
+        "most players have a last name ({named}/{})",
+        summaries.len()
+    );
     assert!(
         summaries.iter().any(|s| !s.position_label.is_empty()),
         "position labels resolve"
@@ -133,10 +150,20 @@ fn player_summaries_carry_depth_chart_fields() {
     // for nearly every player with a companion. Elite players must clear the first-liner tier —
     // an all-36 or all-zero read would fail this.
     let overalls: Vec<i64> = summaries.iter().filter_map(|s| s.overall).collect();
-    assert!(overalls.len() > n * 9 / 10, "overalls resolve ({}/{n})", overalls.len());
-    assert!(overalls.iter().all(|&o| (1..=99).contains(&o)), "overalls clamp to 1..99");
+    assert!(
+        overalls.len() > n * 9 / 10,
+        "overalls resolve ({}/{n})",
+        overalls.len()
+    );
+    assert!(
+        overalls.iter().all(|&o| (1..=99).contains(&o)),
+        "overalls clamp to 1..99"
+    );
     let elite = overalls.iter().filter(|&&o| o >= 80).count();
-    assert!(elite > 50, "the league has first-liners ({elite} rated 80+)");
+    assert!(
+        elite > 50,
+        "the league has first-liners ({elite} rated 80+)"
+    );
 
     // Goalie Overall is the stored `overall` rating on the display (+36) scale, not the formula.
     let goalie = model
@@ -144,7 +171,10 @@ fn player_summaries_carry_depth_chart_fields() {
         .iter()
         .find(|p| p.kind == PlayerKind::Goalie && p.goalie_ai.is_some())
         .expect("anchor has goalies");
-    let gs = summaries.iter().find(|s| s.player_id == goalie.player_id).unwrap();
+    let gs = summaries
+        .iter()
+        .find(|s| s.player_id == goalie.player_id)
+        .unwrap();
     let stored = player_view(&db, &meta, &enums, &model, goalie.player_id)
         .unwrap()
         .ratings
@@ -152,7 +182,11 @@ fn player_summaries_carry_depth_chart_fields() {
         .find(|f| f.name == "c_overall")
         .and_then(|f| f.decoded)
         .unwrap();
-    assert_eq!(gs.overall, Some(stored + 36), "goalie overall = stored eWUF + 36");
+    assert_eq!(
+        gs.overall,
+        Some(stored + 36),
+        "goalie overall = stored eWUF + 36"
+    );
 
     // Archetypes, jerseys, active flag, rights.
     assert!(
@@ -160,10 +194,17 @@ fn player_summaries_carry_depth_chart_fields() {
         "style labels resolve for most players"
     );
     assert!(
-        summaries.iter().filter(|s| s.jersey_number.is_some()).count() > n * 9 / 10,
+        summaries
+            .iter()
+            .filter(|s| s.jersey_number.is_some())
+            .count()
+            > n * 9 / 10,
         "jersey numbers read"
     );
-    assert!(summaries.iter().any(|s| s.is_active == Some(true)), "active players exist");
+    assert!(
+        summaries.iter().any(|s| s.is_active == Some(true)),
+        "active players exist"
+    );
     let team_count = model.teams.len() as u64;
     let rights: Vec<u64> = summaries.iter().filter_map(|s| s.rights_team_id).collect();
     assert!(!rights.is_empty(), "some players carry NHL rights");
@@ -184,8 +225,8 @@ fn team_tab_views_resolve_on_anchor() {
 
     // Strategies: 12 tactics + 24 forward biases + 18 defense biases + 6 team biases, with the
     // tactic vocabularies resolving through the enum registry.
-    let strat = studio_domain::team_strategies(&db, &meta, &enums, team_id)
-        .expect("EeYo row for team 0");
+    let strat =
+        studio_domain::team_strategies(&db, &meta, &enums, team_id).expect("EeYo row for team 0");
     assert_eq!(strat.tactics.len(), 12);
     assert_eq!(strat.forward_biases.len(), 24);
     assert_eq!(strat.defense_biases.len(), 18);
@@ -195,8 +236,15 @@ fn team_tab_views_resolve_on_anchor() {
         .iter()
         .find(|c| c.field.studio_field == "RBGh")
         .unwrap();
-    assert_eq!(forecheck.field.enum_options.len(), 4, "forecheck vocab bound");
-    assert!(forecheck.field.enum_label.is_some(), "stored value is a member");
+    assert_eq!(
+        forecheck.field.enum_options.len(),
+        4,
+        "forecheck vocab bound"
+    );
+    assert!(
+        forecheck.field.enum_label.is_some(),
+        "stored value is a member"
+    );
 
     // Draft picks: the stock grid is 6 years × 7 rounds per team, minus/plus real trades (the
     // anchor ships the 2015 trade ledger — team 0 owns 38). Traded picks resolve their origin.
@@ -207,7 +255,9 @@ fn team_tab_views_resolve_on_anchor() {
         picks.len()
     );
     assert!(picks.iter().all(|p| (1..=7).contains(&p.round)));
-    assert!(picks.windows(2).all(|w| (w[0].year, w[0].round) <= (w[1].year, w[1].round)));
+    assert!(picks
+        .windows(2)
+        .all(|w| (w[0].year, w[0].round) <= (w[1].year, w[1].round)));
     assert!(
         picks
             .iter()
@@ -217,8 +267,11 @@ fn team_tab_views_resolve_on_anchor() {
     );
 
     // Retired numbers: #99 is retired league-wide (one wcSL row per franchise).
-    let team = team_view(&db, &meta, &enums, &model, team_id).unwrap();
-    assert!(team.retired_numbers.contains(&99), "Gretzky's 99 is retired");
+    let team = team_view(&db, &meta, &enums, &model, &leagues_for(&db, &meta, Some("nhllegacy")), team_id).unwrap();
+    assert!(
+        team.retired_numbers.contains(&99),
+        "Gretzky's 99 is retired"
+    );
 
     // Jerseys: every NHL team registers at least a home + away; zones decode 9-wide.
     let jerseys = studio_domain::team_jerseys(&db, team_id);
@@ -229,8 +282,14 @@ fn team_tab_views_resolve_on_anchor() {
 
     // Lines: the slot catalog carries the named situational flags with their studio ids.
     let lines = lines_view(&db, &meta, &enums, &model, team_id).unwrap();
-    assert!(lines.slot_fields.len() >= 70, "full slot catalog ({})", lines.slot_fields.len());
-    for name in ["l1c", "l4rw", "pp4_2ld", "pk3_1rd", "ot_3c", "s5", "x2", "g1"] {
+    assert!(
+        lines.slot_fields.len() >= 70,
+        "full slot catalog ({})",
+        lines.slot_fields.len()
+    );
+    for name in [
+        "l1c", "l4rw", "pp4_2ld", "pk3_1rd", "ot_3c", "s5", "x2", "g1",
+    ] {
         assert!(
             lines.slot_fields.iter().any(|s| s.name == name),
             "slot catalog carries {name}"
@@ -241,8 +300,11 @@ fn team_tab_views_resolve_on_anchor() {
         "the 1-bit rosterstatus flag is not a situational slot"
     );
     // Entries' set slots reference catalog studio ids.
-    let ids: std::collections::HashSet<&str> =
-        lines.slot_fields.iter().map(|s| s.studio_field.as_str()).collect();
+    let ids: std::collections::HashSet<&str> = lines
+        .slot_fields
+        .iter()
+        .map(|s| s.studio_field.as_str())
+        .collect();
     assert!(lines
         .entries
         .iter()
@@ -272,7 +334,10 @@ fn player_view_assembles_detail() {
     assert!(view.identity.iter().any(|f| f.name == "firstname"));
     assert!(!view.ratings.is_empty(), "skater has rating fields (dSvy)");
     assert!(!view.all_fields.is_empty(), "bio all-fields populated");
-    assert!(!view.memberships.is_empty(), "slotted player has a membership");
+    assert!(
+        !view.memberships.is_empty(),
+        "slotted player has a membership"
+    );
 
     assert!(player_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
 }
@@ -293,7 +358,11 @@ fn player_style_options_lock_by_position() {
             continue;
         }
         let defense = p.position == Position::Defense;
-        if if defense { checked_defense } else { checked_forward } {
+        if if defense {
+            checked_defense
+        } else {
+            checked_forward
+        } {
             continue;
         }
         let view = player_view(&db, &meta, &enums, &model, p.player_id).unwrap();
@@ -303,7 +372,11 @@ fn player_style_options_lock_by_position() {
         let eligible = if defense { 1..=4 } else { 5..=10 };
         let raws: Vec<i64> = style.enum_options.iter().map(|(r, _)| *r).collect();
         for r in eligible.clone() {
-            assert!(raws.contains(&r), "eligible style {r} missing for {}", view.header.full_name);
+            assert!(
+                raws.contains(&r),
+                "eligible style {r} missing for {}",
+                view.header.full_name
+            );
         }
         for r in &raws {
             assert!(
@@ -321,7 +394,10 @@ fn player_style_options_lock_by_position() {
             break;
         }
     }
-    assert!(checked_defense && checked_forward, "anchor yields both a defenseman and a forward");
+    assert!(
+        checked_defense && checked_forward,
+        "anchor yields both a defenseman and a forward"
+    );
 }
 
 /// Team summaries cover the model with readable names; the detail resolves identity, arena, roster.
@@ -331,28 +407,33 @@ fn team_views_resolve_identity_and_arena() {
     let db = TdbFile::parse(&bytes).unwrap();
     let model = RosterModel::build(&db).unwrap();
 
-    let teams = team_summaries(&db, &meta, &enums, &model);
+    let teams = team_summaries(&db, &meta, &enums, &model, &leagues_for(&db, &meta, Some("nhllegacy")));
     assert_eq!(teams.len(), model.teams.len());
     assert!(teams.iter().any(|t| !t.name.is_empty()), "teams have names");
-    assert!(teams.iter().any(|t| !t.abbrev.is_empty()), "teams have abbreviations");
     assert!(
-        teams.iter().any(|t| t.league_label.as_deref() == Some("NHL")),
+        teams.iter().any(|t| !t.abbrev.is_empty()),
+        "teams have abbreviations"
+    );
+    assert!(
+        teams
+            .iter()
+            .any(|t| t.league_label.as_deref() == Some("NHL")),
         "league labels resolve"
     );
 
-    let view = team_view(&db, &meta, &enums, &model, teams[0].team_id).expect("team resolves");
+    let view = team_view(&db, &meta, &enums, &model, &leagues_for(&db, &meta, Some("nhllegacy")), teams[0].team_id).expect("team resolves");
     assert!(view.identity.iter().any(|f| f.name == "fullname"));
     assert_eq!(view.roster_count, model.team_roster(teams[0].team_id).len());
     // At least one team in the league resolves its home arena via kOtt.buDa -> StEO.vfEq.
     assert!(
         teams
             .iter()
-            .filter_map(|t| team_view(&db, &meta, &enums, &model, t.team_id))
+            .filter_map(|t| team_view(&db, &meta, &enums, &model, &leagues_for(&db, &meta, Some("nhllegacy")), t.team_id))
             .any(|v| v.arena.is_some()),
         "at least one team resolves an arena"
     );
 
-    assert!(team_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
+    assert!(team_view(&db, &meta, &enums, &model, &leagues_for(&db, &meta, Some("nhllegacy")), 0xFFFF_FFFF).is_none());
 }
 
 /// Arena summaries list the rinks; the detail resolves identity (name/city).
@@ -363,9 +444,12 @@ fn arena_views_resolve() {
 
     let arenas = arena_summaries(&db, &meta);
     assert!(!arenas.is_empty(), "anchor has arenas");
-    assert!(arenas.iter().any(|a| !a.name.is_empty()), "arenas have names");
+    assert!(
+        arenas.iter().any(|a| !a.name.is_empty()),
+        "arenas have names"
+    );
 
-    let view = arena_view(&db, &meta, &enums, arenas[0].arena_id).expect("arena resolves");
+    let view = arena_view(&db, &meta, &enums, &leagues_for(&db, &meta, Some("nhllegacy")), arenas[0].arena_id).expect("arena resolves");
     assert!(view.identity.iter().any(|f| f.name == "arenaname"));
     assert!(!view.all_fields.is_empty());
 }
@@ -387,10 +471,17 @@ fn lines_view_builds_depth_chart() {
 
     let lines = lines_view(&db, &meta, &enums, &model, team_id).expect("lines resolve");
     assert_eq!(lines.entries.len(), model.team_roster(team_id).len());
-    assert!(lines.entries.iter().any(|e| !e.name.is_empty()), "names resolve");
+    assert!(
+        lines.entries.iter().any(|e| !e.name.is_empty()),
+        "names resolve"
+    );
     // Situational flag labels are metadata names (e.g. line/pp/pk slots) when set.
     assert!(
-        lines.entries.iter().flat_map(|e| &e.slots).any(|s| !s.is_empty()),
+        lines
+            .entries
+            .iter()
+            .flat_map(|e| &e.slots)
+            .any(|s| !s.is_empty()),
         "at least one roster entry has a labelled situational slot"
     );
 
@@ -414,7 +505,11 @@ fn player_id_by_name(
 }
 
 /// A cell's display string by column label in a career section row.
-fn cell_display(section: &studio_domain::CareerSection, row: &studio_domain::CareerRow, label: &str) -> String {
+fn cell_display(
+    section: &studio_domain::CareerSection,
+    row: &studio_domain::CareerRow,
+    label: &str,
+) -> String {
     let idx = section
         .columns
         .iter()
@@ -439,7 +534,11 @@ fn career_stats_decode_crosby_2006_07() {
 
     let cs = career_stats(&db, &meta, &enums, pid);
     assert_eq!(cs.sections.len(), 4, "four career sections");
-    let season = cs.sections.iter().find(|s| s.kind == "skater_season").unwrap();
+    let season = cs
+        .sections
+        .iter()
+        .find(|s| s.kind == "skater_season")
+        .unwrap();
     assert!(!season.columns.is_empty(), "skater season columns resolve");
     assert!(
         season.rows.len() >= 8,
@@ -475,7 +574,11 @@ fn career_stats_decode_price_2014_15() {
     let pid = player_id_by_name(&db, &meta, &enums, &model, "Carey", "Price");
 
     let cs = career_stats(&db, &meta, &enums, pid);
-    let season = cs.sections.iter().find(|s| s.kind == "goalie_season").unwrap();
+    let season = cs
+        .sections
+        .iter()
+        .find(|s| s.kind == "goalie_season")
+        .unwrap();
     assert!(!season.rows.is_empty(), "Price has goalie season rows");
     let y1415 = season
         .rows
@@ -515,7 +618,10 @@ fn career_stats_shape_across_players() {
             }
         }
     }
-    assert!(rows_seen > 1000, "the anchor carries plenty of career rows ({rows_seen})");
+    assert!(
+        rows_seen > 1000,
+        "the anchor carries plenty of career rows ({rows_seen})"
+    );
 }
 
 /// The `dXSB` "main team" pointer is 1-indexed on the PS3 NHL Legacy anchor (raw = team id + 1,
@@ -559,7 +665,10 @@ fn main_team_encoding_is_one_indexed_on_legacy_anchor() {
             break;
         }
     }
-    assert!(checked >= 400, "exercised a healthy sample of rostered players ({checked})");
+    assert!(
+        checked >= 400,
+        "exercised a healthy sample of rostered players ({checked})"
+    );
 }
 
 const NHL07_DB: &str = "anchors/xbox360/nhl07/databases/NHL07NG.db";
@@ -567,8 +676,12 @@ const NHL07_META: &str = "anchors/xbox360/nhl07/databases/NHL07NG-meta.xml";
 
 fn nhl07_fixtures() -> (Vec<u8>, FieldMetaIndex, EnumRegistry) {
     let bytes = std::fs::read(repo(NHL07_DB)).unwrap();
-    let meta = FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(NHL07_META)).unwrap()).unwrap();
-    let enums = EnumRegistry::from_dir(repo(DEFS).join("enums")).unwrap();
+    let meta =
+        FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(NHL07_META)).unwrap()).unwrap();
+    let mut enums = EnumRegistry::from_dir(repo(DEFS).join("enums")).unwrap();
+    // The anchor is NHL Legacy (PS3); title-scoped vocabularies (nationality, player style) resolve
+    // only once the title is known, as a project sets it.
+    enums.set_scope(Some("nhllegacy"), "ps3");
     (bytes, meta, enums)
 }
 
@@ -582,18 +695,23 @@ fn nhl07_team_names_resolve_via_thin_index_join() {
     let db = TdbFile::parse(&bytes).unwrap();
     let model = RosterModel::build(&db).unwrap();
 
-    let teams = team_summaries(&db, &meta, &enums, &model);
+    let teams = team_summaries(&db, &meta, &enums, &model, &leagues_for(&db, &meta, Some("nhllegacy")));
     assert_eq!(teams.len(), 93);
     assert!(
         teams.iter().all(|t| !t.name.trim().is_empty()),
         "every NHL07 team must resolve a name via the stock/custom join"
     );
-    let by_id = |id: u64| teams.iter().find(|t| t.team_id == id).map(|t| t.name.as_str());
+    let by_id = |id: u64| {
+        teams
+            .iter()
+            .find(|t| t.team_id == id)
+            .map(|t| t.name.as_str())
+    };
     assert_eq!(by_id(0), Some("Anaheim Ducks\u{2122}"));
     assert_eq!(by_id(9), Some("Dallas Stars\u{2122}"));
 
     // Team detail identity is sourced from the same join (not the thin kOtt row).
-    let view = team_view(&db, &meta, &enums, &model, 2).unwrap();
+    let view = team_view(&db, &meta, &enums, &model, &leagues_for(&db, &meta, Some("nhllegacy")), 2).unwrap();
     assert!(
         view.identity.iter().any(|f| f.display.contains("Boston")),
         "team_view identity should carry the resolved full name: {:?}",

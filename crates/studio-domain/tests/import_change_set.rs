@@ -16,7 +16,9 @@ use tdb_fhm::schema::{SCHEMA_SQL, SCHEMA_VERSION};
 use tdb_fhm::slug::person_slug;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn open_anchor() -> EditSession {
@@ -73,8 +75,11 @@ fn synthetic_corpus() -> FhmCorpus {
 fn corpus_with_person(first: &str, last: &str, dob: &str) -> FhmCorpus {
     let conn = Connection::open_in_memory().unwrap();
     conn.execute_batch(SCHEMA_SQL).unwrap();
-    conn.execute("INSERT INTO meta(key, value) VALUES ('schema_version', ?1)", [SCHEMA_VERSION.to_string()])
-        .unwrap();
+    conn.execute(
+        "INSERT INTO meta(key, value) VALUES ('schema_version', ?1)",
+        [SCHEMA_VERSION.to_string()],
+    )
+    .unwrap();
     let slug = person_slug(last, first, dob);
     conn.execute(
         "INSERT INTO person(person_id, slug, first_name, last_name, dob, retired, season_count, is_goalie)
@@ -101,7 +106,9 @@ fn match_ea_player_bridges_corpus_person_to_the_open_project() {
     let corpus = corpus_with_person(&target.first_name, &target.last_name, "1990-01-01");
     let candidates = sess.match_ea_player(&corpus, 1).unwrap();
     assert!(
-        candidates.iter().any(|c| c.ea_player_id == target.player_id),
+        candidates
+            .iter()
+            .any(|c| c.ea_player_id == target.player_id),
         "the same-named anchor player is a match candidate for {} {}",
         target.first_name,
         target.last_name
@@ -109,7 +116,10 @@ fn match_ea_player_bridges_corpus_person_to_the_open_project() {
 
     // A corpus person with a name no anchor player has → no candidates → the cart should Create.
     let none = corpus_with_person("Zzyzx", "Qwerty-Nomatch", "1990-01-01");
-    assert!(sess.match_ea_player(&none, 1).unwrap().is_empty(), "unknown name → no match");
+    assert!(
+        sess.match_ea_player(&none, 1).unwrap().is_empty(),
+        "unknown name → no match"
+    );
 }
 
 #[test]
@@ -123,26 +133,68 @@ fn cart_lowers_mixed_create_match_and_blocks_unlowerable_items() {
     // An existing EA skater to Match-update.
     let existing = {
         let model = sess.model().unwrap();
-        model.players.iter().find(|p| p.skater_ai.is_some()).unwrap().player_id
+        model
+            .players
+            .iter()
+            .find(|p| p.skater_ai.is_some())
+            .unwrap()
+            .player_id
     };
 
     // A mixed cart: create, match, a missing person, and a match at a bogus id.
     let items = vec![
-        ImportItem { person_id: 1, season_year: 2024, target_team_id: team, identity: ImportIdentity::CreateNew, jersey: Some(42) },
-        ImportItem { person_id: 1, season_year: 2024, target_team_id: team, identity: ImportIdentity::Match(existing), jersey: None },
-        ImportItem { person_id: 999, season_year: 2024, target_team_id: team, identity: ImportIdentity::CreateNew, jersey: None },
-        ImportItem { person_id: 1, season_year: 2024, target_team_id: team, identity: ImportIdentity::Match(9_999_999), jersey: None },
+        ImportItem {
+            person_id: 1,
+            season_year: 2024,
+            target_team_id: team,
+            identity: ImportIdentity::CreateNew,
+            jersey: Some(42),
+        },
+        ImportItem {
+            person_id: 1,
+            season_year: 2024,
+            target_team_id: team,
+            identity: ImportIdentity::Match(existing),
+            jersey: None,
+        },
+        ImportItem {
+            person_id: 999,
+            season_year: 2024,
+            target_team_id: team,
+            identity: ImportIdentity::CreateNew,
+            jersey: None,
+        },
+        ImportItem {
+            person_id: 1,
+            season_year: 2024,
+            target_team_id: team,
+            identity: ImportIdentity::Match(9_999_999),
+            jersey: None,
+        },
     ];
 
-    let lowered = sess.lower_change_set(&corpus, &items, &profile, maxima.as_ref()).unwrap();
+    let lowered = sess
+        .lower_change_set(&corpus, &items, &profile, maxima.as_ref())
+        .unwrap();
 
     // Only the two resolvable items produced ops; the other two are blockers.
-    assert_eq!(lowered.ops.len(), 2, "create + match lowered; missing/bogus did not");
-    assert_eq!(lowered.items.len(), 4, "one trail entry per cart item, in order");
+    assert_eq!(
+        lowered.ops.len(),
+        2,
+        "create + match lowered; missing/bogus did not"
+    );
+    assert_eq!(
+        lowered.items.len(),
+        4,
+        "one trail entry per cart item, in order"
+    );
     assert_eq!(lowered.items[0].outcome, ItemOutcome::Created);
     assert_eq!(lowered.items[1].outcome, ItemOutcome::Matched(existing));
     assert_eq!(lowered.items[2].outcome, ItemOutcome::PersonMissing);
-    assert_eq!(lowered.items[3].outcome, ItemOutcome::NoSuchPlayer(9_999_999));
+    assert_eq!(
+        lowered.items[3].outcome,
+        ItemOutcome::NoSuchPlayer(9_999_999)
+    );
     assert!(lowered.has_blockers());
     assert_eq!(lowered.blocked().count(), 2);
     // Human-readable surface: the resolved person name rode through.
@@ -150,20 +202,38 @@ fn cart_lowers_mixed_create_match_and_blocks_unlowerable_items() {
 
     // Preview the lowered ops (dry-run), then commit the *same* ops — byte-identical.
     let before = sess.player_summaries().unwrap().len();
-    let preview = sess.preview_import(&lowered.ops, lowered.skipped.clone()).unwrap();
+    let preview = sess
+        .preview_import(&lowered.ops, lowered.skipped.clone())
+        .unwrap();
     assert_eq!(preview.players_before, before);
-    assert_eq!(preview.players_after, before + 1, "exactly the one create adds a player");
+    assert_eq!(
+        preview.players_after,
+        before + 1,
+        "exactly the one create adds a player"
+    );
     assert_eq!(sess.undo_depth(), 0, "preview must not mutate the session");
 
     sess.commit_import(&lowered.ops).unwrap();
     assert_eq!(sess.undo_depth(), 1, "the whole cart is one undo entry");
-    assert_eq!(sess.bytes(), preview.previewed.as_slice(), "commit == preview, byte for byte");
+    assert_eq!(
+        sess.bytes(),
+        preview.previewed.as_slice(),
+        "commit == preview, byte for byte"
+    );
 
     // The create landed with its overridden jersey; the match renamed the existing player.
     let after = sess.player_summaries().unwrap();
-    assert!(after.iter().any(|p| p.first_name == "Fresh" && p.last_name == "Import"), "create landed");
+    assert!(
+        after
+            .iter()
+            .any(|p| p.first_name == "Fresh" && p.last_name == "Import"),
+        "create landed"
+    );
     let matched = after.iter().find(|p| p.player_id == existing).unwrap();
-    assert_eq!((matched.first_name.as_str(), matched.last_name.as_str()), ("Fresh", "Import"));
+    assert_eq!(
+        (matched.first_name.as_str(), matched.last_name.as_str()),
+        ("Fresh", "Import")
+    );
 }
 
 #[test]
@@ -172,7 +242,10 @@ fn adapter_resolves_enum_identity_into_the_create_op() {
     let profile = default_profile();
     let maxima = corpus.attribute_maxima().unwrap();
 
-    let sess = open_anchor();
+    // The title is named: nationality labels are title-scoped (receipt 28), and a session that was
+    // never told its title resolves no scoped vocabulary (the import then skips the field).
+    let mut sess = open_anchor();
+    sess.set_game_id(Some("nhl14".to_string()));
     let team = sess.team_summaries().unwrap().first().unwrap().team_id;
 
     let items = vec![ImportItem {
@@ -182,18 +255,29 @@ fn adapter_resolves_enum_identity_into_the_create_op() {
         identity: ImportIdentity::CreateNew,
         jersey: None,
     }];
-    let lowered = sess.lower_change_set(&corpus, &items, &profile, maxima.as_ref()).unwrap();
+    let lowered = sess
+        .lower_change_set(&corpus, &items, &profile, maxima.as_ref())
+        .unwrap();
 
     let ImportOp::Create { writes, .. } = &lowered.ops[0] else {
         panic!("expected a Create op");
     };
     let field = |id: &str| writes.iter().find(|w| w.field == id);
     // Handedness "Left" → GRkp raw 0; Nationality "Canada" → Lelh raw 0 (both from the verified enums).
-    assert!(field("GRkp").is_some(), "handedness resolved to a bio write");
-    assert!(field("Lelh").is_some(), "nationality resolved to a bio write");
+    assert!(
+        field("GRkp").is_some(),
+        "handedness resolved to a bio write"
+    );
+    assert!(
+        field("Lelh").is_some(),
+        "nationality resolved to a bio write"
+    );
     // No skips for the identity fields on nhl14 (they exist and the codes are in range).
     assert!(
-        !lowered.items[0].skipped.iter().any(|s| s.field == "GRkp" || s.field == "Lelh"),
+        !lowered.items[0]
+            .skipped
+            .iter()
+            .any(|s| s.field == "GRkp" || s.field == "Lelh"),
         "identity fields present on nhl14: {:?}",
         lowered.items[0].skipped
     );

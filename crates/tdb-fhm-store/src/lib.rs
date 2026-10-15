@@ -4,6 +4,8 @@
 //!
 //! Everything here is read-only; the corpus is a source, never edited.
 
+pub mod legends;
+
 use std::cell::OnceCell;
 use std::collections::BTreeMap;
 use std::path::Path;
@@ -62,7 +64,10 @@ pub struct PersonIdentity {
 pub enum FhmError {
     Sqlite(rusqlite::Error),
     /// The corpus schema version does not match this build's [`SCHEMA_VERSION`].
-    SchemaMismatch { found: i64, expected: i64 },
+    SchemaMismatch {
+        found: i64,
+        expected: i64,
+    },
 }
 
 impl std::fmt::Display for FhmError {
@@ -149,9 +154,9 @@ impl FhmCorpus {
 
     /// Distinct seasons present (newest first), for the season filter dropdown.
     pub fn seasons(&self) -> Res<Vec<SeasonOption>> {
-        let mut stmt = self.conn.prepare(
-            "SELECT DISTINCT season_year FROM player_season ORDER BY season_year DESC",
-        )?;
+        let mut stmt = self
+            .conn
+            .prepare("SELECT DISTINCT season_year FROM player_season ORDER BY season_year DESC")?;
         let rows = stmt
             .query_map([], |r| {
                 let year: i64 = r.get(0)?;
@@ -168,11 +173,11 @@ impl FhmCorpus {
     /// player's career end as "Present" rather than that year. `None` for an empty corpus.
     pub fn latest_season(&self) -> Res<Option<i64>> {
         // MAX over an empty table still yields one NULL row, so `Option<i64>` covers "no corpus".
-        Ok(self.conn.query_row(
-            "SELECT MAX(season_year) FROM player_season",
-            [],
-            |r| r.get::<_, Option<i64>>(0),
-        )?)
+        Ok(self
+            .conn
+            .query_row("SELECT MAX(season_year) FROM player_season", [], |r| {
+                r.get::<_, Option<i64>>(0)
+            })?)
     }
 
     /// Distinct leagues present (by abbr), for the league filter dropdown.
@@ -304,9 +309,14 @@ impl FhmCorpus {
         // ratings, so requiring a `ratings_season` row (INNER JOIN) keeps exactly the seasons the
         // player was actually rated/active in. This works for every league — unlike career stats,
         // which are absent for ~40% of players (Euro / junior / minor leagues).
+        // Jersey is keyed by the cross-season `team_key` (via the resolved `team_season` row); a
+        // correlated MIN() subquery keeps a player who wore several numbers to a single row.
         let mut stmt = self.conn.prepare(
             "SELECT ps.season_year, ps.team_id, t.name, t.abbr, lg.abbr,
-                    ps.height, ps.weight, r.ability, r.potential
+                    ps.height, ps.weight, r.ability, r.potential,
+                    (SELECT MIN(jn.number) FROM jersey_number jn
+                       WHERE jn.person_id = ps.person_id AND jn.season_year = ps.season_year
+                         AND jn.team_key = t.team_key)
              FROM player_season ps
              JOIN ratings_season r
                     ON r.person_id = ps.person_id AND r.season_year = ps.season_year
@@ -329,6 +339,7 @@ impl FhmCorpus {
                     weight: r.get(6)?,
                     ability: r.get(7)?,
                     potential: r.get(8)?,
+                    jersey: r.get(9)?,
                 })
             })?
             .collect::<Result<Vec<_>, _>>()?;
@@ -581,7 +592,7 @@ impl FhmCorpus {
         let mut out: Vec<TeamIndexEntry> = Vec::new();
 
         // Franchises are all NHL, so they belong only to the "all" and "NHL" views.
-        let include_franchises = league.map_or(true, |l| l.eq_ignore_ascii_case("NHL"));
+        let include_franchises = league.is_none_or(|l| l.eq_ignore_ascii_case("NHL"));
         if include_franchises {
             let mut stmt = self.conn.prepare(
                 "SELECT f.franchise_id, f.display_name, f.abbr, f.is_defunct,
@@ -645,7 +656,7 @@ impl FhmCorpus {
         // When the NHL filter is active there are no standalone NHL teams, so `rows` is empty there.
         out.extend(rows);
 
-        out.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+        out.sort_by_key(|t| t.name.to_lowercase());
         out.truncate(limit.max(0) as usize);
         Ok(out)
     }
@@ -708,7 +719,9 @@ impl FhmCorpus {
         if seasons.is_empty() {
             return Ok(None);
         }
-        let target = season_year.filter(|y| seasons.contains(y)).unwrap_or(seasons[0]);
+        let target = season_year
+            .filter(|y| seasons.contains(y))
+            .unwrap_or(seasons[0]);
 
         // Constituent (team_key, era_name, src_team_id) rows active that season.
         let mut cstmt = self.conn.prepare(
@@ -721,7 +734,9 @@ impl FhmCorpus {
              ORDER BY m.era_name",
         )?;
         let picks: Vec<(Option<String>, i64)> = cstmt
-            .query_map(params![franchise_id, target], |r| Ok((r.get(0)?, r.get(1)?)))?
+            .query_map(params![franchise_id, target], |r| {
+                Ok((r.get(0)?, r.get(1)?))
+            })?
             .collect::<Result<Vec<_>, _>>()?;
 
         let mut constituents = Vec::new();
@@ -778,7 +793,9 @@ impl FhmCorpus {
         if seasons.is_empty() {
             return Ok(None);
         }
-        let target = season_year.filter(|y| seasons.contains(y)).unwrap_or(seasons[0]);
+        let target = season_year
+            .filter(|y| seasons.contains(y))
+            .unwrap_or(seasons[0]);
 
         let src_team_id: Option<i64> = self
             .conn
@@ -1237,7 +1254,10 @@ mod tests {
     fn person_search_and_goalie_filter() {
         let c = fixture();
         assert_eq!(c.person_summaries("cros", None, 50).unwrap().len(), 1);
-        assert_eq!(c.person_summaries("sidney crosby", None, 50).unwrap().len(), 1);
+        assert_eq!(
+            c.person_summaries("sidney crosby", None, 50).unwrap().len(),
+            1
+        );
         assert_eq!(c.person_summaries("", Some(true), 50).unwrap().len(), 1); // only Fleury
         assert_eq!(c.person_summaries("", Some(false), 50).unwrap().len(), 1); // only Crosby
         assert_eq!(c.person_summaries("", None, 50).unwrap().len(), 2);
@@ -1257,7 +1277,11 @@ mod tests {
             )
             .unwrap();
         let hits = |q: &str| c.person_summaries(q, None, 50).unwrap().len();
-        assert_eq!(hits("sundstrom"), 1, "ASCII spelling should match the accented name");
+        assert_eq!(
+            hits("sundstrom"),
+            1,
+            "ASCII spelling should match the accented name"
+        );
         assert_eq!(hits("Sundström"), 1, "accented spelling still matches");
         assert_eq!(hits("erik sundstrom"), 1, "first-last order matches");
         assert_eq!(hits("sundstr"), 1, "partial substring matches");
@@ -1304,12 +1328,24 @@ mod tests {
                 "#,
             )
             .unwrap();
-        let years: Vec<i64> = c.person_seasons(1).unwrap().iter().map(|s| s.season_year).collect();
-        assert_eq!(years, vec![2024, 2023], "only rated seasons appear; phantom re-listings drop");
+        let years: Vec<i64> = c
+            .person_seasons(1)
+            .unwrap()
+            .iter()
+            .map(|s| s.season_year)
+            .collect();
+        assert_eq!(
+            years,
+            vec![2024, 2023],
+            "only rated seasons appear; phantom re-listings drop"
+        );
         assert_eq!(c.person_played_years(1).unwrap(), vec![2024, 2023]);
 
-        // Crosby (person 0): his single rated season stays.
-        assert_eq!(c.person_seasons(0).unwrap().len(), 1);
+        // Crosby (person 0): his single rated season stays, carrying the jersey (87) resolved via the
+        // season's team_key so the Roster Builder can pre-fill it.
+        let cros = c.person_seasons(0).unwrap();
+        assert_eq!(cros.len(), 1);
+        assert_eq!(cros[0].jersey, Some(87));
     }
 
     #[test]
@@ -1332,9 +1368,19 @@ mod tests {
             .unwrap();
         let a = c.person_summaries("aaltonen", None, 50).unwrap().remove(0);
         assert_eq!(a.first_year, Some(1948));
-        assert_eq!(a.last_year, Some(1950), "phantom re-listings must not extend the span");
-        assert!(!a.active, "last rated season predates the current season → not active");
-        assert_eq!(a.seasons_played, 2, "rated seasons 1948, 1950 — no career-stat lines needed");
+        assert_eq!(
+            a.last_year,
+            Some(1950),
+            "phantom re-listings must not extend the span"
+        );
+        assert!(
+            !a.active,
+            "last rated season predates the current season → not active"
+        );
+        assert_eq!(
+            a.seasons_played, 2,
+            "rated seasons 1948, 1950 — no career-stat lines needed"
+        );
         assert_eq!(c.person_played_years(3).unwrap(), vec![1950, 1948]);
 
         // Crosby's last rated season (2024) is the corpus's current season → still active.
@@ -1356,13 +1402,22 @@ mod tests {
     fn team_index_consolidates_nhl_into_franchise() {
         let c = fixture();
         // NHL + AHL are league options (their team_keys live in `team`).
-        let leagues: Vec<String> = c.team_leagues().unwrap().into_iter().map(|l| l.abbr).collect();
+        let leagues: Vec<String> = c
+            .team_leagues()
+            .unwrap()
+            .into_iter()
+            .map(|l| l.abbr)
+            .collect();
         assert!(leagues.contains(&"NHL".to_string()) && leagues.contains(&"AHL".to_string()));
         // "All" = the franchise + the standalone AHL club; the NHL club surfaces once (its franchise).
         let all = c.team_index(None, "", 100).unwrap();
         assert_eq!(all.len(), 2);
         let pens: Vec<_> = all.iter().filter(|e| e.kind == "franchise").collect();
-        assert_eq!(pens.len(), 1, "Penguins appear once (franchise), not also as a raw team_key");
+        assert_eq!(
+            pens.len(),
+            1,
+            "Penguins appear once (franchise), not also as a raw team_key"
+        );
         // The NHL filter yields ONLY the franchises — the standalone AHL club must not leak in.
         let nhl = c.team_index(Some("NHL"), "", 100).unwrap();
         assert_eq!(nhl.len(), 1, "NHL filter is the franchises only");
@@ -1395,7 +1450,11 @@ mod tests {
         assert_eq!(block.division_name.as_deref(), Some("Metropolitan"));
         assert_eq!(block.roster.len(), 2);
         // Crosby carries jersey 87 + captaincy, resolved via team_key.
-        let cros = block.roster.iter().find(|m| m.last_name == "Crosby").unwrap();
+        let cros = block
+            .roster
+            .iter()
+            .find(|m| m.last_name == "Crosby")
+            .unwrap();
         assert_eq!(cros.jersey, Some(87));
         assert_eq!(cros.captaincy.as_deref(), Some("C"));
         assert_eq!(cros.position.as_deref(), Some("C"));
@@ -1407,8 +1466,14 @@ mod tests {
     #[test]
     fn standalone_team_detail_absent_key_is_none() {
         let c = fixture();
-        assert!(c.team_franchise_detail("team", "no__such", None).unwrap().is_none());
-        assert!(c.team_franchise_detail("franchise", "999", None).unwrap().is_none());
+        assert!(c
+            .team_franchise_detail("team", "no__such", None)
+            .unwrap()
+            .is_none());
+        assert!(c
+            .team_franchise_detail("franchise", "999", None)
+            .unwrap()
+            .is_none());
     }
 
     #[test]

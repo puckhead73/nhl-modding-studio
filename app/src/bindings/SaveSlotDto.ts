@@ -15,4 +15,16 @@ label: string, path: string,
 /**
  * Container variant: `v1` (read-only) | `v2` | `v4`.
  */
-container_version: string, writable: boolean, };
+container_version: string, writable: boolean, 
+/**
+ * PS4: the shadPS4 user profile folder the save belongs to.
+ */
+profile: string | null, 
+/**
+ * PS4: the title id directory the save belongs to (e.g. `CUSA18182`).
+ */
+title_id: string | null, 
+/**
+ * Why the save can't be opened (unreadable, or a format the codec doesn't recognise).
+ */
+problem: string | null, };

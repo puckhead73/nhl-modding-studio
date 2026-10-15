@@ -4,9 +4,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useProject } from "./lib/project";
 import { call } from "./lib/client";
 import { Button, Pill } from "./components/primitives";
-import { SECTIONS, activeSection } from "./nav";
+import { SAVE_SECTIONS, SECTIONS, activeSection, type NavSection } from "./nav";
+import { SaveEditorControls } from "./components/SaveEditorControls";
+import { isAvailable } from "./lib/surfaces";
 import { BreadcrumbProvider, useBreadcrumbs } from "./lib/breadcrumbs";
+import { gameById, img } from "./lib/catalog";
 import headerLogo from "./assets/ui/NHL Modding Studio Header.png";
+import tabDatabase from "./assets/ui/tabs/database.svg";
+import tabHistorical from "./assets/ui/tabs/historical.png";
+import tabLegends from "./assets/ui/tabs/legends.png";
+import { LegendsPendingBanner } from "./components/LegendsPendingBanner";
+import { SessionControls } from "./components/SessionControls";
+import tabShop from "./assets/ui/tabs/shop.png";
+import tabAssets from "./assets/ui/tabs/assets.png";
+import tabSettings from "./assets/ui/tabs/settings.png";
 import type { ProjectSummaryDto } from "./bindings/ProjectSummaryDto";
 import type { AutocorrectSummaryDto } from "./bindings/AutocorrectSummaryDto";
 import type { RepairBlocksSummaryDto } from "./bindings/RepairBlocksSummaryDto";
@@ -17,29 +28,33 @@ export function AppShell() {
   return <Shell project={project} dbPath={dbPath} />;
 }
 
-function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string }) {
-  const { update, close } = useProject();
-  const navigate = useNavigate();
-  const qc = useQueryClient();
+function Shell({ project }: { project: ProjectSummaryDto; dbPath: string }) {
+  const [historyTarget, setHistoryTarget] = useState<HTMLDivElement | null>(null);
+  const { info, saveFile } = useProject();
   const { pathname } = useLocation();
-  const section = activeSection(pathname);
+  // Save Editor sessions get the trimmed navigation (database surfaces + validation only).
+  const sections = saveFile ? SAVE_SECTIONS : SECTIONS;
+  const section = activeSection(pathname, sections);
+  // ONB-003: an assets-only project folder has no edit session; the database-bound on-load fixes
+  // and audits do not run for it.
+  const assetsOnly = project.role === "assets";
+
+  // ONB-003 §3: the last meaningful view is remembered with the project (debounced; detail routes
+  // only matter once they settle) so a reopen can land there.
+  useEffect(() => {
+    if (!info || !pathname.startsWith("/app/")) return;
+    const t = setTimeout(() => {
+      call("project_set_view", { projectId: project.project_id, route: pathname }).catch(() => {
+        // bookkeeping only
+      });
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [pathname, info, project.project_id]);
 
   // On-load auto-fix sequencing: the roster-block repair runs first (both files), because every
   // other on-load fix and the corruption guard read the post-repair state — the jersey autocorrect
   // would roll back on a still-corrupt DB, and the guard must only block when the repair failed.
-  const [blocksRepaired, setBlocksRepaired] = useState(false);
-
-  // A workspace with a roster attached saves both files in place; otherwise write the single db back.
-  const save = useMutation({
-    mutationFn: () =>
-      project.roster_attached
-        ? call("save_workspace", { projectId: project.project_id })
-        : call("save_project", { projectId: project.project_id, outPath: dbPath }),
-    onSuccess: async () => {
-      update(await call("project_summary", { projectId: project.project_id }));
-      qc.invalidateQueries();
-    },
-  });
+  const [blocksRepaired, setBlocksRepaired] = useState(project.role === "assets");
 
   const subClass = ({ isActive }: { isActive: boolean }) =>
     "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
@@ -50,113 +65,71 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
   return (
     <BreadcrumbProvider>
     <div className="flex h-full flex-col bg-slate-950 text-slate-100">
-      <BlockRepairAutofix projectId={project.project_id} onDone={() => setBlocksRepaired(true)} />
-      <CorruptionGuard projectId={project.project_id} enabled={blocksRepaired} />
-      <JerseyAutocorrect projectId={project.project_id} start={blocksRepaired} />
-      <header className="flex h-12 shrink-0 items-center gap-6 border-b border-slate-800 bg-slate-900/60 px-4">
+      {!assetsOnly && <BlockRepairAutofix projectId={project.project_id} onDone={() => setBlocksRepaired(true)} />}
+      {!assetsOnly && <CorruptionGuard projectId={project.project_id} enabled={blocksRepaired} />}
+      {!assetsOnly && <JerseyAutocorrect projectId={project.project_id} start={blocksRepaired} />}
+      {/* Grow the existing 60px bar and its artwork by 20%. */}
+      <header className="flex h-[72px] shrink-0 items-center gap-3 xl:gap-6 border-b border-slate-800 bg-slate-900/60 px-4">
         <img
           src={headerLogo}
           alt="NHL Modding Studio"
           draggable={false}
-          className="h-7 w-auto shrink-0 select-none object-contain"
+          className="h-[38.4px] xl:h-[57.6px] w-auto shrink-0 select-none object-contain"
         />
-        {/* Primary section bar — active by which section owns the URL, not exact-path match. */}
-        <nav className="flex flex-1 items-center gap-1">
-          {SECTIONS.map((s) => {
-            const active = s.key === section.key;
-            return (
-              <Link
-                key={s.key}
-                to={s.index ?? s.key}
-                className={
-                  "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors " +
-                  (active
-                    ? "bg-slate-800 text-slate-50"
-                    : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100")
-                }
-              >
-                {s.label}
-              </Link>
-            );
-          })}
-        </nav>
-        <div className="flex items-center gap-2">
-          <NavLink
-            to="database/pending"
-            className={({ isActive }) =>
-              "flex items-center gap-1.5 rounded-md border px-3 py-1 text-xs font-medium transition-colors " +
-              (isActive
-                ? "border-sky-700 bg-sky-900/40 text-sky-100"
-                : project.dirty
-                  ? "border-amber-800/70 bg-amber-900/30 text-amber-100 hover:bg-amber-900/50"
-                  : "border-slate-700 text-slate-300 hover:bg-slate-800/60")
-            }
-          >
-            Pending Edits
-            {(project.undo_depth > 0 || project.dirty) && (
-              <Pill tone={project.dirty ? "warn" : "neutral"}>{project.undo_depth}</Pill>
+        {saveFile && (
+          <div className="flex min-w-0 shrink flex-col leading-tight" title={saveFile.file.path}>
+            <span className="text-sm font-semibold text-slate-100">Save Editor</span>
+            <span className="truncate text-xs text-slate-400">
+              {saveFile.title} · {saveFile.platform_label} · {saveFile.file.kind_label}
+            </span>
+            {saveFile.supplied_tables > 0 && (
+              <span className="truncate text-[11px] text-amber-300/90" title="Data this save does not contain is shown from Studio's copy of the game's default database. It is read-only and never written into the save.">
+                Data not stored in this save is read-only
+              </span>
             )}
-          </NavLink>
-          <span className="text-xs text-slate-400">
-            {project.platform} · {project.role} · {project.source}
-          </span>
-          {project.roster_attached && <DisplaySourceToggle project={project} />}
-          {project.roster_attached && !project.roster_aligned && !project.display_roster && (
-            <Pill tone="warn">Roster: nhlng-only</Pill>
-          )}
-          <button
-            type="button"
-            onClick={() => save.mutate()}
-            disabled={save.isPending || !project.dirty}
-            title={project.roster_attached ? "Saves nhlng.db and the roster save together" : undefined}
-            className="rounded-md border border-sky-500/40 bg-sky-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {save.isPending ? "Saving…" : "Save"}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              close();
-              navigate("/", { replace: true });
-            }}
-            className="rounded-md border border-slate-700 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-800"
-          >
-            Close
-          </button>
-        </div>
-      </header>
-      {/* Roster-only mode notice: the displayed roster save doesn't line up with the main database,
-          so edits go to the roster file alone and nhlng-backed areas are unavailable. */}
-      {project.display_roster && !project.roster_aligned && (
-        <div className="flex shrink-0 items-center gap-2 border-b border-amber-900/60 bg-amber-950/40 px-4 py-1.5 text-xs text-amber-200">
-          <span aria-hidden>⚠️</span>
-          <span>
-            This roster save doesn't match the main database, so you're viewing and editing the
-            roster file on its own. Not all areas are editable without an aligned main database
-            (nhlng.db) — anything the roster save doesn't carry, like career stats, is unavailable.
-          </span>
-        </div>
-      )}
-      {/* History trail — the views clicked through, under the primary tabs; click to jump back. */}
-      <Breadcrumbs />
-      {/* Contextual subtab bar — only when the active section has subtabs. */}
-      {section.subtabs.length > 0 && (
-        <nav className="flex shrink-0 items-center gap-1 border-b border-slate-800 bg-slate-950/60 px-4 py-1.5">
-          {section.subtabs.map((sub) => (
-            <NavLink key={sub.to} to={sub.to} className={subClass}>
-              {sub.label}
-            </NavLink>
+          </div>
+        )}
+        {/* Primary section bar — image tabs, active by which section owns the URL. */}
+        <nav aria-label="Studio sections" className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto py-1 px-0.5 xl:gap-2">
+          {sections.map((s) => (
+            <SectionTab key={s.key} section={s} active={s.key === section.key} project={project} />
           ))}
         </nav>
-      )}
+        <div className="flex shrink-0 items-center gap-2">
+          <div className="flex max-w-28 flex-col items-end gap-1">
+          {!assetsOnly && <ErrorsPill projectId={project.project_id} enabled={blocksRepaired} />}
+          {assetsOnly && <Pill tone="info">Assets only</Pill>}
+          </div>
+          {saveFile
+            ? <SaveEditorControls key={project.project_id} historyTarget={historyTarget} />
+            : <SessionControls key={project.project_id} historyTarget={historyTarget} />}
+        </div>
+      </header>
+      {/* A Legends calculation owed for the active formula profile — persisted beside the corpus,
+          so it survives a restart until it's run or acknowledged. */}
+      <LegendsPendingBanner />
+      {/* History trail — the views clicked through, under the primary tabs; click to jump back. */}
+      <Breadcrumbs />
+      {/* Contextual subtab bar — only when the active section has subtabs. Capability-gated subtabs
+          (Arenas) drop out when the loaded title's schema doesn't carry that surface. */}
+      {(() => {
+        const subtabs = section.subtabs.filter(
+          (sub) => sub.to !== "database/arenas" || isAvailable(project.surfaces?.arenas),
+        );
+        return (
+          <nav className="flex shrink-0 items-center gap-1 border-b border-slate-800 bg-slate-950/60 px-4 py-1.5">
+            {subtabs.map((sub) => (
+              <NavLink key={sub.to} to={sub.to} className={subClass}>
+                {sub.label}
+              </NavLink>
+            ))}
+            <div ref={setHistoryTarget} className="ml-auto flex shrink-0 items-center gap-2" aria-label="Edit history" />
+          </nav>
+        );
+      })()}
       <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
-          {save.isError && (
-            <p className="mb-3 rounded-md border border-rose-800 bg-rose-950/60 px-3 py-2 text-sm text-rose-100">
-              {String(save.error)}
-            </p>
-          )}
-          <Outlet />
+          <Outlet key={project.project_id} />
         </div>
       </main>
     </div>
@@ -164,52 +137,85 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
   );
 }
 
-/** Which file the read views display: the canonical nhlng.db (default) or the mirrored roster save
- *  — for users whose game only loads the roster save. On an aligned pair this is display-only
- *  (edits fan out to both files either way); on a misaligned pair, choosing the roster puts the
- *  workspace in roster-only mode — edits apply strictly to the roster file, and the banner above
- *  the content area explains what isn't editable. Rendered whenever a mirror is attached. */
-function DisplaySourceToggle({ project }: { project: ProjectSummaryDto }) {
-  const { update } = useProject();
-  const qc = useQueryClient();
-  const toggle = useMutation({
-    mutationFn: (on: boolean) =>
-      call("set_display_roster", { projectId: project.project_id, on }),
-    onSuccess: (summary) => {
-      update(summary);
-      qc.invalidateQueries();
-    },
-  });
-  const side = (on: boolean, label: string) => (
-    <button
-      type="button"
-      onClick={() => on !== project.display_roster && toggle.mutate(on)}
-      disabled={toggle.isPending}
-      className={
-        "px-2 py-1 font-medium transition-colors disabled:cursor-wait " +
-        (project.display_roster === on
-          ? "bg-sky-900/50 text-sky-100"
-          : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200")
-      }
-    >
-      {label}
-    </button>
-  );
+// Supplied section photos; Game Database retains the loaded title's box art.
+const TAB_ART: Record<string, string> = {
+  database: tabDatabase,
+  historical: tabHistorical,
+  legends: tabLegends,
+  shop: tabShop,
+  assets: tabAssets,
+  settings: tabSettings,
+};
+
+/** Animate only the image, keeping the frame/label still. Active sections retain source color. */
+function SectionTab({
+  section: s,
+  active,
+  project,
+}: {
+  section: NavSection;
+  active: boolean;
+  project: ProjectSummaryDto;
+}) {
+  const game = s.key === "database" ? gameById(project.game_id) : null;
+  const src = (game && img(game.file)) || TAB_ART[s.key] || tabDatabase;
+  const overlay =
+    s.key === "database" && game ? `${game.label.toUpperCase()} DB` : s.label.toUpperCase();
   return (
-    <div
-      title={
-        project.roster_aligned
-          ? "Which file the views display — edits and Save always apply to both files"
-          : "Which file the views display — this pair is out of sync, so roster-save edits apply to the roster file only"
+    <Link
+      to={s.index ?? s.key}
+      title={overlay}
+      aria-label={overlay}
+      aria-current={active ? "page" : undefined}
+      className={
+        "group relative shrink-0 overflow-hidden rounded-md outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-sky-400 " +
+        (active ? "ring-2 ring-sky-500/80" : "ring-1 ring-slate-700/60 hover:ring-slate-500/80")
       }
-      className="flex items-center overflow-hidden rounded-md border border-slate-700 text-[11px]"
     >
-      <span className="border-r border-slate-700 bg-slate-900/60 px-2 py-1 text-[10px] uppercase tracking-wide text-slate-500">
-        Viewing
+      <img
+        src={src}
+        alt=""
+        draggable={false}
+        className={
+          "h-[52.8px] w-auto select-none object-contain transition-[filter,transform] duration-500 ease-out group-hover:scale-[1.04] group-hover:grayscale-0 group-focus-visible:scale-[1.04] group-focus-visible:grayscale-0 motion-reduce:transform-none motion-reduce:transition-none " +
+          (active ? "grayscale-0" : "grayscale")
+        }
+      />
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 to-transparent px-1 pb-1 pt-3 text-center text-[9px] font-bold uppercase leading-tight tracking-wide text-slate-100">
+        {overlay}
       </span>
-      {side(false, "Main DB")}
-      {side(true, "Roster save")}
-    </div>
+    </Link>
+  );
+}
+
+// One-time notice for the display-source pills: shown on the user's first-ever click, then never
+// again (persisted on this machine).
+/** After the on-load auto-repairs settle, audit the project. When the audit reports
+ *  **error-severity** findings (warnings and info never trigger this), a red pill appears in the
+ *  top bar; clicking it opens the Dashboard (Settings › Dashboard) to review the findings. The
+ *  app itself always lands on the Game Database — no auto-redirect. Hidden when clean. */
+function ErrorsPill({ projectId, enabled }: { projectId: number; enabled: boolean }) {
+  const report = useQuery({
+    queryKey: ["validation", projectId],
+    queryFn: () => call("validate_project", { projectId }),
+    enabled,
+  });
+  const errors = (report.data?.findings ?? []).filter((f) => f.severity === "error").length;
+  if (errors === 0) return null;
+  return (
+    <NavLink
+      to="settings/dashboard"
+      title="The integrity audit found errors — open the Dashboard to review and repair them"
+      className={({ isActive }) =>
+        "flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-colors " +
+        (isActive
+          ? "border-rose-600 bg-rose-900/70 text-rose-100"
+          : "border-rose-700 bg-rose-950/60 text-rose-200 hover:bg-rose-900/60")
+      }
+    >
+      <span aria-hidden>⚠</span>
+      {errors} error{errors === 1 ? "" : "s"} detected
+    </NavLink>
   );
 }
 
@@ -220,11 +226,22 @@ function Breadcrumbs() {
   const trail = useBreadcrumbs();
   const navigate = useNavigate();
   if (trail.length < 2) return null;
+  const prev = trail[trail.length - 2];
   return (
     <nav
       aria-label="Recent views"
       className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-slate-800 bg-slate-950/40 px-4 py-1 text-xs"
     >
+      {/* Back — one step up the trail (same target as clicking the previous crumb). */}
+      <button
+        type="button"
+        onClick={() => navigate(prev.path)}
+        title={`Back to ${prev.label}`}
+        aria-label={`Back to ${prev.label}`}
+        className="mr-1 shrink-0 rounded border border-slate-800 px-1.5 text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-sky-200"
+      >
+        ←
+      </button>
       <span className="mr-1 shrink-0 text-[10px] font-semibold uppercase tracking-wide text-slate-600">
         Recent
       </span>
@@ -501,7 +518,7 @@ function JerseyAutocorrect({ projectId, start }: { projectId: number; start: boo
         <p className="mb-3 text-sm text-slate-300">
           On load, some teams had two players wearing the same number. The first keeps it; the others
           were reassigned the lowest free number. These are staged as pending edits — review them in
-          Pending Edits and <strong>Save</strong> to keep them (or undo).
+          Project Overview and <strong>Save</strong> to keep them (or undo).
         </p>
         <div className="max-h-[45vh] space-y-1 overflow-auto rounded-md border border-slate-800 bg-slate-950/50 p-3">
           {summary.corrections.map((c, i) => (
@@ -522,3 +539,5 @@ function JerseyAutocorrect({ projectId, start }: { projectId: number; start: boo
     </div>
   );
 }
+
+

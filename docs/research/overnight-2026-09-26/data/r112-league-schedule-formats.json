@@ -1,0 +1,1279 @@
+{
+ "note": "R112 - pair-class structure of every league-stem schedule table beyond NHL / AHL / Swiss (receipt 2026-09-26 next task), on the real\nNHL 20, NHL 21 and X360 Legacy sources (hash-checked as in R111). League resolution, never a guessed id:\n  PS4   : table stem -> `stockleagues.name` key (explicit map below, each key read from the title's own stockleagues rows);\n  Legacy: no stockleagues table -> the league of a named member club (map below; club names are shipped fullname strings).\nPer table: members, games, games per team, pairs, games-per-pair by relationship (same division / same conference / other conference, using\nthe league's own group fields as R13), home/away imbalance, slots beyond the member count, a 'single class rule' flag, and - where every\npair plays the same count or two counts - the graph of the higher count (components / cliques), as for Swiss. Observed data only.\nUsage: python r112_league_schedule_formats.py <out.json>\n",
+ "sources": [
+  {
+   "label": "ps4-nhl20-real (CUSA15439 install copy)",
+   "sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "tables": {
+    "qmjhlschedule": {
+     "rows": 612,
+     "league_id": 12,
+     "resolved_by": "stockleagues name 'QMJHL'",
+     "members": 18,
+     "games": 612,
+     "teams_with_games": 18,
+     "games_per_team": {
+      "68": 18
+     },
+     "pairs": 153,
+     "pair_counts": {
+      "2": 72,
+      "3": 4,
+      "4": 26,
+      "5": 8,
+      "6": 23,
+      "7": 2,
+      "8": 4,
+      "9": 12,
+      "10": 2
+     },
+     "by_relationship": {
+      "same-division": {
+       "5": 2,
+       "6": 23,
+       "7": 2,
+       "8": 4,
+       "9": 12,
+       "10": 2
+      },
+      "same-conference-other-division": {
+       "2": 72,
+       "3": 4,
+       "4": 26,
+       "5": 6
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 127,
+      "1": 26
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "ohlschedule": {
+     "rows": 680,
+     "league_id": 11,
+     "resolved_by": "stockleagues name 'OHL'",
+     "members": 20,
+     "games": 680,
+     "teams_with_games": 20,
+     "games_per_team": {
+      "68": 20
+     },
+     "pairs": 190,
+     "pair_counts": {
+      "1": 1,
+      "2": 100,
+      "3": 1,
+      "4": 40,
+      "5": 2,
+      "6": 30,
+      "7": 2,
+      "8": 14
+     },
+     "by_relationship": {
+      "same-division": {
+       "5": 1,
+       "6": 23,
+       "7": 2,
+       "8": 14
+      },
+      "other-conference": {
+       "1": 1,
+       "2": 93,
+       "3": 1,
+       "4": 2,
+       "6": 3
+      },
+      "same-conference-other-division": {
+       "2": 7,
+       "4": 38,
+       "5": 1,
+       "6": 4
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 184,
+      "1": 6
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "whlschedule": {
+     "rows": 748,
+     "league_id": 13,
+     "resolved_by": "stockleagues name 'WHL'",
+     "members": 22,
+     "games": 748,
+     "teams_with_games": 22,
+     "games_per_team": {
+      "68": 22
+     },
+     "pairs": 231,
+     "pair_counts": {
+      "1": 120,
+      "4": 59,
+      "5": 3,
+      "6": 19,
+      "7": 4,
+      "8": 10,
+      "9": 9,
+      "10": 5,
+      "12": 2
+     },
+     "by_relationship": {
+      "same-conference-other-division": {
+       "4": 51,
+       "5": 3,
+       "6": 4,
+       "7": 1,
+       "8": 1,
+       "10": 1
+      },
+      "same-division": {
+       "4": 8,
+       "6": 15,
+       "7": 3,
+       "8": 9,
+       "9": 9,
+       "10": 4,
+       "12": 2
+      },
+      "other-conference": {
+       "1": 120
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 95,
+      "1": 136
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "swedishschedule": {
+     "rows": 364,
+     "league_id": 2,
+     "resolved_by": "stockleagues name 'elitserien'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "austrianschedule": {
+     "rows": 270,
+     "league_id": 7,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_EBEL'",
+     "members": 11,
+     "games": 270,
+     "teams_with_games": 11,
+     "games_per_team": {
+      "48": 5,
+      "50": 6
+     },
+     "pairs": 55,
+     "pair_counts": {
+      "4": 30,
+      "6": 25
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 30,
+       "6": 25
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 55
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       5,
+       6
+      ],
+      "all_cliques": null
+     }
+    },
+    "swedish2ndschedule": {
+     "rows": 364,
+     "league_id": 8,
+     "resolved_by": "stockleagues name 'Allsvenskan'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "czechschedule": {
+     "rows": 364,
+     "league_id": 5,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_O2_EXTRALIGA'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "echlschedule": {
+     "rows": 936,
+     "league_id": 15,
+     "resolved_by": "stockleagues name 'TXT_ECHL'",
+     "members": 26,
+     "games": 936,
+     "teams_with_games": 26,
+     "games_per_team": {
+      "72": 26
+     },
+     "pairs": 166,
+     "pair_counts": {
+      "1": 43,
+      "2": 30,
+      "3": 13,
+      "4": 4,
+      "5": 5,
+      "6": 2,
+      "7": 10,
+      "8": 9,
+      "9": 8,
+      "10": 6,
+      "11": 10,
+      "12": 6,
+      "13": 11,
+      "14": 4,
+      "16": 2,
+      "18": 3
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 1,
+       "5": 2,
+       "6": 2,
+       "7": 10,
+       "8": 8,
+       "9": 7,
+       "10": 6,
+       "11": 10,
+       "12": 6,
+       "13": 11,
+       "14": 4,
+       "16": 2,
+       "18": 3
+      },
+      "same-conference-other-division": {
+       "1": 23,
+       "2": 14,
+       "3": 3,
+       "4": 2,
+       "5": 2,
+       "8": 1
+      },
+      "other-conference": {
+       "1": 20,
+       "2": 16,
+       "3": 10,
+       "4": 1,
+       "5": 1,
+       "9": 1
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 24,
+      "1": 86,
+      "2": 41,
+      "3": 14,
+      "4": 1
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "swissschedule": {
+     "rows": 300,
+     "league_id": 6,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_SWISS_LEAGUE'",
+     "members": 12,
+     "games": 300,
+     "teams_with_games": 12,
+     "games_per_team": {
+      "50": 12
+     },
+     "pairs": 66,
+     "pair_counts": {
+      "4": 48,
+      "6": 18
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 48,
+       "6": 18
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 66
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       4,
+       4,
+       4
+      ],
+      "all_cliques": null
+     }
+    },
+    "germanschedule": {
+     "rows": 364,
+     "league_id": 4,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_DEL'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "finnishschedule": {
+     "rows": 450,
+     "league_id": 3,
+     "resolved_by": "stockleagues name 'SMLIIGA'",
+     "members": 15,
+     "games": 450,
+     "teams_with_games": 15,
+     "games_per_team": {
+      "60": 15
+     },
+     "pairs": 105,
+     "pair_counts": {
+      "4": 90,
+      "6": 15
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 90,
+       "6": 15
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 105
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       3,
+       3,
+       3,
+       3,
+       3
+      ],
+      "all_cliques": null
+     }
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl21",
+   "sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "tables": {
+    "qmjhlschedule": {
+     "rows": 612,
+     "league_id": 12,
+     "resolved_by": "stockleagues name 'QMJHL'",
+     "members": 18,
+     "games": 612,
+     "teams_with_games": 18,
+     "games_per_team": {
+      "68": 18
+     },
+     "pairs": 153,
+     "pair_counts": {
+      "2": 72,
+      "3": 4,
+      "4": 26,
+      "5": 8,
+      "6": 23,
+      "7": 2,
+      "8": 4,
+      "9": 12,
+      "10": 2
+     },
+     "by_relationship": {
+      "same-division": {
+       "5": 2,
+       "6": 23,
+       "7": 2,
+       "8": 4,
+       "9": 12,
+       "10": 2
+      },
+      "same-conference-other-division": {
+       "2": 72,
+       "3": 4,
+       "4": 26,
+       "5": 6
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 127,
+      "1": 26
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "ohlschedule": {
+     "rows": 680,
+     "league_id": 11,
+     "resolved_by": "stockleagues name 'OHL'",
+     "members": 20,
+     "games": 680,
+     "teams_with_games": 20,
+     "games_per_team": {
+      "68": 20
+     },
+     "pairs": 190,
+     "pair_counts": {
+      "1": 1,
+      "2": 100,
+      "3": 1,
+      "4": 40,
+      "5": 2,
+      "6": 30,
+      "7": 2,
+      "8": 14
+     },
+     "by_relationship": {
+      "same-division": {
+       "5": 1,
+       "6": 23,
+       "7": 2,
+       "8": 14
+      },
+      "other-conference": {
+       "1": 1,
+       "2": 93,
+       "3": 1,
+       "4": 2,
+       "6": 3
+      },
+      "same-conference-other-division": {
+       "2": 7,
+       "4": 38,
+       "5": 1,
+       "6": 4
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 184,
+      "1": 6
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "whlschedule": {
+     "rows": 748,
+     "league_id": 13,
+     "resolved_by": "stockleagues name 'WHL'",
+     "members": 22,
+     "games": 748,
+     "teams_with_games": 22,
+     "games_per_team": {
+      "68": 22
+     },
+     "pairs": 231,
+     "pair_counts": {
+      "1": 120,
+      "4": 59,
+      "5": 3,
+      "6": 19,
+      "7": 4,
+      "8": 10,
+      "9": 9,
+      "10": 5,
+      "12": 2
+     },
+     "by_relationship": {
+      "same-conference-other-division": {
+       "4": 51,
+       "5": 3,
+       "6": 4,
+       "7": 1,
+       "8": 1,
+       "10": 1
+      },
+      "same-division": {
+       "4": 8,
+       "6": 15,
+       "7": 3,
+       "8": 9,
+       "9": 9,
+       "10": 4,
+       "12": 2
+      },
+      "other-conference": {
+       "1": 120
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 95,
+      "1": 136
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "swedishschedule": {
+     "rows": 364,
+     "league_id": 2,
+     "resolved_by": "stockleagues name 'elitserien'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "austrianschedule": {
+     "rows": 270,
+     "league_id": 7,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_EBEL'",
+     "members": 11,
+     "games": 270,
+     "teams_with_games": 11,
+     "games_per_team": {
+      "48": 5,
+      "50": 6
+     },
+     "pairs": 55,
+     "pair_counts": {
+      "4": 30,
+      "6": 25
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 30,
+       "6": 25
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 55
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       5,
+       6
+      ],
+      "all_cliques": null
+     }
+    },
+    "swedish2ndschedule": {
+     "rows": 364,
+     "league_id": 8,
+     "resolved_by": "stockleagues name 'Allsvenskan'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "czechschedule": {
+     "rows": 364,
+     "league_id": 5,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_O2_EXTRALIGA'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "echlschedule": {
+     "rows": 936,
+     "league_id": 15,
+     "resolved_by": "stockleagues name 'TXT_ECHL'",
+     "members": 26,
+     "games": 936,
+     "teams_with_games": 26,
+     "games_per_team": {
+      "72": 26
+     },
+     "pairs": 166,
+     "pair_counts": {
+      "1": 43,
+      "2": 30,
+      "3": 13,
+      "4": 4,
+      "5": 5,
+      "6": 2,
+      "7": 10,
+      "8": 9,
+      "9": 8,
+      "10": 6,
+      "11": 10,
+      "12": 6,
+      "13": 11,
+      "14": 4,
+      "16": 2,
+      "18": 3
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 1,
+       "5": 2,
+       "6": 2,
+       "7": 10,
+       "8": 8,
+       "9": 7,
+       "10": 6,
+       "11": 10,
+       "12": 6,
+       "13": 11,
+       "14": 4,
+       "16": 2,
+       "18": 3
+      },
+      "same-conference-other-division": {
+       "1": 23,
+       "2": 14,
+       "3": 3,
+       "4": 2,
+       "5": 2,
+       "8": 1
+      },
+      "other-conference": {
+       "1": 20,
+       "2": 16,
+       "3": 10,
+       "4": 1,
+       "5": 1,
+       "9": 1
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 24,
+      "1": 86,
+      "2": 41,
+      "3": 14,
+      "4": 1
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "swissschedule": {
+     "rows": 300,
+     "league_id": 6,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_SWISS_LEAGUE'",
+     "members": 12,
+     "games": 300,
+     "teams_with_games": 12,
+     "games_per_team": {
+      "50": 12
+     },
+     "pairs": 66,
+     "pair_counts": {
+      "4": 48,
+      "6": 18
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 48,
+       "6": 18
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 66
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       4,
+       4,
+       4
+      ],
+      "all_cliques": null
+     }
+    },
+    "germanschedule": {
+     "rows": 364,
+     "league_id": 4,
+     "resolved_by": "stockleagues name 'TXT_LEAGUE_DEL'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "finnishschedule": {
+     "rows": 450,
+     "league_id": 3,
+     "resolved_by": "stockleagues name 'SMLIIGA'",
+     "members": 15,
+     "games": 450,
+     "teams_with_games": 15,
+     "games_per_team": {
+      "60": 15
+     },
+     "pairs": 105,
+     "pair_counts": {
+      "4": 90,
+      "6": 15
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 90,
+       "6": 15
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 105
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       3,
+       3,
+       3,
+       3,
+       3
+      ],
+      "all_cliques": null
+     }
+    }
+   }
+  },
+  {
+   "label": "xbox360-nhllegacy",
+   "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "tables": {
+    "qmjhlschedule": {
+     "rows": 612,
+     "league_id": 10,
+     "resolved_by": "club 'rimouski'",
+     "members": 18,
+     "games": 612,
+     "teams_with_games": 18,
+     "games_per_team": {
+      "68": 18
+     },
+     "pairs": 153,
+     "pair_counts": {
+      "2": 72,
+      "3": 4,
+      "4": 28,
+      "5": 4,
+      "6": 26,
+      "8": 5,
+      "9": 12,
+      "10": 2
+     },
+     "by_relationship": {
+      "same-conference-other-division": {
+       "2": 72,
+       "3": 4,
+       "4": 20,
+       "5": 2,
+       "6": 10
+      },
+      "same-division": {
+       "4": 8,
+       "5": 2,
+       "6": 16,
+       "8": 5,
+       "9": 12,
+       "10": 2
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 133,
+      "1": 20
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "ohlschedule": {
+     "rows": 680,
+     "league_id": 9,
+     "resolved_by": "club 'london knights'",
+     "members": 20,
+     "games": 680,
+     "teams_with_games": 20,
+     "games_per_team": {
+      "68": 20
+     },
+     "pairs": 190,
+     "pair_counts": {
+      "2": 102,
+      "4": 41,
+      "6": 32,
+      "8": 15
+     },
+     "by_relationship": {
+      "same-conference-other-division": {
+       "2": 7,
+       "4": 39,
+       "6": 4
+      },
+      "same-division": {
+       "6": 25,
+       "8": 15
+      },
+      "other-conference": {
+       "2": 95,
+       "4": 2,
+       "6": 3
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 190
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "whlschedule": {
+     "rows": 792,
+     "league_id": 11,
+     "resolved_by": "club 'kelowna'",
+     "members": 22,
+     "games": 792,
+     "teams_with_games": 22,
+     "games_per_team": {
+      "72": 22
+     },
+     "pairs": 231,
+     "pair_counts": {
+      "1": 94,
+      "2": 19,
+      "3": 7,
+      "4": 59,
+      "5": 1,
+      "6": 13,
+      "7": 6,
+      "8": 23,
+      "10": 7,
+      "12": 2
+     },
+     "by_relationship": {
+      "same-division": {
+       "6": 12,
+       "7": 6,
+       "8": 23,
+       "10": 7,
+       "12": 2
+      },
+      "same-conference-other-division": {
+       "2": 1,
+       "4": 59,
+       "6": 1
+      },
+      "other-conference": {
+       "1": 94,
+       "2": 18,
+       "3": 7,
+       "5": 1
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 114,
+      "1": 108,
+      "2": 9
+     },
+     "single_class_rule": false,
+     "top_count_graph": null
+    },
+    "swedishschedule": {
+     "rows": 364,
+     "league_id": 2,
+     "resolved_by": "club 'frölunda'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "czechschedule": {
+     "rows": 364,
+     "league_id": 5,
+     "resolved_by": "club 'sparta'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "swissschedule": {
+     "rows": 300,
+     "league_id": 6,
+     "resolved_by": "club 'davos'",
+     "members": 12,
+     "games": 300,
+     "teams_with_games": 12,
+     "games_per_team": {
+      "50": 12
+     },
+     "pairs": 66,
+     "pair_counts": {
+      "4": 48,
+      "6": 18
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 48,
+       "6": 18
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 66
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       4,
+       4,
+       4
+      ],
+      "all_cliques": null
+     }
+    },
+    "germanschedule": {
+     "rows": 364,
+     "league_id": 4,
+     "resolved_by": "club 'eisbären'",
+     "members": 14,
+     "games": 364,
+     "teams_with_games": 14,
+     "games_per_team": {
+      "52": 14
+     },
+     "pairs": 91,
+     "pair_counts": {
+      "4": 91
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 91
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "single_class_rule": true,
+     "top_count_graph": {
+      "top_count": 4,
+      "component_sizes": [
+       14
+      ],
+      "all_cliques": null
+     }
+    },
+    "finnishschedule": {
+     "rows": 450,
+     "league_id": 3,
+     "resolved_by": "club 'tappara'",
+     "members": 15,
+     "games": 450,
+     "teams_with_games": 15,
+     "games_per_team": {
+      "60": 15
+     },
+     "pairs": 105,
+     "pair_counts": {
+      "4": 90,
+      "6": 15
+     },
+     "by_relationship": {
+      "same-division": {
+       "4": 90,
+       "6": 15
+      }
+     },
+     "unresolved_pairs": 0,
+     "slots_beyond_members": [],
+     "home_away_imbalance": {
+      "0": 105
+     },
+     "single_class_rule": false,
+     "top_count_graph": {
+      "top_count": 6,
+      "component_sizes": [
+       3,
+       3,
+       3,
+       3,
+       3
+      ],
+      "all_cliques": null
+     }
+    }
+   }
+  }
+ ]
+}

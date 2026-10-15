@@ -1,0 +1,1231 @@
+{
+ "note": "R49 \u2014 PS4 EA-Opus (SNS codec 0x0c, NHL 18\u201321) sample-preview decode contract with known vectors. Read-only on the banks; the only writes\nare temporary Ogg / WAV files in the session scratchpad (removed unless --keep).\n\nChain measured per sample: `.sbr` DSET record (.SID, .OFF, .DUR) \u2192 `.sbs` SNS block stream (0x48 header = SNR: codec 0x0c, 48 000 Hz, channel\nconfig, num_samples; 0x44 data blocks: u24 size | u32 samples-in-block | payload; 0x45 end) \u2192 payload = u16 BE length-prefixed Opus packets\ntiling the payload exactly \u2192 each packet's TOC byte (RFC 6716 \u00a73.1: config \u2192 mode / bandwidth / frame duration; stereo bit; frame-count code)\n\u2192 frame count \u00d7 duration summed over the packets = the Opus sample count (48 kHz) \u2192 compared with the SNR num_samples, the data blocks'\nsamples-in-block and the DSET .DUR. Then the packets are re-framed as an Ogg Opus stream (OpusHead, OpusTags, one page per packet, granule =\ncumulative 48 kHz samples + pre-skip) and decoded with the locally installed ffmpeg (libopus / opus) to WAV; the decoded sample count is\ncompared with the declared count. Decode only \u2014 no encoder is claimed. Vectors: N records from each title's `pbp_samples_inxp.sbr` (or the\nlargest bank), chosen deterministically (first, last and evenly spaced .SIDs), with SHA-256 of the raw SNS bytes and of the decoded PCM.\nUsage: python r49_ea_opus_preview_vectors.py <out.json> [--titles nhl18,nhl19,nhl20,nhl21] [--per-title 6] [--keep]\n",
+ "ffmpeg": "ffmpeg version 8.1.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+ "titles": {
+  "nhl18": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA07569\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbr",
+   "stream": "H:\\Emulators\\ShadPS4\\Games\\CUSA07569\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbs",
+   "dset": 4092,
+   "records": 2596,
+   "summary": {
+    "vectors": 6,
+    "codec_0x0c": 6,
+    "packets_tile_payloads": 6,
+    "toc_samples_eq_snr_num_samples": 0,
+    "toc_samples_eq_block_samples": 0,
+    "decoded": 6,
+    "decoded_frames_eq_declared": 0,
+    "decoded_frames_eq_declared_minus_preskip": 6
+   },
+   "vectors": [
+    {
+     "sid": 15466,
+     "off": 435256160,
+     "dur_declared_s": 0.512521,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 24601
+     },
+     "sns_bytes": 3548,
+     "sns_sha256": "64f63028e975fa4b77af1073fc48eed1c59c52c4d9d41523b51817d2ab66935c",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      3793
+     ],
+     "packets": 26,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 24960,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 24960,
+      "wav_bits": 16,
+      "pcm_sha256": "60ce65034cd6556fb45d682d42132efb3d2f3d0e19943aca5a3d6cae3335d41c",
+      "pcm_peak_abs": 19439
+     },
+     "decoded_s": 0.52
+    },
+    {
+     "sid": 36985,
+     "off": 436265792,
+     "dur_declared_s": 0.300125,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 14406
+     },
+     "sns_bytes": 2240,
+     "sns_sha256": "91ac247c40c1f22b04449ace2518ebc6f299c255cce86ada53fe26cffd3c3eeb",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      4158
+     ],
+     "packets": 16,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 15360,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 15360,
+      "wav_bits": 16,
+      "pcm_sha256": "5c61cbce154ed377434930e5d69d962da1448602d492d4a64093951e09984bda",
+      "pcm_peak_abs": 29266
+     },
+     "decoded_s": 0.32
+    },
+    {
+     "sid": 40440,
+     "off": 436758784,
+     "dur_declared_s": 0.580729,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 27875
+     },
+     "sns_bytes": 4072,
+     "sns_sha256": "9558adb748b2a5ec507bfb378889dfb3e098b47b32b23be5f64e202905587ada",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      7067
+     ],
+     "packets": 30,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 28800,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 28800,
+      "wav_bits": 16,
+      "pcm_sha256": "dac444a48f4d48f3a4b3f69be0055c4c4fc27c07bc0a41df336026398d5d7804",
+      "pcm_peak_abs": 25167
+     },
+     "decoded_s": 0.6
+    },
+    {
+     "sid": 44448,
+     "off": 435708704,
+     "dur_declared_s": 0.344125,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 16518
+     },
+     "sns_bytes": 2512,
+     "sns_sha256": "03e4f7a69a4b91015b53f068f60f8f4032178426f28b47b3ed8d85fe1c1cac34",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      6270
+     ],
+     "packets": 18,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 17280,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 17280,
+      "wav_bits": 16,
+      "pcm_sha256": "110a49aa5a4212f94d7d9c73f8356151886e41521eaabcf489fdc6a4ef59461b",
+      "pcm_peak_abs": 20967
+     },
+     "decoded_s": 0.36
+    },
+    {
+     "sid": 47977,
+     "off": 436539936,
+     "dur_declared_s": 0.358208,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 17194
+     },
+     "sns_bytes": 2644,
+     "sns_sha256": "9fcc888036a1cdf09e959a3b29c18b6423308b002635d990a82509d7303e1864",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      6946
+     ],
+     "packets": 19,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 18240,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 18240,
+      "wav_bits": 16,
+      "pcm_sha256": "0d11dfad20bf16b679306a837b408fe8d9793087ca2540830255437a78b8f187",
+      "pcm_peak_abs": 19601
+     },
+     "decoded_s": 0.38
+    },
+    {
+     "sid": 88943,
+     "off": 439070432,
+     "dur_declared_s": 0.399563,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 19179
+     },
+     "sns_bytes": 2812,
+     "sns_sha256": "7794fc175227a16bb97bcb8d6b5f8eb9dc4f0ded647c2ca4c4ebf023620132d8",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      8931
+     ],
+     "packets": 21,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 20160,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 20160,
+      "wav_bits": 16,
+      "pcm_sha256": "f9088f3c2ca21448d582024c063d5d8f4ef52d0e08021100a7d770f2db7068bd",
+      "pcm_peak_abs": 22946
+     },
+     "decoded_s": 0.42
+    }
+   ]
+  },
+  "nhl19": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA11126\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbr",
+   "stream": "H:\\Emulators\\ShadPS4\\Games\\CUSA11126\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbs",
+   "dset": 4459,
+   "records": 2777,
+   "summary": {
+    "vectors": 6,
+    "codec_0x0c": 6,
+    "packets_tile_payloads": 6,
+    "toc_samples_eq_snr_num_samples": 0,
+    "toc_samples_eq_block_samples": 0,
+    "decoded": 6,
+    "decoded_frames_eq_declared": 0,
+    "decoded_frames_eq_declared_minus_preskip": 6
+   },
+   "vectors": [
+    {
+     "sid": 7239,
+     "off": 636998656,
+     "dur_declared_s": 0.916313,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 43983
+     },
+     "sns_bytes": 6232,
+     "sns_sha256": "9a3b726819d1af78ef2d38a2d2d66172d7f9c3dc59ad29d53b10a96a8c5da5a6",
+     "blocks": 5,
+     "block_samples": [
+      10248,
+      10560,
+      10560,
+      10560,
+      2055
+     ],
+     "packets": 47,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 45120,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 45120,
+      "wav_bits": 16,
+      "pcm_sha256": "2e48aa31a549c212be1ca73f72c7894db09d011dfb7ab487b488ea400a43af48",
+      "pcm_peak_abs": 21185
+     },
+     "decoded_s": 0.94
+    },
+    {
+     "sid": 38600,
+     "off": 638802016,
+     "dur_declared_s": 0.789417,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 37892
+     },
+     "sns_bytes": 5296,
+     "sns_sha256": "926586907fe5a71515e98f30512ed14636586a129c205062486ae587b3982032",
+     "blocks": 4,
+     "block_samples": [
+      10248,
+      10560,
+      10560,
+      6524
+     ],
+     "packets": 40,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 38400,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 38400,
+      "wav_bits": 16,
+      "pcm_sha256": "dc4bb5b1baca20fc62fbdcfd05f65b4aec4d60badc03669cc3f235acb4c7cfd4",
+      "pcm_peak_abs": 25578
+     },
+     "decoded_s": 0.8
+    },
+    {
+     "sid": 44104,
+     "off": 637608128,
+     "dur_declared_s": 0.565917,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 27164
+     },
+     "sns_bytes": 3964,
+     "sns_sha256": "f715f2d29bb77b88eb526f3a3c8e8ac569b1d7412fb5d8143ec2f970d1169e2c",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      6356
+     ],
+     "packets": 29,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 27840,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 27840,
+      "wav_bits": 16,
+      "pcm_sha256": "558ade2384e580fe981bf5a9b0ae6472e47d4fe74f074c8336a7f39fa322d511",
+      "pcm_peak_abs": 22390
+     },
+     "decoded_s": 0.58
+    },
+    {
+     "sid": 69517,
+     "off": 640935072,
+     "dur_declared_s": 0.709021,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 34033
+     },
+     "sns_bytes": 4828,
+     "sns_sha256": "0e7c0c72235b8d69855b59aa9ae1ba0aeb807ca00ffd73974e43f4da59fa7568",
+     "blocks": 4,
+     "block_samples": [
+      10248,
+      10560,
+      10560,
+      2665
+     ],
+     "packets": 36,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 34560,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 34560,
+      "wav_bits": 16,
+      "pcm_sha256": "8f4c6bc86154e036c70e744796d8c7efe10e4fff9fdc70b5f4b2edb47ecf6420",
+      "pcm_peak_abs": 28525
+     },
+     "decoded_s": 0.72
+    },
+    {
+     "sid": 95692,
+     "off": 643803904,
+     "dur_declared_s": 1.1405,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 54744
+     },
+     "sns_bytes": 7676,
+     "sns_sha256": "80808ced9e55d826dbe665ba5323a6e3a891e242d0e209442f54e4253ac0f392",
+     "blocks": 6,
+     "block_samples": [
+      10248,
+      10560,
+      10560,
+      10560,
+      10560,
+      2256
+     ],
+     "packets": 58,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 55680,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 55680,
+      "wav_bits": 16,
+      "pcm_sha256": "8ab206d546a80c5d21a3b46fb9234167eae7865c140b612f54346133c18a6492",
+      "pcm_peak_abs": 22635
+     },
+     "decoded_s": 1.16
+    },
+    {
+     "sid": 100423,
+     "off": 644223648,
+     "dur_declared_s": 1.07675,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 51684
+     },
+     "sns_bytes": 7276,
+     "sns_sha256": "b846b1962e8adcc46b69fcf19697fba679e83e32fc2660107959e713a85575de",
+     "blocks": 5,
+     "block_samples": [
+      10248,
+      10560,
+      10560,
+      10560,
+      9756
+     ],
+     "packets": 55,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 52800,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 52800,
+      "wav_bits": 16,
+      "pcm_sha256": "5e513b005a6776d5c585b681e9af6c6f723b629b16d43eecaa8769d55be774a9",
+      "pcm_peak_abs": 25233
+     },
+     "decoded_s": 1.1
+    }
+   ]
+  },
+  "nhl20": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbr",
+   "stream": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbs",
+   "dset": 2658,
+   "records": 2460,
+   "summary": {
+    "vectors": 6,
+    "codec_0x0c": 6,
+    "packets_tile_payloads": 6,
+    "toc_samples_eq_snr_num_samples": 0,
+    "toc_samples_eq_block_samples": 0,
+    "decoded": 6,
+    "decoded_frames_eq_declared": 0,
+    "decoded_frames_eq_declared_minus_preskip": 6
+   },
+   "vectors": [
+    {
+     "sid": 7748,
+     "off": 518232896,
+     "dur_declared_s": 0.350729,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 16835
+     },
+     "sns_bytes": 2492,
+     "sns_sha256": "5f19a9e8c2c5d1ac720e7cc08b0f13ccebb736cafdb16c258da1b12828bad747",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      6587
+     ],
+     "packets": 18,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 17280,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 17280,
+      "wav_bits": 16,
+      "pcm_sha256": "7e210a63315cea00dc1f7c132f67a9caadca8ab4bcc9a52771f0e85f9f79e1f2",
+      "pcm_peak_abs": 26088
+     },
+     "decoded_s": 0.36
+    },
+    {
+     "sid": 12744,
+     "off": 520158528,
+     "dur_declared_s": 0.605521,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 29065
+     },
+     "sns_bytes": 4188,
+     "sns_sha256": "b14876e342819403dd1591bc3ba7395fcf57b9bdedaa951d72b5251906f526e1",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      8257
+     ],
+     "packets": 31,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 29760,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 29760,
+      "wav_bits": 16,
+      "pcm_sha256": "780b0b6968818abe0848541943a2673cbed6214f4aca07bb0066135c4b6ab79b",
+      "pcm_peak_abs": 31040
+     },
+     "decoded_s": 0.62
+    },
+    {
+     "sid": 21863,
+     "off": 521936512,
+     "dur_declared_s": 0.533792,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 25622
+     },
+     "sns_bytes": 3764,
+     "sns_sha256": "b88011211f0f3ac49662fb9cb6f34ab88564afce145b4dd5435d8c0e7ac35ee7",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      4814
+     ],
+     "packets": 28,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 26880,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 26880,
+      "wav_bits": 16,
+      "pcm_sha256": "995823b770aa96b3114f47eb33f41a01823caf4bf1292d3a9171e58fc4b5abe4",
+      "pcm_peak_abs": 24242
+     },
+     "decoded_s": 0.56
+    },
+    {
+     "sid": 23123,
+     "off": 523601504,
+     "dur_declared_s": 0.482188,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 23145
+     },
+     "sns_bytes": 3420,
+     "sns_sha256": "69d752a7999d8d90693de28db6aca9109a45aae2cac1a4a926bad38b7da20130",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      2337
+     ],
+     "packets": 25,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 24000,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 24000,
+      "wav_bits": 16,
+      "pcm_sha256": "d9c06c672484e44b4d99678f5232e2318d4f7a826af786ba6eb46fd1a104105c",
+      "pcm_peak_abs": 27651
+     },
+     "decoded_s": 0.5
+    },
+    {
+     "sid": 23616,
+     "off": 525298016,
+     "dur_declared_s": 0.481771,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 23125
+     },
+     "sns_bytes": 3416,
+     "sns_sha256": "3731e0b0e641ac64db5a3b843c2cc86f3d7700658952bb891761c82c9de5de8a",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      2317
+     ],
+     "packets": 25,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 24000,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 24000,
+      "wav_bits": 16,
+      "pcm_sha256": "16fa531224290facddf33f657f2aad00057da2b3a33e61029f15efaed4d06cb7",
+      "pcm_peak_abs": 25106
+     },
+     "decoded_s": 0.5
+    },
+    {
+     "sid": 25373,
+     "off": 527037056,
+     "dur_declared_s": 0.500687,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 24033
+     },
+     "sns_bytes": 3572,
+     "sns_sha256": "81df307022aa8727d4eb322114cdb5b0d34bc6b44c7faec8dfbbaea5ae130cca",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      3225
+     ],
+     "packets": 26,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 24960,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 24960,
+      "wav_bits": 16,
+      "pcm_sha256": "821b1f34fff10c8a9311121ff61dfc45d3fa87de3935a2a37c7103038285335e",
+      "pcm_peak_abs": 26552
+     },
+     "decoded_s": 0.52
+    }
+   ]
+  },
+  "nhl21": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbr",
+   "stream": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbs",
+   "dset": 3693,
+   "records": 3237,
+   "summary": {
+    "vectors": 6,
+    "codec_0x0c": 6,
+    "packets_tile_payloads": 6,
+    "toc_samples_eq_snr_num_samples": 0,
+    "toc_samples_eq_block_samples": 0,
+    "decoded": 6,
+    "decoded_frames_eq_declared": 0,
+    "decoded_frames_eq_declared_minus_preskip": 6
+   },
+   "vectors": [
+    {
+     "sid": 7748,
+     "off": 965757344,
+     "dur_declared_s": 0.350729,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 16835
+     },
+     "sns_bytes": 2492,
+     "sns_sha256": "5f19a9e8c2c5d1ac720e7cc08b0f13ccebb736cafdb16c258da1b12828bad747",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      6587
+     ],
+     "packets": 18,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 17280,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 17280,
+      "wav_bits": 16,
+      "pcm_sha256": "7e210a63315cea00dc1f7c132f67a9caadca8ab4bcc9a52771f0e85f9f79e1f2",
+      "pcm_peak_abs": 26088
+     },
+     "decoded_s": 0.36
+    },
+    {
+     "sid": 12901,
+     "off": 968313760,
+     "dur_declared_s": 0.494271,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 23725
+     },
+     "sns_bytes": 3536,
+     "sns_sha256": "44858db52139ae254790b197640e46210c3b07e48a65222db8ee23e15fe50313",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      2917
+     ],
+     "packets": 26,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 24960,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 24960,
+      "wav_bits": 16,
+      "pcm_sha256": "4483b3931f4f4e2507f735b92eb8164eed4e6ee984d72a9fd32fe5a9bdd454b6",
+      "pcm_peak_abs": 26077
+     },
+     "decoded_s": 0.52
+    },
+    {
+     "sid": 22175,
+     "off": 970509280,
+     "dur_declared_s": 0.376396,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 18067
+     },
+     "sns_bytes": 2740,
+     "sns_sha256": "68add8861be46db6fa21c4ee538d6ffe5a58e6a799277f39e6d4ea021e33a334",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      7819
+     ],
+     "packets": 20,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 19200,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 19200,
+      "wav_bits": 16,
+      "pcm_sha256": "539d484226d7f0883a709ddb35ca181daea472dd41fbac26a99f0bb108caa795",
+      "pcm_peak_abs": 21735
+     },
+     "decoded_s": 0.4
+    },
+    {
+     "sid": 23592,
+     "off": 972735552,
+     "dur_declared_s": 0.482354,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 23153
+     },
+     "sns_bytes": 3400,
+     "sns_sha256": "394f71d30b3b090fd5de220ffb4a57bfc61f270cacb1954ec20a11216f9ada4b",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      2345
+     ],
+     "packets": 25,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 24000,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 24000,
+      "wav_bits": 16,
+      "pcm_sha256": "013de88306cc7e28beeb22efafbb4f20c0786dfeec369805f6bf20ada195bc78",
+      "pcm_peak_abs": 25650
+     },
+     "decoded_s": 0.5
+    },
+    {
+     "sid": 32577,
+     "off": 975064320,
+     "dur_declared_s": 0.508833,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 24424
+     },
+     "sns_bytes": 3576,
+     "sns_sha256": "7ac4130f09eda55bf4ae5835239e193b2cfd431712fb97fc499c9b58b3a5b3e0",
+     "blocks": 3,
+     "block_samples": [
+      10248,
+      10560,
+      3616
+     ],
+     "packets": 26,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 24960,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 24960,
+      "wav_bits": 16,
+      "pcm_sha256": "006d7e785b514a2eb81a9ee5190fe17e7f6964eb6c7f738a32e42c32ccaaeff6",
+      "pcm_peak_abs": 24140
+     },
+     "decoded_s": 0.52
+    },
+    {
+     "sid": 38843,
+     "off": 977350496,
+     "dur_declared_s": 0.320021,
+     "snr": {
+      "version": 1,
+      "codec": "ea-opus",
+      "codec_code": 12,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 15361
+     },
+     "sns_bytes": 2360,
+     "sns_sha256": "955d1bd501426ede97b194c9a80d6a1fd517554c7ab4f39d61750102fafad157",
+     "blocks": 2,
+     "block_samples": [
+      10248,
+      5113
+     ],
+     "packets": 17,
+     "packets_tile_payloads": true,
+     "toc_configs": [
+      [
+       31,
+       "CELT-FB",
+       20,
+       0,
+       0
+      ]
+     ],
+     "toc_samples": 16320,
+     "toc_eq_num_samples": false,
+     "toc_eq_block_samples": false,
+     "decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "",
+      "wav_channels": 1,
+      "wav_rate": 48000,
+      "wav_frames": 16320,
+      "wav_bits": 16,
+      "pcm_sha256": "c9d37b2129384dbff72e2003cd72c90d03311487a1fd021b0fbee45264656ac8",
+      "pcm_peak_abs": 28506
+     },
+     "decoded_s": 0.34
+    }
+   ]
+  }
+ }
+}

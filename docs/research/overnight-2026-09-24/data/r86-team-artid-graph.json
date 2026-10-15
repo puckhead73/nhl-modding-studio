@@ -1,0 +1,6168 @@
+{
+ "note": "R86 - Team `artid` identity space and DB-side reference graph on every committed main-database anchor (Xbox 360 08-Legacy,\nPS3 08-Legacy, PS4 15-21; NHL 07 skipped - gen6 schema, no `exhibitionteams`). Read-only over `anchors/`.\n\nPer anchor:\n  identity   `exhibitionteams` (+ `leagueteams` / `customteams` where present): the `artid` field's declared depth / range, rows,\n             distinct artids, duplicate artids (rows sharing one), free artids inside the declared range, sentinel-looking values\n             (0, the range maximum, 255, 1000+), `index` uniqueness, the `index` -> `artid` map size; the same for `teamtype` / `custom`\n             classes when the table has such a field (name containing 'type' or 'custom').\n  references every field in every table whose name contains 'artid' (except `artid` on `exhibitionteams` itself, player / arena / league\n             art ids): rows, distinct, non-zero values covered by the exhibitionteams artid set (fraction), the values outside it\n             (first 20) - a column is a team-artid reference when coverage >= 0.95 of its non-zero values; the R14 census classes are\n             cited for the 'index'-keyed references (not re-measured here).\n  collision  for a hypothetical re-identification a -> b: b must be free (not held by any exhibitionteams row) and inside the declared\n             range; the count of free targets per anchor; whether any artid-keyed column holds b already (a stale reference).\nUsage: python r86_team_artid_graph.py <out.json>\n",
+ "anchors": {
+  "xbox360/nhl08": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl08\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 138,
+     "artid_depth_bits": 8,
+     "artid_range": [
+      0,
+      255
+     ],
+     "distinct_artids": 108,
+     "duplicate_artids": {
+      "0": 31
+     },
+     "artid_min_max": [
+      0,
+      158
+     ],
+     "free_artids_in_range": 148,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      251,
+      252,
+      253,
+      254,
+      255
+     ],
+     "sentinel_like": {
+      "0": 31
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      137
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 29,
+       "2": 12,
+       "3": 14,
+       "4": 21,
+       "5": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "range": [
+      "-1",
+      "16382"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 138,
+     "distinct": 31,
+     "nonzero": 107,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leagueteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhl09": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl09\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 188,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 158,
+     "duplicate_artids": {
+      "0": 31
+     },
+     "artid_min_max": [
+      0,
+      509
+     ],
+     "free_artids_in_range": 32610,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 31
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      187
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 29,
+       "2": 12,
+       "3": 14,
+       "4": 15,
+       "5": 14,
+       "6": 20,
+       "7": 21,
+       "8": 1,
+       "9": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 188,
+     "distinct": 15,
+     "nonzero": 188,
+     "coverage_by_exhibitionteams_artid": 0.133,
+     "values_outside": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      109
+     ],
+     "values_outside_count": 13,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhl10": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl10\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 182,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 153,
+     "duplicate_artids": {
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32615,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      181
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 29,
+       "2": 12,
+       "3": 14,
+       "4": 15,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 1,
+       "9": 2,
+       "10": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhl11": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl11\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 242,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      241
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 15,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 627,
+     "distinct": 212,
+     "nonzero": 622,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhl12": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl12\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 243,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 212,
+     "duplicate_artids": {
+      "23": 2,
+      "29": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32556,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      242
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 17,
+       "10": 22,
+       "11": 2,
+       "12": 1,
+       "14": 2,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 676,
+     "distinct": 211,
+     "nonzero": 669,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhl13": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl13\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 248,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "505": 3,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      247
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 3,
+       "14": 4,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 684,
+     "distinct": 212,
+     "nonzero": 677,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhl14": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl14\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 246,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      245
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 1,
+       "14": 4,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 704,
+     "distinct": 212,
+     "nonzero": 697,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhl15": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhl15\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 246,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      245
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 1,
+       "14": 4,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 659,
+     "distinct": 212,
+     "nonzero": 650,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "xbox360/nhllegacy": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhllegacy\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 252,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 218,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "255": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32550,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1,
+      "255": 2
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      251
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 2,
+       "8": 21,
+       "9": 20,
+       "10": 18,
+       "11": 22,
+       "12": 2,
+       "14": 4,
+       "15": 2,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 703,
+     "distinct": 217,
+     "nonzero": 694,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl08": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl08\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 138,
+     "artid_depth_bits": 8,
+     "artid_range": [
+      0,
+      255
+     ],
+     "distinct_artids": 108,
+     "duplicate_artids": {
+      "0": 31
+     },
+     "artid_min_max": [
+      0,
+      158
+     ],
+     "free_artids_in_range": 148,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      251,
+      252,
+      253,
+      254,
+      255
+     ],
+     "sentinel_like": {
+      "0": 31
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      137
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 29,
+       "2": 12,
+       "3": 14,
+       "4": 21,
+       "5": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "range": [
+      "-1",
+      "16382"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 138,
+     "distinct": 31,
+     "nonzero": 107,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leagueteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl09": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl09\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 188,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 158,
+     "duplicate_artids": {
+      "0": 31
+     },
+     "artid_min_max": [
+      0,
+      509
+     ],
+     "free_artids_in_range": 32610,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 31
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      187
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 29,
+       "2": 12,
+       "3": 14,
+       "4": 15,
+       "5": 14,
+       "6": 20,
+       "7": 21,
+       "8": 1,
+       "9": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 188,
+     "distinct": 15,
+     "nonzero": 188,
+     "coverage_by_exhibitionteams_artid": 0.133,
+     "values_outside": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      109
+     ],
+     "values_outside_count": 13,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueteams",
+     "field": "coachartid",
+     "depth": 13,
+     "range": [
+      "0",
+      "8191"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl10": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl10\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 182,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 153,
+     "duplicate_artids": {
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32615,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      181
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 29,
+       "2": 12,
+       "3": 14,
+       "4": 15,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 1,
+       "9": 2,
+       "10": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl11": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl11\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 242,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      241
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 15,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leaguerookieplayerbiotable",
+     "field": "artid",
+     "depth": 14,
+     "range": [
+      "0",
+      "16383"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 627,
+     "distinct": 212,
+     "nonzero": 622,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl12": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl12\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 243,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 212,
+     "duplicate_artids": {
+      "23": 2,
+      "29": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32556,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      242
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 17,
+       "10": 22,
+       "11": 2,
+       "12": 1,
+       "14": 2,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 676,
+     "distinct": 211,
+     "nonzero": 669,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl13": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl13\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 248,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "505": 3,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      247
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 3,
+       "14": 4,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueretirementtable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 684,
+     "distinct": 212,
+     "nonzero": 677,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl14": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl14\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 246,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      245
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 1,
+       "14": 4,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 704,
+     "distinct": 212,
+     "nonzero": 697,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhl15": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl15\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 246,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      245
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 1,
+       "14": 4,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 659,
+     "distinct": 212,
+     "nonzero": 650,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps3/nhllegacy": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhllegacy\\databases\\nhlng.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 252,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 218,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "255": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32550,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1,
+      "255": 2
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      251
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 2,
+       "8": 21,
+       "9": 20,
+       "10": 18,
+       "11": 22,
+       "12": 2,
+       "14": 4,
+       "15": 2,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 703,
+     "distinct": 217,
+     "nonzero": 694,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps4/nhl15": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl15\\databases\\nhl_game.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 246,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 213,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32555,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      245
+     ],
+     "class_fields": {
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 12,
+       "3": 14,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 21,
+       "8": 20,
+       "9": 18,
+       "10": 22,
+       "11": 2,
+       "12": 1,
+       "14": 4,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 659,
+     "distinct": 212,
+     "nonzero": 650,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockleagues.artid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps4/nhl16": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl16\\databases\\nhl_game.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 252,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 218,
+     "duplicate_artids": {
+      "19": 2,
+      "21": 2,
+      "23": 2,
+      "29": 2,
+      "255": 2,
+      "20054": 30
+     },
+     "artid_min_max": [
+      0,
+      20054
+     ],
+     "free_artids_in_range": 32550,
+     "free_first_10": [
+      32,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1,
+      "255": 2
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      251
+     ],
+     "class_fields": {
+      "stanchiontype": {
+       "0": 252
+      },
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 2,
+       "8": 21,
+       "9": 20,
+       "10": 18,
+       "11": 22,
+       "12": 2,
+       "14": 4,
+       "15": 2,
+       "13": 30
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 60,
+     "distinct": 1,
+     "nonzero": 60,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "leaguecustomteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 703,
+     "distinct": 217,
+     "nonzero": 694,
+     "coverage_by_exhibitionteams_artid": 1.0,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "team-artid reference"
+    },
+    {
+     "table": "eashlplayerbiotable",
+     "field": "artid",
+     "depth": 16,
+     "range": [
+      "0",
+      "65535"
+     ],
+     "rows": 2,
+     "distinct": 2,
+     "nonzero": 2,
+     "coverage_by_exhibitionteams_artid": 0.0,
+     "values_outside": [
+      12586,
+      12587
+     ],
+     "values_outside_count": 2,
+     "class": "not a team-artid reference by coverage"
+    }
+   ],
+   "not_team_art_ids": [
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockleagues.artid",
+    "stockawardstable.playerartid",
+    "leagueplayerbiotable.artid"
+   ]
+  },
+  "ps4/nhl17": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl17\\databases\\nhl_game.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 256,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 256,
+     "duplicate_artids": {},
+     "artid_min_max": [
+      0,
+      30391
+     ],
+     "free_artids_in_range": 32512,
+     "free_first_10": [
+      32,
+      33,
+      62,
+      63,
+      64,
+      65,
+      77,
+      78,
+      79,
+      80
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 1
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      399
+     ],
+     "class_fields": {
+      "teamtype": {
+       "0": 256
+      },
+      "stanchiontype": {
+       "0": 256
+      },
+      "league": {
+       "0": 32,
+       "1": 30,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "7": 2,
+       "8": 21,
+       "9": 20,
+       "10": 18,
+       "11": 22,
+       "12": 2,
+       "13": 27,
+       "14": 8,
+       "17": 5
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    },
+    "customteams": {
+     "rows": 50,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 50,
+     "duplicate_artids": {},
+     "artid_min_max": [
+      10400,
+      10449
+     ],
+     "free_artids_in_range": 32718,
+     "free_first_10": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {},
+     "index_unique": true,
+     "index_min_max": [
+      400,
+      449
+     ],
+     "class_fields": {
+      "teamtype": {
+       "1": 50
+      },
+      "stanchiontype": {
+       "0": 50
+      },
+      "league": {
+       "15": 50
+      }
+     }
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 150,
+     "distinct": 1,
+     "nonzero": 150,
+     "coverage_by_exhibitionteams_artid": 0.0,
+     "values_outside": [
+      20054
+     ],
+     "values_outside_count": 1,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 813,
+     "distinct": 255,
+     "nonzero": 803,
+     "coverage_by_exhibitionteams_artid": 0.9888,
+     "values_outside": [
+      255,
+      1000
+     ],
+     "values_outside_count": 2,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "customplayerbiotable.artid",
+    "customteams.artid",
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "customarena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockleagues.artid",
+    "stockawardstable.playerartid"
+   ]
+  },
+  "ps4/nhl18": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl18\\databases\\nhl_game.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 296,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 289,
+     "duplicate_artids": {
+      "0": 7,
+      "36": 2
+     },
+     "artid_min_max": [
+      0,
+      30398
+     ],
+     "free_artids_in_range": 32479,
+     "free_first_10": [
+      30,
+      31,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 7
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      399
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 293,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "0": 293,
+       "1": 3
+      },
+      "mascotcustombodyzone2": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 293,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 293,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 293,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "0": 27,
+       "1": 266,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 295,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 290,
+       "Mascot": 3,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 293,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 296
+      },
+      "mascotcustombodyzone11": {
+       "0": 293,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 293,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "0": 35,
+       "1": 30,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "10": 21,
+       "11": 20,
+       "12": 18,
+       "13": 22,
+       "14": 2,
+       "15": 27,
+       "9": 8,
+       "7": 12,
+       "8": 14,
+       "20": 6,
+       "18": 2,
+       "17": 8,
+       "19": 2
+      },
+      "mascotcustombody": {
+       "0": 27,
+       "1": 266,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 293,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 293,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 293,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 296
+      },
+      "mascotcustombodyzone10": {
+       "0": 293,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "0": 285,
+       "1": 10,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 293,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    },
+    "customteams": {
+     "rows": 55,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 6,
+     "duplicate_artids": {
+      "20054": 50
+     },
+     "artid_min_max": [
+      10497,
+      30221
+     ],
+     "free_artids_in_range": 32762,
+     "free_first_10": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {},
+     "index_unique": true,
+     "index_min_max": [
+      400,
+      501
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "1": 53,
+       "0": 2
+      },
+      "mascotcustombodyzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 52,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 52,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "1": 52,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 54,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 52,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 55
+      },
+      "mascotcustombodyzone11": {
+       "0": 52,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "16": 53,
+       "17": 2
+      },
+      "mascotcustombody": {
+       "1": 52,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 55
+      },
+      "mascotcustombodyzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "1": 54,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 165,
+     "distinct": 4,
+     "nonzero": 165,
+     "coverage_by_exhibitionteams_artid": 0.0,
+     "values_outside": [
+      1000,
+      20054,
+      30220,
+      30221
+     ],
+     "values_outside_count": 4,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "leagueteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 1030,
+     "distinct": 284,
+     "nonzero": 1006,
+     "coverage_by_exhibitionteams_artid": 0.9791,
+     "values_outside": [
+      255,
+      1000
+     ],
+     "values_outside_count": 2,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "customplayerbiotable.artid",
+    "customteams.artid",
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "customarena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockleagues.artid",
+    "stockawardstable.playerartid"
+   ]
+  },
+  "ps4/nhl19": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl19\\databases\\nhl_game.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 419,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 307,
+     "duplicate_artids": {
+      "0": 2,
+      "1": 2,
+      "2": 3,
+      "3": 3,
+      "4": 4,
+      "5": 2,
+      "6": 3,
+      "7": 3,
+      "8": 2,
+      "9": 3,
+      "10": 4,
+      "11": 4,
+      "12": 2,
+      "13": 3,
+      "14": 2,
+      "15": 4,
+      "16": 2,
+      "17": 3,
+      "18": 2,
+      "19": 4,
+      "20": 2,
+      "21": 3,
+      "22": 2,
+      "23": 2,
+      "24": 3,
+      "25": 2,
+      "26": 2,
+      "27": 2,
+      "28": 3,
+      "29": 2,
+      "345": 10,
+      "346": 11,
+      "347": 2,
+      "36": 2,
+      "500": 2,
+      "501": 2,
+      "600": 40
+     },
+     "artid_min_max": [
+      0,
+      30398
+     ],
+     "free_artids_in_range": 32461,
+     "free_first_10": [
+      30,
+      31,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 2
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      679
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "0": 416,
+       "1": 3
+      },
+      "mascotcustombodyzone2": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 416,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 416,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "0": 89,
+       "1": 327,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 418,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 413,
+       "Mascot": 3,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 419
+      },
+      "mascotcustombodyzone11": {
+       "0": 416,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "0": 35,
+       "1": 31,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "10": 21,
+       "11": 20,
+       "12": 18,
+       "13": 22,
+       "14": 2,
+       "15": 27,
+       "9": 8,
+       "7": 12,
+       "8": 14,
+       "20": 6,
+       "21": 33,
+       "22": 5,
+       "18": 2,
+       "17": 12,
+       "19": 2,
+       "23": 80
+      },
+      "mascotcustombody": {
+       "0": 89,
+       "1": 327,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 419
+      },
+      "mascotcustombodyzone10": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "0": 408,
+       "1": 10,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    },
+    "customteams": {
+     "rows": 55,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 6,
+     "duplicate_artids": {
+      "20054": 50
+     },
+     "artid_min_max": [
+      10497,
+      30221
+     ],
+     "free_artids_in_range": 32762,
+     "free_first_10": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {},
+     "index_unique": true,
+     "index_min_max": [
+      400,
+      501
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "1": 53,
+       "0": 2
+      },
+      "mascotcustombodyzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 52,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 52,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "1": 52,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 54,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 52,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 55
+      },
+      "mascotcustombodyzone11": {
+       "0": 52,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "16": 53,
+       "17": 2
+      },
+      "mascotcustombody": {
+       "1": 52,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 55
+      },
+      "mascotcustombodyzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "1": 54,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 165,
+     "distinct": 4,
+     "nonzero": 165,
+     "coverage_by_exhibitionteams_artid": 0.0,
+     "values_outside": [
+      1000,
+      20054,
+      30220,
+      30221
+     ],
+     "values_outside_count": 4,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "teamartid",
+     "depth": 10,
+     "range": [
+      "-1",
+      "1022"
+     ],
+     "rows": 209,
+     "distinct": 32,
+     "nonzero": 62,
+     "coverage_by_exhibitionteams_artid": 0.9355,
+     "values_outside": [
+      30,
+      33
+     ],
+     "values_outside_count": 2,
+     "class": "partial (spare / sentinel values present)"
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "teamartid",
+     "depth": 10,
+     "range": [
+      "-1",
+      "1022"
+     ],
+     "rows": 552,
+     "distinct": 32,
+     "nonzero": 62,
+     "coverage_by_exhibitionteams_artid": 0.9355,
+     "values_outside": [
+      30,
+      33
+     ],
+     "values_outside_count": 2,
+     "class": "partial (spare / sentinel values present)"
+    },
+    {
+     "table": "leagueteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 1532,
+     "distinct": 299,
+     "nonzero": 1510,
+     "coverage_by_exhibitionteams_artid": 0.9709,
+     "values_outside": [
+      255,
+      1000,
+      1001,
+      1002,
+      1003
+     ],
+     "values_outside_count": 5,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "customplayerbiotable.artid",
+    "customteams.artid",
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "customarena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockleagues.artid",
+    "stockawardstable.playerartid"
+   ]
+  },
+  "ps4/nhl20": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl20\\databases\\nhl_game.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 419,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 307,
+     "duplicate_artids": {
+      "0": 2,
+      "1": 2,
+      "2": 3,
+      "3": 3,
+      "4": 4,
+      "5": 2,
+      "6": 3,
+      "7": 3,
+      "8": 2,
+      "9": 3,
+      "10": 4,
+      "11": 4,
+      "12": 2,
+      "13": 3,
+      "14": 2,
+      "15": 4,
+      "16": 2,
+      "17": 3,
+      "18": 2,
+      "19": 4,
+      "20": 2,
+      "21": 3,
+      "22": 2,
+      "23": 2,
+      "24": 3,
+      "25": 2,
+      "26": 2,
+      "27": 2,
+      "28": 3,
+      "29": 2,
+      "345": 10,
+      "346": 11,
+      "347": 2,
+      "36": 2,
+      "500": 2,
+      "501": 2,
+      "600": 40
+     },
+     "artid_min_max": [
+      0,
+      30398
+     ],
+     "free_artids_in_range": 32461,
+     "free_first_10": [
+      30,
+      31,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 2
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      679
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "0": 416,
+       "1": 3
+      },
+      "mascotcustombodyzone2": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 416,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 416,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "0": 89,
+       "1": 327,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 418,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 413,
+       "Mascot": 3,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 419
+      },
+      "mascotcustombodyzone11": {
+       "0": 416,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "0": 35,
+       "1": 31,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "10": 21,
+       "11": 20,
+       "12": 18,
+       "13": 22,
+       "14": 2,
+       "15": 27,
+       "9": 8,
+       "7": 12,
+       "8": 14,
+       "20": 6,
+       "21": 33,
+       "22": 5,
+       "18": 2,
+       "17": 12,
+       "19": 2,
+       "23": 80
+      },
+      "mascotcustombody": {
+       "0": 89,
+       "1": 327,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 416,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 419
+      },
+      "mascotcustombodyzone10": {
+       "0": 416,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "0": 408,
+       "1": 10,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 416,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    },
+    "customteams": {
+     "rows": 55,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 6,
+     "duplicate_artids": {
+      "20054": 50
+     },
+     "artid_min_max": [
+      10497,
+      30221
+     ],
+     "free_artids_in_range": 32762,
+     "free_first_10": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {},
+     "index_unique": true,
+     "index_min_max": [
+      400,
+      501
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "1": 53,
+       "0": 2
+      },
+      "mascotcustombodyzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 52,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 52,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "1": 52,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 54,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 52,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 55
+      },
+      "mascotcustombodyzone11": {
+       "0": 52,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "16": 53,
+       "17": 2
+      },
+      "mascotcustombody": {
+       "1": 52,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 55
+      },
+      "mascotcustombodyzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "1": 54,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 165,
+     "distinct": 4,
+     "nonzero": 165,
+     "coverage_by_exhibitionteams_artid": 0.0,
+     "values_outside": [
+      1000,
+      20054,
+      30220,
+      30221
+     ],
+     "values_outside_count": 4,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "teamartid",
+     "depth": 10,
+     "range": [
+      "-1",
+      "1022"
+     ],
+     "rows": 209,
+     "distinct": 32,
+     "nonzero": 62,
+     "coverage_by_exhibitionteams_artid": 0.9355,
+     "values_outside": [
+      30,
+      33
+     ],
+     "values_outside_count": 2,
+     "class": "partial (spare / sentinel values present)"
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "teamartid",
+     "depth": 10,
+     "range": [
+      "-1",
+      "1022"
+     ],
+     "rows": 552,
+     "distinct": 32,
+     "nonzero": 62,
+     "coverage_by_exhibitionteams_artid": 0.9355,
+     "values_outside": [
+      30,
+      33
+     ],
+     "values_outside_count": 2,
+     "class": "partial (spare / sentinel values present)"
+    },
+    {
+     "table": "leagueteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 1532,
+     "distinct": 299,
+     "nonzero": 1510,
+     "coverage_by_exhibitionteams_artid": 0.9709,
+     "values_outside": [
+      255,
+      1000,
+      1001,
+      1002,
+      1003
+     ],
+     "values_outside_count": 5,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "customplayerbiotable.artid",
+    "customteams.artid",
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "customarena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockleagues.artid",
+    "stockawardstable.playerartid"
+   ]
+  },
+  "ps4/nhl21": {
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl21\\databases\\nhl_game.db",
+   "identity": {
+    "exhibitionteams": {
+     "rows": 433,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 312,
+     "duplicate_artids": {
+      "0": 3,
+      "1": 2,
+      "2": 2,
+      "3": 2,
+      "4": 2,
+      "5": 2,
+      "6": 2,
+      "7": 2,
+      "8": 2,
+      "9": 2,
+      "10": 2,
+      "11": 2,
+      "12": 2,
+      "13": 3,
+      "14": 2,
+      "15": 2,
+      "16": 2,
+      "17": 2,
+      "18": 2,
+      "19": 2,
+      "20": 2,
+      "21": 2,
+      "22": 2,
+      "23": 2,
+      "24": 2,
+      "25": 3,
+      "26": 2,
+      "27": 2,
+      "28": 2,
+      "29": 2,
+      "345": 35,
+      "346": 7,
+      "347": 2,
+      "36": 2,
+      "500": 2,
+      "501": 2,
+      "600": 45
+     },
+     "artid_min_max": [
+      0,
+      30398
+     ],
+     "free_artids_in_range": 32456,
+     "free_first_10": [
+      30,
+      31,
+      33,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {
+      "0": 3
+     },
+     "index_unique": true,
+     "index_min_max": [
+      0,
+      696
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 430,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "0": 430,
+       "1": 3
+      },
+      "mascotcustombodyzone2": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 430,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 430,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 430,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "0": 91,
+       "1": 339,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 432,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 427,
+       "Mascot": 3,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 430,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 433
+      },
+      "mascotcustombodyzone11": {
+       "0": 430,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 430,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "0": 35,
+       "1": 31,
+       "2": 14,
+       "3": 15,
+       "4": 14,
+       "5": 14,
+       "6": 12,
+       "10": 21,
+       "11": 20,
+       "12": 18,
+       "13": 22,
+       "14": 2,
+       "15": 26,
+       "9": 8,
+       "7": 11,
+       "8": 14,
+       "20": 6,
+       "21": 33,
+       "22": 4,
+       "18": 2,
+       "17": 12,
+       "19": 2,
+       "23": 97
+      },
+      "mascotcustombody": {
+       "0": 91,
+       "1": 339,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 430,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 430,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 430,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 433
+      },
+      "mascotcustombodyzone10": {
+       "0": 430,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "0": 422,
+       "1": 10,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 430,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    },
+    "leagueteams": {
+     "rows": 0
+    },
+    "customteams": {
+     "rows": 55,
+     "artid_depth_bits": 15,
+     "artid_range": [
+      0,
+      32767
+     ],
+     "distinct_artids": 6,
+     "duplicate_artids": {
+      "20054": 50
+     },
+     "artid_min_max": [
+      10497,
+      30221
+     ],
+     "free_artids_in_range": 32762,
+     "free_first_10": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "free_last_5": [
+      32763,
+      32764,
+      32765,
+      32766,
+      32767
+     ],
+     "sentinel_like": {},
+     "index_unique": true,
+     "index_min_max": [
+      400,
+      501
+     ],
+     "class_fields": {
+      "mascotcustomheadzone11": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "teamtype": {
+       "1": 53,
+       "0": 2
+      },
+      "mascotcustombodyzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone13": {
+       "0": 52,
+       "16618241": 1,
+       "1052688": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone15": {
+       "0": 52,
+       "16618241": 1,
+       "1841945": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone2": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustombodyzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomhead": {
+       "1": 52,
+       "22": 1,
+       "18": 1,
+       "17": 1
+      },
+      "mascotcustomnumber": {
+       "0": 54,
+       "95": 1
+      },
+      "mascotcustomheadzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomname": {
+       "": 52,
+       "Old Blue Note": 1,
+       "Ace": 1,
+       "NHL": 1
+      },
+      "mascotcustombodyzone15": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone13": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone14": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "stanchiontype": {
+       "0": 55
+      },
+      "mascotcustombodyzone11": {
+       "0": 52,
+       "1316656": 1,
+       "12783649": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone9": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustombodyzone12": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone7": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "league": {
+       "16": 53,
+       "17": 2
+      },
+      "mascotcustombody": {
+       "1": 52,
+       "9": 2,
+       "5": 1
+      },
+      "mascotcustombodyzone4": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone6": {
+       "0": 52,
+       "1451399": 1,
+       "12954968": 1,
+       "15461355": 1
+      },
+      "mascotcustomheadzone1": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomheadzone8": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustombodyzone3": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      },
+      "mascotcustomheadzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "10293001": 1
+      },
+      "mascotcustomfont": {
+       "0": 55
+      },
+      "mascotcustombodyzone10": {
+       "0": 52,
+       "1316656": 1,
+       "1052688": 1,
+       "11618": 1
+      },
+      "centericelogotype": {
+       "1": 54,
+       "2": 1
+      },
+      "mascotcustombodyzone5": {
+       "0": 52,
+       "16618241": 1,
+       "12783649": 1,
+       "1779036": 1
+      }
+     }
+    }
+   },
+   "references": [
+    {
+     "table": "leagueawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "range": [
+      "-1",
+      "65534"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 165,
+     "distinct": 4,
+     "nonzero": 165,
+     "coverage_by_exhibitionteams_artid": 0.0,
+     "values_outside": [
+      1000,
+      20054,
+      30220,
+      30221
+     ],
+     "values_outside_count": 4,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "teamartid",
+     "depth": 10,
+     "range": [
+      "-1",
+      "1022"
+     ],
+     "rows": 381,
+     "distinct": 32,
+     "nonzero": 62,
+     "coverage_by_exhibitionteams_artid": 0.9355,
+     "values_outside": [
+      30,
+      33
+     ],
+     "values_outside_count": 2,
+     "class": "partial (spare / sentinel values present)"
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "teamartid",
+     "depth": 10,
+     "range": [
+      "-1",
+      "1022"
+     ],
+     "rows": 1234,
+     "distinct": 32,
+     "nonzero": 62,
+     "coverage_by_exhibitionteams_artid": 0.9355,
+     "values_outside": [
+      30,
+      33
+     ],
+     "values_outside_count": 2,
+     "class": "partial (spare / sentinel values present)"
+    },
+    {
+     "table": "leagueteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 0,
+     "distinct": 0,
+     "nonzero": 0,
+     "coverage_by_exhibitionteams_artid": null,
+     "values_outside": [],
+     "values_outside_count": 0,
+     "class": "not a team-artid reference by coverage"
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 1792,
+     "distinct": 299,
+     "nonzero": 1762,
+     "coverage_by_exhibitionteams_artid": 0.9489,
+     "values_outside": [
+      109,
+      255,
+      901,
+      1000,
+      1001,
+      1002,
+      1003,
+      1004
+     ],
+     "values_outside_count": 8,
+     "class": "partial (spare / sentinel values present)"
+    },
+    {
+     "table": "stockawardstable",
+     "field": "teamartid",
+     "depth": 15,
+     "range": [
+      "0",
+      "32767"
+     ],
+     "rows": 485,
+     "distinct": 101,
+     "nonzero": 483,
+     "coverage_by_exhibitionteams_artid": 0.9938,
+     "values_outside": [
+      1000
+     ],
+     "values_outside_count": 1,
+     "class": "team-artid reference"
+    }
+   ],
+   "not_team_art_ids": [
+    "customplayerbiotable.artid",
+    "customteams.artid",
+    "exhibitionteams.artid",
+    "leaguearena.arenaartid",
+    "customarena.arenaartid",
+    "exhibitionplayerbiotable.artid",
+    "leagueteams.artid",
+    "exhibitionarena.arenaartid",
+    "stockleagues.artid",
+    "stockawardstable.playerartid"
+   ]
+  }
+ }
+}

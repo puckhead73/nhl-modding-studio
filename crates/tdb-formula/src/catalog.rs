@@ -7,18 +7,57 @@ pub const PREBUILT_PREFIX: &str = "prebuilt:";
 
 /// EA skater rating attributes, in display order.
 pub const SKATER_EA_ATTRS: &[&str] = &[
-    "Speed", "Body Checking", "Endurance", "Puck Control", "Passing", "Shoot/Pass Bias",
-    "Defense/Offense Bias", "Pass/Carry Bias", "Slapshot Power", "Slapshot Accuracy",
-    "Wristshot Power", "Wristshot Accuracy", "Agility", "Strength", "Acceleration", "Balance",
-    "Faceoffs", "Durability", "Deking", "Aggressiveness", "Poise", "Hand-Eye", "Shot Blocking",
-    "Offensive Awareness", "Defensive Awareness", "Discipline", "Fighting Skill", "Stickchecking",
+    "Speed",
+    "Body Checking",
+    "Endurance",
+    "Puck Control",
+    "Passing",
+    "Shoot/Pass Bias",
+    "Defense/Offense Bias",
+    "Pass/Carry Bias",
+    "Slapshot Power",
+    "Slapshot Accuracy",
+    "Wristshot Power",
+    "Wristshot Accuracy",
+    "Agility",
+    "Strength",
+    "Acceleration",
+    "Balance",
+    "Faceoffs",
+    "Durability",
+    "Deking",
+    "Aggressiveness",
+    "Poise",
+    "Hand-Eye",
+    "Shot Blocking",
+    "Offensive Awareness",
+    "Defensive Awareness",
+    "Discipline",
+    "Fighting Skill",
+    "Stickchecking",
 ];
 
 /// EA goalie rating attributes, in display order.
 pub const GOALIE_EA_ATTRS: &[&str] = &[
-    "Glove Low", "Glove High", "Stick Low", "Stick High", "Speed", "Agility", "Consistency",
-    "Pokechecking", "Endurance", "Breakaways", "Rebounds", "Shot Recovery", "Poise", "Passing",
-    "Angles", "Puck Playing Frequency", "Aggressiveness", "Durability", "Vision",
+    "Glove Low",
+    "Glove High",
+    "Stick Low",
+    "Stick High",
+    "Speed",
+    "Agility",
+    "Consistency",
+    "Pokechecking",
+    "Endurance",
+    "Breakaways",
+    "Rebounds",
+    "Shot Recovery",
+    "Poise",
+    "Passing",
+    "Angles",
+    "Puck Playing Frequency",
+    "Aggressiveness",
+    "Durability",
+    "Vision",
 ];
 
 /// Prebuilt formulas: `(bare_key, native_max, direct_output)`. `direct_output` rows override the EA
@@ -60,7 +99,9 @@ pub fn ea_attr_scale(ea_attr: &str) -> (i32, i32) {
 /// ratings, 0 for the bias/tier rows (stored raw). NOTE: PS4 stores 0..99 directly (offset 0) —
 /// callers writing PS4 databases must apply that per `Capabilities`.
 pub fn ea_attr_raw_offset(ea_attr: &str) -> i32 {
-    override_scale_for_ea_attr(ea_attr).map(|(lo, _)| lo).unwrap_or(36)
+    override_scale_for_ea_attr(ea_attr)
+        .map(|(lo, _)| lo)
+        .unwrap_or(36)
 }
 
 /// FHM attribute vocabulary for the Formulas UI, grouped: `(group, [(display_label, fhm_key)])`. The

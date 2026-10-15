@@ -1,0 +1,4108 @@
+{
+ "note": "every setting_csv member in every databigs/*.big of the PS4 installs; stored and plain hashes; compared to the census plain hashes; read-only",
+ "titles": {
+  "nhl16": {
+   "cusa": "CUSA01909",
+   "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA01909",
+   "param_sfo": {
+    "size": 1760,
+    "sha256": "849dff2534150cd407189328727bcbee0acbac5d188ccb155a78ba601d505e0b",
+    "version_strings": [
+     "01.00",
+     "01.00"
+    ]
+   },
+   "archives": {
+    "boot.big": {
+     "eb_version": "0x00110400",
+     "file_count": 5843,
+     "file_length": 17518112,
+     "archive_size_field": 17518112,
+     "setting_csv_hits": 0
+    },
+    "game_60.big": {
+     "eb_version": "0x00110400",
+     "file_count": 9196,
+     "file_length": 518337568,
+     "archive_size_field": 518337568,
+     "setting_csv_hits": 0
+    },
+    "game_70.big": {
+     "eb_version": "0x00110400",
+     "file_count": 587,
+     "file_length": 6093242528,
+     "archive_size_field": 6093242528,
+     "setting_csv_hits": 0
+    },
+    "game_80.big": {
+     "eb_version": "0x00110400",
+     "file_count": 11,
+     "file_length": 1390547792,
+     "archive_size_field": 1390547792,
+     "setting_csv_hits": 0
+    },
+    "game_90.big": {
+     "eb_version": "0x00110400",
+     "file_count": 53098,
+     "file_length": 7431532384,
+     "archive_size_field": 7414739808,
+     "setting_csv_hits": 0
+    },
+    "inxp_00.big": {
+     "eb_version": "0x00110400",
+     "file_count": 234,
+     "file_length": 299883104,
+     "archive_size_field": 299883104,
+     "setting_csv_hits": 9
+    },
+    "inxp_10.big": {
+     "eb_version": "0x00110400",
+     "file_count": 6584,
+     "file_length": 291756448,
+     "archive_size_field": 291756448,
+     "setting_csv_hits": 0
+    },
+    "inxp_30.big": {
+     "eb_version": "0x00110400",
+     "file_count": 12,
+     "file_length": 152086976,
+     "archive_size_field": 152086976,
+     "setting_csv_hits": 0
+    },
+    "inxp_40.big": {
+     "eb_version": "0x00110400",
+     "file_count": 95,
+     "file_length": 1037065728,
+     "archive_size_field": 1037065728,
+     "setting_csv_hits": 0
+    },
+    "inxp_50.big": {
+     "eb_version": "0x00110400",
+     "file_count": 3685,
+     "file_length": 620875168,
+     "archive_size_field": 620875168,
+     "setting_csv_hits": 0
+    },
+    "overlays_20.big": {
+     "eb_version": "0x00110400",
+     "file_count": 428,
+     "file_length": 16907424,
+     "archive_size_field": 16907424,
+     "setting_csv_hits": 0
+    }
+   },
+   "members": [
+    {
+     "archive": "inxp_00.big",
+     "entry": 77,
+     "path": "nhl/data/common/gamemodes/setting_csv/renderingintro.csv",
+     "offset": 275033392,
+     "stored_size": 1784,
+     "w4": 0,
+     "sort_key": 1449184122,
+     "path_hash": 2657483828,
+     "magic": "chunkzip",
+     "stored_sha256": "83a107e8a5351a55ca166e884087ed53481bef4322e3bcd8f480431f924a3ecf",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 9354,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1736,
+        "flag": 1,
+        "plain": 9354
+       }
+      ],
+      "consumed": 1784,
+      "stored_len": 1784,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 9354,
+     "plain_sha256": "1a7602a7dede107b0e3a360066b1b983084c35eacf1d72721313e7308497d4f1",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 211,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3587,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 211,
+      "header": "introdataid,contextid,contextver,eashl_hut_related,eashlvalue1,eashlvalue2,genericvalue1,genericvalue2,hutvalue1,hutvalue2,ignoreglobalskipcountdown,logicid,priority,repetitioncount,takeid,takever,userteamsiderelated,introyear",
+      "header_columns": 18,
+      "row_comma_counts": {
+       "18": 210
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 77,
+     "census_stored_size": 1784
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 97,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextgroup.csv",
+     "offset": 275029824,
+     "stored_size": 967,
+     "w4": 0,
+     "sort_key": 2022859723,
+     "path_hash": 4178484540,
+     "magic": "chunkzip",
+     "stored_sha256": "4572b52be7b592c6795f642adb8cc3e733fae94b771abb521f32b0d220a3fabc",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 2650,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 919,
+        "flag": 1,
+        "plain": 2650
+       }
+      ],
+      "consumed": 967,
+      "stored_len": 967,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 2650,
+     "plain_sha256": "a732c1235193cb8853b54fa7495195bd0b3520ab4024dc61b88d81599b875242",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 296,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 592,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 296,
+      "header": "context_id,group_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 295
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 97,
+     "census_stored_size": 967
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 102,
+     "path": "nhl/data/common/gamemodes/setting_csv/settinggroup.csv",
+     "offset": 275041680,
+     "stored_size": 2705,
+     "w4": 0,
+     "sort_key": 2130755411,
+     "path_hash": 415043029,
+     "magic": "chunkzip",
+     "stored_sha256": "175a99b16ce19f5d30f9d70160a81613d7d71edc5ba75efed4f179574a6b8989",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 7443,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 2657,
+        "flag": 1,
+        "plain": 7443
+       }
+      ],
+      "consumed": 2705,
+      "stored_len": 2705,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 7443,
+     "plain_sha256": "3c186f4ff2e85440bac16558eca63c6ab8b690b243ab8f267540a97ba10f35cc",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 774,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1548,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 774,
+      "header": "setting_id,group_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 773
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 102,
+     "census_stored_size": 2705
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 113,
+     "path": "nhl/data/common/gamemodes/setting_csv/context.csv",
+     "offset": 275029072,
+     "stored_size": 749,
+     "w4": 0,
+     "sort_key": 2309864921,
+     "path_hash": 2925844175,
+     "magic": "chunkzip",
+     "stored_sha256": "87cfcaa57fb96a03c6ad81843232cc10367be231cb40e9eea5df6bb96552dc87",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 2319,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 701,
+        "flag": 1,
+        "plain": 2319
+       }
+      ],
+      "consumed": 749,
+      "stored_len": 749,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 2319,
+     "plain_sha256": "51845d1231a90a7362e74b753b0ae4d6310684b38e158c8ba74cc7cacba1f71b",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 62,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 124,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 62,
+      "header": "id,key,name",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 61
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 113,
+     "census_stored_size": 749
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 114,
+     "path": "nhl/data/common/gamemodes/setting_csv/setting.csv",
+     "offset": 275035184,
+     "stored_size": 6486,
+     "w4": 0,
+     "sort_key": 2315464403,
+     "path_hash": 2992325576,
+     "magic": "chunkzip",
+     "stored_sha256": "f7a46011449c9e11b0fabf0af17675db7d77219e4d704a19445776816b184061",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 23984,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 6438,
+        "flag": 1,
+        "plain": 23984
+       }
+      ],
+      "consumed": 6486,
+      "stored_len": 6486,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 23984,
+     "plain_sha256": "a75bab081cecf1ee344008fc94cdb6017e0422cfac66eec212671ec615ace489",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 268,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2412,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 268,
+      "header": "id,key,name,string_id,description_id,is_choice,min_value,max_value,default_value,remap_id",
+      "header_columns": 10,
+      "row_comma_counts": {
+       "10": 267
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 114,
+     "census_stored_size": 6486
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 206,
+     "path": "nhl/data/common/gamemodes/setting_csv/stocksettingdependencies.csv",
+     "offset": 275044400,
+     "stored_size": 292,
+     "w4": 0,
+     "sort_key": 3124816267,
+     "path_hash": 3619851795,
+     "magic": "LegacyID",
+     "stored_sha256": "e5ac8abf98846b982c568513d1daca251c91afa3ae2be9c3fc92e93a0766cc46",
+     "chunkzip": null,
+     "plain_size": 292,
+     "plain_sha256": "e5ac8abf98846b982c568513d1daca251c91afa3ae2be9c3fc92e93a0766cc46",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 26,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 52,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 26,
+      "header": "LegacyID,Order,DependentLegacyID",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 25
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 206,
+     "census_stored_size": 292
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 216,
+     "path": "nhl/data/common/gamemodes/setting_csv/choice.csv",
+     "offset": 275026928,
+     "stored_size": 2138,
+     "w4": 0,
+     "sort_key": 3584057772,
+     "path_hash": 1702457077,
+     "magic": "chunkzip",
+     "stored_sha256": "ffd4da28efb2a07fb3ed466f598fb329cf3bcb5a58ebd8ce611596ebdcf1bdf8",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 23209,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 2090,
+        "flag": 1,
+        "plain": 23209
+       }
+      ],
+      "consumed": 2138,
+      "stored_len": 2138,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 23209,
+     "plain_sha256": "2e2c728bb4c10147a7d9a040004fc973c64d97c67687c53d129576710b32d129",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 614,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2456,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 614,
+      "header": "id,setting_id,key,string_id,name",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 613
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 216,
+     "census_stored_size": 2138
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 217,
+     "path": "nhl/data/common/gamemodes/setting_csv/group.csv",
+     "offset": 275032368,
+     "stored_size": 1017,
+     "w4": 0,
+     "sort_key": 3622673371,
+     "path_hash": 3087405111,
+     "magic": "chunkzip",
+     "stored_sha256": "f9ef3d6fed28e1846c7db7b2e81bb1cf7d9f7ce8df4278c44e0488072e161fdc",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 3846,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 969,
+        "flag": 1,
+        "plain": 3846
+       }
+      ],
+      "consumed": 1017,
+      "stored_len": 1017,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 3846,
+     "plain_sha256": "c2d0cc4f2eccfcf1baee0040eb6fbd45904c31322f44b294b70ecc122e84436b",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 90,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 270,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 90,
+      "header": "id,parent_id,string_id,name",
+      "header_columns": 4,
+      "row_comma_counts": {
+       "4": 89
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 217,
+     "census_stored_size": 1017
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 219,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextsetting.csv",
+     "offset": 275030800,
+     "stored_size": 1556,
+     "w4": 0,
+     "sort_key": 3875124184,
+     "path_hash": 1471882765,
+     "magic": "chunkzip",
+     "stored_sha256": "7708c4efb6de590a071589e4456b98b048cc07c79b71d07576362991a952f55f",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 8047,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1508,
+        "flag": 1,
+        "plain": 8047
+       }
+      ],
+      "consumed": 1556,
+      "stored_len": 1556,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 8047,
+     "plain_sha256": "f481eed805dea95dbe7cdcd012347623e32e54930c1589892f63f30c30c907a6",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 571,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3426,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 571,
+      "header": "context_id,setting_id,min_value,max_value,default_value,choices,is_enabled",
+      "header_columns": 7,
+      "row_comma_counts": {
+       "7": 570
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 219,
+     "census_stored_size": 1556
+    }
+   ],
+   "eboot": {
+    "size": 58936564,
+    "sha256": "e4845ac1b74b9cf6b804fe530f2b6f50e23e2eb4cf57db9b44a225f4df171779"
+   },
+   "path_copies": {},
+   "census_paths_not_found": []
+  },
+  "nhl17": {
+   "cusa": "CUSA04326",
+   "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA04326",
+   "param_sfo": {
+    "size": 1792,
+    "sha256": "012e57dbcebcfd02a7d948a1814959b426288170997ef652873c861a473ed2da",
+    "version_strings": [
+     "01.00",
+     "01.00"
+    ]
+   },
+   "archives": {
+    "boot.big": {
+     "eb_version": "0x00110400",
+     "file_count": 5968,
+     "file_length": 21070384,
+     "archive_size_field": 21070384,
+     "setting_csv_hits": 0
+    },
+    "game_60.big": {
+     "eb_version": "0x00110400",
+     "file_count": 10233,
+     "file_length": 636124960,
+     "archive_size_field": 636124960,
+     "setting_csv_hits": 0
+    },
+    "game_70.big": {
+     "eb_version": "0x00110400",
+     "file_count": 522,
+     "file_length": 5390659600,
+     "archive_size_field": 5390659600,
+     "setting_csv_hits": 0
+    },
+    "game_80.big": {
+     "eb_version": "0x00110400",
+     "file_count": 8,
+     "file_length": 1771962352,
+     "archive_size_field": 1771962352,
+     "setting_csv_hits": 0
+    },
+    "game_90.big": {
+     "eb_version": "0x00110400",
+     "file_count": 58973,
+     "file_length": 9225259072,
+     "archive_size_field": 9225259072,
+     "setting_csv_hits": 0
+    },
+    "inxp_00.big": {
+     "eb_version": "0x00110400",
+     "file_count": 1185,
+     "file_length": 273371840,
+     "archive_size_field": 273371840,
+     "setting_csv_hits": 12
+    },
+    "inxp_10.big": {
+     "eb_version": "0x00110400",
+     "file_count": 13694,
+     "file_length": 850671760,
+     "archive_size_field": 850671760,
+     "setting_csv_hits": 0
+    },
+    "inxp_30.big": {
+     "eb_version": "0x00110400",
+     "file_count": 18,
+     "file_length": 280663344,
+     "archive_size_field": 280663344,
+     "setting_csv_hits": 0
+    },
+    "inxp_40.big": {
+     "eb_version": "0x00110400",
+     "file_count": 93,
+     "file_length": 1546119360,
+     "archive_size_field": 1546119360,
+     "setting_csv_hits": 0
+    },
+    "inxp_50.big": {
+     "eb_version": "0x00110400",
+     "file_count": 5286,
+     "file_length": 720236816,
+     "archive_size_field": 720236816,
+     "setting_csv_hits": 0
+    },
+    "overlays_20.big": {
+     "eb_version": "0x00110400",
+     "file_count": 216,
+     "file_length": 8287296,
+     "archive_size_field": 8287296,
+     "setting_csv_hits": 0
+    },
+    "overlays_21.big": {
+     "eb_version": "0x00110400",
+     "file_count": 212,
+     "file_length": 8641792,
+     "archive_size_field": 8641792,
+     "setting_csv_hits": 0
+    }
+   },
+   "members": [
+    {
+     "archive": "inxp_00.big",
+     "entry": 173,
+     "path": "nhl/data/common/gamemodes/setting_csv/groupsetting.csv",
+     "offset": 256882928,
+     "stored_size": 5204,
+     "w4": 0,
+     "sort_key": 654678815,
+     "path_hash": 3311450741,
+     "magic": "chunkzip",
+     "stored_sha256": "0ecaccacedf2a2f0f2fef9d00fbedfce634874ccc6b383e5dccd53886f006ce6",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 15114,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 5156,
+        "flag": 1,
+        "plain": 15114
+       }
+      ],
+      "consumed": 5204,
+      "stored_len": 5204,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 15114,
+     "plain_sha256": "9d17f233982b11db20c312fd6da5c8f61a6d823043dc538501825945184872c0",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1403,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2806,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1403,
+      "header": "group_id,setting_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 1402
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 173,
+     "census_stored_size": 5204
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 281,
+     "path": "nhl/data/common/gamemodes/setting_csv/settingservice.csv",
+     "offset": 256897200,
+     "stored_size": 68,
+     "w4": 0,
+     "sort_key": 1114442538,
+     "path_hash": 4068866233,
+     "magic": "setting_",
+     "stored_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "chunkzip": null,
+     "plain_size": 68,
+     "plain_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 6,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1,
+      "header": "setting_id,order,info_urn,get_urn,set_urn,category_name,value_name",
+      "header_columns": 7,
+      "row_comma_counts": {},
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 281,
+     "census_stored_size": 68
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 369,
+     "path": "nhl/data/common/gamemodes/setting_csv/renderingintro.csv",
+     "offset": 256888528,
+     "stored_size": 1747,
+     "w4": 0,
+     "sort_key": 1449184122,
+     "path_hash": 2657483828,
+     "magic": "chunkzip",
+     "stored_sha256": "14a66b7cfb222112dd223d9259fe0f4905635fbc140a701b95fa74ad3fbbab2f",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 8958,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1699,
+        "flag": 1,
+        "plain": 8958
+       }
+      ],
+      "consumed": 1747,
+      "stored_len": 1747,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 8958,
+     "plain_sha256": "2119581b482b6bb730b621f07d4db736f6d37c51efd603535b24327015996648",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 193,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3474,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 193,
+      "header": "introdataid,contextid,contextver,eashl_hut_related,eashlvalue1,eashlvalue2,genericvalue1,genericvalue2,hutvalue1,hutvalue2,ignoreglobalskipcountdown,logicid,priority,repetitioncount,takeid,takever,userteamsiderelated,introyear,isaudio",
+      "header_columns": 19,
+      "row_comma_counts": {
+       "19": 192
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 369,
+     "census_stored_size": 1747
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 519,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextgroup.csv",
+     "offset": 256856800,
+     "stored_size": 1733,
+     "w4": 0,
+     "sort_key": 2022859723,
+     "path_hash": 4178484540,
+     "magic": "chunkzip",
+     "stored_sha256": "d3f4198a6e73fd327c260fa4d407394a1d527c529cdd380fdca3c223482a2936",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 5686,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1685,
+        "flag": 1,
+        "plain": 5686
+       }
+      ],
+      "consumed": 1733,
+      "stored_len": 1733,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 5686,
+     "plain_sha256": "8d7e1232961b1bdfba6352e9e9a5e3e6eb3f1ba5aa1238818827ae2d6420453c",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 601,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1202,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 601,
+      "header": "context_id,group_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 600
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 519,
+     "census_stored_size": 1733
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 615,
+     "path": "nhl/data/common/gamemodes/setting_csv/context.csv",
+     "offset": 256855904,
+     "stored_size": 884,
+     "w4": 0,
+     "sort_key": 2309864921,
+     "path_hash": 2925844175,
+     "magic": "chunkzip",
+     "stored_sha256": "9e025d2e582397b27de76fd9c6e27ea23435db5746f55e54a8a91d70e60cf57f",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 2947,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 836,
+        "flag": 1,
+        "plain": 2947
+       }
+      ],
+      "consumed": 884,
+      "stored_len": 884,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 2947,
+     "plain_sha256": "15799d48a51e7a808d1bf42620181b100f56130c6bc15c35d16c0d57179b401a",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 103,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 103,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 103,
+      "header": "id,name",
+      "header_columns": 2,
+      "row_comma_counts": {
+       "2": 102
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 615,
+     "census_stored_size": 884
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 617,
+     "path": "nhl/data/common/gamemodes/setting_csv/setting.csv",
+     "offset": 256890288,
+     "stored_size": 6904,
+     "w4": 0,
+     "sort_key": 2315464403,
+     "path_hash": 2992325576,
+     "magic": "chunkzip",
+     "stored_sha256": "57006992faf93a814518e1d4ddeebe7b6d7563f0dd3bf06994a5941f60ee8032",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 27618,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 6856,
+        "flag": 1,
+        "plain": 27618
+       }
+      ],
+      "consumed": 6904,
+      "stored_len": 6904,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 27618,
+     "plain_sha256": "8b052005649e8c6ec099802628df01e61e54e7a693ed4e549d00298f2982a7d5",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 352,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2816,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 352,
+      "header": "id,name,legacy_id,is_global,is_choice,choice_to_range,name_loc,description_loc,extra_loc",
+      "header_columns": 9,
+      "row_comma_counts": {
+       "9": 351
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 617,
+     "census_stored_size": 6904
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 637,
+     "path": "nhl/data/common/gamemodes/setting_csv/choicelist.csv",
+     "offset": 256855120,
+     "stored_size": 779,
+     "w4": 0,
+     "sort_key": 2367194709,
+     "path_hash": 1469552977,
+     "magic": "chunkzip",
+     "stored_sha256": "cd4e72b4cb8acc225157d09ac2dec1dcba7c1578dd029b7602903b1b438d4cb3",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 1492,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 731,
+        "flag": 1,
+        "plain": 1492
+       }
+      ],
+      "consumed": 779,
+      "stored_len": 779,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 1492,
+     "plain_sha256": "5896c3b2ba84f957b66dd25c284361e4dd10ff01d3fd685ada3d6458393c5710",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 72,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 72,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 72,
+      "header": "id,name",
+      "header_columns": 2,
+      "row_comma_counts": {
+       "2": 71
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 637,
+     "census_stored_size": 779
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 892,
+     "path": "nhl/data/common/gamemodes/setting_csv/stocksettingdependencies.csv",
+     "offset": 256897280,
+     "stored_size": 292,
+     "w4": 0,
+     "sort_key": 3124816267,
+     "path_hash": 3619851795,
+     "magic": "LegacyID",
+     "stored_sha256": "e5ac8abf98846b982c568513d1daca251c91afa3ae2be9c3fc92e93a0766cc46",
+     "chunkzip": null,
+     "plain_size": 292,
+     "plain_sha256": "e5ac8abf98846b982c568513d1daca251c91afa3ae2be9c3fc92e93a0766cc46",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 26,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 52,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 26,
+      "header": "LegacyID,Order,DependentLegacyID",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 25
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 892,
+     "census_stored_size": 292
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 991,
+     "path": "nhl/data/common/gamemodes/setting_csv/choice.csv",
+     "offset": 256851744,
+     "stored_size": 3372,
+     "w4": 0,
+     "sort_key": 3584057772,
+     "path_hash": 1702457077,
+     "magic": "chunkzip",
+     "stored_sha256": "2d1a0bc9ca419119d90bd3b44f6589f20b8fcdc0e3e33e9ac7c8bd63c489d308",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 10417,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 3324,
+        "flag": 1,
+        "plain": 10417
+       }
+      ],
+      "consumed": 3372,
+      "stored_len": 3372,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 10417,
+     "plain_sha256": "fd6070a287e91d2f7e4a34f79af90bca5f3f1fc1dca5ca23d675f44b0c92f34e",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 300,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1500,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 300,
+      "header": "id,choicelist_id,name,value,name_loc,description_loc",
+      "header_columns": 6,
+      "row_comma_counts": {
+       "6": 299
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 991,
+     "census_stored_size": 3372
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1001,
+     "path": "nhl/data/common/gamemodes/setting_csv/group.csv",
+     "offset": 256881984,
+     "stored_size": 934,
+     "w4": 0,
+     "sort_key": 3622673371,
+     "path_hash": 3087405111,
+     "magic": "chunkzip",
+     "stored_sha256": "d089e4defe8547d6cdf529110f76a00bbb5afade1130f62a7c1cd6ae20de485c",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 2636,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 886,
+        "flag": 1,
+        "plain": 2636
+       }
+      ],
+      "consumed": 934,
+      "stored_len": 934,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 2636,
+     "plain_sha256": "e7577279b17511ac880336f259a2cd60227ff697b8af2f3df2c5589c55a58e69",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 65,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 195,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 65,
+      "header": "id,name,parent_id,name_loc",
+      "header_columns": 4,
+      "row_comma_counts": {
+       "4": 64
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1001,
+     "census_stored_size": 934
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1002,
+     "path": "nhl/data/common/gamemodes/setting_csv/range.csv",
+     "offset": 256888144,
+     "stored_size": 382,
+     "w4": 0,
+     "sort_key": 3622676804,
+     "path_hash": 2593539383,
+     "magic": "id,name,",
+     "stored_sha256": "bf30b82741cb63bd21a6dc437fbcf5c7b55522df8b83d8f71b457deab31d3d13",
+     "chunkzip": null,
+     "plain_size": 382,
+     "plain_sha256": "bf30b82741cb63bd21a6dc437fbcf5c7b55522df8b83d8f71b457deab31d3d13",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 13,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 52,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 13,
+      "header": "id,name,min,max,step",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 12
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1002,
+     "census_stored_size": 382
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1060,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextsetting.csv",
+     "offset": 256858544,
+     "stored_size": 23439,
+     "w4": 0,
+     "sort_key": 3875124184,
+     "path_hash": 1471882765,
+     "magic": "chunkzip",
+     "stored_sha256": "64abcf9827c75f059747a7db2aa3426499caf21e0498d96f85efff15df9990f9",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 120469,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 23391,
+        "flag": 1,
+        "plain": 120469
+       }
+      ],
+      "consumed": 23439,
+      "stored_len": 23439,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 120469,
+     "plain_sha256": "19f1f32fa94b0c44a7b3e674043cd4c4946ffcc658026e677427b6c65cb61e03",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 8307,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 33228,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 8307,
+      "header": "context_id,setting_id,is_enabled,default_value,potential_values",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 8306
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1060,
+     "census_stored_size": 23439
+    }
+   ],
+   "eboot": {
+    "size": 73395278,
+    "sha256": "6aa1ff7be63a4c42eb39ed277f9bf8adb05882eacb63f0bbe028da66fceed2e7"
+   },
+   "path_copies": {},
+   "census_paths_not_found": []
+  },
+  "nhl18": {
+   "cusa": "CUSA07569",
+   "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA07569",
+   "param_sfo": {
+    "size": 1852,
+    "sha256": "55d8582ebe476c4a348a13b03c46ac18cc3ad4e38b075b1412baf7c3fd2d4c59",
+    "version_strings": [
+     "01.00",
+     "01.00"
+    ]
+   },
+   "archives": {
+    "boot.big": {
+     "eb_version": "0x00110400",
+     "file_count": 6659,
+     "file_length": 17987168,
+     "archive_size_field": 17987168,
+     "setting_csv_hits": 0
+    },
+    "game_60.big": {
+     "eb_version": "0x00110400",
+     "file_count": 11388,
+     "file_length": 759509824,
+     "archive_size_field": 759509824,
+     "setting_csv_hits": 0
+    },
+    "game_70.big": {
+     "eb_version": "0x00110400",
+     "file_count": 544,
+     "file_length": 5554932768,
+     "archive_size_field": 5554932768,
+     "setting_csv_hits": 0
+    },
+    "game_80.big": {
+     "eb_version": "0x00110400",
+     "file_count": 46,
+     "file_length": 1197095024,
+     "archive_size_field": 1197095024,
+     "setting_csv_hits": 0
+    },
+    "game_90.big": {
+     "eb_version": "0x00110400",
+     "file_count": 72795,
+     "file_length": 11018633824,
+     "archive_size_field": 11018633824,
+     "setting_csv_hits": 0
+    },
+    "inxp_00.big": {
+     "eb_version": "0x00110400",
+     "file_count": 1354,
+     "file_length": 390197792,
+     "archive_size_field": 390197792,
+     "setting_csv_hits": 11
+    },
+    "inxp_10.big": {
+     "eb_version": "0x00110400",
+     "file_count": 17419,
+     "file_length": 1769934752,
+     "archive_size_field": 1769934752,
+     "setting_csv_hits": 0
+    },
+    "inxp_30.big": {
+     "eb_version": "0x00110400",
+     "file_count": 116,
+     "file_length": 1438721168,
+     "archive_size_field": 1438721168,
+     "setting_csv_hits": 0
+    },
+    "inxp_40.big": {
+     "eb_version": "0x00110400",
+     "file_count": 126,
+     "file_length": 1592883024,
+     "archive_size_field": 1592883024,
+     "setting_csv_hits": 0
+    },
+    "inxp_50.big": {
+     "eb_version": "0x00110400",
+     "file_count": 9704,
+     "file_length": 1284063184,
+     "archive_size_field": 1284063184,
+     "setting_csv_hits": 0
+    },
+    "overlays_20.big": {
+     "eb_version": "0x00110400",
+     "file_count": 216,
+     "file_length": 8287296,
+     "archive_size_field": 8287296,
+     "setting_csv_hits": 0
+    },
+    "overlays_21.big": {
+     "eb_version": "0x00110400",
+     "file_count": 212,
+     "file_length": 8641792,
+     "archive_size_field": 8641792,
+     "setting_csv_hits": 0
+    },
+    "overlays_22.big": {
+     "eb_version": "0x00110400",
+     "file_count": 12,
+     "file_length": 2292096,
+     "archive_size_field": 2292096,
+     "setting_csv_hits": 0
+    }
+   },
+   "members": [
+    {
+     "archive": "inxp_00.big",
+     "entry": 195,
+     "path": "nhl/data/common/gamemodes/setting_csv/groupsetting.csv",
+     "offset": 371123984,
+     "stored_size": 5703,
+     "w4": 0,
+     "sort_key": 654678815,
+     "path_hash": 3311450741,
+     "magic": "chunkzip",
+     "stored_sha256": "f53def9bead841f0b51b58cfa537d409f4e69a140b4c92a526856bcca0b2ff07",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 16477,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 5655,
+        "flag": 1,
+        "plain": 16477
+       }
+      ],
+      "consumed": 5703,
+      "stored_len": 5703,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 16477,
+     "plain_sha256": "77b9d68b5db0415ee454ced3662dce1ead09afab5c8c82231e79110a2fe0a50d",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1528,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3056,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1528,
+      "header": "group_id,setting_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 1527
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 195,
+     "census_stored_size": 5703
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 315,
+     "path": "nhl/data/common/gamemodes/setting_csv/settingservice.csv",
+     "offset": 371139360,
+     "stored_size": 68,
+     "w4": 0,
+     "sort_key": 1114442538,
+     "path_hash": 4068866233,
+     "magic": "setting_",
+     "stored_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "chunkzip": null,
+     "plain_size": 68,
+     "plain_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 6,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1,
+      "header": "setting_id,order,info_urn,get_urn,set_urn,category_name,value_name",
+      "header_columns": 7,
+      "row_comma_counts": {},
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 315,
+     "census_stored_size": 68
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 418,
+     "path": "nhl/data/common/gamemodes/setting_csv/renderingintro.csv",
+     "offset": 371130176,
+     "stored_size": 1784,
+     "w4": 0,
+     "sort_key": 1449184122,
+     "path_hash": 2657483828,
+     "magic": "chunkzip",
+     "stored_sha256": "db8f7eba3158ee467c95f4bcadc69d711281b3bb4334653e7b14ef5ecbd022e2",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 9200,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1736,
+        "flag": 1,
+        "plain": 9200
+       }
+      ],
+      "consumed": 1784,
+      "stored_len": 1784,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 9200,
+     "plain_sha256": "f54a15914e2cc6f4d37058e80282a14643aacc959f1ed4792c4dc4b3ca2d0d2c",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 198,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3564,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 198,
+      "header": "introdataid,contextid,contextver,eashl_hut_related,eashlvalue1,eashlvalue2,genericvalue1,genericvalue2,hutvalue1,hutvalue2,ignoreglobalskipcountdown,logicid,priority,repetitioncount,takeid,takever,userteamsiderelated,introyear,isaudio",
+      "header_columns": 19,
+      "row_comma_counts": {
+       "19": 197
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 418,
+     "census_stored_size": 1784
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 583,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextgroup.csv",
+     "offset": 371095168,
+     "stored_size": 1934,
+     "w4": 0,
+     "sort_key": 2022859723,
+     "path_hash": 4178484540,
+     "magic": "chunkzip",
+     "stored_sha256": "43df2c1c60d7d212acd96bb75dc24c1a8654f9a04dfdad55b88d992785cdad2b",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 6335,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1886,
+        "flag": 1,
+        "plain": 6335
+       }
+      ],
+      "consumed": 1934,
+      "stored_len": 1934,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 6335,
+     "plain_sha256": "f001f4e7a4b8a680135e3c369c474936154ea57edfe064c09dc2e72f54d547b5",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 662,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1324,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 662,
+      "header": "context_id,group_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 661
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 583,
+     "census_stored_size": 1934
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 684,
+     "path": "nhl/data/common/gamemodes/setting_csv/context.csv",
+     "offset": 371094128,
+     "stored_size": 1025,
+     "w4": 0,
+     "sort_key": 2309864921,
+     "path_hash": 2925844175,
+     "magic": "chunkzip",
+     "stored_sha256": "e87aba5f04e9215fa12f9b582f9a94a7e0cf677fb986a234b004360687c75e5c",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 3626,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 977,
+        "flag": 1,
+        "plain": 3626
+       }
+      ],
+      "consumed": 1025,
+      "stored_len": 1025,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 3626,
+     "plain_sha256": "d9aa964574f9c867f78f304c27ab367fb7adc3643e185925c0151478adffe19b",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 112,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 336,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 112,
+      "header": "id,name,useGroupAll,parent_id",
+      "header_columns": 4,
+      "row_comma_counts": {
+       "4": 111
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 684,
+     "census_stored_size": 1025
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 688,
+     "path": "nhl/data/common/gamemodes/setting_csv/setting.csv",
+     "offset": 371131968,
+     "stored_size": 7392,
+     "w4": 0,
+     "sort_key": 2315464403,
+     "path_hash": 2992325576,
+     "magic": "chunkzip",
+     "stored_sha256": "91855380123f0aa27e590c4088cb844ce091bda31eaba7717c3f97743d06e77d",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 31518,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 7344,
+        "flag": 1,
+        "plain": 31518
+       }
+      ],
+      "consumed": 7392,
+      "stored_len": 7392,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 31518,
+     "plain_sha256": "967f62a9d5800f0e488c1ea09055a89f617b44d6a3993da480b7e2ec04cc81fa",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 377,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3770,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 377,
+      "header": "id,name,is_global,is_choice,choice_to_range,name_loc,description_loc,extra_loc,default_value,potential_values,usage",
+      "header_columns": 11,
+      "row_comma_counts": {
+       "11": 376
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 688,
+     "census_stored_size": 7392
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 709,
+     "path": "nhl/data/common/gamemodes/setting_csv/choicelist.csv",
+     "offset": 371093216,
+     "stored_size": 910,
+     "w4": 0,
+     "sort_key": 2367194709,
+     "path_hash": 1469552977,
+     "magic": "chunkzip",
+     "stored_sha256": "b4d18b42f9a4f3d2a3479c3f4822efd1dc712ed30b474a07a181be17444e7cc1",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 1799,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 862,
+        "flag": 1,
+        "plain": 1799
+       }
+      ],
+      "consumed": 910,
+      "stored_len": 910,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 1799,
+     "plain_sha256": "778cac71b4dfe1efcfec6e3b646d23f2e4691f38e78807fce46ae8adf2f6a6c7",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 85,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 85,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 85,
+      "header": "id,name",
+      "header_columns": 2,
+      "row_comma_counts": {
+       "2": 84
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 709,
+     "census_stored_size": 910
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1131,
+     "path": "nhl/data/common/gamemodes/setting_csv/choice.csv",
+     "offset": 371089200,
+     "stored_size": 4003,
+     "w4": 0,
+     "sort_key": 3584057772,
+     "path_hash": 1702457077,
+     "magic": "chunkzip",
+     "stored_sha256": "a400b7a4e401a08eeda6b648e839873d4b994560034489eb30a8fb2a7fbf099d",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 12323,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 3955,
+        "flag": 1,
+        "plain": 12323
+       }
+      ],
+      "consumed": 4003,
+      "stored_len": 4003,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 12323,
+     "plain_sha256": "8a3e5ce7ad8db5cfc4aad747bdd0b6c762e7e78c5cb8e348ef4e50d12d48efab",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 352,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1760,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 352,
+      "header": "id,choicelist_id,name,value,name_loc,description_loc",
+      "header_columns": 6,
+      "row_comma_counts": {
+       "6": 351
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1131,
+     "census_stored_size": 4003
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1141,
+     "path": "nhl/data/common/gamemodes/setting_csv/group.csv",
+     "offset": 371122912,
+     "stored_size": 1071,
+     "w4": 0,
+     "sort_key": 3622673371,
+     "path_hash": 3087405111,
+     "magic": "chunkzip",
+     "stored_sha256": "6552dbff2ce3bd4a1287cf8178edb8e79d14737a171b74761d63b9345ce89973",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 3162,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1023,
+        "flag": 1,
+        "plain": 3162
+       }
+      ],
+      "consumed": 1071,
+      "stored_len": 1071,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 3162,
+     "plain_sha256": "76344a3e48ad75e79ea2028de640ca05c4004de197c1961dc0440610fc57a320",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 74,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 222,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 74,
+      "header": "id,name,parent_id,name_loc",
+      "header_columns": 4,
+      "row_comma_counts": {
+       "4": 73
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1141,
+     "census_stored_size": 1071
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1142,
+     "path": "nhl/data/common/gamemodes/setting_csv/range.csv",
+     "offset": 371129696,
+     "stored_size": 477,
+     "w4": 0,
+     "sort_key": 3622676804,
+     "path_hash": 2593539383,
+     "magic": "id,name,",
+     "stored_sha256": "5f2c0acc733d24a5a2674b3222c65ad19bf66d4cb4b42e0ae7cec2553050dc9a",
+     "chunkzip": null,
+     "plain_size": 477,
+     "plain_sha256": "5f2c0acc733d24a5a2674b3222c65ad19bf66d4cb4b42e0ae7cec2553050dc9a",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 16,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 64,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 16,
+      "header": "id,name,min,max,step",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 15
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1142,
+     "census_stored_size": 477
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1207,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextsetting.csv",
+     "offset": 371097104,
+     "stored_size": 25805,
+     "w4": 0,
+     "sort_key": 3875124184,
+     "path_hash": 1471882765,
+     "magic": "chunkzip",
+     "stored_sha256": "f23ca850ba2b0e10be76211d094db319ac9d360fb18b6cda4b775cb29d6a138e",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 166384,
+      "window": 131072,
+      "n_chunks": 2,
+      "chunks": [
+       {
+        "zsize": 20270,
+        "flag": 1,
+        "plain": 131072
+       },
+       {
+        "zsize": 5469,
+        "flag": 1,
+        "plain": 35312
+       }
+      ],
+      "consumed": 25805,
+      "stored_len": 25805,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 166384,
+     "plain_sha256": "954a842c236485642f7812312bd6a4ba80889224f4a418fef37012a714f7c952",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 8945,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 53670,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 8945,
+      "header": "context_id,setting_id,is_enabled,default_value,potential_values,is_visible,usage",
+      "header_columns": 7,
+      "row_comma_counts": {
+       "7": 8944
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1207,
+     "census_stored_size": 25805
+    }
+   ],
+   "eboot": {
+    "size": 80134904,
+    "sha256": "59e33089575da770ed527c1ffac8c9d608a8606961eb3debc64caea13bc86a50"
+   },
+   "path_copies": {},
+   "census_paths_not_found": []
+  },
+  "nhl19": {
+   "cusa": "CUSA11126",
+   "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA11126",
+   "param_sfo": {
+    "size": 1924,
+    "sha256": "50759900aaa850f49bb3df24242af8a3b72d0cb81d701b983f3f8236270a2970",
+    "version_strings": [
+     "01.60",
+     "01.55",
+     "01.00"
+    ]
+   },
+   "archives": {
+    "boot.big": {
+     "eb_version": "0x00110400",
+     "file_count": 6886,
+     "file_length": 16313792,
+     "archive_size_field": 16313792,
+     "setting_csv_hits": 0
+    },
+    "game_60.big": {
+     "eb_version": "0x00110400",
+     "file_count": 7795,
+     "file_length": 630263392,
+     "archive_size_field": 630263392,
+     "setting_csv_hits": 0
+    },
+    "game_70.big": {
+     "eb_version": "0x00110400",
+     "file_count": 558,
+     "file_length": 5566155616,
+     "archive_size_field": 5566155616,
+     "setting_csv_hits": 0
+    },
+    "game_80.big": {
+     "eb_version": "0x00110400",
+     "file_count": 125,
+     "file_length": 1818291872,
+     "archive_size_field": 1818291872,
+     "setting_csv_hits": 0
+    },
+    "game_90-008.big": {
+     "eb_version": "0x00110400",
+     "file_count": 79391,
+     "file_length": 13554785291,
+     "archive_size_field": 13554785291,
+     "setting_csv_hits": 0
+    },
+    "inxp_00.big": {
+     "eb_version": "0x00110400",
+     "file_count": 2329,
+     "file_length": 445758880,
+     "archive_size_field": 445758880,
+     "setting_csv_hits": 11
+    },
+    "inxp_10-010.big": {
+     "eb_version": "0x00110400",
+     "file_count": 28819,
+     "file_length": 2987318816,
+     "archive_size_field": 2987318816,
+     "setting_csv_hits": 0
+    },
+    "inxp_30.big": {
+     "eb_version": "0x00110400",
+     "file_count": 156,
+     "file_length": 1711034288,
+     "archive_size_field": 1711034288,
+     "setting_csv_hits": 0
+    },
+    "inxp_40.big": {
+     "eb_version": "0x00110400",
+     "file_count": 111,
+     "file_length": 1707331008,
+     "archive_size_field": 1707331008,
+     "setting_csv_hits": 0
+    },
+    "inxp_50.big": {
+     "eb_version": "0x00110400",
+     "file_count": 10870,
+     "file_length": 1414628128,
+     "archive_size_field": 1414628128,
+     "setting_csv_hits": 0
+    },
+    "overlays_20.big": {
+     "eb_version": "0x00110400",
+     "file_count": 216,
+     "file_length": 8287296,
+     "archive_size_field": 8287296,
+     "setting_csv_hits": 0
+    },
+    "overlays_21.big": {
+     "eb_version": "0x00110400",
+     "file_count": 212,
+     "file_length": 8641792,
+     "archive_size_field": 8641792,
+     "setting_csv_hits": 0
+    },
+    "overlays_22.big": {
+     "eb_version": "0x00110400",
+     "file_count": 24,
+     "file_length": 5394560,
+     "archive_size_field": 5394560,
+     "setting_csv_hits": 0
+    },
+    "patch_game_91.big": {
+     "eb_version": "0x00110400",
+     "file_count": 3281,
+     "file_length": 761555651,
+     "archive_size_field": 761555651,
+     "setting_csv_hits": 0
+    },
+    "patch_game_92.big": {
+     "eb_version": "0x00110400",
+     "file_count": 688,
+     "file_length": 1236540192,
+     "archive_size_field": 1236540192,
+     "setting_csv_hits": 0
+    },
+    "patch_game_93.big": {
+     "eb_version": "0x00110400",
+     "file_count": 3776,
+     "file_length": 1381330787,
+     "archive_size_field": 1381330787,
+     "setting_csv_hits": 0
+    },
+    "patch_game_94.big": {
+     "eb_version": "0x00110400",
+     "file_count": 473,
+     "file_length": 375063600,
+     "archive_size_field": 375063600,
+     "setting_csv_hits": 0
+    },
+    "patch_game_95.big": {
+     "eb_version": "0x00110400",
+     "file_count": 74,
+     "file_length": 58208672,
+     "archive_size_field": 58208672,
+     "setting_csv_hits": 0
+    },
+    "patch_game_96.big": {
+     "eb_version": "0x00110400",
+     "file_count": 48,
+     "file_length": 55567808,
+     "archive_size_field": 55567808,
+     "setting_csv_hits": 0
+    },
+    "patch_inxp_51.big": {
+     "eb_version": "0x00110400",
+     "file_count": 2001,
+     "file_length": 564334320,
+     "archive_size_field": 564334320,
+     "setting_csv_hits": 0
+    },
+    "patch_inxp_52.big": {
+     "eb_version": "0x00110400",
+     "file_count": 735,
+     "file_length": 203285216,
+     "archive_size_field": 203285216,
+     "setting_csv_hits": 0
+    },
+    "patch_inxp_53.big": {
+     "eb_version": "0x00110400",
+     "file_count": 1383,
+     "file_length": 275514016,
+     "archive_size_field": 275514016,
+     "setting_csv_hits": 0
+    },
+    "patch_inxp_54.big": {
+     "eb_version": "0x00110400",
+     "file_count": 685,
+     "file_length": 138174224,
+     "archive_size_field": 138174224,
+     "setting_csv_hits": 0
+    },
+    "patch_inxp_55.big": {
+     "eb_version": "0x00110400",
+     "file_count": 592,
+     "file_length": 245558720,
+     "archive_size_field": 245558720,
+     "setting_csv_hits": 0
+    },
+    "patch_inxp_56.big": {
+     "eb_version": "0x00110400",
+     "file_count": 567,
+     "file_length": 128855568,
+     "archive_size_field": 128855568,
+     "setting_csv_hits": 0
+    }
+   },
+   "members": [
+    {
+     "archive": "inxp_00.big",
+     "entry": 364,
+     "path": "nhl/data/common/gamemodes/setting_csv/groupsetting.csv",
+     "offset": 424802864,
+     "stored_size": 5917,
+     "w4": 0,
+     "sort_key": 654678815,
+     "path_hash": 3311450741,
+     "magic": "chunkzip",
+     "stored_sha256": "8d647a6ba99ac8da13c0c68bf8d806d01ad44616fb29d0e063bab82b193862a0",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 17106,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 5869,
+        "flag": 1,
+        "plain": 17106
+       }
+      ],
+      "consumed": 5917,
+      "stored_len": 5917,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 17106,
+     "plain_sha256": "b746f4adb0b144e6c65fff74dcea921bd50630877076b8abca28ee0bf2afe510",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1585,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3170,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1585,
+      "header": "group_id,setting_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 1584
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 364,
+     "census_stored_size": 5917
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 577,
+     "path": "nhl/data/common/gamemodes/setting_csv/settingservice.csv",
+     "offset": 424818432,
+     "stored_size": 68,
+     "w4": 0,
+     "sort_key": 1114442538,
+     "path_hash": 4068866233,
+     "magic": "setting_",
+     "stored_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "chunkzip": null,
+     "plain_size": 68,
+     "plain_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 6,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1,
+      "header": "setting_id,order,info_urn,get_urn,set_urn,category_name,value_name",
+      "header_columns": 7,
+      "row_comma_counts": {},
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 577,
+     "census_stored_size": 68
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 757,
+     "path": "nhl/data/common/gamemodes/setting_csv/renderingintro.csv",
+     "offset": 424809264,
+     "stored_size": 1506,
+     "w4": 0,
+     "sort_key": 1449184122,
+     "path_hash": 2657483828,
+     "magic": "chunkzip",
+     "stored_sha256": "faee53626b2f6258bd5572a2d221c72d1cd2680bb638040e35198f3f8ce201cc",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 7376,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1458,
+        "flag": 1,
+        "plain": 7376
+       }
+      ],
+      "consumed": 1506,
+      "stored_len": 1506,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 7376,
+     "plain_sha256": "d647bca1b0df797ddd09dc7f5ee4389543d867c2c4633ba108cf354cc83b87f7",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 157,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2826,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 157,
+      "header": "introdataid,contextid,contextver,eashl_hut_related,eashlvalue1,eashlvalue2,genericvalue1,genericvalue2,hutvalue1,hutvalue2,ignoreglobalskipcountdown,logicid,priority,repetitioncount,takeid,takever,userteamsiderelated,introyear,isaudio",
+      "header_columns": 19,
+      "row_comma_counts": {
+       "19": 156
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 757,
+     "census_stored_size": 1506
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1061,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextgroup.csv",
+     "offset": 424769200,
+     "stored_size": 2665,
+     "w4": 0,
+     "sort_key": 2022859723,
+     "path_hash": 4178484540,
+     "magic": "chunkzip",
+     "stored_sha256": "18cd4392cd2fc4062adbfb8588a16b89de141c821781134cb621f12c57b5716c",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 8702,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 2617,
+        "flag": 1,
+        "plain": 8702
+       }
+      ],
+      "consumed": 2665,
+      "stored_len": 2665,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 8702,
+     "plain_sha256": "45427aad01084b056622aeb9ad6dc715d675884b69f1f6f0b0d72162c5570a46",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 884,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1768,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 884,
+      "header": "context_id,group_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 883
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1061,
+     "census_stored_size": 2665
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1233,
+     "path": "nhl/data/common/gamemodes/setting_csv/context.csv",
+     "offset": 424768080,
+     "stored_size": 1114,
+     "w4": 0,
+     "sort_key": 2309864921,
+     "path_hash": 2925844175,
+     "magic": "chunkzip",
+     "stored_sha256": "415d28c5fb46d2e4a9526fd394b1b60d0a54432ac3e5895b1c6cc6de2e01ec3c",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 4196,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1066,
+        "flag": 1,
+        "plain": 4196
+       }
+      ],
+      "consumed": 1114,
+      "stored_len": 1114,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 4196,
+     "plain_sha256": "6d69dba9b29ed4b774135e41be0d01f6afa0f2b0ee82eca5bd858fcec4f0b5ea",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 112,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 336,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 112,
+      "header": "id,name,useGroupAll,parent_id",
+      "header_columns": 4,
+      "row_comma_counts": {
+       "4": 111
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1233,
+     "census_stored_size": 1114
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1238,
+     "path": "nhl/data/common/gamemodes/setting_csv/setting.csv",
+     "offset": 424810784,
+     "stored_size": 7640,
+     "w4": 0,
+     "sort_key": 2315464403,
+     "path_hash": 2992325576,
+     "magic": "chunkzip",
+     "stored_sha256": "5dc20cde5f731822d9cc73ab9e954737e3d633b0ce47b3be522a33f290fb8472",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 32971,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 7592,
+        "flag": 1,
+        "plain": 32971
+       }
+      ],
+      "consumed": 7640,
+      "stored_len": 7640,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 32971,
+     "plain_sha256": "0b3a5fa9ac498c828ec90d19534a10624e5e8dce5bb54c1ce272781b19dd4fc3",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 390,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3900,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 390,
+      "header": "id,name,is_global,is_choice,choice_to_range,name_loc,description_loc,extra_loc,default_value,potential_values,usage",
+      "header_columns": 11,
+      "row_comma_counts": {
+       "11": 389
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1238,
+     "census_stored_size": 7640
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1275,
+     "path": "nhl/data/common/gamemodes/setting_csv/choicelist.csv",
+     "offset": 424767152,
+     "stored_size": 924,
+     "w4": 0,
+     "sort_key": 2367194709,
+     "path_hash": 1469552977,
+     "magic": "chunkzip",
+     "stored_sha256": "5b75a7377bf2ff799259483684d0fcc51955231b20ff95f2dae27e22abb2e0cd",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 1828,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 876,
+        "flag": 1,
+        "plain": 1828
+       }
+      ],
+      "consumed": 924,
+      "stored_len": 924,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 1828,
+     "plain_sha256": "1cbe1ea9f649f820a524371eda998fbf46691fb4d287623ddf8bbcdb99206902",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 86,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 86,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 86,
+      "header": "id,name",
+      "header_columns": 2,
+      "row_comma_counts": {
+       "2": 85
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1275,
+     "census_stored_size": 924
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1956,
+     "path": "nhl/data/common/gamemodes/setting_csv/choice.csv",
+     "offset": 424763024,
+     "stored_size": 4114,
+     "w4": 0,
+     "sort_key": 3584057772,
+     "path_hash": 1702457077,
+     "magic": "chunkzip",
+     "stored_sha256": "3a440234ecf7b05857f6a56bc91dd78267f1572c74a1b9c374ee91510efe235f",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 12630,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 4066,
+        "flag": 1,
+        "plain": 12630
+       }
+      ],
+      "consumed": 4114,
+      "stored_len": 4114,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 12630,
+     "plain_sha256": "0ed7525d0ca1a11f5c570a7ac6ae19a6b6429200040413744de51b33c3542052",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 359,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1795,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 359,
+      "header": "id,choicelist_id,name,value,name_loc,description_loc",
+      "header_columns": 6,
+      "row_comma_counts": {
+       "6": 358
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1956,
+     "census_stored_size": 4114
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1978,
+     "path": "nhl/data/common/gamemodes/setting_csv/group.csv",
+     "offset": 424801744,
+     "stored_size": 1107,
+     "w4": 0,
+     "sort_key": 3622673371,
+     "path_hash": 3087405111,
+     "magic": "chunkzip",
+     "stored_sha256": "37174cd22ee9c9cb69dc9af1ae92d42b6b903126b563ad6fb7d75a03fe7957b1",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 3270,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1059,
+        "flag": 1,
+        "plain": 3270
+       }
+      ],
+      "consumed": 1107,
+      "stored_len": 1107,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 3270,
+     "plain_sha256": "ea677ea283e7cf6a556a78db7c4f84b78dad73cea4128b4629c449d263630892",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 76,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 228,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 76,
+      "header": "id,name,parent_id,name_loc",
+      "header_columns": 4,
+      "row_comma_counts": {
+       "4": 75
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1978,
+     "census_stored_size": 1107
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1979,
+     "path": "nhl/data/common/gamemodes/setting_csv/range.csv",
+     "offset": 424808784,
+     "stored_size": 477,
+     "w4": 0,
+     "sort_key": 3622676804,
+     "path_hash": 2593539383,
+     "magic": "id,name,",
+     "stored_sha256": "5f2c0acc733d24a5a2674b3222c65ad19bf66d4cb4b42e0ae7cec2553050dc9a",
+     "chunkzip": null,
+     "plain_size": 477,
+     "plain_sha256": "5f2c0acc733d24a5a2674b3222c65ad19bf66d4cb4b42e0ae7cec2553050dc9a",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 16,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 64,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 16,
+      "header": "id,name,min,max,step",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 15
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1979,
+     "census_stored_size": 477
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 2097,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextsetting.csv",
+     "offset": 424771872,
+     "stored_size": 29869,
+     "w4": 0,
+     "sort_key": 3875124184,
+     "path_hash": 1471882765,
+     "magic": "chunkzip",
+     "stored_sha256": "cc4fd0712461012dd5d0c17d2ed026af46860a0ff6ef0a49e0d0b9f0c6fe352d",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 191552,
+      "window": 131072,
+      "n_chunks": 2,
+      "chunks": [
+       {
+        "zsize": 20294,
+        "flag": 1,
+        "plain": 131072
+       },
+       {
+        "zsize": 9517,
+        "flag": 1,
+        "plain": 60480
+       }
+      ],
+      "consumed": 29869,
+      "stored_len": 29869,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 191552,
+     "plain_sha256": "7ff616cf35d968deeedf022b7b59aee8029ce2c30f48f7bd98b99eabb2d23f01",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 10233,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 61398,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 10233,
+      "header": "context_id,setting_id,is_enabled,default_value,potential_values,is_visible,usage",
+      "header_columns": 7,
+      "row_comma_counts": {
+       "7": 10232
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 2097,
+     "census_stored_size": 29869
+    }
+   ],
+   "eboot": {
+    "size": 100369766,
+    "sha256": "426297a6ad5a16bed648f2f8aa83b73a1eecfcf8e85ef018e11dbe88b4dd4cca"
+   },
+   "path_copies": {},
+   "census_paths_not_found": []
+  },
+  "nhl20": {
+   "cusa": "CUSA15439",
+   "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439",
+   "param_sfo": {
+    "size": 1884,
+    "sha256": "9f63789056833b69b0d3aa6f01f26074707e09c050a87f506ebbbd23d4a18122",
+    "version_strings": [
+     "01.00",
+     "01.00"
+    ]
+   },
+   "archives": {
+    "boot.big": {
+     "eb_version": "0x00110400",
+     "file_count": 7168,
+     "file_length": 17553104,
+     "archive_size_field": 17553104,
+     "setting_csv_hits": 0
+    },
+    "game_60.big": {
+     "eb_version": "0x00110400",
+     "file_count": 9109,
+     "file_length": 736921968,
+     "archive_size_field": 736921968,
+     "setting_csv_hits": 0
+    },
+    "game_70.big": {
+     "eb_version": "0x00110400",
+     "file_count": 168,
+     "file_length": 2232410960,
+     "archive_size_field": 2232410960,
+     "setting_csv_hits": 0
+    },
+    "game_80.big": {
+     "eb_version": "0x00110400",
+     "file_count": 180,
+     "file_length": 1603113584,
+     "archive_size_field": 1603113584,
+     "setting_csv_hits": 0
+    },
+    "game_90.big": {
+     "eb_version": "0x00110400",
+     "file_count": 88730,
+     "file_length": 16030077840,
+     "archive_size_field": 16030077840,
+     "setting_csv_hits": 0
+    },
+    "inxp_00.big": {
+     "eb_version": "0x00110400",
+     "file_count": 14567,
+     "file_length": 517362304,
+     "archive_size_field": 517362304,
+     "setting_csv_hits": 11
+    },
+    "inxp_10.big": {
+     "eb_version": "0x00110400",
+     "file_count": 37690,
+     "file_length": 3757204192,
+     "archive_size_field": 3757204192,
+     "setting_csv_hits": 0
+    },
+    "inxp_30.big": {
+     "eb_version": "0x00110400",
+     "file_count": 180,
+     "file_length": 2043328368,
+     "archive_size_field": 2043328368,
+     "setting_csv_hits": 0
+    },
+    "inxp_40.big": {
+     "eb_version": "0x00110400",
+     "file_count": 126,
+     "file_length": 1653021360,
+     "archive_size_field": 1653021360,
+     "setting_csv_hits": 0
+    },
+    "inxp_50.big": {
+     "eb_version": "0x00110400",
+     "file_count": 12259,
+     "file_length": 1837808208,
+     "archive_size_field": 1837808208,
+     "setting_csv_hits": 0
+    },
+    "overlays_20.big": {
+     "eb_version": "0x00110400",
+     "file_count": 421,
+     "file_length": 20147072,
+     "archive_size_field": 20147072,
+     "setting_csv_hits": 0
+    },
+    "overlays_21.big": {
+     "eb_version": "0x00110400",
+     "file_count": 134,
+     "file_length": 2605472,
+     "archive_size_field": 2605472,
+     "setting_csv_hits": 0
+    },
+    "overlays_22.big": {
+     "eb_version": "0x00110400",
+     "file_count": 24,
+     "file_length": 5394560,
+     "archive_size_field": 5394560,
+     "setting_csv_hits": 0
+    }
+   },
+   "members": [
+    {
+     "archive": "inxp_00.big",
+     "entry": 2274,
+     "path": "nhl/data/common/gamemodes/setting_csv/groupsetting.csv",
+     "offset": 495213712,
+     "stored_size": 6251,
+     "w4": 0,
+     "sort_key": 654678815,
+     "path_hash": 3311450741,
+     "magic": "chunkzip",
+     "stored_sha256": "49763a68a23aa35badf3fe0155f776b257ae5fef642ed098b1eefc0cb15a76ad",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 17992,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 6203,
+        "flag": 1,
+        "plain": 17992
+       }
+      ],
+      "consumed": 6251,
+      "stored_len": 6251,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 17992,
+     "plain_sha256": "0e31ad62cf75232c3abd76261a022a829423fc8553bccbb052744a48dfc12ac5",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1665,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3330,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1665,
+      "header": "group_id,setting_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 1664
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 2274,
+     "census_stored_size": 6251
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 3671,
+     "path": "nhl/data/common/gamemodes/setting_csv/settingservice.csv",
+     "offset": 495230304,
+     "stored_size": 68,
+     "w4": 0,
+     "sort_key": 1114442538,
+     "path_hash": 4068866233,
+     "magic": "setting_",
+     "stored_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "chunkzip": null,
+     "plain_size": 68,
+     "plain_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 6,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1,
+      "header": "setting_id,order,info_urn,get_urn,set_urn,category_name,value_name",
+      "header_columns": 7,
+      "row_comma_counts": {},
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 3671,
+     "census_stored_size": 68
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 4976,
+     "path": "nhl/data/common/gamemodes/setting_csv/renderingintro.csv",
+     "offset": 495220496,
+     "stored_size": 1506,
+     "w4": 0,
+     "sort_key": 1449184122,
+     "path_hash": 2657483828,
+     "magic": "chunkzip",
+     "stored_sha256": "faee53626b2f6258bd5572a2d221c72d1cd2680bb638040e35198f3f8ce201cc",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 7376,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1458,
+        "flag": 1,
+        "plain": 7376
+       }
+      ],
+      "consumed": 1506,
+      "stored_len": 1506,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 7376,
+     "plain_sha256": "d647bca1b0df797ddd09dc7f5ee4389543d867c2c4633ba108cf354cc83b87f7",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 157,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2826,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 157,
+      "header": "introdataid,contextid,contextver,eashl_hut_related,eashlvalue1,eashlvalue2,genericvalue1,genericvalue2,hutvalue1,hutvalue2,ignoreglobalskipcountdown,logicid,priority,repetitioncount,takeid,takever,userteamsiderelated,introyear,isaudio",
+      "header_columns": 19,
+      "row_comma_counts": {
+       "19": 156
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 4976,
+     "census_stored_size": 1506
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 6945,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextgroup.csv",
+     "offset": 495178224,
+     "stored_size": 2855,
+     "w4": 0,
+     "sort_key": 2022859723,
+     "path_hash": 4178484540,
+     "magic": "chunkzip",
+     "stored_sha256": "10f8f3a1856de1c7778394bfd962851b1cc6fbdef412235e5349daf6332c0d1b",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 9281,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 2807,
+        "flag": 1,
+        "plain": 9281
+       }
+      ],
+      "consumed": 2855,
+      "stored_len": 2855,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 9281,
+     "plain_sha256": "5fa10e79db4b2226df97c94195431e1e1a68afe67981965e7edaf8f583e2d7b0",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 938,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1876,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 938,
+      "header": "context_id,group_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 937
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 6945,
+     "census_stored_size": 2855
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 7936,
+     "path": "nhl/data/common/gamemodes/setting_csv/context.csv",
+     "offset": 495177008,
+     "stored_size": 1216,
+     "w4": 0,
+     "sort_key": 2309864921,
+     "path_hash": 2925844175,
+     "magic": "chunkzip",
+     "stored_sha256": "902097c7ef7ae192c2d9e77b4430402fd21aa5e1880a9613086688114a4db896",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 4800,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1168,
+        "flag": 1,
+        "plain": 4800
+       }
+      ],
+      "consumed": 1216,
+      "stored_len": 1216,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 4800,
+     "plain_sha256": "8e000a9cdd0700c7dd39c4de77f1b362cefcb77cde9a1f6bf6c0bef9b8d5cc2a",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 118,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 472,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 118,
+      "header": "id,name,useGroupAll,parent_id,audio_id",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 117
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 7936,
+     "census_stored_size": 1216
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 7958,
+     "path": "nhl/data/common/gamemodes/setting_csv/setting.csv",
+     "offset": 495222016,
+     "stored_size": 8276,
+     "w4": 0,
+     "sort_key": 2315464403,
+     "path_hash": 2992325576,
+     "magic": "chunkzip",
+     "stored_sha256": "cb3b97c2725f487b3f354080c0305ef8c45921e048e617895c26c24d73ee3c0c",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 37473,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 8228,
+        "flag": 1,
+        "plain": 37473
+       }
+      ],
+      "consumed": 8276,
+      "stored_len": 8276,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 37473,
+     "plain_sha256": "1493b14b9bd87e926e0a2208887f6abf8536a063517a5837625196ac9d3e9dbb",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 410,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 4920,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 410,
+      "header": "id,name,is_global,is_choice,choice_to_range,name_loc,description_loc,extra_loc,default_value,potential_values,usage,audio_id,description_audio_id",
+      "header_columns": 13,
+      "row_comma_counts": {
+       "13": 409
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 7958,
+     "census_stored_size": 8276
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 8098,
+     "path": "nhl/data/common/gamemodes/setting_csv/choicelist.csv",
+     "offset": 495176048,
+     "stored_size": 959,
+     "w4": 0,
+     "sort_key": 2367194709,
+     "path_hash": 1469552977,
+     "magic": "chunkzip",
+     "stored_sha256": "1e35ab154706d4170b0cbabab565a2dec140a08b273694dea6b537a8b5e422e0",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 1914,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 911,
+        "flag": 1,
+        "plain": 1914
+       }
+      ],
+      "consumed": 959,
+      "stored_len": 959,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 1914,
+     "plain_sha256": "1888b54f836ce000bebc74436cd5530b913f0cf0cc3997c5a38fba8041df58f5",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 89,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 89,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 89,
+      "header": "id,name",
+      "header_columns": 2,
+      "row_comma_counts": {
+       "2": 88
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 8098,
+     "census_stored_size": 959
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 12207,
+     "path": "nhl/data/common/gamemodes/setting_csv/choice.csv",
+     "offset": 495171632,
+     "stored_size": 4404,
+     "w4": 0,
+     "sort_key": 3584057772,
+     "path_hash": 1702457077,
+     "magic": "chunkzip",
+     "stored_sha256": "35d89831c32a02d6b646ce303ab47ffd713d0c83490ec4a581c3f9bcc319e26a",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 14115,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 4356,
+        "flag": 1,
+        "plain": 14115
+       }
+      ],
+      "consumed": 4404,
+      "stored_len": 4404,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 14115,
+     "plain_sha256": "8a8b9744dcb52a1dd8d29b1a9bb1b260949a4ce07e50cf88f36bfdbaae6f1607",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 370,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2220,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 370,
+      "header": "id,choicelist_id,name,value,name_loc,description_loc,audio_id",
+      "header_columns": 7,
+      "row_comma_counts": {
+       "7": 369
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 12207,
+     "census_stored_size": 4404
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 12343,
+     "path": "nhl/data/common/gamemodes/setting_csv/group.csv",
+     "offset": 495212464,
+     "stored_size": 1240,
+     "w4": 0,
+     "sort_key": 3622673371,
+     "path_hash": 3087405111,
+     "magic": "chunkzip",
+     "stored_sha256": "26f89cb2ae8d54df2c505776d806e2bb2173d13127981bd5d873790b5e6c7431",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 3965,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1192,
+        "flag": 1,
+        "plain": 3965
+       }
+      ],
+      "consumed": 1240,
+      "stored_len": 1240,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 3965,
+     "plain_sha256": "3cd701ac3fafd8a3b859d2eb41fa6a3d672e109c93189b524866716cbab6f3c1",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 84,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 336,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 84,
+      "header": "id,name,parent_id,name_loc,audio_id",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 83
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 12343,
+     "census_stored_size": 1240
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 12344,
+     "path": "nhl/data/common/gamemodes/setting_csv/range.csv",
+     "offset": 495219968,
+     "stored_size": 519,
+     "w4": 0,
+     "sort_key": 3622676804,
+     "path_hash": 2593539383,
+     "magic": "id,name,",
+     "stored_sha256": "d320928564ba0521881e4fa9f7f1340d76348c11459ff4177d92a1bd384e48f4",
+     "chunkzip": null,
+     "plain_size": 519,
+     "plain_sha256": "d320928564ba0521881e4fa9f7f1340d76348c11459ff4177d92a1bd384e48f4",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 17,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 68,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 17,
+      "header": "id,name,min,max,step",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 16
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 12344,
+     "census_stored_size": 519
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 13251,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextsetting.csv",
+     "offset": 495181088,
+     "stored_size": 31374,
+     "w4": 0,
+     "sort_key": 3875124184,
+     "path_hash": 1471882765,
+     "magic": "chunkzip",
+     "stored_sha256": "5af901065f12ea52351ed82c2fd924565fe3049862da1adde060f2177ee73ad7",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 200689,
+      "window": 131072,
+      "n_chunks": 2,
+      "chunks": [
+       {
+        "zsize": 20377,
+        "flag": 1,
+        "plain": 131072
+       },
+       {
+        "zsize": 10926,
+        "flag": 1,
+        "plain": 69617
+       }
+      ],
+      "consumed": 31374,
+      "stored_len": 31374,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 200689,
+     "plain_sha256": "745e4f39c931aa61b6ea9e4a3d0524e0597b594b601d39918bd8fac2060c255d",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 10704,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 64224,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 10704,
+      "header": "context_id,setting_id,is_enabled,default_value,potential_values,is_visible,usage",
+      "header_columns": 7,
+      "row_comma_counts": {
+       "7": 10703
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 13251,
+     "census_stored_size": 31374
+    }
+   ],
+   "eboot": {
+    "size": 98710655,
+    "sha256": "82ea5a63af999ed18d9800928f980f88b1aba7007aa0b4af94a292a7c2729adc"
+   },
+   "path_copies": {},
+   "census_paths_not_found": []
+  },
+  "nhl21": {
+   "cusa": "CUSA18182",
+   "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182",
+   "param_sfo": {
+    "size": 1888,
+    "sha256": "bb8c97e3377f029a0a2ead4e17c753c711041fd928f113e57fc40489640e56d4",
+    "version_strings": [
+     "01.00",
+     "01.01"
+    ]
+   },
+   "archives": {
+    "boot.big": {
+     "eb_version": "0x00110400",
+     "file_count": 7365,
+     "file_length": 19019040,
+     "archive_size_field": 19019040,
+     "setting_csv_hits": 0
+    },
+    "game_60.big": {
+     "eb_version": "0x00110400",
+     "file_count": 10375,
+     "file_length": 843749440,
+     "archive_size_field": 843749440,
+     "setting_csv_hits": 0
+    },
+    "game_61.big": {
+     "eb_version": "0x00110400",
+     "file_count": 21314,
+     "file_length": 2238911056,
+     "archive_size_field": 2238911056,
+     "setting_csv_hits": 0
+    },
+    "game_70.big": {
+     "eb_version": "0x00110400",
+     "file_count": 242,
+     "file_length": 3066583776,
+     "archive_size_field": 3066583776,
+     "setting_csv_hits": 0
+    },
+    "game_80.big": {
+     "eb_version": "0x00110400",
+     "file_count": 159,
+     "file_length": 1629458032,
+     "archive_size_field": 1629458032,
+     "setting_csv_hits": 0
+    },
+    "game_90.big": {
+     "eb_version": "0x00110400",
+     "file_count": 92322,
+     "file_length": 17046806716,
+     "archive_size_field": 17046806716,
+     "setting_csv_hits": 0
+    },
+    "inxp_00.big": {
+     "eb_version": "0x00110400",
+     "file_count": 2950,
+     "file_length": 777373328,
+     "archive_size_field": 777373328,
+     "setting_csv_hits": 11
+    },
+    "inxp_10.big": {
+     "eb_version": "0x00110400",
+     "file_count": 21181,
+     "file_length": 2057349808,
+     "archive_size_field": 2057349808,
+     "setting_csv_hits": 0
+    },
+    "inxp_30.big": {
+     "eb_version": "0x00110400",
+     "file_count": 196,
+     "file_length": 2008652096,
+     "archive_size_field": 2008652096,
+     "setting_csv_hits": 0
+    },
+    "inxp_40.big": {
+     "eb_version": "0x00110400",
+     "file_count": 174,
+     "file_length": 3194882672,
+     "archive_size_field": 3194882672,
+     "setting_csv_hits": 0
+    },
+    "inxp_50.big": {
+     "eb_version": "0x00110400",
+     "file_count": 12336,
+     "file_length": 1854095808,
+     "archive_size_field": 1854095808,
+     "setting_csv_hits": 0
+    },
+    "overlays_20.big": {
+     "eb_version": "0x00110400",
+     "file_count": 6,
+     "file_length": 5648,
+     "archive_size_field": 5648,
+     "setting_csv_hits": 0
+    },
+    "overlays_21.big": {
+     "eb_version": "0x00110400",
+     "file_count": 257,
+     "file_length": 8628704,
+     "archive_size_field": 8628704,
+     "setting_csv_hits": 0
+    },
+    "overlays_22.big": {
+     "eb_version": "0x00110400",
+     "file_count": 91,
+     "file_length": 5283984,
+     "archive_size_field": 5283984,
+     "setting_csv_hits": 0
+    },
+    "overlays_23.big": {
+     "eb_version": "0x00110400",
+     "file_count": 90,
+     "file_length": 4021808,
+     "archive_size_field": 4021808,
+     "setting_csv_hits": 0
+    },
+    "overlays_24.big": {
+     "eb_version": "0x00110400",
+     "file_count": 36,
+     "file_length": 6914288,
+     "archive_size_field": 6914288,
+     "setting_csv_hits": 0
+    }
+   },
+   "members": [
+    {
+     "archive": "inxp_00.big",
+     "entry": 445,
+     "path": "nhl/data/common/gamemodes/setting_csv/groupsetting.csv",
+     "offset": 741208064,
+     "stored_size": 6547,
+     "w4": 0,
+     "sort_key": 654678815,
+     "path_hash": 3311450741,
+     "magic": "chunkzip",
+     "stored_sha256": "f1ad6936632ed864c029736dcfc0529953e815fb330ede86f053dd8e0373eb07",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 18894,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 6499,
+        "flag": 1,
+        "plain": 18894
+       }
+      ],
+      "consumed": 6547,
+      "stored_len": 6547,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 18894,
+     "plain_sha256": "fd8cf70645c271d2ff8633829d920463e0c8633ccb98853ccaec1b31775887c2",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1744,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 3488,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1744,
+      "header": "group_id,setting_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 1743
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 445,
+     "census_stored_size": 6547
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 713,
+     "path": "nhl/data/common/gamemodes/setting_csv/settingservice.csv",
+     "offset": 741225280,
+     "stored_size": 68,
+     "w4": 0,
+     "sort_key": 1114442538,
+     "path_hash": 4068866233,
+     "magic": "setting_",
+     "stored_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "chunkzip": null,
+     "plain_size": 68,
+     "plain_sha256": "88fe09c17d1801ffd7025705b4048106bee1c3ffb1900fd4c478c658c32ca3fa",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 1,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 6,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 1,
+      "header": "setting_id,order,info_urn,get_urn,set_urn,category_name,value_name",
+      "header_columns": 7,
+      "row_comma_counts": {},
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 713,
+     "census_stored_size": 68
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 935,
+     "path": "nhl/data/common/gamemodes/setting_csv/renderingintro.csv",
+     "offset": 741215152,
+     "stored_size": 1506,
+     "w4": 0,
+     "sort_key": 1449184122,
+     "path_hash": 2657483828,
+     "magic": "chunkzip",
+     "stored_sha256": "faee53626b2f6258bd5572a2d221c72d1cd2680bb638040e35198f3f8ce201cc",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 7376,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1458,
+        "flag": 1,
+        "plain": 7376
+       }
+      ],
+      "consumed": 1506,
+      "stored_len": 1506,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 7376,
+     "plain_sha256": "d647bca1b0df797ddd09dc7f5ee4389543d867c2c4633ba108cf354cc83b87f7",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 157,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2826,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 157,
+      "header": "introdataid,contextid,contextver,eashl_hut_related,eashlvalue1,eashlvalue2,genericvalue1,genericvalue2,hutvalue1,hutvalue2,ignoreglobalskipcountdown,logicid,priority,repetitioncount,takeid,takever,userteamsiderelated,introyear,isaudio",
+      "header_columns": 19,
+      "row_comma_counts": {
+       "19": 156
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 935,
+     "census_stored_size": 1506
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1322,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextgroup.csv",
+     "offset": 741171728,
+     "stored_size": 2874,
+     "w4": 0,
+     "sort_key": 2022859723,
+     "path_hash": 4178484540,
+     "magic": "chunkzip",
+     "stored_sha256": "cf9ea7953fc4d648c11e0f9cc9dc1708d450361d1f3484432158d9034f19293a",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 9333,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 2826,
+        "flag": 1,
+        "plain": 9333
+       }
+      ],
+      "consumed": 2874,
+      "stored_len": 2874,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 9333,
+     "plain_sha256": "efbb15ba9d9e61e09904665869bf31d8db98b5223ed00156bc03a8c96669ae29",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 943,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 1886,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 943,
+      "header": "context_id,group_id,order",
+      "header_columns": 3,
+      "row_comma_counts": {
+       "3": 942
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1322,
+     "census_stored_size": 2874
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1542,
+     "path": "nhl/data/common/gamemodes/setting_csv/context.csv",
+     "offset": 741170464,
+     "stored_size": 1249,
+     "w4": 0,
+     "sort_key": 2309864921,
+     "path_hash": 2925844175,
+     "magic": "chunkzip",
+     "stored_sha256": "67ba335ffa702e23707b7ffec7b13a104b55b15bb11fda83578a6caf2e8707ef",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 4917,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1201,
+        "flag": 1,
+        "plain": 4917
+       }
+      ],
+      "consumed": 1249,
+      "stored_len": 1249,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 4917,
+     "plain_sha256": "3a24ea7db10683ac7b283c6d96d7688cebed7c17836ca2a5a2a5e8f934ae16b8",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 121,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 484,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 121,
+      "header": "id,name,useGroupAll,parent_id,audio_id",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 120
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1542,
+     "census_stored_size": 1249
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1548,
+     "path": "nhl/data/common/gamemodes/setting_csv/setting.csv",
+     "offset": 741216672,
+     "stored_size": 8595,
+     "w4": 0,
+     "sort_key": 2315464403,
+     "path_hash": 2992325576,
+     "magic": "chunkzip",
+     "stored_sha256": "ad17dd7afd9dd6f53ed0e79364855c7c499935a7efe78fe438611dc0fd451394",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 39258,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 8547,
+        "flag": 1,
+        "plain": 39258
+       }
+      ],
+      "consumed": 8595,
+      "stored_len": 8595,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 39258,
+     "plain_sha256": "64f4782d031440e0c2fe233bddab1c05a48e083ea9b37417a1b38b4c8c97bb05",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 428,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 5136,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 428,
+      "header": "id,name,is_global,is_choice,choice_to_range,name_loc,description_loc,extra_loc,default_value,potential_values,usage,audio_id,description_audio_id",
+      "header_columns": 13,
+      "row_comma_counts": {
+       "13": 427
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1548,
+     "census_stored_size": 8595
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 1591,
+     "path": "nhl/data/common/gamemodes/setting_csv/choicelist.csv",
+     "offset": 741169472,
+     "stored_size": 992,
+     "w4": 0,
+     "sort_key": 2367194709,
+     "path_hash": 1469552977,
+     "magic": "chunkzip",
+     "stored_sha256": "137045c02ceae16726a59d879e1c357983126497d1b3964b3d9c19dbb19cdc0c",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 1987,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 944,
+        "flag": 1,
+        "plain": 1987
+       }
+      ],
+      "consumed": 992,
+      "stored_len": 992,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 1987,
+     "plain_sha256": "e784aa500e220fe9cf9dd6bd0aa1ad1fa125eb203d5aa0da135276ac465a250d",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 93,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 93,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 93,
+      "header": "id,name",
+      "header_columns": 2,
+      "row_comma_counts": {
+       "2": 92
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 1591,
+     "census_stored_size": 992
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 2457,
+     "path": "nhl/data/common/gamemodes/setting_csv/choice.csv",
+     "offset": 741164912,
+     "stored_size": 4554,
+     "w4": 0,
+     "sort_key": 3584057772,
+     "path_hash": 1702457077,
+     "magic": "chunkzip",
+     "stored_sha256": "65a00430c279a6d3111ffe022f9e6f60d0bf83d562859042923b180c5e826c1f",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 14780,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 4506,
+        "flag": 1,
+        "plain": 14780
+       }
+      ],
+      "consumed": 4554,
+      "stored_len": 4554,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 14780,
+     "plain_sha256": "bb4d0e68c0ad3ad2ffefa03f4587eba0337f0b86be77551fbbdd389b6f45f0fd",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 389,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 2334,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 389,
+      "header": "id,choicelist_id,name,value,name_loc,description_loc,audio_id",
+      "header_columns": 7,
+      "row_comma_counts": {
+       "7": 388
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 2457,
+     "census_stored_size": 4554
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 2487,
+     "path": "nhl/data/common/gamemodes/setting_csv/group.csv",
+     "offset": 741206800,
+     "stored_size": 1258,
+     "w4": 0,
+     "sort_key": 3622673371,
+     "path_hash": 3087405111,
+     "magic": "chunkzip",
+     "stored_sha256": "7a268862bf5af40e43e6cc84e4dc60560f08315066d21d661ab61a26df1d654f",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 4044,
+      "window": 131072,
+      "n_chunks": 1,
+      "chunks": [
+       {
+        "zsize": 1210,
+        "flag": 1,
+        "plain": 4044
+       }
+      ],
+      "consumed": 1258,
+      "stored_len": 1258,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 4044,
+     "plain_sha256": "b9dab82f7f698d2cefb98c4c0364477559a8fe4f30c8afbd342465ab4d146378",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 85,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 340,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 85,
+      "header": "id,name,parent_id,name_loc,audio_id",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 84
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 2487,
+     "census_stored_size": 1258
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 2488,
+     "path": "nhl/data/common/gamemodes/setting_csv/range.csv",
+     "offset": 741214624,
+     "stored_size": 519,
+     "w4": 0,
+     "sort_key": 3622676804,
+     "path_hash": 2593539383,
+     "magic": "id,name,",
+     "stored_sha256": "d320928564ba0521881e4fa9f7f1340d76348c11459ff4177d92a1bd384e48f4",
+     "chunkzip": null,
+     "plain_size": 519,
+     "plain_sha256": "d320928564ba0521881e4fa9f7f1340d76348c11459ff4177d92a1bd384e48f4",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 17,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 68,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 17,
+      "header": "id,name,min,max,step",
+      "header_columns": 5,
+      "row_comma_counts": {
+       "5": 16
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 2488,
+     "census_stored_size": 519
+    },
+    {
+     "archive": "inxp_00.big",
+     "entry": 2660,
+     "path": "nhl/data/common/gamemodes/setting_csv/contextsetting.csv",
+     "offset": 741174608,
+     "stored_size": 32185,
+     "w4": 0,
+     "sort_key": 3875124184,
+     "path_hash": 1471882765,
+     "magic": "chunkzip",
+     "stored_sha256": "608b2b097f5f5183bb6a6f018e490ae4d33dc99085616339fe7698f05c4bd36e",
+     "chunkzip": {
+      "header_len": 40,
+      "fullsize": 205779,
+      "window": 131072,
+      "n_chunks": 2,
+      "chunks": [
+       {
+        "zsize": 20399,
+        "flag": 1,
+        "plain": 131072
+       },
+       {
+        "zsize": 11721,
+        "flag": 1,
+        "plain": 74707
+       }
+      ],
+      "consumed": 32185,
+      "stored_len": 32185,
+      "trailing_after_last_chunk": 0
+     },
+     "plain_size": 205779,
+     "plain_sha256": "281d1af6d68a19df42878af4aa4ce51aa13149ba2986184b68c01ecb818cb1eb",
+     "text": {
+      "bom_utf8": false,
+      "bom_utf16": false,
+      "crlf": 10970,
+      "lf_only": 0,
+      "cr_only": 0,
+      "trailing_newline": true,
+      "double_quotes": 0,
+      "tabs": 0,
+      "semicolons": 0,
+      "commas": 65820,
+      "nul_bytes": 0,
+      "non_ascii": 0,
+      "lines": 10970,
+      "header": "context_id,setting_id,is_enabled,default_value,potential_values,is_visible,usage",
+      "header_columns": 7,
+      "row_comma_counts": {
+       "7": 10969
+      },
+      "blank_lines": 0
+     },
+     "census": "same plain hash",
+     "census_entry": 2660,
+     "census_stored_size": 32185
+    }
+   ],
+   "eboot": {
+    "size": 104845239,
+    "sha256": "fc95ca66cc65a45f6d125f5f02920c296d0c6ff1d7a65a727b6e6a25b1dd1731"
+   },
+   "path_copies": {},
+   "census_paths_not_found": []
+  }
+ }
+}

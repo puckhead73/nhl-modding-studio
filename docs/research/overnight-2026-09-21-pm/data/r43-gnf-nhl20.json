@@ -1,0 +1,3228 @@
+{
+ "title": "nhl20",
+ "cusa": "CUSA15439",
+ "root": "H:\\Emulators\\ShadPS4\\Games\\CUSA15439\\databigs\\Extracted",
+ "started": "2026-09-21T17:34:08-0600",
+ "seconds": 2535,
+ "gnf_files_walked": 140142,
+ "classes": {
+  "readable": 138740,
+  "predicted_format": 135774,
+  "size_rule_pass": 135774,
+  "cube_or_array": 145,
+  "not_gnf": 1402,
+  "bc6h_0x28": 2821
+ },
+ "checks": {
+  "stream_size_eq_file_size": 138740,
+  "stream_size_eq_file_size_or_streams_tile_file": 138740,
+  "d7_eq_data_bytes": 138740,
+  "contents_size_0xf8": 138740,
+  "tiling_13": 138740,
+  "base_level_0": 138740,
+  "d0_zero": 138740,
+  "pitch_rule_tested": 138740,
+  "pitch_rule_ok": 138740,
+  "pitch_eq_w_minus_1": 118284,
+  "last_level_le_log2_maxdim": 138740,
+  "pitch_block_nonmultiple_tested": 20456,
+  "pitch_block_nonmultiple_ok": 20456
+ },
+ "shipped_maxima": {
+  "w": 8192,
+  "h": 4096,
+  "pitch": 8191,
+  "last_level": 13,
+  "data_bytes": 25165824
+ },
+ "formats": {
+  "BC1": 68976,
+  "BC3": 9940,
+  "BC5": 7753,
+  "BC6H": 2919,
+  "BC4": 2830,
+  "BC7": 46292,
+  "BC2": 21,
+  "8_8_8_8": 9
+ },
+ "tail16_first4": {
+  "00000000": 137436,
+  "55534552": 1304
+ },
+ "d5_d6_nonzero": {
+  "(False, False)": 138595,
+  "(True, False)": 145
+ },
+ "pitch_by_nonmultiple_width": {
+  "4": {
+   "31": 65
+  },
+  "8": {
+   "31": 47
+  },
+  "12": {
+   "31": 29
+  },
+  "16": {
+   "31": 71
+  },
+  "20": {
+   "31": 17
+  },
+  "24": {
+   "31": 95
+  },
+  "28": {
+   "31": 44
+  },
+  "36": {
+   "63": 98
+  },
+  "40": {
+   "63": 32
+  },
+  "44": {
+   "63": 56
+  },
+  "48": {
+   "63": 71
+  },
+  "52": {
+   "63": 77
+  },
+  "56": {
+   "63": 102
+  },
+  "60": {
+   "63": 98
+  },
+  "68": {
+   "95": 63
+  },
+  "72": {
+   "95": 181
+  },
+  "76": {
+   "95": 56
+  },
+  "80": {
+   "95": 1107
+  },
+  "84": {
+   "95": 18
+  },
+  "88": {
+   "95": 1659
+  },
+  "92": {
+   "95": 128
+  },
+  "100": {
+   "127": 95
+  },
+  "104": {
+   "127": 21
+  },
+  "108": {
+   "127": 12
+  },
+  "112": {
+   "127": 38
+  },
+  "116": {
+   "127": 7
+  },
+  "120": {
+   "127": 39
+  },
+  "124": {
+   "127": 8
+  },
+  "132": {
+   "159": 32
+  },
+  "136": {
+   "159": 5
+  },
+  "140": {
+   "159": 15
+  },
+  "144": {
+   "159": 47
+  },
+  "148": {
+   "159": 6
+  },
+  "152": {
+   "159": 39
+  },
+  "156": {
+   "159": 7
+  },
+  "164": {
+   "191": 7120
+  },
+  "168": {
+   "191": 35
+  },
+  "172": {
+   "191": 7
+  },
+  "176": {
+   "191": 11
+  },
+  "180": {
+   "191": 7
+  },
+  "184": {
+   "191": 4
+  },
+  "188": {
+   "191": 43
+  },
+  "196": {
+   "223": 7
+  },
+  "200": {
+   "223": 115
+  },
+  "204": {
+   "223": 5
+  },
+  "208": {
+   "223": 4
+  },
+  "212": {
+   "223": 6
+  },
+  "216": {
+   "223": 10
+  },
+  "220": {
+   "223": 37
+  },
+  "228": {
+   "255": 11
+  },
+  "232": {
+   "255": 11
+  },
+  "236": {
+   "255": 11
+  },
+  "240": {
+   "255": 10
+  },
+  "244": {
+   "255": 3
+  },
+  "248": {
+   "255": 65
+  },
+  "252": {
+   "255": 33
+  },
+  "260": {
+   "287": 40
+  },
+  "264": {
+   "287": 5
+  },
+  "268": {
+   "287": 5
+  },
+  "272": {
+   "287": 5
+  },
+  "276": {
+   "287": 10
+  },
+  "280": {
+   "287": 77
+  },
+  "284": {
+   "287": 5
+  },
+  "292": {
+   "319": 9
+  },
+  "296": {
+   "319": 13
+  },
+  "300": {
+   "319": 779
+  },
+  "304": {
+   "319": 6
+  },
+  "308": {
+   "319": 8
+  },
+  "312": {
+   "319": 4
+  },
+  "316": {
+   "319": 4
+  },
+  "324": {
+   "351": 121
+  },
+  "328": {
+   "351": 4
+  },
+  "332": {
+   "351": 3099
+  },
+  "340": {
+   "351": 5
+  },
+  "344": {
+   "351": 5
+  },
+  "348": {
+   "351": 15
+  },
+  "356": {
+   "383": 15
+  },
+  "360": {
+   "383": 507
+  },
+  "364": {
+   "383": 4
+  },
+  "372": {
+   "383": 2
+  },
+  "376": {
+   "383": 283
+  },
+  "380": {
+   "383": 6
+  },
+  "388": {
+   "415": 1
+  },
+  "392": {
+   "415": 191
+  },
+  "396": {
+   "415": 4
+  },
+  "400": {
+   "415": 254
+  },
+  "404": {
+   "415": 16
+  },
+  "408": {
+   "415": 3
+  },
+  "412": {
+   "415": 30
+  },
+  "420": {
+   "447": 13
+  },
+  "424": {
+   "447": 840
+  },
+  "428": {
+   "447": 12
+  },
+  "432": {
+   "447": 17
+  },
+  "436": {
+   "447": 2
+  },
+  "440": {
+   "447": 7
+  },
+  "444": {
+   "447": 15
+  },
+  "452": {
+   "479": 22
+  },
+  "456": {
+   "479": 6
+  },
+  "460": {
+   "479": 22
+  },
+  "464": {
+   "479": 6
+  },
+  "468": {
+   "479": 92
+  },
+  "472": {
+   "479": 3
+  },
+  "476": {
+   "479": 2
+  },
+  "484": {
+   "511": 2
+  },
+  "488": {
+   "511": 3
+  },
+  "492": {
+   "511": 924
+  },
+  "496": {
+   "511": 1
+  },
+  "500": {
+   "511": 49
+  },
+  "504": {
+   "511": 2
+  },
+  "520": {
+   "543": 97
+  },
+  "524": {
+   "543": 2
+  },
+  "528": {
+   "543": 3
+  },
+  "532": {
+   "543": 1
+  },
+  "540": {
+   "543": 4
+  },
+  "548": {
+   "575": 3
+  },
+  "552": {
+   "575": 37
+  },
+  "556": {
+   "575": 2
+  },
+  "560": {
+   "575": 3
+  },
+  "564": {
+   "575": 5
+  },
+  "568": {
+   "575": 26
+  },
+  "572": {
+   "575": 24
+  },
+  "580": {
+   "607": 4
+  },
+  "584": {
+   "607": 1
+  },
+  "588": {
+   "607": 4
+  },
+  "592": {
+   "607": 2
+  },
+  "596": {
+   "607": 1
+  },
+  "600": {
+   "607": 39
+  },
+  "604": {
+   "607": 3
+  },
+  "612": {
+   "639": 3
+  },
+  "616": {
+   "639": 39
+  },
+  "620": {
+   "639": 10
+  },
+  "624": {
+   "639": 3
+  },
+  "628": {
+   "639": 2
+  },
+  "632": {
+   "639": 2
+  },
+  "636": {
+   "639": 1
+  },
+  "644": {
+   "671": 1
+  },
+  "648": {
+   "671": 3
+  },
+  "652": {
+   "671": 3
+  },
+  "656": {
+   "671": 3
+  },
+  "660": {
+   "671": 5
+  },
+  "664": {
+   "671": 5
+  },
+  "668": {
+   "671": 7
+  },
+  "676": {
+   "703": 1
+  },
+  "680": {
+   "703": 6
+  },
+  "684": {
+   "703": 6
+  },
+  "688": {
+   "703": 1
+  },
+  "692": {
+   "703": 2
+  },
+  "700": {
+   "703": 101
+  },
+  "708": {
+   "735": 3
+  },
+  "712": {
+   "735": 7
+  },
+  "720": {
+   "735": 5
+  },
+  "724": {
+   "735": 5
+  },
+  "728": {
+   "735": 10
+  },
+  "732": {
+   "735": 5
+  },
+  "740": {
+   "767": 2
+  },
+  "744": {
+   "767": 4
+  },
+  "748": {
+   "767": 15
+  },
+  "752": {
+   "767": 7
+  },
+  "756": {
+   "767": 2
+  },
+  "760": {
+   "767": 3
+  },
+  "764": {
+   "767": 1
+  },
+  "772": {
+   "799": 19
+  },
+  "776": {
+   "799": 1
+  },
+  "780": {
+   "799": 5
+  },
+  "784": {
+   "799": 1
+  },
+  "788": {
+   "799": 10
+  },
+  "792": {
+   "799": 2
+  },
+  "796": {
+   "799": 3
+  },
+  "808": {
+   "831": 1
+  },
+  "812": {
+   "831": 27
+  },
+  "816": {
+   "831": 2
+  },
+  "820": {
+   "831": 1
+  },
+  "824": {
+   "831": 2
+  },
+  "828": {
+   "831": 1
+  },
+  "836": {
+   "863": 1
+  },
+  "840": {
+   "863": 1
+  },
+  "844": {
+   "863": 1
+  },
+  "848": {
+   "863": 3
+  },
+  "852": {
+   "863": 2
+  },
+  "856": {
+   "863": 10
+  },
+  "860": {
+   "863": 4
+  },
+  "868": {
+   "895": 1
+  },
+  "872": {
+   "895": 5
+  },
+  "876": {
+   "895": 3
+  },
+  "880": {
+   "895": 1
+  },
+  "884": {
+   "895": 2
+  },
+  "900": {
+   "927": 3
+  },
+  "908": {
+   "927": 1
+  },
+  "912": {
+   "927": 1
+  },
+  "916": {
+   "927": 1
+  },
+  "920": {
+   "927": 2
+  },
+  "932": {
+   "959": 1
+  },
+  "940": {
+   "959": 1
+  },
+  "944": {
+   "959": 2
+  },
+  "948": {
+   "959": 4
+  },
+  "952": {
+   "959": 1
+  },
+  "964": {
+   "991": 1
+  },
+  "968": {
+   "991": 57
+  },
+  "972": {
+   "991": 4
+  },
+  "980": {
+   "991": 2
+  },
+  "1000": {
+   "1023": 5
+  },
+  "1012": {
+   "1023": 1
+  },
+  "1016": {
+   "1023": 17
+  },
+  "1028": {
+   "1055": 1
+  },
+  "1032": {
+   "1055": 1
+  },
+  "1036": {
+   "1055": 1
+  },
+  "1044": {
+   "1055": 1
+  },
+  "1048": {
+   "1055": 1
+  },
+  "1052": {
+   "1055": 1
+  },
+  "1060": {
+   "1087": 1
+  },
+  "1068": {
+   "1087": 1
+  },
+  "1080": {
+   "1087": 1
+  },
+  "1096": {
+   "1119": 1
+  },
+  "1100": {
+   "1119": 28
+  },
+  "1104": {
+   "1119": 1
+  },
+  "1112": {
+   "1119": 1
+  },
+  "1124": {
+   "1151": 4
+  },
+  "1128": {
+   "1151": 2
+  },
+  "1136": {
+   "1151": 1
+  },
+  "1144": {
+   "1151": 1
+  },
+  "1156": {
+   "1183": 2
+  },
+  "1176": {
+   "1183": 2
+  },
+  "1180": {
+   "1183": 2
+  },
+  "1196": {
+   "1215": 1
+  },
+  "1200": {
+   "1215": 2
+  },
+  "1220": {
+   "1247": 1
+  },
+  "1232": {
+   "1247": 1
+  },
+  "1260": {
+   "1279": 2
+  },
+  "1292": {
+   "1311": 2
+  },
+  "1300": {
+   "1311": 2
+  },
+  "1308": {
+   "1311": 1
+  },
+  "1316": {
+   "1343": 5
+  },
+  "1324": {
+   "1343": 1
+  },
+  "1348": {
+   "1375": 1
+  },
+  "1352": {
+   "1375": 1
+  },
+  "1360": {
+   "1375": 1
+  },
+  "1372": {
+   "1375": 1
+  },
+  "1384": {
+   "1407": 1
+  },
+  "1400": {
+   "1407": 2
+  },
+  "1460": {
+   "1471": 1
+  },
+  "1468": {
+   "1471": 1
+  },
+  "1476": {
+   "1503": 1
+  },
+  "1480": {
+   "1503": 2
+  },
+  "1512": {
+   "1535": 1
+  },
+  "1560": {
+   "1567": 1
+  },
+  "1572": {
+   "1599": 1
+  },
+  "1604": {
+   "1631": 1
+  },
+  "1636": {
+   "1663": 1
+  },
+  "1700": {
+   "1727": 1
+  },
+  "2192": {
+   "2207": 2
+  },
+  "2748": {
+   "2751": 2
+  }
+ },
+ "bc6h": {
+  "16B_block_rule_ok": 2821
+ },
+ "shapes_top": [
+  {
+   "shape": [
+    128,
+    128,
+    "BC1",
+    9,
+    7,
+    9
+   ],
+   "count": 34468
+  },
+  {
+   "shape": [
+    512,
+    340,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 9154
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 6957
+  },
+  {
+   "shape": [
+    164,
+    164,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 6669
+  },
+  {
+   "shape": [
+    2048,
+    2048,
+    "BC1",
+    9,
+    11,
+    9
+   ],
+   "count": 6117
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 6070
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC1",
+    9,
+    9,
+    9
+   ],
+   "count": 5629
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC1",
+    9,
+    8,
+    9
+   ],
+   "count": 4036
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC5",
+    1,
+    10,
+    9
+   ],
+   "count": 3314
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC1",
+    0,
+    0,
+    9
+   ],
+   "count": 2992
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC3",
+    9,
+    10,
+    9
+   ],
+   "count": 2974
+  },
+  {
+   "shape": [
+    2048,
+    2048,
+    "BC5",
+    1,
+    11,
+    9
+   ],
+   "count": 2481
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 2043
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC3",
+    0,
+    0,
+    9
+   ],
+   "count": 2037
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC1",
+    0,
+    9,
+    9
+   ],
+   "count": 1956
+  },
+  {
+   "shape": [
+    2048,
+    1024,
+    "BC1",
+    9,
+    11,
+    9
+   ],
+   "count": 1704
+  },
+  {
+   "shape": [
+    332,
+    464,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 1620
+  },
+  {
+   "shape": [
+    1920,
+    1080,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 1475
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC3",
+    9,
+    0,
+    9
+   ],
+   "count": 1471
+  },
+  {
+   "shape": [
+    320,
+    380,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 1440
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "BC6H",
+    0,
+    7,
+    9
+   ],
+   "count": 1437
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC4",
+    0,
+    8,
+    9
+   ],
+   "count": 1430
+  },
+  {
+   "shape": [
+    80,
+    80,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 1038
+  },
+  {
+   "shape": [
+    332,
+    464,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 956
+  },
+  {
+   "shape": [
+    492,
+    276,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 915
+  },
+  {
+   "shape": [
+    88,
+    88,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 852
+  },
+  {
+   "shape": [
+    2048,
+    2048,
+    "BC1",
+    0,
+    11,
+    9
+   ],
+   "count": 814
+  },
+  {
+   "shape": [
+    88,
+    88,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 802
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC5",
+    1,
+    9,
+    9
+   ],
+   "count": 773
+  },
+  {
+   "shape": [
+    424,
+    652,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 770
+  },
+  {
+   "shape": [
+    320,
+    180,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 770
+  },
+  {
+   "shape": [
+    300,
+    300,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 758
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC1",
+    0,
+    10,
+    9
+   ],
+   "count": 749
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC6H",
+    0,
+    8,
+    9
+   ],
+   "count": 704
+  },
+  {
+   "shape": [
+    32,
+    32,
+    "BC1",
+    9,
+    5,
+    9
+   ],
+   "count": 673
+  },
+  {
+   "shape": [
+    1024,
+    512,
+    "BC3",
+    9,
+    9,
+    9
+   ],
+   "count": 650
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC4",
+    0,
+    9,
+    9
+   ],
+   "count": 639
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "BC3",
+    9,
+    9,
+    9
+   ],
+   "count": 629
+  },
+  {
+   "shape": [
+    1024,
+    256,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 625
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 576
+  },
+  {
+   "shape": [
+    160,
+    160,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 519
+  },
+  {
+   "shape": [
+    320,
+    380,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 455
+  },
+  {
+   "shape": [
+    164,
+    164,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 447
+  },
+  {
+   "shape": [
+    2048,
+    2048,
+    "BC1",
+    0,
+    0,
+    9
+   ],
+   "count": 433
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC3",
+    9,
+    8,
+    9
+   ],
+   "count": 386
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "BC4",
+    0,
+    7,
+    9
+   ],
+   "count": 356
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 347
+  },
+  {
+   "shape": [
+    2048,
+    1024,
+    "BC3",
+    9,
+    11,
+    9
+   ],
+   "count": 341
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 339
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "BC6H",
+    0,
+    6,
+    9
+   ],
+   "count": 301
+  },
+  {
+   "shape": [
+    256,
+    512,
+    "BC1",
+    9,
+    9,
+    9
+   ],
+   "count": 287
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "BC5",
+    1,
+    8,
+    9
+   ],
+   "count": 286
+  },
+  {
+   "shape": [
+    360,
+    480,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 264
+  },
+  {
+   "shape": [
+    376,
+    524,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 257
+  },
+  {
+   "shape": [
+    360,
+    480,
+    "BC7",
+    0,
+    0,
+    9
+   ],
+   "count": 240
+  },
+  {
+   "shape": [
+    256,
+    1024,
+    "BC1",
+    9,
+    10,
+    9
+   ],
+   "count": 235
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "BC1",
+    9,
+    0,
+    9
+   ],
+   "count": 232
+  },
+  {
+   "shape": [
+    512,
+    340,
+    "BC7",
+    9,
+    0,
+    9
+   ],
+   "count": 232
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "BC1",
+    9,
+    6,
+    9
+   ],
+   "count": 226
+  },
+  {
+   "shape": [
+    1024,
+    256,
+    "BC5",
+    1,
+    10,
+    9
+   ],
+   "count": 221
+  }
+ ],
+ "shapes_distinct": 1497,
+ "families": {
+  "nhl/data/kettle": {
+   "pass": 89515,
+   "cube_or_array": 145
+  }
+ },
+ "failures": {
+  "cube_or_array": [
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/board_glass_cubemap.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/character_common_env_cube_1.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/character_ufc_env_cube_sweat.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/chl_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 393216,
+    "pred_2d": 65536,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/convolved_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/convolved_filled_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_eapitch_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_irrad_common.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_irrad_nyrangers.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_irrad_outdoor_canal_night.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_irrad_rogers.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_irrad_rogers_pe.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_irrad_uberavatar.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_irrad_vancouver.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_dusk_distance.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_dusk_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_dusk_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_night_distance.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_night_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_sunny_distance.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_sunny_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_canal_sunny_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_farm_dusk_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_farm_dusk_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_farm_night_distance.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_farm_night_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_farm_night_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_farm_sunny_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_farm_sunny_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_dusk_distance.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_dusk_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_dusk_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_night_distance.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_night_distance_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_night_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_night_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_sunny_distance.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_sunny_distance_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_sunny_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_peak_sunny_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier0_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier0_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier1_distance_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier1_distance_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier1_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier1_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier2_distance_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier2_distance_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier2_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier2_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier3_distance_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier3_distance_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier3_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier3_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier4_distance_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier4_distance_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier4_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_tier4_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_dusk_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_dusk_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_night_distance_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_night_distance_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_night_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_night_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_sunny_irrad.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_outdoor_urbanpark_sunny_spec.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec2_outdoor_canal_night.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_anaheim.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_arizona.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_boston.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_buffalo.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_calgary.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_carolina.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_chicago.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_colorado.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_columbus.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_common.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_dallas.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_detroit.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_edmonton.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_florida.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_losangeles.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_minnesota.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_montreal.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_nashville.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_newjersey.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_nyislanders.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_nyrangers.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_ottawa.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_philadelphia.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_pittsburgh.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_rogers.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_rogers_pe.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_sanjose.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_stlouis.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_tampa.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_toronto.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_uberavatar.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_vancouver.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_vegas.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_washington.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/cubemap_spec_winnipeg.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/default_cube.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/diffuse_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/environment_metal_spec_cubemap.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/environment_spec_cubemap.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/equipment_cube_map.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/eye_reflection_01.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/face_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/face_specular_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 393216,
+    "pred_2d": 65536,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/helmet_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/icepond_spec_cube.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/ice_spec_cube.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/snowypitch_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/specular_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/stad_gen_cubemap.gnf",
+    "w": 512,
+    "h": 512,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 10,
+    "data": 2834432,
+    "pred_2d": 354304,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/stad_glass_cube_map.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 98304,
+    "pred_2d": 16384,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/trophy_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 393216,
+    "pred_2d": 65536,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/common/visor_cube_map.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/indicator/indicator_hint_iconarray.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 13,
+    "depth": 1,
+    "levels": 9,
+    "data": 184320,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/indicator/indicator_texturetriangles_diff.gnf",
+    "w": 128,
+    "h": 128,
+    "fmt": "BC3",
+    "type": 13,
+    "depth": 7,
+    "levels": 8,
+    "data": 212992,
+    "pred_2d": 26624,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_goalie_nineties_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_goalie_rbk_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_skater_adidas_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_skater_nineties_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/characters/player/jersey_skater_rbk_wrinkle_texarray.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/common_blurred_enviro_cubemap.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 393216,
+    "pred_2d": 65536,
+    "six_x": true
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/default_new_cube.gnf",
+    "w": 256,
+    "h": 256,
+    "fmt": "BC3",
+    "type": 11,
+    "depth": 0,
+    "levels": 9,
+    "data": 737280,
+    "pred_2d": 92160,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_canal_day.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_canal_night.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_day.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_farm_day.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_farm_night.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_peak_day.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_peak_night.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_tier0.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_tier1.gnf",
+    "w": 2048,
+    "h": 2048,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 25165824,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_tier2.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_tier3.gnf",
+    "w": 2048,
+    "h": 2048,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 25165824,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_tier4.gnf",
+    "w": 2048,
+    "h": 2048,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 25165824,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_urbanpark_day.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/sky_outdoor_urbanpark_night.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC6H",
+    "type": 11,
+    "depth": 0,
+    "levels": 1,
+    "data": 6291456,
+    "pred_2d": null,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/snow_array_coeff.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC1",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 2805760,
+    "pred_2d": 701440,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/snow_array_diffuse.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC1",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 2805760,
+    "pred_2d": 701440,
+    "six_x": false
+   },
+   {
+    "file": "nhl/data/kettle/rendering/stadiums/common/snow_array_normal.gnf",
+    "w": 1024,
+    "h": 1024,
+    "fmt": "BC5",
+    "type": 13,
+    "depth": 3,
+    "levels": 11,
+    "data": 5611520,
+    "pred_2d": 1402880,
+    "six_x": false
+   }
+  ]
+ },
+ "note": "R43 \u2014 PS4 GNF header census, one checkpoint file per title (read-only; headers + file sizes only). Restores the 2026-09-21 handoff 15\npitch-rounding check as a full-population probe (no sample) and separates the coverage classes the R1 review asked for.\n\nPer `.gnf` under `<CUSA>/databigs/Extracted`: the 256-byte GNF header (`GNF ` magic, contentsSize, version/count/alignment, streamSize) and\nthe T# words as Studio's `tdb-rx2::gnf` splits them (width / height 14-bit, dfmt 6-bit, nfmt, base / last level, tiling, type, pitch 14-bit,\ndepth), dword 7 and the 16 bytes after the T#. Classes per file (mutually exclusive, in this order):\n  not_gnf            magic missing / header shorter than 0x40\n  cube_or_array      type != 9 (2D) or depth != 0 or data == 6 x the 2D prediction\n  unknown_format     dfmt not in the block / uncompressed byte tables (BC6H 0x28 stays separate: tested with a 16-byte-block hypothesis)\n  predicted          data-size rule evaluated: pass / fail counted separately\nRules tested on every readable file: streamSize == file size (or the concatenated streams tile the file \u2014 NHL 15 ships 1 115 two-stream files, found 2026-09-21 pm; the size rules are then evaluated on the first stream); d7 == file size - 0x100; pitch == roundup(w, 32) - 1 for block formats\n(and == w - 1 for uncompressed); last_level + 1 <= floor(log2(max(w, h))) + 1; data == sum over levels of 8x8-block micro-tiles (tiling 13).\nField-bound census (representable vs shipped): max width / height / pitch / last_level seen per title.\nUsage: python r43_gnf_header_census_per_title.py <out_dir> --titles nhl20[,nhl15,...] [--max N]\n  -> <out_dir>/r43-gnf-<title>.json per title (a title's file is written only when its walk completes).\n"
+}

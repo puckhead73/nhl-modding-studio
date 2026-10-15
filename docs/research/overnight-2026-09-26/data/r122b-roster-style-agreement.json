@@ -1,0 +1,2622 @@
+{
+ "note": "R122b - does the exhibition roster table's style field (eGlu.QgFs, `playerstyle`, bound to the title-free Legacy-anchored\nplayer-style.toml on every title) carry the same code as the skater / goalie companion style (dSvy / mHuy p_style / g_style /\nplayerstyle) for the same player? Join: exhibitionrostertable.playerindex -> exhibitionplayers.index -> .playerid -> companion.game_id\n(sorted, deterministic). Per distinct source: pairs, share equal, the (roster, companion) code cross-table for skaters and goalies\nseparately (goalie = companion row found in the goalie AI table), and the label player-style.toml / the NHL 07 synthetic vocabulary\nwould give each roster code on that source (static rules, see r122). Continuity / agreement only - no in-game label is observed here.\nUsage: python r122b_roster_style_agreement.py <out.json>\n",
+ "player_style_toml": {
+  "1": "Defensive Defenseman",
+  "2": "Offensive Defenseman",
+  "3": "Enforcer Defenseman",
+  "4": "Two-Way Defenseman",
+  "5": "Grinder",
+  "6": "Playmaker",
+  "7": "Sniper",
+  "8": "Power Forward",
+  "9": "Two-Way Forward",
+  "10": "Enforcer Forward"
+ },
+ "nhl07_synthetic": {
+  "1": "Defensive",
+  "2": "Offensive",
+  "3": "Grinder",
+  "4": "Playmaker",
+  "5": "Sniper",
+  "6": "Power Forward",
+  "7": "Dangler"
+ },
+ "sources": {
+  "xbox360-nhl07": {
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "roster_style_depth": 3,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 2250,
+    "share_equal": 0.7316,
+    "cross": [
+     [
+      1,
+      1,
+      708
+     ],
+     [
+      1,
+      2,
+      14
+     ],
+     [
+      2,
+      2,
+      77
+     ],
+     [
+      3,
+      3,
+      480
+     ],
+     [
+      3,
+      5,
+      2
+     ],
+     [
+      3,
+      6,
+      4
+     ],
+     [
+      3,
+      7,
+      1
+     ],
+     [
+      4,
+      3,
+      8
+     ],
+     [
+      4,
+      4,
+      149
+     ],
+     [
+      4,
+      5,
+      164
+     ],
+     [
+      4,
+      6,
+      1
+     ],
+     [
+      4,
+      7,
+      1
+     ],
+     [
+      5,
+      3,
+      194
+     ],
+     [
+      5,
+      4,
+      2
+     ],
+     [
+      5,
+      5,
+      118
+     ],
+     [
+      5,
+      6,
+      3
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      6,
+      3,
+      9
+     ],
+     [
+      6,
+      4,
+      192
+     ],
+     [
+      6,
+      5,
+      6
+     ],
+     [
+      6,
+      6,
+      83
+     ],
+     [
+      6,
+      7,
+      2
+     ],
+     [
+      7,
+      7,
+      31
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 266,
+    "share_equal": 0.6767,
+    "cross": [
+     [
+      0,
+      0,
+      20
+     ],
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      1,
+      1,
+      33
+     ],
+     [
+      1,
+      2,
+      1
+     ],
+     [
+      2,
+      0,
+      28
+     ],
+     [
+      2,
+      1,
+      56
+     ],
+     [
+      2,
+      2,
+      127
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    }
+   }
+  },
+  "xbox360-nhl08": {
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "roster_style_depth": 3,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 2289,
+    "share_equal": 0.9873,
+    "cross": [
+     [
+      1,
+      1,
+      671
+     ],
+     [
+      1,
+      2,
+      8
+     ],
+     [
+      1,
+      3,
+      1
+     ],
+     [
+      2,
+      1,
+      1
+     ],
+     [
+      2,
+      2,
+      145
+     ],
+     [
+      3,
+      3,
+      896
+     ],
+     [
+      3,
+      4,
+      1
+     ],
+     [
+      3,
+      5,
+      2
+     ],
+     [
+      3,
+      6,
+      2
+     ],
+     [
+      4,
+      4,
+      209
+     ],
+     [
+      4,
+      5,
+      5
+     ],
+     [
+      5,
+      3,
+      2
+     ],
+     [
+      5,
+      5,
+      173
+     ],
+     [
+      5,
+      6,
+      2
+     ],
+     [
+      6,
+      4,
+      1
+     ],
+     [
+      6,
+      5,
+      2
+     ],
+     [
+      6,
+      6,
+      121
+     ],
+     [
+      6,
+      7,
+      1
+     ],
+     [
+      7,
+      4,
+      1
+     ],
+     [
+      7,
+      7,
+      45
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 236,
+    "share_equal": 0.9746,
+    "cross": [
+     [
+      0,
+      0,
+      15
+     ],
+     [
+      0,
+      1,
+      1
+     ],
+     [
+      1,
+      1,
+      96
+     ],
+     [
+      1,
+      2,
+      1
+     ],
+     [
+      2,
+      0,
+      2
+     ],
+     [
+      2,
+      1,
+      2
+     ],
+     [
+      2,
+      2,
+      119
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    }
+   }
+  },
+  "xbox360-nhl09": {
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "roster_style_depth": 3,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 3519,
+    "share_equal": 0.9881,
+    "cross": [
+     [
+      1,
+      1,
+      1061
+     ],
+     [
+      1,
+      2,
+      13
+     ],
+     [
+      2,
+      1,
+      1
+     ],
+     [
+      2,
+      2,
+      216
+     ],
+     [
+      3,
+      3,
+      1274
+     ],
+     [
+      3,
+      4,
+      1
+     ],
+     [
+      3,
+      5,
+      3
+     ],
+     [
+      3,
+      6,
+      5
+     ],
+     [
+      4,
+      4,
+      344
+     ],
+     [
+      4,
+      5,
+      9
+     ],
+     [
+      5,
+      3,
+      2
+     ],
+     [
+      5,
+      4,
+      1
+     ],
+     [
+      5,
+      5,
+      298
+     ],
+     [
+      5,
+      6,
+      1
+     ],
+     [
+      6,
+      4,
+      1
+     ],
+     [
+      6,
+      5,
+      2
+     ],
+     [
+      6,
+      6,
+      218
+     ],
+     [
+      7,
+      4,
+      1
+     ],
+     [
+      7,
+      5,
+      2
+     ],
+     [
+      7,
+      7,
+      66
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 381,
+    "share_equal": 0.9869,
+    "cross": [
+     [
+      0,
+      0,
+      38
+     ],
+     [
+      0,
+      1,
+      2
+     ],
+     [
+      1,
+      1,
+      161
+     ],
+     [
+      1,
+      2,
+      1
+     ],
+     [
+      2,
+      1,
+      2
+     ],
+     [
+      2,
+      2,
+      177
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    }
+   }
+  },
+  "xbox360-nhl10": {
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 3335,
+    "share_equal": 1.0,
+    "cross": [
+     [
+      1,
+      1,
+      913
+     ],
+     [
+      2,
+      2,
+      267
+     ],
+     [
+      3,
+      3,
+      22
+     ],
+     [
+      4,
+      4,
+      996
+     ],
+     [
+      5,
+      5,
+      428
+     ],
+     [
+      6,
+      6,
+      341
+     ],
+     [
+      7,
+      7,
+      219
+     ],
+     [
+      8,
+      8,
+      73
+     ],
+     [
+      9,
+      9,
+      76
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 384,
+    "share_equal": 0.9141,
+    "cross": [
+     [
+      1,
+      0,
+      33
+     ],
+     [
+      1,
+      1,
+      145
+     ],
+     [
+      2,
+      2,
+      206
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "xbox360-nhl11": {
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4697,
+    "share_equal": 1.0,
+    "cross": [
+     [
+      1,
+      1,
+      797
+     ],
+     [
+      2,
+      2,
+      326
+     ],
+     [
+      3,
+      3,
+      81
+     ],
+     [
+      4,
+      4,
+      467
+     ],
+     [
+      5,
+      5,
+      670
+     ],
+     [
+      6,
+      6,
+      637
+     ],
+     [
+      7,
+      7,
+      459
+     ],
+     [
+      8,
+      8,
+      336
+     ],
+     [
+      9,
+      9,
+      808
+     ],
+     [
+      10,
+      10,
+      116
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 531,
+    "share_equal": 0.9379,
+    "cross": [
+     [
+      1,
+      0,
+      33
+     ],
+     [
+      1,
+      1,
+      233
+     ],
+     [
+      2,
+      2,
+      265
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "xbox360-nhl12": {
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4799,
+    "share_equal": 0.9996,
+    "cross": [
+     [
+      1,
+      1,
+      832
+     ],
+     [
+      1,
+      5,
+      2
+     ],
+     [
+      2,
+      2,
+      289
+     ],
+     [
+      3,
+      3,
+      67
+     ],
+     [
+      4,
+      4,
+      529
+     ],
+     [
+      5,
+      5,
+      642
+     ],
+     [
+      6,
+      6,
+      616
+     ],
+     [
+      7,
+      7,
+      465
+     ],
+     [
+      8,
+      8,
+      358
+     ],
+     [
+      9,
+      9,
+      918
+     ],
+     [
+      10,
+      10,
+      81
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 550,
+    "share_equal": 0.9655,
+    "cross": [
+     [
+      1,
+      0,
+      19
+     ],
+     [
+      1,
+      1,
+      381
+     ],
+     [
+      2,
+      2,
+      150
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "xbox360-nhl13": {
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4913,
+    "share_equal": 0.9998,
+    "cross": [
+     [
+      1,
+      1,
+      845
+     ],
+     [
+      1,
+      5,
+      1
+     ],
+     [
+      2,
+      2,
+      316
+     ],
+     [
+      3,
+      3,
+      52
+     ],
+     [
+      4,
+      4,
+      542
+     ],
+     [
+      5,
+      5,
+      583
+     ],
+     [
+      6,
+      6,
+      690
+     ],
+     [
+      7,
+      7,
+      507
+     ],
+     [
+      8,
+      8,
+      345
+     ],
+     [
+      9,
+      9,
+      979
+     ],
+     [
+      10,
+      10,
+      53
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 533,
+    "share_equal": 0.9587,
+    "cross": [
+     [
+      1,
+      0,
+      22
+     ],
+     [
+      1,
+      1,
+      360
+     ],
+     [
+      2,
+      2,
+      151
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "xbox360-nhl14": {
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4836,
+    "share_equal": 0.999,
+    "cross": [
+     [
+      1,
+      1,
+      840
+     ],
+     [
+      1,
+      5,
+      5
+     ],
+     [
+      2,
+      2,
+      310
+     ],
+     [
+      3,
+      3,
+      43
+     ],
+     [
+      4,
+      4,
+      535
+     ],
+     [
+      5,
+      5,
+      504
+     ],
+     [
+      6,
+      6,
+      680
+     ],
+     [
+      7,
+      7,
+      513
+     ],
+     [
+      8,
+      8,
+      337
+     ],
+     [
+      9,
+      9,
+      1027
+     ],
+     [
+      10,
+      10,
+      42
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 517,
+    "share_equal": 0.9632,
+    "cross": [
+     [
+      1,
+      0,
+      19
+     ],
+     [
+      1,
+      1,
+      357
+     ],
+     [
+      2,
+      2,
+      141
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "xbox360-nhl15": {
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4956,
+    "share_equal": 0.9996,
+    "cross": [
+     [
+      1,
+      1,
+      766
+     ],
+     [
+      1,
+      5,
+      2
+     ],
+     [
+      2,
+      2,
+      278
+     ],
+     [
+      3,
+      3,
+      45
+     ],
+     [
+      4,
+      4,
+      698
+     ],
+     [
+      5,
+      5,
+      432
+     ],
+     [
+      6,
+      6,
+      658
+     ],
+     [
+      7,
+      7,
+      515
+     ],
+     [
+      8,
+      8,
+      359
+     ],
+     [
+      9,
+      9,
+      1163
+     ],
+     [
+      10,
+      10,
+      40
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 555,
+    "share_equal": 0.973,
+    "cross": [
+     [
+      1,
+      0,
+      15
+     ],
+     [
+      1,
+      1,
+      377
+     ],
+     [
+      2,
+      2,
+      163
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "xbox360-nhllegacy": {
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4980,
+    "share_equal": 0.9986,
+    "cross": [
+     [
+      1,
+      1,
+      733
+     ],
+     [
+      1,
+      5,
+      7
+     ],
+     [
+      2,
+      2,
+      247
+     ],
+     [
+      3,
+      3,
+      35
+     ],
+     [
+      4,
+      4,
+      764
+     ],
+     [
+      5,
+      5,
+      445
+     ],
+     [
+      6,
+      6,
+      582
+     ],
+     [
+      7,
+      7,
+      523
+     ],
+     [
+      8,
+      8,
+      302
+     ],
+     [
+      9,
+      9,
+      1313
+     ],
+     [
+      10,
+      10,
+      29
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 552,
+    "share_equal": 0.9855,
+    "cross": [
+     [
+      1,
+      0,
+      8
+     ],
+     [
+      1,
+      1,
+      395
+     ],
+     [
+      2,
+      2,
+      149
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl15": {
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4969,
+    "share_equal": 0.9998,
+    "cross": [
+     [
+      1,
+      1,
+      796
+     ],
+     [
+      1,
+      5,
+      1
+     ],
+     [
+      2,
+      2,
+      261
+     ],
+     [
+      3,
+      3,
+      47
+     ],
+     [
+      4,
+      4,
+      688
+     ],
+     [
+      5,
+      5,
+      481
+     ],
+     [
+      6,
+      6,
+      632
+     ],
+     [
+      7,
+      7,
+      513
+     ],
+     [
+      8,
+      8,
+      345
+     ],
+     [
+      9,
+      9,
+      1162
+     ],
+     [
+      10,
+      10,
+      43
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 554,
+    "share_equal": 0.9747,
+    "cross": [
+     [
+      1,
+      0,
+      14
+     ],
+     [
+      1,
+      1,
+      381
+     ],
+     [
+      2,
+      2,
+      159
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl16": {
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4980,
+    "share_equal": 0.9986,
+    "cross": [
+     [
+      1,
+      1,
+      733
+     ],
+     [
+      1,
+      5,
+      7
+     ],
+     [
+      2,
+      2,
+      247
+     ],
+     [
+      3,
+      3,
+      35
+     ],
+     [
+      4,
+      4,
+      764
+     ],
+     [
+      5,
+      5,
+      445
+     ],
+     [
+      6,
+      6,
+      582
+     ],
+     [
+      7,
+      7,
+      523
+     ],
+     [
+      8,
+      8,
+      302
+     ],
+     [
+      9,
+      9,
+      1313
+     ],
+     [
+      10,
+      10,
+      29
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 552,
+    "share_equal": 0.9855,
+    "cross": [
+     [
+      1,
+      0,
+      8
+     ],
+     [
+      1,
+      1,
+      395
+     ],
+     [
+      2,
+      2,
+      149
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl17": {
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 5776,
+    "share_equal": 0.9998,
+    "cross": [
+     [
+      1,
+      1,
+      890
+     ],
+     [
+      1,
+      5,
+      1
+     ],
+     [
+      2,
+      2,
+      286
+     ],
+     [
+      3,
+      3,
+      41
+     ],
+     [
+      4,
+      4,
+      861
+     ],
+     [
+      5,
+      5,
+      485
+     ],
+     [
+      6,
+      6,
+      635
+     ],
+     [
+      7,
+      7,
+      581
+     ],
+     [
+      8,
+      8,
+      329
+     ],
+     [
+      9,
+      9,
+      1628
+     ],
+     [
+      10,
+      10,
+      39
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 654,
+    "share_equal": 0.9832,
+    "cross": [
+     [
+      1,
+      0,
+      11
+     ],
+     [
+      1,
+      1,
+      595
+     ],
+     [
+      2,
+      2,
+      48
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl18": {
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 6635,
+    "share_equal": 1.0,
+    "cross": [
+     [
+      1,
+      1,
+      911
+     ],
+     [
+      2,
+      2,
+      290
+     ],
+     [
+      3,
+      3,
+      39
+     ],
+     [
+      4,
+      4,
+      1134
+     ],
+     [
+      5,
+      5,
+      485
+     ],
+     [
+      6,
+      6,
+      640
+     ],
+     [
+      7,
+      7,
+      589
+     ],
+     [
+      8,
+      8,
+      348
+     ],
+     [
+      9,
+      9,
+      2172
+     ],
+     [
+      10,
+      10,
+      27
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 738,
+    "share_equal": 0.9905,
+    "cross": [
+     [
+      1,
+      0,
+      7
+     ],
+     [
+      1,
+      1,
+      619
+     ],
+     [
+      2,
+      2,
+      112
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl19-base": {
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 7334,
+    "share_equal": 0.9995,
+    "cross": [
+     [
+      1,
+      1,
+      896
+     ],
+     [
+      1,
+      5,
+      4
+     ],
+     [
+      2,
+      2,
+      325
+     ],
+     [
+      3,
+      3,
+      45
+     ],
+     [
+      4,
+      4,
+      1374
+     ],
+     [
+      5,
+      5,
+      418
+     ],
+     [
+      6,
+      6,
+      691
+     ],
+     [
+      7,
+      7,
+      703
+     ],
+     [
+      8,
+      8,
+      384
+     ],
+     [
+      9,
+      9,
+      2463
+     ],
+     [
+      10,
+      10,
+      31
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 994,
+    "share_equal": 0.9416,
+    "cross": [
+     [
+      1,
+      0,
+      58
+     ],
+     [
+      1,
+      1,
+      818
+     ],
+     [
+      2,
+      2,
+      118
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl21": {
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 8028,
+    "share_equal": 0.9996,
+    "cross": [
+     [
+      1,
+      1,
+      816
+     ],
+     [
+      1,
+      5,
+      3
+     ],
+     [
+      2,
+      2,
+      341
+     ],
+     [
+      3,
+      3,
+      33
+     ],
+     [
+      4,
+      4,
+      1639
+     ],
+     [
+      5,
+      5,
+      397
+     ],
+     [
+      6,
+      6,
+      752
+     ],
+     [
+      7,
+      7,
+      720
+     ],
+     [
+      8,
+      8,
+      427
+     ],
+     [
+      9,
+      9,
+      2816
+     ],
+     [
+      10,
+      10,
+      84
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 1062,
+    "share_equal": 0.9369,
+    "cross": [
+     [
+      1,
+      0,
+      67
+     ],
+     [
+      1,
+      1,
+      861
+     ],
+     [
+      2,
+      2,
+      134
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl20-real": {
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 7612,
+    "share_equal": 0.9995,
+    "cross": [
+     [
+      1,
+      1,
+      856
+     ],
+     [
+      1,
+      5,
+      4
+     ],
+     [
+      2,
+      2,
+      294
+     ],
+     [
+      3,
+      3,
+      34
+     ],
+     [
+      4,
+      4,
+      1534
+     ],
+     [
+      5,
+      5,
+      408
+     ],
+     [
+      6,
+      6,
+      717
+     ],
+     [
+      7,
+      7,
+      701
+     ],
+     [
+      8,
+      8,
+      391
+     ],
+     [
+      9,
+      9,
+      2642
+     ],
+     [
+      10,
+      10,
+      31
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 1001,
+    "share_equal": 0.9471,
+    "cross": [
+     [
+      1,
+      0,
+      53
+     ],
+     [
+      1,
+      1,
+      802
+     ],
+     [
+      2,
+      2,
+      146
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl19-patch56": {
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 7813,
+    "share_equal": 0.999,
+    "cross": [
+     [
+      1,
+      1,
+      837
+     ],
+     [
+      1,
+      5,
+      8
+     ],
+     [
+      2,
+      2,
+      326
+     ],
+     [
+      3,
+      3,
+      35
+     ],
+     [
+      4,
+      4,
+      1594
+     ],
+     [
+      5,
+      5,
+      387
+     ],
+     [
+      6,
+      6,
+      746
+     ],
+     [
+      7,
+      7,
+      731
+     ],
+     [
+      8,
+      8,
+      408
+     ],
+     [
+      9,
+      9,
+      2713
+     ],
+     [
+      10,
+      10,
+      28
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 1033,
+    "share_equal": 0.9439,
+    "cross": [
+     [
+      1,
+      0,
+      58
+     ],
+     [
+      1,
+      1,
+      831
+     ],
+     [
+      2,
+      2,
+      144
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  },
+  "ps4-nhl15-patch00": {
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "roster_style_depth": 4,
+   "unresolved_rows": 0,
+   "skater": {
+    "pairs": 4969,
+    "share_equal": 0.9998,
+    "cross": [
+     [
+      1,
+      1,
+      796
+     ],
+     [
+      1,
+      5,
+      1
+     ],
+     [
+      2,
+      2,
+      261
+     ],
+     [
+      3,
+      3,
+      47
+     ],
+     [
+      4,
+      4,
+      688
+     ],
+     [
+      5,
+      5,
+      481
+     ],
+     [
+      6,
+      6,
+      632
+     ],
+     [
+      7,
+      7,
+      513
+     ],
+     [
+      8,
+      8,
+      345
+     ],
+     [
+      9,
+      9,
+      1162
+     ],
+     [
+      10,
+      10,
+      43
+     ]
+    ]
+   },
+   "goalie": {
+    "pairs": 554,
+    "share_equal": 0.9747,
+    "cross": [
+     [
+      1,
+      0,
+      14
+     ],
+     [
+      1,
+      1,
+      381
+     ],
+     [
+      2,
+      2,
+      159
+     ]
+    ]
+   },
+   "skater_roster_codes_labels": {
+    "1": {
+     "player_style_toml": "Defensive Defenseman",
+     "nhl07_synthetic": "Defensive"
+    },
+    "2": {
+     "player_style_toml": "Offensive Defenseman",
+     "nhl07_synthetic": "Offensive"
+    },
+    "3": {
+     "player_style_toml": "Enforcer Defenseman",
+     "nhl07_synthetic": "Grinder"
+    },
+    "4": {
+     "player_style_toml": "Two-Way Defenseman",
+     "nhl07_synthetic": "Playmaker"
+    },
+    "5": {
+     "player_style_toml": "Grinder",
+     "nhl07_synthetic": "Sniper"
+    },
+    "6": {
+     "player_style_toml": "Playmaker",
+     "nhl07_synthetic": "Power Forward"
+    },
+    "7": {
+     "player_style_toml": "Sniper",
+     "nhl07_synthetic": "Dangler"
+    },
+    "8": {
+     "player_style_toml": "Power Forward",
+     "nhl07_synthetic": null
+    },
+    "9": {
+     "player_style_toml": "Two-Way Forward",
+     "nhl07_synthetic": null
+    },
+    "10": {
+     "player_style_toml": "Enforcer Forward",
+     "nhl07_synthetic": null
+    }
+   }
+  }
+ }
+}

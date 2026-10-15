@@ -1,0 +1,257 @@
+# NHL Legacy (PS3 / Xbox 360) and Legacy Recompiled (by reference - no independent anchor).
+# Same schema fingerprint as NHL 12-15; the game id decides. Codes 7+ are shifted by the Norwegian
+# league; the layout is named by NHL 16 PS4's stockleagues table.
+name = "gen7-nhllegacy"
+description = "NHL Legacy team league codes"
+applies_to = ["nhllegacy", "legacyrecomp"]
+
+[schema]
+league_table = "kOtt"
+league_field = "xMjj"
+league_width = 4
+required_fields = ["kOtt.iIBl", "kOtt.OwTu", "kOtt.CGMK"]
+forbidden_tables = ["fsLK"]
+
+[source]
+kind = "anchor-measurement"
+description = "L1.1-A cross-tab on the Legacy anchor (105d2186...c230); corroborated by NHL 16 PS4 stockleagues (7d95f1db...af7c), whose kOtt.xMjj distribution is identical; NHL conference/division groups from the prior-app Legacy audit (formerly defs/enums/conference.toml and division.toml)"
+
+# Dictionary keys (LOC-W1, 2026-09-18): `dictionary_key` per code is TRACED — read from the static
+# enum-name table in NHL Legacy Xbox 360 `default.xex` (decompressed image base 0x82000000, pointer
+# table at file 0x19aa64c region, entries [93..114]); the same list NHL 16 PS4 stores in
+# `stockleagues.name`. Evidence for that executable only. Code 14 (Winter Classic rows) binds to
+# the key `NHL` in that table.
+#
+# R1 F5 (2026-09-18): the `traced` class below is scoped by `[key_witness]` to the target whose
+# executable was read. Studio resolves the evidence per (game, platform): NHL Legacy Xbox 360 shows
+# `traced`; NHL Legacy PS3 and Legacy Recompiled share the mapping `by-reference` (identical
+# database and dictionary key set; their own executables were not inspected, and the recompiled
+# build's loader behaviour is unknown). Nothing here claims which screens read a key on any target.
+[key_witness]
+traced_on = [{ game = "nhllegacy", platform = "xbox" }]
+source = "NHL Legacy Xbox 360 default.xex static enum-name table (decompressed image base 0x82000000, pointer table at file 0x19aa64c region, entries [93..114])"
+otherwise = "by-reference"
+
+[[entries]]
+raw = 0
+label = "NHL"
+confidence = "corroborated"
+evidence = "32 rows; NHL 16 PS4 stockleagues 0 = NHL"
+dictionary_key = "NHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 1
+label = "AHL"
+confidence = "corroborated"
+evidence = "30 rows; stockleagues 1 = AHL"
+dictionary_key = "AHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 2
+label = "SHL (Sweden)"
+confidence = "corroborated"
+evidence = "14 rows; stockleagues 2 = elitserien"
+dictionary_key = "elitserien"
+key_evidence = "traced"
+
+[[entries]]
+raw = 3
+label = "Liiga (Finland)"
+confidence = "corroborated"
+evidence = "15 rows; stockleagues 3 = SMLIIGA"
+dictionary_key = "SMLIIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 4
+label = "DEL (Germany)"
+confidence = "corroborated"
+evidence = "14 rows; stockleagues 4 = TXT_LEAGUE_DEL"
+dictionary_key = "TXT_LEAGUE_DEL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 5
+label = "Extraliga (Czech)"
+confidence = "corroborated"
+evidence = "14 rows; stockleagues 5 = TXT_LEAGUE_O2_EXTRALIGA"
+dictionary_key = "TXT_LEAGUE_O2_EXTRALIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 6
+label = "National League (Switzerland)"
+confidence = "corroborated"
+evidence = "12 rows; stockleagues 6 = TXT_LEAGUE_SWISS_LEAGUE"
+dictionary_key = "TXT_LEAGUE_SWISS_LEAGUE"
+key_evidence = "traced"
+
+[[entries]]
+raw = 7
+label = "GET-ligaen (Norway)"
+confidence = "corroborated"
+evidence = "2 rows STAV, VAL; stockleagues 7 = TXT_LEAGUE_NORWAY"
+dictionary_key = "TXT_LEAGUE_NORWAY"
+key_evidence = "traced"
+
+[[entries]]
+raw = 8
+label = "National Teams"
+confidence = "corroborated"
+evidence = "21 rows; stockleagues 8 = NATIONAL"
+dictionary_key = "NATIONAL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 9
+label = "OHL"
+confidence = "corroborated"
+evidence = "20 rows; stockleagues 9 = OHL"
+dictionary_key = "OHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 10
+label = "QMJHL"
+confidence = "corroborated"
+evidence = "18 rows; stockleagues 10 = QMJHL"
+dictionary_key = "QMJHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 11
+label = "WHL"
+confidence = "corroborated"
+evidence = "22 rows; stockleagues 11 = WHL"
+dictionary_key = "WHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 12
+label = "Top Prospects"
+confidence = "corroborated"
+evidence = "2 rows TPR/TPW; stockleagues 12 = PROSPECT_TEAMS"
+dictionary_key = "PROSPECT_TEAMS"
+key_evidence = "traced"
+
+[[entries]]
+raw = 13
+label = "Custom Teams"
+confidence = "corroborated"
+evidence = "30 rows with empty abbreviations; stockleagues 13 = CUSTOM_TEAMS"
+dictionary_key = "CUSTOM_TEAMS"
+key_evidence = "traced"
+
+[[entries]]
+raw = 14
+label = "Winter Classic"
+confidence = "candidate"
+evidence = "4 NHL rows NYR, PHI, PIT, WSH; stockleagues 14 = NHL (artid 0)"
+dictionary_key = "NHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 15
+label = "EASHL"
+confidence = "corroborated"
+evidence = "2 rows EASHL; stockleagues 15 = TXT_EASHL"
+dictionary_key = "EA_SPORTS_HOCKEY_LEAGUE"
+key_evidence = "traced"
+
+# NHL-only group labels (kOtt.OwTu / kOtt.CGMK), scoped to league code 0. Other leagues reuse the
+# group-id space with their own meaning and stay raw.
+[[groups]]
+field = "OwTu"
+league_raw = 0
+raw = 1
+label = "Western"
+confidence = "candidate"
+
+[[groups]]
+field = "OwTu"
+league_raw = 0
+raw = 2
+label = "Eastern"
+confidence = "candidate"
+
+[[groups]]
+field = "CGMK"
+league_raw = 0
+raw = 3
+label = "Pacific"
+confidence = "candidate"
+
+[[groups]]
+field = "CGMK"
+league_raw = 0
+raw = 4
+label = "Central"
+confidence = "candidate"
+
+[[groups]]
+field = "CGMK"
+league_raw = 0
+raw = 5
+label = "Atlantic"
+confidence = "candidate"
+
+[[groups]]
+field = "CGMK"
+league_raw = 0
+raw = 6
+label = "Metropolitan"
+confidence = "candidate"
+
+# Codes present in the executable enum with no stock team row on the anchors (P1.1-X §1, Legacy
+# pointer table at VA 0x839b1230 — the same table the batch traced at raw-PE offset 0x19aa64c). Whether
+# a team assigned one of these codes is accepted by the game is a runtime question.
+[[entries]]
+raw = 16
+label = "CHL"
+confidence = "enum"
+evidence = "no team row on the anchors; Legacy Xbox 360 pointer table entry 16"
+dictionary_key = "CHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 17
+label = "United States"
+confidence = "enum"
+evidence = "no team row on the anchors; Legacy Xbox 360 pointer table entry 17"
+dictionary_key = "UnitedStates"
+key_evidence = "traced"
+
+[[entries]]
+raw = 18
+label = "Russia"
+confidence = "enum"
+evidence = "no team row on the anchors; Legacy Xbox 360 pointer table entry 18"
+dictionary_key = "Russia"
+key_evidence = "traced"
+
+[[entries]]
+raw = 19
+label = "Rest Of World"
+confidence = "enum"
+evidence = "no team row on the anchors; Legacy Xbox 360 pointer table entry 19"
+dictionary_key = "TXT_ROW_LEAGUE"
+key_evidence = "traced"
+
+[[entries]]
+raw = 20
+label = "Hockey Ultimate Team"
+confidence = "enum"
+evidence = "no team row on the anchors; Legacy Xbox 360 pointer table entry 20"
+dictionary_key = "HUT"
+key_evidence = "traced"
+
+[[entries]]
+raw = 21
+label = "Legend Teams"
+confidence = "enum"
+evidence = "no team row on the anchors; Legacy Xbox 360 pointer table entry 21"
+dictionary_key = "TXT_LEGEND_TEAMS"
+key_evidence = "traced"
+

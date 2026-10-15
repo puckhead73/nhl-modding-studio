@@ -1,0 +1,867 @@
+{
+ "note": "R142 - PS3 same-size / same-format board-raster writer inputs (after-receipt-5 research package 2, 28 Sep 2026). Research probe, NOT a\nStudio writer and not a write authorisation. Read-only on the installs; mutations only on package-owned disposable copies.\n  A  `board_edges_checked`: the R127f material -> raster edge with every bound the coordinator asked for (predecessor exists, is 0xEF0001,\n     lies inside the header region, reaches +260; slot word names an in-range 0x20003 descriptor of >= 0x38 B inside the header region;\n     signature 83f1 / 83f2 / 83f3 on both format words; descriptor u32 @0 names an in-range 0x10030 data entry whose span lies in the data\n     region, overlaps no other data entry and is owned by no other descriptor; entry size == the plain chain). Replaces r137b.board_edges,\n     which read +256 without a block-length check.\n  B  synthetic malformed packages (built in memory): one valid baseline and one variant per refusal; the r137b helper is run on the\n     short-block variant to show the old read past the block.\n  C  census on every PS3 venue package: loose NHL 14 / 15 / Legacy, archive-only NHL 11 / 12 / 13 (chunkzip members unwrapped in memory):\n     edge outcomes, board rasters per format / level count, materials per raster, refusals.\n  D  full-chain round trips on disposable copies (one sample per format and topology): every level replaced by format-valid solid blocks\n     (a distinct colour / alpha per level), then: bytes outside the entry unchanged, 0 .. hdr_size unchanged, every checked edge unchanged,\n     each level decoded by Pillow's BCn decoder (independent of the writer) = its level colour, the stock entry also decodes level by\n     level; restore by byte copy -> SHA-256 of the source. Container: archive member unwrapped == loose original (pairs); Python zlib-9\n     native chunkzip framing (mirror of tdb-archive-codec compress_chunkzip_native) of the unmodified package == the stock member?;\n     re-wrap of the mutated package decodes back exactly; stored member length stock vs new.\nUsage: python r142_ps3_board_raster_writer.py <out.json> <scratch dir>\n",
+ "probe_sha256": "d7ee2d488bfa3c6abc27f5765d926449c3289354ece9a88dcac8d158b6d13616",
+ "synthetic": [
+  {
+   "case": "baseline",
+   "expected": "edge",
+   "result": "edge",
+   "reason": null,
+   "pass": true
+  },
+  {
+   "case": "short block (240 B)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "short parameter block (240 B): slot word at +256 lies outside it",
+   "pass": true,
+   "old_r137b_board_edges": {
+    "adbd_TEST": 3
+   }
+  },
+  {
+   "case": "predecessor not 0xEF0001",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "predecessor type 0xef0002 (not 0xEF0001)",
+   "pass": true
+  },
+  {
+   "case": "block past header region",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "parameter block outside the header region",
+   "pass": true
+  },
+  {
+   "case": "slot word out of range",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "slot word 99 out of range (7 chunks)",
+   "pass": true
+  },
+  {
+   "case": "slot names a material (foreign type)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "slot names chunk 2 of type 0xef0005 (not a 0x20003 descriptor)",
+   "pass": true
+  },
+  {
+   "case": "descriptor shorter than 0x38",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: size 32 / extent outside the header region",
+   "pass": true
+  },
+  {
+   "case": "format 6007 (texel)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: format 6007/6007 outside 83f1 / 83f2 / 83f3",
+   "pass": true
+  },
+  {
+   "case": "entry word out of range",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: entry word 50 out of range",
+   "pass": true
+  },
+  {
+   "case": "entry word names a non-data chunk",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: entry 1 of type 0xef0001 (not a 0x10030 data entry)",
+   "pass": true
+  },
+  {
+   "case": "entry past file end",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "data entry 4 extends past the file",
+   "pass": true
+  },
+  {
+   "case": "entry size = 6 x chain (cube)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "data entry 4: 240 B != plain chain 40 B (= 6 x chain: cube map)",
+   "pass": true
+  },
+  {
+   "case": "entry owned by two descriptors",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "data entry 4 owned by 2 descriptors",
+   "pass": true
+  },
+  {
+   "case": "entry overlaps another data entry",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "data entry 4 overlaps another data entry",
+   "pass": true
+  }
+ ],
+ "census": {
+  "ps3-nhl14": {
+   "topology": "loose + archive pair",
+   "counts": {
+    "packages": 67,
+    "board_materials": 243,
+    "edges": 243,
+    "board_rasters": 139
+   },
+   "refusals": {},
+   "rasters_by_format": {
+    "DXT1": 138,
+    "DXT3": 1
+   },
+   "materials_per_raster": {
+    "1": 51,
+    "2": 73,
+    "3": 14,
+    "4": 1
+   },
+   "levels_per_raster": {
+    "9": 1,
+    "10": 69,
+    "11": 69
+   }
+  },
+  "ps3-nhl15": {
+   "topology": "loose + archive pair",
+   "counts": {
+    "packages": 67,
+    "board_materials": 243,
+    "edges": 243,
+    "board_rasters": 139
+   },
+   "refusals": {},
+   "rasters_by_format": {
+    "DXT1": 138,
+    "DXT3": 1
+   },
+   "materials_per_raster": {
+    "1": 51,
+    "2": 73,
+    "3": 14,
+    "4": 1
+   },
+   "levels_per_raster": {
+    "9": 1,
+    "10": 69,
+    "11": 69
+   }
+  },
+  "ps3-legacy": {
+   "topology": "loose + archive pair",
+   "counts": {
+    "packages": 67,
+    "board_materials": 243,
+    "edges": 243,
+    "board_rasters": 139
+   },
+   "refusals": {},
+   "rasters_by_format": {
+    "DXT1": 138,
+    "DXT3": 1
+   },
+   "materials_per_raster": {
+    "1": 51,
+    "2": 73,
+    "3": 14,
+    "4": 1
+   },
+   "levels_per_raster": {
+    "9": 1,
+    "10": 69,
+    "11": 69
+   }
+  },
+  "ps3-nhl11": {
+   "topology": "archive-only (stadium.big)",
+   "counts": {
+    "packages": 51,
+    "board_materials": 137,
+    "edges": 136,
+    "board_rasters": 112
+   },
+   "refusals": {
+    "slot word N out of range (N chunks)": 1
+   },
+   "rasters_by_format": {
+    "DXT1": 112
+   },
+   "materials_per_raster": {
+    "1": 91,
+    "2": 18,
+    "3": 3
+   },
+   "levels_per_raster": {
+    "3": 1,
+    "8": 2,
+    "10": 55,
+    "11": 54
+   }
+  },
+  "ps3-nhl12": {
+   "topology": "archive-only (cacherender.big)",
+   "counts": {
+    "packages": 57,
+    "board_materials": 226,
+    "edges": 226,
+    "board_rasters": 127
+   },
+   "refusals": {},
+   "rasters_by_format": {
+    "DXT1": 126,
+    "DXT3": 1
+   },
+   "materials_per_raster": {
+    "1": 44,
+    "2": 68,
+    "3": 14,
+    "4": 1
+   },
+   "levels_per_raster": {
+    "10": 62,
+    "11": 65
+   }
+  },
+  "ps3-nhl13": {
+   "topology": "archive-only (cacherender.big)",
+   "counts": {
+    "packages": 61,
+    "board_materials": 232,
+    "edges": 232,
+    "board_rasters": 132
+   },
+   "refusals": {},
+   "rasters_by_format": {
+    "DXT1": 131,
+    "DXT3": 1
+   },
+   "materials_per_raster": {
+    "1": 48,
+    "2": 69,
+    "3": 14,
+    "4": 1
+   },
+   "levels_per_raster": {
+    "9": 1,
+    "10": 66,
+    "11": 65
+   }
+  }
+ },
+ "round_trips": [
+  {
+   "tree": "ps3-legacy",
+   "topology": "pair",
+   "package": "stadium_321_container_0.rpsgl",
+   "loose_sha256": "25ee59f4796a5c84fc4fc2908742336d0254a6e2f62695e3987238c73ec8b85e",
+   "member": {
+    "archive": "cacherender.big",
+    "offset": 187777536,
+    "stored_bytes": 4104919,
+    "codec": "chunkzip",
+    "stored_sha256": "59b3f9ebe567b9af7db96685d5d295fa7f3eeff0f2b0e99767ae4e919e816411",
+    "unwrapped_sha256": "25ee59f4796a5c84fc4fc2908742336d0254a6e2f62695e3987238c73ec8b85e",
+    "unwrapped_equals_loose": true
+   },
+   "material": "adbd_sign_mult_Mat1_Clone_178",
+   "materials_sharing_raster": [
+    "adbd_sign_mult_Mat1_Clone_178",
+    "adbd_placeholder1_Clone_393",
+    "adbd_placeholder"
+   ],
+   "descriptor": 124,
+   "entry": 123,
+   "format": "DXT1",
+   "w": 256,
+   "h": 512,
+   "levels": 10,
+   "entry_span": [
+    5492096,
+    5579496
+   ],
+   "file_bytes": 12874420,
+   "stock_levels_decode": true,
+   "outside_entry_unchanged": true,
+   "header_region_unchanged": true,
+   "length_unchanged": true,
+   "checked_edges_unchanged": true,
+   "all_sharing_materials_still_resolve": true,
+   "level_readback": [
+    {
+     "level": 0,
+     "w": 256,
+     "h": 512,
+     "bytes": 65536,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 1,
+     "w": 128,
+     "h": 256,
+     "bytes": 16384,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 2,
+     "w": 64,
+     "h": 128,
+     "bytes": 4096,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 3,
+     "w": 32,
+     "h": 64,
+     "bytes": 1024,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 4,
+     "w": 16,
+     "h": 32,
+     "bytes": 256,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 5,
+     "w": 8,
+     "h": 16,
+     "bytes": 64,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 6,
+     "w": 4,
+     "h": 8,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 7,
+     "w": 2,
+     "h": 4,
+     "bytes": 8,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 8,
+     "w": 1,
+     "h": 2,
+     "bytes": 8,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 9,
+     "w": 1,
+     "h": 1,
+     "bytes": 8,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    }
+   ],
+   "all_levels_match": true,
+   "rewrap": {
+    "python_zlib9_native_of_stock_equals_member": true,
+    "stock_member_stored": 4104919,
+    "mutated_rewrap_stored": 4060071,
+    "stored_length_delta": -44848,
+    "mutated_rewrap_decodes_exactly": true
+   },
+   "restore_sha256_equal": true,
+   "scratch_copy_removed": true
+  },
+  {
+   "tree": "ps3-legacy",
+   "topology": "pair",
+   "package": "stadium_13_container_0.rpsgl",
+   "loose_sha256": "f9df11e64a8accafaf2c783382cb0d4bce45e81192d11f804d369d2c17368688",
+   "member": {
+    "archive": "cacherender.big",
+    "offset": 80063696,
+    "stored_bytes": 4395031,
+    "codec": "chunkzip",
+    "stored_sha256": "7750dd06a9f0a482aa090262ff11205dd4b57ee600657b27e0179447c167865a",
+    "unwrapped_sha256": "f9df11e64a8accafaf2c783382cb0d4bce45e81192d11f804d369d2c17368688",
+    "unwrapped_equals_loose": true
+   },
+   "material": "adbd_staples",
+   "materials_sharing_raster": [
+    "adbd_staples"
+   ],
+   "descriptor": 30,
+   "entry": 29,
+   "format": "DXT3",
+   "w": 512,
+   "h": 128,
+   "levels": 10,
+   "entry_span": [
+    3755904,
+    3843344
+   ],
+   "file_bytes": 10858412,
+   "stock_levels_decode": true,
+   "outside_entry_unchanged": true,
+   "header_region_unchanged": true,
+   "length_unchanged": true,
+   "checked_edges_unchanged": true,
+   "all_sharing_materials_still_resolve": true,
+   "level_readback": [
+    {
+     "level": 0,
+     "w": 512,
+     "h": 128,
+     "bytes": 65536,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 1,
+     "w": 256,
+     "h": 64,
+     "bytes": 16384,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 2,
+     "w": 128,
+     "h": 32,
+     "bytes": 4096,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 3,
+     "w": 64,
+     "h": 16,
+     "bytes": 1024,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 4,
+     "w": 32,
+     "h": 8,
+     "bytes": 256,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 5,
+     "w": 16,
+     "h": 4,
+     "bytes": 64,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 6,
+     "w": 8,
+     "h": 2,
+     "bytes": 32,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 7,
+     "w": 4,
+     "h": 1,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 8,
+     "w": 2,
+     "h": 1,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 9,
+     "w": 1,
+     "h": 1,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    }
+   ],
+   "all_levels_match": true,
+   "rewrap": {
+    "python_zlib9_native_of_stock_equals_member": true,
+    "stock_member_stored": 4395031,
+    "mutated_rewrap_stored": 4390007,
+    "stored_length_delta": -5024,
+    "mutated_rewrap_decodes_exactly": true
+   },
+   "restore_sha256_equal": true,
+   "scratch_copy_removed": true
+  },
+  {
+   "tree": "ps3-legacy",
+   "format": "DXT5",
+   "result": "no multi-level board raster of this format"
+  },
+  {
+   "tree": "ps3-nhl13",
+   "topology": "archive-only",
+   "package": "stadium_321_container_0.rpsgl",
+   "loose_sha256": null,
+   "member": {
+    "archive": "cacherender.big",
+    "offset": 154271456,
+    "stored_bytes": 4116086,
+    "codec": "chunkzip",
+    "stored_sha256": "262fc7782521831c9b3ed64a8a14ac9810e1018075d81df51b1b83c33974d9af",
+    "unwrapped_sha256": "c7988f0dc1af679b3c5bffed1016ff63b01ccf53a8999b30b4c8354ee3a71862",
+    "unwrapped_equals_loose": null
+   },
+   "material": "adbd_sign_mult_Mat1_Clone_178",
+   "materials_sharing_raster": [
+    "adbd_sign_mult_Mat1_Clone_178",
+    "adbd_placeholder1_Clone_393",
+    "adbd_placeholder"
+   ],
+   "descriptor": 124,
+   "entry": 123,
+   "format": "DXT1",
+   "w": 256,
+   "h": 512,
+   "levels": 10,
+   "entry_span": [
+    5492736,
+    5580136
+   ],
+   "file_bytes": 12875044,
+   "stock_levels_decode": true,
+   "outside_entry_unchanged": true,
+   "header_region_unchanged": true,
+   "length_unchanged": true,
+   "checked_edges_unchanged": true,
+   "all_sharing_materials_still_resolve": true,
+   "level_readback": [
+    {
+     "level": 0,
+     "w": 256,
+     "h": 512,
+     "bytes": 65536,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 1,
+     "w": 128,
+     "h": 256,
+     "bytes": 16384,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 2,
+     "w": 64,
+     "h": 128,
+     "bytes": 4096,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 3,
+     "w": 32,
+     "h": 64,
+     "bytes": 1024,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 4,
+     "w": 16,
+     "h": 32,
+     "bytes": 256,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 5,
+     "w": 8,
+     "h": 16,
+     "bytes": 64,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 6,
+     "w": 4,
+     "h": 8,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 7,
+     "w": 2,
+     "h": 4,
+     "bytes": 8,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 8,
+     "w": 1,
+     "h": 2,
+     "bytes": 8,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 9,
+     "w": 1,
+     "h": 1,
+     "bytes": 8,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    }
+   ],
+   "all_levels_match": true,
+   "rewrap": {
+    "python_zlib9_native_of_stock_equals_member": true,
+    "stock_member_stored": 4116086,
+    "mutated_rewrap_stored": 4070838,
+    "stored_length_delta": -45248,
+    "mutated_rewrap_decodes_exactly": true
+   },
+   "restore_sha256_equal": true,
+   "scratch_copy_removed": true
+  },
+  {
+   "tree": "ps3-nhl13",
+   "topology": "archive-only",
+   "package": "stadium_13_container_0.rpsgl",
+   "loose_sha256": null,
+   "member": {
+    "archive": "cacherender.big",
+    "offset": 50213696,
+    "stored_bytes": 4401943,
+    "codec": "chunkzip",
+    "stored_sha256": "d6e4c8ec9918789ee1a36af95c8127da2c8d73a1cce6b0cd452c41df42524359",
+    "unwrapped_sha256": "47e5e40d5a50fd994b50bf82882ba8300b70d43e0f13462f1569bf322bcad26f",
+    "unwrapped_equals_loose": null
+   },
+   "material": "adbd_staples",
+   "materials_sharing_raster": [
+    "adbd_staples"
+   ],
+   "descriptor": 30,
+   "entry": 29,
+   "format": "DXT3",
+   "w": 512,
+   "h": 128,
+   "levels": 10,
+   "entry_span": [
+    3755904,
+    3843344
+   ],
+   "file_bytes": 10858412,
+   "stock_levels_decode": true,
+   "outside_entry_unchanged": true,
+   "header_region_unchanged": true,
+   "length_unchanged": true,
+   "checked_edges_unchanged": true,
+   "all_sharing_materials_still_resolve": true,
+   "level_readback": [
+    {
+     "level": 0,
+     "w": 512,
+     "h": 128,
+     "bytes": 65536,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 1,
+     "w": 256,
+     "h": 64,
+     "bytes": 16384,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 2,
+     "w": 128,
+     "h": 32,
+     "bytes": 4096,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 3,
+     "w": 64,
+     "h": 16,
+     "bytes": 1024,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 4,
+     "w": 32,
+     "h": 8,
+     "bytes": 256,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 5,
+     "w": 16,
+     "h": 4,
+     "bytes": 64,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 6,
+     "w": 8,
+     "h": 2,
+     "bytes": 32,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 7,
+     "w": 4,
+     "h": 1,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 8,
+     "w": 2,
+     "h": 1,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    },
+    {
+     "level": 9,
+     "w": 1,
+     "h": 1,
+     "bytes": 16,
+     "decoded": true,
+     "uniform": true,
+     "matches_level_colour": true,
+     "error": null
+    }
+   ],
+   "all_levels_match": true,
+   "rewrap": {
+    "python_zlib9_native_of_stock_equals_member": true,
+    "stock_member_stored": 4401943,
+    "mutated_rewrap_stored": 4396919,
+    "stored_length_delta": -5024,
+    "mutated_rewrap_decodes_exactly": true
+   },
+   "restore_sha256_equal": true,
+   "scratch_copy_removed": true
+  },
+  {
+   "tree": "ps3-nhl13",
+   "format": "DXT5",
+   "result": "no multi-level board raster of this format"
+  }
+ ]
+}

@@ -1,17 +1,14 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
-import { useProject } from "../lib/project";
+import { useRosterEdit } from "../lib/useRosterEdit";
+import { pendingField } from "../lib/useFieldEdit";
 import { EmptyState, Spinner } from "./primitives";
 import { ratingToneClass } from "../lib/ratingColor";
-import {
-  GOALIE_STYLE_LABELS,
-  isDressed,
-  PLAYER_STYLE_LABELS,
-  styleCode,
-} from "../lib/teamPresentation";
+import { isDressed, styleCode } from "../lib/teamPresentation";
 import type { LineEntryDto } from "../bindings/LineEntryDto";
+import type { FieldViewDto } from "../bindings/FieldViewDto";
 import type { LinesViewDto } from "../bindings/LinesViewDto";
 import type { PlayerSummaryDto } from "../bindings/PlayerSummaryDto";
 
@@ -147,8 +144,6 @@ function buildBuckets(view: LinesViewDto): BucketSpec[] {
 const SCRATCHED_TAB = "__scratched__";
 
 export function LinesTab({ projectId, teamId }: { projectId: number; teamId: number }) {
-  const qc = useQueryClient();
-  const { update } = useProject();
   const lines = useQuery({
     queryKey: ["lines", projectId, teamId],
     queryFn: () => call("lines_view", { projectId, teamId }),
@@ -159,8 +154,6 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
   });
   const [activeBucket, setActiveBucket] = useState<string | null>(null);
   const [dragOverSlot, setDragOverSlot] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [lastError, setLastError] = useState<string | null>(null);
 
   const summaryOf = useMemo(() => {
     const m = new Map<number, PlayerSummaryDto>();
@@ -168,72 +161,25 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
     return m;
   }, [players.data]);
 
-  const refresh = async () => {
-    await qc.invalidateQueries();
-    update(await call("project_summary", { projectId }));
-  };
-
-  // One sequential batch of 1-bit slot writes (clear + set pairs), refreshed once at the end.
-  const applySlotWrites = async (writes: Array<{ record: number; field: string; value: 0 | 1 }>) => {
-    if (writes.length === 0) return;
-    setBusy(true);
-    setLastError(null);
-    try {
-      for (const w of writes) {
-        await call("set_field", {
-          projectId,
-          table: "eGlu",
-          record: w.record,
-          field: w.field,
-          intValue: w.value,
-        });
-      }
-      await refresh();
-    } catch (e) {
-      setLastError(String(e));
-      await refresh();
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const statusMut = useMutation({
-    mutationFn: async (v: { entry: LineEntryDto; dressed: boolean }) => {
-      // Scratching pulls the player off every line slot first — an out-of-lineup player can't hold
-      // a line assignment (mirrors the game's own invariant; matches eGlu.hSZj = 0).
-      if (!v.dressed) {
-        for (const field of v.entry.slots) {
-          await call("set_field", {
-            projectId,
-            table: "eGlu",
-            record: v.entry.slot_record,
-            field,
-            intValue: 0,
-          });
-        }
-      }
-      return call("set_dressed", {
-        projectId,
-        team: teamId,
-        player: v.entry.player_id as number,
-        dressed: v.dressed,
-      });
-    },
-    onSuccess: refresh,
-    onError: (e) => setLastError(String(e)),
-  });
-  const archetypeMut = useMutation({
-    mutationFn: (v: { record: number; value: number }) =>
-      call("set_field", {
-        projectId,
-        table: "eGlu",
-        record: v.record,
-        field: "QgFs",
-        intValue: v.value,
-      }),
-    onSuccess: refresh,
-    onError: (e) => setLastError(String(e)),
-  });
+  type SlotWrite = { record: number; field: string; value: 0 | 1 };
+  const slotsMut = useRosterEdit(projectId, teamId,
+    (writes: SlotWrite[]) => call("set_team_roster", { projectId, team: teamId, writes: writes.map(w => [w.record, w.field, w.value]) }),
+    (before, writes) => ({ ...before, entries: before.entries.map(e => {
+      const slots = new Set(e.slots);
+      for (const w of writes) if (w.record === e.slot_record) { if (w.value) slots.add(w.field); else slots.delete(w.field); }
+      return { ...e, slots: [...slots] };
+    }) }));
+  const applySlotWrites = (writes: SlotWrite[]) => { if (writes.length) slotsMut.mutate(writes); };
+  const statusMut = useRosterEdit(projectId, teamId,
+    (v: { entry: LineEntryDto; dressed: boolean }) => call("set_dressed", { projectId, team: teamId, player: v.entry.player_id!, dressed: v.dressed }),
+    (before, v) => ({ ...before, entries: before.entries.map(e => e.slot_record === v.entry.slot_record
+      ? { ...e, dressed: v.dressed, slots: v.dressed ? e.slots : [], captaincy: v.dressed ? e.captaincy : 0 } : e) }));
+  const archetypeMut = useRosterEdit(projectId, teamId,
+    (v: { record: number; value: number }) => call("set_field", { projectId, table: "eGlu", record: v.record, field: "QgFs", intValue: v.value }),
+    (before, v) => ({ ...before, entries: before.entries.map(e => e.slot_record === v.record && e.style
+      ? { ...e, style: pendingField(e.style, { intValue: v.value }) } : e) }));
+  const busy = slotsMut.isPending;
+  const mutationError = slotsMut.error ?? statusMut.error ?? archetypeMut.error;
 
   if (lines.isLoading || players.isLoading) return <Spinner label="Loading lines…" />;
   if (lines.isError) return <p className="text-rose-400">{String(lines.error)}</p>;
@@ -320,7 +266,7 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
           </span>
         </div>
       </div>
-      {lastError && <p className="text-xs text-rose-400">{lastError}</p>}
+      {mutationError != null && <p className="text-xs text-rose-400">{String(mutationError)}</p>}
       <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_15rem]">
         <div className="min-w-0">
           {selectedKey === SCRATCHED_TAB ? (
@@ -719,7 +665,7 @@ function RosterRail({
                 key={e.slot_record}
                 entry={e}
                 summary={e.player_id != null ? summaryOf.get(e.player_id) : undefined}
-                styleLabels={PLAYER_STYLE_LABELS}
+                goalie={false}
                 onLine={activeRecords.has(e.slot_record)}
                 busy={busy}
                 onSetStatus={onSetStatus}
@@ -742,7 +688,7 @@ function RosterRail({
                   key={e.slot_record}
                   entry={e}
                   summary={e.player_id != null ? summaryOf.get(e.player_id) : undefined}
-                  styleLabels={GOALIE_STYLE_LABELS}
+                  goalie
                   onLine={activeRecords.has(e.slot_record)}
                   busy={busy}
                   onSetStatus={onSetStatus}
@@ -760,10 +706,22 @@ function RosterRail({
   );
 }
 
+/** Rail options for the roster style cell: the domain's per-title labels for skaters, else the
+ *  field's declared range as plain numbers (goalies always numbers). */
+export function archetypeChoices(style: FieldViewDto | null, goalie: boolean): Array<{ raw: number; label: string }> {
+  if (!style) return [];
+  if (!goalie && style.enum_options.length > 0) return style.enum_options.map((o) => ({ raw: o.raw, label: o.label })).sort((a, b) => a.raw - b.raw);
+  const lo = style.range_low ?? 0;
+  const hi = style.range_high ?? lo;
+  const out: Array<{ raw: number; label: string }> = [];
+  for (let r = lo; r <= hi && out.length < 64; r++) out.push({ raw: r, label: String(r) });
+  return out;
+}
+
 function RailRow({
   entry,
   summary,
-  styleLabels,
+  goalie,
   onLine,
   busy,
   onSetStatus,
@@ -771,7 +729,8 @@ function RailRow({
 }: {
   entry: LineEntryDto;
   summary: PlayerSummaryDto | undefined;
-  styleLabels: Record<number, string>;
+  /** Goalie rows: the roster cell's meaning for goalies is unresolved (research R122 S4) — numbers only. */
+  goalie: boolean;
   onLine: boolean;
   busy: boolean;
   onSetStatus: (entry: LineEntryDto, dressed: boolean) => void;
@@ -781,11 +740,12 @@ function RailRow({
   const unassigned = !outOfLineup && !onLine;
   const inactive = summary?.is_active === false;
   const archetypeRaw = entry.style?.decoded ?? null;
-  const archetypeOptions = Object.entries(styleLabels)
-    .map(([raw, label]) => ({ raw: Number(raw), label }))
-    .sort((a, b) => a.raw - b.raw);
+  // The per-title vocabulary the domain attached to this cell (research R122: NHL 11+ the Legacy
+  // table, NHL 08 / 09 the NHL 07 set, NHL 07 / 10 none); without one, the field's own range as
+  // numbers — never a borrowed label, and never a code the field cannot hold.
+  const archetypeOptions = archetypeChoices(entry.style ?? null, goalie);
   if (archetypeRaw !== null && !archetypeOptions.some((o) => o.raw === archetypeRaw)) {
-    archetypeOptions.push({ raw: archetypeRaw, label: `raw ${archetypeRaw}` });
+    archetypeOptions.push({ raw: archetypeRaw, label: String(archetypeRaw) });
   }
 
   return (
@@ -869,7 +829,7 @@ function RailRow({
           disabled={busy || archetypeRaw === null || entry.style?.editable === false}
           onChange={(e) => onSetArchetype(entry.slot_record, Number(e.target.value))}
           aria-label="Archetype"
-          title="Per-slot archetype (eGlu.QgFs) — PROVISIONAL: the binding is unconfirmed; labels borrowed from the player/goalie style enum."
+          title={entry.style?.vocabulary_note ?? (goalie ? "Per-slot style code (eGlu.QgFs): its meaning for goalies is unresolved — shown as a number" : "Per-slot style (eGlu.QgFs)")}
           className="min-w-0 flex-1 rounded border border-amber-900/50 bg-slate-950 px-1 py-0.5 text-[10px] text-amber-200/80 disabled:opacity-30"
         >
           {archetypeRaw === null && <option value="">—</option>}

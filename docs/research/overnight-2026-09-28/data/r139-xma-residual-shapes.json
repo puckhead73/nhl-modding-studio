@@ -1,0 +1,2231 @@
+{
+ "note": "R139 - residual X360 EA-XMA ram-record shapes that Studio refuses (research package 5b, 28 Sep 2026): multi-segment, looping and > 2 channel\nin-bank records on the loose X360 NHL 10 -> Legacy `audio/sfx/*.abk` banks. Read-only; decoder output never kept.\n  1  inventory per title: ram records with codec 0x03 (EA-XMA) by (segments, loop, channel config); record-header sum rule\n     (sum of segment samples == declared num_samples);\n  2  smallest discriminating samples per title and shape (non-loop 2+ segments cc 0 / 1; looping single-segment cc 0 / 1):\n     per segment the unchanged R84 raw route (w0 >> 2 = length, packet headers, 0x800 padding, RIFF XMA2) decoded by the INSTALLED PINNED\n     helper (`C:\\nhlms-toolchain\\out\\xma2-helper-ffmpeg-8.1.3\\nhlms-xma2-helper.exe`, pipe protocol only) -> decoded vs declared; the\n     first packet header of every segment after the first (frame offset / skip: does a later segment start on a fresh frame?); a control\n     decode with the RIFF sample count + 1000 (does the output merely follow the header?); and the segments' packets concatenated as one\n     stream with the summed count.\nDecoder success is decoder acceptance only: no listening, no claim about how the console joins segments.\nUsage: python r139_xma_residual_shapes.py <out.json> [--titles x360-nhl10,...]\n",
+ "helper": "C:\\nhlms-toolchain\\out\\xma2-helper-ffmpeg-8.1.3\\nhlms-xma2-helper.exe",
+ "helper_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+ "titles": {
+  "x360-nhl10": {
+   "inventory": {
+    "segments 1 loop 0 cc 1": 205,
+    "segments 1 loop 1 cc 1": 73,
+    "segments 1 loop 0 cc 0": 1633,
+    "segments 1 loop 0 cc 3": 83,
+    "segments 1 loop 1 cc 3": 10,
+    "segments 2 loop 1 cc 1": 40,
+    "segments 1 loop 0 cc 5": 6
+   },
+   "sum_rule": {
+    "sum == num_samples": 2050
+   },
+   "candidates": {
+    "loop": 73,
+    "multi+loop": 40
+   },
+   "samples": {
+    "loop": [
+     {
+      "bank": "000_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 48888,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 48888,
+        "declared": 48888,
+        "exact": true,
+        "control_plus_1000": 48888,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 31904
+       }
+      ],
+      "concatenated": {
+       "decoded": 48888,
+       "declared_sum": 48888
+      }
+     },
+     {
+      "bank": "043_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 51608,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 51608,
+        "declared": 51608,
+        "exact": true,
+        "control_plus_1000": 51608,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 32034
+       }
+      ],
+      "concatenated": {
+       "decoded": 51608,
+       "declared_sum": 51608
+      }
+     }
+    ],
+    "multi+loop": [
+     {
+      "bank": "073_chant.abk",
+      "entry": 0,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 4437,
+      "num_samples": 52575,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 2,
+        "decoded": 4437,
+        "declared": 4437,
+        "exact": true,
+        "control_plus_1000": 4437,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 2910
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 8,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 15,
+        "decoded": 48138,
+        "declared": 48138,
+        "exact": true,
+        "control_plus_1000": 48138,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 28951
+       }
+      ],
+      "concatenated": {
+       "decoded": 53258,
+       "declared_sum": 52575
+      }
+     },
+     {
+      "bank": "066_chant.abk",
+      "entry": 3,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 2603,
+      "num_samples": 53316,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 6,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 1,
+        "decoded": 2603,
+        "declared": 2603,
+        "exact": true,
+        "control_plus_1000": 2603,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 1833
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 50713,
+        "declared": 50713,
+        "exact": true,
+        "control_plus_1000": 50713,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 31335
+       }
+      ],
+      "concatenated": {
+       "decoded": 53785,
+       "declared_sum": 53316
+      }
+     }
+    ]
+   },
+   "sweep": {
+    "segs 1 loop 1 cc 1: loop_start 0": 73,
+    "segs 1 loop 1 cc 1: every segment exact": 57,
+    "segs 1 loop 0 cc 3: structure refused": 83,
+    "segs 1 loop 0 cc 3: not exact": 83,
+    "segs 1 loop 1 cc 3: loop_start 0": 10,
+    "segs 1 loop 1 cc 3: structure refused": 10,
+    "segs 1 loop 1 cc 3: not exact": 10,
+    "segs 1 loop 1 cc 1: structure refused": 16,
+    "segs 1 loop 1 cc 1: not exact": 16,
+    "segs 2 loop 1 cc 1: loop_start == segment 0 samples": 40,
+    "segs 2 loop 1 cc 1: structure refused": 8,
+    "segs 2 loop 1 cc 1: not exact": 8,
+    "segs 2 loop 1 cc 1: every segment exact": 32,
+    "segs 1 loop 0 cc 5: structure refused": 6,
+    "segs 1 loop 0 cc 5: not exact": 6
+   },
+   "sweep_failures_first": [
+    [
+     "002_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 171257 != segment length 346702"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 57623 != segment length 118814"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 191379 != segment length 389715"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 102602 != segment length 216128"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 28524 != segment length 60232"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 142649 != segment length 290136"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 115508 != segment length 224828"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 54663 != segment length 113007"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 187002 != segment length 391144"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 193323 != segment length 398183"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 55518 != segment length 114136"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 196793 != segment length 398024"
+     ]
+    ]
+   ]
+  },
+  "x360-nhl11": {
+   "inventory": {
+    "segments 1 loop 0 cc 1": 213,
+    "segments 1 loop 1 cc 1": 74,
+    "segments 1 loop 0 cc 0": 1648,
+    "segments 1 loop 0 cc 3": 83,
+    "segments 1 loop 1 cc 3": 10,
+    "segments 2 loop 1 cc 1": 47,
+    "segments 1 loop 0 cc 5": 4
+   },
+   "sum_rule": {
+    "sum == num_samples": 2079
+   },
+   "candidates": {
+    "loop": 74,
+    "multi+loop": 47
+   },
+   "samples": {
+    "loop": [
+     {
+      "bank": "000_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 48888,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 48888,
+        "declared": 48888,
+        "exact": true,
+        "control_plus_1000": 48888,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 31904
+       }
+      ],
+      "concatenated": {
+       "decoded": 48888,
+       "declared_sum": 48888
+      }
+     },
+     {
+      "bank": "043_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 51608,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 51608,
+        "declared": 51608,
+        "exact": true,
+        "control_plus_1000": 51608,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 32034
+       }
+      ],
+      "concatenated": {
+       "decoded": 51608,
+       "declared_sum": 51608
+      }
+     }
+    ],
+    "multi+loop": [
+     {
+      "bank": "073_chant.abk",
+      "entry": 0,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 4437,
+      "num_samples": 52575,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 2,
+        "decoded": 4437,
+        "declared": 4437,
+        "exact": true,
+        "control_plus_1000": 4437,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 2910
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 8,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 15,
+        "decoded": 48138,
+        "declared": 48138,
+        "exact": true,
+        "control_plus_1000": 48138,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 28951
+       }
+      ],
+      "concatenated": {
+       "decoded": 53258,
+       "declared_sum": 52575
+      }
+     },
+     {
+      "bank": "066_chant.abk",
+      "entry": 3,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 2603,
+      "num_samples": 53316,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 6,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 1,
+        "decoded": 2603,
+        "declared": 2603,
+        "exact": true,
+        "control_plus_1000": 2603,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 1833
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 50713,
+        "declared": 50713,
+        "exact": true,
+        "control_plus_1000": 50713,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 31335
+       }
+      ],
+      "concatenated": {
+       "decoded": 53785,
+       "declared_sum": 53316
+      }
+     }
+    ]
+   },
+   "sweep": {
+    "segs 1 loop 1 cc 1: loop_start 0": 74,
+    "segs 1 loop 1 cc 1: every segment exact": 57,
+    "segs 1 loop 0 cc 3: structure refused": 83,
+    "segs 1 loop 0 cc 3: not exact": 83,
+    "segs 1 loop 1 cc 3: loop_start 0": 10,
+    "segs 1 loop 1 cc 3: structure refused": 10,
+    "segs 1 loop 1 cc 3: not exact": 10,
+    "segs 1 loop 1 cc 1: structure refused": 17,
+    "segs 1 loop 1 cc 1: not exact": 17,
+    "segs 2 loop 1 cc 1: loop_start == segment 0 samples": 47,
+    "segs 2 loop 1 cc 1: structure refused": 8,
+    "segs 2 loop 1 cc 1: not exact": 8,
+    "segs 2 loop 1 cc 1: every segment exact": 39,
+    "segs 1 loop 0 cc 5: structure refused": 4,
+    "segs 1 loop 0 cc 5: not exact": 4
+   },
+   "sweep_failures_first": [
+    [
+     "002_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 171257 != segment length 346702"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 57623 != segment length 118814"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 191379 != segment length 389715"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 102602 != segment length 216128"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 28524 != segment length 60232"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 142649 != segment length 290136"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 115508 != segment length 224828"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 54663 != segment length 113007"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 187002 != segment length 391144"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 193323 != segment length 398183"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 55518 != segment length 114136"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 196793 != segment length 398024"
+     ]
+    ]
+   ]
+  },
+  "x360-nhl12": {
+   "inventory": {
+    "segments 1 loop 0 cc 1": 205,
+    "segments 1 loop 1 cc 1": 73,
+    "segments 1 loop 0 cc 0": 896,
+    "segments 1 loop 0 cc 3": 153,
+    "segments 1 loop 1 cc 3": 12,
+    "segments 2 loop 1 cc 1": 49,
+    "segments 1 loop 0 cc 5": 4
+   },
+   "sum_rule": {
+    "sum == num_samples": 1392
+   },
+   "candidates": {
+    "loop": 73,
+    "multi+loop": 49
+   },
+   "samples": {
+    "loop": [
+     {
+      "bank": "000_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 48888,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 48888,
+        "declared": 48888,
+        "exact": true,
+        "control_plus_1000": 48888,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 31904
+       }
+      ],
+      "concatenated": {
+       "decoded": 48888,
+       "declared_sum": 48888
+      }
+     },
+     {
+      "bank": "043_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 51608,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 51608,
+        "declared": 51608,
+        "exact": true,
+        "control_plus_1000": 51608,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 32034
+       }
+      ],
+      "concatenated": {
+       "decoded": 51608,
+       "declared_sum": 51608
+      }
+     }
+    ],
+    "multi+loop": [
+     {
+      "bank": "073_chant.abk",
+      "entry": 0,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 4437,
+      "num_samples": 52575,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 2,
+        "decoded": 4437,
+        "declared": 4437,
+        "exact": true,
+        "control_plus_1000": 4437,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 2910
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 8,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 15,
+        "decoded": 48138,
+        "declared": 48138,
+        "exact": true,
+        "control_plus_1000": 48138,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 28951
+       }
+      ],
+      "concatenated": {
+       "decoded": 53258,
+       "declared_sum": 52575
+      }
+     },
+     {
+      "bank": "066_chant.abk",
+      "entry": 3,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 2603,
+      "num_samples": 53316,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 6,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 1,
+        "decoded": 2603,
+        "declared": 2603,
+        "exact": true,
+        "control_plus_1000": 2603,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 1833
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 50713,
+        "declared": 50713,
+        "exact": true,
+        "control_plus_1000": 50713,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 31335
+       }
+      ],
+      "concatenated": {
+       "decoded": 53785,
+       "declared_sum": 53316
+      }
+     }
+    ]
+   },
+   "sweep": {
+    "segs 1 loop 1 cc 1: loop_start 0": 73,
+    "segs 1 loop 1 cc 1: every segment exact": 58,
+    "segs 1 loop 0 cc 3: structure refused": 153,
+    "segs 1 loop 0 cc 3: not exact": 153,
+    "segs 1 loop 1 cc 3: loop_start 0": 12,
+    "segs 1 loop 1 cc 3: structure refused": 12,
+    "segs 1 loop 1 cc 3: not exact": 12,
+    "segs 1 loop 1 cc 1: structure refused": 15,
+    "segs 1 loop 1 cc 1: not exact": 15,
+    "segs 2 loop 1 cc 1: loop_start == segment 0 samples": 49,
+    "segs 2 loop 1 cc 1: structure refused": 9,
+    "segs 2 loop 1 cc 1: not exact": 9,
+    "segs 2 loop 1 cc 1: every segment exact": 40,
+    "segs 1 loop 0 cc 5: structure refused": 4,
+    "segs 1 loop 0 cc 5: not exact": 4
+   },
+   "sweep_failures_first": [
+    [
+     "002_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 171257 != segment length 346702"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 57623 != segment length 118814"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 191379 != segment length 389715"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 102602 != segment length 216128"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 28524 != segment length 60232"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 142649 != segment length 290136"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 115508 != segment length 224828"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 54663 != segment length 113007"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 187002 != segment length 391144"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 193323 != segment length 398183"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 55518 != segment length 114136"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 196793 != segment length 398024"
+     ]
+    ]
+   ]
+  },
+  "x360-nhl13": {
+   "inventory": {
+    "segments 1 loop 0 cc 1": 200,
+    "segments 1 loop 1 cc 1": 63,
+    "segments 1 loop 0 cc 0": 1342,
+    "segments 1 loop 0 cc 3": 152,
+    "segments 1 loop 1 cc 3": 12,
+    "segments 2 loop 1 cc 1": 52,
+    "segments 1 loop 0 cc 5": 1
+   },
+   "sum_rule": {
+    "sum == num_samples": 1822
+   },
+   "candidates": {
+    "loop": 63,
+    "multi+loop": 52
+   },
+   "samples": {
+    "loop": [
+     {
+      "bank": "000_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 48888,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 48888,
+        "declared": 48888,
+        "exact": true,
+        "control_plus_1000": 48888,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 31904
+       }
+      ],
+      "concatenated": {
+       "decoded": 48888,
+       "declared_sum": 48888
+      }
+     },
+     {
+      "bank": "043_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 51608,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 51608,
+        "declared": 51608,
+        "exact": true,
+        "control_plus_1000": 51608,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 32034
+       }
+      ],
+      "concatenated": {
+       "decoded": 51608,
+       "declared_sum": 51608
+      }
+     }
+    ],
+    "multi+loop": [
+     {
+      "bank": "073_chant.abk",
+      "entry": 0,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 4437,
+      "num_samples": 52575,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 2,
+        "decoded": 4437,
+        "declared": 4437,
+        "exact": true,
+        "control_plus_1000": 4437,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 2910
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 8,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 15,
+        "decoded": 48138,
+        "declared": 48138,
+        "exact": true,
+        "control_plus_1000": 48138,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 28951
+       }
+      ],
+      "concatenated": {
+       "decoded": 53258,
+       "declared_sum": 52575
+      }
+     },
+     {
+      "bank": "066_chant.abk",
+      "entry": 3,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 2603,
+      "num_samples": 53316,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 6,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 1,
+        "decoded": 2603,
+        "declared": 2603,
+        "exact": true,
+        "control_plus_1000": 2603,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 1833
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 50713,
+        "declared": 50713,
+        "exact": true,
+        "control_plus_1000": 50713,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 31335
+       }
+      ],
+      "concatenated": {
+       "decoded": 53785,
+       "declared_sum": 53316
+      }
+     }
+    ]
+   },
+   "sweep": {
+    "segs 1 loop 1 cc 1: loop_start 0": 63,
+    "segs 1 loop 1 cc 1: every segment exact": 48,
+    "segs 1 loop 0 cc 3: structure refused": 152,
+    "segs 1 loop 0 cc 3: not exact": 152,
+    "segs 1 loop 1 cc 3: loop_start 0": 12,
+    "segs 1 loop 1 cc 3: structure refused": 12,
+    "segs 1 loop 1 cc 3: not exact": 12,
+    "segs 1 loop 1 cc 1: structure refused": 15,
+    "segs 1 loop 1 cc 1: not exact": 15,
+    "segs 2 loop 1 cc 1: loop_start == segment 0 samples": 52,
+    "segs 2 loop 1 cc 1: structure refused": 11,
+    "segs 2 loop 1 cc 1: not exact": 11,
+    "segs 2 loop 1 cc 1: every segment exact": 41,
+    "segs 1 loop 0 cc 5: structure refused": 1,
+    "segs 1 loop 0 cc 5: not exact": 1
+   },
+   "sweep_failures_first": [
+    [
+     "002_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 171257 != segment length 346702"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 57623 != segment length 118814"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 191379 != segment length 389715"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 102602 != segment length 216128"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 28524 != segment length 60232"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 142649 != segment length 290136"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 115508 != segment length 224828"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 54663 != segment length 113007"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 187002 != segment length 391144"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 193323 != segment length 398183"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 55518 != segment length 114136"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 196793 != segment length 398024"
+     ]
+    ]
+   ]
+  },
+  "x360-nhl14": {
+   "inventory": {
+    "segments 1 loop 0 cc 1": 202,
+    "segments 1 loop 1 cc 1": 63,
+    "segments 1 loop 0 cc 0": 1345,
+    "segments 1 loop 0 cc 3": 152,
+    "segments 1 loop 1 cc 3": 12,
+    "segments 2 loop 1 cc 1": 55
+   },
+   "sum_rule": {
+    "sum == num_samples": 1829
+   },
+   "candidates": {
+    "loop": 63,
+    "multi+loop": 55
+   },
+   "samples": {
+    "loop": [
+     {
+      "bank": "000_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 48888,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 48888,
+        "declared": 48888,
+        "exact": true,
+        "control_plus_1000": 48888,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 31904
+       }
+      ],
+      "concatenated": {
+       "decoded": 48888,
+       "declared_sum": 48888
+      }
+     },
+     {
+      "bank": "043_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 51608,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 51608,
+        "declared": 51608,
+        "exact": true,
+        "control_plus_1000": 51608,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 32034
+       }
+      ],
+      "concatenated": {
+       "decoded": 51608,
+       "declared_sum": 51608
+      }
+     }
+    ],
+    "multi+loop": [
+     {
+      "bank": "073_chant.abk",
+      "entry": 0,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 4437,
+      "num_samples": 52575,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 2,
+        "decoded": 4437,
+        "declared": 4437,
+        "exact": true,
+        "control_plus_1000": 4437,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 2910
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 8,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 15,
+        "decoded": 48138,
+        "declared": 48138,
+        "exact": true,
+        "control_plus_1000": 48138,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 28951
+       }
+      ],
+      "concatenated": {
+       "decoded": 53258,
+       "declared_sum": 52575
+      }
+     },
+     {
+      "bank": "066_chant.abk",
+      "entry": 3,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 2603,
+      "num_samples": 53316,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 6,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 1,
+        "decoded": 2603,
+        "declared": 2603,
+        "exact": true,
+        "control_plus_1000": 2603,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 1833
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 50713,
+        "declared": 50713,
+        "exact": true,
+        "control_plus_1000": 50713,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 31335
+       }
+      ],
+      "concatenated": {
+       "decoded": 53785,
+       "declared_sum": 53316
+      }
+     }
+    ]
+   },
+   "sweep": {
+    "segs 1 loop 1 cc 1: loop_start 0": 63,
+    "segs 1 loop 1 cc 1: every segment exact": 48,
+    "segs 1 loop 0 cc 3: structure refused": 152,
+    "segs 1 loop 0 cc 3: not exact": 152,
+    "segs 1 loop 1 cc 3: loop_start 0": 12,
+    "segs 1 loop 1 cc 3: structure refused": 12,
+    "segs 1 loop 1 cc 3: not exact": 12,
+    "segs 1 loop 1 cc 1: structure refused": 15,
+    "segs 1 loop 1 cc 1: not exact": 15,
+    "segs 2 loop 1 cc 1: loop_start == segment 0 samples": 55,
+    "segs 2 loop 1 cc 1: structure refused": 11,
+    "segs 2 loop 1 cc 1: not exact": 11,
+    "segs 2 loop 1 cc 1: every segment exact": 44
+   },
+   "sweep_failures_first": [
+    [
+     "002_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 171257 != segment length 346702"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 57623 != segment length 118814"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 191379 != segment length 389715"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 102602 != segment length 216128"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 28524 != segment length 60232"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 142649 != segment length 290136"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 115508 != segment length 224828"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 54663 != segment length 113007"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 187002 != segment length 391144"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 193323 != segment length 398183"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 55518 != segment length 114136"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 196793 != segment length 398024"
+     ]
+    ]
+   ]
+  },
+  "x360-nhl15": {
+   "inventory": {
+    "segments 1 loop 0 cc 1": 202,
+    "segments 1 loop 1 cc 1": 63,
+    "segments 1 loop 0 cc 0": 1345,
+    "segments 1 loop 0 cc 3": 152,
+    "segments 1 loop 1 cc 3": 12,
+    "segments 2 loop 1 cc 1": 55
+   },
+   "sum_rule": {
+    "sum == num_samples": 1829
+   },
+   "candidates": {
+    "loop": 63,
+    "multi+loop": 55
+   },
+   "samples": {
+    "loop": [
+     {
+      "bank": "000_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 48888,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 48888,
+        "declared": 48888,
+        "exact": true,
+        "control_plus_1000": 48888,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 31904
+       }
+      ],
+      "concatenated": {
+       "decoded": 48888,
+       "declared_sum": 48888
+      }
+     },
+     {
+      "bank": "043_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 51608,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 51608,
+        "declared": 51608,
+        "exact": true,
+        "control_plus_1000": 51608,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 32034
+       }
+      ],
+      "concatenated": {
+       "decoded": 51608,
+       "declared_sum": 51608
+      }
+     }
+    ],
+    "multi+loop": [
+     {
+      "bank": "073_chant.abk",
+      "entry": 0,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 4437,
+      "num_samples": 52575,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 2,
+        "decoded": 4437,
+        "declared": 4437,
+        "exact": true,
+        "control_plus_1000": 4437,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 2910
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 8,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 15,
+        "decoded": 48138,
+        "declared": 48138,
+        "exact": true,
+        "control_plus_1000": 48138,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 28951
+       }
+      ],
+      "concatenated": {
+       "decoded": 53258,
+       "declared_sum": 52575
+      }
+     },
+     {
+      "bank": "066_chant.abk",
+      "entry": 3,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 2603,
+      "num_samples": 53316,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 6,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 1,
+        "decoded": 2603,
+        "declared": 2603,
+        "exact": true,
+        "control_plus_1000": 2603,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 1833
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 50713,
+        "declared": 50713,
+        "exact": true,
+        "control_plus_1000": 50713,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 31335
+       }
+      ],
+      "concatenated": {
+       "decoded": 53785,
+       "declared_sum": 53316
+      }
+     }
+    ]
+   },
+   "sweep": {
+    "segs 1 loop 1 cc 1: loop_start 0": 63,
+    "segs 1 loop 1 cc 1: every segment exact": 48,
+    "segs 1 loop 0 cc 3: structure refused": 152,
+    "segs 1 loop 0 cc 3: not exact": 152,
+    "segs 1 loop 1 cc 3: loop_start 0": 12,
+    "segs 1 loop 1 cc 3: structure refused": 12,
+    "segs 1 loop 1 cc 3: not exact": 12,
+    "segs 1 loop 1 cc 1: structure refused": 15,
+    "segs 1 loop 1 cc 1: not exact": 15,
+    "segs 2 loop 1 cc 1: loop_start == segment 0 samples": 55,
+    "segs 2 loop 1 cc 1: structure refused": 12,
+    "segs 2 loop 1 cc 1: not exact": 12,
+    "segs 2 loop 1 cc 1: every segment exact": 43
+   },
+   "sweep_failures_first": [
+    [
+     "002_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 171257 != segment length 346702"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 57623 != segment length 118814"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 191379 != segment length 389715"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 102602 != segment length 216128"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 28524 != segment length 60232"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 142649 != segment length 290136"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 115508 != segment length 224828"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 54663 != segment length 113007"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 187002 != segment length 391144"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 193323 != segment length 398183"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 55518 != segment length 114136"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 196793 != segment length 398024"
+     ]
+    ]
+   ]
+  },
+  "x360-legacy": {
+   "inventory": {
+    "segments 1 loop 0 cc 1": 176,
+    "segments 1 loop 1 cc 1": 72,
+    "segments 1 loop 0 cc 0": 1375,
+    "segments 1 loop 0 cc 3": 152,
+    "segments 1 loop 1 cc 3": 12,
+    "segments 2 loop 1 cc 1": 42
+   },
+   "sum_rule": {
+    "sum == num_samples": 1829
+   },
+   "candidates": {
+    "loop": 72,
+    "multi+loop": 42
+   },
+   "samples": {
+    "loop": [
+     {
+      "bank": "000_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 48888,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 48888,
+        "declared": 48888,
+        "exact": true,
+        "control_plus_1000": 48888,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 31904
+       }
+      ],
+      "concatenated": {
+       "decoded": 48888,
+       "declared_sum": 48888
+      }
+     },
+     {
+      "bank": "043_chant.abk",
+      "entry": 1,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 0,
+      "num_samples": 51608,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 51608,
+        "declared": 51608,
+        "exact": true,
+        "control_plus_1000": 51608,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 32034
+       }
+      ],
+      "concatenated": {
+       "decoded": 51608,
+       "declared_sum": 51608
+      }
+     }
+    ],
+    "multi+loop": [
+     {
+      "bank": "073_chant.abk",
+      "entry": 0,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 4437,
+      "num_samples": 52575,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 2,
+        "decoded": 4437,
+        "declared": 4437,
+        "exact": true,
+        "control_plus_1000": 4437,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 2910
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 8,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 15,
+        "decoded": 48138,
+        "declared": 48138,
+        "exact": true,
+        "control_plus_1000": 48138,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 28951
+       }
+      ],
+      "concatenated": {
+       "decoded": 53258,
+       "declared_sum": 52575
+      }
+     },
+     {
+      "bank": "066_chant.abk",
+      "entry": 3,
+      "channels": 2,
+      "rate": 32000,
+      "loop": true,
+      "loop_start": 2603,
+      "num_samples": 53316,
+      "segments": [
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 6,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 1,
+        "decoded": 2603,
+        "declared": 2603,
+        "exact": true,
+        "control_plus_1000": 2603,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 0,
+        "bytes": 1833
+       },
+       {
+        "structure_ok": true,
+        "errors": [],
+        "first_header": {
+         "frame_count": 7,
+         "frame_offset_bits": 0,
+         "metadata": 1,
+         "skip": 0
+        },
+        "packets": 16,
+        "decoded": 50713,
+        "declared": 50713,
+        "exact": true,
+        "control_plus_1000": 50713,
+        "output_follows_header": false,
+        "rc": 0,
+        "stderr": "",
+        "segment": 1,
+        "bytes": 31335
+       }
+      ],
+      "concatenated": {
+       "decoded": 53785,
+       "declared_sum": 53316
+      }
+     }
+    ]
+   },
+   "sweep": {
+    "segs 1 loop 1 cc 1: loop_start 0": 72,
+    "segs 1 loop 1 cc 1: every segment exact": 56,
+    "segs 1 loop 0 cc 3: structure refused": 152,
+    "segs 1 loop 0 cc 3: not exact": 152,
+    "segs 1 loop 1 cc 3: loop_start 0": 12,
+    "segs 1 loop 1 cc 3: structure refused": 12,
+    "segs 1 loop 1 cc 3: not exact": 12,
+    "segs 1 loop 1 cc 1: structure refused": 16,
+    "segs 1 loop 1 cc 1: not exact": 16,
+    "segs 2 loop 1 cc 1: loop_start == segment 0 samples": 42,
+    "segs 2 loop 1 cc 1: structure refused": 8,
+    "segs 2 loop 1 cc 1: not exact": 8,
+    "segs 2 loop 1 cc 1: every segment exact": 34
+   },
+   "sweep_failures_first": [
+    [
+     "002_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 171257 != segment length 346702"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 57623 != segment length 118814"
+     ]
+    ],
+    [
+     "002_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 191379 != segment length 389715"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 102602 != segment length 216128"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 28524 != segment length 60232"
+     ]
+    ],
+    [
+     "005_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 142649 != segment length 290136"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 115508 != segment length 224828"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 54663 != segment length 113007"
+     ]
+    ],
+    [
+     "008_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 187002 != segment length 391144"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     0,
+     0,
+     [
+      "w0 >> 2 = 193323 != segment length 398183"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     1,
+     0,
+     [
+      "w0 >> 2 = 55518 != segment length 114136"
+     ]
+    ],
+    [
+     "010_chant.abk",
+     2,
+     0,
+     [
+      "w0 >> 2 = 196793 != segment length 398024"
+     ]
+    ]
+   ]
+  }
+ }
+}

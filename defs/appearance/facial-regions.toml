@@ -1,0 +1,28 @@
+# Legacy palette → facial-region buckets, used by `rigaudit regions`.
+#
+# Keys are PALETTE indices (vertex BLENDINDICES ÷ 3). This is the
+# cross-head-stable layout measured by the PR1 facial-bone sweep
+# (20 heads, IDs 10–60124 + the three templates) — see
+# docs/rig-audit-phase1.md. Edit here, not in code; the classifier
+# sanity-checks the eye buckets against usage centroids per head and
+# warns when this file doesn't fit an asset.
+#
+# eye_control_* are the per-eye bone PAIRS (functional split between
+# pair members still under investigation — `rigaudit eye-pairs`).
+# Head-mesh vertices weighted on them form the eye-socket ring.
+
+[legacy.palette_buckets]
+eye_control_l = [23, 34]
+eye_control_r = [24, 35]
+upper_eyelid_l = [39]
+upper_eyelid_r = [41]
+lower_eyelid_l = [36]
+lower_eyelid_r = [37]
+upper_lip = [31, 44, 45]
+lower_lip = [17, 18, 19]
+mouth_corner_l = [29, 30]
+mouth_corner_r = [32, 33]
+tongue = [20, 21]
+jaw = [16]
+head = [8, 10, 15]
+neck = [4, 5, 6, 7, 14, 46, 47, 48]

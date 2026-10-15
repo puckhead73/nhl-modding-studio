@@ -1,0 +1,2101 @@
+{
+ "titles": {
+  "nhl07": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)",
+   "members": [
+    {
+     "path": "db/NHL07NG-meta.xml",
+     "container": "loose",
+     "size": 269813,
+     "sha256": "c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/NHL07NG.db",
+     "container": "loose",
+     "size": 4189776,
+     "sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-databasehashedattributes.h",
+     "container": "loose",
+     "size": 837,
+     "sha256": "392dcd5a572882478784e8c03dd8735b58a288a40f7e0b77bdddc1a4e72cf1e9",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 970,
+     "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 182500,
+     "sha256": "5d3c0b0187b8d673b9642eaec4fabf346fc3451f9a3bf14e4e6bfb4cd61743c3",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-databasehashedattributes.h",
+     "container": "data1.big",
+     "entry": 163,
+     "offset": 10431552,
+     "size": 837,
+     "sha256": "392dcd5a572882478784e8c03dd8735b58a288a40f7e0b77bdddc1a4e72cf1e9",
+     "magic": "0d0a2f2f",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "data1.big",
+     "entry": 164,
+     "offset": 10432448,
+     "size": 970,
+     "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    }
+   ]
+  },
+  "nhl08": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)",
+   "members": [
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 243270,
+     "sha256": "d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 1556560,
+     "sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 970,
+     "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 267068,
+     "sha256": "308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4",
+     "anchor": "equal"
+    }
+   ]
+  },
+  "nhl09": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)",
+   "members": [
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 238947,
+     "sha256": "3c32238ac784dfc8c9fa555ca3944bcad413c68f5c0e338f325bd372b6d079f4",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 1903376,
+     "sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "loose",
+     "size": 555652,
+     "sha256": "7a6dc6616dc62526a78b23b62a365cfff346ff43dd4f77454e7473a12c25298c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 970,
+     "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 513564,
+     "sha256": "d9e0463b1b6b49d744273803785469ae9781b21c838cbb226526d66028b8727e",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "loose",
+     "size": 526724,
+     "sha256": "4e6a985041b8bd626839f9ceeec599d83ef508277b32ef4d8ca141b54e830089",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 970,
+     "sha256": "089aa9dd59e8fbfc9e02935993a5b86945eda575a1cfcfa9e7939c5118d73576",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 544220,
+     "sha256": "c93660d5e0c1466cba2409a0754c7fdcef95b95e4ff4ae95dd0fafe01f3286e6",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "loose",
+     "size": 543196,
+     "sha256": "9b4cb7f4024835c50949195f7c2d2d2178a7ea2c2a6b6e1d6a87c8a67cfe8b8e",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "loose",
+     "size": 689564,
+     "sha256": "c01fb17b63ac70bdb47bb6b26585a3cec1d81d923dca0b7412b29aafe422d1ce",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "loose",
+     "size": 528468,
+     "sha256": "e0e6c1f586b081113ac215ff9d68d9c2ca8c75017afc08f51912be1096588e24",
+     "anchor": "none"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "boot.big",
+     "entry": 88,
+     "offset": 1068672,
+     "size": 15712,
+     "sha256": "c0f6ef1eb9ff9aa42fa4b839a8f5583eba5f41f9cbfcbb4a60c93fbd91dd7ac5",
+     "magic": "10fb03a5",
+     "anchor": "differs"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "boot.big",
+     "entry": 89,
+     "offset": 1084416,
+     "size": 970,
+     "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "boot.big",
+     "entry": 90,
+     "offset": 1085440,
+     "size": 970,
+     "sha256": "089aa9dd59e8fbfc9e02935993a5b86945eda575a1cfcfa9e7939c5118d73576",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    }
+   ]
+  },
+  "nhl10": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10",
+   "members": [
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 274595,
+     "sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 1998232,
+     "sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 970,
+     "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 667996,
+     "sha256": "f1a9a1dd9e8f2851053750fabb6f3b42aa53f3cf45e021449652fdea1c042671",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 970,
+     "sha256": "089aa9dd59e8fbfc9e02935993a5b86945eda575a1cfcfa9e7939c5118d73576",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 708964,
+     "sha256": "95c10bf7416e54f3f14bd09ee3725d39e73909089801dcdfbea160635fb82403",
+     "anchor": "none"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "boot.big",
+     "entry": 98,
+     "offset": 1762752,
+     "size": 18197,
+     "sha256": "550ca6fd56d7ebe94282aa1b85139990e7bf6e602c72a79609e74036caff7e43",
+     "magic": "10fb0430",
+     "anchor": "differs"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "boot.big",
+     "entry": 99,
+     "offset": 1780992,
+     "size": 970,
+     "sha256": "5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "boot.big",
+     "entry": 100,
+     "offset": 1782016,
+     "size": 970,
+     "sha256": "089aa9dd59e8fbfc9e02935993a5b86945eda575a1cfcfa9e7939c5118d73576",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    }
+   ]
+  },
+  "nhl11": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11",
+   "members": [
+    {
+     "path": "db/draft_roster.db",
+     "container": "loose",
+     "size": 1334472,
+     "sha256": "eba04eae8d317887f309fa43e9940efac64f2f97cacbf0970530d15e8740afca",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 382671,
+     "sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 2739736,
+     "sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 811364,
+     "sha256": "82520ab36988b7e384830c74c208cf7a7d8f80be34fd435242a5a067feedc22b",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 864372,
+     "sha256": "cddca2282a5dd221741b8ea84ec734b0bc52b87fecdaba5c4c068e882295a56c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "boot.big",
+     "entry": 95,
+     "offset": 3883008,
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "boot.big",
+     "entry": 96,
+     "offset": 3883984,
+     "size": 811364,
+     "sha256": "82520ab36988b7e384830c74c208cf7a7d8f80be34fd435242a5a067feedc22b",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "boot.big",
+     "entry": 97,
+     "offset": 4695360,
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "boot.big",
+     "entry": 98,
+     "offset": 4696336,
+     "size": 864372,
+     "sha256": "cddca2282a5dd221741b8ea84ec734b0bc52b87fecdaba5c4c068e882295a56c",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "db/draft_roster.db",
+     "container": "fe.big",
+     "entry": 0,
+     "offset": 1001680,
+     "size": 1334472,
+     "sha256": "eba04eae8d317887f309fa43e9940efac64f2f97cacbf0970530d15e8740afca",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "fe.big",
+     "entry": 1,
+     "offset": 2336160,
+     "size": 382671,
+     "sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+     "magic": "3c3f786d",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "fe.big",
+     "entry": 2,
+     "offset": 2718832,
+     "size": 2739736,
+     "sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+     "magic": "44420008",
+     "anchor": "equal"
+    }
+   ]
+  },
+  "nhl12": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12",
+   "members": [
+    {
+     "path": "db/draft_roster.db",
+     "container": "loose",
+     "size": 1817072,
+     "sha256": "f2f0e02a4b2e0fbe0b7c25d03bbc0dca896582ff62bab30d74a2c7bbcc682834",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 397080,
+     "sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 3043876,
+     "sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "loose",
+     "size": 1045828,
+     "sha256": "088f90590889d2cedb002c82fa37279abfc5ea361ca1e35f0b3ba0cea2df436c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 936780,
+     "sha256": "354a1905582faf3d45ae8a5ba4d7bddb51645f7af144f7864939536c8cc01fd7",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "loose",
+     "size": 969212,
+     "sha256": "5f35ee84024efdb9c4312f3ff549844d11638999436e5e4c143a9238747d8d62",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 1003388,
+     "sha256": "ed231331a4591f489729f3dd6b7b8de0606f34efa58f88e83e1e067111f41141",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "loose",
+     "size": 990972,
+     "sha256": "cc14ba8b83e540070d439074832a7525580b0600d8fff6d80a7e5d76222c4da0",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "loose",
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "loose",
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "loose",
+     "size": 1301332,
+     "sha256": "712d9f089017a9c3b1fab02ba0069d814d6af62ce6a3c0e96f7fbfe49196afaa",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "loose",
+     "size": 965420,
+     "sha256": "fbefebd07703c3b292c677bc64f4177bbeab4e4d64d01bc227d632bcee64f402",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "cache.big",
+     "entry": 0,
+     "offset": 809520,
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "cache.big",
+     "entry": 1,
+     "offset": 810496,
+     "size": 1045828,
+     "sha256": "088f90590889d2cedb002c82fa37279abfc5ea361ca1e35f0b3ba0cea2df436c",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "cache.big",
+     "entry": 2,
+     "offset": 1856336,
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "cache.big",
+     "entry": 3,
+     "offset": 1857312,
+     "size": 936780,
+     "sha256": "354a1905582faf3d45ae8a5ba4d7bddb51645f7af144f7864939536c8cc01fd7",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "cache.big",
+     "entry": 4,
+     "offset": 2794096,
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "cache.big",
+     "entry": 5,
+     "offset": 2795072,
+     "size": 969212,
+     "sha256": "5f35ee84024efdb9c4312f3ff549844d11638999436e5e4c143a9238747d8d62",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "cache.big",
+     "entry": 6,
+     "offset": 3764288,
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "cache.big",
+     "entry": 7,
+     "offset": 3765264,
+     "size": 1003388,
+     "sha256": "ed231331a4591f489729f3dd6b7b8de0606f34efa58f88e83e1e067111f41141",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "cache.big",
+     "entry": 8,
+     "offset": 4768656,
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "cache.big",
+     "entry": 9,
+     "offset": 4769632,
+     "size": 990972,
+     "sha256": "cc14ba8b83e540070d439074832a7525580b0600d8fff6d80a7e5d76222c4da0",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "cache.big",
+     "entry": 10,
+     "offset": 5760608,
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "cache.big",
+     "entry": 11,
+     "offset": 5761408,
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "cache.big",
+     "entry": 12,
+     "offset": 6601504,
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "cache.big",
+     "entry": 13,
+     "offset": 6602480,
+     "size": 1301332,
+     "sha256": "712d9f089017a9c3b1fab02ba0069d814d6af62ce6a3c0e96f7fbfe49196afaa",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "cache.big",
+     "entry": 14,
+     "offset": 7903824,
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "cache.big",
+     "entry": 15,
+     "offset": 7904800,
+     "size": 965420,
+     "sha256": "fbefebd07703c3b292c677bc64f4177bbeab4e4d64d01bc227d632bcee64f402",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "db/draft_roster.db",
+     "container": "cache.big",
+     "entry": 32,
+     "offset": 9187344,
+     "size": 1817072,
+     "sha256": "f2f0e02a4b2e0fbe0b7c25d03bbc0dca896582ff62bab30d74a2c7bbcc682834",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "cache.big",
+     "entry": 33,
+     "offset": 11004416,
+     "size": 397080,
+     "sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+     "magic": "3c3f786d",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "cache.big",
+     "entry": 34,
+     "offset": 11401504,
+     "size": 3043876,
+     "sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+     "magic": "44420008",
+     "anchor": "equal"
+    }
+   ]
+  },
+  "nhl13": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13",
+   "members": [
+    {
+     "path": "db/draft_roster.db",
+     "container": "loose",
+     "size": 1639900,
+     "sha256": "907501c9d2d4c522e6a8d3584b34e3f8389b92bb10e8f894b496eed2e01f8ad3",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 438494,
+     "sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 2695068,
+     "sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "loose",
+     "size": 1275692,
+     "sha256": "cef76c62d2b502bb77d45171ded812cbb0e7e9c3427f57ede4d229a8e322f3fa",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 1153044,
+     "sha256": "b93fa83f8b4fb760eb48e3a274e1f95a7aaf19d868ba63be59218c41063486e5",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "loose",
+     "size": 1188716,
+     "sha256": "0bb525ec12c54747574eb54392758772c3f000a498a1232b7f087404c3112f4d",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 1234756,
+     "sha256": "5b62c26f1b2f5a8c9b113f2b8f904cedc054fabbff314303c1fb56dd951c4ff6",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "loose",
+     "size": 1222108,
+     "sha256": "854e67cd9d7a71a516daf475d385de39b713a52809b86a3a1455cde8c0d91cfa",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "loose",
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "loose",
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "loose",
+     "size": 1557204,
+     "sha256": "7efe61486447d02d647d0f9c119fb269e7bd3db06a4cf90f8506f38c3352be18",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "loose",
+     "size": 1190812,
+     "sha256": "fb9110bbb47d0b79fb1a854124d1f8602d0506dbb0ffa9b600e26cdcd92cc7b7",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "cache.big",
+     "entry": 0,
+     "offset": 861984,
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "cache.big",
+     "entry": 1,
+     "offset": 862960,
+     "size": 1275692,
+     "sha256": "cef76c62d2b502bb77d45171ded812cbb0e7e9c3427f57ede4d229a8e322f3fa",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "cache.big",
+     "entry": 2,
+     "offset": 2138656,
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "cache.big",
+     "entry": 3,
+     "offset": 2139632,
+     "size": 1153044,
+     "sha256": "b93fa83f8b4fb760eb48e3a274e1f95a7aaf19d868ba63be59218c41063486e5",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "cache.big",
+     "entry": 4,
+     "offset": 3292688,
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "cache.big",
+     "entry": 5,
+     "offset": 3293664,
+     "size": 1188716,
+     "sha256": "0bb525ec12c54747574eb54392758772c3f000a498a1232b7f087404c3112f4d",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "cache.big",
+     "entry": 6,
+     "offset": 4482384,
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "cache.big",
+     "entry": 7,
+     "offset": 4483360,
+     "size": 1234756,
+     "sha256": "5b62c26f1b2f5a8c9b113f2b8f904cedc054fabbff314303c1fb56dd951c4ff6",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "cache.big",
+     "entry": 8,
+     "offset": 5718128,
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "cache.big",
+     "entry": 9,
+     "offset": 5719104,
+     "size": 1222108,
+     "sha256": "854e67cd9d7a71a516daf475d385de39b713a52809b86a3a1455cde8c0d91cfa",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "cache.big",
+     "entry": 10,
+     "offset": 6941216,
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "cache.big",
+     "entry": 11,
+     "offset": 6942016,
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "cache.big",
+     "entry": 12,
+     "offset": 7782112,
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "cache.big",
+     "entry": 13,
+     "offset": 7783088,
+     "size": 1557204,
+     "sha256": "7efe61486447d02d647d0f9c119fb269e7bd3db06a4cf90f8506f38c3352be18",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "cache.big",
+     "entry": 14,
+     "offset": 9340304,
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "cache.big",
+     "entry": 15,
+     "offset": 9341280,
+     "size": 1190812,
+     "sha256": "fb9110bbb47d0b79fb1a854124d1f8602d0506dbb0ffa9b600e26cdcd92cc7b7",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "db/draft_roster.db",
+     "container": "cache.big",
+     "entry": 30,
+     "offset": 10915200,
+     "size": 1639900,
+     "sha256": "907501c9d2d4c522e6a8d3584b34e3f8389b92bb10e8f894b496eed2e01f8ad3",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "cache.big",
+     "entry": 31,
+     "offset": 12555104,
+     "size": 438494,
+     "sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+     "magic": "3c3f786d",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "cache.big",
+     "entry": 32,
+     "offset": 12993600,
+     "size": 2695068,
+     "sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+     "magic": "44420008",
+     "anchor": "equal"
+    }
+   ]
+  },
+  "nhl14": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14",
+   "members": [
+    {
+     "path": "db/draft_roster.db",
+     "container": "loose",
+     "size": 1665692,
+     "sha256": "48701f43244298849a6c7a039d2980be9696440d02158416262fbab509fe6513",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/dynamic_ratings.db",
+     "container": "loose",
+     "size": 18860,
+     "sha256": "f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 444989,
+     "sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 2820656,
+     "sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "loose",
+     "size": 1892996,
+     "sha256": "e70fa8c2b653bdf72a637d44299f59aa9faeb5f5fe1e41fdaf0a9199286f883e",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 1703204,
+     "sha256": "e5aff8285169e2ab0790f63f6def65c892f7cd42553bc71b622f42296c48ac74",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "loose",
+     "size": 1773348,
+     "sha256": "1d394418ec09c434316ab8b83618d115cc8000147dd4c450312b2f11c21ce8e4",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 1824588,
+     "sha256": "5df3c48d789b39ff77d7fa040a84bfd700538e55a4d893421f3eb526d89ba4ae",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "loose",
+     "size": 1804460,
+     "sha256": "d32599fceb728f8706d2e650a9004ead71b2c9e99d25b6e7d5a86723499e6c9e",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "loose",
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "loose",
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "loose",
+     "size": 2288612,
+     "sha256": "7881581abaa78e08d948760f65969e83fb86a0782917aa92041c794a64265fc1",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "loose",
+     "size": 1760964,
+     "sha256": "b85941cb122465fd5eea6d123eaf897d3096371632081e913ae9651e8c702c0c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 0,
+     "offset": 3952,
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "cacheboot.big",
+     "entry": 1,
+     "offset": 4928,
+     "size": 1892996,
+     "sha256": "e70fa8c2b653bdf72a637d44299f59aa9faeb5f5fe1e41fdaf0a9199286f883e",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 2,
+     "offset": 1897936,
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "cacheboot.big",
+     "entry": 3,
+     "offset": 1898912,
+     "size": 1703204,
+     "sha256": "e5aff8285169e2ab0790f63f6def65c892f7cd42553bc71b622f42296c48ac74",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 4,
+     "offset": 3602128,
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "cacheboot.big",
+     "entry": 5,
+     "offset": 3603104,
+     "size": 1773348,
+     "sha256": "1d394418ec09c434316ab8b83618d115cc8000147dd4c450312b2f11c21ce8e4",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 6,
+     "offset": 5376464,
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "cacheboot.big",
+     "entry": 7,
+     "offset": 5377440,
+     "size": 1824588,
+     "sha256": "5df3c48d789b39ff77d7fa040a84bfd700538e55a4d893421f3eb526d89ba4ae",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 8,
+     "offset": 7202032,
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "cacheboot.big",
+     "entry": 9,
+     "offset": 7203008,
+     "size": 1804460,
+     "sha256": "d32599fceb728f8706d2e650a9004ead71b2c9e99d25b6e7d5a86723499e6c9e",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 10,
+     "offset": 9007472,
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "cacheboot.big",
+     "entry": 11,
+     "offset": 9008272,
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 12,
+     "offset": 9848368,
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "cacheboot.big",
+     "entry": 13,
+     "offset": 9849344,
+     "size": 2288612,
+     "sha256": "7881581abaa78e08d948760f65969e83fb86a0782917aa92041c794a64265fc1",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 14,
+     "offset": 12137968,
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "cacheboot.big",
+     "entry": 15,
+     "offset": 12138944,
+     "size": 1760964,
+     "sha256": "b85941cb122465fd5eea6d123eaf897d3096371632081e913ae9651e8c702c0c",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "db/draft_roster.db",
+     "container": "cacheboot.big",
+     "entry": 47,
+     "offset": 15387984,
+     "size": 1665692,
+     "sha256": "48701f43244298849a6c7a039d2980be9696440d02158416262fbab509fe6513",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/dynamic_ratings.db",
+     "container": "cacheboot.big",
+     "entry": 48,
+     "offset": 17053680,
+     "size": 18860,
+     "sha256": "f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 49,
+     "offset": 17072544,
+     "size": 444989,
+     "sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "cacheboot.big",
+     "entry": 50,
+     "offset": 17517536,
+     "size": 2820656,
+     "sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+     "magic": "44420008",
+     "anchor": "equal"
+    }
+   ]
+  },
+  "nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15",
+   "members": [
+    {
+     "path": "db/draft_roster.db",
+     "container": "loose",
+     "size": 1703808,
+     "sha256": "39b4d04f7124497dde41c79c47bc99cab59e06bd64fcda27aaef5598c51b91e0",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/dynamic_ratings.db",
+     "container": "loose",
+     "size": 18860,
+     "sha256": "f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 445000,
+     "sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 2890040,
+     "sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "loose",
+     "size": 1923036,
+     "sha256": "5a50119d4d966abcd1593ee7e74604e8ec0366962559af2affb6f5ec1bf83cf0",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 1729660,
+     "sha256": "86167614957bed34d9d829c0508d0e3ab2e533e59c424f56211d4383ab9cd614",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "loose",
+     "size": 1800636,
+     "sha256": "3627641bba84e1795dcd76614feedf2662e15665edeb534347238fcdc8eaf55e",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 1854948,
+     "sha256": "ed2c91b72d98cce90e1bc16cfe933ae4f1e7fa797a03a7c14188c3796ace7c53",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "loose",
+     "size": 1831340,
+     "sha256": "2c20b06d6f9757356ddffd0c0cd2ef036a1a4fbd79e82c90818899eb9648e741",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "loose",
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "loose",
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "loose",
+     "size": 2324700,
+     "sha256": "5f64dbf17da5635725ea11aaa6fc7dac5b2c468e2a18bf9190924ecf3b976256",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "loose",
+     "size": 1788420,
+     "sha256": "86897fa1ab9babb81b740d3cc5a3b25d257fefaac3ef80bba32d5617dd8b2682",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 0,
+     "offset": 3952,
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "cacheboot.big",
+     "entry": 1,
+     "offset": 4928,
+     "size": 1923036,
+     "sha256": "5a50119d4d966abcd1593ee7e74604e8ec0366962559af2affb6f5ec1bf83cf0",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 2,
+     "offset": 1927968,
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "cacheboot.big",
+     "entry": 3,
+     "offset": 1928944,
+     "size": 1729660,
+     "sha256": "86167614957bed34d9d829c0508d0e3ab2e533e59c424f56211d4383ab9cd614",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 4,
+     "offset": 3658608,
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "cacheboot.big",
+     "entry": 5,
+     "offset": 3659584,
+     "size": 1800636,
+     "sha256": "3627641bba84e1795dcd76614feedf2662e15665edeb534347238fcdc8eaf55e",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 6,
+     "offset": 5460224,
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "cacheboot.big",
+     "entry": 7,
+     "offset": 5461200,
+     "size": 1854948,
+     "sha256": "ed2c91b72d98cce90e1bc16cfe933ae4f1e7fa797a03a7c14188c3796ace7c53",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 8,
+     "offset": 7316160,
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "cacheboot.big",
+     "entry": 9,
+     "offset": 7317136,
+     "size": 1831340,
+     "sha256": "2c20b06d6f9757356ddffd0c0cd2ef036a1a4fbd79e82c90818899eb9648e741",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 10,
+     "offset": 9148480,
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "cacheboot.big",
+     "entry": 11,
+     "offset": 9149280,
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 12,
+     "offset": 9989376,
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "cacheboot.big",
+     "entry": 13,
+     "offset": 9990352,
+     "size": 2324700,
+     "sha256": "5f64dbf17da5635725ea11aaa6fc7dac5b2c468e2a18bf9190924ecf3b976256",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 14,
+     "offset": 12315056,
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "cacheboot.big",
+     "entry": 15,
+     "offset": 12316032,
+     "size": 1788420,
+     "sha256": "86897fa1ab9babb81b740d3cc5a3b25d257fefaac3ef80bba32d5617dd8b2682",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "db/draft_roster.db",
+     "container": "cacheboot.big",
+     "entry": 47,
+     "offset": 15596256,
+     "size": 1703808,
+     "sha256": "39b4d04f7124497dde41c79c47bc99cab59e06bd64fcda27aaef5598c51b91e0",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/dynamic_ratings.db",
+     "container": "cacheboot.big",
+     "entry": 48,
+     "offset": 17300064,
+     "size": 18860,
+     "sha256": "f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 49,
+     "offset": 17318928,
+     "size": 445000,
+     "sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "cacheboot.big",
+     "entry": 50,
+     "offset": 17763936,
+     "size": 2890040,
+     "sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+     "magic": "44420008",
+     "anchor": "equal"
+    }
+   ]
+  },
+  "nhllegacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "members": [
+    {
+     "path": "db/draft_roster.db",
+     "container": "loose",
+     "size": 1898964,
+     "sha256": "2ade8a604f1e2b4509f9d823d93bda29594c7f802c54fafa5ec7ec05e6ec9acc",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/dynamic_ratings.db",
+     "container": "loose",
+     "size": 18860,
+     "sha256": "f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "loose",
+     "size": 444404,
+     "sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "loose",
+     "size": 2901504,
+     "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "loose",
+     "size": 1953700,
+     "sha256": "8bdcbe1f6e521760a36bc70e293c897815d8ac6a55ea1b881f1f66b548c22c84",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "loose",
+     "size": 1759044,
+     "sha256": "f00926ceff27d46f1e5264385468369cd60f91d54d9944dd5c8584bf6d9b8f70",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "loose",
+     "size": 1829916,
+     "sha256": "daa3319de1a1b255bf7a6022b8c34b47d10e44872e784d8e693676ab18f7580d",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "loose",
+     "size": 1885124,
+     "sha256": "9988f0efbb39c79f4ce04c5edd03fe7f2f0c76fbbd00bb1f6fbbc14201596d9d",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "loose",
+     "size": 1860740,
+     "sha256": "8da6b92ba00d0c9a851dd7a390b5824dc154d8849e50906f17252fdcb813e44d",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "loose",
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "loose",
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "loose",
+     "size": 2362116,
+     "sha256": "3b7028da1aed903fb6a7fa9b7c0d2bed961fe8ea9a9f939435c4b0ed7ff202ec",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "loose",
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "loose",
+     "size": 1818364,
+     "sha256": "07520bd878ed9a1d62888152cafdbe2115eda5e2414a28fc74be1d02ec3d1efd",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 0,
+     "offset": 3952,
+     "size": 962,
+     "sha256": "f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_cze_cz.db",
+     "container": "cacheboot.big",
+     "entry": 1,
+     "offset": 4928,
+     "size": 1953700,
+     "sha256": "8bdcbe1f6e521760a36bc70e293c897815d8ac6a55ea1b881f1f66b548c22c84",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 2,
+     "offset": 1958640,
+     "size": 962,
+     "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_eng_us.db",
+     "container": "cacheboot.big",
+     "entry": 3,
+     "offset": 1959616,
+     "size": 1759044,
+     "sha256": "f00926ceff27d46f1e5264385468369cd60f91d54d9944dd5c8584bf6d9b8f70",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 4,
+     "offset": 3718672,
+     "size": 962,
+     "sha256": "f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fin_fi.db",
+     "container": "cacheboot.big",
+     "entry": 5,
+     "offset": 3719648,
+     "size": 1829916,
+     "sha256": "daa3319de1a1b255bf7a6022b8c34b47d10e44872e784d8e693676ab18f7580d",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 6,
+     "offset": 5549568,
+     "size": 962,
+     "sha256": "a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_fre_fr.db",
+     "container": "cacheboot.big",
+     "entry": 7,
+     "offset": 5550544,
+     "size": 1885124,
+     "sha256": "9988f0efbb39c79f4ce04c5edd03fe7f2f0c76fbbd00bb1f6fbbc14201596d9d",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 8,
+     "offset": 7435680,
+     "size": 962,
+     "sha256": "a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_ger_de.db",
+     "container": "cacheboot.big",
+     "entry": 9,
+     "offset": 7436656,
+     "size": 1860740,
+     "sha256": "8da6b92ba00d0c9a851dd7a390b5824dc154d8849e50906f17252fdcb813e44d",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 10,
+     "offset": 9297408,
+     "size": 790,
+     "sha256": "58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_lng_lg.db",
+     "container": "cacheboot.big",
+     "entry": 11,
+     "offset": 9298208,
+     "size": 840084,
+     "sha256": "dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 12,
+     "offset": 10138304,
+     "size": 962,
+     "sha256": "4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_rus_ru.db",
+     "container": "cacheboot.big",
+     "entry": 13,
+     "offset": 10139280,
+     "size": 2362116,
+     "sha256": "3b7028da1aed903fb6a7fa9b7c0d2bed961fe8ea9a9f939435c4b0ed7ff202ec",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 14,
+     "offset": 12501408,
+     "size": 962,
+     "sha256": "f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3",
+     "magic": "efbbbf3c",
+     "anchor": "none"
+    },
+    {
+     "path": "fe/loc/nhl_swe_se.db",
+     "container": "cacheboot.big",
+     "entry": 15,
+     "offset": 12502384,
+     "size": 1818364,
+     "sha256": "07520bd878ed9a1d62888152cafdbe2115eda5e2414a28fc74be1d02ec3d1efd",
+     "magic": "44420008",
+     "anchor": "none"
+    },
+    {
+     "path": "db/draft_roster.db",
+     "container": "cacheboot.big",
+     "entry": 47,
+     "offset": 15815600,
+     "size": 1898964,
+     "sha256": "2ade8a604f1e2b4509f9d823d93bda29594c7f802c54fafa5ec7ec05e6ec9acc",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/dynamic_ratings.db",
+     "container": "cacheboot.big",
+     "entry": 48,
+     "offset": 17714576,
+     "size": 18860,
+     "sha256": "f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90",
+     "magic": "44420008",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng-meta.xml",
+     "container": "cacheboot.big",
+     "entry": 49,
+     "offset": 17733440,
+     "size": 444404,
+     "sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+     "magic": "efbbbf3c",
+     "anchor": "equal"
+    },
+    {
+     "path": "db/nhlng.db",
+     "container": "cacheboot.big",
+     "entry": 50,
+     "offset": 18177856,
+     "size": 2901504,
+     "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+     "magic": "44420008",
+     "anchor": "equal"
+    }
+   ]
+  }
+ }
+}

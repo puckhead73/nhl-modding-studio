@@ -1,0 +1,7271 @@
+{
+ "note": "R143 - gen7 create-player equipment thumbnails (`fe/ion/artassets/createplayer/<dir>/<prefix><N>.big`) vs the database gear values and the\nrender-file id sets (after-receipt-5 research package 3, 28 Sep 2026). Read-only; loose trees (R53 roots) + the committed anchors.\nPer title and family:\n  T   thumbnail ids (file names; strays of another prefix in the folder reported), SHA-256 per package -> byte-identical duplicate groups;\n  V   the stored values of the DB column (anchor DB), distinct + per-value row counts; mask also the team slots (exhibitionteams\n      goaliemask<k>_{starter,backup}, non-zero);\n  S   shift discriminator: |{v + k : v in V} & T| / |V| for k = -2 .. +2 (a numeric-filename candidate must fit at exactly one k);\n  R   every render prefix / numeric position (`rendering/<fam>` and `rendering/fe<fam>`) set P: |T & P|, T == P, T <= P, P <= T;\n  X   V - T (stored values with no thumbnail at the best shift) and T - V counts.\nThis is file-NAME evidence (a numeric-filename candidate), not a data edge: no table joining values to thumbnails was found (see handoff 11).\nUsage: python r143_gen7_createplayer_thumbnails.py <r53.json> <out.json>\n",
+ "titles": {
+  "nhl10": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "families": {
+    "pads": {
+     "thumbnails": 38,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 71,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 18,
+     "db_rows": 434,
+     "db_range": [
+      0,
+      50
+     ],
+     "shift_hits": {
+      "-2": 15,
+      "-1": 15,
+      "0": 15,
+      "1": 16,
+      "2": 16
+     },
+     "best_shift": 1,
+     "fit_at_best": "16/18",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "26": 4,
+      "50": 5
+     },
+     "thumbnails_without_stored_value": 22,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/texlib#1",
+       "P": 27,
+       "T_and_P": 25,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.625
+      },
+      {
+       "render": "fegoaliepad/texlib#1",
+       "P": 27,
+       "T_and_P": 25,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.625
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 37,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 72,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 17,
+     "db_rows": 434,
+     "db_range": [
+      1,
+      50
+     ],
+     "shift_hits": {
+      "-2": 14,
+      "-1": 14,
+      "0": 14,
+      "1": 14,
+      "2": 14
+     },
+     "best_shift": -2,
+     "fit_at_best": "14/17",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "1": 30,
+      "24": 6,
+      "50": 4
+     },
+     "thumbnails_without_stored_value": 23,
+     "render_relations_top": [
+      {
+       "render": "blocker/texlib#1",
+       "P": 27,
+       "T_and_P": 24,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.6
+      },
+      {
+       "render": "feblocker/texlib#1",
+       "P": 27,
+       "T_and_P": 24,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.6
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 37,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 72,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 17,
+     "db_rows": 434,
+     "db_range": [
+      1,
+      50
+     ],
+     "shift_hits": {
+      "-2": 14,
+      "-1": 14,
+      "0": 14,
+      "1": 14,
+      "2": 14
+     },
+     "best_shift": -2,
+     "fit_at_best": "14/17",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "1": 32,
+      "24": 6,
+      "50": 3
+     },
+     "thumbnails_without_stored_value": 23,
+     "render_relations_top": [
+      {
+       "render": "trapper/texlib#1",
+       "P": 27,
+       "T_and_P": 24,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.6
+      },
+      {
+       "render": "fetrapper/texlib#1",
+       "P": 27,
+       "T_and_P": 24,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.6
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 50,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 59,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 7,
+     "db_rows": 434,
+     "db_range": [
+      6,
+      25
+     ],
+     "shift_hits": {
+      "-2": 7,
+      "-1": 7,
+      "0": 7,
+      "1": 7,
+      "2": 7
+     },
+     "best_shift": -2,
+     "fit_at_best": "7/7",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 43,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 26,
+       "T_and_P": 23,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.434
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 81,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 140,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 172,
+     "db_rows": 434,
+     "db_range": [
+      0,
+      249
+     ],
+     "shift_hits": {
+      "-2": 56,
+      "-1": 56,
+      "0": 52,
+      "1": 54,
+      "2": 55
+     },
+     "best_shift": -2,
+     "fit_at_best": "56/172",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 81,
+      "1": 1,
+      "2": 1,
+      "22": 1,
+      "53": 2,
+      "54": 3,
+      "55": 3,
+      "56": 3,
+      "57": 3,
+      "58": 3,
+      "59": 3,
+      "60": 3,
+      "61": 3,
+      "62": 3,
+      "63": 3,
+      "64": 3,
+      "65": 2,
+      "66": 2,
+      "67": 3,
+      "68": 2,
+      "69": 3,
+      "70": 2,
+      "71": 3,
+      "72": 3,
+      "73": 3,
+      "74": 3,
+      "75": 3,
+      "77": 3,
+      "78": 3,
+      "80": 1,
+      "83": 3,
+      "85": 1,
+      "86": 1,
+      "88": 1,
+      "94": 3,
+      "95": 1,
+      "100": 1,
+      "102": 1,
+      "103": 1,
+      "105": 1,
+      "106": 1,
+      "108": 2,
+      "119": 5,
+      "120": 14,
+      "122": 3,
+      "123": 1,
+      "124": 4,
+      "125": 2,
+      "126": 2,
+      "127": 1,
+      "128": 1,
+      "138": 2,
+      "139": 2,
+      "140": 2,
+      "152": 2,
+      "153": 1,
+      "154": 1,
+      "155": 1,
+      "159": 1,
+      "160": 2,
+      "161": 2,
+      "162": 1,
+      "163": 2,
+      "164": 1,
+      "165": 1,
+      "166": 2,
+      "167": 1,
+      "168": 2,
+      "170": 2,
+      "171": 2,
+      "172": 2,
+      "173": 2,
+      "174": 1,
+      "175": 2,
+      "176": 3,
+      "177": 2,
+      "178": 2,
+      "179": 2,
+      "180": 2,
+      "181": 2,
+      "182": 1,
+      "183": 2,
+      "184": 2,
+      "185": 1,
+      "186": 2,
+      "191": 3,
+      "192": 3,
+      "193": 3,
+      "194": 2,
+      "195": 4,
+      "196": 3,
+      "197": 2,
+      "198": 2,
+      "199": 1,
+      "200": 4,
+      "201": 4,
+      "202": 2,
+      "203": 2,
+      "204": 2,
+      "205": 1,
+      "206": 3,
+      "208": 2,
+      "209": 2,
+      "210": 2,
+      "211": 3,
+      "224": 2,
+      "225": 2,
+      "226": 2,
+      "228": 1,
+      "230": 1,
+      "231": 2,
+      "232": 2,
+      "233": 1,
+      "247": 2,
+      "248": 2,
+      "249": 2
+     },
+     "thumbnails_without_stored_value": 25,
+     "team_slots": {
+      "distinct": 218,
+      "in_thumbnails_at_shift0": 70,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 241,
+       "T_and_P": 81,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.336
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 6,
+       "T_and_P": 5,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.061
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 6,
+       "T_and_P": 5,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.061
+      },
+      {
+       "render": "goaliehelmet/cage#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.024
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 32,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 78,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 11,
+     "db_rows": 3499,
+     "db_range": [
+      2,
+      27
+     ],
+     "shift_hits": {
+      "-2": 7,
+      "-1": 7,
+      "0": 6,
+      "1": 6,
+      "2": 5
+     },
+     "best_shift": -2,
+     "fit_at_best": "7/11",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "23": 106,
+      "24": 210,
+      "25": 221,
+      "27": 117
+     },
+     "thumbnails_without_stored_value": 25,
+     "render_relations_top": [
+      {
+       "render": "feglove/texlib#1",
+       "P": 28,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.463
+      },
+      {
+       "render": "glove/texlib#1",
+       "P": 22,
+       "T_and_P": 17,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.459
+      },
+      {
+       "render": "glove/glove#3",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.094
+      },
+      {
+       "render": "glove/glove#1",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.062
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 24,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 177,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 9,
+     "db_rows": 3499,
+     "db_range": [
+      0,
+      15
+     ],
+     "shift_hits": {
+      "-2": 6,
+      "-1": 7,
+      "0": 8,
+      "1": 7,
+      "2": 7
+     },
+     "best_shift": 0,
+     "fit_at_best": "8/9",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "15": 17
+     },
+     "thumbnails_without_stored_value": 16,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 21,
+       "T_and_P": 21,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.875
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 20,
+       "T_and_P": 20,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.833
+      },
+      {
+       "render": "helmet/chinstrap#1",
+       "P": 19,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.792
+      },
+      {
+       "render": "helmet/jawprotector#1",
+       "P": 16,
+       "T_and_P": 16,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.667
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 27,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 82,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 8,
+     "db_rows": 3499,
+     "db_range": [
+      2,
+      22
+     ],
+     "shift_hits": {
+      "-2": 6,
+      "-1": 7,
+      "0": 7,
+      "1": 6,
+      "2": 5
+     },
+     "best_shift": -1,
+     "fit_at_best": "7/8",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "22": 11
+     },
+     "thumbnails_without_stored_value": 20,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 21,
+       "T_and_P": 18,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.6
+      },
+      {
+       "render": "skate/skate#4",
+       "P": 4,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.107
+      },
+      {
+       "render": "skate/skatelace#4",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.071
+      },
+      {
+       "render": "skate/skatetongue#4",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.071
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 44,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 65,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 14,
+     "db_rows": 3499,
+     "db_range": [
+      18,
+      36
+     ],
+     "shift_hits": {
+      "-2": 14,
+      "-1": 14,
+      "0": 14,
+      "1": 14,
+      "2": 13
+     },
+     "best_shift": -2,
+     "fit_at_best": "14/14",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 30,
+     "render_relations_top": [
+      {
+       "render": "stick/texlib#1",
+       "P": 27,
+       "T_and_P": 26,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.578
+      },
+      {
+       "render": "stick/sticktape#6",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.045
+      },
+      {
+       "render": "stick/stick#6",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.045
+      },
+      {
+       "render": "stick/sticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 3499,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "visor/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#3",
+       "P": 4,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "nhl11": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "families": {
+    "pads": {
+     "thumbnails": 56,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 53,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 32,
+     "db_rows": 550,
+     "db_range": [
+      1,
+      50
+     ],
+     "shift_hits": {
+      "-2": 30,
+      "-1": 30,
+      "0": 32,
+      "1": 30,
+      "2": 30
+     },
+     "best_shift": 0,
+     "fit_at_best": "32/32",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 24,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/texlib#1",
+       "P": 33,
+       "T_and_P": 33,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.589
+      },
+      {
+       "render": "fegoaliepad/texlib#1",
+       "P": 33,
+       "T_and_P": 33,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.589
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 56,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 53,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 33,
+     "db_rows": 550,
+     "db_range": [
+      1,
+      50
+     ],
+     "shift_hits": {
+      "-2": 31,
+      "-1": 31,
+      "0": 33,
+      "1": 31,
+      "2": 30
+     },
+     "best_shift": 0,
+     "fit_at_best": "33/33",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 23,
+     "render_relations_top": [
+      {
+       "render": "blocker/texlib#1",
+       "P": 33,
+       "T_and_P": 33,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.589
+      },
+      {
+       "render": "feblocker/texlib#1",
+       "P": 33,
+       "T_and_P": 33,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.589
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 56,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 53,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 32,
+     "db_rows": 550,
+     "db_range": [
+      1,
+      50
+     ],
+     "shift_hits": {
+      "-2": 30,
+      "-1": 30,
+      "0": 32,
+      "1": 30,
+      "2": 29
+     },
+     "best_shift": 0,
+     "fit_at_best": "32/32",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 24,
+     "render_relations_top": [
+      {
+       "render": "trapper/texlib#1",
+       "P": 33,
+       "T_and_P": 33,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.589
+      },
+      {
+       "render": "fetrapper/texlib#1",
+       "P": 33,
+       "T_and_P": 33,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.589
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 50,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 59,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 13,
+     "db_rows": 550,
+     "db_range": [
+      7,
+      19
+     ],
+     "shift_hits": {
+      "-2": 13,
+      "-1": 13,
+      "0": 13,
+      "1": 13,
+      "2": 13
+     },
+     "best_shift": -2,
+     "fit_at_best": "13/13",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 37,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 14,
+       "T_and_P": 14,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.28
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 188,
+     "db_rows": 550,
+     "db_range": [
+      0,
+      254
+     ],
+     "shift_hits": {
+      "-2": 74,
+      "-1": 74,
+      "0": 71,
+      "1": 71,
+      "2": 72
+     },
+     "best_shift": -2,
+     "fit_at_best": "74/188",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 33,
+      "1": 3,
+      "2": 1,
+      "12": 1,
+      "20": 1,
+      "21": 1,
+      "22": 2,
+      "31": 1,
+      "53": 4,
+      "54": 4,
+      "55": 4,
+      "56": 4,
+      "57": 4,
+      "58": 5,
+      "59": 4,
+      "60": 3,
+      "61": 2,
+      "69": 3,
+      "70": 2,
+      "71": 3,
+      "72": 3,
+      "73": 3,
+      "74": 3,
+      "75": 2,
+      "77": 3,
+      "78": 3,
+      "80": 2,
+      "83": 1,
+      "84": 1,
+      "87": 1,
+      "88": 2,
+      "91": 2,
+      "94": 4,
+      "95": 1,
+      "96": 1,
+      "98": 1,
+      "102": 1,
+      "103": 1,
+      "107": 1,
+      "108": 1,
+      "119": 5,
+      "120": 11,
+      "123": 1,
+      "124": 2,
+      "125": 26,
+      "126": 1,
+      "128": 1,
+      "138": 2,
+      "139": 1,
+      "140": 2,
+      "150": 1,
+      "151": 1,
+      "152": 2,
+      "154": 1,
+      "155": 1,
+      "159": 1,
+      "160": 3,
+      "161": 3,
+      "162": 1,
+      "163": 2,
+      "164": 3,
+      "165": 2,
+      "166": 3,
+      "167": 1,
+      "168": 3,
+      "170": 1,
+      "171": 2,
+      "172": 2,
+      "173": 1,
+      "174": 1,
+      "175": 2,
+      "176": 2,
+      "177": 3,
+      "178": 2,
+      "179": 3,
+      "180": 3,
+      "181": 3,
+      "182": 2,
+      "183": 2,
+      "184": 2,
+      "185": 1,
+      "186": 1,
+      "187": 2,
+      "191": 4,
+      "192": 3,
+      "193": 3,
+      "194": 2,
+      "195": 4,
+      "196": 3,
+      "197": 2,
+      "198": 3,
+      "199": 1,
+      "200": 2,
+      "201": 3,
+      "202": 3,
+      "203": 1,
+      "204": 4,
+      "205": 2,
+      "206": 3,
+      "208": 3,
+      "209": 3,
+      "210": 3,
+      "211": 2,
+      "224": 1,
+      "225": 1,
+      "226": 1,
+      "227": 1,
+      "228": 2,
+      "229": 1,
+      "231": 1,
+      "232": 1,
+      "233": 1,
+      "247": 2,
+      "254": 3
+     },
+     "thumbnails_without_stored_value": 14,
+     "team_slots": {
+      "distinct": 220,
+      "in_thumbnails_at_shift0": 77,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 243,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.362
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 7,
+       "T_and_P": 6,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.067
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 7,
+       "T_and_P": 6,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.067
+      },
+      {
+       "render": "goaliehelmet/cage#1",
+       "P": 4,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 47,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 63,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 14,
+     "db_rows": 4760,
+     "db_range": [
+      15,
+      40
+     ],
+     "shift_hits": {
+      "-2": 12,
+      "-1": 12,
+      "0": 14,
+      "1": 10,
+      "2": 9
+     },
+     "best_shift": 0,
+     "fit_at_best": "14/14",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 33,
+     "render_relations_top": [
+      {
+       "render": "glove/texlib#1",
+       "P": 17,
+       "T_and_P": 17,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.362
+      },
+      {
+       "render": "feglove/texlib#1",
+       "P": 17,
+       "T_and_P": 17,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.362
+      },
+      {
+       "render": "glove/glove#3",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.064
+      },
+      {
+       "render": "glove/glove#1",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.043
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 28,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 173,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 7,
+     "db_rows": 4760,
+     "db_range": [
+      2,
+      15
+     ],
+     "shift_hits": {
+      "-2": 7,
+      "-1": 7,
+      "0": 7,
+      "1": 6,
+      "2": 5
+     },
+     "best_shift": -2,
+     "fit_at_best": "7/7",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 21,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 11,
+       "T_and_P": 11,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.393
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 10,
+       "T_and_P": 10,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.357
+      },
+      {
+       "render": "helmet/chinstrap#1",
+       "P": 9,
+       "T_and_P": 9,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.321
+      },
+      {
+       "render": "helmet/jawprotector#1",
+       "P": 6,
+       "T_and_P": 6,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.214
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 35,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 74,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 8,
+     "db_rows": 4760,
+     "db_range": [
+      7,
+      29
+     ],
+     "shift_hits": {
+      "-2": 6,
+      "-1": 7,
+      "0": 8,
+      "1": 6,
+      "2": 3
+     },
+     "best_shift": 0,
+     "fit_at_best": "8/8",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 27,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 17,
+       "T_and_P": 15,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.405
+      },
+      {
+       "render": "skate/skate#4",
+       "P": 4,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.083
+      },
+      {
+       "render": "skate/skatelace#4",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.056
+      },
+      {
+       "render": "skate/skatetongue#4",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.056
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 56,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 53,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 14,
+     "db_rows": 4760,
+     "db_range": [
+      18,
+      47
+     ],
+     "shift_hits": {
+      "-2": 14,
+      "-1": 14,
+      "0": 14,
+      "1": 13,
+      "2": 12
+     },
+     "best_shift": -2,
+     "fit_at_best": "14/14",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 42,
+     "render_relations_top": [
+      {
+       "render": "stick/texlib#1",
+       "P": 28,
+       "T_and_P": 27,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.474
+      },
+      {
+       "render": "stick/sticktape#6",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.036
+      },
+      {
+       "render": "stick/stick#6",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.036
+      },
+      {
+       "render": "stick/sticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.018
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 4760,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "visor/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#3",
+       "P": 4,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.4
+      }
+     ]
+    }
+   }
+  },
+  "nhl12": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "families": {
+    "pads": {
+     "thumbnails": 64,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 45,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 29,
+     "db_rows": 574,
+     "db_range": [
+      1,
+      54
+     ],
+     "shift_hits": {
+      "-2": 27,
+      "-1": 28,
+      "0": 29,
+      "1": 28,
+      "2": 27
+     },
+     "best_shift": 0,
+     "fit_at_best": "29/29",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 35,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/goaliepad#2",
+       "P": 44,
+       "T_and_P": 43,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.662
+      },
+      {
+       "render": "goaliepad/fegoaliepad#2",
+       "P": 41,
+       "T_and_P": 41,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.641
+      },
+      {
+       "render": "goaliepad/fegoaliepad#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.031
+      },
+      {
+       "render": "goaliepad/goaliepad#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.031
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 65,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 44,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 28,
+     "db_rows": 574,
+     "db_range": [
+      1,
+      54
+     ],
+     "shift_hits": {
+      "-2": 27,
+      "-1": 27,
+      "0": 28,
+      "1": 28,
+      "2": 27
+     },
+     "best_shift": 0,
+     "fit_at_best": "28/28",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 37,
+     "render_relations_top": [
+      {
+       "render": "blocker/blocker#2",
+       "P": 45,
+       "T_and_P": 44,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.667
+      },
+      {
+       "render": "blocker/feblocker#2",
+       "P": 42,
+       "T_and_P": 42,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.646
+      },
+      {
+       "render": "blocker/blocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.03
+      },
+      {
+       "render": "blocker/feblocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.03
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 63,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 46,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 31,
+     "db_rows": 574,
+     "db_range": [
+      1,
+      54
+     ],
+     "shift_hits": {
+      "-2": 29,
+      "-1": 30,
+      "0": 31,
+      "1": 30,
+      "2": 28
+     },
+     "best_shift": 0,
+     "fit_at_best": "31/31",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 32,
+     "render_relations_top": [
+      {
+       "render": "trapper/trapper#2",
+       "P": 43,
+       "T_and_P": 42,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.656
+      },
+      {
+       "render": "trapper/fetrapper#2",
+       "P": 40,
+       "T_and_P": 40,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.635
+      },
+      {
+       "render": "trapper/fetrapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.031
+      },
+      {
+       "render": "trapper/trapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.031
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 50,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 59,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 14,
+     "db_rows": 574,
+     "db_range": [
+      6,
+      26
+     ],
+     "shift_hits": {
+      "-2": 14,
+      "-1": 14,
+      "0": 14,
+      "1": 14,
+      "2": 14
+     },
+     "best_shift": -2,
+     "fit_at_best": "14/14",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 36,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 23,
+       "T_and_P": 22,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.431
+      },
+      {
+       "render": "goaliestick/goaliesticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.04
+      },
+      {
+       "render": "goaliestick/goaliestick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.04
+      },
+      {
+       "render": "goaliestick/goaliesticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.02
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 185,
+     "db_rows": 574,
+     "db_range": [
+      0,
+      257
+     ],
+     "shift_hits": {
+      "-2": 72,
+      "-1": 70,
+      "0": 68,
+      "1": 71,
+      "2": 70
+     },
+     "best_shift": -2,
+     "fit_at_best": "72/185",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 32,
+      "1": 2,
+      "2": 1,
+      "12": 1,
+      "20": 3,
+      "21": 2,
+      "31": 2,
+      "53": 4,
+      "54": 3,
+      "55": 4,
+      "56": 4,
+      "57": 4,
+      "58": 5,
+      "59": 4,
+      "60": 6,
+      "61": 3,
+      "69": 3,
+      "70": 3,
+      "71": 3,
+      "72": 3,
+      "73": 2,
+      "74": 3,
+      "75": 3,
+      "77": 3,
+      "78": 3,
+      "80": 1,
+      "84": 1,
+      "86": 2,
+      "88": 1,
+      "91": 1,
+      "94": 4,
+      "95": 1,
+      "98": 1,
+      "101": 1,
+      "102": 1,
+      "103": 2,
+      "106": 1,
+      "107": 1,
+      "119": 3,
+      "120": 13,
+      "123": 2,
+      "124": 2,
+      "125": 36,
+      "126": 2,
+      "128": 1,
+      "138": 2,
+      "139": 1,
+      "140": 1,
+      "150": 2,
+      "152": 1,
+      "153": 2,
+      "154": 2,
+      "155": 1,
+      "159": 1,
+      "160": 3,
+      "161": 1,
+      "162": 2,
+      "163": 1,
+      "164": 2,
+      "166": 2,
+      "167": 3,
+      "168": 1,
+      "170": 2,
+      "171": 2,
+      "173": 1,
+      "174": 2,
+      "175": 3,
+      "176": 1,
+      "177": 2,
+      "178": 4,
+      "179": 3,
+      "180": 1,
+      "181": 2,
+      "182": 1,
+      "183": 2,
+      "184": 2,
+      "185": 2,
+      "186": 3,
+      "187": 2,
+      "191": 4,
+      "192": 3,
+      "193": 4,
+      "194": 3,
+      "195": 4,
+      "196": 3,
+      "197": 3,
+      "198": 2,
+      "199": 2,
+      "200": 3,
+      "201": 4,
+      "202": 4,
+      "203": 2,
+      "204": 3,
+      "205": 1,
+      "206": 3,
+      "208": 2,
+      "209": 2,
+      "210": 2,
+      "211": 2,
+      "224": 1,
+      "225": 1,
+      "226": 1,
+      "227": 2,
+      "228": 1,
+      "229": 1,
+      "231": 2,
+      "232": 1,
+      "233": 1,
+      "247": 2,
+      "254": 2,
+      "255": 3,
+      "256": 3,
+      "257": 2
+     },
+     "thumbnails_without_stored_value": 16,
+     "team_slots": {
+      "distinct": 218,
+      "in_thumbnails_at_shift0": 75,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 246,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.358
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 7,
+       "T_and_P": 6,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.067
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 7,
+       "T_and_P": 6,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.067
+      },
+      {
+       "render": "goaliehelmet/cage#1",
+       "P": 4,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 56,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 54,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 15,
+     "db_rows": 4821,
+     "db_range": [
+      25,
+      48
+     ],
+     "shift_hits": {
+      "-2": 14,
+      "-1": 14,
+      "0": 15,
+      "1": 13,
+      "2": 13
+     },
+     "best_shift": 0,
+     "fit_at_best": "15/15",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 41,
+     "render_relations_top": [
+      {
+       "render": "glove/glove#2",
+       "P": 30,
+       "T_and_P": 30,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.536
+      },
+      {
+       "render": "glove/feglove#2",
+       "P": 27,
+       "T_and_P": 27,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.482
+      },
+      {
+       "render": "glove/feglove#3",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.054
+      },
+      {
+       "render": "glove/glove#3",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.054
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 29,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 172,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 8,
+     "db_rows": 4821,
+     "db_range": [
+      2,
+      99
+     ],
+     "shift_hits": {
+      "-2": 7,
+      "-1": 7,
+      "0": 7,
+      "1": 8,
+      "2": 7
+     },
+     "best_shift": 1,
+     "fit_at_best": "8/8",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 21,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 14,
+       "T_and_P": 14,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.483
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 13,
+       "T_and_P": 13,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.448
+      },
+      {
+       "render": "helmet/chinstrap#1",
+       "P": 12,
+       "T_and_P": 12,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.414
+      },
+      {
+       "render": "helmet/padding#1",
+       "P": 11,
+       "T_and_P": 11,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.379
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 37,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 72,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 7,
+     "db_rows": 4821,
+     "db_range": [
+      7,
+      30
+     ],
+     "shift_hits": {
+      "-2": 5,
+      "-1": 7,
+      "0": 7,
+      "1": 6,
+      "2": 3
+     },
+     "best_shift": -1,
+     "fit_at_best": "7/7",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 30,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 15,
+       "T_and_P": 14,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.368
+      },
+      {
+       "render": "skate/skatelace#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.053
+      },
+      {
+       "render": "skate/skatetongue#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.053
+      },
+      {
+       "render": "skate/skatetongue#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.053
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 66,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 43,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 16,
+     "db_rows": 4821,
+     "db_range": [
+      18,
+      70
+     ],
+     "shift_hits": {
+      "-2": 15,
+      "-1": 15,
+      "0": 16,
+      "1": 15,
+      "2": 13
+     },
+     "best_shift": 0,
+     "fit_at_best": "16/16",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 50,
+     "render_relations_top": [
+      {
+       "render": "playerstick/texlib#1",
+       "P": 32,
+       "T_and_P": 31,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.463
+      },
+      {
+       "render": "playerstick/playersticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.03
+      },
+      {
+       "render": "playerstick/playerstick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.03
+      },
+      {
+       "render": "playerstick/playersticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.015
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 4821,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "visor/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#3",
+       "P": 5,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.333
+      }
+     ]
+    }
+   }
+  },
+  "nhl13": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "families": {
+    "pads": {
+     "thumbnails": 73,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 36,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 30,
+     "db_rows": 537,
+     "db_range": [
+      1,
+      56
+     ],
+     "shift_hits": {
+      "-2": 28,
+      "-1": 29,
+      "0": 30,
+      "1": 29,
+      "2": 29
+     },
+     "best_shift": 0,
+     "fit_at_best": "30/30",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 43,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/goaliepad#1",
+       "P": 53,
+       "T_and_P": 52,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.703
+      },
+      {
+       "render": "goaliepad/fegoaliepad#1",
+       "P": 50,
+       "T_and_P": 50,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.685
+      },
+      {
+       "render": "goaliepad/fegoaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.027
+      },
+      {
+       "render": "goaliepad/goaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.027
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 74,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 35,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 31,
+     "db_rows": 537,
+     "db_range": [
+      1,
+      56
+     ],
+     "shift_hits": {
+      "-2": 30,
+      "-1": 30,
+      "0": 31,
+      "1": 31,
+      "2": 31
+     },
+     "best_shift": 0,
+     "fit_at_best": "31/31",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 43,
+     "render_relations_top": [
+      {
+       "render": "blocker/blocker#2",
+       "P": 54,
+       "T_and_P": 53,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.707
+      },
+      {
+       "render": "blocker/feblocker#2",
+       "P": 51,
+       "T_and_P": 51,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.689
+      },
+      {
+       "render": "blocker/blocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.027
+      },
+      {
+       "render": "blocker/feblocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.027
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 72,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 37,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 28,
+     "db_rows": 537,
+     "db_range": [
+      1,
+      56
+     ],
+     "shift_hits": {
+      "-2": 26,
+      "-1": 26,
+      "0": 28,
+      "1": 27,
+      "2": 26
+     },
+     "best_shift": 0,
+     "fit_at_best": "28/28",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 44,
+     "render_relations_top": [
+      {
+       "render": "trapper/trapper#2",
+       "P": 52,
+       "T_and_P": 51,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.699
+      },
+      {
+       "render": "trapper/fetrapper#2",
+       "P": 49,
+       "T_and_P": 49,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.681
+      },
+      {
+       "render": "trapper/fetrapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.027
+      },
+      {
+       "render": "trapper/trapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.027
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 39,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 70,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 17,
+     "db_rows": 537,
+     "db_range": [
+      6,
+      26
+     ],
+     "shift_hits": {
+      "-2": 17,
+      "-1": 17,
+      "0": 17,
+      "1": 17,
+      "2": 17
+     },
+     "best_shift": -2,
+     "fit_at_best": "17/17",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 22,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 26,
+       "T_and_P": 25,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.625
+      },
+      {
+       "render": "goaliestick/goaliesticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.051
+      },
+      {
+       "render": "goaliestick/goaliestick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.051
+      },
+      {
+       "render": "goaliestick/goaliesticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.025
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 184,
+     "db_rows": 537,
+     "db_range": [
+      0,
+      260
+     ],
+     "shift_hits": {
+      "-2": 70,
+      "-1": 69,
+      "0": 65,
+      "1": 67,
+      "2": 67
+     },
+     "best_shift": -2,
+     "fit_at_best": "70/184",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 32,
+      "2": 3,
+      "12": 1,
+      "20": 2,
+      "21": 1,
+      "31": 1,
+      "53": 3,
+      "55": 4,
+      "56": 4,
+      "57": 4,
+      "58": 3,
+      "59": 3,
+      "60": 13,
+      "61": 7,
+      "69": 3,
+      "70": 3,
+      "71": 2,
+      "72": 3,
+      "73": 3,
+      "74": 3,
+      "75": 2,
+      "77": 3,
+      "78": 3,
+      "84": 1,
+      "86": 1,
+      "89": 1,
+      "94": 4,
+      "95": 1,
+      "97": 1,
+      "99": 1,
+      "101": 2,
+      "102": 2,
+      "104": 1,
+      "107": 1,
+      "119": 8,
+      "120": 14,
+      "122": 2,
+      "123": 3,
+      "124": 3,
+      "125": 23,
+      "126": 2,
+      "128": 1,
+      "138": 2,
+      "139": 1,
+      "140": 1,
+      "150": 1,
+      "151": 1,
+      "152": 2,
+      "153": 2,
+      "154": 1,
+      "155": 1,
+      "159": 2,
+      "160": 3,
+      "161": 1,
+      "162": 2,
+      "163": 1,
+      "164": 3,
+      "165": 2,
+      "166": 1,
+      "167": 1,
+      "170": 3,
+      "173": 1,
+      "174": 2,
+      "175": 3,
+      "176": 1,
+      "177": 2,
+      "178": 1,
+      "179": 2,
+      "180": 1,
+      "181": 2,
+      "182": 2,
+      "183": 1,
+      "184": 2,
+      "185": 3,
+      "186": 1,
+      "187": 2,
+      "191": 3,
+      "192": 3,
+      "193": 2,
+      "194": 1,
+      "195": 2,
+      "196": 3,
+      "197": 2,
+      "198": 2,
+      "199": 2,
+      "200": 2,
+      "201": 2,
+      "202": 2,
+      "203": 2,
+      "204": 2,
+      "205": 1,
+      "206": 3,
+      "208": 2,
+      "209": 2,
+      "210": 2,
+      "211": 3,
+      "224": 1,
+      "226": 1,
+      "227": 1,
+      "228": 1,
+      "229": 3,
+      "231": 1,
+      "232": 1,
+      "233": 1,
+      "247": 1,
+      "251": 1,
+      "253": 1,
+      "254": 1,
+      "255": 3,
+      "256": 4,
+      "257": 1,
+      "258": 1,
+      "259": 2,
+      "260": 1
+     },
+     "thumbnails_without_stored_value": 18,
+     "team_slots": {
+      "distinct": 222,
+      "in_thumbnails_at_shift0": 76,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 249,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.353
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/texlib#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 58,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 52,
+     "strays": [
+      "glove72.big"
+     ],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 13,
+     "db_rows": 4875,
+     "db_range": [
+      27,
+      50
+     ],
+     "shift_hits": {
+      "-2": 12,
+      "-1": 12,
+      "0": 13,
+      "1": 12,
+      "2": 12
+     },
+     "best_shift": 0,
+     "fit_at_best": "13/13",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 45,
+     "render_relations_top": [
+      {
+       "render": "glove/glove#1",
+       "P": 32,
+       "T_and_P": 31,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.525
+      },
+      {
+       "render": "glove/feglove#1",
+       "P": 29,
+       "T_and_P": 28,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.475
+      },
+      {
+       "render": "glove/feglove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.052
+      },
+      {
+       "render": "glove/glove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.052
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 30,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 171,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 9,
+     "db_rows": 4875,
+     "db_range": [
+      2,
+      17
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 9,
+      "0": 9,
+      "1": 8,
+      "2": 7
+     },
+     "best_shift": -2,
+     "fit_at_best": "9/9",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 21,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 15,
+       "T_and_P": 15,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 14,
+       "T_and_P": 14,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.467
+      },
+      {
+       "render": "helmet/texlib#1",
+       "P": 15,
+       "T_and_P": 14,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.452
+      },
+      {
+       "render": "helmet/chinstrap#1",
+       "P": 13,
+       "T_and_P": 13,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.433
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 42,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 67,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 10,
+     "db_rows": 4875,
+     "db_range": [
+      16,
+      35
+     ],
+     "shift_hits": {
+      "-2": 8,
+      "-1": 10,
+      "0": 10,
+      "1": 9,
+      "2": 6
+     },
+     "best_shift": -1,
+     "fit_at_best": "10/10",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 32,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 20,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.442
+      },
+      {
+       "render": "skate/goalieskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.047
+      },
+      {
+       "render": "skate/playerskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.047
+      },
+      {
+       "render": "skate/skatelace#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.047
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 76,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 33,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 16,
+     "db_rows": 4875,
+     "db_range": [
+      35,
+      64
+     ],
+     "shift_hits": {
+      "-2": 16,
+      "-1": 16,
+      "0": 16,
+      "1": 16,
+      "2": 16
+     },
+     "best_shift": -2,
+     "fit_at_best": "16/16",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 60,
+     "render_relations_top": [
+      {
+       "render": "playerstick/texlib#1",
+       "P": 41,
+       "T_and_P": 40,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.519
+      },
+      {
+       "render": "playerstick/playersticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.026
+      },
+      {
+       "render": "playerstick/playerstick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.026
+      },
+      {
+       "render": "playerstick/playersticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.013
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 4875,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#3",
+       "P": 5,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.333
+      }
+     ]
+    }
+   }
+  },
+  "nhl14": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "families": {
+    "pads": {
+     "thumbnails": 80,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 29,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 34,
+     "db_rows": 523,
+     "db_range": [
+      1,
+      71
+     ],
+     "shift_hits": {
+      "-2": 33,
+      "-1": 33,
+      "0": 34,
+      "1": 32,
+      "2": 32
+     },
+     "best_shift": 0,
+     "fit_at_best": "34/34",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 46,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/fegoaliepad#1",
+       "P": 57,
+       "T_and_P": 57,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.713
+      },
+      {
+       "render": "goaliepad/goaliepad#1",
+       "P": 57,
+       "T_and_P": 57,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.713
+      },
+      {
+       "render": "goaliepad/fegoaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.025
+      },
+      {
+       "render": "goaliepad/goaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.025
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 81,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 28,
+     "strays": [
+      "gloves72.big"
+     ],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 34,
+     "db_rows": 523,
+     "db_range": [
+      1,
+      71
+     ],
+     "shift_hits": {
+      "-2": 33,
+      "-1": 33,
+      "0": 34,
+      "1": 33,
+      "2": 33
+     },
+     "best_shift": 0,
+     "fit_at_best": "34/34",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 47,
+     "render_relations_top": [
+      {
+       "render": "blocker/blocker#2",
+       "P": 58,
+       "T_and_P": 58,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.716
+      },
+      {
+       "render": "blocker/feblocker#2",
+       "P": 58,
+       "T_and_P": 58,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.716
+      },
+      {
+       "render": "blocker/blocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.024
+      },
+      {
+       "render": "blocker/feblocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.024
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 79,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 30,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 31,
+     "db_rows": 523,
+     "db_range": [
+      1,
+      71
+     ],
+     "shift_hits": {
+      "-2": 30,
+      "-1": 29,
+      "0": 31,
+      "1": 29,
+      "2": 28
+     },
+     "best_shift": 0,
+     "fit_at_best": "31/31",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 48,
+     "render_relations_top": [
+      {
+       "render": "trapper/fetrapper#2",
+       "P": 56,
+       "T_and_P": 56,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.709
+      },
+      {
+       "render": "trapper/trapper#2",
+       "P": 56,
+       "T_and_P": 56,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.709
+      },
+      {
+       "render": "trapper/fetrapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.025
+      },
+      {
+       "render": "trapper/trapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.025
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 44,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 65,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 17,
+     "db_rows": 523,
+     "db_range": [
+      6,
+      33
+     ],
+     "shift_hits": {
+      "-2": 17,
+      "-1": 17,
+      "0": 17,
+      "1": 17,
+      "2": 16
+     },
+     "best_shift": -2,
+     "fit_at_best": "17/17",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 27,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 29,
+       "T_and_P": 29,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.659
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 175,
+     "db_rows": 523,
+     "db_range": [
+      0,
+      265
+     ],
+     "shift_hits": {
+      "-2": 66,
+      "-1": 64,
+      "0": 60,
+      "1": 62,
+      "2": 65
+     },
+     "best_shift": -2,
+     "fit_at_best": "66/175",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 32,
+      "2": 2,
+      "12": 1,
+      "20": 1,
+      "21": 1,
+      "53": 3,
+      "55": 3,
+      "56": 4,
+      "57": 3,
+      "58": 3,
+      "59": 3,
+      "60": 16,
+      "61": 7,
+      "69": 2,
+      "70": 3,
+      "71": 3,
+      "72": 2,
+      "73": 2,
+      "74": 5,
+      "75": 2,
+      "77": 3,
+      "78": 3,
+      "82": 1,
+      "83": 1,
+      "86": 1,
+      "94": 3,
+      "99": 1,
+      "100": 1,
+      "101": 1,
+      "105": 1,
+      "106": 1,
+      "119": 5,
+      "120": 26,
+      "123": 7,
+      "124": 5,
+      "125": 17,
+      "126": 2,
+      "128": 1,
+      "138": 1,
+      "139": 1,
+      "140": 2,
+      "150": 1,
+      "151": 1,
+      "152": 2,
+      "153": 2,
+      "154": 1,
+      "155": 1,
+      "157": 1,
+      "159": 2,
+      "160": 2,
+      "161": 1,
+      "162": 1,
+      "163": 1,
+      "164": 2,
+      "166": 1,
+      "167": 1,
+      "168": 2,
+      "170": 1,
+      "171": 1,
+      "173": 2,
+      "174": 1,
+      "175": 2,
+      "177": 2,
+      "179": 1,
+      "180": 1,
+      "181": 2,
+      "182": 3,
+      "183": 2,
+      "184": 2,
+      "185": 1,
+      "186": 2,
+      "187": 2,
+      "192": 3,
+      "193": 2,
+      "194": 2,
+      "195": 3,
+      "196": 3,
+      "197": 3,
+      "198": 3,
+      "199": 2,
+      "200": 2,
+      "201": 2,
+      "202": 2,
+      "203": 2,
+      "204": 2,
+      "205": 1,
+      "206": 3,
+      "208": 2,
+      "209": 2,
+      "210": 2,
+      "211": 3,
+      "224": 1,
+      "225": 1,
+      "226": 1,
+      "227": 1,
+      "228": 3,
+      "229": 1,
+      "233": 2,
+      "247": 1,
+      "253": 1,
+      "254": 1,
+      "255": 3,
+      "256": 2,
+      "259": 2,
+      "260": 2,
+      "261": 1,
+      "262": 1,
+      "264": 2,
+      "265": 1
+     },
+     "thumbnails_without_stored_value": 22,
+     "team_slots": {
+      "distinct": 223,
+      "in_thumbnails_at_shift0": 76,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 254,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.346
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/texlib#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 5,
+       "T_and_P": 5,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.057
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 68,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 42,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 15,
+     "db_rows": 4851,
+     "db_range": [
+      27,
+      57
+     ],
+     "shift_hits": {
+      "-2": 15,
+      "-1": 14,
+      "0": 15,
+      "1": 13,
+      "2": 13
+     },
+     "best_shift": -2,
+     "fit_at_best": "15/15",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 53,
+     "render_relations_top": [
+      {
+       "render": "glove/feglove#1",
+       "P": 43,
+       "T_and_P": 41,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.586
+      },
+      {
+       "render": "glove/glove#1",
+       "P": 43,
+       "T_and_P": 41,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.586
+      },
+      {
+       "render": "glove/feglove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.044
+      },
+      {
+       "render": "glove/glove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.044
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 32,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 169,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 9,
+     "db_rows": 4851,
+     "db_range": [
+      2,
+      19
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 9,
+      "0": 9,
+      "1": 8,
+      "2": 7
+     },
+     "best_shift": -2,
+     "fit_at_best": "9/9",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 23,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 17,
+       "T_and_P": 17,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.531
+      },
+      {
+       "render": "helmet/texlib#1",
+       "P": 16,
+       "T_and_P": 16,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#1",
+       "P": 15,
+       "T_and_P": 15,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.469
+      },
+      {
+       "render": "helmet/padding#1",
+       "P": 14,
+       "T_and_P": 14,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.438
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 48,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 61,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 9,
+     "db_rows": 4851,
+     "db_range": [
+      25,
+      38
+     ],
+     "shift_hits": {
+      "-2": 8,
+      "-1": 9,
+      "0": 9,
+      "1": 8,
+      "2": 6
+     },
+     "best_shift": -1,
+     "fit_at_best": "9/9",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 39,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 26,
+       "T_and_P": 26,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.542
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 21,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 20,
+     "db_rows": 4851,
+     "db_range": [
+      35,
+      82
+     ],
+     "shift_hits": {
+      "-2": 19,
+      "-1": 19,
+      "0": 20,
+      "1": 18,
+      "2": 17
+     },
+     "best_shift": 0,
+     "fit_at_best": "20/20",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 68,
+     "render_relations_top": [
+      {
+       "render": "playerstick/texlib#1",
+       "P": 55,
+       "T_and_P": 55,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.625
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 4851,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#3",
+       "P": 5,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.333
+      }
+     ]
+    }
+   }
+  },
+  "nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "families": {
+    "pads": {
+     "thumbnails": 87,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 22,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 28,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      79
+     ],
+     "shift_hits": {
+      "-2": 27,
+      "-1": 28,
+      "0": 28,
+      "1": 26,
+      "2": 25
+     },
+     "best_shift": -1,
+     "fit_at_best": "28/28",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 59,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/goaliepad#1",
+       "P": 67,
+       "T_and_P": 66,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.75
+      },
+      {
+       "render": "goaliepad/fegoaliepad#1",
+       "P": 64,
+       "T_and_P": 64,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.736
+      },
+      {
+       "render": "goaliepad/fegoaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      },
+      {
+       "render": "goaliepad/goaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 21,
+     "strays": [
+      "gloves72.big"
+     ],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 29,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      79
+     ],
+     "shift_hits": {
+      "-2": 28,
+      "-1": 29,
+      "0": 29,
+      "1": 27,
+      "2": 26
+     },
+     "best_shift": -1,
+     "fit_at_best": "29/29",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 59,
+     "render_relations_top": [
+      {
+       "render": "blocker/blocker#2",
+       "P": 68,
+       "T_and_P": 67,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.753
+      },
+      {
+       "render": "blocker/feblocker#2",
+       "P": 65,
+       "T_and_P": 65,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.739
+      },
+      {
+       "render": "blocker/blocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      },
+      {
+       "render": "blocker/feblocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 86,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 23,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 26,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      79
+     ],
+     "shift_hits": {
+      "-2": 25,
+      "-1": 26,
+      "0": 26,
+      "1": 24,
+      "2": 23
+     },
+     "best_shift": -1,
+     "fit_at_best": "26/26",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 60,
+     "render_relations_top": [
+      {
+       "render": "trapper/trapper#2",
+       "P": 66,
+       "T_and_P": 65,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.747
+      },
+      {
+       "render": "trapper/fetrapper#2",
+       "P": 63,
+       "T_and_P": 63,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.733
+      },
+      {
+       "render": "trapper/fetrapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      },
+      {
+       "render": "trapper/trapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 48,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 61,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 19,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      38
+     ],
+     "shift_hits": {
+      "-2": 19,
+      "-1": 19,
+      "0": 19,
+      "1": 18,
+      "2": 18
+     },
+     "best_shift": -2,
+     "fit_at_best": "19/19",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 29,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 35,
+       "T_and_P": 34,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.694
+      },
+      {
+       "render": "goaliestick/goaliesticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.042
+      },
+      {
+       "render": "goaliestick/goaliestick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.042
+      },
+      {
+       "render": "goaliestick/goaliesticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.02
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 182,
+     "db_rows": 556,
+     "db_range": [
+      0,
+      267
+     ],
+     "shift_hits": {
+      "-2": 73,
+      "-1": 73,
+      "0": 70,
+      "1": 71,
+      "2": 72
+     },
+     "best_shift": -2,
+     "fit_at_best": "73/182",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 32,
+      "1": 1,
+      "2": 2,
+      "12": 2,
+      "20": 3,
+      "21": 2,
+      "22": 2,
+      "31": 1,
+      "53": 4,
+      "54": 3,
+      "55": 4,
+      "56": 4,
+      "57": 4,
+      "58": 5,
+      "59": 4,
+      "60": 12,
+      "61": 2,
+      "70": 2,
+      "71": 4,
+      "72": 3,
+      "73": 3,
+      "74": 3,
+      "75": 3,
+      "76": 4,
+      "77": 4,
+      "78": 2,
+      "85": 1,
+      "86": 1,
+      "87": 1,
+      "91": 1,
+      "100": 1,
+      "119": 3,
+      "120": 22,
+      "121": 1,
+      "123": 4,
+      "124": 5,
+      "125": 21,
+      "126": 1,
+      "127": 1,
+      "128": 1,
+      "138": 2,
+      "139": 1,
+      "140": 1,
+      "150": 1,
+      "151": 1,
+      "153": 1,
+      "154": 1,
+      "155": 2,
+      "159": 2,
+      "160": 2,
+      "161": 2,
+      "162": 1,
+      "163": 2,
+      "164": 2,
+      "165": 2,
+      "166": 3,
+      "167": 1,
+      "168": 2,
+      "170": 1,
+      "171": 2,
+      "173": 2,
+      "174": 2,
+      "175": 2,
+      "177": 3,
+      "178": 3,
+      "179": 1,
+      "180": 1,
+      "181": 2,
+      "182": 2,
+      "183": 2,
+      "184": 1,
+      "185": 3,
+      "186": 2,
+      "187": 1,
+      "192": 2,
+      "193": 4,
+      "194": 4,
+      "195": 3,
+      "196": 3,
+      "197": 3,
+      "198": 4,
+      "199": 4,
+      "201": 3,
+      "202": 4,
+      "203": 2,
+      "204": 3,
+      "205": 2,
+      "206": 4,
+      "208": 3,
+      "209": 2,
+      "210": 3,
+      "211": 4,
+      "224": 1,
+      "226": 1,
+      "227": 1,
+      "228": 2,
+      "246": 1,
+      "247": 2,
+      "253": 1,
+      "254": 1,
+      "255": 4,
+      "256": 4,
+      "257": 1,
+      "259": 1,
+      "261": 1,
+      "262": 1,
+      "264": 2,
+      "265": 1,
+      "267": 1
+     },
+     "thumbnails_without_stored_value": 15,
+     "team_slots": {
+      "distinct": 225,
+      "in_thumbnails_at_shift0": 76,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 256,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.344
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/texlib#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 74,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 36,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 15,
+     "db_rows": 4978,
+     "db_range": [
+      27,
+      62
+     ],
+     "shift_hits": {
+      "-2": 15,
+      "-1": 14,
+      "0": 15,
+      "1": 14,
+      "2": 14
+     },
+     "best_shift": -2,
+     "fit_at_best": "15/15",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 59,
+     "render_relations_top": [
+      {
+       "render": "glove/glove#1",
+       "P": 50,
+       "T_and_P": 48,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.632
+      },
+      {
+       "render": "glove/feglove#1",
+       "P": 47,
+       "T_and_P": 45,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.592
+      },
+      {
+       "render": "glove/feglove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.041
+      },
+      {
+       "render": "glove/glove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.041
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 34,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 167,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 10,
+     "db_rows": 4978,
+     "db_range": [
+      1,
+      21
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 10,
+      "0": 10,
+      "1": 9,
+      "2": 8
+     },
+     "best_shift": -1,
+     "fit_at_best": "10/10",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 24,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 19,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.559
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 18,
+       "T_and_P": 18,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.529
+      },
+      {
+       "render": "helmet/texlib#1",
+       "P": 19,
+       "T_and_P": 18,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.514
+      },
+      {
+       "render": "helmet/chinstrap#1",
+       "P": 17,
+       "T_and_P": 17,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 52,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 57,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 9,
+     "db_rows": 4978,
+     "db_range": [
+      32,
+      42
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 9,
+      "0": 9,
+      "1": 8,
+      "2": 7
+     },
+     "best_shift": -2,
+     "fit_at_best": "9/9",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 43,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 31,
+       "T_and_P": 30,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.566
+      },
+      {
+       "render": "skate/goalieskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.038
+      },
+      {
+       "render": "skate/playerskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.038
+      },
+      {
+       "render": "skate/skatelace#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.038
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 101,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 8,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 19,
+     "db_rows": 4978,
+     "db_range": [
+      35,
+      91
+     ],
+     "shift_hits": {
+      "-2": 18,
+      "-1": 18,
+      "0": 19,
+      "1": 18,
+      "2": 18
+     },
+     "best_shift": 0,
+     "fit_at_best": "19/19",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 82,
+     "render_relations_top": [
+      {
+       "render": "playerstick/texlib#1",
+       "P": 69,
+       "T_and_P": 68,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.667
+      },
+      {
+       "render": "playerstick/playersticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.02
+      },
+      {
+       "render": "playerstick/playerstick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.02
+      },
+      {
+       "render": "playerstick/playersticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.01
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 4978,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#3",
+       "P": 5,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.333
+      }
+     ]
+    }
+   }
+  },
+  "legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "families": {
+    "pads": {
+     "thumbnails": 92,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 17,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 29,
+     "db_rows": 566,
+     "db_range": [
+      11,
+      82
+     ],
+     "shift_hits": {
+      "-2": 28,
+      "-1": 28,
+      "0": 29,
+      "1": 29,
+      "2": 29
+     },
+     "best_shift": 0,
+     "fit_at_best": "29/29",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 63,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/goaliepad#1",
+       "P": 70,
+       "T_and_P": 69,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.742
+      },
+      {
+       "render": "goaliepad/fegoaliepad#1",
+       "P": 67,
+       "T_and_P": 67,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.728
+      },
+      {
+       "render": "goaliepad/fegoaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      },
+      {
+       "render": "goaliepad/goaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 93,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 16,
+     "strays": [
+      "gloves72.big"
+     ],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 29,
+     "db_rows": 566,
+     "db_range": [
+      11,
+      82
+     ],
+     "shift_hits": {
+      "-2": 28,
+      "-1": 28,
+      "0": 29,
+      "1": 29,
+      "2": 29
+     },
+     "best_shift": 0,
+     "fit_at_best": "29/29",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 64,
+     "render_relations_top": [
+      {
+       "render": "blocker/blocker#2",
+       "P": 71,
+       "T_and_P": 70,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.745
+      },
+      {
+       "render": "blocker/feblocker#2",
+       "P": 68,
+       "T_and_P": 68,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.731
+      },
+      {
+       "render": "blocker/blocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.021
+      },
+      {
+       "render": "blocker/feblocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.021
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 91,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 18,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 26,
+     "db_rows": 566,
+     "db_range": [
+      11,
+      82
+     ],
+     "shift_hits": {
+      "-2": 25,
+      "-1": 25,
+      "0": 26,
+      "1": 26,
+      "2": 26
+     },
+     "best_shift": 0,
+     "fit_at_best": "26/26",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 65,
+     "render_relations_top": [
+      {
+       "render": "trapper/trapper#2",
+       "P": 69,
+       "T_and_P": 68,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.739
+      },
+      {
+       "render": "trapper/fetrapper#2",
+       "P": 66,
+       "T_and_P": 66,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.725
+      },
+      {
+       "render": "trapper/fetrapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      },
+      {
+       "render": "trapper/trapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 54,
+     "range": [
+      1,
+      9999
+     ],
+     "gaps_in_range": 9945,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 12,
+     "db_rows": 566,
+     "db_range": [
+      18,
+      43
+     ],
+     "shift_hits": {
+      "-2": 12,
+      "-1": 12,
+      "0": 12,
+      "1": 11,
+      "2": 11
+     },
+     "best_shift": -2,
+     "fit_at_best": "12/12",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 42,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 40,
+       "T_and_P": 39,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.709
+      },
+      {
+       "render": "goaliestick/goaliesticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.037
+      },
+      {
+       "render": "goaliestick/goaliestick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.037
+      },
+      {
+       "render": "goaliestick/goaliesticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.018
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 173,
+     "db_rows": 566,
+     "db_range": [
+      0,
+      290
+     ],
+     "shift_hits": {
+      "-2": 64,
+      "-1": 63,
+      "0": 59,
+      "1": 61,
+      "2": 62
+     },
+     "best_shift": -2,
+     "fit_at_best": "64/173",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 36,
+      "2": 2,
+      "12": 1,
+      "20": 2,
+      "21": 2,
+      "22": 1,
+      "53": 3,
+      "54": 3,
+      "55": 4,
+      "56": 3,
+      "57": 3,
+      "58": 4,
+      "59": 4,
+      "60": 17,
+      "61": 4,
+      "69": 1,
+      "70": 3,
+      "71": 3,
+      "72": 3,
+      "73": 3,
+      "74": 3,
+      "75": 3,
+      "76": 3,
+      "77": 3,
+      "80": 1,
+      "84": 2,
+      "91": 1,
+      "99": 1,
+      "101": 1,
+      "103": 1,
+      "119": 6,
+      "120": 56,
+      "122": 2,
+      "123": 7,
+      "124": 4,
+      "125": 25,
+      "126": 2,
+      "127": 1,
+      "128": 1,
+      "138": 1,
+      "140": 2,
+      "150": 1,
+      "151": 2,
+      "152": 1,
+      "153": 1,
+      "154": 1,
+      "155": 1,
+      "159": 1,
+      "160": 1,
+      "161": 2,
+      "162": 2,
+      "166": 4,
+      "167": 2,
+      "168": 2,
+      "170": 1,
+      "171": 3,
+      "173": 2,
+      "177": 3,
+      "178": 1,
+      "179": 1,
+      "180": 1,
+      "181": 2,
+      "183": 2,
+      "184": 1,
+      "185": 1,
+      "187": 1,
+      "192": 2,
+      "193": 3,
+      "194": 2,
+      "195": 2,
+      "196": 2,
+      "197": 3,
+      "198": 2,
+      "199": 2,
+      "201": 1,
+      "202": 5,
+      "203": 4,
+      "204": 4,
+      "205": 2,
+      "208": 2,
+      "209": 3,
+      "210": 2,
+      "211": 3,
+      "224": 1,
+      "226": 1,
+      "227": 1,
+      "228": 2,
+      "246": 1,
+      "247": 1,
+      "250": 1,
+      "251": 1,
+      "255": 4,
+      "256": 3,
+      "257": 2,
+      "259": 1,
+      "261": 1,
+      "264": 2,
+      "265": 1,
+      "266": 1,
+      "269": 1,
+      "271": 2,
+      "273": 2,
+      "277": 1,
+      "279": 2,
+      "283": 1,
+      "284": 2,
+      "287": 1,
+      "288": 1,
+      "290": 2
+     },
+     "thumbnails_without_stored_value": 24,
+     "team_slots": {
+      "distinct": 230,
+      "in_thumbnails_at_shift0": 75,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 280,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.314
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/texlib#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 83,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 27,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 14,
+     "db_rows": 5066,
+     "db_range": [
+      27,
+      83
+     ],
+     "shift_hits": {
+      "-2": 12,
+      "-1": 12,
+      "0": 14,
+      "1": 12,
+      "2": 12
+     },
+     "best_shift": 0,
+     "fit_at_best": "14/14",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 69,
+     "render_relations_top": [
+      {
+       "render": "glove/glove#1",
+       "P": 56,
+       "T_and_P": 54,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.635
+      },
+      {
+       "render": "glove/feglove#1",
+       "P": 53,
+       "T_and_P": 51,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.6
+      },
+      {
+       "render": "glove/feglove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.036
+      },
+      {
+       "render": "glove/glove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.036
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 38,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 163,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 10,
+     "db_rows": 5066,
+     "db_range": [
+      1,
+      25
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 10,
+      "0": 10,
+      "1": 9,
+      "2": 8
+     },
+     "best_shift": -1,
+     "fit_at_best": "10/10",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 28,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 22,
+       "T_and_P": 22,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.579
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 19,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#1",
+       "P": 19,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/texlib#1",
+       "P": 20,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.487
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 58,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 51,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 8,
+     "db_rows": 5066,
+     "db_range": [
+      39,
+      48
+     ],
+     "shift_hits": {
+      "-2": 8,
+      "-1": 8,
+      "0": 8,
+      "1": 7,
+      "2": 6
+     },
+     "best_shift": -2,
+     "fit_at_best": "8/8",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 50,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 33,
+       "T_and_P": 32,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.542
+      },
+      {
+       "render": "skate/goalieskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      },
+      {
+       "render": "skate/playerskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      },
+      {
+       "render": "skate/skatelace#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 106,
+     "range": [
+      1,
+      112
+     ],
+     "gaps_in_range": 6,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 19,
+     "db_rows": 5066,
+     "db_range": [
+      35,
+      112
+     ],
+     "shift_hits": {
+      "-2": 16,
+      "-1": 18,
+      "0": 19,
+      "1": 17,
+      "2": 16
+     },
+     "best_shift": 0,
+     "fit_at_best": "19/19",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 87,
+     "render_relations_top": [
+      {
+       "render": "playerstick/texlib#1",
+       "P": 75,
+       "T_and_P": 72,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.661
+      },
+      {
+       "render": "playerstick/playersticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.019
+      },
+      {
+       "render": "playerstick/playerstick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.019
+      },
+      {
+       "render": "playerstick/playersticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.009
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 5066,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/padding#2",
+       "P": 1,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.333
+      }
+     ]
+    }
+   }
+  },
+  "ps3-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "families": {
+    "pads": {
+     "thumbnails": 87,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 22,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 28,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      79
+     ],
+     "shift_hits": {
+      "-2": 27,
+      "-1": 28,
+      "0": 28,
+      "1": 26,
+      "2": 25
+     },
+     "best_shift": -1,
+     "fit_at_best": "28/28",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 59,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/goaliepad#1",
+       "P": 67,
+       "T_and_P": 66,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.75
+      },
+      {
+       "render": "goaliepad/fegoaliepad#1",
+       "P": 64,
+       "T_and_P": 64,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.736
+      },
+      {
+       "render": "goaliepad/fegoaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      },
+      {
+       "render": "goaliepad/goaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 21,
+     "strays": [
+      "gloves72.big"
+     ],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 29,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      79
+     ],
+     "shift_hits": {
+      "-2": 28,
+      "-1": 29,
+      "0": 29,
+      "1": 27,
+      "2": 26
+     },
+     "best_shift": -1,
+     "fit_at_best": "29/29",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 59,
+     "render_relations_top": [
+      {
+       "render": "blocker/blocker#2",
+       "P": 68,
+       "T_and_P": 67,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.753
+      },
+      {
+       "render": "blocker/feblocker#2",
+       "P": 65,
+       "T_and_P": 65,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.739
+      },
+      {
+       "render": "blocker/blocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      },
+      {
+       "render": "blocker/feblocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 86,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 23,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 26,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      79
+     ],
+     "shift_hits": {
+      "-2": 25,
+      "-1": 26,
+      "0": 26,
+      "1": 24,
+      "2": 23
+     },
+     "best_shift": -1,
+     "fit_at_best": "26/26",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 60,
+     "render_relations_top": [
+      {
+       "render": "trapper/trapper#2",
+       "P": 66,
+       "T_and_P": 65,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.747
+      },
+      {
+       "render": "trapper/fetrapper#2",
+       "P": 63,
+       "T_and_P": 63,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.733
+      },
+      {
+       "render": "trapper/fetrapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      },
+      {
+       "render": "trapper/trapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.023
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 48,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 61,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 19,
+     "db_rows": 556,
+     "db_range": [
+      11,
+      38
+     ],
+     "shift_hits": {
+      "-2": 19,
+      "-1": 19,
+      "0": 19,
+      "1": 18,
+      "2": 18
+     },
+     "best_shift": -2,
+     "fit_at_best": "19/19",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 29,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 35,
+       "T_and_P": 34,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.694
+      },
+      {
+       "render": "goaliestick/goaliesticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.042
+      },
+      {
+       "render": "goaliestick/goaliestick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.042
+      },
+      {
+       "render": "goaliestick/goaliesticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.02
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 182,
+     "db_rows": 556,
+     "db_range": [
+      0,
+      267
+     ],
+     "shift_hits": {
+      "-2": 73,
+      "-1": 73,
+      "0": 70,
+      "1": 71,
+      "2": 72
+     },
+     "best_shift": -2,
+     "fit_at_best": "73/182",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 32,
+      "1": 1,
+      "2": 2,
+      "12": 2,
+      "20": 3,
+      "21": 2,
+      "22": 2,
+      "31": 1,
+      "53": 4,
+      "54": 3,
+      "55": 4,
+      "56": 4,
+      "57": 4,
+      "58": 5,
+      "59": 4,
+      "60": 12,
+      "61": 2,
+      "70": 2,
+      "71": 4,
+      "72": 3,
+      "73": 3,
+      "74": 3,
+      "75": 3,
+      "76": 4,
+      "77": 4,
+      "78": 2,
+      "85": 1,
+      "86": 1,
+      "87": 1,
+      "91": 1,
+      "100": 1,
+      "119": 3,
+      "120": 22,
+      "121": 1,
+      "123": 4,
+      "124": 5,
+      "125": 21,
+      "126": 1,
+      "127": 1,
+      "128": 1,
+      "138": 2,
+      "139": 1,
+      "140": 1,
+      "150": 1,
+      "151": 1,
+      "153": 1,
+      "154": 1,
+      "155": 2,
+      "159": 2,
+      "160": 2,
+      "161": 2,
+      "162": 1,
+      "163": 2,
+      "164": 2,
+      "165": 2,
+      "166": 3,
+      "167": 1,
+      "168": 2,
+      "170": 1,
+      "171": 2,
+      "173": 2,
+      "174": 2,
+      "175": 2,
+      "177": 3,
+      "178": 3,
+      "179": 1,
+      "180": 1,
+      "181": 2,
+      "182": 2,
+      "183": 2,
+      "184": 1,
+      "185": 3,
+      "186": 2,
+      "187": 1,
+      "192": 2,
+      "193": 4,
+      "194": 4,
+      "195": 3,
+      "196": 3,
+      "197": 3,
+      "198": 4,
+      "199": 4,
+      "201": 3,
+      "202": 4,
+      "203": 2,
+      "204": 3,
+      "205": 2,
+      "206": 4,
+      "208": 3,
+      "209": 2,
+      "210": 3,
+      "211": 4,
+      "224": 1,
+      "226": 1,
+      "227": 1,
+      "228": 2,
+      "246": 1,
+      "247": 2,
+      "253": 1,
+      "254": 1,
+      "255": 4,
+      "256": 4,
+      "257": 1,
+      "259": 1,
+      "261": 1,
+      "262": 1,
+      "264": 2,
+      "265": 1,
+      "267": 1
+     },
+     "thumbnails_without_stored_value": 15,
+     "team_slots": {
+      "distinct": 225,
+      "in_thumbnails_at_shift0": 76,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 256,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.344
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/texlib#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 74,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 36,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 15,
+     "db_rows": 4978,
+     "db_range": [
+      27,
+      62
+     ],
+     "shift_hits": {
+      "-2": 15,
+      "-1": 14,
+      "0": 15,
+      "1": 14,
+      "2": 14
+     },
+     "best_shift": -2,
+     "fit_at_best": "15/15",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 59,
+     "render_relations_top": [
+      {
+       "render": "glove/glove#1",
+       "P": 50,
+       "T_and_P": 48,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.632
+      },
+      {
+       "render": "glove/feglove#1",
+       "P": 47,
+       "T_and_P": 45,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.592
+      },
+      {
+       "render": "glove/feglove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.041
+      },
+      {
+       "render": "glove/glove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.041
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 34,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 167,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 10,
+     "db_rows": 4978,
+     "db_range": [
+      1,
+      21
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 10,
+      "0": 10,
+      "1": 9,
+      "2": 8
+     },
+     "best_shift": -1,
+     "fit_at_best": "10/10",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 24,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 19,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.559
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 18,
+       "T_and_P": 18,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.529
+      },
+      {
+       "render": "helmet/chinstrap#1",
+       "P": 17,
+       "T_and_P": 17,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#1",
+       "P": 17,
+       "T_and_P": 17,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 52,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 57,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 9,
+     "db_rows": 4978,
+     "db_range": [
+      32,
+      42
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 9,
+      "0": 9,
+      "1": 8,
+      "2": 7
+     },
+     "best_shift": -2,
+     "fit_at_best": "9/9",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 43,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 31,
+       "T_and_P": 30,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.566
+      },
+      {
+       "render": "skate/goalieskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.038
+      },
+      {
+       "render": "skate/playerskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.038
+      },
+      {
+       "render": "skate/skatelace#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.038
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 101,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 8,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 19,
+     "db_rows": 4978,
+     "db_range": [
+      35,
+      91
+     ],
+     "shift_hits": {
+      "-2": 18,
+      "-1": 18,
+      "0": 19,
+      "1": 18,
+      "2": 18
+     },
+     "best_shift": 0,
+     "fit_at_best": "19/19",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 82,
+     "render_relations_top": [
+      {
+       "render": "playerstick/texlib#1",
+       "P": 69,
+       "T_and_P": 68,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.667
+      },
+      {
+       "render": "playerstick/playersticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.02
+      },
+      {
+       "render": "playerstick/playerstick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.02
+      },
+      {
+       "render": "playerstick/playersticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.01
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 4978,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/helmet#3",
+       "P": 5,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.333
+      }
+     ]
+    }
+   }
+  },
+  "ps3-legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "families": {
+    "pads": {
+     "thumbnails": 92,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 17,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.pads",
+     "db_distinct": 29,
+     "db_rows": 566,
+     "db_range": [
+      11,
+      82
+     ],
+     "shift_hits": {
+      "-2": 28,
+      "-1": 28,
+      "0": 29,
+      "1": 29,
+      "2": 29
+     },
+     "best_shift": 0,
+     "fit_at_best": "29/29",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 63,
+     "render_relations_top": [
+      {
+       "render": "goaliepad/goaliepad#1",
+       "P": 70,
+       "T_and_P": 69,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.742
+      },
+      {
+       "render": "goaliepad/fegoaliepad#1",
+       "P": 67,
+       "T_and_P": 67,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.728
+      },
+      {
+       "render": "goaliepad/fegoaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      },
+      {
+       "render": "goaliepad/goaliepad#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      }
+     ]
+    },
+    "blocker": {
+     "thumbnails": 93,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 16,
+     "strays": [
+      "gloves72.big"
+     ],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.blocker",
+     "db_distinct": 29,
+     "db_rows": 566,
+     "db_range": [
+      11,
+      82
+     ],
+     "shift_hits": {
+      "-2": 28,
+      "-1": 28,
+      "0": 29,
+      "1": 29,
+      "2": 29
+     },
+     "best_shift": 0,
+     "fit_at_best": "29/29",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 64,
+     "render_relations_top": [
+      {
+       "render": "blocker/blocker#2",
+       "P": 71,
+       "T_and_P": 70,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.745
+      },
+      {
+       "render": "blocker/feblocker#2",
+       "P": 68,
+       "T_and_P": 68,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.731
+      },
+      {
+       "render": "blocker/blocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.021
+      },
+      {
+       "render": "blocker/feblocker#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.021
+      }
+     ]
+    },
+    "trapper": {
+     "thumbnails": 91,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 18,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       37,
+       41
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitiongoalieequipment.trapper",
+     "db_distinct": 26,
+     "db_rows": 566,
+     "db_range": [
+      11,
+      82
+     ],
+     "shift_hits": {
+      "-2": 25,
+      "-1": 25,
+      "0": 26,
+      "1": 26,
+      "2": 26
+     },
+     "best_shift": 0,
+     "fit_at_best": "26/26",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 65,
+     "render_relations_top": [
+      {
+       "render": "trapper/trapper#2",
+       "P": 69,
+       "T_and_P": 68,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.739
+      },
+      {
+       "render": "trapper/fetrapper#2",
+       "P": 66,
+       "T_and_P": 66,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.725
+      },
+      {
+       "render": "trapper/fetrapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      },
+      {
+       "render": "trapper/trapper#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.022
+      }
+     ]
+    },
+    "goaliestick": {
+     "thumbnails": 54,
+     "range": [
+      1,
+      9999
+     ],
+     "gaps_in_range": 9945,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.stick",
+     "db_distinct": 12,
+     "db_rows": 566,
+     "db_range": [
+      18,
+      43
+     ],
+     "shift_hits": {
+      "-2": 12,
+      "-1": 12,
+      "0": 12,
+      "1": 11,
+      "2": 11
+     },
+     "best_shift": -2,
+     "fit_at_best": "12/12",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 42,
+     "render_relations_top": [
+      {
+       "render": "goaliestick/goaliestick#1",
+       "P": 40,
+       "T_and_P": 39,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.709
+      },
+      {
+       "render": "goaliestick/goaliesticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.037
+      },
+      {
+       "render": "goaliestick/goaliestick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.037
+      },
+      {
+       "render": "goaliestick/goaliesticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.018
+      }
+     ]
+    },
+    "mask": {
+     "thumbnails": 88,
+     "range": [
+      1,
+      221
+     ],
+     "gaps_in_range": 133,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitiongoalieequipment.maskid",
+     "db_distinct": 173,
+     "db_rows": 566,
+     "db_range": [
+      0,
+      290
+     ],
+     "shift_hits": {
+      "-2": 64,
+      "-1": 63,
+      "0": 59,
+      "1": 61,
+      "2": 62
+     },
+     "best_shift": -2,
+     "fit_at_best": "64/173",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {
+      "0": 36,
+      "2": 2,
+      "12": 1,
+      "20": 2,
+      "21": 2,
+      "22": 1,
+      "53": 3,
+      "54": 3,
+      "55": 4,
+      "56": 3,
+      "57": 3,
+      "58": 4,
+      "59": 4,
+      "60": 17,
+      "61": 4,
+      "69": 1,
+      "70": 3,
+      "71": 3,
+      "72": 3,
+      "73": 3,
+      "74": 3,
+      "75": 3,
+      "76": 3,
+      "77": 3,
+      "80": 1,
+      "84": 2,
+      "91": 1,
+      "99": 1,
+      "101": 1,
+      "103": 1,
+      "119": 6,
+      "120": 56,
+      "122": 2,
+      "123": 7,
+      "124": 4,
+      "125": 25,
+      "126": 2,
+      "127": 1,
+      "128": 1,
+      "138": 1,
+      "140": 2,
+      "150": 1,
+      "151": 2,
+      "152": 1,
+      "153": 1,
+      "154": 1,
+      "155": 1,
+      "159": 1,
+      "160": 1,
+      "161": 2,
+      "162": 2,
+      "166": 4,
+      "167": 2,
+      "168": 2,
+      "170": 1,
+      "171": 3,
+      "173": 2,
+      "177": 3,
+      "178": 1,
+      "179": 1,
+      "180": 1,
+      "181": 2,
+      "183": 2,
+      "184": 1,
+      "185": 1,
+      "187": 1,
+      "192": 2,
+      "193": 3,
+      "194": 2,
+      "195": 2,
+      "196": 2,
+      "197": 3,
+      "198": 2,
+      "199": 2,
+      "201": 1,
+      "202": 5,
+      "203": 4,
+      "204": 4,
+      "205": 2,
+      "208": 2,
+      "209": 3,
+      "210": 2,
+      "211": 3,
+      "224": 1,
+      "226": 1,
+      "227": 1,
+      "228": 2,
+      "246": 1,
+      "247": 1,
+      "250": 1,
+      "251": 1,
+      "255": 4,
+      "256": 3,
+      "257": 2,
+      "259": 1,
+      "261": 1,
+      "264": 2,
+      "265": 1,
+      "266": 1,
+      "269": 1,
+      "271": 2,
+      "273": 2,
+      "277": 1,
+      "279": 2,
+      "283": 1,
+      "284": 2,
+      "287": 1,
+      "288": 1,
+      "290": 2
+     },
+     "thumbnails_without_stored_value": 24,
+     "team_slots": {
+      "distinct": 230,
+      "in_thumbnails_at_shift0": 75,
+      "missing": [
+       10,
+       18,
+       19,
+       20,
+       28,
+       29,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56
+      ]
+     },
+     "render_relations_top": [
+      {
+       "render": "goaliehelmet/goaliehelmet#2",
+       "P": 280,
+       "T_and_P": 88,
+       "T_eq_P": false,
+       "T_sub_P": true,
+       "P_sub_T": false,
+       "jaccard": 0.314
+      },
+      {
+       "render": "goaliehelmet/goaliehelmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/helmet#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      },
+      {
+       "render": "goaliehelmet/texlib#1",
+       "P": 8,
+       "T_and_P": 7,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.079
+      }
+     ]
+    },
+    "gloves": {
+     "thumbnails": 83,
+     "range": [
+      0,
+      109
+     ],
+     "gaps_in_range": 27,
+     "strays": [],
+     "duplicate_byte_groups": [
+      [
+       0,
+       1
+      ]
+     ],
+     "duplicate_groups": 1,
+     "db": "exhibitionskaterequipment.gloves",
+     "db_distinct": 14,
+     "db_rows": 5066,
+     "db_range": [
+      27,
+      83
+     ],
+     "shift_hits": {
+      "-2": 12,
+      "-1": 12,
+      "0": 14,
+      "1": 12,
+      "2": 12
+     },
+     "best_shift": 0,
+     "fit_at_best": "14/14",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 69,
+     "render_relations_top": [
+      {
+       "render": "glove/glove#1",
+       "P": 56,
+       "T_and_P": 54,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.635
+      },
+      {
+       "render": "glove/feglove#1",
+       "P": 53,
+       "T_and_P": 51,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.6
+      },
+      {
+       "render": "glove/feglove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.036
+      },
+      {
+       "render": "glove/glove#2",
+       "P": 3,
+       "T_and_P": 3,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.036
+      }
+     ]
+    },
+    "helmet": {
+     "thumbnails": 38,
+     "range": [
+      0,
+      200
+     ],
+     "gaps_in_range": 163,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.helmetbrand",
+     "db_distinct": 10,
+     "db_rows": 5066,
+     "db_range": [
+      1,
+      25
+     ],
+     "shift_hits": {
+      "-2": 9,
+      "-1": 10,
+      "0": 10,
+      "1": 9,
+      "2": 8
+     },
+     "best_shift": -1,
+     "fit_at_best": "10/10",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 28,
+     "render_relations_top": [
+      {
+       "render": "helmet/helmet#2",
+       "P": 22,
+       "T_and_P": 22,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.579
+      },
+      {
+       "render": "helmet/helmet#1",
+       "P": 19,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#1",
+       "P": 19,
+       "T_and_P": 19,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/chinstrap#1",
+       "P": 18,
+       "T_and_P": 18,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.474
+      }
+     ]
+    },
+    "skates": {
+     "thumbnails": 58,
+     "range": [
+      1,
+      109
+     ],
+     "gaps_in_range": 51,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.skatebrand",
+     "db_distinct": 8,
+     "db_rows": 5066,
+     "db_range": [
+      39,
+      48
+     ],
+     "shift_hits": {
+      "-2": 8,
+      "-1": 8,
+      "0": 8,
+      "1": 7,
+      "2": 6
+     },
+     "best_shift": -2,
+     "fit_at_best": "8/8",
+     "unique_full_shift": false,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 50,
+     "render_relations_top": [
+      {
+       "render": "skate/texlib#1",
+       "P": 33,
+       "T_and_P": 32,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.542
+      },
+      {
+       "render": "skate/goalieskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      },
+      {
+       "render": "skate/playerskate#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      },
+      {
+       "render": "skate/skatelace#1",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.034
+      }
+     ]
+    },
+    "sticks": {
+     "thumbnails": 106,
+     "range": [
+      1,
+      112
+     ],
+     "gaps_in_range": 6,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.stick",
+     "db_distinct": 19,
+     "db_rows": 5066,
+     "db_range": [
+      35,
+      112
+     ],
+     "shift_hits": {
+      "-2": 16,
+      "-1": 18,
+      "0": 19,
+      "1": 17,
+      "2": 16
+     },
+     "best_shift": 0,
+     "fit_at_best": "19/19",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 87,
+     "render_relations_top": [
+      {
+       "render": "playerstick/texlib#1",
+       "P": 75,
+       "T_and_P": 72,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.661
+      },
+      {
+       "render": "playerstick/playersticktape#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.019
+      },
+      {
+       "render": "playerstick/playerstick#2",
+       "P": 2,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.019
+      },
+      {
+       "render": "playerstick/playersticktape#1",
+       "P": 2,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.009
+      }
+     ]
+    },
+    "visor": {
+     "thumbnails": 3,
+     "range": [
+      1,
+      3
+     ],
+     "gaps_in_range": 0,
+     "strays": [],
+     "duplicate_byte_groups": [],
+     "duplicate_groups": 0,
+     "db": "exhibitionskaterequipment.visortype",
+     "db_distinct": 3,
+     "db_rows": 5066,
+     "db_range": [
+      0,
+      2
+     ],
+     "shift_hits": {
+      "-2": 0,
+      "-1": 1,
+      "0": 2,
+      "1": 3,
+      "2": 2
+     },
+     "best_shift": 1,
+     "fit_at_best": "3/3",
+     "unique_full_shift": true,
+     "stored_without_thumbnail": {},
+     "thumbnails_without_stored_value": 0,
+     "render_relations_top": [
+      {
+       "render": "helmet/chinstrap#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/jawprotector#2",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/visor#3",
+       "P": 3,
+       "T_and_P": 2,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": false,
+       "jaccard": 0.5
+      },
+      {
+       "render": "helmet/padding#2",
+       "P": 1,
+       "T_and_P": 1,
+       "T_eq_P": false,
+       "T_sub_P": false,
+       "P_sub_T": true,
+       "jaccard": 0.333
+      }
+     ]
+    }
+   }
+  }
+ }
+}

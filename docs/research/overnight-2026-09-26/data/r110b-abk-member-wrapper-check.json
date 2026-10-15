@@ -1,0 +1,65 @@
+{
+ "note": "R110b - raw first bytes of archive-backed .abk / .ast members (PS3 09 / 10 / 12 / 13, X360 09): which members are wrapped (RefPack\n`10 FB` / chunkzip / chunklzx) and which begin with the payload magic (`ABKC` / `S10S`) - reconciles R82's wrapper wording with R98's\n'stored' records. Read-only. Usage: python r110b_abk_member_wrapper_check.py <out.json>\n",
+ "trees": {
+  "ps3-nhl09": {
+   "audioboot.big|.abk|payload:ABKC": 6,
+   "data0.big|.abk|payload:ABKC": 180,
+   "data0.big|.ast|payload:S10S": 7
+  },
+  "ps3-nhl09:examples": {
+   "audioboot.big|.abk|payload:ABKC": "audio/sfx/ram/fe.abk",
+   "data0.big|.abk|payload:ABKC": "audio/sfx/ram/0004_chant.abk",
+   "data0.big|.ast|payload:S10S": "audio/sfx/streams/colors1.ast"
+  },
+  "ps3-nhl10": {
+   "audio.big|.abk|payload:ABKC": 185,
+   "audio.big|.ast|payload:S10S": 3,
+   "audioboot.big|.abk|payload:ABKC": 1,
+   "audioboot2.big|.abk|payload:ABKC": 5,
+   "stadium.big|.abk|payload:ABKC": 8
+  },
+  "ps3-nhl10:examples": {
+   "audio.big|.abk|payload:ABKC": "audio/sfx/0004_chant.abk",
+   "audio.big|.ast|payload:S10S": "audio/sfx/createplayer.ast",
+   "audioboot.big|.abk|payload:ABKC": "audio/sfx/fe.abk",
+   "audioboot2.big|.abk|payload:ABKC": "audio/sfx/sfx.abk",
+   "stadium.big|.abk|payload:ABKC": "audio/sfx/loadloop000.abk"
+  },
+  "ps3-nhl12": {
+   "audioboot.big|.abk|payload:ABKC": 1,
+   "audioboot2.big|.abk|payload:ABKC": 9,
+   "nocache.big|.abk|payload:ABKC": 209,
+   "nocache.big|.ast|payload:S10S": 15
+  },
+  "ps3-nhl12:examples": {
+   "audioboot.big|.abk|payload:ABKC": "audio/sfx/fe.abk",
+   "audioboot2.big|.abk|payload:ABKC": "audio/sfx/sfx.abk",
+   "nocache.big|.abk|payload:ABKC": "audio/sfx/loadloop000.abk",
+   "nocache.big|.ast|payload:S10S": "audio/sfx/ambientskatesandpunches.ast"
+  },
+  "ps3-nhl13": {
+   "audioboot.big|.abk|payload:ABKC": 1,
+   "audioboot2.big|.abk|payload:ABKC": 10,
+   "cacheaudio.big|.ast|payload:S10S": 7,
+   "nocache.big|.abk|payload:ABKC": 202,
+   "nocache.big|.ast|payload:S10S": 8
+  },
+  "ps3-nhl13:examples": {
+   "audioboot.big|.abk|payload:ABKC": "audio/sfx/fe.abk",
+   "audioboot2.big|.abk|payload:ABKC": "audio/sfx/sfx.abk",
+   "cacheaudio.big|.ast|payload:S10S": "audio/sfx/colors1.ast",
+   "nocache.big|.abk|payload:ABKC": "audio/sfx/loadloop000.abk",
+   "nocache.big|.ast|payload:S10S": "audio/sfx/ambientskatesandpunches.ast"
+  },
+  "x360-nhl09": {
+   "audioboot.big|.abk|payload:ABKC": 6,
+   "data0.big|.abk|payload:ABKC": 180,
+   "data0.big|.ast|payload:S10S": 7
+  },
+  "x360-nhl09:examples": {
+   "audioboot.big|.abk|payload:ABKC": "audio/sfx/ram/fe.abk",
+   "data0.big|.abk|payload:ABKC": "audio/sfx/ram/0004_chant.abk",
+   "data0.big|.ast|payload:S10S": "audio/sfx/streams/colors1.ast"
+  }
+ }
+}

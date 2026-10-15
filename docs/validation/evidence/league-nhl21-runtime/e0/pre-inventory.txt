@@ -1,0 +1,123 @@
+# pre-launch inventory 2026-09-18T05:12:51Z
+aeb048921e7749ef9dc580a6009bc0cbff08b193ae9f04cce209c9e7cf012790 */h/Emulators/ShadPS4/shadPS4.exe
+a3dcaffceedb73ee7004c070517974ba8f656428a1dcd9f6f8cc6d74899a3ef5 */c/Users/puckh/AppData/Roaming/shadPS4/config.toml
+bb8c97e3377f029a0a2ead4e17c753c711041fd928f113e57fc40489640e56d4 */h/Emulators/ShadPS4/Games/CUSA18182/sce_sys/param.sfo
+fc95ca66cc65a45f6d125f5f02920c296d0c6ff1d7a65a727b6e6a25b1dd1731 */h/Emulators/ShadPS4/Games/CUSA18182/eboot.bin
+1c41f578a595dbd5aae7ad921445626636f3a842d8fb869bc054d35e3e849e87 */h/Emulators/ShadPS4/Games/CUSA18182/databigs/inxp_00.big
+-rwxr-xr-x 1 puckh 197121 69042176 Sep  9 06:37 /h/Emulators/ShadPS4/shadPS4.exe
+## user dir listing
+total 29
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121    0 Sep 16 01:43 ..
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 cache
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 captures
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 cheats
+-rw-r--r-- 1 puckh 197121 3763 Sep  9 04:40 config.toml
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 custom_audios
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 custom_configs
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 custom_themes
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 custom_trophy
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 data
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 download
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 fonts
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 game_data
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 home
+-rw-r--r-- 1 puckh 197121   66 Sep 17 20:51 keys.json
+drwxr-xr-x 1 puckh 197121    0 Sep 15 00:45 log
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 mods_folder
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 patches
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 screenshots
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 shader
+drwxr-xr-x 1 puckh 197121    0 Sep 15 06:10 sys_modules
+drwxr-xr-x 1 puckh 197121    0 Sep  9 04:40 temp
+## mods_folder
+/c/Users/puckh/AppData/Roaming/shadPS4/mods_folder:
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 ..
+## patches (user)
+/c/Users/puckh/AppData/Roaming/shadPS4/patches:
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 ..
+## cheats
+/c/Users/puckh/AppData/Roaming/shadPS4/cheats:
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 ..
+## custom_configs
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 ..
+## game_data
+/c/Users/puckh/AppData/Roaming/shadPS4/game_data:
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 ..
+## home
+/c/Users/puckh/AppData/Roaming/shadPS4/home:
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 ..
+## data
+/c/Users/puckh/AppData/Roaming/shadPS4/data:
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 .
+drwxr-xr-x 1 puckh 197121 0 Sep  9 04:40 ..
+## sys_modules/CUSA18182
+total 4
+drwxr-xr-x 1 puckh 197121 0 Sep  9 16:19 .
+drwxr-xr-x 1 puckh 197121 0 Sep 15 06:10 ..
+## keys.json
+{
+    "TrophyKeySet": {
+        "ReleaseTrophyKey": ""
+    }
+}
+## H:\Emulators\ShadPS4 top
+total 441588
+drwxr-xr-x 1 puckh 197121         0 Sep 11 17:07 .
+drwxr-xr-x 1 puckh 197121         0 Sep  6 22:50 ..
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:07 DLCs
+drwxr-xr-x 1 puckh 197121         0 Sep 11 16:54 Games
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:19 PKGs
+drwxr-xr-x 1 puckh 197121         0 Sep  1 18:10 Patches
+drwxr-xr-x 1 puckh 197121         0 Sep  6 03:50 evidence
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:06 generic
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:06 imageformats
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:06 multimedia
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:06 networkinformation
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:06 platforms
+drwxr-xr-x 1 puckh 197121         0 Aug 31 04:46 reshade-shaders
+-rwxr-xr-x 1 puckh 197121  69042176 Sep  9 06:37 shadPS4.exe
+-rwxr-xr-x 1 puckh 197121  67542528 Sep  4 13:28 shadPS4.exe.pre-tp2f
+-rwxr-xr-x 1 puckh 197121  67661312 Sep  4 16:17 shadPS4.exe.tp2f-final.bak
+-rw-r--r-- 1 puckh 197121 200892416 Sep  9 06:37 shadps4.pdb
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:06 styles
+drwxr-xr-x 1 puckh 197121         0 Jun  4 02:06 tls
+-rw-r--r-- 1 puckh 197121     16384 Sep  4 14:03 tp1c_state.txt
+-rw-r--r-- 1 puckh 197121      8956 Sep  3 23:37 tp1c_terminal.txt
+## Patches dir (emulator root)
+total 20
+drwxr-xr-x 1 puckh 197121     0 Sep  1 18:10 .
+drwxr-xr-x 1 puckh 197121     0 Sep 11 17:07 ..
+-rw-r--r-- 1 puckh 197121 10113 Sep  1 18:11 NHL19.xml
+## game folder top + loose nhl tree
+total 105617
+drwxr-xr-x 1 puckh 197121         0 Jun 25 19:41 .
+drwxr-xr-x 1 puckh 197121         0 Sep 11 16:54 ..
+-rw-r--r-- 1 puckh 197121       194 Jun 25 19:41 _options.viv
+drwxr-xr-x 1 puckh 197121         0 Jun 25 21:03 databigs
+-rw-r--r-- 1 puckh 197121 104845239 Jun 25 19:41 eboot.bin
+drwxr-xr-x 1 puckh 197121         0 Jun 25 19:41 nhl
+-rw-r--r-- 1 puckh 197121   3288792 Jun 25 19:41 sce_discmap.plt
+drwxr-xr-x 1 puckh 197121         0 Jun 25 19:41 sce_module
+drwxr-xr-x 1 puckh 197121         0 Jun 25 19:41 sce_sys
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/common/config/memory.cfg
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/common/config/videoheap.cfg
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/kettle/config/eu_versioninfo.ini
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/kettle/config/titleinfo.ini
+/h/Emulators/ShadPS4/Games/CUSA18182/nhl/data/kettle/eawebkit.prx
+## savedata search
+## portable user dir?
+ls: cannot access '/h/Emulators/ShadPS4/user': No such file or directory

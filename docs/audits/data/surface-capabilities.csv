@@ -1,0 +1,487 @@
+platform,game,surface,state,reason
+ps3,nhl07,players,editable,
+ps3,nhl07,teams,editable,
+ps3,nhl07,arenas,not-applicable,no arena table (StEO)
+ps3,nhl07,career,readable,
+ps3,nhl07,attributes,editable,some ratings are not yet named
+ps3,nhl07,traits,not-applicable,no player-trait slots in this schema (gen6)
+ps3,nhl07,lines,editable,
+ps3,nhl07,strategies,editable,
+ps3,nhl07,captaincy,editable,
+ps3,nhl07,contracts,editable,
+ps3,nhl07,draft_picks,not-applicable,no draft-pick asset table (qHav)
+ps3,nhl07,jerseys,not-applicable,no team-jersey table (xjgw)
+ps3,nhl07,team_equipment,not-applicable,no team-equipment table (hHbv)
+ps3,nhl07,player_equipment,not-applicable,no per-player equipment tables (gen6)
+ps3,nhl07,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl07,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl07,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl07,audio,disabled,audio tooling is a later phase
+ps3,nhl08,players,editable,
+ps3,nhl08,teams,editable,
+ps3,nhl08,arenas,readable,
+ps3,nhl08,career,readable,
+ps3,nhl08,attributes,editable,
+ps3,nhl08,traits,not-applicable,no player-trait slots in this schema (gen6)
+ps3,nhl08,lines,editable,
+ps3,nhl08,strategies,editable,
+ps3,nhl08,captaincy,editable,
+ps3,nhl08,contracts,editable,
+ps3,nhl08,draft_picks,not-applicable,no draft-pick asset table (qHav)
+ps3,nhl08,jerseys,not-applicable,no team-jersey table (xjgw)
+ps3,nhl08,team_equipment,editable,
+ps3,nhl08,player_equipment,editable,
+ps3,nhl08,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl08,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl08,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl08,audio,disabled,audio tooling is a later phase
+ps3,nhl09,players,editable,
+ps3,nhl09,teams,editable,
+ps3,nhl09,arenas,readable,
+ps3,nhl09,career,readable,
+ps3,nhl09,attributes,editable,
+ps3,nhl09,traits,not-applicable,no player-trait slots in this schema (gen6)
+ps3,nhl09,lines,editable,
+ps3,nhl09,strategies,editable,
+ps3,nhl09,captaincy,editable,
+ps3,nhl09,contracts,editable,
+ps3,nhl09,draft_picks,not-applicable,no draft-pick asset table (qHav)
+ps3,nhl09,jerseys,not-applicable,no team-jersey table (xjgw)
+ps3,nhl09,team_equipment,editable,
+ps3,nhl09,player_equipment,editable,
+ps3,nhl09,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl09,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl09,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl09,audio,disabled,audio tooling is a later phase
+ps3,nhl10,players,editable,
+ps3,nhl10,teams,editable,
+ps3,nhl10,arenas,readable,
+ps3,nhl10,career,readable,
+ps3,nhl10,attributes,editable,
+ps3,nhl10,traits,not-applicable,no player-trait slots in this schema (gen6)
+ps3,nhl10,lines,editable,
+ps3,nhl10,strategies,editable,
+ps3,nhl10,captaincy,editable,
+ps3,nhl10,contracts,editable,
+ps3,nhl10,draft_picks,not-applicable,no draft-pick asset table (qHav)
+ps3,nhl10,jerseys,not-applicable,no team-jersey table (xjgw)
+ps3,nhl10,team_equipment,editable,
+ps3,nhl10,player_equipment,editable,
+ps3,nhl10,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl10,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl10,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl10,audio,disabled,audio tooling is a later phase
+ps3,nhl11,players,editable,
+ps3,nhl11,teams,editable,
+ps3,nhl11,arenas,readable,
+ps3,nhl11,career,readable,
+ps3,nhl11,attributes,editable,
+ps3,nhl11,traits,not-applicable,no player-trait slots in this schema (gen6)
+ps3,nhl11,lines,editable,
+ps3,nhl11,strategies,editable,
+ps3,nhl11,captaincy,editable,
+ps3,nhl11,contracts,editable,
+ps3,nhl11,draft_picks,editable,
+ps3,nhl11,jerseys,editable,
+ps3,nhl11,team_equipment,editable,
+ps3,nhl11,player_equipment,editable,
+ps3,nhl11,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl11,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl11,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl11,audio,disabled,audio tooling is a later phase
+ps3,nhl12,players,editable,
+ps3,nhl12,teams,editable,
+ps3,nhl12,arenas,readable,
+ps3,nhl12,career,readable,
+ps3,nhl12,attributes,editable,
+ps3,nhl12,traits,editable,
+ps3,nhl12,lines,editable,
+ps3,nhl12,strategies,editable,
+ps3,nhl12,captaincy,editable,
+ps3,nhl12,contracts,editable,
+ps3,nhl12,draft_picks,editable,
+ps3,nhl12,jerseys,editable,
+ps3,nhl12,team_equipment,editable,
+ps3,nhl12,player_equipment,editable,
+ps3,nhl12,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl12,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl12,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl12,audio,disabled,audio tooling is a later phase
+ps3,nhl13,players,editable,
+ps3,nhl13,teams,editable,
+ps3,nhl13,arenas,readable,
+ps3,nhl13,career,readable,
+ps3,nhl13,attributes,editable,
+ps3,nhl13,traits,editable,
+ps3,nhl13,lines,editable,
+ps3,nhl13,strategies,editable,
+ps3,nhl13,captaincy,editable,
+ps3,nhl13,contracts,editable,
+ps3,nhl13,draft_picks,editable,
+ps3,nhl13,jerseys,editable,
+ps3,nhl13,team_equipment,editable,
+ps3,nhl13,player_equipment,editable,
+ps3,nhl13,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl13,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl13,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl13,audio,disabled,audio tooling is a later phase
+ps3,nhl14,players,editable,
+ps3,nhl14,teams,editable,
+ps3,nhl14,arenas,readable,
+ps3,nhl14,career,readable,
+ps3,nhl14,attributes,editable,
+ps3,nhl14,traits,editable,
+ps3,nhl14,lines,editable,
+ps3,nhl14,strategies,editable,
+ps3,nhl14,captaincy,editable,
+ps3,nhl14,contracts,editable,
+ps3,nhl14,draft_picks,editable,
+ps3,nhl14,jerseys,editable,
+ps3,nhl14,team_equipment,editable,
+ps3,nhl14,player_equipment,editable,
+ps3,nhl14,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl14,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl14,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl14,audio,disabled,audio tooling is a later phase
+ps3,nhl15,players,editable,
+ps3,nhl15,teams,editable,
+ps3,nhl15,arenas,readable,
+ps3,nhl15,career,readable,
+ps3,nhl15,attributes,editable,
+ps3,nhl15,traits,editable,
+ps3,nhl15,lines,editable,
+ps3,nhl15,strategies,editable,
+ps3,nhl15,captaincy,editable,
+ps3,nhl15,contracts,editable,
+ps3,nhl15,draft_picks,editable,
+ps3,nhl15,jerseys,editable,
+ps3,nhl15,team_equipment,editable,
+ps3,nhl15,player_equipment,editable,
+ps3,nhl15,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhl15,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhl15,heads,disabled,head/appearance authoring is a later phase
+ps3,nhl15,audio,disabled,audio tooling is a later phase
+ps3,nhllegacy,players,editable,
+ps3,nhllegacy,teams,editable,
+ps3,nhllegacy,arenas,readable,
+ps3,nhllegacy,career,readable,
+ps3,nhllegacy,attributes,editable,
+ps3,nhllegacy,traits,editable,
+ps3,nhllegacy,lines,editable,
+ps3,nhllegacy,strategies,editable,
+ps3,nhllegacy,captaincy,editable,
+ps3,nhllegacy,contracts,editable,
+ps3,nhllegacy,draft_picks,editable,
+ps3,nhllegacy,jerseys,editable,
+ps3,nhllegacy,team_equipment,editable,
+ps3,nhllegacy,player_equipment,editable,
+ps3,nhllegacy,portraits,disabled,portrait authoring is a later phase (preview only)
+ps3,nhllegacy,logos,disabled,logo authoring is a later phase (preview only)
+ps3,nhllegacy,heads,disabled,head/appearance authoring is a later phase
+ps3,nhllegacy,audio,disabled,audio tooling is a later phase
+ps4,nhl15,players,editable,
+ps4,nhl15,teams,editable,
+ps4,nhl15,arenas,readable,
+ps4,nhl15,career,readable,
+ps4,nhl15,attributes,editable,
+ps4,nhl15,traits,editable,
+ps4,nhl15,lines,editable,
+ps4,nhl15,strategies,editable,
+ps4,nhl15,captaincy,editable,
+ps4,nhl15,contracts,editable,
+ps4,nhl15,draft_picks,editable,
+ps4,nhl15,jerseys,editable,
+ps4,nhl15,team_equipment,editable,
+ps4,nhl15,player_equipment,editable,
+ps4,nhl15,portraits,disabled,portrait authoring is a later phase (preview only)
+ps4,nhl15,logos,disabled,logo authoring is a later phase (preview only)
+ps4,nhl15,heads,disabled,head/appearance authoring is a later phase
+ps4,nhl15,audio,disabled,audio tooling is a later phase
+ps4,nhl16,players,editable,
+ps4,nhl16,teams,editable,
+ps4,nhl16,arenas,readable,
+ps4,nhl16,career,readable,
+ps4,nhl16,attributes,editable,
+ps4,nhl16,traits,editable,
+ps4,nhl16,lines,editable,
+ps4,nhl16,strategies,editable,
+ps4,nhl16,captaincy,editable,
+ps4,nhl16,contracts,editable,
+ps4,nhl16,draft_picks,editable,
+ps4,nhl16,jerseys,editable,
+ps4,nhl16,team_equipment,editable,
+ps4,nhl16,player_equipment,editable,
+ps4,nhl16,portraits,disabled,portrait authoring is a later phase (preview only)
+ps4,nhl16,logos,disabled,logo authoring is a later phase (preview only)
+ps4,nhl16,heads,disabled,head/appearance authoring is a later phase
+ps4,nhl16,audio,disabled,audio tooling is a later phase
+ps4,nhl17,players,editable,
+ps4,nhl17,teams,editable,
+ps4,nhl17,arenas,readable,
+ps4,nhl17,career,readable,
+ps4,nhl17,attributes,editable,
+ps4,nhl17,traits,editable,
+ps4,nhl17,lines,editable,
+ps4,nhl17,strategies,editable,
+ps4,nhl17,captaincy,editable,
+ps4,nhl17,contracts,editable,
+ps4,nhl17,draft_picks,editable,
+ps4,nhl17,jerseys,editable,
+ps4,nhl17,team_equipment,editable,
+ps4,nhl17,player_equipment,editable,
+ps4,nhl17,portraits,disabled,portrait authoring is a later phase (preview only)
+ps4,nhl17,logos,disabled,logo authoring is a later phase (preview only)
+ps4,nhl17,heads,disabled,head/appearance authoring is a later phase
+ps4,nhl17,audio,disabled,audio tooling is a later phase
+ps4,nhl18,players,editable,
+ps4,nhl18,teams,editable,
+ps4,nhl18,arenas,readable,
+ps4,nhl18,career,readable,
+ps4,nhl18,attributes,editable,
+ps4,nhl18,traits,editable,
+ps4,nhl18,lines,editable,
+ps4,nhl18,strategies,editable,
+ps4,nhl18,captaincy,editable,
+ps4,nhl18,contracts,editable,
+ps4,nhl18,draft_picks,editable,
+ps4,nhl18,jerseys,editable,
+ps4,nhl18,team_equipment,editable,
+ps4,nhl18,player_equipment,editable,
+ps4,nhl18,portraits,disabled,portrait authoring is a later phase (preview only)
+ps4,nhl18,logos,disabled,logo authoring is a later phase (preview only)
+ps4,nhl18,heads,disabled,head/appearance authoring is a later phase
+ps4,nhl18,audio,disabled,audio tooling is a later phase
+ps4,nhl19,players,editable,
+ps4,nhl19,teams,editable,
+ps4,nhl19,arenas,readable,
+ps4,nhl19,career,readable,
+ps4,nhl19,attributes,editable,
+ps4,nhl19,traits,editable,
+ps4,nhl19,lines,editable,
+ps4,nhl19,strategies,editable,
+ps4,nhl19,captaincy,editable,
+ps4,nhl19,contracts,editable,
+ps4,nhl19,draft_picks,editable,
+ps4,nhl19,jerseys,editable,
+ps4,nhl19,team_equipment,editable,
+ps4,nhl19,player_equipment,editable,
+ps4,nhl19,portraits,disabled,portrait authoring is a later phase (preview only)
+ps4,nhl19,logos,disabled,logo authoring is a later phase (preview only)
+ps4,nhl19,heads,disabled,head/appearance authoring is a later phase
+ps4,nhl19,audio,disabled,audio tooling is a later phase
+ps4,nhl20,players,editable,
+ps4,nhl20,teams,editable,
+ps4,nhl20,arenas,readable,
+ps4,nhl20,career,readable,
+ps4,nhl20,attributes,editable,
+ps4,nhl20,traits,editable,
+ps4,nhl20,lines,editable,
+ps4,nhl20,strategies,editable,
+ps4,nhl20,captaincy,editable,
+ps4,nhl20,contracts,editable,
+ps4,nhl20,draft_picks,editable,
+ps4,nhl20,jerseys,editable,
+ps4,nhl20,team_equipment,editable,
+ps4,nhl20,player_equipment,editable,
+ps4,nhl20,portraits,disabled,portrait authoring is a later phase (preview only)
+ps4,nhl20,logos,disabled,logo authoring is a later phase (preview only)
+ps4,nhl20,heads,disabled,head/appearance authoring is a later phase
+ps4,nhl20,audio,disabled,audio tooling is a later phase
+ps4,nhl21,players,editable,
+ps4,nhl21,teams,editable,
+ps4,nhl21,arenas,readable,
+ps4,nhl21,career,readable,
+ps4,nhl21,attributes,editable,
+ps4,nhl21,traits,editable,
+ps4,nhl21,lines,editable,
+ps4,nhl21,strategies,editable,
+ps4,nhl21,captaincy,editable,
+ps4,nhl21,contracts,editable,
+ps4,nhl21,draft_picks,editable,
+ps4,nhl21,jerseys,editable,
+ps4,nhl21,team_equipment,editable,
+ps4,nhl21,player_equipment,editable,
+ps4,nhl21,portraits,disabled,portrait authoring is a later phase (preview only)
+ps4,nhl21,logos,disabled,logo authoring is a later phase (preview only)
+ps4,nhl21,heads,disabled,head/appearance authoring is a later phase
+ps4,nhl21,audio,disabled,audio tooling is a later phase
+xbox360,nhl07,players,editable,
+xbox360,nhl07,teams,editable,
+xbox360,nhl07,arenas,not-applicable,no arena table (StEO)
+xbox360,nhl07,career,readable,
+xbox360,nhl07,attributes,editable,some ratings are not yet named
+xbox360,nhl07,traits,not-applicable,no player-trait slots in this schema (gen6)
+xbox360,nhl07,lines,editable,
+xbox360,nhl07,strategies,editable,
+xbox360,nhl07,captaincy,editable,
+xbox360,nhl07,contracts,editable,
+xbox360,nhl07,draft_picks,not-applicable,no draft-pick asset table (qHav)
+xbox360,nhl07,jerseys,not-applicable,no team-jersey table (xjgw)
+xbox360,nhl07,team_equipment,not-applicable,no team-equipment table (hHbv)
+xbox360,nhl07,player_equipment,not-applicable,no per-player equipment tables (gen6)
+xbox360,nhl07,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl07,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl07,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl07,audio,disabled,audio tooling is a later phase
+xbox360,nhl08,players,editable,
+xbox360,nhl08,teams,editable,
+xbox360,nhl08,arenas,readable,
+xbox360,nhl08,career,readable,
+xbox360,nhl08,attributes,editable,
+xbox360,nhl08,traits,not-applicable,no player-trait slots in this schema (gen6)
+xbox360,nhl08,lines,editable,
+xbox360,nhl08,strategies,editable,
+xbox360,nhl08,captaincy,editable,
+xbox360,nhl08,contracts,editable,
+xbox360,nhl08,draft_picks,not-applicable,no draft-pick asset table (qHav)
+xbox360,nhl08,jerseys,not-applicable,no team-jersey table (xjgw)
+xbox360,nhl08,team_equipment,editable,
+xbox360,nhl08,player_equipment,editable,
+xbox360,nhl08,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl08,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl08,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl08,audio,disabled,audio tooling is a later phase
+xbox360,nhl09,players,editable,
+xbox360,nhl09,teams,editable,
+xbox360,nhl09,arenas,readable,
+xbox360,nhl09,career,readable,
+xbox360,nhl09,attributes,editable,
+xbox360,nhl09,traits,not-applicable,no player-trait slots in this schema (gen6)
+xbox360,nhl09,lines,editable,
+xbox360,nhl09,strategies,editable,
+xbox360,nhl09,captaincy,editable,
+xbox360,nhl09,contracts,editable,
+xbox360,nhl09,draft_picks,not-applicable,no draft-pick asset table (qHav)
+xbox360,nhl09,jerseys,not-applicable,no team-jersey table (xjgw)
+xbox360,nhl09,team_equipment,editable,
+xbox360,nhl09,player_equipment,editable,
+xbox360,nhl09,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl09,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl09,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl09,audio,disabled,audio tooling is a later phase
+xbox360,nhl10,players,editable,
+xbox360,nhl10,teams,editable,
+xbox360,nhl10,arenas,readable,
+xbox360,nhl10,career,readable,
+xbox360,nhl10,attributes,editable,
+xbox360,nhl10,traits,not-applicable,no player-trait slots in this schema (gen6)
+xbox360,nhl10,lines,editable,
+xbox360,nhl10,strategies,editable,
+xbox360,nhl10,captaincy,editable,
+xbox360,nhl10,contracts,editable,
+xbox360,nhl10,draft_picks,not-applicable,no draft-pick asset table (qHav)
+xbox360,nhl10,jerseys,not-applicable,no team-jersey table (xjgw)
+xbox360,nhl10,team_equipment,editable,
+xbox360,nhl10,player_equipment,editable,
+xbox360,nhl10,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl10,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl10,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl10,audio,disabled,audio tooling is a later phase
+xbox360,nhl11,players,editable,
+xbox360,nhl11,teams,editable,
+xbox360,nhl11,arenas,readable,
+xbox360,nhl11,career,readable,
+xbox360,nhl11,attributes,editable,
+xbox360,nhl11,traits,not-applicable,no player-trait slots in this schema (gen6)
+xbox360,nhl11,lines,editable,
+xbox360,nhl11,strategies,editable,
+xbox360,nhl11,captaincy,editable,
+xbox360,nhl11,contracts,editable,
+xbox360,nhl11,draft_picks,editable,
+xbox360,nhl11,jerseys,editable,
+xbox360,nhl11,team_equipment,editable,
+xbox360,nhl11,player_equipment,editable,
+xbox360,nhl11,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl11,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl11,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl11,audio,disabled,audio tooling is a later phase
+xbox360,nhl12,players,editable,
+xbox360,nhl12,teams,editable,
+xbox360,nhl12,arenas,readable,
+xbox360,nhl12,career,readable,
+xbox360,nhl12,attributes,editable,
+xbox360,nhl12,traits,editable,
+xbox360,nhl12,lines,editable,
+xbox360,nhl12,strategies,editable,
+xbox360,nhl12,captaincy,editable,
+xbox360,nhl12,contracts,editable,
+xbox360,nhl12,draft_picks,editable,
+xbox360,nhl12,jerseys,editable,
+xbox360,nhl12,team_equipment,editable,
+xbox360,nhl12,player_equipment,editable,
+xbox360,nhl12,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl12,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl12,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl12,audio,disabled,audio tooling is a later phase
+xbox360,nhl13,players,editable,
+xbox360,nhl13,teams,editable,
+xbox360,nhl13,arenas,readable,
+xbox360,nhl13,career,readable,
+xbox360,nhl13,attributes,editable,
+xbox360,nhl13,traits,editable,
+xbox360,nhl13,lines,editable,
+xbox360,nhl13,strategies,editable,
+xbox360,nhl13,captaincy,editable,
+xbox360,nhl13,contracts,editable,
+xbox360,nhl13,draft_picks,editable,
+xbox360,nhl13,jerseys,editable,
+xbox360,nhl13,team_equipment,editable,
+xbox360,nhl13,player_equipment,editable,
+xbox360,nhl13,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl13,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl13,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl13,audio,disabled,audio tooling is a later phase
+xbox360,nhl14,players,editable,
+xbox360,nhl14,teams,editable,
+xbox360,nhl14,arenas,readable,
+xbox360,nhl14,career,readable,
+xbox360,nhl14,attributes,editable,
+xbox360,nhl14,traits,editable,
+xbox360,nhl14,lines,editable,
+xbox360,nhl14,strategies,editable,
+xbox360,nhl14,captaincy,editable,
+xbox360,nhl14,contracts,editable,
+xbox360,nhl14,draft_picks,editable,
+xbox360,nhl14,jerseys,editable,
+xbox360,nhl14,team_equipment,editable,
+xbox360,nhl14,player_equipment,editable,
+xbox360,nhl14,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl14,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl14,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl14,audio,disabled,audio tooling is a later phase
+xbox360,nhl15,players,editable,
+xbox360,nhl15,teams,editable,
+xbox360,nhl15,arenas,readable,
+xbox360,nhl15,career,readable,
+xbox360,nhl15,attributes,editable,
+xbox360,nhl15,traits,editable,
+xbox360,nhl15,lines,editable,
+xbox360,nhl15,strategies,editable,
+xbox360,nhl15,captaincy,editable,
+xbox360,nhl15,contracts,editable,
+xbox360,nhl15,draft_picks,editable,
+xbox360,nhl15,jerseys,editable,
+xbox360,nhl15,team_equipment,editable,
+xbox360,nhl15,player_equipment,editable,
+xbox360,nhl15,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhl15,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhl15,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhl15,audio,disabled,audio tooling is a later phase
+xbox360,nhllegacy,players,editable,
+xbox360,nhllegacy,teams,editable,
+xbox360,nhllegacy,arenas,readable,
+xbox360,nhllegacy,career,readable,
+xbox360,nhllegacy,attributes,editable,
+xbox360,nhllegacy,traits,editable,
+xbox360,nhllegacy,lines,editable,
+xbox360,nhllegacy,strategies,editable,
+xbox360,nhllegacy,captaincy,editable,
+xbox360,nhllegacy,contracts,editable,
+xbox360,nhllegacy,draft_picks,editable,
+xbox360,nhllegacy,jerseys,editable,
+xbox360,nhllegacy,team_equipment,editable,
+xbox360,nhllegacy,player_equipment,editable,
+xbox360,nhllegacy,portraits,disabled,portrait authoring is a later phase (preview only)
+xbox360,nhllegacy,logos,disabled,logo authoring is a later phase (preview only)
+xbox360,nhllegacy,heads,disabled,head/appearance authoring is a later phase
+xbox360,nhllegacy,audio,disabled,audio tooling is a later phase

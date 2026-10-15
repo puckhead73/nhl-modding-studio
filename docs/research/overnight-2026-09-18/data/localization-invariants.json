@@ -1,0 +1,278 @@
+[
+ {
+  "label": "x360-legacy",
+  "rows": 25782,
+  "max_records": 25782,
+  "reclen": 16,
+  "big_endian": true,
+  "fields": [
+   [
+    "sAhV",
+    13,
+    0,
+    800
+   ],
+   [
+    "ZbYb",
+    14,
+    32,
+    32000
+   ],
+   [
+    "jhKj",
+    3,
+    64,
+    32
+   ]
+  ],
+  "hash_sorted_asc": true,
+  "hash_sorted_desc": false,
+  "duplicate_hashes": 0,
+  "hash_matches_key": "25782/25782",
+  "tree_bytes": 660,
+  "first_ptr": 660,
+  "shared_text_ptrs": 0,
+  "shared_key_ptrs": 0,
+  "key_ptr_before_text_ptr": "25782/25782",
+  "key_ptrs_monotonic_in_record_order": true,
+  "gap_histogram_first2000": {
+   "0": 3500,
+   "1": 498
+  },
+  "pool_bytes": 1346408,
+  "db_size_hdr": 1759044,
+  "file_len": 1759044,
+  "eof_word": "80d7fe3e",
+  "hdr_hex": "4442000801000000001ad7440000000000000001e2fc1378"
+ },
+ {
+  "label": "x360-nhl10",
+  "rows": 12505,
+  "max_records": 12505,
+  "reclen": 16,
+  "big_endian": true,
+  "fields": [
+   [
+    "sAhV",
+    13,
+    0,
+    800
+   ],
+   [
+    "ZbYb",
+    14,
+    32,
+    32000
+   ],
+   [
+    "jhKj",
+    3,
+    64,
+    32
+   ]
+  ],
+  "hash_sorted_asc": false,
+  "hash_sorted_desc": false,
+  "duplicate_hashes": 0,
+  "hash_matches_key": "12505/12505",
+  "tree_bytes": 560,
+  "first_ptr": 560,
+  "shared_text_ptrs": 0,
+  "shared_key_ptrs": 0,
+  "key_ptr_before_text_ptr": "12505/12505",
+  "key_ptrs_monotonic_in_record_order": true,
+  "gap_histogram_first2000": {
+   "0": 3465,
+   "1": 531
+  },
+  "pool_bytes": 467792,
+  "db_size_hdr": 667996,
+  "file_len": 667996,
+  "eof_word": "db848123",
+  "hdr_hex": "4442000801000000000a315c000000000000000146841401"
+ },
+ {
+  "label": "ps3-legacy",
+  "rows": 25783,
+  "max_records": 25783,
+  "reclen": 16,
+  "big_endian": true,
+  "fields": [
+   [
+    "sAhV",
+    13,
+    0,
+    800
+   ],
+   [
+    "ZbYb",
+    14,
+    32,
+    32000
+   ],
+   [
+    "jhKj",
+    3,
+    64,
+    32
+   ]
+  ],
+  "hash_sorted_asc": true,
+  "hash_sorted_desc": false,
+  "duplicate_hashes": 0,
+  "hash_matches_key": "25783/25783",
+  "tree_bytes": 660,
+  "first_ptr": 660,
+  "shared_text_ptrs": 0,
+  "shared_key_ptrs": 0,
+  "key_ptr_before_text_ptr": "25783/25783",
+  "key_ptrs_monotonic_in_record_order": true,
+  "gap_histogram_first2000": {
+   "0": 3499,
+   "1": 499
+  },
+  "pool_bytes": 1345560,
+  "db_size_hdr": 1758212,
+  "file_len": 1758212,
+  "eof_word": "2efc08d1",
+  "hdr_hex": "4442000801000000001ad404000000000000000106988112"
+ },
+ {
+  "label": "ps4-nhl21",
+  "rows": 55766,
+  "max_records": 55766,
+  "reclen": 16,
+  "big_endian": false,
+  "fields": [
+   [
+    "bYbZ",
+    14,
+    0,
+    32000
+   ],
+   [
+    "jKhj",
+    3,
+    32,
+    32
+   ],
+   [
+    "VhAs",
+    13,
+    64,
+    800
+   ]
+  ],
+  "hash_sorted_asc": true,
+  "hash_sorted_desc": false,
+  "duplicate_hashes": 1,
+  "hash_matches_key": "55762/55766",
+  "tree_bytes": 640,
+  "first_ptr": 640,
+  "shared_text_ptrs": 0,
+  "shared_key_ptrs": 0,
+  "key_ptr_before_text_ptr": "37/55766",
+  "key_ptrs_monotonic_in_record_order": true,
+  "gap_histogram_first2000": {
+   "0": 3505,
+   "1": 494
+  },
+  "pool_bytes": 3028680,
+  "db_size_hdr": 3921060,
+  "file_len": 3921060,
+  "eof_word": "8b30453d",
+  "hdr_hex": "4442000800000000a4d43b000000000001000000c175326b"
+ },
+ {
+  "label": "ps4-nhl15",
+  "rows": 24251,
+  "max_records": 24251,
+  "reclen": 16,
+  "big_endian": false,
+  "fields": [
+   [
+    "bYbZ",
+    14,
+    0,
+    32000
+   ],
+   [
+    "jKhj",
+    3,
+    32,
+    32
+   ],
+   [
+    "VhAs",
+    13,
+    64,
+    800
+   ]
+  ],
+  "hash_sorted_asc": true,
+  "hash_sorted_desc": false,
+  "duplicate_hashes": 1,
+  "hash_matches_key": "24251/24251",
+  "tree_bytes": 616,
+  "first_ptr": 616,
+  "shared_text_ptrs": 0,
+  "shared_key_ptrs": 0,
+  "key_ptr_before_text_ptr": "30/24251",
+  "key_ptrs_monotonic_in_record_order": true,
+  "gap_histogram_first2000": {
+   "0": 3492,
+   "1": 507
+  },
+  "pool_bytes": 1258128,
+  "db_size_hdr": 1646268,
+  "file_len": 1646268,
+  "eof_word": "a9f62a7c",
+  "hdr_hex": "4442000800000000bc1e19000000000001000000ffedd3d4"
+ },
+ {
+  "label": "x360-nhl07",
+  "rows": 3952,
+  "max_records": 3952,
+  "reclen": 16,
+  "big_endian": true,
+  "fields": [
+   [
+    "sAhV",
+    13,
+    0,
+    800
+   ],
+   [
+    "ZbYb",
+    14,
+    32,
+    32000
+   ],
+   [
+    "jhKj",
+    3,
+    64,
+    32
+   ]
+  ],
+  "hash_sorted_asc": true,
+  "hash_sorted_desc": false,
+  "duplicate_hashes": 0,
+  "hash_matches_key": "3952/3952",
+  "tree_bytes": 380,
+  "first_ptr": 380,
+  "shared_text_ptrs": 0,
+  "shared_key_ptrs": 0,
+  "key_ptr_before_text_ptr": "3952/3952",
+  "key_ptrs_monotonic_in_record_order": true,
+  "gap_histogram_first2000": {
+   "0": 3531,
+   "1": 468
+  },
+  "pool_bytes": 119144,
+  "db_size_hdr": 182500,
+  "file_len": 182500,
+  "eof_word": "a61d4a03",
+  "hdr_hex": "44420008010000000002c8e40000000000000001d7c98fc2"
+ }
+]

@@ -40,9 +40,11 @@ export function AttributesTab({ projectId, player }: { projectId: number; player
     a.kind === "goalie" ? caps.goalie_ratings_labelled : caps.skater_ratings_labelled;
   const ratingsTotal =
     a.kind === "goalie" ? caps.goalie_ratings_total : caps.skater_ratings_total;
-  // The storage scale is per-era (PS3/X360: raw+36 → 36..99; PS4: stored 0..99 directly). The
-  // backend stamps the offset on each cell; read it off the first rating for the caption.
-  const plus36 = a.flat.some((c) => c.is_rating && c.field?.edit_offset === 36);
+  // The storage scale is per-era (PS3/X360 NHL 11–Legacy: raw+36 → 36..99; NHL 07–10: raw+50 →
+  // 50..99; PS4: stored 0..99 directly). The backend probes and stamps the offset on each cell;
+  // read it off the first rating for the caption so the words always match the numbers.
+  const scaleOffset = a.flat.find((c) => c.is_rating && c.field)?.field?.edit_offset ?? 0;
+  const scaleCaption = scaleOffset ? `raw + ${scaleOffset} → ${scaleOffset}..99` : "stored 0..99";
 
   const cell = (attr: AttributeViewDto | null | undefined) =>
     attr ? (
@@ -53,8 +55,12 @@ export function AttributesTab({ projectId, player }: { projectId: number; player
     <div className="space-y-5">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h3 className="text-sm font-semibold text-slate-100">{kindLabel} Ratings</h3>
-        <span className="text-[11px] uppercase tracking-wider text-slate-500">
-          from {player.ratings_table} · {plus36 ? "raw + 36 → 36..99" : "stored 0..99"}
+        <span
+          className="text-[11px] uppercase tracking-wider text-slate-500"
+          title={`Companion table ${player.ratings_table}`}
+          data-testid="ratings-scale-caption"
+        >
+          companion ratings · {scaleCaption}
         </span>
       </div>
 
@@ -72,14 +78,21 @@ export function AttributesTab({ projectId, player }: { projectId: number; player
         </p>
       )}
 
-      {/* Headline: Style + Potential Range/Accuracy (EA fields growthtier/growthletter — the in-game
-          scouting potential). Overall is formula-derived (added later); tEok/c_potential is NHLViewNG's
+      {/* Headline: the derived Overall, then Style + Potential Range/Accuracy (EA fields
+          growthtier/growthletter — the in-game scouting potential). tEok/c_potential is NHLViewNG's
           separate numeric potential, dormant in rosters, so it stays in the raw list only. */}
       <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-3">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
-          {cell(a.style)}
-          {cell(a.potential_range)}
-          {cell(a.potential_accuracy)}
+        <div className="flex flex-wrap items-start gap-x-6 gap-y-3">
+          <OverallTile
+            computed={a.computed_overall}
+            stored={a.stored_overall}
+            kindLabel={kindLabel}
+          />
+          <div className="grid min-w-0 flex-1 grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
+            {cell(a.style)}
+            {cell(a.potential_range)}
+            {cell(a.potential_accuracy)}
+          </div>
         </div>
         {(a.potential_range || a.potential_accuracy) && (
           <p className="mt-2 text-[11px] leading-snug text-slate-500">
@@ -108,21 +121,91 @@ export function AttributesTab({ projectId, player }: { projectId: number; player
         options={a.trait_options}
       />
 
-      <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
-        <summary className="cursor-pointer text-xs font-semibold text-slate-300">
-          All rating fields ({player.ratings.length}) — full editor
-        </summary>
-        <div className="mt-2 sm:grid sm:grid-cols-2 sm:gap-x-6">
-          {player.ratings.map((f) => (
-            <FieldRow
-              key={f.studio_field}
-              projectId={projectId}
-              record={rec}
-              field={{ ...f, editable: f.editable && editable }}
-            />
-          ))}
+      {/* The leftover drawer. The domain computes what ISN'T already represented above (curated
+          cells, headline cells, the 32 trait slots the checkbox menu owns), so no field is editable
+          in two places on this tab. The stored Overall stays here on purpose — it's the raw value
+          behind the derived headline number. */}
+      {a.other_fields.length > 0 && (
+        <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
+          <summary
+            className="cursor-pointer text-xs font-semibold text-slate-300"
+            title={`Raw editor for the remaining fields on the ${player.ratings_table} companion record.`}
+          >
+            Other {kindLabel.toLowerCase()} fields ({a.other_fields.length}) — All fields not presented for editing above, only change if you know what you are doing.
+            above
+          </summary>
+          <div className="mt-2 sm:grid sm:grid-cols-2 sm:gap-x-6">
+            {a.other_fields.map((f) => (
+              <FieldRow
+                key={f.studio_field}
+                projectId={projectId}
+                record={rec}
+                field={{ ...f, editable: f.editable && editable }}
+              />
+            ))}
+          </div>
+        </details>
+      )}
+    </div>
+  );
+}
+
+/** The derived Overall. Not an editable field: it's recomputed in the domain from this player's own
+ *  ratings with the EA regression (the same one the roster/lines OVR column ranks on), so it tracks
+ *  every rating edit live. The value stored in the companion row is shown only when it disagrees —
+ *  a mismatch means the game's own baked Overall is stale relative to the ratings. */
+function OverallTile({
+  computed,
+  stored,
+  kindLabel,
+}: {
+  computed: number | null;
+  stored: number | null;
+  kindLabel: string;
+}) {
+  // Outside the era the regression is calibrated for (NHL 10–13's p_/g_ ratings vocabulary) it reads
+  // a flat ~13 low, so the domain reports nothing rather than a confidently wrong rating — fall back
+  // to the value the record actually stores, clearly labelled as such.
+  if (computed === null) {
+    return (
+      <div
+        className="min-w-[7rem]"
+        title={
+          "This title's ratings layout isn't one the EA Overall regression is calibrated for " +
+          "(it was fit on the NHL 14+ vocabulary), so this is the Overall stored in the record — " +
+          "it will not follow your rating edits."
+        }
+      >
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          Overall <span className="text-slate-500">(stored)</span>
         </div>
-      </details>
+        {stored !== null ? (
+          <div className={"text-3xl font-bold tabular-nums " + ratingToneClass(stored)}>
+            {stored}
+          </div>
+        ) : (
+          <div className="text-3xl font-bold text-slate-600">—</div>
+        )}
+      </div>
+    );
+  }
+  const drift = stored !== null && stored !== computed;
+  return (
+    <div
+      className="min-w-[7rem]"
+      title={
+        `Calculated with the EA ${kindLabel.toLowerCase()} Overall regression from this player's ` +
+        `ratings — it isn't read from the file, so it follows your edits.` +
+        (stored !== null ? `\nStored in the record: ${stored}.` : "")
+      }
+    >
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-300/80">
+        Overall <span className="text-slate-500">(calculated)</span>
+      </div>
+      <div className={"text-3xl font-bold tabular-nums " + ratingToneClass(computed)}>
+        {computed}
+      </div>
+      {drift && <div className="text-[11px] text-amber-300">stored: {stored}</div>}
     </div>
   );
 }

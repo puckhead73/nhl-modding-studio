@@ -1,20 +1,24 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { DetailTabs, type DetailTab } from "../components/DetailTabs";
 import { EmptyState, Spinner } from "../components/primitives";
 import { ComputedRatings } from "../components/ComputedRatings";
+import { Section } from "../components/FieldProfile";
+import { ReadonlyField } from "../components/EditableField";
+import { HistoricalPlayerHeader, heightStr } from "../components/HistoricalPlayerHeader";
 import { useCrumbLabel } from "../lib/breadcrumbs";
-import { POS_BADGE, POS_FULL } from "../lib/position";
+import { POS_FULL } from "../lib/position";
 import { useRosterCart } from "../lib/rosterCart";
 import { useProject } from "../lib/project";
 import type { HistoricalPersonDto } from "../bindings/HistoricalPersonDto";
 import type { HistoricalCareerRowDto } from "../bindings/HistoricalCareerRowDto";
 
-/// Historical Player detail — read-only, brought to EA-player-view parity: a header + the same tab
-/// set as the EA DB player view (Player Data / Career Stats / Attributes / Appearance). Data is the
-/// FHM person: canonical bio, per-season timeline, career, computed EA ratings + raw FHM attributes.
+/// Historical Player detail — read-only, laid out as a mirror of the EA Game Database player view:
+/// the same banner shape (`HistoricalPlayerHeader`), the same subtab set (Player Data / Career Stats
+/// / Attributes / Equipment), and the same sectioned 4-column Player Data grid. Only the data differs
+/// — it's the FHM person: canonical bio, per-season timeline, career, computed EA ratings.
 export function HistoricalPlayerDetail() {
   const { id } = useParams<{ id: string }>();
   const personId = Number(id);
@@ -31,15 +35,23 @@ export function HistoricalPlayerDetail() {
   const p = q.data;
   if (!p) return <p className="text-sm text-slate-400">Select a player.</p>;
 
+  // The EA player view's subtab set, in its order, plus Appearance — the historical-only surface
+  // the Legends builder needs (portrait match + head/appearance selection for an imported legend).
+  // Neither Equipment nor Appearance has a corpus source yet, so both stand as placeholders.
   const tabs: DetailTab[] = [
-    { key: "data", label: "Player Data", content: <PlayerDataTab p={p} /> },
-    {
-      key: "career",
-      label: "Career Stats",
-      badge: p.career.length || undefined,
-      content: <CareerTab career={p.career} />,
-    },
+    { key: "player-data", label: "Player Data", content: <PlayerDataTab p={p} /> },
+    { key: "career", label: "Career Stats", content: <CareerTab career={p.career} /> },
     { key: "attributes", label: "Attributes", content: <AttributesTab p={p} /> },
+    {
+      key: "equipment",
+      label: "Equipment",
+      content: (
+        <EmptyState
+          title="Equipment — not in the historical corpus"
+          hint="Gear is resolved on the EA side once a legend is placed on a roster; editing arrives with the Hockey Shop / equipment tools."
+        />
+      ),
+    },
     {
       key: "appearance",
       label: "Appearance",
@@ -54,104 +66,61 @@ export function HistoricalPlayerDetail() {
 
   return (
     <div className="max-w-6xl space-y-3">
-      <Header p={p} />
+      <HistoricalPlayerHeader p={p} />
       <DetailTabs tabs={tabs} />
     </div>
   );
 }
 
-function Header({ p }: { p: HistoricalPersonDto }) {
-  return (
-    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-3">
-      <h2 className="text-lg font-semibold text-slate-100">
-        {p.first_name} {p.last_name}
-      </h2>
-      {p.nick_name && <span className="text-sm text-slate-400">“{p.nick_name}”</span>}
-      {p.position && (
-        <span
-          className={
-            "inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold " +
-            (POS_BADGE[p.position] ?? "bg-slate-800 text-slate-300")
-          }
-          title={POS_FULL[p.position] ?? p.position}
-        >
-          {p.position}
-        </span>
-      )}
-      <span className="text-xs text-slate-400">
-        {p.first_year ?? "?"}–{p.active ? "Present" : p.last_year ?? "?"}
-      </span>
-      {p.retired && <span className="text-[10px] font-semibold uppercase text-slate-500">Retired</span>}
-    </div>
-  );
+/** One read-only cell — the EA Player Data grid's `ReadonlyField`, with a nullable value. */
+function F({ label, value }: { label: string; value: string | number | null | undefined }) {
+  return <ReadonlyField label={label}>{value ?? ""}</ReadonlyField>;
 }
 
-/** A titled block whose cells flow in a 4-column grid (mirrors the EA Player Data layout). */
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section>
-      <h3 className="mb-3 border-b border-slate-800 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-        {title}
-      </h3>
-      <div className="grid grid-cols-2 items-start gap-x-8 gap-y-3 sm:grid-cols-3 lg:grid-cols-4">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-/** One read-only field cell. */
-function F({ label, value }: { label: string; value: ReactNode }) {
-  const empty = value == null || value === "";
-  return (
-    <div className="min-w-0">
-      <div className="text-[10px] uppercase tracking-wide text-slate-500">{label}</div>
-      <div className="truncate text-sm text-slate-100">{empty ? <span className="text-slate-600">—</span> : value}</div>
-    </div>
-  );
-}
-
-function heightStr(inches: number | null): string {
-  if (inches == null || inches <= 0) return "";
-  return `${Math.floor(inches / 12)}'${inches % 12}"`;
-}
 function salaryStr(dollars: number | null): string {
   if (dollars == null) return "";
   return dollars >= 1000 ? `$${dollars.toLocaleString()}` : `$${dollars}`;
 }
 
+/// The Player Data tab — the EA page's curated section stack (Biographical Data → Roster Data →
+/// Contract Data → Draft Data) in the same 4-column grid, read-only. Sections with no corpus data
+/// drop out entirely, the way the EA profile omits cells its schema doesn't carry. The two
+/// historical-only blocks (Awards, Season Timeline) follow the curated stack.
 function PlayerDataTab({ p }: { p: HistoricalPersonDto }) {
   const birthplace = [p.birthcity, p.birthstate].filter(Boolean).join(", ");
+  // `seasons` is newest-first — the jersey/club shown as "roster data" is the last one worn.
+  const latest = p.seasons[0] ?? null;
   return (
     <div className="space-y-6">
       <Section title="Biographical Data">
         <F label="First Name" value={p.first_name} />
         <F label="Last Name" value={p.last_name} />
         <F label="Nickname" value={p.nick_name} />
+        <F label="Height" value={heightStr(p.height)} />
+        <F label="Weight" value={p.weight ? `${p.weight} lb` : null} />
         <F label="Date of Birth" value={p.dob === "?" ? null : p.dob} />
         <F label="Birthplace" value={birthplace} />
         <F label="Nationality" value={p.nationality} />
-        <F label="Height" value={heightStr(p.height)} />
-        <F label="Weight" value={p.weight ? `${p.weight} lb` : null} />
-        <F label="Shoots/Catches" value={p.hand} />
         <F label="Position" value={p.position ? (POS_FULL[p.position] ?? p.position) : null} />
+        <F label="Handedness" value={p.hand} />
       </Section>
 
-      <Section title="Status">
+      <Section title="Roster Data">
+        <F label="Jersey Number" value={latest?.jersey} />
+        <F label="Main Team" value={latest?.team_name ?? latest?.team_abbr} />
+        <F label="League" value={latest?.league_abbr} />
+        <F label="Active" value={p.retired ? "No" : "Yes"} />
         <F label="First Season" value={p.first_year} />
         <F label="Last Season" value={p.last_year} />
         <F label="Seasons Played" value={p.seasons.length} />
-        <F label="Retired" value={p.retired ? "Yes" : "No"} />
         <F label="Goaltender" value={p.is_goalie ? "Yes" : "No"} />
       </Section>
 
-      {p.drafts.length > 0 && <DraftData drafts={p.drafts} />}
-
       {p.contract && (
-        <Section title="Contract">
-          <F label="Team" value={p.contract.team_abbr} />
+        <Section title="Contract Data">
+          <F label="Pro Team" value={p.contract.team_abbr} />
           <F label="Avg Salary" value={salaryStr(p.contract.avg_salary)} />
-          <F label="Years" value={p.contract.length} />
+          <F label="Length Of Contract" value={p.contract.length} />
           <F
             label="Clauses"
             value={
@@ -163,6 +132,8 @@ function PlayerDataTab({ p }: { p: HistoricalPersonDto }) {
           <F label="Scholarship" value={p.contract.scholarship} />
         </Section>
       )}
+
+      {p.drafts.length > 0 && <DraftData drafts={p.drafts} />}
 
       {p.awards.length > 0 && (
         <section>
@@ -192,13 +163,15 @@ function DraftData({ drafts }: { drafts: HistoricalPersonDto["drafts"] }) {
   const overall = primary.overall != null ? `#${primary.overall} overall` : null;
   return (
     <div className="space-y-3">
+      {/* EA cell labels (Draft Team / Draft Year / Draft Round / Draft Position), plus the
+          corpus-only draft name and overall pick. */}
       <Section title="Draft Data">
-        <F label="Draft" value={primary.draft_name} />
+        <F label="Draft Team" value={primary.team} />
         <F label="Draft Year" value={primary.year} />
+        <F label="Draft Round" value={primary.round} />
+        <F label="Draft Position" value={primary.pick} />
         <F label="Overall" value={overall} />
-        <F label="Round" value={primary.round} />
-        {primary.pick != null && <F label="Pick in Round" value={primary.pick} />}
-        <F label="Drafted By" value={primary.team} />
+        <F label="Draft" value={primary.draft_name} />
       </Section>
       {rest.length > 0 && (
         <details className="text-sm">
@@ -273,6 +246,7 @@ function SeasonTimeline({ p }: { p: HistoricalPersonDto }) {
                             personName: `${p.first_name} ${p.last_name}`.trim(),
                             seasonLabel: s.season_label,
                             position: p.position ?? null,
+                            jersey: s.jersey,
                           })
                         }
                         className="rounded border border-slate-700 px-1.5 py-0.5 text-[11px] text-slate-300 hover:border-sky-600 hover:text-sky-300 disabled:cursor-default disabled:border-slate-800 disabled:text-slate-600"

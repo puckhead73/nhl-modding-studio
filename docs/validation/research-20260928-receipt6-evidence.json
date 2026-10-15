@@ -1,0 +1,239 @@
+{
+  "scope": "In-memory extracted R142 validator and synthetic functions; no install reads or mutations; old helper not replayed",
+  "probe_sha256": "d7ee2d488bfa3c6abc27f5765d926449c3289354ece9a88dcac8d158b6d13616",
+  "original_vectors": [
+    {
+      "case": "baseline",
+      "expected": "edge",
+      "result": "edge",
+      "reason": null,
+      "pass": true
+    },
+    {
+      "case": "short block (240 B)",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "short parameter block (240 B): slot word at +256 lies outside it",
+      "pass": true
+    },
+    {
+      "case": "predecessor not 0xEF0001",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "predecessor type 0xef0002 (not 0xEF0001)",
+      "pass": true
+    },
+    {
+      "case": "block past header region",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "parameter block outside the header region",
+      "pass": true
+    },
+    {
+      "case": "slot word out of range",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "slot word 99 out of range (7 chunks)",
+      "pass": true
+    },
+    {
+      "case": "slot names a material (foreign type)",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "slot names chunk 2 of type 0xef0005 (not a 0x20003 descriptor)",
+      "pass": true
+    },
+    {
+      "case": "descriptor shorter than 0x38",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "descriptor 3: size 32 / extent outside the header region",
+      "pass": true
+    },
+    {
+      "case": "format 6007 (texel)",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "descriptor 3: format 6007/6007 outside 83f1 / 83f2 / 83f3",
+      "pass": true
+    },
+    {
+      "case": "entry word out of range",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "descriptor 3: entry word 50 out of range",
+      "pass": true
+    },
+    {
+      "case": "entry word names a non-data chunk",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "descriptor 3: entry 1 of type 0xef0001 (not a 0x10030 data entry)",
+      "pass": true
+    },
+    {
+      "case": "entry past file end",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "data entry 4 extends past the file",
+      "pass": true
+    },
+    {
+      "case": "entry size = 6 x chain (cube)",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "data entry 4: 240 B != plain chain 40 B (= 6 x chain: cube map)",
+      "pass": true
+    },
+    {
+      "case": "entry owned by two descriptors",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "data entry 4 owned by 2 descriptors",
+      "pass": true
+    },
+    {
+      "case": "entry overlaps another data entry",
+      "expected": "refuse",
+      "result": "refuse",
+      "reason": "data entry 4 overlaps another data entry",
+      "pass": true
+    }
+  ],
+  "additional": [
+    {
+      "case": "nested_overlap_selected_entry_inside_nonadjacent_span",
+      "admitted": true,
+      "edges": {
+        "adbd_TEST": {
+          "block": 1,
+          "block_bytes": 320,
+          "descriptor": 3,
+          "entry": 4,
+          "format": "DXT1",
+          "w": 8,
+          "h": 8,
+          "mips": 2,
+          "start": 1152,
+          "bytes": 40,
+          "levels": [
+            [
+              0,
+              8,
+              8,
+              0,
+              32
+            ],
+            [
+              1,
+              4,
+              4,
+              32,
+              8
+            ]
+          ]
+        }
+      },
+      "refusals": []
+    },
+    {
+      "case": "DXT5",
+      "admitted": true,
+      "edges": {
+        "adbd_TEST": {
+          "block": 1,
+          "block_bytes": 320,
+          "descriptor": 3,
+          "entry": 4,
+          "format": "DXT5",
+          "w": 8,
+          "h": 8,
+          "mips": 2,
+          "start": 1024,
+          "bytes": 80,
+          "levels": [
+            [
+              0,
+              8,
+              8,
+              0,
+              64
+            ],
+            [
+              1,
+              4,
+              4,
+              64,
+              16
+            ]
+          ]
+        }
+      },
+      "refusals": []
+    },
+    {
+      "case": "zero_width",
+      "admitted": true,
+      "edges": {
+        "adbd_TEST": {
+          "block": 1,
+          "block_bytes": 320,
+          "descriptor": 3,
+          "entry": 4,
+          "format": "DXT1",
+          "w": 0,
+          "h": 8,
+          "mips": 2,
+          "start": 1024,
+          "bytes": 24,
+          "levels": [
+            [
+              0,
+              1,
+              8,
+              0,
+              16
+            ],
+            [
+              1,
+              1,
+              4,
+              16,
+              8
+            ]
+          ]
+        }
+      },
+      "refusals": []
+    },
+    {
+      "case": "zero_mip_count",
+      "admitted": true,
+      "edges": {
+        "adbd_TEST": {
+          "block": 1,
+          "block_bytes": 320,
+          "descriptor": 3,
+          "entry": 4,
+          "format": "DXT1",
+          "w": 8,
+          "h": 8,
+          "mips": 0,
+          "start": 1024,
+          "bytes": 32,
+          "levels": [
+            [
+              0,
+              8,
+              8,
+              0,
+              32
+            ]
+          ]
+        }
+      },
+      "refusals": []
+    }
+  ]
+}

@@ -85,11 +85,16 @@ fn plausible_year(dob: &str) -> bool {
 }
 
 /// The first `ubPc` field descriptor whose metadata `name` matches (name-keyed bio fields).
-fn descriptor_by_name<'a>(meta: &FieldMetaIndex, table: &'a Table, name: &str) -> Option<&'a FieldDescriptor> {
-    table
-        .fields
-        .iter()
-        .find(|f| meta.field(&table.id.raw(), &f.id.raw()).map(|m| m.name == name).unwrap_or(false))
+fn descriptor_by_name<'a>(
+    meta: &FieldMetaIndex,
+    table: &'a Table,
+    name: &str,
+) -> Option<&'a FieldDescriptor> {
+    table.fields.iter().find(|f| {
+        meta.field(&table.id.raw(), &f.id.raw())
+            .map(|m| m.name == name)
+            .unwrap_or(false)
+    })
 }
 
 impl EaSlugIndex {
@@ -112,8 +117,16 @@ impl EaSlugIndex {
         };
 
         // Team-name resolver (human-readable surfaces) + each player's current team from the slots.
-        let team_names: HashMap<u64, String> =
-            team_summaries(db, meta, enums, model).into_iter().map(|t| (t.team_id, t.name)).collect();
+        let leagues = crate::leagues::LeagueCatalog::build(
+            db,
+            meta,
+            &crate::leagues::LeagueVocabularies::default(),
+            None,
+        );
+        let team_names: HashMap<u64, String> = team_summaries(db, meta, enums, model, &leagues)
+            .into_iter()
+            .map(|t| (t.team_id, t.name))
+            .collect();
         let mut team_of: HashMap<u64, u64> = HashMap::new();
         for s in &model.slots {
             if let Some(pid) = s.player_id {
@@ -146,7 +159,11 @@ impl EaSlugIndex {
         let read_dec = |f: Option<&FieldDescriptor>, rec: u32| -> Option<i64> {
             let f = f?;
             let raw = db.read_u64(bio, rec, f)?;
-            Some(meta.field(&bio.id.raw(), &f.id.raw()).map(|m| m.decode_raw(raw)).unwrap_or(raw as i64))
+            Some(
+                meta.field(&bio.id.raw(), &f.id.raw())
+                    .map(|m| m.decode_raw(raw))
+                    .unwrap_or(raw as i64),
+            )
         };
 
         for p in &model.players {
@@ -160,7 +177,11 @@ impl EaSlugIndex {
             };
 
             // Compose the DOB with the probed offsets — same formula as the display path.
-            let dob = match (read_dec(qfnd, rec), read_dec(jklp, rec), read_dec(kswi, rec)) {
+            let dob = match (
+                read_dec(qfnd, rec),
+                read_dec(jklp, rec),
+                read_dec(kswi, rec),
+            ) {
                 (Some(y), Some(m), Some(d)) => {
                     let (y, m, d) = (y + year_base, m + md_off, d + md_off);
                     if (DOB_MIN_YEAR..=DOB_MAX_YEAR).contains(&y)
@@ -175,13 +196,29 @@ impl EaSlugIndex {
                 _ => None,
             };
 
-            let team_name = team_of.get(&p.player_id).and_then(|t| team_names.get(t)).cloned();
+            let team_name = team_of
+                .get(&p.player_id)
+                .and_then(|t| team_names.get(t))
+                .cloned();
 
-            idx.by_name.entry(name_key(&last, &first)).or_default().push(p.player_id);
+            idx.by_name
+                .entry(name_key(&last, &first))
+                .or_default()
+                .push(p.player_id);
             if let Some(d) = &dob {
-                idx.by_name_dob.entry(person_slug(&last, &first, d)).or_default().push(p.player_id);
+                idx.by_name_dob
+                    .entry(person_slug(&last, &first, d))
+                    .or_default()
+                    .push(p.player_id);
             }
-            idx.rows.insert(p.player_id, BioRow { full_name, dob, team_name });
+            idx.rows.insert(
+                p.player_id,
+                BioRow {
+                    full_name,
+                    dob,
+                    team_name,
+                },
+            );
         }
         idx
     }
@@ -319,11 +356,32 @@ fn push_semantic_int(
     field_id: &str,
     human: i64,
 ) {
-    let Some(f) = table.fields.iter().find(|f| f.id.canonical(db.endian) == field_id) else {
-        skipped.push(SkippedField { field: field_id.to_string(), reason: "field absent on this title".into() });
+    let Some(f) = table
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == field_id)
+    else {
+        skipped.push(SkippedField {
+            field: field_id.to_string(),
+            reason: "field absent on this title".into(),
+        });
         return;
     };
-    let offset = read_field(db, meta, enums, table, 0, f).edit_offset.unwrap_or(0);
+    // A title-encoded cell (weight, six-bit rating, birth month / day) is never lowered with a
+    // guessed offset: no resolved encoding contract → skip and say so (`crate::encoding`).
+    let studio_table = table.id.canonical(db.endian);
+    if crate::encoding::is_contract_encoded(db, meta, &studio_table, field_id)
+        && crate::encoding::player_encoding(db, meta).is_none()
+    {
+        skipped.push(SkippedField {
+            field: field_id.to_string(),
+            reason: crate::encoding::UNRESOLVED_NOTE.to_string(),
+        });
+        return;
+    }
+    let offset = read_field(db, meta, enums, table, 0, f)
+        .edit_offset
+        .unwrap_or(0);
     let decoded = human - offset;
     match meta.field(&table.id.raw(), &f.id.raw()) {
         Some(m) if m.validate(decoded).is_ok() => {
@@ -335,7 +393,9 @@ fn push_semantic_int(
         }
         _ => skipped.push(SkippedField {
             field: field_id.to_string(),
-            reason: format!("human value {human} out of range (or field lacks metadata) on this title"),
+            reason: format!(
+                "human value {human} out of range (or field lacks metadata) on this title"
+            ),
         }),
     }
 }
@@ -355,7 +415,10 @@ fn person_writes(
     let mut skipped: Vec<SkippedField> = Vec::new();
 
     // Identity strings (no offset).
-    for (name, text) in [("firstname", &person.first_name), ("lastname", &person.last_name)] {
+    for (name, text) in [
+        ("firstname", &person.first_name),
+        ("lastname", &person.last_name),
+    ] {
         match descriptor_by_name(meta, bio, name) {
             Some(f) => writes.push(ImportWrite {
                 target: ImportTarget::Bio,
@@ -371,40 +434,140 @@ fn person_writes(
 
     // Physicals + jersey (each via its own probed edit_offset).
     if let Some(h) = person.height_inches {
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "ypBQ", h);
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "ypBQ",
+            h,
+        );
     }
     if let Some(w) = person.weight_lb {
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "sNZW", w);
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "sNZW",
+            w,
+        );
     }
     if let Some(j) = person.jersey {
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "sVRt", j);
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "sVRt",
+            j,
+        );
     }
 
     // Birthdate — each component decodes with the probed year base / month-day 0-or-1 index.
     if let Some((y, m, d)) = person.birthdate {
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "qFnd", y);
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "JKLp", m);
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "Kswi", d);
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "qFnd",
+            y,
+        );
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "JKLp",
+            m,
+        );
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "Kswi",
+            d,
+        );
     }
 
     // Enum-coded identity — handedness + nationality on the bio. Each carries a raw enum code the
     // adapter already resolved against the target title's vocabulary (offset 0; validated as a plain
     // int by `push_semantic_int`, and as an enum member by the op audit).
     if let Some(hand) = person.handedness {
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "GRkp", hand as i64);
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "GRkp",
+            hand as i64,
+        );
     }
     if let Some(nat) = person.nationality {
-        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "Lelh", nat as i64);
+        push_semantic_int(
+            db,
+            meta,
+            enums,
+            bio,
+            ImportTarget::Bio,
+            &mut writes,
+            &mut skipped,
+            "Lelh",
+            nat as i64,
+        );
     }
 
     // Ratings + skater style on the kind-correct companion (Spike S1 rating edit_offset). Style is the
     // 1-based `QgFs` archetype code (skaters only; the adapter leaves it `None` for goalies).
     if let Some(comp) = companion {
         if let Some(style) = person.style {
-            push_semantic_int(db, meta, enums, comp, ImportTarget::Companion, &mut writes, &mut skipped, "QgFs", style as i64);
+            push_semantic_int(
+                db,
+                meta,
+                enums,
+                comp,
+                ImportTarget::Companion,
+                &mut writes,
+                &mut skipped,
+                "QgFs",
+                style as i64,
+            );
         }
         for (fid, human) in &person.ratings {
-            push_semantic_int(db, meta, enums, comp, ImportTarget::Companion, &mut writes, &mut skipped, fid, *human);
+            push_semantic_int(
+                db,
+                meta,
+                enums,
+                comp,
+                ImportTarget::Companion,
+                &mut writes,
+                &mut skipped,
+                fid,
+                *human,
+            );
         }
     }
 
@@ -424,10 +587,27 @@ pub fn lower_create(
     target_team: u64,
 ) -> Option<(ImportOp, Vec<SkippedField>)> {
     let bio = db.table_canonical(ids::BIO)?;
-    let companion_id = if person.position == 4 { ids::GOALIE_AI } else { ids::SKATER_AI };
-    let (writes, skipped) =
-        person_writes(db, meta, enums, bio, db.table_canonical(companion_id), person);
-    Some((ImportOp::Create { team: target_team, position: person.position, writes }, skipped))
+    let companion_id = if person.position == 4 {
+        ids::GOALIE_AI
+    } else {
+        ids::SKATER_AI
+    };
+    let (writes, skipped) = person_writes(
+        db,
+        meta,
+        enums,
+        bio,
+        db.table_canonical(companion_id),
+        person,
+    );
+    Some((
+        ImportOp::Create {
+            team: target_team,
+            position: person.position,
+            writes,
+        },
+        skipped,
+    ))
 }
 
 /// Lower one **Match(existing)** person-season into an encoded [`ImportOp::Update`] over the matched
@@ -448,9 +628,21 @@ pub fn lower_update(
         tdb_relations::PlayerKind::Skater => ids::SKATER_AI,
         tdb_relations::PlayerKind::Goalie => ids::GOALIE_AI,
     };
-    let (writes, skipped) =
-        person_writes(db, meta, enums, bio, db.table_canonical(companion_id), person);
-    Some((ImportOp::Update { player_id: ea_player_id, writes }, skipped))
+    let (writes, skipped) = person_writes(
+        db,
+        meta,
+        enums,
+        bio,
+        db.table_canonical(companion_id),
+        person,
+    );
+    Some((
+        ImportOp::Update {
+            player_id: ea_player_id,
+            writes,
+        },
+        skipped,
+    ))
 }
 
 // ---------------------------------------------------------------------------
@@ -488,23 +680,51 @@ fn parse_dob(dob: &str) -> Option<(i64, i64, i64)> {
 /// explicit and verified against `attributes::{SKATER,GOALIE}_LABELS`. The three AI **biases** (0..15,
 /// id-keyed) and goalie **Angles** (no unambiguous field) are intentionally absent → skip, not guess.
 const SKATER_EA_TO_SUFFIX: &[(&str, &str)] = &[
-    ("Speed", "speed"), ("Body Checking", "bodychecking"), ("Endurance", "endurance"),
-    ("Puck Control", "puckcontrol"), ("Passing", "passing"), ("Slapshot Power", "slapshotpower"),
-    ("Slapshot Accuracy", "slapaccuracy"), ("Wristshot Power", "wristshotpower"),
-    ("Wristshot Accuracy", "wristaccuracy"), ("Agility", "agility"), ("Strength", "strength"),
-    ("Acceleration", "acceleration"), ("Balance", "balance"), ("Faceoffs", "faceoffs"),
-    ("Durability", "durability"), ("Deking", "deking"), ("Aggressiveness", "aggression"),
-    ("Poise", "poise"), ("Hand-Eye", "handeye"), ("Shot Blocking", "shotblocking"),
-    ("Offensive Awareness", "offawareness"), ("Defensive Awareness", "defawareness"),
-    ("Discipline", "discipline"), ("Fighting Skill", "fightingskill"), ("Stickchecking", "stickchecking"),
+    ("Speed", "speed"),
+    ("Body Checking", "bodychecking"),
+    ("Endurance", "endurance"),
+    ("Puck Control", "puckcontrol"),
+    ("Passing", "passing"),
+    ("Slapshot Power", "slapshotpower"),
+    ("Slapshot Accuracy", "slapaccuracy"),
+    ("Wristshot Power", "wristshotpower"),
+    ("Wristshot Accuracy", "wristaccuracy"),
+    ("Agility", "agility"),
+    ("Strength", "strength"),
+    ("Acceleration", "acceleration"),
+    ("Balance", "balance"),
+    ("Faceoffs", "faceoffs"),
+    ("Durability", "durability"),
+    ("Deking", "deking"),
+    ("Aggressiveness", "aggression"),
+    ("Poise", "poise"),
+    ("Hand-Eye", "handeye"),
+    ("Shot Blocking", "shotblocking"),
+    ("Offensive Awareness", "offawareness"),
+    ("Defensive Awareness", "defawareness"),
+    ("Discipline", "discipline"),
+    ("Fighting Skill", "fightingskill"),
+    ("Stickchecking", "stickchecking"),
 ];
 const GOALIE_EA_TO_SUFFIX: &[(&str, &str)] = &[
-    ("Glove Low", "gsl"), ("Glove High", "gsh"), ("Stick Low", "ssl"), ("Stick High", "ssh"),
-    ("Speed", "speed"), ("Agility", "agility"), ("Consistency", "consistency"),
-    ("Pokechecking", "pokecheck"), ("Endurance", "endurance"), ("Breakaways", "breakaway"),
-    ("Rebounds", "reboundcontrol"), ("Shot Recovery", "shotrecover"), ("Poise", "poise"),
-    ("Passing", "passing"), ("Puck Playing Frequency", "puckplayfrequency"),
-    ("Aggressiveness", "aggression"), ("Durability", "durability"), ("Vision", "vision"),
+    ("Glove Low", "gsl"),
+    ("Glove High", "gsh"),
+    ("Stick Low", "ssl"),
+    ("Stick High", "ssh"),
+    ("Speed", "speed"),
+    ("Agility", "agility"),
+    ("Consistency", "consistency"),
+    ("Pokechecking", "pokecheck"),
+    ("Endurance", "endurance"),
+    ("Breakaways", "breakaway"),
+    ("Rebounds", "reboundcontrol"),
+    ("Shot Recovery", "shotrecover"),
+    ("Poise", "poise"),
+    ("Passing", "passing"),
+    ("Puck Playing Frequency", "puckplayfrequency"),
+    ("Aggressiveness", "aggression"),
+    ("Durability", "durability"),
+    ("Vision", "vision"),
 ];
 
 /// FHM country names that differ from the EA nationality enum label. Only genuine spelling
@@ -515,7 +735,12 @@ const NATIONALITY_ALIASES: &[(&str, &str)] = &[("Czechia", "Czech Republic")];
 /// Resolve a corpus label to a target-title enum raw code for `table.field`, or `None` when the field
 /// carries no enum on this title or the label is not in its vocabulary. The single source of truth is
 /// the loaded, verified enum def — so this stays title-aware and never hardcodes a code.
-fn resolve_enum(enums: &EnumRegistry, table_canonical: &str, field: &str, label: &str) -> Option<u64> {
+fn resolve_enum(
+    enums: &EnumRegistry,
+    table_canonical: &str,
+    field: &str,
+    label: &str,
+) -> Option<u64> {
     let raw = enums.for_field(table_canonical, field)?.raw_of(label)?;
     u64::try_from(raw).ok()
 }
@@ -530,11 +755,19 @@ fn resolve_ratings(
     meta: &FieldMetaIndex,
     goalie: bool,
 ) -> Vec<(String, i64)> {
-    let table_id = if goalie { ids::GOALIE_AI } else { ids::SKATER_AI };
+    let table_id = if goalie {
+        ids::GOALIE_AI
+    } else {
+        ids::SKATER_AI
+    };
     let Some(comp) = db.table_canonical(table_id) else {
         return Vec::new();
     };
-    let bridge = if goalie { GOALIE_EA_TO_SUFFIX } else { SKATER_EA_TO_SUFFIX };
+    let bridge = if goalie {
+        GOALIE_EA_TO_SUFFIX
+    } else {
+        SKATER_EA_TO_SUFFIX
+    };
 
     // suffix → this title's field id, for the companion's rating fields.
     let mut field_of: HashMap<&str, String> = HashMap::new();
@@ -549,7 +782,9 @@ fn resolve_ratings(
     let mut out = Vec::new();
     for r in &set.ratings {
         let Some(v) = r.value else { continue };
-        let Some((_, suffix)) = bridge.iter().find(|(k, _)| *k == r.ea_key) else { continue };
+        let Some((_, suffix)) = bridge.iter().find(|(k, _)| *k == r.ea_key) else {
+            continue;
+        };
         if let Some(fid) = field_of.get(suffix) {
             out.push((fid.clone(), v as i64));
         }
@@ -582,7 +817,11 @@ pub fn person_season_from_corpus(
     let position = if detail.is_goalie {
         4
     } else {
-        detail.position.as_deref().map(ea_position_code).unwrap_or(0)
+        detail
+            .position
+            .as_deref()
+            .map(ea_position_code)
+            .unwrap_or(0)
     };
     let season = detail.seasons.iter().find(|s| s.season_year == season_year);
     let height_inches = season.and_then(|s| s.height).or(detail.height);
@@ -592,19 +831,35 @@ pub fn person_season_from_corpus(
     // Enum-coded identity, resolved against the **target title's** vocabulary (the bio table's own
     // canonical id). Handedness labels ("Left"/"Right") match the enum verbatim; nationality needs the
     // FHM→EA spelling alias. Anything unmapped resolves to `None` — skip, never guessed.
-    let bio_canon = db.table_canonical(ids::BIO).map(|t| t.id.canonical(db.endian));
-    let handedness = bio_canon.as_deref().zip(detail.hand.as_deref()).and_then(|(tbl, hand)| {
-        resolve_enum(enums, tbl, "GRkp", hand.trim())
-    });
-    let nationality = bio_canon.as_deref().zip(detail.nationality.as_deref()).and_then(|(tbl, country)| {
-        let country = country.trim();
-        let mapped = NATIONALITY_ALIASES.iter().find(|(k, _)| *k == country).map(|(_, v)| *v).unwrap_or(country);
-        resolve_enum(enums, tbl, "Lelh", mapped)
-    });
+    let bio_canon = db
+        .table_canonical(ids::BIO)
+        .map(|t| t.id.canonical(db.endian));
+    let handedness = bio_canon
+        .as_deref()
+        .zip(detail.hand.as_deref())
+        .and_then(|(tbl, hand)| resolve_enum(enums, tbl, "GRkp", hand.trim()));
+    let nationality = bio_canon
+        .as_deref()
+        .zip(detail.nationality.as_deref())
+        .and_then(|(tbl, country)| {
+            let country = country.trim();
+            let mapped = NATIONALITY_ALIASES
+                .iter()
+                .find(|(k, _)| *k == country)
+                .map(|(_, v)| *v)
+                .unwrap_or(country);
+            resolve_enum(enums, tbl, "Lelh", mapped)
+        });
 
     // Ratings + skater style: one `compute_person_ratings` pass yields both (the archetype's `ea_raw`
     // is the 1-based `QgFs` code; the classifier returns `None` for goalies).
-    let (ratings, style) = match crate::formula::compute_person_ratings(corpus, person_id, season_year, profile, maxima)? {
+    let (ratings, style) = match crate::formula::compute_person_ratings(
+        corpus,
+        person_id,
+        season_year,
+        profile,
+        maxima,
+    )? {
         Some(cr) => {
             let style = cr.set.archetype.as_ref().map(|a| a.ea_raw as u64);
             (resolve_ratings(&cr.set, db, meta, detail.is_goalie), style)
@@ -764,7 +1019,14 @@ pub fn lower_change_set(
     for item in items {
         // Resolve the corpus person-season (applying the cart's jersey override).
         let ps = match person_season_from_corpus(
-            corpus, item.person_id, item.season_year, profile, maxima, db, meta, enums,
+            corpus,
+            item.person_id,
+            item.season_year,
+            profile,
+            maxima,
+            db,
+            meta,
+            enums,
         )? {
             Some(mut ps) => {
                 if item.jersey.is_some() {
@@ -788,10 +1050,12 @@ pub fn lower_change_set(
 
         // Lower per the identity decision; record the outcome + merge the item's skips.
         let (outcome, op, skipped) = match item.identity {
-            ImportIdentity::CreateNew => match lower_create(db, meta, enums, &ps, item.target_team_id) {
-                Some((op, sk)) => (ItemOutcome::Created, Some(op), sk),
-                None => (ItemOutcome::NoBioTable, None, Vec::new()),
-            },
+            ImportIdentity::CreateNew => {
+                match lower_create(db, meta, enums, &ps, item.target_team_id) {
+                    Some((op, sk)) => (ItemOutcome::Created, Some(op), sk),
+                    None => (ItemOutcome::NoBioTable, None, Vec::new()),
+                }
+            }
             ImportIdentity::Match(id) => match lower_update(db, meta, enums, &ps, id) {
                 Some((op, sk)) => (ItemOutcome::Matched(id), Some(op), sk),
                 None => (ItemOutcome::NoSuchPlayer(id), None, Vec::new()),

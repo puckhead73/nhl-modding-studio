@@ -1,0 +1,223 @@
+# Versioned freshness scope definitions — docs/plans/qa-evidence-contract.md §5.3.
+#
+# A scope names the *implementation* an observation depends on. Its digest is taken over file
+# CONTENT only (R-CONTENT): a file touched without changing bytes invalidates nothing, and one
+# changed byte invalidates exactly the records that declared the containing scope. No date, commit
+# id or mtime participates.
+#
+# If any declared path matches nothing, that scope's digest is the literal `unknown` and every
+# record declaring it is not-fresh (R-FRESH-UNKNOWN). A missing input never produces `fresh`, and a
+# scope is never silently narrowed to whatever happens to exist.
+#
+# Bump `version` when the *meaning* of a scope changes (paths added or removed). Records declaring
+# the old version keep referring to it and are reported against it; they are never rewritten.
+#
+# This is a proposal for the first emitters (contract §9 Q-D — implementation work, not a user
+# decision). It is not a claim that any of these surfaces is verified.
+
+schema = "qa-scopes/1"
+
+# --------------------------------------------------------------------------------------------
+# Shared foundations. Everything that parses or describes a TDB depends on these, so a change here
+# invalidates every scope that shares it.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "shared-core"
+# v2 (C0-S2-INT1): v1 declared `defs/metadata/**`, which does not exist in this repository. Under
+# R-FRESH-UNKNOWN one glob matching nothing makes the whole digest `unknown`, and because every
+# other scope shares this one, *every* freshness digest was permanently `unknown` and no
+# observation could ever be fresh. The declared config is now the two definition trees the engine
+# actually loads (`Project::load(..., defs)`); per-title field metadata is not a `defs/` tree — it
+# ships as the `*-meta.xml` beside each anchor database and is not declared here.
+# v3 (C0-EMIT1-R1): that last sentence was the gap. Every emitter reads a per-title `*-meta.xml`
+# (`nhlng-meta.xml` / `nhl_game-meta.xml` / `NHL07NG-meta.xml`; `save_matrix` may even fall back to
+# the sibling platform's copy), every codec decision the assertions make flows from it, and the
+# merge compares no fixture digest against current content — so a metadata edit left every
+# dependent row `fresh`. The glob subset has no `*.xml` form and a directory prefix over `anchors/`
+# would hash ~660 MB of databases and save fixtures on every emitter start, CLI call and test, so
+# every `*-meta.xml` under `anchors/` is listed literally (the localisation metas ride along;
+# harmless). A changed, missing or unreadable file in this list makes every scope stale or
+# `unknown`. The list cannot fall behind silently: `evidence_freshness` asserts that every
+# `*-meta.xml` present under `anchors/` appears here.
+version = 3
+paths = ["crates/tdb-core/src/**", "crates/tdb-defs/src/**"]
+config = ["defs/enums/**", "defs/relationships/**"]
+schema = [
+  "anchors/ps3/nhl07/databases/NHL07NG-meta.xml",
+  "anchors/ps3/nhl07/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl08/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl08/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl09/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl09/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl10/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl11/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl11/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl12/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl12/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl13/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl13/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl14/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl14/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl15/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl15/databases/nhlng-meta.xml",
+  "anchors/ps3/nhllegacy/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhllegacy/databases/nhlng-meta.xml",
+  "anchors/ps4/nhl15/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl15/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl16/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl16/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl17/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl17/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl18/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl18/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl19/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl19/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl20/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl20/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl21/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl21/databases/nhl_game-meta.xml",
+  "anchors/xbox360/nhl07/databases/NHL07NG-meta.xml",
+  "anchors/xbox360/nhl07/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl08/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl08/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl09/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl09/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl10/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl10/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl11/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl11/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl12/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl12/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl13/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl13/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl14/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl14/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl15/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl15/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhllegacy/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhllegacy/databases/nhlng-meta.xml",
+]
+toolchain = ["rustc-version", "target-triple"]
+
+# --------------------------------------------------------------------------------------------
+# Database read and edit paths.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "db-read"
+# v2 (C0-S2-INT1-R1): v1 declared only `view.rs` + `surfaces.rs`, but the read assertions also drive
+# `Capabilities::probe` and `RosterModel::build`, and the coverage-key mapping lives in the emitter
+# test itself. A change to any of those changes what the observation means, so all three are now
+# declared and prior evidence goes stale when they move.
+# v3 (C0-EMIT1-R1): `Capabilities::probe` calls `attributes::{rating_label, rating_offset,
+# rating_suffix, is_gen6_style_schema}` and `view::probe_main_team_encoding`; `attributes.rs` was
+# not declared. `view.rs` also imports `assets::probe_birthdate_encoding`, but only for the
+# player/bio views the read assertions never reach, so `assets.rs` stays out.
+version = 3
+shared = ["shared-core"]
+paths = [
+  "crates/studio-domain/src/view.rs",
+  "crates/studio-domain/src/surfaces.rs",
+  "crates/studio-domain/src/capabilities.rs",
+  "crates/studio-domain/src/attributes.rs",
+  "crates/tdb-relations/src/**",
+]
+schema = ["docs/audits/data/schema/**"]
+mapping = ["crates/studio-domain/tests/surface_matrix.rs"]
+
+[[scope]]
+id = "db-edit"
+# v2 (C0-S2-INT1-R1): the scalar and relational assertions open through `Project::load`, rebuild the
+# entity model, and gate every applied operation on the whole-DB invariant audit — none of which v1
+# declared. The two emitter tests carry the operation → coverage-key mapping and the invariant
+# battery, so they are declared too.
+# v3 (C0-EMIT1): `Project::load` builds the enum registry that every `EditSession` operation and
+# `validate_invariants` consult, and `strategy-edit` resolves the cell it edits through
+# `team_tabs.rs`. v2 declared the enum *definitions* (`defs/enums/**`, via `shared-core`) but not
+# the registry code, so a change to `tdb-enums` or `team_tabs.rs` could not make prior evidence
+# stale.
+# v4 (C0-EMIT1-R1): the closure of what the edit assertions execute, at file granularity.
+# `set_field` mirrors strategy edits through `view::read_u64_by_studio`; `team_strategies` (the
+# `strategy-edit` cell picker) runs `view::read_field` + `view::team_name_by_id`, and `read_field`
+# consults `attributes::{is_gen6_style_schema, synthetic_enum}`; every `Result` the assertions
+# match on is shaped by `error.rs`. `view.rs`, `attributes.rs` and `error.rs` were not declared.
+# `tdb-savedata` is imported by `project.rs` but `detect_source` returns before reaching it for
+# the loose databases these two emitters feed, so it is not declared here (it is in
+# `save-containers`). `assets.rs` is reachable only through view functions the edit path never
+# calls and stays out.
+version = 4
+shared = ["shared-core"]
+paths = [
+  "crates/tdb-edit/src/**",
+  "crates/studio-domain/src/session.rs",
+  "crates/studio-domain/src/project.rs",
+  "crates/studio-domain/src/team_tabs.rs",
+  "crates/studio-domain/src/view.rs",
+  "crates/studio-domain/src/attributes.rs",
+  "crates/studio-domain/src/error.rs",
+  "crates/tdb-relations/src/**",
+  "crates/tdb-domain-validation/src/**",
+  "crates/tdb-enums/src/**",
+]
+mapping = [
+  "crates/studio-domain/tests/mutation_matrix.rs",
+  "crates/studio-domain/tests/operation_matrix.rs",
+]
+
+# --------------------------------------------------------------------------------------------
+# Save containers. Outer-console packaging (Q04) has no implementation to declare yet, so it has no
+# scope: a `save-outer-package` observation would carry `implementation_digest = "unknown"` and be
+# not-fresh, which is the correct report for an unimplemented required operation.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "save-containers"
+# v2 (C0-S2-INT1-R1): the repack proof does not stop at the codec — a ROSTER fixture takes a real
+# `EditSession` scalar edit through `Project::load` and back out again, so the edit seam is part of
+# what the observation depends on. The emitter test carries the detect/extract/repack split and the
+# variant mapping.
+# v3 (C0-EMIT1): the same `Project::load` seam builds the enum registry the semantic roster edit
+# goes through; declared for the same reason as in `db-edit` v3.
+# v4 (C0-EMIT1-R1): the ROSTER semantic edit is `Project::load` → `EditSession::set_field` →
+# `save` → reopen, i.e. the same seam `db-edit` v4 declares: `EditTransaction::commit` runs the
+# `tdb-domain-validation` invariants over a `tdb-relations` model, `set_field` consults
+# `team_tabs`/`view`/`attributes`, and `error.rs` shapes every result. v3 listed only a subset of
+# that closure; the list is now the `db-edit` closure plus the container codec.
+version = 4
+shared = ["shared-core"]
+paths = [
+  "crates/tdb-savedata/src/**",
+  "crates/tdb-edit/src/**",
+  "crates/studio-domain/src/session.rs",
+  "crates/studio-domain/src/project.rs",
+  "crates/studio-domain/src/team_tabs.rs",
+  "crates/studio-domain/src/view.rs",
+  "crates/studio-domain/src/attributes.rs",
+  "crates/studio-domain/src/error.rs",
+  "crates/tdb-relations/src/**",
+  "crates/tdb-domain-validation/src/**",
+  "crates/tdb-enums/src/**",
+]
+mapping = ["crates/studio-domain/tests/save_matrix.rs"]
+
+# --------------------------------------------------------------------------------------------
+# Assets.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "asset-codecs"
+version = 1
+shared = ["shared-core"]
+paths = ["crates/tdb-rx2/src/**", "crates/tdb-archive-codec/src/**", "crates/tdb-archive-big/src/**"]
+
+[[scope]]
+id = "headmesh-convert"
+version = 1
+shared = ["shared-core"]
+paths = ["crates/tdb-headmesh/src/**", "crates/tdb-rx2/src/**"]
+recipe = [
+  "defs/appearance/headmesh-matrix.toml",
+  "defs/appearance/head-uv-classes.toml",
+  "defs/appearance/legacy-bone-names.toml",
+]

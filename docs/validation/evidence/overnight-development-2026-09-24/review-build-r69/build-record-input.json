@@ -1,0 +1,20 @@
+{
+  "candidate": "NHL Modding Studio rc-20261001-r69",
+  "built": "2026-10-01T14:25:58-06:00 .. 14:28:44-06:00",
+  "command": "CARGO_INCREMENTAL=0 npm run build -- --no-bundle (repo root; tauri build; existing target\\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 974,
+  "dirty_manifest_sha256": "bb8f2914590c65df56dae2639f0631b8ee72d991d115eda680aa9a983d3afec6",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "051681c2661537acc123392218801fd799199356bb21a89cea1a357bac8b4968",
+  "exe_bytes": 51006464,
+  "defs_tree_sha256": "20c3b1833a4ce1125a2cc58d1b67a0cda2c6feaaf0b75b2ad0c0f711438fcf8b",
+  "frontend_dist_tree_sha256": "84abba136fd63400698efacb7aab315b420ec2f957283c48695afd133daa2d31",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "r68 contents (developer receipts through 67, plus 69: N21-001) plus 70: the bounded N21-001-R1 correction (a stale remembered PS4 roster is never replaced silently; an explicit database-only choice when none is left; unreadable nested save / library folders reported as an incomplete inventory). Also includes the unrelated pre-existing Cargo.toml dev/test profile change (release profile unchanged).",
+  "tree_sha_definition": "SHA-256 of '<relpath>\t<sha256>\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

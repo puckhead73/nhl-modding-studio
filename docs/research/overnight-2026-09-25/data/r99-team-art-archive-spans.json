@@ -1,0 +1,2381 @@
+{
+ "note": "R99 - Q-R88-2 (handoff 06 s F3 gap): shared spans and path-derived entry fields for TEAM-ART-keyed members inside the gen7 EB\narchives, measured read-only so the re-key / rename contract can state what an archive-side rename would have to touch and what it\ncould never touch safely. Trees: X360 Legacy, PS3 Legacy, X360 NHL 15, PS3 NHL 15 (EB 0x00000400, 16-byte rows), PS3 NHL 12 / 13\n(EB, the archive-backed kit titles). Every *.big under the tree root is listed with the R0 EB lister (eb_list.parse).\n\nPer archive row: `block << 4` = offset, `size` = stored size, `w4` (unknown word), `path_hash` (last word). Measured here:\n  H1 path_hash == djb2(path) under 4 variants (add / xor; as stored / lowercase) x 2 separators - which variant, how many rows;\n  W4 what `w4` is: equals size? 0? monotone with row index? the member's decompressed size (chunkzip header 'chunkzip' u32 at +8?)\n     - reported as a distribution, not a conclusion;\n  SPAN duplicate spans (same offset, same size), overlapping spans (interval overlap with a different offset) - per archive;\n  FAM team-art family classification by path grammar (handoff 04 s3): FE crest t{id} / s{id}, rink logo texlib_{id}_a_b, centerlogo_{id},\n     puck_{id}, kits rendering/{jersey,pant,sock}/texlib_{style}_{id}_{variant}; nameplate grammar is a CANDIDATE (rendering_name*{id});\n     for every team-art member: is its span shared with a member of a different id (any family) or with a non-team-art member;\n     ids per family; members per id; archives per family.\nNothing is written; no member is decoded except reading 16 header bytes for the W4 test.\nUsage: python r99_team_art_archive_spans.py <out.json> [--trees a,b] [--ps4 <inxp_00.big>]\n",
+ "started": "2026-09-25T14:23:07",
+ "trees": {
+  "x360-legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "archives": {
+    "audioboot.big": {
+     "entries": 25,
+     "size": 1381808,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 25,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 25,
+      "hits": {
+       "djb2-add|as-is|/": 25,
+       "djb2-add|lower|/": 25
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 13,
+      "stored:w4==0": 12
+     }
+    },
+    "audioboot2.big": {
+     "entries": 10,
+     "size": 5635728,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 10,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 10,
+      "hits": {
+       "djb2-add|as-is|/": 10,
+       "djb2-add|lower|/": 10
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 10
+     }
+    },
+    "boot.big": {
+     "entries": 599,
+     "size": 11184432,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 599,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 599,
+      "hits": {
+       "djb2-add|as-is|/": 599,
+       "djb2-add|lower|/": 599
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 143,
+      "chunklzx:w4!=u32@8": 57
+     }
+    },
+    "cache.big": {
+     "entries": 17760,
+     "size": 312439568,
+     "families": {
+      "fe_crest": 318
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 318,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 17760,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 17760,
+      "hits": {
+       "djb2-add|as-is|/": 17760,
+       "djb2-add|lower|/": 17760
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 7,
+      "stored:w4==0": 193
+     }
+    },
+    "cacheaudio.big": {
+     "entries": 7,
+     "size": 79725376,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 7,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 7,
+      "hits": {
+       "djb2-add|as-is|/": 7,
+       "djb2-add|lower|/": 7
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 7
+     }
+    },
+    "cacheboot.big": {
+     "entries": 61,
+     "size": 31705408,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 61,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 61,
+      "hits": {
+       "djb2-add|as-is|/": 61,
+       "djb2-add|lower|/": 61
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 51,
+      "chunklzx:w4!=u32@8": 10
+     }
+    },
+    "cachemovie.big": {
+     "entries": 6,
+     "size": 11086736,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 6,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 6,
+      "hits": {
+       "djb2-add|as-is|/": 6,
+       "djb2-add|lower|/": 6
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 6
+     }
+    },
+    "cacheoverlay.big": {
+     "entries": 63,
+     "size": 3487968,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 63,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 63,
+      "hits": {
+       "djb2-add|as-is|/": 63,
+       "djb2-add|lower|/": 63
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 63
+     }
+    },
+    "cacherender.big": {
+     "entries": 12845,
+     "size": 1458552880,
+     "families": {
+      "center_logo": 231,
+      "rink_logo": 1926,
+      "kit_pant": 959,
+      "puck": 249,
+      "kit_sock": 946
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 4311,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 12845,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 12845,
+      "hits": {
+       "djb2-add|as-is|/": 12845,
+       "djb2-add|lower|/": 12845
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 200
+     }
+    },
+    "data0.big": {
+     "entries": 5,
+     "size": 29427680,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 5,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 5,
+      "hits": {
+       "djb2-add|as-is|/": 5,
+       "djb2-add|lower|/": 5
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 2,
+      "chunklzx:w4!=u32@8": 3
+     }
+    },
+    "nocache.big": {
+     "entries": 9707,
+     "size": 2301830880,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 9707,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 9707,
+      "hits": {
+       "djb2-add|as-is|/": 9707,
+       "djb2-add|lower|/": 9707
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 194,
+      "chunklzx:w4!=u32@8": 6
+     }
+    },
+    "nocacherender.big": {
+     "entries": 3237,
+     "size": 1938855744,
+     "families": {
+      "nameplate_candidate": 904,
+      "kit_jersey": 905
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 1809,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 3237,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 3237,
+      "hits": {
+       "djb2-add|as-is|/": 3237,
+       "djb2-add|lower|/": 3237
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 200
+     }
+    },
+    "renderboot.big": {
+     "entries": 277,
+     "size": 9401248,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 277,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 277,
+      "hits": {
+       "djb2-add|as-is|/": 277,
+       "djb2-add|lower|/": 277
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 200
+     }
+    }
+   },
+   "family_totals": {
+    "fe_crest": 318,
+    "center_logo": 231,
+    "rink_logo": 1926,
+    "kit_pant": 959,
+    "puck": 249,
+    "kit_sock": 946,
+    "nameplate_candidate": 904,
+    "kit_jersey": 905
+   },
+   "ids_per_family": {
+    "fe_crest": {
+     "distinct_ids": 318,
+     "min": 0,
+     "max": 20087
+    },
+    "center_logo": {
+     "distinct_ids": 231,
+     "min": 0,
+     "max": 701
+    },
+    "rink_logo": {
+     "distinct_ids": 348,
+     "min": 0,
+     "max": 20085
+    },
+    "kit_pant": {
+     "distinct_ids": 221,
+     "min": 0,
+     "max": 421
+    },
+    "puck": {
+     "distinct_ids": 249,
+     "min": 0,
+     "max": 777
+    },
+    "kit_sock": {
+     "distinct_ids": 221,
+     "min": 0,
+     "max": 421
+    },
+    "nameplate_candidate": {
+     "distinct_ids": 221,
+     "min": 0,
+     "max": 421
+    },
+    "kit_jersey": {
+     "distinct_ids": 222,
+     "min": 0,
+     "max": 421
+    }
+   },
+   "shared_with_other_id": [],
+   "shared_with_non_team_art": [],
+   "hash": {
+    "djb2-add|as-is|/": 44602,
+    "djb2-add|lower|/": 44602
+   },
+   "hash_rows": 44602,
+   "w4": {
+    "chunklzx:w4!=u32@8": 696,
+    "stored:w4==0": 681
+   }
+  },
+  "ps3-legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR",
+   "archives": {
+    "audioboot.big": {
+     "entries": 25,
+     "size": 1827536,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 25,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 25,
+      "hits": {
+       "djb2-add|as-is|/": 25,
+       "djb2-add|lower|/": 25
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 13,
+      "stored:w4==0": 12
+     }
+    },
+    "audioboot2.big": {
+     "entries": 10,
+     "size": 8851440,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 10,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 10,
+      "hits": {
+       "djb2-add|as-is|/": 10,
+       "djb2-add|lower|/": 10
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 10
+     }
+    },
+    "boot.big": {
+     "entries": 469,
+     "size": 4900384,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 469,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 469,
+      "hits": {
+       "djb2-add|as-is|/": 469,
+       "djb2-add|lower|/": 469
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 14,
+      "chunkzip:w4!=u32@8": 186
+     }
+    },
+    "cache.big": {
+     "entries": 17758,
+     "size": 308267648,
+     "families": {
+      "fe_crest": 318
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 318,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 17758,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 17758,
+      "hits": {
+       "djb2-add|as-is|/": 17758,
+       "djb2-add|lower|/": 17758
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 7,
+      "stored:w4==0": 193
+     }
+    },
+    "cacheaudio.big": {
+     "entries": 7,
+     "size": 134970240,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 7,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 7,
+      "hits": {
+       "djb2-add|as-is|/": 7,
+       "djb2-add|lower|/": 7
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 7
+     }
+    },
+    "cacheboot.big": {
+     "entries": 61,
+     "size": 31714320,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 61,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 61,
+      "hits": {
+       "djb2-add|as-is|/": 61,
+       "djb2-add|lower|/": 61
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 51,
+      "chunkzip:w4!=u32@8": 10
+     }
+    },
+    "cachemovie.big": {
+     "entries": 6,
+     "size": 11086736,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 6,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 6,
+      "hits": {
+       "djb2-add|as-is|/": 6,
+       "djb2-add|lower|/": 6
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 6
+     }
+    },
+    "cacheoverlay.big": {
+     "entries": 63,
+     "size": 3264160,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 63,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 63,
+      "hits": {
+       "djb2-add|as-is|/": 63,
+       "djb2-add|lower|/": 63
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 63
+     }
+    },
+    "cacherender.big": {
+     "entries": 12846,
+     "size": 1435662384,
+     "families": {
+      "center_logo": 231,
+      "rink_logo": 1928,
+      "kit_pant": 959,
+      "puck": 249,
+      "kit_sock": 946
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 4313,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 12846,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 12846,
+      "hits": {
+       "djb2-add|as-is|/": 12846,
+       "djb2-add|lower|/": 12846
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 199,
+      "stored:w4==0": 1
+     }
+    },
+    "data0.big": {
+     "entries": 5,
+     "size": 29428976,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 5,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 5,
+      "hits": {
+       "djb2-add|as-is|/": 5,
+       "djb2-add|lower|/": 5
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 2,
+      "chunkzip:w4!=u32@8": 3
+     }
+    },
+    "nocache.big": {
+     "entries": 9706,
+     "size": 1764134128,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 9706,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 9706,
+      "hits": {
+       "djb2-add|as-is|/": 9706,
+       "djb2-add|lower|/": 9706
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 194,
+      "chunkzip:w4!=u32@8": 6
+     }
+    },
+    "nocacherender.big": {
+     "entries": 3238,
+     "size": 1720747824,
+     "families": {
+      "nameplate_candidate": 904,
+      "kit_jersey": 905
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 1809,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 3238,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 3238,
+      "hits": {
+       "djb2-add|as-is|/": 3238,
+       "djb2-add|lower|/": 3238
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 200
+     }
+    },
+    "renderboot.big": {
+     "entries": 277,
+     "size": 8856096,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 277,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 277,
+      "hits": {
+       "djb2-add|as-is|/": 277,
+       "djb2-add|lower|/": 277
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 195,
+      "stored:w4==0": 5
+     }
+    }
+   },
+   "family_totals": {
+    "fe_crest": 318,
+    "center_logo": 231,
+    "rink_logo": 1928,
+    "kit_pant": 959,
+    "puck": 249,
+    "kit_sock": 946,
+    "nameplate_candidate": 904,
+    "kit_jersey": 905
+   },
+   "ids_per_family": {
+    "fe_crest": {
+     "distinct_ids": 318,
+     "min": 0,
+     "max": 20087
+    },
+    "center_logo": {
+     "distinct_ids": 231,
+     "min": 0,
+     "max": 701
+    },
+    "rink_logo": {
+     "distinct_ids": 348,
+     "min": 0,
+     "max": 20085
+    },
+    "kit_pant": {
+     "distinct_ids": 221,
+     "min": 0,
+     "max": 421
+    },
+    "puck": {
+     "distinct_ids": 249,
+     "min": 0,
+     "max": 777
+    },
+    "kit_sock": {
+     "distinct_ids": 221,
+     "min": 0,
+     "max": 421
+    },
+    "nameplate_candidate": {
+     "distinct_ids": 221,
+     "min": 0,
+     "max": 421
+    },
+    "kit_jersey": {
+     "distinct_ids": 222,
+     "min": 0,
+     "max": 421
+    }
+   },
+   "shared_with_other_id": [],
+   "shared_with_non_team_art": [],
+   "hash": {
+    "djb2-add|as-is|/": 44471,
+    "djb2-add|lower|/": 44471
+   },
+   "hash_rows": 44471,
+   "w4": {
+    "chunkzip:w4!=u32@8": 819,
+    "stored:w4==0": 558
+   }
+  },
+  "x360-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15",
+   "archives": {
+    "audioboot.big": {
+     "entries": 25,
+     "size": 1230144,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 25,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 25,
+      "hits": {
+       "djb2-add|as-is|/": 25,
+       "djb2-add|lower|/": 25
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 13,
+      "stored:w4==0": 12
+     }
+    },
+    "audioboot2.big": {
+     "entries": 10,
+     "size": 5635728,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 10,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 10,
+      "hits": {
+       "djb2-add|as-is|/": 10,
+       "djb2-add|lower|/": 10
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 10
+     }
+    },
+    "boot.big": {
+     "entries": 599,
+     "size": 11267408,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 599,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 599,
+      "hits": {
+       "djb2-add|as-is|/": 599,
+       "djb2-add|lower|/": 599
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 143,
+      "chunklzx:w4!=u32@8": 57
+     }
+    },
+    "cache.big": {
+     "entries": 16346,
+     "size": 288538928,
+     "families": {
+      "fe_crest": 313
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 313,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 16346,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 16346,
+      "hits": {
+       "djb2-add|as-is|/": 16346,
+       "djb2-add|lower|/": 16346
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 7,
+      "stored:w4==0": 193
+     }
+    },
+    "cacheaudio.big": {
+     "entries": 7,
+     "size": 79725376,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 7,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 7,
+      "hits": {
+       "djb2-add|as-is|/": 7,
+       "djb2-add|lower|/": 7
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 7
+     }
+    },
+    "cacheboot.big": {
+     "entries": 61,
+     "size": 30671072,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 61,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 61,
+      "hits": {
+       "djb2-add|as-is|/": 61,
+       "djb2-add|lower|/": 61
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 51,
+      "chunklzx:w4!=u32@8": 10
+     }
+    },
+    "cachemovie.big": {
+     "entries": 6,
+     "size": 11086736,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 6,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 6,
+      "hits": {
+       "djb2-add|as-is|/": 6,
+       "djb2-add|lower|/": 6
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 6
+     }
+    },
+    "cacheoverlay.big": {
+     "entries": 63,
+     "size": 3487968,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 63,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 63,
+      "hits": {
+       "djb2-add|as-is|/": 63,
+       "djb2-add|lower|/": 63
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 63
+     }
+    },
+    "cacherender.big": {
+     "entries": 11746,
+     "size": 1284140496,
+     "families": {
+      "center_logo": 226,
+      "rink_logo": 1784,
+      "kit_pant": 684,
+      "puck": 244,
+      "kit_sock": 683
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 3621,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 11746,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 11746,
+      "hits": {
+       "djb2-add|as-is|/": 11746,
+       "djb2-add|lower|/": 11746
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 200
+     }
+    },
+    "data0.big": {
+     "entries": 5,
+     "size": 29427680,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 5,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 5,
+      "hits": {
+       "djb2-add|as-is|/": 5,
+       "djb2-add|lower|/": 5
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 2,
+      "chunklzx:w4!=u32@8": 3
+     }
+    },
+    "nocache.big": {
+     "entries": 8895,
+     "size": 2980250656,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 8895,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 8895,
+      "hits": {
+       "djb2-add|as-is|/": 8895,
+       "djb2-add|lower|/": 8895
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 194,
+      "chunklzx:w4!=u32@8": 6
+     }
+    },
+    "nocacherender.big": {
+     "entries": 2794,
+     "size": 1522484192,
+     "families": {
+      "nameplate_candidate": 683,
+      "kit_jersey": 683
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 1366,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 2794,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 2794,
+      "hits": {
+       "djb2-add|as-is|/": 2794,
+       "djb2-add|lower|/": 2794
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 200
+     }
+    },
+    "renderboot.big": {
+     "entries": 280,
+     "size": 9566064,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 280,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 280,
+      "hits": {
+       "djb2-add|as-is|/": 280,
+       "djb2-add|lower|/": 280
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunklzx:w4!=u32@8": 200
+     }
+    }
+   },
+   "family_totals": {
+    "fe_crest": 313,
+    "center_logo": 226,
+    "rink_logo": 1784,
+    "kit_pant": 684,
+    "puck": 244,
+    "kit_sock": 683,
+    "nameplate_candidate": 683,
+    "kit_jersey": 683
+   },
+   "ids_per_family": {
+    "fe_crest": {
+     "distinct_ids": 313,
+     "min": 0,
+     "max": 20087
+    },
+    "center_logo": {
+     "distinct_ids": 226,
+     "min": 0,
+     "max": 701
+    },
+    "rink_logo": {
+     "distinct_ids": 339,
+     "min": 0,
+     "max": 20085
+    },
+    "kit_pant": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    },
+    "puck": {
+     "distinct_ids": 244,
+     "min": 0,
+     "max": 777
+    },
+    "kit_sock": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    },
+    "nameplate_candidate": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    },
+    "kit_jersey": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    }
+   },
+   "shared_with_other_id": [],
+   "shared_with_non_team_art": [],
+   "hash": {
+    "djb2-add|as-is|/": 40837,
+    "djb2-add|lower|/": 40837
+   },
+   "hash_rows": 40837,
+   "w4": {
+    "chunklzx:w4!=u32@8": 696,
+    "stored:w4==0": 681
+   }
+  },
+  "ps3-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR",
+   "archives": {
+    "audioboot.big": {
+     "entries": 25,
+     "size": 1587600,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 25,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 25,
+      "hits": {
+       "djb2-add|as-is|/": 25,
+       "djb2-add|lower|/": 25
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 13,
+      "stored:w4==0": 12
+     }
+    },
+    "audioboot2.big": {
+     "entries": 10,
+     "size": 8851440,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 10,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 10,
+      "hits": {
+       "djb2-add|as-is|/": 10,
+       "djb2-add|lower|/": 10
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 10
+     }
+    },
+    "boot.big": {
+     "entries": 469,
+     "size": 4985584,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 469,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 469,
+      "hits": {
+       "djb2-add|as-is|/": 469,
+       "djb2-add|lower|/": 469
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 14,
+      "chunkzip:w4!=u32@8": 186
+     }
+    },
+    "cache.big": {
+     "entries": 16344,
+     "size": 284865616,
+     "families": {
+      "fe_crest": 313
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 313,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 16344,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 16344,
+      "hits": {
+       "djb2-add|as-is|/": 16344,
+       "djb2-add|lower|/": 16344
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 7,
+      "stored:w4==0": 193
+     }
+    },
+    "cacheaudio.big": {
+     "entries": 7,
+     "size": 134970240,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 7,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 7,
+      "hits": {
+       "djb2-add|as-is|/": 7,
+       "djb2-add|lower|/": 7
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 7
+     }
+    },
+    "cacheboot.big": {
+     "entries": 61,
+     "size": 30676448,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 61,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 61,
+      "hits": {
+       "djb2-add|as-is|/": 61,
+       "djb2-add|lower|/": 61
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 51,
+      "chunkzip:w4!=u32@8": 10
+     }
+    },
+    "cachemovie.big": {
+     "entries": 6,
+     "size": 11086736,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 6,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 6,
+      "hits": {
+       "djb2-add|as-is|/": 6,
+       "djb2-add|lower|/": 6
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 6
+     }
+    },
+    "cacheoverlay.big": {
+     "entries": 63,
+     "size": 3264160,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 63,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 63,
+      "hits": {
+       "djb2-add|as-is|/": 63,
+       "djb2-add|lower|/": 63
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 63
+     }
+    },
+    "cacherender.big": {
+     "entries": 11747,
+     "size": 1275259152,
+     "families": {
+      "center_logo": 226,
+      "rink_logo": 1786,
+      "kit_pant": 684,
+      "puck": 244,
+      "kit_sock": 683
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 3623,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 11747,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 11747,
+      "hits": {
+       "djb2-add|as-is|/": 11747,
+       "djb2-add|lower|/": 11747
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 199,
+      "stored:w4==0": 1
+     }
+    },
+    "data0.big": {
+     "entries": 5,
+     "size": 29428976,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 5,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 5,
+      "hits": {
+       "djb2-add|as-is|/": 5,
+       "djb2-add|lower|/": 5
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 2,
+      "chunkzip:w4!=u32@8": 3
+     }
+    },
+    "nocache.big": {
+     "entries": 8894,
+     "size": 2511680992,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 8894,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 8894,
+      "hits": {
+       "djb2-add|as-is|/": 8894,
+       "djb2-add|lower|/": 8894
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 194,
+      "chunkzip:w4!=u32@8": 6
+     }
+    },
+    "nocacherender.big": {
+     "entries": 2794,
+     "size": 1349931920,
+     "families": {
+      "nameplate_candidate": 683,
+      "kit_jersey": 683
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 1366,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 2794,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 2794,
+      "hits": {
+       "djb2-add|as-is|/": 2794,
+       "djb2-add|lower|/": 2794
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 200
+     }
+    },
+    "renderboot.big": {
+     "entries": 280,
+     "size": 9023872,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 280,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 280,
+      "hits": {
+       "djb2-add|as-is|/": 280,
+       "djb2-add|lower|/": 280
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 195,
+      "stored:w4==0": 5
+     }
+    }
+   },
+   "family_totals": {
+    "fe_crest": 313,
+    "center_logo": 226,
+    "rink_logo": 1786,
+    "kit_pant": 684,
+    "puck": 244,
+    "kit_sock": 683,
+    "nameplate_candidate": 683,
+    "kit_jersey": 683
+   },
+   "ids_per_family": {
+    "fe_crest": {
+     "distinct_ids": 313,
+     "min": 0,
+     "max": 20087
+    },
+    "center_logo": {
+     "distinct_ids": 226,
+     "min": 0,
+     "max": 701
+    },
+    "rink_logo": {
+     "distinct_ids": 339,
+     "min": 0,
+     "max": 20085
+    },
+    "kit_pant": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    },
+    "puck": {
+     "distinct_ids": 244,
+     "min": 0,
+     "max": 777
+    },
+    "kit_sock": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    },
+    "nameplate_candidate": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    },
+    "kit_jersey": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 505
+    }
+   },
+   "shared_with_other_id": [],
+   "shared_with_non_team_art": [],
+   "hash": {
+    "djb2-add|as-is|/": 40705,
+    "djb2-add|lower|/": 40705
+   },
+   "hash_rows": 40705,
+   "w4": {
+    "chunkzip:w4!=u32@8": 819,
+    "stored:w4==0": 558
+   }
+  },
+  "ps3-nhl12": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 12\\[BLUS 30791] NHL\u00ae 12\\PS3_GAME\\USRDIR",
+   "archives": {
+    "audioboot.big": {
+     "entries": 25,
+     "size": 2453776,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 25,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 25,
+      "hits": {
+       "djb2-add|as-is|/": 25,
+       "djb2-add|lower|/": 25
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 13,
+      "stored:w4==0": 12
+     }
+    },
+    "audioboot2.big": {
+     "entries": 9,
+     "size": 4546832,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 9,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 9,
+      "hits": {
+       "djb2-add|as-is|/": 9,
+       "djb2-add|lower|/": 9
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 9
+     }
+    },
+    "boot.big": {
+     "entries": 435,
+     "size": 5974096,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 435,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 435,
+      "hits": {
+       "djb2-add|as-is|/": 435,
+       "djb2-add|lower|/": 435
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 13,
+      "chunkzip:w4!=u32@8": 187
+     }
+    },
+    "cache.big": {
+     "entries": 12902,
+     "size": 276458720,
+     "families": {
+      "fe_crest": 302
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 302,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 12902,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 12902,
+      "hits": {
+       "djb2-add|as-is|/": 12902,
+       "djb2-add|lower|/": 12902
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 180,
+      "chunkzip:w4!=u32@8": 20
+     }
+    },
+    "cacherender.big": {
+     "entries": 12141,
+     "size": 1207751360,
+     "families": {
+      "center_logo": 213,
+      "rink_logo": 1701,
+      "kit_pant": 979,
+      "puck": 212,
+      "kit_sock": 2012
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 5117,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 12141,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 12141,
+      "hits": {
+       "djb2-add|as-is|/": 12141,
+       "djb2-add|lower|/": 12141
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 200
+     }
+    },
+    "data0.big": {
+     "entries": 2,
+     "size": 23003184,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 2,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 2,
+      "hits": {
+       "djb2-add|as-is|/": 2,
+       "djb2-add|lower|/": 2
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 2
+     }
+    },
+    "nocache.big": {
+     "entries": 344,
+     "size": 2056192880,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 344,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 344,
+      "hits": {
+       "djb2-add|as-is|/": 344,
+       "djb2-add|lower|/": 344
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 194,
+      "chunkzip:w4!=u32@8": 6
+     }
+    },
+    "nocacherender.big": {
+     "entries": 9710,
+     "size": 1682716368,
+     "families": {
+      "nameplate_candidate": 969,
+      "kit_jersey": 967
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 1936,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 9710,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 9710,
+      "hits": {
+       "djb2-add|as-is|/": 9710,
+       "djb2-add|lower|/": 9710
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 200
+     }
+    }
+   },
+   "family_totals": {
+    "fe_crest": 302,
+    "center_logo": 213,
+    "rink_logo": 1701,
+    "kit_pant": 979,
+    "puck": 212,
+    "kit_sock": 2012,
+    "nameplate_candidate": 969,
+    "kit_jersey": 967
+   },
+   "ids_per_family": {
+    "fe_crest": {
+     "distinct_ids": 302,
+     "min": 0,
+     "max": 20085
+    },
+    "center_logo": {
+     "distinct_ids": 213,
+     "min": 0,
+     "max": 600
+    },
+    "rink_logo": {
+     "distinct_ids": 337,
+     "min": 0,
+     "max": 20085
+    },
+    "kit_pant": {
+     "distinct_ids": 228,
+     "min": 0,
+     "max": 505
+    },
+    "puck": {
+     "distinct_ids": 212,
+     "min": 0,
+     "max": 777
+    },
+    "kit_sock": {
+     "distinct_ids": 2,
+     "min": 0,
+     "max": 1
+    },
+    "nameplate_candidate": {
+     "distinct_ids": 228,
+     "min": 0,
+     "max": 505
+    },
+    "kit_jersey": {
+     "distinct_ids": 228,
+     "min": 0,
+     "max": 505
+    }
+   },
+   "shared_with_other_id": [],
+   "shared_with_non_team_art": [],
+   "hash": {
+    "djb2-add|as-is|/": 35568,
+    "djb2-add|lower|/": 35568
+   },
+   "hash_rows": 35568,
+   "w4": {
+    "chunkzip:w4!=u32@8": 626,
+    "stored:w4==0": 410
+   }
+  },
+  "ps3-nhl13": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 13\\PS3_GAME\\USRDIR",
+   "archives": {
+    "audioboot.big": {
+     "entries": 25,
+     "size": 2252880,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 25,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 25,
+      "hits": {
+       "djb2-add|as-is|/": 25,
+       "djb2-add|lower|/": 25
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 13,
+      "stored:w4==0": 12
+     }
+    },
+    "audioboot2.big": {
+     "entries": 10,
+     "size": 9176064,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 10,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 10,
+      "hits": {
+       "djb2-add|as-is|/": 10,
+       "djb2-add|lower|/": 10
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 10
+     }
+    },
+    "boot.big": {
+     "entries": 465,
+     "size": 4389056,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 465,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 465,
+      "hits": {
+       "djb2-add|as-is|/": 465,
+       "djb2-add|lower|/": 465
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 12,
+      "chunkzip:w4!=u32@8": 188
+     }
+    },
+    "cache.big": {
+     "entries": 14205,
+     "size": 448495552,
+     "families": {
+      "fe_crest": 305
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 305,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 14205,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 14205,
+      "hits": {
+       "djb2-add|as-is|/": 14205,
+       "djb2-add|lower|/": 14205
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 188,
+      "chunkzip:w4!=u32@8": 12
+     }
+    },
+    "cacheaudio.big": {
+     "entries": 7,
+     "size": 138218176,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 7,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 7,
+      "hits": {
+       "djb2-add|as-is|/": 7,
+       "djb2-add|lower|/": 7
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 7
+     }
+    },
+    "cachemovie.big": {
+     "entries": 6,
+     "size": 11086736,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 6,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 6,
+      "hits": {
+       "djb2-add|as-is|/": 6,
+       "djb2-add|lower|/": 6
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 6
+     }
+    },
+    "cacheoverlay.big": {
+     "entries": 63,
+     "size": 3387248,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 63,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 63,
+      "hits": {
+       "djb2-add|as-is|/": 63,
+       "djb2-add|lower|/": 63
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 63
+     }
+    },
+    "cacherender.big": {
+     "entries": 10969,
+     "size": 1162598528,
+     "families": {
+      "center_logo": 218,
+      "rink_logo": 1700,
+      "kit_pant": 865,
+      "puck": 216,
+      "kit_sock": 865
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 3864,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 10969,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 10969,
+      "hits": {
+       "djb2-add|as-is|/": 10969,
+       "djb2-add|lower|/": 10969
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 200
+     }
+    },
+    "data0.big": {
+     "entries": 2,
+     "size": 29265968,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 2,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 2,
+      "hits": {
+       "djb2-add|as-is|/": 2,
+       "djb2-add|lower|/": 2
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 2
+     }
+    },
+    "nocache.big": {
+     "entries": 321,
+     "size": 2129436944,
+     "families": {},
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 0,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 321,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 321,
+      "hits": {
+       "djb2-add|as-is|/": 321,
+       "djb2-add|lower|/": 321
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "stored:w4==0": 194,
+      "chunkzip:w4!=u32@8": 6
+     }
+    },
+    "nocacherender.big": {
+     "entries": 10173,
+     "size": 1620465760,
+     "families": {
+      "nameplate_candidate": 843,
+      "kit_jersey": 865
+     },
+     "dup_span_groups": 0,
+     "dup_span_rows": 0,
+     "overlap_rows": 0,
+     "team_art_rows": 1708,
+     "team_art_shared_other_id": 0,
+     "team_art_shared_non_team": 0,
+     "team_art_dup_same_id": 0,
+     "w4_eq_size": 0,
+     "w4_zero": 10173,
+     "w4_gt_size": 0,
+     "w4_lt_size": 0,
+     "path_hash": {
+      "rows": 10173,
+      "hits": {
+       "djb2-add|as-is|/": 10173,
+       "djb2-add|lower|/": 10173
+      }
+     },
+     "w4_vs_member_header_sample": {
+      "chunkzip:w4!=u32@8": 200
+     }
+    }
+   },
+   "family_totals": {
+    "fe_crest": 305,
+    "center_logo": 218,
+    "rink_logo": 1700,
+    "kit_pant": 865,
+    "puck": 216,
+    "kit_sock": 865,
+    "nameplate_candidate": 843,
+    "kit_jersey": 865
+   },
+   "ids_per_family": {
+    "fe_crest": {
+     "distinct_ids": 305,
+     "min": 0,
+     "max": 20086
+    },
+    "center_logo": {
+     "distinct_ids": 218,
+     "min": 0,
+     "max": 701
+    },
+    "rink_logo": {
+     "distinct_ids": 337,
+     "min": 0,
+     "max": 20085
+    },
+    "kit_pant": {
+     "distinct_ids": 215,
+     "min": 0,
+     "max": 505
+    },
+    "puck": {
+     "distinct_ids": 216,
+     "min": 0,
+     "max": 777
+    },
+    "kit_sock": {
+     "distinct_ids": 215,
+     "min": 0,
+     "max": 505
+    },
+    "nameplate_candidate": {
+     "distinct_ids": 215,
+     "min": 0,
+     "max": 505
+    },
+    "kit_jersey": {
+     "distinct_ids": 215,
+     "min": 0,
+     "max": 505
+    }
+   },
+   "shared_with_other_id": [],
+   "shared_with_non_team_art": [],
+   "hash": {
+    "djb2-add|as-is|/": 36246,
+    "djb2-add|lower|/": 36246
+   },
+   "hash_rows": 36246,
+   "w4": {
+    "chunkzip:w4!=u32@8": 619,
+    "stored:w4==0": 494
+   }
+  }
+ },
+ "ps4": {
+  "path": "H:/Emulators/ShadPS4/Games/CUSA18182/databigs/inxp_00.big",
+  "entries": 2950,
+  "row": 20,
+  "path_hash": {
+   "rows": 2950,
+   "hits": {
+    "djb2-add|as-is|/": 2950,
+    "djb2-add|lower|/": 2950
+   }
+  },
+  "sort_key(word_12)": {
+   "rows": 2950,
+   "hits": {}
+  },
+  "word_12_monotone_in_row_order": true,
+  "word_12_distinct": 2395,
+  "word_12_monotone_in_path_order": false
+ }
+}

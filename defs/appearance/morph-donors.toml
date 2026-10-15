@@ -1,0 +1,42 @@
+# Morph donor registry (Path B — donor shrinkwrap).
+#
+# One [[donor]] per target-native donor head. Adding a donor (or supporting a new
+# target title) is a data change, never a code change. The numbers here are the
+# in-game-proven tunables from the prior effort's donor work:
+#   * eye centers / freeze radii protect the rigged eyelid pocket (collapsing it is
+#     unrecoverable — the separate eyeball submeshes animate against it);
+#   * boundary_freeze_rings is the BFS falloff band from the open neck/mouth loops;
+#   * head_vertex_count is a hard gate — a mismatched donor is the wrong file.
+#
+# Donor mesh/texlib files themselves are game data and are NOT in the repo: they are
+# resolved from the target install / library roots at run time.
+
+schema = "headmesh-morph-donors/1"
+
+[[donor]]
+key = "player_67"
+target = "nhllegacy-xbox360"
+head_vertex_count = 2623
+eye_center_l = [0.034083, 1.835745, 0.090668]
+eye_center_r = [-0.031242, 1.834532, 0.090979]
+eye_freeze_inner_m = 0.016
+eye_freeze_outer_m = 0.028
+boundary_freeze_rings = 8
+smooth_factor = 0.5
+smooth_iterations = 6
+eye_hole_y_range = [1.74, 1.92]
+notes = "Generic 5-submesh Legacy donor; the default for short-hair heads. Pristine copy comes from a cacherender.big extraction — never a research-modified leftover."
+
+[[donor]]
+key = "player_71"
+target = "nhllegacy-xbox360"
+head_vertex_count = 0
+eye_center_l = [0.034083, 1.835745, 0.090668]
+eye_center_r = [-0.031242, 1.834532, 0.090979]
+eye_freeze_inner_m = 0.016
+eye_freeze_outer_m = 0.028
+boundary_freeze_rings = 8
+smooth_factor = 0.5
+smooth_iterations = 6
+eye_hole_y_range = [1.74, 1.92]
+notes = "Long-hair multicard donor (hair grafting variant). head_vertex_count and eye centers UNVERIFIED for this donor (0 = not yet measured; measure before first use — M3)."

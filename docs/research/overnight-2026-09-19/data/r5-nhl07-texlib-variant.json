@@ -1,0 +1,145 @@
+[
+ {
+  "family": "leaguelogos",
+  "id": 0,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 100,
+  "h": 104,
+  "buf_len": 65536,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "leaguelogos",
+  "id": 1,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 100,
+  "h": 104,
+  "buf_len": 65536,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "leaguelogossmall",
+  "id": 0,
+  "variant": "nhl07-tag0-absolute",
+  "format": "0x86",
+  "w": 128,
+  "h": 64,
+  "buf_len": 32768,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "leaguelogoswide",
+  "id": 0,
+  "variant": "nhl07-tag0-absolute",
+  "format": "0x86",
+  "w": 512,
+  "h": 248,
+  "buf_len": 524288,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "leaguelogoswide",
+  "id": 1,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 512,
+  "h": 248,
+  "buf_len": 524288,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "divisionlogos",
+  "id": 0,
+  "variant": "nhl07-tag0-absolute",
+  "format": "0x86",
+  "w": 560,
+  "h": 408,
+  "buf_len": 958464,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "divisionlogos",
+  "id": 1,
+  "variant": "nhl07-tag0-absolute",
+  "format": "0x86",
+  "w": 524,
+  "h": 408,
+  "buf_len": 905216,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "divisionlogos",
+  "id": 2,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 496,
+  "h": 448,
+  "buf_len": 917504,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "trophies",
+  "id": 0,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 408,
+  "h": 200,
+  "buf_len": 372736,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "trophies",
+  "id": 1,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 468,
+  "h": 344,
+  "buf_len": 675840,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "trophies",
+  "id": 2,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 476,
+  "h": 200,
+  "buf_len": 430080,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "trophies",
+  "id": 3,
+  "variant": "standard",
+  "format": "0x86",
+  "w": 392,
+  "h": 192,
+  "buf_len": 319488,
+  "slot_offset": 4096,
+  "ok": true
+ },
+ {
+  "family": "flagssmall",
+  "id": 0,
+  "variant": "nhl07-tag0-absolute",
+  "format": "0x86",
+  "w": 128,
+  "h": 96,
+  "buf_len": 49152,
+  "slot_offset": 4096,
+  "ok": true
+ }
+]

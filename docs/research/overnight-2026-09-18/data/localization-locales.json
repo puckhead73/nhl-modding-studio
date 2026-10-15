@@ -1,0 +1,599 @@
+{
+ "xbox360": {
+  "nhl07": {
+   "eng_us": [
+    "loose"
+   ]
+  },
+  "nhl08": {
+   "eng_us": [
+    "loose"
+   ]
+  },
+  "nhl09": {
+   "cze_cz": [
+    "loose"
+   ],
+   "eng_us": [
+    "loose"
+   ],
+   "fin_fi": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ],
+   "ger_de": [
+    "loose"
+   ],
+   "rus_ru": [
+    "loose"
+   ],
+   "swe_se": [
+    "loose"
+   ]
+  },
+  "nhl10": {
+   "eng_us": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ]
+  },
+  "nhl11": {
+   "eng_us": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ]
+  },
+  "nhl12": {
+   "cze_cz": [
+    "loose"
+   ],
+   "eng_us": [
+    "loose"
+   ],
+   "fin_fi": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ],
+   "ger_de": [
+    "loose"
+   ],
+   "lng_lg": [
+    "loose"
+   ],
+   "rus_ru": [
+    "loose"
+   ],
+   "swe_se": [
+    "loose"
+   ]
+  },
+  "nhl13": {
+   "cze_cz": [
+    "loose"
+   ],
+   "eng_us": [
+    "loose"
+   ],
+   "fin_fi": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ],
+   "ger_de": [
+    "loose"
+   ],
+   "lng_lg": [
+    "loose"
+   ],
+   "rus_ru": [
+    "loose"
+   ],
+   "swe_se": [
+    "loose"
+   ]
+  },
+  "nhl14": {
+   "cze_cz": [
+    "loose"
+   ],
+   "eng_us": [
+    "loose"
+   ],
+   "fin_fi": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ],
+   "ger_de": [
+    "loose"
+   ],
+   "lng_lg": [
+    "loose"
+   ],
+   "rus_ru": [
+    "loose"
+   ],
+   "swe_se": [
+    "loose"
+   ]
+  },
+  "nhl15": {
+   "cze_cz": [
+    "loose"
+   ],
+   "eng_us": [
+    "loose"
+   ],
+   "fin_fi": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ],
+   "ger_de": [
+    "loose"
+   ],
+   "lng_lg": [
+    "loose"
+   ],
+   "rus_ru": [
+    "loose"
+   ],
+   "swe_se": [
+    "loose"
+   ]
+  },
+  "nhllegacy": {
+   "cze_cz": [
+    "loose"
+   ],
+   "eng_us": [
+    "loose"
+   ],
+   "fin_fi": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ],
+   "ger_de": [
+    "loose"
+   ],
+   "lng_lg": [
+    "loose"
+   ],
+   "rus_ru": [
+    "loose"
+   ],
+   "swe_se": [
+    "loose"
+   ]
+  }
+ },
+ "ps3": {
+  "nhl08": {
+   "eng_us": [
+    "loose"
+   ]
+  },
+  "nhl09": {
+   "eng_us": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ]
+  },
+  "nhl10": {
+   "eng_us": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ]
+  },
+  "nhl11": {
+   "eng_us": [
+    "loose"
+   ],
+   "fre_fr": [
+    "loose"
+   ]
+  },
+  "nhl12": {
+   "cze_cz": [
+    "cache.big",
+    "loose"
+   ],
+   "eng_us": [
+    "cache.big",
+    "loose"
+   ],
+   "fin_fi": [
+    "cache.big",
+    "loose"
+   ],
+   "fre_fr": [
+    "cache.big",
+    "loose"
+   ],
+   "ger_de": [
+    "cache.big",
+    "loose"
+   ],
+   "lng_lg": [
+    "cache.big",
+    "loose"
+   ],
+   "rus_ru": [
+    "cache.big",
+    "loose"
+   ],
+   "swe_se": [
+    "cache.big",
+    "loose"
+   ]
+  },
+  "nhl13": {
+   "cze_cz": [
+    "cache.big",
+    "loose"
+   ],
+   "eng_us": [
+    "cache.big",
+    "loose"
+   ],
+   "fin_fi": [
+    "cache.big",
+    "loose"
+   ],
+   "fre_fr": [
+    "cache.big",
+    "loose"
+   ],
+   "ger_de": [
+    "cache.big",
+    "loose"
+   ],
+   "lng_lg": [
+    "cache.big",
+    "loose"
+   ],
+   "rus_ru": [
+    "cache.big",
+    "loose"
+   ],
+   "swe_se": [
+    "cache.big",
+    "loose"
+   ]
+  },
+  "nhl14": {
+   "cze_cz": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "eng_us": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "fin_fi": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "fre_fr": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "ger_de": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "lng_lg": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "rus_ru": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "swe_se": [
+    "cacheboot.big",
+    "loose"
+   ]
+  },
+  "nhl15": {
+   "cze_cz": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "eng_us": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "fin_fi": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "fre_fr": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "ger_de": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "lng_lg": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "rus_ru": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "swe_se": [
+    "cacheboot.big",
+    "loose"
+   ]
+  },
+  "nhllegacy": {
+   "cze_cz": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "eng_us": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "fin_fi": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "fre_fr": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "ger_de": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "lng_lg": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "rus_ru": [
+    "cacheboot.big",
+    "loose"
+   ],
+   "swe_se": [
+    "cacheboot.big",
+    "loose"
+   ]
+  }
+ },
+ "ps4": {
+  "nhl15": {
+   "cze_cz": [
+    "inxp00.big:loc",
+    "patch_inxp00.big:loc"
+   ],
+   "eng_us": [
+    "inxp00.big:loc",
+    "patch_inxp00.big:loc"
+   ],
+   "fin_fi": [
+    "inxp00.big:loc",
+    "patch_inxp00.big:loc"
+   ],
+   "fre_fr": [
+    "inxp00.big:loc",
+    "patch_inxp00.big:loc"
+   ],
+   "ger_de": [
+    "inxp00.big:loc",
+    "patch_inxp00.big:loc"
+   ],
+   "rus_ru": [
+    "inxp00.big:loc",
+    "patch_inxp00.big:loc"
+   ],
+   "swe_se": [
+    "inxp00.big:loc",
+    "patch_inxp00.big:loc"
+   ]
+  },
+  "nhl16": {
+   "cze_cz": [
+    "inxp_00.big:loc"
+   ],
+   "eng_us": [
+    "inxp_00.big:loc"
+   ],
+   "fin_fi": [
+    "inxp_00.big:loc"
+   ],
+   "fre_fr": [
+    "inxp_00.big:loc"
+   ],
+   "ger_de": [
+    "inxp_00.big:loc"
+   ],
+   "rus_ru": [
+    "inxp_00.big:loc"
+   ],
+   "swe_se": [
+    "inxp_00.big:loc"
+   ]
+  },
+  "nhl17": {
+   "cze_cz": [
+    "inxp_00.big:loc"
+   ],
+   "eng_us": [
+    "inxp_00.big:loc"
+   ],
+   "fin_fi": [
+    "inxp_00.big:loc"
+   ],
+   "fre_fr": [
+    "inxp_00.big:loc"
+   ],
+   "ger_de": [
+    "inxp_00.big:loc"
+   ],
+   "rus_ru": [
+    "inxp_00.big:loc"
+   ],
+   "swe_se": [
+    "inxp_00.big:loc"
+   ]
+  },
+  "nhl18": {
+   "cze_cz": [
+    "inxp_00.big:loc"
+   ],
+   "eng_us": [
+    "inxp_00.big:loc"
+   ],
+   "fin_fi": [
+    "inxp_00.big:loc"
+   ],
+   "fre_fr": [
+    "inxp_00.big:loc"
+   ],
+   "ger_de": [
+    "inxp_00.big:loc"
+   ],
+   "rus_ru": [
+    "inxp_00.big:loc"
+   ],
+   "swe_se": [
+    "inxp_00.big:loc"
+   ]
+  },
+  "nhl19": {
+   "cze_cz": [
+    "inxp_00.big:loc",
+    "patch_inxp_51.big:loc",
+    "patch_inxp_52.big:loc",
+    "patch_inxp_53.big:loc",
+    "patch_inxp_54.big:loc",
+    "patch_inxp_55.big:loc",
+    "patch_inxp_56.big:loc"
+   ],
+   "eng_us": [
+    "inxp_00.big:loc",
+    "patch_inxp_51.big:loc",
+    "patch_inxp_52.big:loc",
+    "patch_inxp_53.big:loc",
+    "patch_inxp_54.big:loc",
+    "patch_inxp_55.big:loc",
+    "patch_inxp_56.big:loc"
+   ],
+   "fin_fi": [
+    "inxp_00.big:loc",
+    "patch_inxp_51.big:loc",
+    "patch_inxp_52.big:loc",
+    "patch_inxp_53.big:loc",
+    "patch_inxp_54.big:loc",
+    "patch_inxp_55.big:loc",
+    "patch_inxp_56.big:loc"
+   ],
+   "fre_fr": [
+    "inxp_00.big:loc",
+    "patch_inxp_51.big:loc",
+    "patch_inxp_52.big:loc",
+    "patch_inxp_53.big:loc",
+    "patch_inxp_54.big:loc",
+    "patch_inxp_55.big:loc",
+    "patch_inxp_56.big:loc"
+   ],
+   "ger_de": [
+    "inxp_00.big:loc",
+    "patch_inxp_51.big:loc",
+    "patch_inxp_52.big:loc",
+    "patch_inxp_53.big:loc",
+    "patch_inxp_54.big:loc",
+    "patch_inxp_55.big:loc",
+    "patch_inxp_56.big:loc"
+   ],
+   "rus_ru": [
+    "inxp_00.big:loc",
+    "patch_inxp_51.big:loc",
+    "patch_inxp_52.big:loc",
+    "patch_inxp_53.big:loc",
+    "patch_inxp_54.big:loc",
+    "patch_inxp_55.big:loc",
+    "patch_inxp_56.big:loc"
+   ],
+   "swe_se": [
+    "inxp_00.big:loc",
+    "patch_inxp_51.big:loc",
+    "patch_inxp_52.big:loc",
+    "patch_inxp_53.big:loc",
+    "patch_inxp_54.big:loc",
+    "patch_inxp_55.big:loc",
+    "patch_inxp_56.big:loc"
+   ]
+  },
+  "nhl20": {
+   "cze_cz": [
+    "inxp_00.big:loc"
+   ],
+   "eng_us": [
+    "inxp_00.big:loc"
+   ],
+   "fin_fi": [
+    "inxp_00.big:loc"
+   ],
+   "fre_fr": [
+    "inxp_00.big:loc"
+   ],
+   "ger_de": [
+    "inxp_00.big:loc"
+   ],
+   "rus_ru": [
+    "inxp_00.big:loc"
+   ],
+   "swe_se": [
+    "inxp_00.big:loc"
+   ]
+  },
+  "nhl21": {
+   "cze_cz": [
+    "inxp_00.big:loc"
+   ],
+   "eng_us": [
+    "inxp_00.big:loc"
+   ],
+   "fin_fi": [
+    "inxp_00.big:loc"
+   ],
+   "fre_fr": [
+    "inxp_00.big:loc"
+   ],
+   "ger_de": [
+    "inxp_00.big:loc"
+   ],
+   "lng_lg": [
+    "inxp_00.big:loc"
+   ],
+   "rus_ru": [
+    "inxp_00.big:loc"
+   ],
+   "swe_se": [
+    "inxp_00.big:loc"
+   ]
+  }
+ }
+}

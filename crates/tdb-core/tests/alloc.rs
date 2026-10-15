@@ -5,7 +5,8 @@ use tdb_core::{AllocError, TdbFile};
 
 fn anchor() -> Vec<u8> {
     std::fs::read(
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps3/nhllegacy/databases/nhlng.db"),
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../anchors/ps3/nhllegacy/databases/nhlng.db"),
     )
     .unwrap()
 }
@@ -38,7 +39,11 @@ fn append_grows_full_table_and_preserves_data() {
 
     let (out, idx) = db.append_record("cPbu").unwrap();
     assert_eq!(idx, old_cur as u32);
-    assert_eq!(out.len(), bytes.len() + reclen as usize, "file grew by one record");
+    assert_eq!(
+        out.len(),
+        bytes.len() + reclen as usize,
+        "file grew by one record"
+    );
 
     let db2 = TdbFile::parse(&out).unwrap();
     assert!(db2.size_ok(), "db_size updated");
@@ -48,8 +53,16 @@ fn append_grows_full_table_and_preserves_data() {
     let t2 = db2.table("cPbu").unwrap();
     assert_eq!(t2.current_records, old_cur + 1);
     assert_eq!(t2.max_records, old_max + 1);
-    assert_eq!(db2.read_u64(t2, 0, &t2.fields[cf]).unwrap(), cbefore, "existing record preserved");
-    assert_eq!(db2.read_u64(t2, idx, &t2.fields[cf]).unwrap(), 0, "new record zero-filled");
+    assert_eq!(
+        db2.read_u64(t2, 0, &t2.fields[cf]).unwrap(),
+        cbefore,
+        "existing record preserved"
+    );
+    assert_eq!(
+        db2.read_u64(t2, idx, &t2.fields[cf]).unwrap(),
+        0,
+        "new record zero-filled"
+    );
 
     let kott2 = db2.table("ttOk").unwrap();
     assert_eq!(
@@ -80,7 +93,10 @@ fn remove_swap_pop_relocates_tail() {
     assert_eq!(db2.serialize(), out, "CRCs self-consistent");
     let t2 = db2.table("cPbu").unwrap();
     assert_eq!(t2.current_records as u32, cur - 1);
-    assert_eq!(t2.max_records, t.max_records, "max unchanged → slack created");
+    assert_eq!(
+        t2.max_records, t.max_records,
+        "max unchanged → slack created"
+    );
     assert_eq!(
         db2.read_u64(t2, remove_idx, &t2.fields[cf]).unwrap(),
         tail_val,
@@ -97,7 +113,10 @@ fn grow_table_max_preallocates_slack() {
     let db = TdbFile::parse(&bytes).unwrap();
     let t = db.table("cPbu").unwrap();
     let (old_cur, old_max, reclen) = (t.current_records, t.max_records, t.record_len_bytes);
-    assert_eq!(old_cur, old_max, "anchor cPbu expected packed → real growth");
+    assert_eq!(
+        old_cur, old_max,
+        "anchor cPbu expected packed → real growth"
+    );
 
     let cf = num_field(&db, "cPbu");
     let kf = num_field(&db, "ttOk");
@@ -108,7 +127,11 @@ fn grow_table_max_preallocates_slack() {
 
     let target = old_max + 100;
     let out = db.grow_table_max("cPbu", target).unwrap();
-    assert_eq!(out.len(), bytes.len() + 100 * reclen as usize, "file grew by the added slack");
+    assert_eq!(
+        out.len(),
+        bytes.len() + 100 * reclen as usize,
+        "file grew by the added slack"
+    );
 
     let db2 = TdbFile::parse(&out).unwrap();
     assert!(db2.size_ok(), "db_size updated");
@@ -118,9 +141,14 @@ fn grow_table_max_preallocates_slack() {
     let t2 = db2.table("cPbu").unwrap();
     assert_eq!(t2.max_records, target, "allocation grew to the target");
     assert_eq!(t2.current_records, old_cur, "population untouched");
-    assert_eq!(db2.read_u64(t2, 0, &t2.fields[cf]).unwrap(), cbefore, "first record preserved");
     assert_eq!(
-        db2.read_u64(t2, old_cur as u32 - 1, &t2.fields[cf]).unwrap(),
+        db2.read_u64(t2, 0, &t2.fields[cf]).unwrap(),
+        cbefore,
+        "first record preserved"
+    );
+    assert_eq!(
+        db2.read_u64(t2, old_cur as u32 - 1, &t2.fields[cf])
+            .unwrap(),
         clast,
         "last populated record preserved"
     );
@@ -162,11 +190,18 @@ fn append_after_remove_reuses_slack() {
 
     let db_r = TdbFile::parse(&after_remove).unwrap();
     let t = db_r.table("cPbu").unwrap();
-    assert!(t.current_records < t.max_records, "slack exists after removal");
+    assert!(
+        t.current_records < t.max_records,
+        "slack exists after removal"
+    );
     let (cur, max) = (t.current_records, t.max_records);
 
     let (after_append, _idx) = db_r.append_record("cPbu").unwrap();
-    assert_eq!(after_append.len(), removed_len, "append reuses slack — no growth");
+    assert_eq!(
+        after_append.len(),
+        removed_len,
+        "append reuses slack — no growth"
+    );
     let db_a = TdbFile::parse(&after_append).unwrap();
     let t_a = db_a.table("cPbu").unwrap();
     assert_eq!(t_a.current_records, cur + 1);
@@ -199,7 +234,11 @@ fn insert_grows_and_shifts_tail_down() {
     let kbefore = rec(&bytes, &db, "ttOk", 0).to_vec();
 
     let out = db.insert_record("cPbu", at).unwrap();
-    assert_eq!(out.len(), bytes.len() + reclen as usize, "file grew by one record");
+    assert_eq!(
+        out.len(),
+        bytes.len() + reclen as usize,
+        "file grew by one record"
+    );
 
     let db2 = TdbFile::parse(&out).unwrap();
     assert_eq!(db2.serialize(), out, "all CRC scopes self-consistent");
@@ -208,10 +247,25 @@ fn insert_grows_and_shifts_tail_down() {
     assert_eq!(t2.current_records, old_cur + 1);
     assert_eq!(t2.max_records, old_max + 1);
 
-    assert!(rec(&out, &db2, "cPbu", at).iter().all(|&b| b == 0), "hole zeroed at index");
-    assert_eq!(rec(&out, &db2, "cPbu", at + 1), &before_at[..], "old record[at] shifted down one");
-    assert_eq!(rec(&out, &db2, "cPbu", last + 1), &before_last[..], "old tail shifted down one");
-    assert_eq!(rec(&out, &db2, "ttOk", 0), &kbefore[..], "other table preserved through the shift");
+    assert!(
+        rec(&out, &db2, "cPbu", at).iter().all(|&b| b == 0),
+        "hole zeroed at index"
+    );
+    assert_eq!(
+        rec(&out, &db2, "cPbu", at + 1),
+        &before_at[..],
+        "old record[at] shifted down one"
+    );
+    assert_eq!(
+        rec(&out, &db2, "cPbu", last + 1),
+        &before_last[..],
+        "old tail shifted down one"
+    );
+    assert_eq!(
+        rec(&out, &db2, "ttOk", 0),
+        &kbefore[..],
+        "other table preserved through the shift"
+    );
 }
 
 /// Inserting at `current_records` is exactly an append (hole at the end, empty shift) — byte-identical
@@ -241,7 +295,11 @@ fn insert_reuses_slack_when_not_full() {
     assert!(cur < max, "slack exists after removal");
 
     let out = db_r.insert_record("cPbu", 3).unwrap();
-    assert_eq!(out.len(), after_remove.len(), "insert reuses slack — no growth");
+    assert_eq!(
+        out.len(),
+        after_remove.len(),
+        "insert reuses slack — no growth"
+    );
     let db2 = TdbFile::parse(&out).unwrap();
     let t2 = db2.table("cPbu").unwrap();
     assert_eq!(t2.current_records, cur + 1);
@@ -272,9 +330,20 @@ fn remove_ordered_slides_tail_up() {
     let t2 = db2.table("cPbu").unwrap();
     assert_eq!(t2.current_records as u32, cur - 1);
     assert_eq!(t2.max_records, max, "max unchanged → slack");
-    assert_eq!(rec(&out, &db2, "cPbu", at), &before_after[..], "successor slid up into the hole");
-    assert_eq!(rec(&out, &db2, "cPbu", last - 1), &before_last[..], "old tail now one slot lower");
-    assert!(rec(&out, &db2, "cPbu", last).iter().all(|&b| b == 0), "vacated tail slot zeroed");
+    assert_eq!(
+        rec(&out, &db2, "cPbu", at),
+        &before_after[..],
+        "successor slid up into the hole"
+    );
+    assert_eq!(
+        rec(&out, &db2, "cPbu", last - 1),
+        &before_last[..],
+        "old tail now one slot lower"
+    );
+    assert!(
+        rec(&out, &db2, "cPbu", last).iter().all(|&b| b == 0),
+        "vacated tail slot zeroed"
+    );
 }
 
 /// Insert-at-index then ordered-remove-at-the-same-index round-trips the record contents (the two are
@@ -284,16 +353,26 @@ fn insert_then_ordered_remove_is_identity_on_data() {
     let bytes = anchor();
     let db = TdbFile::parse(&bytes).unwrap();
     let cur = db.table("cPbu").unwrap().current_records as u32;
-    let snapshot: Vec<Vec<u8>> = (0..cur).map(|i| rec(&bytes, &db, "cPbu", i).to_vec()).collect();
+    let snapshot: Vec<Vec<u8>> = (0..cur)
+        .map(|i| rec(&bytes, &db, "cPbu", i).to_vec())
+        .collect();
 
     let inserted = db.insert_record("cPbu", 7).unwrap();
     let db_i = TdbFile::parse(&inserted).unwrap();
     let restored = db_i.remove_record_ordered("cPbu", 7).unwrap();
     let db_r = TdbFile::parse(&restored).unwrap();
 
-    assert_eq!(db_r.table("cPbu").unwrap().current_records as u32, cur, "count restored");
+    assert_eq!(
+        db_r.table("cPbu").unwrap().current_records as u32,
+        cur,
+        "count restored"
+    );
     for i in 0..cur {
-        assert_eq!(rec(&restored, &db_r, "cPbu", i), &snapshot[i as usize][..], "record {i} restored");
+        assert_eq!(
+            rec(&restored, &db_r, "cPbu", i),
+            &snapshot[i as usize][..],
+            "record {i} restored"
+        );
     }
 }
 
@@ -312,28 +391,48 @@ fn copy_record_duplicates_a_record_block() {
 
     let db2 = TdbFile::parse(&buf).unwrap();
     assert_eq!(db2.serialize(), buf, "CRCs self-consistent");
-    assert_eq!(rec(&buf, &db2, "cPbu", 3), &before0[..], "record 3 is now a copy of record 0");
-    assert_eq!(rec(&buf, &db2, "cPbu", 0), &before0[..], "source record unchanged");
-    assert!(!db.copy_record(&mut buf, t, 9_999_999, 3), "out-of-range source rejected");
+    assert_eq!(
+        rec(&buf, &db2, "cPbu", 3),
+        &before0[..],
+        "record 3 is now a copy of record 0"
+    );
+    assert_eq!(
+        rec(&buf, &db2, "cPbu", 0),
+        &before0[..],
+        "source record unchanged"
+    );
+    assert!(
+        !db.copy_record(&mut buf, t, 9_999_999, 3),
+        "out-of-range source rejected"
+    );
 }
 
 #[test]
 fn allocation_errors() {
     let bytes = anchor();
     let db = TdbFile::parse(&bytes).unwrap();
-    assert_eq!(db.append_record("zzzz").unwrap_err(), AllocError::UnknownTable);
+    assert_eq!(
+        db.append_record("zzzz").unwrap_err(),
+        AllocError::UnknownTable
+    );
     assert_eq!(
         db.remove_record("cPbu", 9_999_999).unwrap_err(),
         AllocError::IndexOutOfRange
     );
     // insert accepts index == current (append) but rejects beyond it; ordered-remove rejects OOB.
     let cur = db.table("cPbu").unwrap().current_records as u32;
-    assert_eq!(db.insert_record("zzzz", 0).unwrap_err(), AllocError::UnknownTable);
+    assert_eq!(
+        db.insert_record("zzzz", 0).unwrap_err(),
+        AllocError::UnknownTable
+    );
     assert_eq!(
         db.insert_record("cPbu", cur + 1).unwrap_err(),
         AllocError::IndexOutOfRange
     );
-    assert!(db.insert_record("cPbu", cur).is_ok(), "index == current is append");
+    assert!(
+        db.insert_record("cPbu", cur).is_ok(),
+        "index == current is append"
+    );
     assert_eq!(
         db.remove_record_ordered("cPbu", cur).unwrap_err(),
         AllocError::IndexOutOfRange

@@ -1,0 +1,2046 @@
+{
+ "note": "R141 - PS4 Creation Zone name keys (goalie masks and skater gear, handoffs 02 / 02b) resolved through each title's OWN English\ndictionary (`nhl/data/kettle/loc/eng_us.db`, every archive of the install that carries it; the last patch-ordered copy is reported\nseparately). Read-only. For every `$`-prefixed cell of the listed CSVs (and the un-prefixed `displayname` keys of\ngoaliemaskdisplayinfo.csv), after removing the `$`: exact key match -> text; else hash match (Studio `tdb_loc::loc_hash`: UTF-16 units & 0xDF\ninto a reflected CRC-32, init 0, no final XOR - case-insensitive for ASCII letters) -> text of the hashed row; else unresolved.\nUsage: python r141_cz_name_keys_loc.py <out.json>",
+ "titles": {
+  "nhl17": {
+   "dictionary": {
+    "archive": "inxp_00.big",
+    "member": "nhl/data/kettle/loc/eng_us.db",
+    "stored_bytes": 2074876,
+    "wrapped": false,
+    "bytes": 2074876,
+    "sha256": "035b3b30e34cd2c2f6fe2ef9cb76ef8c0a55d8d92e88898011ab55087b2e0e51",
+    "copies": [
+     "inxp_00.big"
+    ],
+    "rows": 30799,
+    "hash_mismatches": 3
+   },
+   "files": {
+    "goaliemaskinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 577,
+      "wrapped": true,
+      "bytes": 2089,
+      "sha256": "b7224fed583b99e5c5c29a6cfc3b97e475abe375cda278ed4105e6f6a09fe629"
+     },
+     "counts": {
+      "name: exact key": 28,
+      "stylename: hash (case-insensitive) match": 14,
+      "patternname: exact key": 28,
+      "stylename: exact key": 14
+     },
+     "examples": [
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "patternname",
+       "$yellow",
+       "exact key",
+       "Yellow"
+      ],
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ]
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "counts": {
+      "displayname: exact key": 8
+     },
+     "examples": [
+      [
+       "displayname",
+       "MaskPrimaryItech",
+       "exact key",
+       "Starting BAUER"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryHasek",
+       "exact key",
+       "Starting Cage"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCooper",
+       "exact key",
+       "Starting Cage 2"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCHL",
+       "exact key",
+       "Starting CHL Mask"
+      ]
+     ]
+    },
+    "skaterhelmetstyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+      "stored_bytes": 501,
+      "wrapped": false,
+      "bytes": 501,
+      "sha256": "1753f9d95664928edd473a2267fdcdabde5a68a044ce3fea06ba9587d8b6d7fa"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 1,
+      "itemname: exact key": 11
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauer4500",
+       "hash (case-insensitive) match",
+       "BAUER 4500"
+      ],
+      [
+       "itemname",
+       "$bauer5100",
+       "exact key",
+       "BAUER 5100"
+      ],
+      [
+       "itemname",
+       "$bauerims110",
+       "exact key",
+       "BAUER IMS 11.0"
+      ],
+      [
+       "itemname",
+       "$bauerreakt100",
+       "exact key",
+       "BAUER RE-AKT 100"
+      ]
+     ]
+    },
+    "skaterglovestyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+      "stored_bytes": 805,
+      "wrapped": false,
+      "bytes": 805,
+      "sha256": "2de3b243f364d321388bd67524c1a5d4ac98635f20216ec278d4dedc1e3e8ac4"
+     },
+     "counts": {
+      "itemname: exact key": 20,
+      "itemname: hash (case-insensitive) match": 3
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauernexus1n",
+       "exact key",
+       "BAUER Nexus 1N"
+      ],
+      [
+       "itemname",
+       "$bauersupremetotalonemx3",
+       "exact key",
+       "BAUER Supreme TotalOne MX3"
+      ],
+      [
+       "itemname",
+       "$bauervapor1x",
+       "exact key",
+       "BAUER Vapor 1X"
+      ],
+      [
+       "itemname",
+       "$ccm30k",
+       "exact key",
+       "CCM 30K"
+      ],
+      [
+       "itemname",
+       "$ccm4rollpro",
+       "hash (case-insensitive) match",
+       "CCM 4 Roll Pro III"
+      ],
+      [
+       "itemname",
+       "$eagleppf",
+       "hash (case-insensitive) match",
+       "EAGLE PPF"
+      ],
+      [
+       "itemname",
+       "$eastoneqpro",
+       "hash (case-insensitive) match",
+       "EASTON Pro 10"
+      ]
+     ]
+    },
+    "skatedisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+      "stored_bytes": 339,
+      "wrapped": false,
+      "bytes": 339,
+      "sha256": "6a9ffef9a63e09cf204d898836f4c7788d88734491ab18e55098db8e58f69117"
+     },
+     "counts": {
+      "skatename: exact key": 10
+     },
+     "examples": [
+      [
+       "skatename",
+       "$bauernexus1n",
+       "exact key",
+       "BAUER Nexus 1N"
+      ],
+      [
+       "skatename",
+       "$bauersupreme1s",
+       "exact key",
+       "BAUER Supreme 1S"
+      ],
+      [
+       "skatename",
+       "$bauervapor1x",
+       "exact key",
+       "BAUER Vapor 1X"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeed",
+       "exact key",
+       "CCM Jetspeed"
+      ]
+     ]
+    },
+    "stickdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+      "stored_bytes": 549,
+      "wrapped": true,
+      "bytes": 1402,
+      "sha256": "4486f7f18a7f185b417bedbc2df463e4d06b05101038bc79a71662e51b77a8b7"
+     },
+     "counts": {
+      "stickname: exact key": 30
+     },
+     "examples": [
+      [
+       "stickname",
+       "$bauernexus1n",
+       "exact key",
+       "BAUER Nexus 1N"
+      ],
+      [
+       "stickname",
+       "$bauersupreme1s",
+       "exact key",
+       "BAUER Supreme 1S"
+      ],
+      [
+       "stickname",
+       "$bauervapor1x",
+       "exact key",
+       "BAUER Vapor 1X"
+      ],
+      [
+       "stickname",
+       "$ccmrbzrevolution",
+       "exact key",
+       "CCM RBZ Revolution"
+      ]
+     ]
+    },
+    "skatervisortypes.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+      "stored_bytes": 150,
+      "wrapped": false,
+      "bytes": 150,
+      "sha256": "5824ecae7e78077629a017497d92dde25741a37fbd98ea22be904632c29b1828"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 1,
+      "itemname: exact key": 5
+     },
+     "examples": [
+      [
+       "itemname",
+       "$none",
+       "hash (case-insensitive) match",
+       "None"
+      ],
+      [
+       "itemname",
+       "$straightitech",
+       "exact key",
+       "Straight BAUER "
+      ],
+      [
+       "itemname",
+       "$curveditech",
+       "exact key",
+       "Curved BAUER"
+      ],
+      [
+       "itemname",
+       "$TXT_VISOR_AVIATOR",
+       "exact key",
+       "Aviator"
+      ]
+     ]
+    }
+   },
+   "totals": {
+    "exact key": 154,
+    "hash (case-insensitive) match": 19
+   },
+   "unresolved_keys": {}
+  },
+  "nhl18": {
+   "dictionary": {
+    "archive": "inxp_00.big",
+    "member": "nhl/data/kettle/loc/eng_us.db",
+    "stored_bytes": 2250244,
+    "wrapped": false,
+    "bytes": 2250244,
+    "sha256": "12f1af46906c064670f3b536ef3876b6fb8921ac620e88785d359ff17ea7159f",
+    "copies": [
+     "inxp_00.big"
+    ],
+    "rows": 33396,
+    "hash_mismatches": 3
+   },
+   "files": {
+    "goaliemaskinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 577,
+      "wrapped": true,
+      "bytes": 2089,
+      "sha256": "b7224fed583b99e5c5c29a6cfc3b97e475abe375cda278ed4105e6f6a09fe629"
+     },
+     "counts": {
+      "name: exact key": 28,
+      "stylename: hash (case-insensitive) match": 14,
+      "patternname: exact key": 28,
+      "stylename: exact key": 14
+     },
+     "examples": [
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "patternname",
+       "$yellow",
+       "exact key",
+       "Yellow"
+      ],
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ]
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "counts": {
+      "displayname: exact key": 8
+     },
+     "examples": [
+      [
+       "displayname",
+       "MaskPrimaryItech",
+       "exact key",
+       "Starting BAUER"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryHasek",
+       "exact key",
+       "Starting Cage"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCooper",
+       "exact key",
+       "Starting Cage 2"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCHL",
+       "exact key",
+       "Starting CHL Mask"
+      ]
+     ]
+    },
+    "skaterhelmetstyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+      "stored_bytes": 666,
+      "wrapped": false,
+      "bytes": 666,
+      "sha256": "6f998e285a28051aa0b576a3f1d3de37d196c57d60bc170bcc3a3a1cb477ad19"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 5,
+      "itemname: exact key": 11
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauer4500",
+       "hash (case-insensitive) match",
+       "BAUER 4500"
+      ],
+      [
+       "itemname",
+       "$bauer5100",
+       "exact key",
+       "BAUER 5100"
+      ],
+      [
+       "itemname",
+       "$bauerims110",
+       "exact key",
+       "BAUER IMS 11.0"
+      ],
+      [
+       "itemname",
+       "$bauerreakt100",
+       "exact key",
+       "BAUER RE-AKT 100"
+      ],
+      [
+       "itemname",
+       "$bauerreakt200",
+       "hash (case-insensitive) match",
+       "Bauer Re-Akt 200"
+      ],
+      [
+       "itemname",
+       "$helmethalfcage",
+       "hash (case-insensitive) match",
+       "Half cage"
+      ],
+      [
+       "itemname",
+       "$helmetfullshield",
+       "hash (case-insensitive) match",
+       "Full Shield"
+      ],
+      [
+       "itemname",
+       "$helmethybridshield",
+       "hash (case-insensitive) match",
+       "Hybrid Shield"
+      ]
+     ]
+    },
+    "skaterglovestyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+      "stored_bytes": 606,
+      "wrapped": false,
+      "bytes": 606,
+      "sha256": "b2fcd5102318c7e4faf32679d212b04b75d8ecb194addf1c5ccf26e775511724"
+     },
+     "counts": {
+      "itemname: exact key": 14,
+      "itemname: hash (case-insensitive) match": 3
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauernexus1n",
+       "exact key",
+       "BAUER Nexus 1N"
+      ],
+      [
+       "itemname",
+       "$bauersupreme1s",
+       "exact key",
+       "BAUER Supreme 1S"
+      ],
+      [
+       "itemname",
+       "$bauervapor1x",
+       "exact key",
+       "BAUER Vapor 1X"
+      ],
+      [
+       "itemname",
+       "$ccm30k",
+       "exact key",
+       "CCM 30K"
+      ],
+      [
+       "itemname",
+       "$ccm4rollpro",
+       "hash (case-insensitive) match",
+       "CCM 4 Roll Pro III"
+      ],
+      [
+       "itemname",
+       "$stxsurgeonhpr",
+       "hash (case-insensitive) match",
+       "STX Surgeon HPR"
+      ],
+      [
+       "itemname",
+       "$warrioralphaqx",
+       "hash (case-insensitive) match",
+       "Warrior Alpha QX"
+      ]
+     ]
+    },
+    "skatedisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+      "stored_bytes": 313,
+      "wrapped": false,
+      "bytes": 313,
+      "sha256": "2ec9022492f4bc4bbbc13c6bb60a62b9d6e2d9a22f1821c6bd96a71352f7cd39"
+     },
+     "counts": {
+      "skatename: exact key": 6,
+      "skatename: hash (case-insensitive) match": 3
+     },
+     "examples": [
+      [
+       "skatename",
+       "$bauernexus1n",
+       "exact key",
+       "BAUER Nexus 1N"
+      ],
+      [
+       "skatename",
+       "$bauersupreme1s",
+       "exact key",
+       "BAUER Supreme 1S"
+      ],
+      [
+       "skatename",
+       "$bauervapor1x2",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X 2.0 "
+      ],
+      [
+       "skatename",
+       "$ccmjetspeed",
+       "exact key",
+       "CCM Jetspeed"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeedft1",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT1"
+      ],
+      [
+       "skatename",
+       "$ccmribcor70k",
+       "hash (case-insensitive) match",
+       "CCM Ribcor 70K"
+      ]
+     ]
+    },
+    "stickdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+      "stored_bytes": 565,
+      "wrapped": true,
+      "bytes": 1525,
+      "sha256": "eea88509210e6d4ae7bcc73e64e5e86a1d47165a0f86e5b821a241cbb3a6af0f"
+     },
+     "counts": {
+      "stickname: exact key": 25,
+      "stickname: hash (case-insensitive) match": 8
+     },
+     "examples": [
+      [
+       "stickname",
+       "$bauernexus1n",
+       "exact key",
+       "BAUER Nexus 1N"
+      ],
+      [
+       "stickname",
+       "$bauersupreme1s2",
+       "hash (case-insensitive) match",
+       "Bauer Supreme 1S 2.0"
+      ],
+      [
+       "stickname",
+       "$bauervapor1xlite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X Lite"
+      ],
+      [
+       "stickname",
+       "$ccmrbzft1",
+       "hash (case-insensitive) match",
+       "CCM RBZ FT1"
+      ],
+      [
+       "stickname",
+       "$ccmribcortrigger2",
+       "hash (case-insensitive) match",
+       "CCM Ribcor Trigger 2"
+      ],
+      [
+       "stickname",
+       "$ccmsupertacks2",
+       "hash (case-insensitive) match",
+       "CCM Super Tacks 2.0"
+      ],
+      [
+       "stickname",
+       "$sherwoodek365",
+       "hash (case-insensitive) match",
+       "Sher-Wood EK Rekker 365"
+      ],
+      [
+       "stickname",
+       "$stxstallionhpr",
+       "hash (case-insensitive) match",
+       "STX Stallion HPR IH"
+      ]
+     ]
+    },
+    "skatervisortypes.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+      "stored_bytes": 178,
+      "wrapped": false,
+      "bytes": 178,
+      "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 1,
+      "itemname: exact key": 6
+     },
+     "examples": [
+      [
+       "itemname",
+       "$none",
+       "hash (case-insensitive) match",
+       "None"
+      ],
+      [
+       "itemname",
+       "$straightitech",
+       "exact key",
+       "Straight BAUER "
+      ],
+      [
+       "itemname",
+       "$curveditech",
+       "exact key",
+       "Curved BAUER"
+      ],
+      [
+       "itemname",
+       "$TXT_VISOR_AVIATOR",
+       "exact key",
+       "Aviator"
+      ]
+     ]
+    }
+   },
+   "totals": {
+    "exact key": 140,
+    "hash (case-insensitive) match": 34
+   },
+   "unresolved_keys": {}
+  },
+  "nhl19": {
+   "dictionary": {
+    "archive": "patch_inxp_56.big",
+    "member": "nhl/data/kettle/loc/eng_us.db",
+    "stored_bytes": 2507372,
+    "wrapped": false,
+    "bytes": 2507372,
+    "sha256": "fbb8adcf2f2fd0558a7c1564f3a5bdd3d2acfb83f11e91477163f4935a3613fa",
+    "copies": [
+     "inxp_00.big",
+     "patch_inxp_51.big",
+     "patch_inxp_52.big",
+     "patch_inxp_53.big",
+     "patch_inxp_54.big",
+     "patch_inxp_55.big",
+     "patch_inxp_56.big"
+    ],
+    "rows": 38001,
+    "hash_mismatches": 3
+   },
+   "files": {
+    "goaliemaskinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 854,
+      "wrapped": true,
+      "bytes": 3287,
+      "sha256": "0573c36d23249b11161c5e9848f142eac8e353ccf33da4f91849f06ca1368533"
+     },
+     "counts": {
+      "name: exact key": 38,
+      "stylename: hash (case-insensitive) match": 14,
+      "patternname: exact key": 28,
+      "stylename: exact key": 14,
+      "patternname: unresolved": 10,
+      "styleabbreviation: unresolved": 10
+     },
+     "examples": [
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "patternname",
+       "$yellow",
+       "exact key",
+       "Yellow"
+      ],
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ]
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "counts": {
+      "displayname: exact key": 8
+     },
+     "examples": [
+      [
+       "displayname",
+       "MaskPrimaryItech",
+       "exact key",
+       "Starting BAUER"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryHasek",
+       "exact key",
+       "Starting Cage"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCooper",
+       "exact key",
+       "Starting Cage 2"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCHL",
+       "exact key",
+       "Starting CHL Mask"
+      ]
+     ]
+    },
+    "skaterhelmetstyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+      "stored_bytes": 672,
+      "wrapped": false,
+      "bytes": 672,
+      "sha256": "70c989e1f26b9c4d36f14f205ad9c3f634eb444c0847a4e6529f6cea1db2f3ba"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 6,
+      "itemname: exact key": 10
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauer4500",
+       "hash (case-insensitive) match",
+       "BAUER 4500"
+      ],
+      [
+       "itemname",
+       "$bauer5100",
+       "exact key",
+       "BAUER 5100"
+      ],
+      [
+       "itemname",
+       "$bauerreakt100",
+       "exact key",
+       "BAUER RE-AKT 100"
+      ],
+      [
+       "itemname",
+       "$bauerreakt200",
+       "hash (case-insensitive) match",
+       "Bauer Re-Akt 200"
+      ],
+      [
+       "itemname",
+       "$warrioralphaone",
+       "hash (case-insensitive) match",
+       "Warrior Alpha One"
+      ],
+      [
+       "itemname",
+       "$helmethalfcage",
+       "hash (case-insensitive) match",
+       "Half cage"
+      ],
+      [
+       "itemname",
+       "$helmetfullshield",
+       "hash (case-insensitive) match",
+       "Full Shield"
+      ],
+      [
+       "itemname",
+       "$helmethybridshield",
+       "hash (case-insensitive) match",
+       "Hybrid Shield"
+      ]
+     ]
+    },
+    "skaterglovestyle.csv": {
+     "csv_source": {
+      "archive": "patch_inxp_53.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+      "stored_bytes": 921,
+      "wrapped": false,
+      "bytes": 921,
+      "sha256": "6f4941415107a010d5c2df1390dbd4473d054101ffbce27cd8f9150525ec5244"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 7,
+      "itemname: exact key": 18
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauernexus2n",
+       "hash (case-insensitive) match",
+       "Bauer Nexus 2N PRO"
+      ],
+      [
+       "itemname",
+       "$bauersupreme1s",
+       "exact key",
+       "BAUER Supreme 1S"
+      ],
+      [
+       "itemname",
+       "$bauervapor1xlite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X Lite"
+      ],
+      [
+       "itemname",
+       "$ccm30k",
+       "exact key",
+       "CCM 30K"
+      ],
+      [
+       "itemname",
+       "$ccm4rollpro",
+       "hash (case-insensitive) match",
+       "CCM 4 Roll Pro III"
+      ],
+      [
+       "itemname",
+       "$ccmjetspeedft1",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT1"
+      ],
+      [
+       "itemname",
+       "$stxsurgeonhpr",
+       "hash (case-insensitive) match",
+       "STX Surgeon HPR"
+      ],
+      [
+       "itemname",
+       "$warrioralphaqredge",
+       "hash (case-insensitive) match",
+       "Warrior Alpha QR Edge"
+      ]
+     ]
+    },
+    "skatedisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+      "stored_bytes": 868,
+      "wrapped": true,
+      "bytes": 2735,
+      "sha256": "461f524244bc2eef4868cb3f7ae61fe8cab0ced0f110de1b5be07f3ef97bd3f7"
+     },
+     "counts": {
+      "skatename: hash (case-insensitive) match": 7,
+      "skatename: exact key": 34
+     },
+     "examples": [
+      [
+       "skatename",
+       "$bauernexus2n",
+       "hash (case-insensitive) match",
+       "Bauer Nexus 2N PRO"
+      ],
+      [
+       "skatename",
+       "$bauersupreme2s",
+       "hash (case-insensitive) match",
+       "Bauer Supreme 2S Pro"
+      ],
+      [
+       "skatename",
+       "$bauervapor1x2",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X 2.0 "
+      ],
+      [
+       "skatename",
+       "$ccmjetspeed",
+       "exact key",
+       "CCM Jetspeed"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeedft1",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT1"
+      ],
+      [
+       "skatename",
+       "$ccmribcor70k",
+       "hash (case-insensitive) match",
+       "CCM Ribcor 70K"
+      ],
+      [
+       "skatename",
+       "$ccmsupertacksas1",
+       "hash (case-insensitive) match",
+       "CCM Super Tacks AS1"
+      ],
+      [
+       "skatename",
+       "$truehockeycustom",
+       "hash (case-insensitive) match",
+       "True Hockey Pro Custom"
+      ]
+     ]
+    },
+    "stickdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "patch_inxp_53.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+      "stored_bytes": 1586,
+      "wrapped": true,
+      "bytes": 6631,
+      "sha256": "a0bcc73b387c083248ac36c938fa738088bc72c7a498caec1aee2c4bf3315c63"
+     },
+     "counts": {
+      "stickname: hash (case-insensitive) match": 14,
+      "stickname: exact key": 73
+     },
+     "examples": [
+      [
+       "stickname",
+       "$bauernexus2n",
+       "hash (case-insensitive) match",
+       "Bauer Nexus 2N PRO"
+      ],
+      [
+       "stickname",
+       "$bauersupreme2s",
+       "hash (case-insensitive) match",
+       "Bauer Supreme 2S Pro"
+      ],
+      [
+       "stickname",
+       "$bauervapor1xlite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X Lite"
+      ],
+      [
+       "stickname",
+       "$ccmjetspeed",
+       "exact key",
+       "CCM Jetspeed"
+      ],
+      [
+       "stickname",
+       "$ccmrbzft1",
+       "hash (case-insensitive) match",
+       "CCM RBZ FT1"
+      ],
+      [
+       "stickname",
+       "$ccmribcortrigger2",
+       "hash (case-insensitive) match",
+       "CCM Ribcor Trigger 2"
+      ],
+      [
+       "stickname",
+       "$ccmribcortrigger3d",
+       "hash (case-insensitive) match",
+       "CCM Ribcor Trigger 3D"
+      ],
+      [
+       "stickname",
+       "$ccmsupertacks2",
+       "hash (case-insensitive) match",
+       "CCM Super Tacks 2.0"
+      ]
+     ]
+    },
+    "skatervisortypes.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+      "stored_bytes": 178,
+      "wrapped": false,
+      "bytes": 178,
+      "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 1,
+      "itemname: exact key": 6
+     },
+     "examples": [
+      [
+       "itemname",
+       "$none",
+       "hash (case-insensitive) match",
+       "None"
+      ],
+      [
+       "itemname",
+       "$straightitech",
+       "exact key",
+       "Straight BAUER "
+      ],
+      [
+       "itemname",
+       "$curveditech",
+       "exact key",
+       "Curved BAUER"
+      ],
+      [
+       "itemname",
+       "$TXT_VISOR_AVIATOR",
+       "exact key",
+       "Aviator"
+      ]
+     ]
+    }
+   },
+   "totals": {
+    "exact key": 229,
+    "hash (case-insensitive) match": 49,
+    "unresolved": 20
+   },
+   "unresolved_keys": {
+    "GoalieMaskPattern": 10,
+    "GoalieMaskBrandAbbr": 10
+   }
+  },
+  "nhl20": {
+   "dictionary": {
+    "archive": "inxp_00.big",
+    "member": "nhl/data/kettle/loc/eng_us.db",
+    "stored_bytes": 2675972,
+    "wrapped": false,
+    "bytes": 2675972,
+    "sha256": "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad",
+    "copies": [
+     "inxp_00.big"
+    ],
+    "rows": 40535,
+    "hash_mismatches": 4
+   },
+   "files": {
+    "goaliemaskinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 1064,
+      "wrapped": true,
+      "bytes": 4427,
+      "sha256": "c2d54977ef5b6d8ad5df12e4ac5cdd36d33751b80af38e135fd80f69b3ced200"
+     },
+     "counts": {
+      "name: exact key": 50,
+      "stylename: hash (case-insensitive) match": 14,
+      "patternname: exact key": 28,
+      "stylename: exact key": 14,
+      "patternname: unresolved": 22,
+      "styleabbreviation: unresolved": 22
+     },
+     "examples": [
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "patternname",
+       "$yellow",
+       "exact key",
+       "Yellow"
+      ],
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ]
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "counts": {
+      "displayname: exact key": 8
+     },
+     "examples": [
+      [
+       "displayname",
+       "MaskPrimaryItech",
+       "exact key",
+       "Starting BAUER"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryHasek",
+       "exact key",
+       "Starting Cage"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCooper",
+       "exact key",
+       "Starting Cage 2"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCHL",
+       "exact key",
+       "Starting CHL Mask"
+      ]
+     ]
+    },
+    "skaterhelmetstyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+      "stored_bytes": 640,
+      "wrapped": false,
+      "bytes": 640,
+      "sha256": "bfb440e9aada6733c8e0919525bca1d548b0478c8cbd7388d12e58559ed6f78c"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 6,
+      "itemname: exact key": 9
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauer4500",
+       "hash (case-insensitive) match",
+       "BAUER 4500"
+      ],
+      [
+       "itemname",
+       "$bauerreakt100",
+       "exact key",
+       "BAUER RE-AKT 100"
+      ],
+      [
+       "itemname",
+       "$bauerreakt200",
+       "hash (case-insensitive) match",
+       "Bauer Re-Akt 200"
+      ],
+      [
+       "itemname",
+       "$ccmfitlite",
+       "exact key",
+       "CCM Fitlite"
+      ],
+      [
+       "itemname",
+       "$warrioralphaone",
+       "hash (case-insensitive) match",
+       "Warrior Alpha One"
+      ],
+      [
+       "itemname",
+       "$helmethalfcage",
+       "hash (case-insensitive) match",
+       "Half cage"
+      ],
+      [
+       "itemname",
+       "$helmetfullshield",
+       "hash (case-insensitive) match",
+       "Full Shield"
+      ],
+      [
+       "itemname",
+       "$helmethybridshield",
+       "hash (case-insensitive) match",
+       "Hybrid Shield"
+      ]
+     ]
+    },
+    "skaterglovestyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+      "stored_bytes": 973,
+      "wrapped": false,
+      "bytes": 973,
+      "sha256": "aa99c4fb51a813a2e53c584c972d5d3e264d9bb4ae4075c7fa4df31141b18b51"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 9,
+      "itemname: exact key": 17
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauernexus2n",
+       "hash (case-insensitive) match",
+       "Bauer Nexus 2N PRO"
+      ],
+      [
+       "itemname",
+       "$bauersupreme2spro",
+       "hash (case-insensitive) match",
+       "Bauer Supreme 2S Pro"
+      ],
+      [
+       "itemname",
+       "$bauervapor1xlite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X Lite"
+      ],
+      [
+       "itemname",
+       "$ccm30k",
+       "exact key",
+       "CCM 30K"
+      ],
+      [
+       "itemname",
+       "$ccm4rollpro",
+       "hash (case-insensitive) match",
+       "CCM 4 Roll Pro III"
+      ],
+      [
+       "itemname",
+       "$ccmjetspeedft1",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT1"
+      ],
+      [
+       "itemname",
+       "$stxsurgeonhpr",
+       "hash (case-insensitive) match",
+       "STX Surgeon HPR"
+      ],
+      [
+       "itemname",
+       "$truehockeya60sbppro",
+       "hash (case-insensitive) match",
+       "True Hockey A6.0 SBP Pro"
+      ]
+     ]
+    },
+    "skatedisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+      "stored_bytes": 1709,
+      "wrapped": true,
+      "bytes": 7312,
+      "sha256": "db71fe45afd1d349147792760a1165cedc05d62aceb6c0e463d0814b09dbc6fe"
+     },
+     "counts": {
+      "skatename: hash (case-insensitive) match": 9,
+      "skatename: exact key": 92
+     },
+     "examples": [
+      [
+       "skatename",
+       "$bauernexus2n",
+       "hash (case-insensitive) match",
+       "Bauer Nexus 2N PRO"
+      ],
+      [
+       "skatename",
+       "$bauersupreme2s",
+       "hash (case-insensitive) match",
+       "Bauer Supreme 2S Pro"
+      ],
+      [
+       "skatename",
+       "$bauervapor2xpro",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 2X Pro"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeed",
+       "exact key",
+       "CCM Jetspeed"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeedft1",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT1"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeedft2",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT2"
+      ],
+      [
+       "skatename",
+       "$ccmribcor70k",
+       "hash (case-insensitive) match",
+       "CCM Ribcor 70K"
+      ],
+      [
+       "skatename",
+       "$ccmribcor80k",
+       "hash (case-insensitive) match",
+       "CCM RIBCOR 80K"
+      ]
+     ]
+    },
+    "stickdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+      "stored_bytes": 2564,
+      "wrapped": true,
+      "bytes": 13098,
+      "sha256": "176886d9a8d02a95d3f567e7c7c97451e8c2ee659bebf9af1bbaff97694c3a27"
+     },
+     "counts": {
+      "stickname: hash (case-insensitive) match": 22,
+      "stickname: exact key": 139
+     },
+     "examples": [
+      [
+       "stickname",
+       "$bauernexus2n",
+       "hash (case-insensitive) match",
+       "Bauer Nexus 2N PRO"
+      ],
+      [
+       "stickname",
+       "$bauersupreme2s",
+       "hash (case-insensitive) match",
+       "Bauer Supreme 2S Pro"
+      ],
+      [
+       "stickname",
+       "$bauervaporflylite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor Flylite"
+      ],
+      [
+       "stickname",
+       "$ccmjetspeed",
+       "exact key",
+       "CCM Jetspeed"
+      ],
+      [
+       "stickname",
+       "$ccmjetspeedft2",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT2"
+      ],
+      [
+       "stickname",
+       "$ccmrbzft1",
+       "hash (case-insensitive) match",
+       "CCM RBZ FT1"
+      ],
+      [
+       "stickname",
+       "$ccmribcortrigger2",
+       "hash (case-insensitive) match",
+       "CCM Ribcor Trigger 2"
+      ],
+      [
+       "stickname",
+       "$ccmribcortrigger3d",
+       "hash (case-insensitive) match",
+       "CCM Ribcor Trigger 3D"
+      ]
+     ]
+    },
+    "skatervisortypes.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+      "stored_bytes": 178,
+      "wrapped": false,
+      "bytes": 178,
+      "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 1,
+      "itemname: exact key": 6
+     },
+     "examples": [
+      [
+       "itemname",
+       "$none",
+       "hash (case-insensitive) match",
+       "None"
+      ],
+      [
+       "itemname",
+       "$straightitech",
+       "exact key",
+       "Straight BAUER "
+      ],
+      [
+       "itemname",
+       "$curveditech",
+       "exact key",
+       "Curved BAUER"
+      ],
+      [
+       "itemname",
+       "$TXT_VISOR_AVIATOR",
+       "exact key",
+       "Aviator"
+      ]
+     ]
+    }
+   },
+   "totals": {
+    "exact key": 363,
+    "hash (case-insensitive) match": 61,
+    "unresolved": 44
+   },
+   "unresolved_keys": {
+    "GoalieMaskPattern": 22,
+    "GoalieMaskBrandAbbr": 22
+   }
+  },
+  "nhl21": {
+   "dictionary": {
+    "archive": "inxp_00.big",
+    "member": "nhl/data/kettle/loc/eng_us.db",
+    "stored_bytes": 3921060,
+    "wrapped": false,
+    "bytes": 3921060,
+    "sha256": "24693e2f1ae87bde23066d083458bae2efea9a633269518f4fede2354fbac969",
+    "copies": [
+     "inxp_00.big"
+    ],
+    "rows": 55766,
+    "hash_mismatches": 4
+   },
+   "files": {
+    "goaliemaskinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 1141,
+      "wrapped": true,
+      "bytes": 4741,
+      "sha256": "c4920c36b481f247b89125709baf00db0f0690650f2f53960b55aa1176a81575"
+     },
+     "counts": {
+      "name: exact key": 53,
+      "stylename: hash (case-insensitive) match": 14,
+      "patternname: exact key": 28,
+      "stylename: exact key": 14,
+      "patternname: unresolved": 25,
+      "styleabbreviation: unresolved": 25
+     },
+     "examples": [
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "patternname",
+       "$yellow",
+       "exact key",
+       "Yellow"
+      ],
+      [
+       "name",
+       "$TXT_STANDARD_MASK_DESC",
+       "exact key",
+       "%1s %2s"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ],
+      [
+       "stylename",
+       "$bauer",
+       "hash (case-insensitive) match",
+       "BAUER"
+      ]
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "counts": {
+      "displayname: exact key": 8
+     },
+     "examples": [
+      [
+       "displayname",
+       "MaskPrimaryItech",
+       "exact key",
+       "Starting BAUER"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryHasek",
+       "exact key",
+       "Starting Cage"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCooper",
+       "exact key",
+       "Starting Cage 2"
+      ],
+      [
+       "displayname",
+       "MaskPrimaryCHL",
+       "exact key",
+       "Starting CHL Mask"
+      ]
+     ]
+    },
+    "skaterhelmetstyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+      "stored_bytes": 900,
+      "wrapped": false,
+      "bytes": 900,
+      "sha256": "962e41d42b33ee92ead4699e26cf682a98cc35fc868851d6b3f65cdd387c817b"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 7,
+      "itemname: exact key": 11
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauer4500",
+       "hash (case-insensitive) match",
+       "BAUER 4500"
+      ],
+      [
+       "itemname",
+       "$bauerreakt100",
+       "exact key",
+       "BAUER RE-AKT 100"
+      ],
+      [
+       "itemname",
+       "$bauerreakt200",
+       "hash (case-insensitive) match",
+       "Bauer Re-Akt 200"
+      ],
+      [
+       "itemname",
+       "$ccmfitlite",
+       "exact key",
+       "CCM Fitlite"
+      ],
+      [
+       "itemname",
+       "$truehockeydynamic9pro",
+       "hash (case-insensitive) match",
+       "TRUE HOCKEY DYNAMIC 9 PRO"
+      ],
+      [
+       "itemname",
+       "$warrioralphaone",
+       "hash (case-insensitive) match",
+       "Warrior Alpha One"
+      ],
+      [
+       "itemname",
+       "$helmethalfcage",
+       "hash (case-insensitive) match",
+       "Half cage"
+      ],
+      [
+       "itemname",
+       "$helmetfullshield",
+       "hash (case-insensitive) match",
+       "Full Shield"
+      ]
+     ]
+    },
+    "skaterglovestyle.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+      "stored_bytes": 776,
+      "wrapped": true,
+      "bytes": 2180,
+      "sha256": "0ce956add23b145cad373517c300f0ae4cc3bc8cf597d0298043170b3600e48b"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 10,
+      "itemname: exact key": 34
+     },
+     "examples": [
+      [
+       "itemname",
+       "$bauernexus2n",
+       "hash (case-insensitive) match",
+       "Bauer Nexus 2N"
+      ],
+      [
+       "itemname",
+       "$bauersupreme2spro",
+       "hash (case-insensitive) match",
+       "Bauer Supreme 2S Pro"
+      ],
+      [
+       "itemname",
+       "$bauervapor1xlite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X Lite"
+      ],
+      [
+       "itemname",
+       "$ccm30k",
+       "exact key",
+       "CCM 30K"
+      ],
+      [
+       "itemname",
+       "$ccm4rollpro",
+       "hash (case-insensitive) match",
+       "CCM 4 Roll Pro III"
+      ],
+      [
+       "itemname",
+       "$ccmjetspeedft1",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT1"
+      ],
+      [
+       "itemname",
+       "$stxsurgeonhpr",
+       "hash (case-insensitive) match",
+       "STX Surgeon HPR"
+      ],
+      [
+       "itemname",
+       "$stxstallionhpr2",
+       "hash (case-insensitive) match",
+       "STX STALLION HPR 2"
+      ]
+     ]
+    },
+    "skatedisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+      "stored_bytes": 2057,
+      "wrapped": true,
+      "bytes": 8993,
+      "sha256": "bb86b4fa3bbc7543f207d11ddf22ae3bd3e3b04dab048d878f71ae1c178a8b9c"
+     },
+     "counts": {
+      "skatename: exact key": 116,
+      "skatename: hash (case-insensitive) match": 7
+     },
+     "examples": [
+      [
+       "skatename",
+       "$bauersupremeultrasonicpro",
+       "exact key",
+       "Bauer Supreme Ultrasonic"
+      ],
+      [
+       "skatename",
+       "$bauervapor2xpro",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 2X Pro"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeed",
+       "exact key",
+       "CCM Jetspeed"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeedft1",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT1"
+      ],
+      [
+       "skatename",
+       "$ccmjetspeedft2",
+       "hash (case-insensitive) match",
+       "CCM Jetspeed FT2"
+      ],
+      [
+       "skatename",
+       "$ccmribcor70k",
+       "hash (case-insensitive) match",
+       "CCM Ribcor 70K"
+      ],
+      [
+       "skatename",
+       "$ccmribcor80k",
+       "hash (case-insensitive) match",
+       "CCM RIBCOR 80K"
+      ],
+      [
+       "skatename",
+       "$ccmsupertacksas1",
+       "hash (case-insensitive) match",
+       "CCM Super Tacks AS1"
+      ]
+     ]
+    },
+    "stickdisplayinfo.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+      "stored_bytes": 3049,
+      "wrapped": true,
+      "bytes": 15524,
+      "sha256": "d96d764a0b8c1812dd59975b1049bbea9fdc51587dcc138d117dac0382379913"
+     },
+     "counts": {
+      "stickname: exact key": 167,
+      "stickname: hash (case-insensitive) match": 25
+     },
+     "examples": [
+      [
+       "stickname",
+       "$bauernexusadv",
+       "exact key",
+       "Bauer Nexus ADV"
+      ],
+      [
+       "stickname",
+       "$bauernexusgeopro",
+       "exact key",
+       "Bauer Nexus Geo Pro"
+      ],
+      [
+       "stickname",
+       "$bauersupreme2scanada",
+       "exact key",
+       "Bauer Supreme 2S Canada"
+      ],
+      [
+       "stickname",
+       "$bauersupreme2susa",
+       "exact key",
+       "Bauer Supreme 2S USA"
+      ],
+      [
+       "stickname",
+       "$bauersupremeadv",
+       "hash (case-insensitive) match",
+       "Bauer Supreme ADV"
+      ],
+      [
+       "stickname",
+       "$bauersupremeadv2",
+       "hash (case-insensitive) match",
+       "BAUER VAPOR ADV"
+      ],
+      [
+       "stickname",
+       "$bauervaporflylite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor Flylite"
+      ],
+      [
+       "stickname",
+       "$bauervapor1xlite",
+       "hash (case-insensitive) match",
+       "Bauer Vapor 1X Lite"
+      ]
+     ]
+    },
+    "skatervisortypes.csv": {
+     "csv_source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+      "stored_bytes": 178,
+      "wrapped": false,
+      "bytes": 178,
+      "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c"
+     },
+     "counts": {
+      "itemname: hash (case-insensitive) match": 1,
+      "itemname: exact key": 6
+     },
+     "examples": [
+      [
+       "itemname",
+       "$none",
+       "hash (case-insensitive) match",
+       "None"
+      ],
+      [
+       "itemname",
+       "$straightitech",
+       "exact key",
+       "Straight BAUER "
+      ],
+      [
+       "itemname",
+       "$curveditech",
+       "exact key",
+       "Curved BAUER"
+      ],
+      [
+       "itemname",
+       "$TXT_VISOR_AVIATOR",
+       "exact key",
+       "Aviator"
+      ]
+     ]
+    }
+   },
+   "totals": {
+    "exact key": 437,
+    "hash (case-insensitive) match": 64,
+    "unresolved": 50
+   },
+   "unresolved_keys": {
+    "GoalieMaskPattern": 25,
+    "GoalieMaskBrandAbbr": 25
+   }
+  }
+ }
+}

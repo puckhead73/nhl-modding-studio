@@ -1,0 +1,37 @@
+$ python research/nhl07-roster-schema/scripts/update_table_match.py anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658 0x1c anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml
+JJDo   68B nf=75 -> lVMf[exhibitiongoalieequipment] == update+key
+hTDj   32B nf=32 -> NDEo[customteamequipmenttable] == update+key
+MSZu   12B nf=17 -> ajmx[exhibitionskaterequipment] == update+key
+mASv    8B nf=11 -> oYeE[exhibitionteamstrategies] == update+key
+KjDh    4B nf= 5 -> Roup[custompalettetable] == update+key
+VDLc  148B nf=79 -> nAUy[stockgoalieequipment] == update+key
+SREo  200B nf=24 -> ttOk[exhibitionteams] == update+key
+PPVt    8B nf=13 -> Vzjq[customfacetable] == update+key
+qWeu    4B nf= 3 -> caBZ[exhibitionplayers] == update+key
+vozd   16B nf=71 -> ulGe[exhibitionrostertable] == update+key
+UHgc   32B nf=33 -> vbHh[stockteamequipmenttable] == update+key
+CvSu  184B nf=32 -> cPbu[exhibitionplayerbiotable] == update+key
+TUaR  104B nf=33 -> OEtS[exhibitionarena] == update+key
+RosT   24B nf=30 -> yvSd[exhibitionskaterai] == update+key
+uyGF   20B nf=26 -> yuHm[exhibitiongoalieai] == update+key
+XGls    8B nf= 4 -> sozv[stockteamcolorstable] == update+key
+
+update-field counts for roster-group parents:
+  exhibitiongoalieequipment      lVMf all=75 update=74 key=['zIBw']
+  customteamequipmenttable       NDEo all=32 update=31 key=['qEfv']
+  exhibitionskaterequipment      ajmx all=17 update=16 key=['zIBw']
+  exhibitionteamstrategies       oYeE all=11 update=10 key=['qEfv']
+  custompalettetable             Roup all=5 update=4 key=['qEfv']
+  stockgoalieequipment           nAUy all=79 update=78 key=['XWot']
+  exhibitionfreeagents           QEoV all=1 update=0 key=['TWSX']
+  exhibitionteams                ttOk all=31 update=23 key=['qEfv']
+  customfacetable                Vzjq all=13 update=12 key=['qFky']
+  exhibitionplayers              caBZ all=3 update=2 key=['qEfv']
+  exhibitionrostertable          ulGe all=71 update=70 key=['XWot']
+  stockteamequipmenttable        vbHh all=33 update=32 key=['qEfv']
+  exhibitionplayerbiotable       cPbu all=32 update=31 key=['zIBw']
+  exhibitionarena                OEtS all=33 update=32 key=['qEfv']
+  exhibitionskaterai             yvSd all=30 update=29 key=['zIBw']
+  exhibitiongoalieai             yuHm all=26 update=25 key=['zIBw']
+  stockteamcolorstable           sozv all=6 update=3 key=['qEfv']
+

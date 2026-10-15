@@ -1,0 +1,319 @@
+{
+ "nhl15": {
+  "cusa": "CUSA00561",
+  "eboot_sha256": "37df821aa288535d19f6d97a943cf7f3e7b1761500a19877a34e28c775269917",
+  "eboot_size": 66413634,
+  "param_sfo": {
+   "size": 1720,
+   "version_strings": [
+    "01.00\u0000",
+    "01.06\u0000"
+   ]
+  },
+  "db_members": [
+   {
+    "archive": "inxp00.big",
+    "entry": 0,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 16981156,
+    "sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8"
+   },
+   {
+    "archive": "inxp00.big",
+    "entry": 146,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 1646268,
+    "sha256": "fa65b9af56b51ab6fa10253dcb0d9b5cca48ea930d64ea6352ea916b35945017"
+   },
+   {
+    "archive": "patch_inxp00.big",
+    "entry": 0,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 16981204,
+    "sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff"
+   },
+   {
+    "archive": "patch_inxp00.big",
+    "entry": 264,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 1658908,
+    "sha256": "1e873d7ef0c4fe87dc2d92752c05a82ec81c701beb7f6fe4476ff99bb320aef2"
+   }
+  ],
+  "anchor_sha256": {
+   "nhl_game.db": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "eng_us.db": "fa65b9af56b51ab6fa10253dcb0d9b5cca48ea930d64ea6352ea916b35945017"
+  }
+ },
+ "nhl16": {
+  "cusa": "CUSA01909",
+  "eboot_sha256": "e4845ac1b74b9cf6b804fe530f2b6f50e23e2eb4cf57db9b44a225f4df171779",
+  "eboot_size": 58936564,
+  "param_sfo": {
+   "size": 1760,
+   "version_strings": [
+    "01.00\u0000"
+   ]
+  },
+  "db_members": [
+   {
+    "archive": "inxp_00.big",
+    "entry": 86,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 1859156,
+    "sha256": "cb1f5d56be75827696b38132e405fa678ab34761026fed21fefd9a875beba231"
+   },
+   {
+    "archive": "inxp_00.big",
+    "entry": 218,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 18456008,
+    "sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c"
+   }
+  ],
+  "anchor_sha256": {
+   "nhl_game.db": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "eng_us.db": "cb1f5d56be75827696b38132e405fa678ab34761026fed21fefd9a875beba231"
+  }
+ },
+ "nhl17": {
+  "cusa": "CUSA04326",
+  "eboot_sha256": "6aa1ff7be63a4c42eb39ed277f9bf8adb05882eacb63f0bbe028da66fceed2e7",
+  "eboot_size": 73395278,
+  "param_sfo": {
+   "size": 1792,
+   "version_strings": [
+    "01.00\u0000"
+   ]
+  },
+  "db_members": [
+   {
+    "archive": "inxp_00.big",
+    "entry": 441,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2074876,
+    "sha256": "035b3b30e34cd2c2f6fe2ef9cb76ef8c0a55d8d92e88898011ab55087b2e0e51"
+   },
+   {
+    "archive": "inxp_00.big",
+    "entry": 1053,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 17798544,
+    "sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff"
+   }
+  ],
+  "anchor_sha256": {
+   "nhl_game.db": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "eng_us.db": "035b3b30e34cd2c2f6fe2ef9cb76ef8c0a55d8d92e88898011ab55087b2e0e51"
+  }
+ },
+ "nhl18": {
+  "cusa": "CUSA07569",
+  "eboot_sha256": "59e33089575da770ed527c1ffac8c9d608a8606961eb3debc64caea13bc86a50",
+  "eboot_size": 80134904,
+  "param_sfo": {
+   "size": 1852,
+   "version_strings": [
+    "01.00\u0000"
+   ]
+  },
+  "db_members": [
+   {
+    "archive": "inxp_00.big",
+    "entry": 503,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2250244,
+    "sha256": "12f1af46906c064670f3b536ef3876b6fb8921ac620e88785d359ff17ea7159f"
+   },
+   {
+    "archive": "inxp_00.big",
+    "entry": 1200,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 18171964,
+    "sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704"
+   }
+  ],
+  "anchor_sha256": {
+   "nhl_game.db": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "eng_us.db": "12f1af46906c064670f3b536ef3876b6fb8921ac620e88785d359ff17ea7159f"
+  }
+ },
+ "nhl19": {
+  "cusa": "CUSA11126",
+  "eboot_sha256": "426297a6ad5a16bed648f2f8aa83b73a1eecfcf8e85ef018e11dbe88b4dd4cca",
+  "eboot_size": 100369766,
+  "param_sfo": {
+   "size": 1924,
+   "version_strings": [
+    "01.00\u0000",
+    "01.55\u0000",
+    "01.60\u0000"
+   ]
+  },
+  "db_members": [
+   {
+    "archive": "inxp_00.big",
+    "entry": 936,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2492428,
+    "sha256": "62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2"
+   },
+   {
+    "archive": "inxp_00.big",
+    "entry": 2089,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10347860,
+    "sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408"
+   },
+   {
+    "archive": "patch_inxp_51.big",
+    "entry": 991,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2494372,
+    "sha256": "a3a08ce74f90ffc986c7c8247c836578459138aad937a8f564efbc62158d6b55"
+   },
+   {
+    "archive": "patch_inxp_51.big",
+    "entry": 1827,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10347860,
+    "sha256": "82d66970d12be53d14dd4605a17c6f9762f4b87444a76e175b5326f9a793c6e3"
+   },
+   {
+    "archive": "patch_inxp_52.big",
+    "entry": 326,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2498796,
+    "sha256": "2d517b33f380ff03d4db5459d57f3484cdbb7a0fbcdbc7e75cbdddff0d51006c"
+   },
+   {
+    "archive": "patch_inxp_52.big",
+    "entry": 657,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10337184,
+    "sha256": "7ed8b5fbba720965a6397187d2f9d8d12aa222efe1af3398b2bf60edc363cf45"
+   },
+   {
+    "archive": "patch_inxp_53.big",
+    "entry": 439,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2503716,
+    "sha256": "c04d59e54ad26c6d9b7fcc2c0e4820e42539020c2a47bc3ed5b42c34b24a6ccb"
+   },
+   {
+    "archive": "patch_inxp_53.big",
+    "entry": 937,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10337184,
+    "sha256": "997ea05b3c0aa2a62a23b32ed5fe9cbc11e6f9c6cbf9dc2c8d4d168e7851bbc7"
+   },
+   {
+    "archive": "patch_inxp_54.big",
+    "entry": 254,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2506220,
+    "sha256": "44d4819376993962f4e4e813789d51e017b02f5e16e7a181421eb9b82e0576f9"
+   },
+   {
+    "archive": "patch_inxp_54.big",
+    "entry": 598,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10318300,
+    "sha256": "ea6f39e05dc4b1540d3a875ec627597b076a0b58ddf5b4e9b776ef3136f22dc7"
+   },
+   {
+    "archive": "patch_inxp_55.big",
+    "entry": 234,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2507140,
+    "sha256": "25a00360c890183248dca909b5f7dd560274f4629d99ea43e53a2ebe940468da"
+   },
+   {
+    "archive": "patch_inxp_55.big",
+    "entry": 528,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10318300,
+    "sha256": "fcb4bfe8516f2464968ed8a18ed54b7c52c60e6a89a2e27e83152511c4a670c4"
+   },
+   {
+    "archive": "patch_inxp_56.big",
+    "entry": 209,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2507372,
+    "sha256": "fbb8adcf2f2fd0558a7c1564f3a5bdd3d2acfb83f11e91477163f4935a3613fa"
+   },
+   {
+    "archive": "patch_inxp_56.big",
+    "entry": 504,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10318668,
+    "sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d"
+   }
+  ],
+  "anchor_sha256": {
+   "nhl_game.db": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408"
+  }
+ },
+ "nhl20": {
+  "cusa": "CUSA15439",
+  "eboot_sha256": "82ea5a63af999ed18d9800928f980f88b1aba7007aa0b4af94a292a7c2729adc",
+  "eboot_size": 98710655,
+  "param_sfo": {
+   "size": 1884,
+   "version_strings": [
+    "01.00\u0000"
+   ]
+  },
+  "db_members": [
+   {
+    "archive": "inxp_00.big",
+    "entry": 6245,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 2675972,
+    "sha256": "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad"
+   },
+   {
+    "archive": "inxp_00.big",
+    "entry": 13224,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 10226516,
+    "sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b"
+   }
+  ],
+  "anchor_sha256": {
+   "nhl_game.db": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "eng_us.db": "62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2"
+  }
+ },
+ "nhl21": {
+  "cusa": "CUSA18182",
+  "eboot_sha256": "fc95ca66cc65a45f6d125f5f02920c296d0c6ff1d7a65a727b6e6a25b1dd1731",
+  "eboot_size": 104845239,
+  "param_sfo": {
+   "size": 1888,
+   "version_strings": [
+    "01.00\u0000",
+    "01.01\u0000"
+   ]
+  },
+  "db_members": [
+   {
+    "archive": "inxp_00.big",
+    "entry": 1156,
+    "path": "nhl/data/kettle/loc/eng_us.db",
+    "size": 3921060,
+    "sha256": "24693e2f1ae87bde23066d083458bae2efea9a633269518f4fede2354fbac969"
+   },
+   {
+    "archive": "inxp_00.big",
+    "entry": 2652,
+    "path": "nhl/data/common/gamemodes/database/t3db/nhl_game.db",
+    "size": 11209672,
+    "sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9"
+   }
+  ],
+  "anchor_sha256": {
+   "nhl_game.db": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9"
+  }
+ }
+}

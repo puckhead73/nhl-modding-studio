@@ -10,7 +10,8 @@
 //! (its exact byte values vary by title — NHL19 starts `00 70 00…`, NHL16 starts `07 00 00…` — so it
 //! is preserved verbatim, never interpreted). One record (the roster) has a payload that is an
 //! **LZ4 Frame**, optionally preceded by a `01` codec byte: NHL17–19+ use `[01][frame]`, **NHL16 uses
-//! a bare `[frame]`** (no codec byte). The frame decompresses to a **little-endian TDB v6** (the live
+//! a bare `[frame]`** (no codec byte). NHL15 instead uses native-framed `chunkzip` (128 KiB chunks).
+//! The payload decompresses to a **little-endian TDB v6** (the live
 //! roster). Other records are small JSON/version blobs. See `docs/formats/ps4-save-container.md`
 //! (verified against the nhl19 + nhl16 anchors).
 //!
@@ -44,7 +45,8 @@ fn parse_records(data: &[u8]) -> Result<Vec<Record>, SaveError> {
         if pos + 4 + HEADER_LEN > data.len() {
             return Err(SaveError::Ps4("truncated record header".into()));
         }
-        let len = u32::from_le_bytes([data[pos], data[pos + 1], data[pos + 2], data[pos + 3]]) as usize;
+        let len =
+            u32::from_le_bytes([data[pos], data[pos + 1], data[pos + 2], data[pos + 3]]) as usize;
         pos += 4;
         let mut header = [0u8; HEADER_LEN];
         header.copy_from_slice(&data[pos..pos + HEADER_LEN]);
@@ -64,9 +66,11 @@ fn parse_records(data: &[u8]) -> Result<Vec<Record>, SaveError> {
     Ok(records)
 }
 
-/// How the roster record wraps its LZ4 frame within the payload.
+/// The roster record's compression and wrapper.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 enum Framing {
+    /// Native padded chunkzip (NHL15).
+    Chunkzip,
     /// Payload is the bare LZ4 frame (NHL16).
     Bare,
     /// Payload is `[01][LZ4 frame]` (NHL17–19+).
@@ -77,19 +81,30 @@ impl Framing {
     /// Bytes the frame is offset by within the payload.
     fn prefix_len(self) -> usize {
         match self {
-            Framing::Bare => 0,
+            Framing::Bare | Framing::Chunkzip => 0,
             Framing::Codec01 => 1,
         }
     }
 }
 
-/// Find the roster record — the one whose payload is an LZ4 frame (optionally `01`-prefixed) — and
+/// Compression observed in the roster record, independent of the title/folder name.
+pub fn compression_label(data: &[u8]) -> Option<&'static str> {
+    let records = parse_records(data).ok()?;
+    let (_, framing) = roster_record(&records)?;
+    Some(match framing { Framing::Chunkzip => "ps4-chunkzip", Framing::Bare | Framing::Codec01 => "ps4-lz4" })
+}
+
+/// Find the roster record — chunkzip or LZ4 (optionally `01`-prefixed) — and
 /// how it is framed (so repack can reproduce the exact wrapping).
 fn roster_record(records: &[Record]) -> Option<(usize, Framing)> {
     records.iter().enumerate().find_map(|(i, r)| {
-        if r.payload.get(0..4) == Some(&LZ4_MAGIC[..]) {
+        if r.payload.starts_with(tdb_archive_codec::MAGIC_CHUNKZIP) {
+            Some((i, Framing::Chunkzip))
+        } else if r.payload.get(0..4) == Some(&LZ4_MAGIC[..]) {
             Some((i, Framing::Bare))
-        } else if r.payload.first() == Some(&CODEC_LZ4) && r.payload.get(1..5) == Some(&LZ4_MAGIC[..]) {
+        } else if r.payload.first() == Some(&CODEC_LZ4)
+            && r.payload.get(1..5) == Some(&LZ4_MAGIC[..])
+        {
             Some((i, Framing::Codec01))
         } else {
             None
@@ -107,7 +122,7 @@ fn serialize_records(records: &[Record]) -> Vec<u8> {
     out
 }
 
-/// `true` if `data` parses as a PS4 save stream containing an LZ4 roster record.
+/// `true` if `data` parses as a PS4 save stream containing a supported compressed roster record.
 pub fn is_ps4_save(data: &[u8]) -> bool {
     parse_records(data)
         .map(|r| roster_record(&r).is_some())
@@ -117,20 +132,32 @@ pub fn is_ps4_save(data: &[u8]) -> bool {
 /// Extract the inner little-endian roster TDB from a PS4 save `DATA` stream.
 pub fn extract_roster(data: &[u8]) -> Result<Vec<u8>, SaveError> {
     let records = parse_records(data)?;
-    let (idx, framing) =
-        roster_record(&records).ok_or_else(|| SaveError::Ps4("no LZ4 roster record in DATA".into()))?;
-    lz4_decompress(&records[idx].payload[framing.prefix_len()..])
+    let (idx, framing) = roster_record(&records)
+        .ok_or_else(|| SaveError::Ps4("no supported roster record in DATA".into()))?;
+    if framing == Framing::Chunkzip {
+        tdb_archive_codec::decompress_chunkzip(&records[idx].payload)
+            .map_err(|e| SaveError::Ps4(format!("chunkzip roster: {e}")))
+    } else {
+        lz4_decompress(&records[idx].payload[framing.prefix_len()..])
+    }
 }
 
 /// Repack an edited inner roster TDB into the `DATA` stream, preserving every other record and all
-/// headers verbatim, and reproducing the roster record's exact framing (bare frame for NHL16, or the
-/// `01` codec prefix for NHL17–19+).
+/// headers verbatim, retaining native chunkzip for NHL15, bare LZ4 for NHL16, or the
+/// `01` codec prefix for NHL17–19+.
 pub fn repack_roster(original: &[u8], new_inner: &[u8]) -> Result<Vec<u8>, SaveError> {
     let mut records = parse_records(original)?;
-    let (idx, framing) =
-        roster_record(&records).ok_or_else(|| SaveError::Ps4("no LZ4 roster record in DATA".into()))?;
+    let (idx, framing) = roster_record(&records)
+        .ok_or_else(|| SaveError::Ps4("no supported roster record in DATA".into()))?;
 
-    let frame = lz4_compress(new_inner)?;
+    let frame = if framing == Framing::Chunkzip {
+        // Preserve the measured NHL15 native chunking, rather than a single oversized chunk.
+        tdb_archive_codec::is_native_chunkzip_framing(&records[idx].payload)
+            .map_err(|e| SaveError::Ps4(format!("unqualified chunkzip roster framing: {e}")))?;
+        tdb_archive_codec::compress_chunkzip_native(new_inner)
+    } else {
+        lz4_compress(new_inner)?
+    };
     let mut payload = Vec::with_capacity(frame.len() + framing.prefix_len());
     if framing == Framing::Codec01 {
         payload.push(CODEC_LZ4);
@@ -151,7 +178,8 @@ fn lz4_decompress(frame: &[u8]) -> Result<Vec<u8>, SaveError> {
 
 fn lz4_compress(inner: &[u8]) -> Result<Vec<u8>, SaveError> {
     let mut enc = lz4_flex::frame::FrameEncoder::new(Vec::new());
-    enc.write_all(inner).map_err(|e| SaveError::Lz4(e.to_string()))?;
+    enc.write_all(inner)
+        .map_err(|e| SaveError::Lz4(e.to_string()))?;
     enc.finish().map_err(|e| SaveError::Lz4(e.to_string()))
 }
 
@@ -162,7 +190,12 @@ mod tests {
     use tdb_core::TdbFile;
 
     fn read_anchor(rel: &str) -> Vec<u8> {
-        std::fs::read(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)).unwrap()
+        std::fs::read(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../..")
+                .join(rel),
+        )
+        .unwrap()
     }
     /// NHL19 roster save (`[01][frame]` framing) — the doc's primary verified anchor.
     fn nhl19_data() -> Vec<u8> {
@@ -173,25 +206,62 @@ mod tests {
         read_anchor("anchors/ps4/nhl16/savefiles/84f8102f - ROSTER/DATA")
     }
 
+    fn nhl15_data() -> Vec<u8> {
+        read_anchor("anchors/ps4/nhl15/savefiles/84f8102f - ROSTER/DATA")
+    }
+
+    #[test]
+    fn detects_and_extracts_chunkzip_nhl15() {
+        let data = nhl15_data();
+        let records = parse_records(&data).unwrap();
+        let (idx, framing) = roster_record(&records).unwrap();
+        assert_eq!(framing, Framing::Chunkzip);
+        tdb_archive_codec::is_native_chunkzip_framing(&records[idx].payload).unwrap();
+        assert_extracts_le_roster(&data);
+        let inner = extract_roster(&data).unwrap();
+        assert_eq!(inner.len(), 0x264f00);
+        let repacked = repack_roster(&data, &inner).unwrap();
+        let new_records = parse_records(&repacked).unwrap();
+        tdb_archive_codec::is_native_chunkzip_framing(&new_records[idx].payload).unwrap();
+    }
+
     fn assert_extracts_le_roster(data: &[u8]) {
         assert!(is_ps4_save(data));
         let inner = extract_roster(data).unwrap();
         let db = TdbFile::parse(&inner).expect("inner roster parses as TDB");
-        assert_eq!(db.endian, tdb_core::Endian::Little, "PS4 inner TDB is little-endian");
+        assert_eq!(
+            db.endian,
+            tdb_core::Endian::Little,
+            "PS4 inner TDB is little-endian"
+        );
         assert!(db.header_crc_ok(), "extracted roster header CRC verifies");
         // A real roster subset (NHL16 ≈ 36 tables, NHL19 ≈ 54), not a stub.
-        assert!(db.tables.len() > 20, "roster subset has many tables: {}", db.tables.len());
+        assert!(
+            db.tables.len() > 20,
+            "roster subset has many tables: {}",
+            db.tables.len()
+        );
     }
 
     #[test]
     fn detects_and_extracts_codec01_framing_nhl19() {
-        assert_eq!(roster_record(&parse_records(&nhl19_data()).unwrap()).unwrap().1, Framing::Codec01);
+        assert_eq!(
+            roster_record(&parse_records(&nhl19_data()).unwrap())
+                .unwrap()
+                .1,
+            Framing::Codec01
+        );
         assert_extracts_le_roster(&nhl19_data());
     }
 
     #[test]
     fn detects_and_extracts_bare_framing_nhl16() {
-        assert_eq!(roster_record(&parse_records(&nhl16_data()).unwrap()).unwrap().1, Framing::Bare);
+        assert_eq!(
+            roster_record(&parse_records(&nhl16_data()).unwrap())
+                .unwrap()
+                .1,
+            Framing::Bare
+        );
         assert_extracts_le_roster(&nhl16_data());
     }
 
@@ -199,12 +269,16 @@ mod tests {
     /// (codec byte presence) — checked for both the `01`-prefixed and bare variants.
     #[test]
     fn repack_round_trips_and_preserves_framing() {
-        for data in [nhl19_data(), nhl16_data()] {
+        for data in [nhl19_data(), nhl16_data(), nhl15_data()] {
             let (_, framing) = roster_record(&parse_records(&data).unwrap()).unwrap();
             let inner = extract_roster(&data).unwrap();
 
             let repacked = repack_roster(&data, &inner).unwrap();
-            assert_eq!(extract_roster(&repacked).unwrap(), inner, "inner roster survives repack");
+            assert_eq!(
+                extract_roster(&repacked).unwrap(),
+                inner,
+                "inner roster survives repack"
+            );
             assert_eq!(
                 roster_record(&parse_records(&repacked).unwrap()).unwrap().1,
                 framing,
@@ -218,7 +292,10 @@ mod tests {
             for (i, (a, b)) in orig.iter().zip(new.iter()).enumerate() {
                 assert_eq!(a.header, b.header, "record {i} header preserved");
                 if i != roster {
-                    assert_eq!(a.payload, b.payload, "non-roster record {i} payload preserved");
+                    assert_eq!(
+                        a.payload, b.payload,
+                        "non-roster record {i} payload preserved"
+                    );
                 }
             }
         }
@@ -226,7 +303,7 @@ mod tests {
 
     #[test]
     fn edited_roster_survives_repack() {
-        for data in [nhl19_data(), nhl16_data()] {
+        for data in [nhl19_data(), nhl16_data(), nhl15_data()] {
             let mut inner = extract_roster(&data).unwrap();
             let probe = inner.len() / 2;
             inner[probe] ^= 0xFF;

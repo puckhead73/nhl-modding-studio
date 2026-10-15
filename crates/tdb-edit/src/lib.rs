@@ -42,20 +42,43 @@ pub enum EditError {
     /// The entity model could not be assembled from the working bytes.
     Entity(String),
     /// No roster slot matches the requested `(team, player)` pair.
-    NoSuchSlot { team_id: u64, player_id: u64 },
+    NoSuchSlot {
+        team_id: u64,
+        player_id: u64,
+    },
     /// An operation argument was outside its legal set.
-    InvalidValue { what: &'static str, value: i64 },
+    InvalidValue {
+        what: &'static str,
+        value: i64,
+    },
+    /// A text value does not fit the field's fixed byte width. `field` is the metadata's human
+    /// name (the label the user edited), so the refusal reads as a plain sentence in the UI.
+    TextTooLong {
+        field: String,
+        bytes: usize,
+        max: usize,
+    },
     /// No player with that `wBIz` id exists.
     NoSuchPlayer(u64),
     /// A record-allocation primitive failed.
     Alloc(String),
     /// A jersey number is already worn by another player on the team (unique-where-required).
-    JerseyTaken { team: u64, number: u64 },
+    JerseyTaken {
+        team: u64,
+        number: u64,
+    },
     /// The destination team's roster block has no free slot — relocating into it would need block
     /// growth (capacity normalization), which is not available yet.
-    TeamRosterFull { team: u64 },
+    /// A refusal already phrased for the person at the screen (the domain layer resolved names
+    /// and the reason); displayed verbatim, no prefix.
+    Refused(String),
+    TeamRosterFull {
+        team: u64,
+    },
     /// The player already occupies a roster slot — they are not a free agent (use move/trade instead).
-    AlreadyRostered { player: u64 },
+    AlreadyRostered {
+        player: u64,
+    },
     /// A repairing transaction's post-condition audit failed; the operation was rolled back.
     AuditFailed {
         predicate: &'static str,
@@ -85,16 +108,29 @@ impl fmt::Display for EditError {
             EditError::InvalidValue { what, value } => {
                 write!(f, "invalid {what}: {value}")
             }
+            EditError::TextTooLong { field, bytes, max } => {
+                write!(
+                    f,
+                    "{field}: the text is {bytes} bytes but this field holds at most {max} bytes; the edit was not applied"
+                )
+            }
             EditError::NoSuchPlayer(id) => write!(f, "no player with wBIz {id}"),
             EditError::Alloc(e) => write!(f, "record allocation failed: {e}"),
             EditError::JerseyTaken { team, number } => {
                 write!(f, "jersey {number} already worn on team {team}")
             }
+            EditError::Refused(msg) => write!(f, "{msg}"),
             EditError::TeamRosterFull { team } => {
-                write!(f, "team {team} roster block is full (no free slot to relocate into)")
+                write!(
+                    f,
+                    "team {team} roster block is full (no free slot to relocate into)"
+                )
             }
             EditError::AlreadyRostered { player } => {
-                write!(f, "player {player} already occupies a roster slot (not a free agent)")
+                write!(
+                    f,
+                    "player {player} already occupies a roster slot (not a free agent)"
+                )
             }
             EditError::AuditFailed {
                 predicate,

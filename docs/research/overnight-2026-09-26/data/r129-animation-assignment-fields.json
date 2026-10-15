@@ -1,0 +1,3957 @@
+{
+ "note": "R129 - Players 3.2 \"supported animation / stance / celebration assignments\": which database fields exist per distinct source, their\ndeclared width / range and stored value distribution (read-only; R113 sources, genuine NHL 20 included, anchors/ps4/nhl20 reported as the\nNHL 19 base copy). Field-name filter: celebr | stance | anim | taunt | skatingstyle | emote | intro. Also whether any vault schema string of\nthe title names such an enum (PS4, gcschema). No label is inferred from values.\nUsage: python r129_animation_assignment_fields.py <out.json>\n",
+ "sources": {
+  "xbox360-nhl07": {
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "fields": []
+  },
+  "xbox360-nhl08": {
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "fields": []
+  },
+  "xbox360-nhl09": {
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "fields": []
+  },
+  "xbox360-nhl10": {
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "fields": []
+  },
+  "xbox360-nhl11": {
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "fields": []
+  },
+  "xbox360-nhl12": {
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "fields": []
+  },
+  "xbox360-nhl13": {
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "fields": []
+  },
+  "xbox360-nhl14": {
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "fields": []
+  },
+  "xbox360-nhl15": {
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "fields": []
+  },
+  "xbox360-nhllegacy": {
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "fields": []
+  },
+  "ps4-nhl15": {
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "fields": [],
+   "vault_schema_strings": [
+    "Attrib::Gen::ClassRefSpec_ge_instance",
+    "Attrib::Gen::ClassRefSpec_ge_particleinstance"
+   ]
+  },
+  "ps4-nhl16": {
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "fields": [
+    {
+     "table": "exhibitiongoalieai",
+     "field": "stance",
+     "depth": 4,
+     "declared": [
+      "0",
+      "15"
+     ],
+     "rows": 566,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       566
+      ]
+     ]
+    }
+   ],
+   "vault_schema_strings": [
+    "Attrib::Gen::ClassRefSpec_ge_instance",
+    "Attrib::Gen::ClassRefSpec_ge_particleinstance"
+   ]
+  },
+  "ps4-nhl17": {
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "fields": [
+    {
+     "table": "exhibitionarena",
+     "field": "intromusicid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect2id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect2zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect2zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect2zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect3id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect3zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect3zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect3zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect4id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect4zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect4zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect4zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect5id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect5zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect5zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffect5zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffectid",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffectzone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffectzone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "signatureintroeffectzone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 256,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       256
+      ]
+     ]
+    },
+    {
+     "table": "exhibitiongoalieai",
+     "field": "stance",
+     "depth": 7,
+     "declared": [
+      "0",
+      "127"
+     ],
+     "rows": 601,
+     "distinct": 41,
+     "min": 0,
+     "max": 40,
+     "top": [
+      [
+       0,
+       561
+      ],
+      [
+       20,
+       1
+      ],
+      [
+       12,
+       1
+      ],
+      [
+       32,
+       1
+      ],
+      [
+       28,
+       1
+      ],
+      [
+       26,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "goalcelebration",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 5527,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       5527
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 5527,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       5527
+      ]
+     ]
+    }
+   ],
+   "vault_schema_strings": [
+    "Attrib::Gen::ClassRefSpec_ge_instance",
+    "Attrib::Gen::ClassRefSpec_ge_particleinstance"
+   ]
+  },
+  "ps4-nhl18": {
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "fields": [
+    {
+     "table": "exhibitiongoalieai",
+     "field": "stance",
+     "depth": 7,
+     "declared": [
+      "0",
+      "127"
+     ],
+     "rows": 714,
+     "distinct": 41,
+     "min": 0,
+     "max": 40,
+     "top": [
+      [
+       0,
+       663
+      ],
+      [
+       4,
+       3
+      ],
+      [
+       12,
+       2
+      ],
+      [
+       28,
+       2
+      ],
+      [
+       36,
+       2
+      ],
+      [
+       10,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "introsongid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 7236,
+     "distinct": 44,
+     "min": 0,
+     "max": 275603,
+     "top": [
+      [
+       0,
+       7070
+      ],
+      [
+       238403,
+       8
+      ],
+      [
+       219303,
+       8
+      ],
+      [
+       182206,
+       8
+      ],
+      [
+       232803,
+       7
+      ],
+      [
+       173602,
+       7
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "goalcelebration",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 6522,
+     "distinct": 35,
+     "min": 0,
+     "max": 126,
+     "top": [
+      [
+       0,
+       6461
+      ],
+      [
+       100,
+       2
+      ],
+      [
+       126,
+       2
+      ],
+      [
+       101,
+       2
+      ],
+      [
+       102,
+       2
+      ],
+      [
+       104,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 6522,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6522
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterequipment",
+     "field": "mouthguardanim",
+     "depth": 1,
+     "declared": [
+      "0",
+      "1"
+     ],
+     "rows": 6522,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6522
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "intromusicid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect4id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect4zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect4zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect4zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect5id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 296,
+     "distinct": 3,
+     "min": 0,
+     "max": 6,
+     "top": [
+      [
+       0,
+       294
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       4,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect5zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 2,
+     "min": 0,
+     "max": 14803425,
+     "top": [
+      [
+       0,
+       294
+      ],
+      [
+       14803425,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect5zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect5zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectid",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 296,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       296
+      ]
+     ]
+    }
+   ],
+   "vault_schema_strings": [
+    "Attrib::Gen::ClassRefSpec_ge_instance",
+    "Attrib::Gen::ClassRefSpec_ge_particleinstance"
+   ]
+  },
+  "ps4-nhl19-base": {
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "fields": [
+    {
+     "table": "exhibitiongoalieai",
+     "field": "stance",
+     "depth": 7,
+     "declared": [
+      "0",
+      "127"
+     ],
+     "rows": 747,
+     "distinct": 41,
+     "min": 0,
+     "max": 40,
+     "top": [
+      [
+       0,
+       706
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       20,
+       1
+      ],
+      [
+       12,
+       1
+      ],
+      [
+       32,
+       1
+      ],
+      [
+       28,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "introsongid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 7136,
+     "distinct": 45,
+     "min": 0,
+     "max": 275603,
+     "top": [
+      [
+       0,
+       7064
+      ],
+      [
+       173602,
+       4
+      ],
+      [
+       234904,
+       3
+      ],
+      [
+       186203,
+       3
+      ],
+      [
+       217202,
+       3
+      ],
+      [
+       264806,
+       3
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotebigsave",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 209,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       209
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotegoalagainst",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 209,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       209
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotebighit",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 552,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       552
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotegoal",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 552,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       552
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "animpack",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 6389,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6389
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "goalcelebration",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 6389,
+     "distinct": 44,
+     "min": 0,
+     "max": 132,
+     "top": [
+      [
+       0,
+       6342
+      ],
+      [
+       13,
+       3
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       39,
+       2
+      ],
+      [
+       40,
+       1
+      ],
+      [
+       69,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 6389,
+     "distinct": 3,
+     "min": 2,
+     "max": 4,
+     "top": [
+      [
+       3,
+       4513
+      ],
+      [
+       2,
+       1373
+      ],
+      [
+       4,
+       503
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterequipment",
+     "field": "mouthguardanim",
+     "depth": 1,
+     "declared": [
+      "0",
+      "1"
+     ],
+     "rows": 6389,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6389
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "intromusicid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 419,
+     "distinct": 3,
+     "min": 0,
+     "max": 6,
+     "top": [
+      [
+       0,
+       417
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       4,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 2,
+     "min": 0,
+     "max": 14803425,
+     "top": [
+      [
+       0,
+       417
+      ],
+      [
+       14803425,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectid",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 419,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       419
+      ]
+     ]
+    }
+   ],
+   "vault_schema_strings": [
+    "Attrib::Gen::ClassRefSpec_ge_instance",
+    "Attrib::Gen::ClassRefSpec_ge_particleinstance"
+   ]
+  },
+  "ps4-nhl21": {
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "fields": [
+    {
+     "table": "exhibitiongoalieai",
+     "field": "stance",
+     "depth": 7,
+     "declared": [
+      "0",
+      "127"
+     ],
+     "rows": 749,
+     "distinct": 52,
+     "min": 0,
+     "max": 58,
+     "top": [
+      [
+       0,
+       695
+      ],
+      [
+       25,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       20,
+       1
+      ],
+      [
+       12,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "introsongid",
+     "depth": 25,
+     "declared": [
+      "-1",
+      "29999999"
+     ],
+     "rows": 7247,
+     "distinct": 43,
+     "min": 0,
+     "max": 275603,
+     "top": [
+      [
+       0,
+       7173
+      ],
+      [
+       264806,
+       4
+      ],
+      [
+       217202,
+       4
+      ],
+      [
+       173602,
+       4
+      ],
+      [
+       234904,
+       3
+      ],
+      [
+       186203,
+       3
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotebigsave",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 381,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       381
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotegoalagainst",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 381,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       381
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortplayerextras",
+     "field": "introanimid",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 44,
+     "distinct": 2,
+     "min": 82,
+     "max": 130,
+     "top": [
+      [
+       82,
+       40
+      ],
+      [
+       130,
+       4
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortplayerextras",
+     "field": "introtextid",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 44,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       44
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotebighit",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 1234,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1234
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotegoal",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 1234,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       1234
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "animpack",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 6498,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6498
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "goalcelebration",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 6498,
+     "distinct": 61,
+     "min": 0,
+     "max": 134,
+     "top": [
+      [
+       0,
+       6424
+      ],
+      [
+       10,
+       5
+      ],
+      [
+       13,
+       4
+      ],
+      [
+       14,
+       2
+      ],
+      [
+       58,
+       2
+      ],
+      [
+       60,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle",
+     "depth": 3,
+     "declared": [
+      "0",
+      "7"
+     ],
+     "rows": 6498,
+     "distinct": 3,
+     "min": 1,
+     "max": 3,
+     "top": [
+      [
+       2,
+       4566
+      ],
+      [
+       1,
+       1388
+      ],
+      [
+       3,
+       544
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle0",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 22,
+     "max": 69,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       64,
+       1
+      ],
+      [
+       22,
+       1
+      ],
+      [
+       54,
+       1
+      ],
+      [
+       69,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle1",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 21,
+     "max": 51,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       46,
+       1
+      ],
+      [
+       21,
+       1
+      ],
+      [
+       45,
+       1
+      ],
+      [
+       40,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle10",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 6,
+     "min": 8,
+     "max": 51,
+     "top": [
+      [
+       51,
+       6493
+      ],
+      [
+       8,
+       1
+      ],
+      [
+       42,
+       1
+      ],
+      [
+       22,
+       1
+      ],
+      [
+       34,
+       1
+      ],
+      [
+       48,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle11",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 1,
+     "max": 89,
+     "top": [
+      [
+       51,
+       6493
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       38,
+       1
+      ],
+      [
+       62,
+       1
+      ],
+      [
+       89,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle12",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 6,
+     "min": 14,
+     "max": 78,
+     "top": [
+      [
+       51,
+       6493
+      ],
+      [
+       45,
+       1
+      ],
+      [
+       66,
+       1
+      ],
+      [
+       78,
+       1
+      ],
+      [
+       14,
+       1
+      ],
+      [
+       69,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle13",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 6,
+     "min": 6,
+     "max": 61,
+     "top": [
+      [
+       51,
+       6493
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       15,
+       1
+      ],
+      [
+       33,
+       1
+      ],
+      [
+       25,
+       1
+      ],
+      [
+       61,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle14",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 4,
+     "min": 35,
+     "max": 57,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       38,
+       2
+      ],
+      [
+       35,
+       1
+      ],
+      [
+       57,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle15",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 1,
+     "min": 51,
+     "max": 51,
+     "top": [
+      [
+       51,
+       6498
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle16",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 1,
+     "min": 51,
+     "max": 51,
+     "top": [
+      [
+       51,
+       6498
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle17",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 1,
+     "min": 51,
+     "max": 51,
+     "top": [
+      [
+       51,
+       6498
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle18",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 1,
+     "min": 51,
+     "max": 51,
+     "top": [
+      [
+       51,
+       6498
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle19",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 1,
+     "min": 51,
+     "max": 51,
+     "top": [
+      [
+       51,
+       6498
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle2",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 25,
+     "max": 73,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       73,
+       1
+      ],
+      [
+       62,
+       1
+      ],
+      [
+       25,
+       1
+      ],
+      [
+       57,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle3",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 48,
+     "max": 77,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       60,
+       1
+      ],
+      [
+       77,
+       1
+      ],
+      [
+       48,
+       1
+      ],
+      [
+       63,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle4",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 9,
+     "max": 92,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       79,
+       1
+      ],
+      [
+       9,
+       1
+      ],
+      [
+       92,
+       1
+      ],
+      [
+       62,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle5",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 6,
+     "min": 51,
+     "max": 79,
+     "top": [
+      [
+       51,
+       6493
+      ],
+      [
+       68,
+       1
+      ],
+      [
+       69,
+       1
+      ],
+      [
+       64,
+       1
+      ],
+      [
+       79,
+       1
+      ],
+      [
+       55,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle6",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 3,
+     "min": 1,
+     "max": 3,
+     "top": [
+      [
+       1,
+       6493
+      ],
+      [
+       2,
+       3
+      ],
+      [
+       3,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle7",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 20,
+     "max": 90,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       90,
+       1
+      ],
+      [
+       81,
+       1
+      ],
+      [
+       60,
+       1
+      ],
+      [
+       20,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle8",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 6,
+     "min": 51,
+     "max": 100,
+     "top": [
+      [
+       51,
+       6493
+      ],
+      [
+       100,
+       1
+      ],
+      [
+       86,
+       1
+      ],
+      [
+       71,
+       1
+      ],
+      [
+       87,
+       1
+      ],
+      [
+       61,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle9",
+     "depth": 7,
+     "declared": [
+      "-1",
+      "126"
+     ],
+     "rows": 6498,
+     "distinct": 5,
+     "min": 20,
+     "max": 90,
+     "top": [
+      [
+       51,
+       6494
+      ],
+      [
+       90,
+       1
+      ],
+      [
+       81,
+       1
+      ],
+      [
+       60,
+       1
+      ],
+      [
+       20,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterequipment",
+     "field": "mouthguardanim",
+     "depth": 1,
+     "declared": [
+      "0",
+      "1"
+     ],
+     "rows": 6498,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6498
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "intromusicid",
+     "depth": 25,
+     "declared": [
+      "-1",
+      "29999999"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2id",
+     "depth": 4,
+     "declared": [
+      "-1",
+      "14"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3id",
+     "depth": 4,
+     "declared": [
+      "-1",
+      "14"
+     ],
+     "rows": 433,
+     "distinct": 3,
+     "min": 0,
+     "max": 6,
+     "top": [
+      [
+       0,
+       431
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       4,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 2,
+     "min": 0,
+     "max": 14803425,
+     "top": [
+      [
+       0,
+       431
+      ],
+      [
+       14803425,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectid",
+     "depth": 4,
+     "declared": [
+      "-1",
+      "14"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 433,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       433
+      ]
+     ]
+    }
+   ],
+   "vault_schema_strings": [
+    "Attrib::Gen::ClassRefSpec_ge_instance",
+    "Attrib::Gen::ClassRefSpec_ge_particleinstance"
+   ]
+  },
+  "ps4-nhl20-real": {
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "fields": [
+    {
+     "table": "exhibitiongoalieai",
+     "field": "stance",
+     "depth": 7,
+     "declared": [
+      "0",
+      "127"
+     ],
+     "rows": 773,
+     "distinct": 40,
+     "min": 0,
+     "max": 40,
+     "top": [
+      [
+       0,
+       730
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       25,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       20,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "introsongid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 7576,
+     "distinct": 43,
+     "min": 0,
+     "max": 275603,
+     "top": [
+      [
+       0,
+       7501
+      ],
+      [
+       264806,
+       4
+      ],
+      [
+       217202,
+       4
+      ],
+      [
+       257903,
+       4
+      ],
+      [
+       173602,
+       4
+      ],
+      [
+       234904,
+       3
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotebigsave",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 305,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       305
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotegoalagainst",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 305,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       305
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortplayerextras",
+     "field": "introanimid",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 44,
+     "distinct": 2,
+     "min": 82,
+     "max": 130,
+     "top": [
+      [
+       82,
+       40
+      ],
+      [
+       130,
+       4
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortplayerextras",
+     "field": "introtextid",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 44,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       44
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotebighit",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 980,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       980
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotegoal",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 980,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       980
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "animpack",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 6803,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6803
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "goalcelebration",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 6803,
+     "distinct": 59,
+     "min": 0,
+     "max": 134,
+     "top": [
+      [
+       0,
+       6733
+      ],
+      [
+       10,
+       5
+      ],
+      [
+       13,
+       4
+      ],
+      [
+       58,
+       2
+      ],
+      [
+       39,
+       2
+      ],
+      [
+       28,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 6803,
+     "distinct": 3,
+     "min": 2,
+     "max": 4,
+     "top": [
+      [
+       3,
+       4807
+      ],
+      [
+       2,
+       1398
+      ],
+      [
+       4,
+       598
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterequipment",
+     "field": "mouthguardanim",
+     "depth": 1,
+     "declared": [
+      "0",
+      "1"
+     ],
+     "rows": 6803,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       6803
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "intromusicid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2id",
+     "depth": 4,
+     "declared": [
+      "-1",
+      "14"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3id",
+     "depth": 4,
+     "declared": [
+      "-1",
+      "14"
+     ],
+     "rows": 416,
+     "distinct": 3,
+     "min": 0,
+     "max": 6,
+     "top": [
+      [
+       0,
+       414
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       4,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 2,
+     "min": 0,
+     "max": 14803425,
+     "top": [
+      [
+       0,
+       414
+      ],
+      [
+       14803425,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectid",
+     "depth": 4,
+     "declared": [
+      "-1",
+      "14"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 416,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       416
+      ]
+     ]
+    }
+   ],
+   "vault_schema_strings": [
+    "Attrib::Gen::ClassRefSpec_ge_instance",
+    "Attrib::Gen::ClassRefSpec_ge_particleinstance"
+   ]
+  },
+  "ps4-nhl19-patch56": {
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "fields": [
+    {
+     "table": "exhibitiongoalieai",
+     "field": "stance",
+     "depth": 7,
+     "declared": [
+      "0",
+      "127"
+     ],
+     "rows": 849,
+     "distinct": 41,
+     "min": 0,
+     "max": 40,
+     "top": [
+      [
+       0,
+       805
+      ],
+      [
+       33,
+       2
+      ],
+      [
+       25,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       20,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "introsongid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 8279,
+     "distinct": 43,
+     "min": 0,
+     "max": 275603,
+     "top": [
+      [
+       0,
+       8206
+      ],
+      [
+       264806,
+       4
+      ],
+      [
+       217202,
+       4
+      ],
+      [
+       173602,
+       4
+      ],
+      [
+       234904,
+       3
+      ],
+      [
+       186203,
+       3
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotebigsave",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 215,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       215
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "emotegoalagainst",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 215,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       215
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotebighit",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 570,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       570
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "emotegoal",
+     "depth": 12,
+     "declared": [
+      "-1",
+      "4094"
+     ],
+     "rows": 570,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       570
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "animpack",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 7430,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       7430
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "goalcelebration",
+     "depth": 8,
+     "declared": [
+      "0",
+      "255"
+     ],
+     "rows": 7430,
+     "distinct": 53,
+     "min": 0,
+     "max": 132,
+     "top": [
+      [
+       0,
+       7365
+      ],
+      [
+       10,
+       5
+      ],
+      [
+       39,
+       4
+      ],
+      [
+       13,
+       4
+      ],
+      [
+       58,
+       2
+      ],
+      [
+       26,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "skatingstyle",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 7430,
+     "distinct": 3,
+     "min": 2,
+     "max": 4,
+     "top": [
+      [
+       3,
+       5261
+      ],
+      [
+       2,
+       1516
+      ],
+      [
+       4,
+       653
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionskaterequipment",
+     "field": "mouthguardanim",
+     "depth": 1,
+     "declared": [
+      "0",
+      "1"
+     ],
+     "rows": 7430,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       7430
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "intromusicid",
+     "depth": 20,
+     "declared": [
+      "-1",
+      "999999"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect2zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3id",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 423,
+     "distinct": 3,
+     "min": 0,
+     "max": 6,
+     "top": [
+      [
+       0,
+       421
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       4,
+       1
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 2,
+     "min": 0,
+     "max": 14803425,
+     "top": [
+      [
+       0,
+       421
+      ],
+      [
+       14803425,
+       2
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffect3zone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectid",
+     "depth": 8,
+     "declared": [
+      "-1",
+      "254"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone1",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone2",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "signatureintroeffectzone3",
+     "depth": 24,
+     "declared": [
+      "0",
+      "16777215"
+     ],
+     "rows": 423,
+     "distinct": 1,
+     "min": 0,
+     "max": 0,
+     "top": [
+      [
+       0,
+       423
+      ]
+     ]
+    }
+   ]
+  },
+  "ps4-nhl15-patch00": {
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "fields": []
+  }
+ }
+}

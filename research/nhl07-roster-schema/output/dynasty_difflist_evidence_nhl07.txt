@@ -1,0 +1,101 @@
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1 0x1c
+TDB @0x1c version=8 BE=True db_size=690188 tables=77 hdr_crc=a49f2197
+  WExj (canon jxEW) block=0x29c rec=8B/63bits max=34 cur=34 alloc=6 unk18=0xffff nf=4 ni=0
+  oWfM (canon MfWo) block=0x414 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  ioPQ (canon QPoi) block=0x44c rec=4B/31bits max=74 cur=74 alloc=6 unk18=0xffff nf=1 ni=0
+  oiBf (canon fBio) block=0x5ac rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  XSfs (canon sfSX) block=0x5e4 rec=396B/3167bits max=30 cur=30 alloc=6 unk18=0xffff nf=58 ni=0
+  BoxD (canon DxoB) block=0x3814 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  ulaJ (canon Jalu) block=0x384c rec=396B/3167bits max=0 cur=0 alloc=2 unk18=0xffff nf=58 ni=0
+  VMdm (canon mdMV) block=0x3c14 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  DCzJ (canon JzCD) block=0x3c5c rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  esMb (canon bMse) block=0x3c94 rec=328B/2623bits max=0 cur=0 alloc=2 unk18=0xffff nf=9 ni=0
+  wiOU (canon UOiw) block=0x3d4c rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  xFwu (canon uwFx) block=0x3d84 rec=8B/63bits max=51 cur=51 alloc=6 unk18=0xffff nf=3 ni=0
+  TXSB (canon BSXT) block=0x3f74 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  cSVD (canon DVSc) block=0x3fac rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  paEP (canon PEap) block=0x4004 rec=324B/2591bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  fwKg (canon gKwf) block=0x405c rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  KcZA (canon AZcK) block=0x4094 rec=28B/223bits max=0 cur=0 alloc=2 unk18=0xffff nf=20 ni=0
+  EeDv (canon vDeE) block=0x41fc rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  rbMB (canon BMbr) block=0x4234 rec=24B/191bits max=0 cur=0 alloc=2 unk18=0xffff nf=18 ni=0
+  Pwkd (canon dkwP) block=0x437c rec=16B/127bits max=867 cur=867 alloc=6 unk18=0xffff nf=71 ni=0
+  VeqS (canon SqeV) block=0x7e44 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  azBc (canon cBza) block=0x7e7c rec=12B/95bits max=0 cur=0 alloc=2 unk18=0xffff nf=70 ni=0
+  wtoq (canon qotw) block=0x8304 rec=20B/159bits max=21 cur=21 alloc=6 unk18=0xffff nf=27 ni=0
+  mXaF (canon FaXm) block=0x8680 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  PjxU (canon UxjP) block=0x86b8 rec=8B/63bits max=32 cur=32 alloc=6 unk18=0xffff nf=11 ni=0
+  BRfb (canon bfRB) block=0x8890 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  ukol (canon loku) block=0x88c8 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=11 ni=0
+  keBr (canon rBek) block=0x89a0 rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=19 ni=0
+  moPE (canon EPom) block=0x8af8 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  frUz (canon zUrf) block=0x8b30 rec=508B/4063bits max=150 cur=150 alloc=6 unk18=0xffff nf=42 ni=0
+  lJuw (canon wuJl) block=0x1b7a0 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  KExm (canon mxEK) block=0x1b7d8 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  JvZd (canon dZvJ) block=0x1b820 rec=2044B/16351bits max=4 cur=4 alloc=6 unk18=0xffff nf=2 ni=0
+  zFDS (canon SDFz) block=0x1d858 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  wAMQ (canon QMAw) block=0x1d890 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  eiHK (canon KHie) block=0x1d8d8 rec=4B/31bits max=32 cur=32 alloc=6 unk18=0xffff nf=3 ni=0
+  coVl (canon lVoc) block=0x1d9b0 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  HPAr (canon rAPH) block=0x1d9e8 rec=36B/287bits max=0 cur=0 alloc=2 unk18=0xffff nf=43 ni=0
+  BJaE (canon EaJB) block=0x1dcc0 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  uMRy (canon yRMu) block=0x1dcf8 rec=36B/287bits max=0 cur=0 alloc=2 unk18=0xffff nf=41 ni=0
+  SbrI (canon IrbS) block=0x1dfb0 rec=32B/255bits max=0 cur=0 alloc=2 unk18=0xffff nf=43 ni=0
+  wJln (canon nlJw) block=0x1e288 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  zMit (canon tiMz) block=0x1e2c0 rec=32B/255bits max=0 cur=0 alloc=2 unk18=0xffff nf=41 ni=0
+  oiax (canon xaio) block=0x1e578 rec=32B/255bits max=0 cur=0 alloc=2 unk18=0xffff nf=17 ni=0
+  egAy (canon yAge) block=0x1e6b0 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  Rlnw (canon wnlR) block=0x1e6e8 rec=32B/255bits max=0 cur=0 alloc=2 unk18=0xffff nf=17 ni=0
+  DnxP (canon PxnD) block=0x1e820 rec=4B/31bits max=32 cur=32 alloc=6 unk18=0xffff nf=5 ni=0
+  dlfg (canon gfld) block=0x1e918 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  SoUW (canon WUoS) block=0x1e950 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  naRH (canon HRan) block=0x1e998 rec=2044B/16351bits max=1 cur=1 alloc=6 unk18=0xffff nf=2 ni=0
+  lYzo (canon ozYl) block=0x1f1dc rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  KtUe (canon eUtK) block=0x1f214 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  ZCvv (canon vvCZ) block=0x1f25c rec=8B/63bits max=1200 cur=1200 alloc=6 unk18=0xffff nf=2 ni=0
+  zYhA (canon AhYz) block=0x21824 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  gTQc (canon cQTg) block=0x2185c rec=2044B/16351bits max=1 cur=1 alloc=6 unk18=0xffff nf=2 ni=0
+  CpyT (canon TypC) block=0x220a0 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  tktN (canon Ntkt) block=0x220d8 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  ULcv (canon vcLU) block=0x22120 rec=8B/63bits max=1231 cur=1231 alloc=6 unk18=0xffff nf=7 ni=0
+  CRmA (canon AmRC) block=0x24830 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  tMBG (canon GBMt) block=0x24868 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=7 ni=0
+  ogsK (canon Ksgo) block=0x24900 rec=48B/383bits max=848 cur=848 alloc=6 unk18=0xffff nf=61 ni=0
+  eiil (canon liie) block=0x2ebf8 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  RPlb (canon blPR) block=0x2ec30 rec=48B/383bits max=0 cur=0 alloc=2 unk18=0xffff nf=61 ni=0
+  wOpG (canon GpOw) block=0x2f028 rec=24B/191bits max=129 cur=129 alloc=6 unk18=0xffff nf=31 ni=0
+  eIbp (canon pbIe) block=0x2fe58 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  vmSc (canon cSmv) block=0x2fe90 rec=40B/319bits max=93 cur=93 alloc=6 unk18=0xffff nf=53 ni=0
+  ZkIT (canon TIkZ) block=0x31090 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  WpPN (canon NPpW) block=0x310c8 rec=40B/319bits max=0 cur=0 alloc=2 unk18=0xffff nf=53 ni=0
+  INYI (canon IYNI) block=0x31440 rec=4B/31bits max=150 cur=150 alloc=6 unk18=0xffff nf=5 ni=0
+  CHqn (canon nqHC) block=0x31710 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  talx (canon xlat) block=0x31748 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=5 ni=0
+  fcdR (canon Rdcf) block=0x317c0 rec=516B/4127bits max=941 cur=941 alloc=6 unk18=0xffff nf=55 ni=0
+  lWze (canon ezWl) block=0xa840c rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  Krok (canon korK) block=0xa8444 rec=12B/95bits max=0 cur=0 alloc=2 unk18=0xffff nf=13 ni=0
+  aAMH (canon HMAa) block=0xa853c rec=28B/223bits max=0 cur=0 alloc=2 unk18=0xffff nf=20 ni=0
+  gSOo (canon oOSg) block=0xa86a4 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  PPFi (canon iFPP) block=0xa86dc rec=24B/191bits max=0 cur=0 alloc=2 unk18=0xffff nf=18 ni=0
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1 0x1c anchors/xbox360/nhl07/databases/NHL07NG-meta.xml fcdR 0 3 --as MMxP --only game_id,firstname,lastname,team,jersey,position
+table fcdR (fcdR named as leagueplayerbiotable) block=0x317c0 record_block=0x31b58 rec=516B cur=941 max=941
+  [0 @0x31b58] team=0 firstname='FRANCOIS' lastname='BEAUCHEMIN' position=3 jersey=23 game_id=324
+  [1 @0x31d5c] team=0 firstname='ILJA' lastname='BRYZGALOV' position=4 jersey=30 game_id=462
+  [2 @0x31f60] team=0 firstname='JOE' lastname='DIPENTA' position=3 jersey=33 game_id=626
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1 0x1c anchors/xbox360/nhl07/databases/NHL07NG-meta.xml Pwkd 0 3 --as rgQY --only playerindex,team,rosterstatus
+table Pwkd (Pwkd named as leaguerostertable) block=0x437c record_block=0x4814 rec=16B cur=867 max=867
+  [0 @0x4814] team=0 playerindex=0 rosterstatus=1
+  [1 @0x4824] team=0 playerindex=1 rosterstatus=1
+  [2 @0x4834] team=0 playerindex=2 rosterstatus=1
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1 0x1c anchors/xbox360/nhl07/databases/NHL07NG-meta.xml ioPQ 0 3 --as kGzd
+table ioPQ (ioPQ named as leaguefreeagents) block=0x44c record_block=0x484 rec=4B cur=74 max=74
+  [0 @0x484] playerindex=867
+  [1 @0x488] playerindex=868
+  [2 @0x48c] playerindex=869
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1 0x1c anchors/xbox360/nhl07/databases/NHL07NG-meta.xml oiBf 0 3 --as kGzd
+table oiBf (oiBf named as leaguefreeagents) block=0x5ac record_block=0x5e4 rec=4B cur=0 max=0
+

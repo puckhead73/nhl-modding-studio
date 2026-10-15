@@ -1,0 +1,414 @@
+{
+ "note": "R140 - X360 `.ast` EA-XMA stream records on NHL 11 / 13 / 14, the titles Studio's XMA_STREAM_TITLES does not admit for lack of a vector\n(research package 6, 28 Sep 2026), plus NHL 12 as an admitted control. Read-only; decoder output never kept.\nPer title, every stream record of every loose `audio/sfx/<bank>.abk` with a sibling `.ast`: the unchanged R91 framing (stub; for loops the\nbody at the stub end or the next 0x40 boundary, R91 rule), then the unchanged R92 packet assembly (per sub-stream when the stream holds\nseveral XMA sub-blocks per block), each part decoded by the INSTALLED PINNED helper through stdin/stdout. A part is `exact` when every\nsub-stream decodes to the part's summed block samples. Counts per (loop, channel config); first failures listed.\nUsage: python r140_ast_xma_streams_11_13_14.py <out.json> [--titles x360-nhl11,...]\n",
+ "helper_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+ "titles": {
+  "x360-nhl11": {
+   "results": {
+    "loop 0 cc 0: exact": 676,
+    "loop 1 cc 1: exact": 8,
+    "loop 0 cc 3: exact": 4,
+    "loop 1 cc 3: exact": 3,
+    "loop 0 cc 1: exact": 39
+   },
+   "first_failures": [],
+   "first_exact_per_shape": {
+    "loop 0 cc 0": {
+     "bank": "colors1.abk",
+     "record": 0,
+     "detail": [
+      [
+       "stream",
+       54000,
+       [
+        54000
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 1": {
+     "bank": "crowds.abk",
+     "record": 6,
+     "detail": [
+      [
+       "stub",
+       26,
+       [
+        26
+       ]
+      ],
+      [
+       "body",
+       113266,
+       [
+        113266
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 3": {
+     "bank": "crowds.abk",
+     "record": 13,
+     "detail": [
+      [
+       "stream",
+       952896,
+       [
+        952896,
+        952896
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 3": {
+     "bank": "crowds.abk",
+     "record": 14,
+     "detail": [
+      [
+       "stub",
+       24,
+       [
+        24,
+        24
+       ]
+      ],
+      [
+       "body",
+       691200,
+       [
+        691200,
+        691200
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 1": {
+     "bank": "crowds.abk",
+     "record": 45,
+     "detail": [
+      [
+       "stream",
+       547444,
+       [
+        547444
+       ]
+      ]
+     ]
+    }
+   }
+  },
+  "x360-nhl13": {
+   "results": {
+    "loop 0 cc 1: exact": 73,
+    "loop 0 cc 0: exact": 3185,
+    "loop 1 cc 1: exact": 14,
+    "loop 1 cc 3: exact": 5,
+    "loop 0 cc 3: exact": 7,
+    "loop 0 cc 5: exact": 1
+   },
+   "first_failures": [],
+   "first_exact_per_shape": {
+    "loop 0 cc 1": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 0,
+     "detail": [
+      [
+       "stream",
+       28496,
+       [
+        28496
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 0": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 3,
+     "detail": [
+      [
+       "stream",
+       17068,
+       [
+        17068
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 1": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 207,
+     "detail": [
+      [
+       "stub",
+       32,
+       [
+        32
+       ]
+      ],
+      [
+       "body",
+       815616,
+       [
+        815616
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 3": {
+     "bank": "crowds.abk",
+     "record": 108,
+     "detail": [
+      [
+       "stub",
+       24,
+       [
+        24,
+        24
+       ]
+      ],
+      [
+       "body",
+       3979557,
+       [
+        3979557,
+        3979557
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 3": {
+     "bank": "crowds.abk",
+     "record": 115,
+     "detail": [
+      [
+       "stream",
+       952896,
+       [
+        952896,
+        952896
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 5": {
+     "bank": "sfx.abk",
+     "record": 206,
+     "detail": [
+      [
+       "stream",
+       455519,
+       [
+        455519,
+        455519,
+        455519
+       ]
+      ]
+     ]
+    }
+   }
+  },
+  "x360-nhl14": {
+   "results": {
+    "loop 0 cc 1: exact": 69,
+    "loop 0 cc 0: exact": 3177,
+    "loop 1 cc 1: exact": 14,
+    "loop 1 cc 3: exact": 5,
+    "loop 0 cc 3: exact": 4,
+    "loop 0 cc 5: exact": 1
+   },
+   "first_failures": [],
+   "first_exact_per_shape": {
+    "loop 0 cc 1": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 0,
+     "detail": [
+      [
+       "stream",
+       28496,
+       [
+        28496
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 0": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 3,
+     "detail": [
+      [
+       "stream",
+       17068,
+       [
+        17068
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 1": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 132,
+     "detail": [
+      [
+       "stub",
+       32,
+       [
+        32
+       ]
+      ],
+      [
+       "body",
+       815616,
+       [
+        815616
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 3": {
+     "bank": "crowds.abk",
+     "record": 0,
+     "detail": [
+      [
+       "stub",
+       24,
+       [
+        24,
+        24
+       ]
+      ],
+      [
+       "body",
+       563232,
+       [
+        563232,
+        563232
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 3": {
+     "bank": "crowds.abk",
+     "record": 83,
+     "detail": [
+      [
+       "stream",
+       952896,
+       [
+        952896,
+        952896
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 5": {
+     "bank": "sfx.abk",
+     "record": 441,
+     "detail": [
+      [
+       "stream",
+       455519,
+       [
+        455519,
+        455519,
+        455519
+       ]
+      ]
+     ]
+    }
+   }
+  },
+  "x360-nhl12": {
+   "results": {
+    "loop 0 cc 1: exact": 80,
+    "loop 0 cc 0: exact": 3198,
+    "loop 1 cc 1: exact": 14,
+    "loop 0 cc 3: exact": 6,
+    "loop 1 cc 3: exact": 5
+   },
+   "first_failures": [],
+   "first_exact_per_shape": {
+    "loop 0 cc 1": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 37,
+     "detail": [
+      [
+       "stream",
+       28496,
+       [
+        28496
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 0": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 40,
+     "detail": [
+      [
+       "stream",
+       17068,
+       [
+        17068
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 1": {
+     "bank": "ambientskatesandpunches.abk",
+     "record": 248,
+     "detail": [
+      [
+       "stub",
+       32,
+       [
+        32
+       ]
+      ],
+      [
+       "body",
+       815616,
+       [
+        815616
+       ]
+      ]
+     ]
+    },
+    "loop 0 cc 3": {
+     "bank": "crowds.abk",
+     "record": 6,
+     "detail": [
+      [
+       "stream",
+       952896,
+       [
+        952896,
+        952896
+       ]
+      ]
+     ]
+    },
+    "loop 1 cc 3": {
+     "bank": "crowds.abk",
+     "record": 7,
+     "detail": [
+      [
+       "stub",
+       24,
+       [
+        24,
+        24
+       ]
+      ],
+      [
+       "body",
+       691200,
+       [
+        691200,
+        691200
+       ]
+      ]
+     ]
+    }
+   }
+  }
+ }
+}

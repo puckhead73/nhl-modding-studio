@@ -90,7 +90,9 @@ pub struct IntegrityReport {
 
 impl IntegrityReport {
     pub fn errors(&self) -> impl Iterator<Item = &Finding> {
-        self.findings.iter().filter(|f| f.severity == Severity::Error)
+        self.findings
+            .iter()
+            .filter(|f| f.severity == Severity::Error)
     }
 
     /// No `Error`-severity findings — the db is safe to write.
@@ -187,7 +189,11 @@ pub fn audit_edge(db: &TdbFile, b: &RelBinding) -> Option<EdgeAudit> {
         let Some(v) = db.read_u64(src_t, i, src_f) else {
             continue;
         };
-        if v == 0 || v == sentinel || is_known_null_sentinel(&b.source_table, &b.source_field, v) {
+        if !b.no_null_sentinels
+            && (v == 0
+                || v == sentinel
+                || is_known_null_sentinel(&b.source_table, &b.source_field, v))
+        {
             continue; // documented null / "none" sentinels (generic 0/all-ones + per-field secondaries)
         }
         source_populated += 1;
@@ -277,15 +283,30 @@ pub fn enum_vocabulary(db: &TdbFile, enums: &EnumRegistry) -> Vec<Finding> {
     // a vocabulary that doesn't apply to this schema. Detected by the 3-bit gen6 `p_style` (`mQoE`).
     let gen6 = db
         .table_canonical("dSvy")
-        .and_then(|t| t.fields.iter().find(|f| f.id.canonical(db.endian) == "mQoE"))
+        .and_then(|t| {
+            t.fields
+                .iter()
+                .find(|f| f.id.canonical(db.endian) == "mQoE")
+        })
         .map(|f| f.bit_width == 3)
         .unwrap_or(false);
     let gen6_geo = |table: &str, field: &str| {
-        gen6 && matches!((table, field), ("ubPc", "Lelh") | ("ubPc", "QvxI") | ("eGlu", "QgFs"))
+        gen6 && matches!(
+            (table, field),
+            ("ubPc", "Lelh") | ("ubPc", "QvxI") | ("eGlu", "QgFs")
+        )
     };
     for def in enums.defs() {
         for binding in &def.bindings {
             if gen6_geo(&binding.table_raw_id, &binding.field_raw_id) {
+                continue;
+            }
+            // Title-scoped vocabularies (receipt 28): only the def that applies to this registry's
+            // title is checked — another title's catalogue says nothing about this file's codes.
+            let applies = enums
+                .for_field(&binding.table_raw_id, &binding.field_raw_id)
+                .is_some_and(|d| std::ptr::eq(d, def));
+            if !applies {
                 continue;
             }
             let Some(t) = db.table_canonical(&binding.table_raw_id) else {

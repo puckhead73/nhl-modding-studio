@@ -16,7 +16,9 @@ use studio_domain::{
 use tdb_core::TdbFile;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 #[test]
@@ -47,7 +49,10 @@ fn nhl10_ps3_loads_with_restored_meta() {
         .filter_map(|p| sess.player_view(p.player_id).ok().flatten())
         .filter(|v| v.header.birthdate.is_some())
         .count();
-    assert!(with_dob > 0, "no birthdates composed — bio fields did not resolve against the meta");
+    assert!(
+        with_dob > 0,
+        "no birthdates composed — bio fields did not resolve against the meta"
+    );
 
     // nhl10's documented drift: month/day are 1-indexed (0-indexed on 11→21). The probe reads the
     // ubPc table via the meta, so this settling correctly is itself meta-agreement evidence.

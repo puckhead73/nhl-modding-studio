@@ -1,0 +1,455 @@
+{
+ "note": "R144 - bounded structure + candidate search in the gen7 front-end Attrib vault (X360 Legacy `attribdb/feattribdb.{vlt,bin}`;\nafter-receipt-6 prompt, package 3; RECEIPT-6 section 8). Read-only. Measured here, not transplanted from PS4:\n  .vlt chunk chain tag|u32 size (big-endian): Vers, StrN, DepN, DatN, ExpN, PtrN, EndC;\n  ExpN: u32 0, u32 count, then count x 24 B rows = key u64 | type u64 | size u32 | vlt offset u32;\n  DatN record: collection key u64 | class key u64 | u64 0 | u32 nA | u32 nT | u32 nA | u16 | u16 | 8 B 0 | nT x 16 B type rows |\n               nA x 16 B attribute rows = attr key u64 | value u32 | flags u32 (0x4000 inline, 0x0200 other);\n  PtrN: fixup rows (layout measured below as candidates).\nSearches (candidate evidence only, never a selection edge):\n  S1 every create-player thumbnail id list of this title (pads / blocker / trapper / gloves / helmet / skates / sticks / goaliestick /\n     mask; from the loose fe tree) as an ordered u8 / u16 BE / u32 BE array anywhere in .vlt or .bin, and its first 8 ids as a run;\n  S2 per-family count words (|T|) inside records' inline values;\n  S3 the longest strictly ascending u8 / u16 / u32 runs in the .bin heap (to see whether any id-list-like array exists at all);\n  control: the same S1 search with the ids shuffled (seeded) and with ids + 1.\nUsage: python r144_gen7_feattribdb_vault.py <out.json> [<title root> ...]",
+ "titles": {
+  "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy": {
+   "vlt_sha256": "e1ad72be02cd1ee0883c035468e52fd5898972f33401bf187c1e07d47fffc059",
+   "bin_sha256": "394d7381fbdaa5a5e1c0a6ca65b1761da2ab221ef7c859639ac6108f2714893f",
+   "vlt_chunks": [
+    [
+     "Vers",
+     0,
+     16
+    ],
+    [
+     "StrN",
+     16,
+     16
+    ],
+    [
+     "DepN",
+     32,
+     80
+    ],
+    [
+     "DatN",
+     112,
+     15568
+    ],
+    [
+     "ExpN",
+     15680,
+     1152
+    ],
+    [
+     "PtrN",
+     16832,
+     5488
+    ],
+    [
+     "EndC",
+     22320,
+     16
+    ]
+   ],
+   "bin_chunks": [
+    [
+     "StrE",
+     0,
+     16
+    ],
+    [
+     "EndC",
+     16,
+     16
+    ]
+   ],
+   "exports": 47,
+   "export_types": {
+    "ad303b8f42b3307e": 47
+   },
+   "classes": {
+    "ae4f5d2971f66606": 16,
+    "49a6fcea0224a8d2": 1,
+    "69066fe33900b0aa": 1,
+    "3c7594dc3bb665ee": 1,
+    "633ac2ee4c879921": 1,
+    "6514dd260ea23d27": 1,
+    "43940ed6bad69bf0": 1,
+    "12bd61aa3d767f08": 1,
+    "14601c9429550e43": 1,
+    "1c23dc620396fd22": 1,
+    "5964c5afaebb48bb": 1,
+    "469168a7e3326deb": 1,
+    "d9c154511650bed8": 1,
+    "c97ebc6c27566223": 1,
+    "9ed20b2eaac6e356": 1,
+    "5b77b854ba449079": 1,
+    "ab8feeb4b0540b2a": 1,
+    "ce94eb69057785c8": 1,
+    "b7ac7b1e80ff79d0": 1,
+    "7f81d6b57deac7b8": 1,
+    "5be0fee7776459e7": 1,
+    "461fbacc8bf92ebc": 1,
+    "a410eb3f07971e79": 1,
+    "572eb15d2a95e34b": 1,
+    "bfaf52799f22babd": 1,
+    "f98eb6f4655fff61": 1,
+    "d9a20904018c6d4b": 1,
+    "897c1cddee768cd5": 1,
+    "a7f7a1711dfeac91": 1,
+    "80cc8b216695cae2": 1,
+    "268a1ec84d1cb51b": 1,
+    "8737ab0af57a53f2": 1
+   },
+   "records_consistent": 40,
+   "flag_totals": {
+    "0x4000": 389,
+    "0x0": 19,
+    "0x200": 275,
+    "0x71c4cc16": 4,
+    "0x14000": 21,
+    "0x10200": 28,
+    "0x24000": 13,
+    "0x30200": 18,
+    "0xb3c209d8": 3,
+    "0x5c4040d5": 1,
+    "0xc7799374": 1,
+    "0x20200": 2
+   },
+   "inline_value_max": 4294967291,
+   "S1_id_lists": {
+    "pads": {
+     "ids": 92,
+     "hits": {}
+    },
+    "blocker": {
+     "ids": 93,
+     "hits": {}
+    },
+    "trapper": {
+     "ids": 91,
+     "hits": {}
+    },
+    "gloves": {
+     "ids": 83,
+     "hits": {}
+    },
+    "helmet": {
+     "ids": 38,
+     "hits": {}
+    },
+    "skates": {
+     "ids": 58,
+     "hits": {}
+    },
+    "sticks": {
+     "ids": 106,
+     "hits": {}
+    },
+    "goaliestick": {
+     "ids": 53,
+     "hits": {}
+    },
+    "mask": {
+     "ids": 88,
+     "hits": {}
+    }
+   },
+   "S2_count_words": {
+    "pads": 0,
+    "blocker": 0,
+    "trapper": 0,
+    "gloves": 12,
+    "helmet": 0,
+    "skates": 3,
+    "sticks": 0,
+    "goaliestick": 1,
+    "mask": 4
+   },
+   "S3_ascending_runs_bin": {
+    "1": [],
+    "2": [],
+    "4": []
+   },
+   "records_sample": [
+    {
+     "key": "6bb8e6f10b9d5f6d",
+     "class": "ae4f5d2971f66606",
+     "nA": 9,
+     "nT": 2,
+     "size": 208,
+     "flags": {
+      "0x4000": 8
+     }
+    },
+    {
+     "key": "3cfdf42be623825e",
+     "class": "ae4f5d2971f66606",
+     "nA": 14,
+     "nT": 0,
+     "size": 288,
+     "flags": {
+      "0x0": 1,
+      "0x4000": 13
+     }
+    },
+    {
+     "key": "3ebd89b7d73b7213",
+     "class": "ae4f5d2971f66606",
+     "nA": 17,
+     "nT": 0,
+     "size": 336,
+     "flags": {
+      "0x0": 1,
+      "0x4000": 16
+     }
+    },
+    {
+     "key": "0442e251f75408d9",
+     "class": "ae4f5d2971f66606",
+     "nA": 5,
+     "nT": 1,
+     "size": 144,
+     "flags": {
+      "0x4000": 5
+     }
+    },
+    {
+     "key": "03a00eadda472e28",
+     "class": "ae4f5d2971f66606",
+     "nA": 14,
+     "nT": 1,
+     "size": 288,
+     "flags": {
+      "0x4000": 14
+     }
+    },
+    {
+     "key": "f0f4150c0b78cad6",
+     "class": "ae4f5d2971f66606",
+     "nA": 17,
+     "nT": 1,
+     "size": 336,
+     "flags": {
+      "0x4000": 17
+     }
+    }
+   ]
+  },
+  "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15": {
+   "vlt_sha256": "e1ad72be02cd1ee0883c035468e52fd5898972f33401bf187c1e07d47fffc059",
+   "bin_sha256": "394d7381fbdaa5a5e1c0a6ca65b1761da2ab221ef7c859639ac6108f2714893f",
+   "vlt_chunks": [
+    [
+     "Vers",
+     0,
+     16
+    ],
+    [
+     "StrN",
+     16,
+     16
+    ],
+    [
+     "DepN",
+     32,
+     80
+    ],
+    [
+     "DatN",
+     112,
+     15568
+    ],
+    [
+     "ExpN",
+     15680,
+     1152
+    ],
+    [
+     "PtrN",
+     16832,
+     5488
+    ],
+    [
+     "EndC",
+     22320,
+     16
+    ]
+   ],
+   "bin_chunks": [
+    [
+     "StrE",
+     0,
+     16
+    ],
+    [
+     "EndC",
+     16,
+     16
+    ]
+   ],
+   "exports": 47,
+   "export_types": {
+    "ad303b8f42b3307e": 47
+   },
+   "classes": {
+    "ae4f5d2971f66606": 16,
+    "49a6fcea0224a8d2": 1,
+    "69066fe33900b0aa": 1,
+    "3c7594dc3bb665ee": 1,
+    "633ac2ee4c879921": 1,
+    "6514dd260ea23d27": 1,
+    "43940ed6bad69bf0": 1,
+    "12bd61aa3d767f08": 1,
+    "14601c9429550e43": 1,
+    "1c23dc620396fd22": 1,
+    "5964c5afaebb48bb": 1,
+    "469168a7e3326deb": 1,
+    "d9c154511650bed8": 1,
+    "c97ebc6c27566223": 1,
+    "9ed20b2eaac6e356": 1,
+    "5b77b854ba449079": 1,
+    "ab8feeb4b0540b2a": 1,
+    "ce94eb69057785c8": 1,
+    "b7ac7b1e80ff79d0": 1,
+    "7f81d6b57deac7b8": 1,
+    "5be0fee7776459e7": 1,
+    "461fbacc8bf92ebc": 1,
+    "a410eb3f07971e79": 1,
+    "572eb15d2a95e34b": 1,
+    "bfaf52799f22babd": 1,
+    "f98eb6f4655fff61": 1,
+    "d9a20904018c6d4b": 1,
+    "897c1cddee768cd5": 1,
+    "a7f7a1711dfeac91": 1,
+    "80cc8b216695cae2": 1,
+    "268a1ec84d1cb51b": 1,
+    "8737ab0af57a53f2": 1
+   },
+   "records_consistent": 40,
+   "flag_totals": {
+    "0x4000": 389,
+    "0x0": 19,
+    "0x200": 275,
+    "0x71c4cc16": 4,
+    "0x14000": 21,
+    "0x10200": 28,
+    "0x24000": 13,
+    "0x30200": 18,
+    "0xb3c209d8": 3,
+    "0x5c4040d5": 1,
+    "0xc7799374": 1,
+    "0x20200": 2
+   },
+   "inline_value_max": 4294967291,
+   "S1_id_lists": {
+    "pads": {
+     "ids": 87,
+     "hits": {}
+    },
+    "blocker": {
+     "ids": 88,
+     "hits": {}
+    },
+    "trapper": {
+     "ids": 86,
+     "hits": {}
+    },
+    "gloves": {
+     "ids": 74,
+     "hits": {}
+    },
+    "helmet": {
+     "ids": 34,
+     "hits": {}
+    },
+    "skates": {
+     "ids": 52,
+     "hits": {}
+    },
+    "sticks": {
+     "ids": 101,
+     "hits": {}
+    },
+    "goaliestick": {
+     "ids": 48,
+     "hits": {}
+    },
+    "mask": {
+     "ids": 88,
+     "hits": {}
+    }
+   },
+   "S2_count_words": {
+    "pads": 2,
+    "blocker": 4,
+    "trapper": 4,
+    "gloves": 10,
+    "helmet": 2,
+    "skates": 0,
+    "sticks": 0,
+    "goaliestick": 1,
+    "mask": 4
+   },
+   "S3_ascending_runs_bin": {
+    "1": [],
+    "2": [],
+    "4": []
+   },
+   "records_sample": [
+    {
+     "key": "6bb8e6f10b9d5f6d",
+     "class": "ae4f5d2971f66606",
+     "nA": 9,
+     "nT": 2,
+     "size": 208,
+     "flags": {
+      "0x4000": 8
+     }
+    },
+    {
+     "key": "3cfdf42be623825e",
+     "class": "ae4f5d2971f66606",
+     "nA": 14,
+     "nT": 0,
+     "size": 288,
+     "flags": {
+      "0x0": 1,
+      "0x4000": 13
+     }
+    },
+    {
+     "key": "3ebd89b7d73b7213",
+     "class": "ae4f5d2971f66606",
+     "nA": 17,
+     "nT": 0,
+     "size": 336,
+     "flags": {
+      "0x0": 1,
+      "0x4000": 16
+     }
+    },
+    {
+     "key": "0442e251f75408d9",
+     "class": "ae4f5d2971f66606",
+     "nA": 5,
+     "nT": 1,
+     "size": 144,
+     "flags": {
+      "0x4000": 5
+     }
+    },
+    {
+     "key": "03a00eadda472e28",
+     "class": "ae4f5d2971f66606",
+     "nA": 14,
+     "nT": 1,
+     "size": 288,
+     "flags": {
+      "0x4000": 14
+     }
+    },
+    {
+     "key": "f0f4150c0b78cad6",
+     "class": "ae4f5d2971f66606",
+     "nA": 17,
+     "nT": 1,
+     "size": 336,
+     "flags": {
+      "0x4000": 17
+     }
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,889 @@
+{
+ "tool": "por1_specimens.py",
+ "tool_sha256": {
+  "por1_formats.py": "679ebd69e608a3920f634b6541a5b5a688a3ddfcc4960247f7d390dc4834a760",
+  "por1_specimens.py": "0e6f0f066656135235e18a3d65d197653db058ac605585962fcf93b19bacad2c"
+ },
+ "roots": {
+  "ps3": "H:\\Emulators\\RPCS3\\dev_hdd0\\game\\BLUS31540\\USRDIR\\fe\\ion\\artassets",
+  "x360": "H:\\Emulators\\games\\XBOX\\NHL Legacy - Vanilla\\_compiled\\fe\\ion\\artassets",
+  "ps4": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\ui\\kettle_assets\\playerportraits"
+ },
+ "specimens": [
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheads/p0_4000/p1008.big",
+   "bytes": 24176,
+   "sha256": "5474eef4870bfab8f8f53d6d227c84741ac574cd01ae418d4e5f0d7e6e299e55",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheads/p0_4000/p1008.big",
+   "bytes": 23920,
+   "sha256": "e6c7586c4cff15c5615fe8e3b59f40fa211e0c753b27b0f50a417b3d78e899a3",
+   "group": "current"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p1008.big",
+   "bytes": 7216,
+   "sha256": "d1fec29b8d1a62d3dc5e0c00734276d8ec7d9805e36bd5fd82cc70510e56a359",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p1008.big",
+   "bytes": 7024,
+   "sha256": "2fedf777f8c3d9c889a8cad1e0521b02af5d3ff15f205fd226cdfe917edfea31",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheads/p0_4000/p1.big",
+   "bytes": 21168,
+   "sha256": "58b9ecedef7c22c5968bd81a4b316b2c23cb51225c4db6087789f95e808b8c13",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheads/p0_4000/p1000.big",
+   "bytes": 23472,
+   "sha256": "1acb233aacf562e67318750422431b872fbe2396e3cb4bcf3e4b026e26549014",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p1.big",
+   "bytes": 7216,
+   "sha256": "bd22fb38cd7d82a393a3cdd3b895b4f5261b347b7fbc5d3e6dfcf278087d8c9c",
+   "group": "current"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheads/p0_4000/p1.big",
+   "bytes": 21488,
+   "sha256": "4155958264d4c138ab4921173089e6274547dcfe55565aa61eb60a9a7a09431d",
+   "group": "current"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheads/p0_4000/p1000.big",
+   "bytes": 23920,
+   "sha256": "2be0bc47403f03ce2cfd74c5015b007374cfefe73ab7003be53c8c6b73a51dff",
+   "group": "current"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p1.big",
+   "bytes": 7472,
+   "sha256": "27faee618496a08285a4ba2722e321b4574e61a1a9d88c4133b143e17936dfee",
+   "group": "current"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheads/p0_4000/p104.big",
+   "bytes": 20528,
+   "sha256": "51107c862cfbaaefbd0549f05a9cef1971b0d1bf1db456520070f481f50aeda5",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheads/p0_4000/p104.big",
+   "bytes": 20336,
+   "sha256": "d0eca9ea100f3080e0a461ca4bc5ceb1e796b5ce9ff757a6cc4b5005062942c3",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheadssmall/silhouettes/p60000.big",
+   "bytes": 1776,
+   "sha256": "2b6ed6ea209327f9fbfbf20735632752c579572ac01a14b53fc9ce8b8a514163",
+   "group": "current"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheadssmall/silhouettes/p60000.big",
+   "bytes": 1904,
+   "sha256": "e782a3b11db2799b2f112280cd9b16442c923cc1229146dda7249260aaa29d47",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheads/p0_4000/p1070.big",
+   "bytes": 31893,
+   "sha256": "2afb92956480b2ec803ecffff0d7c1c7173ed9343696f0727332aa7510ca26f7",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheads/p0_4000/p1070.big.bak",
+   "bytes": 22320,
+   "sha256": "52e014a0f99f969796decf2d9bc10957491aed4389829c2fba2b0bdf819afeec",
+   "group": "backup-labelled"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p127.big",
+   "bytes": 9930,
+   "sha256": "cebc9ebb583793dce6420b61643c7240ec0810fd2a458d15b12e0fff9506c1af",
+   "group": "current"
+  },
+  {
+   "location": "ps3",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p127.big.bak",
+   "bytes": 7088,
+   "sha256": "c2b1e874b81d59419e33e03dd84d37debb73a468b672ca029d8bd1200de5da11",
+   "group": "backup-labelled"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p127.big",
+   "bytes": 7280,
+   "sha256": "c717014cdb7954d8d4a251a2db6412f80cf5dfe3c559e55f9e64badfcc191e70",
+   "group": "current"
+  },
+  {
+   "location": "x360",
+   "path_relative_to_root": "playerheadssmall/p0_4000/p1112_glump.options",
+   "bytes": 488,
+   "sha256": "7bae76522045c78bd4a0a370ff190ee94d83675bec78d7dc25c75f8430a15bf0",
+   "group": "other"
+  },
+  {
+   "location": "ps4",
+   "path_relative_to_root": "p100.gnf",
+   "bytes": 180480,
+   "sha256": "500637943135460b1da4579b409f1c0ef5c43400afae4d1edb46f47f865f71af",
+   "group": "current"
+  },
+  {
+   "location": "ps4",
+   "path_relative_to_root": "p1.gnf",
+   "bytes": 180480,
+   "sha256": "0cdcd1ed5caa5d133ba61e56550196cc00f1d93ff617749d7b2e7c5c2ef812dd",
+   "group": "current"
+  }
+ ],
+ "comparison": {
+  "method": "seeded (seed=7) sample of 25 ids per folder from the p0_4000 bucket only",
+  "shared_stages": [
+   "parse_bigf",
+   "refpack_decode"
+  ],
+  "stages_exercised": [
+   "parse_xpr2",
+   "swap16",
+   "xbox360_tiled_offset (transcribed from tdb-rx2)"
+  ],
+  "establishes": "that for these specimens the Xbox 360-specific stages yield the same block stream as the PS3 file. Not authenticity, not provenance, not target scope.",
+  "results": [
+   {
+    "folder": "playerheads",
+    "file": "p2326.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1610.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p271.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p640.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1187.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1280.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p3587.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1364.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p2544.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p392.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1224.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p3380.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1873.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1146.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1333.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p2877.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p2811.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1271.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1980.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1350.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p3685.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p2839.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1229.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p378.big",
+    "ps3_dimensions": [
+     512,
+     512
+    ],
+    "x360_dimensions": [
+     512,
+     512
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheads",
+    "file": "p1488.big",
+    "ps3_dimensions": [
+     512,
+     256
+    ],
+    "x360_dimensions": [
+     512,
+     256
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p2323.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1609.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p2701.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p639.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1186.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1279.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p3583.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1362.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p2541.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p3916.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1223.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p3376.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1871.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1145.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1331.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p2875.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p281.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p127.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": true,
+    "identical_block_stream": false,
+    "backup_matches_x360": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1979.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1349.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p3683.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p2837.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1228.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p3775.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   },
+   {
+    "folder": "playerheadssmall",
+    "file": "p1486.big",
+    "ps3_dimensions": [
+     256,
+     128
+    ],
+    "x360_dimensions": [
+     256,
+     128
+    ],
+    "ps3_has_backup_sibling": false,
+    "identical_block_stream": true
+   }
+  ],
+  "summary": {
+   "compared": 50,
+   "identical": 49,
+   "differing": 1
+  }
+ }
+}

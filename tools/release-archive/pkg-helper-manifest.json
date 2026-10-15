@@ -1,0 +1,54 @@
+{
+  "release": "https://github.com/AzaharPlus/shadPS4Plus/releases/tag/PKG_EXTRACTOR_1_1",
+  "upstream_zip_sha256": "a6a6dee84c1283949245c868e580ff8d0049d0e73df9de3096460ee26c6f04d7",
+  "source_commit": "771a8d58aff540448c7cbace7c40a66a5daf010d",
+  "cryptopp_commit": "effed0d0b865afc23ed67e0916f83734e4b9b3b7",
+  "downloads": {
+    "source/shadPS4Plus.zip": {
+      "url": "https://codeload.github.com/AzaharPlus/shadPS4Plus/zip/771a8d58aff540448c7cbace7c40a66a5daf010d",
+      "sha256": "8f977bef773181ed13439f4ff313d6e7903c1c4dfc1fbf9ed2424da77c60fd58"
+    },
+    "source/cryptopp.zip": {
+      "url": "https://codeload.github.com/shadps4-emu/ext-cryptopp/zip/effed0d0b865afc23ed67e0916f83734e4b9b3b7",
+      "sha256": "f30166f74a29dcd69e7abb8066ab51bb715ca3302969e528c16356356cc92291"
+    },
+    "licenses/shadPS4Plus.txt": {
+      "url": "https://raw.githubusercontent.com/AzaharPlus/shadPS4Plus/771a8d58aff540448c7cbace7c40a66a5daf010d/LICENSE",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+    },
+    "licenses/cryptopp.txt": {
+      "url": "https://raw.githubusercontent.com/shadps4-emu/ext-cryptopp/effed0d0b865afc23ed67e0916f83734e4b9b3b7/License.txt",
+      "sha256": "78e4010b682cb94187fe0b57e50116d0ba271ef81104d1ddb35c80c3d81e3169"
+    },
+    "licenses/libcxx.txt": {
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-21.1.8/libcxx/LICENSE.TXT",
+      "sha256": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b"
+    },
+    "licenses/libcxxabi.txt": {
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-21.1.8/libcxxabi/LICENSE.TXT",
+      "sha256": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c"
+    },
+    "licenses/libunwind.txt": {
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-21.1.8/libunwind/LICENSE.TXT",
+      "sha256": "b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d"
+    },
+    "licenses/zlib.txt": {
+      "url": "https://raw.githubusercontent.com/madler/zlib/v1.3.1/LICENSE",
+      "sha256": "845efc77857d485d91fb3e0b884aaa929368c717ae8186b66fe1ed2495753243"
+    }
+  },
+  "files": {
+    "libc++.dll": "c9c399d9b285c1c176fe9c958e136ebbd10a986da56b51cf8b335dcfc50e34e7",
+    "licenses/cryptopp.txt": "78e4010b682cb94187fe0b57e50116d0ba271ef81104d1ddb35c80c3d81e3169",
+    "licenses/libcxx.txt": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+    "licenses/libcxxabi.txt": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+    "licenses/libunwind.txt": "b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d",
+    "licenses/shadPS4Plus.txt": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "licenses/zlib.txt": "845efc77857d485d91fb3e0b884aaa929368c717ae8186b66fe1ed2495753243",
+    "pkg_extractor.exe": "b94bb842757a0d42e153a095cfad3aa69e2b7b7f7513eb3e611e560f807a6ae1",
+    "README.txt": "5e26db40790b918127e13d61034d0bf712903b60d2ce2b2a4d6d155b03f2e181",
+    "source/cryptopp.zip": "f30166f74a29dcd69e7abb8066ab51bb715ca3302969e528c16356356cc92291",
+    "source/shadPS4Plus.zip": "8f977bef773181ed13439f4ff313d6e7903c1c4dfc1fbf9ed2424da77c60fd58",
+    "zlib1.dll": "f2c31972bd69e1b2ca759e95e847a57213b4459978e25d5f6cd989a743b55d20"
+  }
+}

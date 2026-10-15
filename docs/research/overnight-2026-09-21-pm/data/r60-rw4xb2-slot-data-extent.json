@@ -1,0 +1,11396 @@
+{
+ "note": "R60 \u2014 Xbox 360 `RW4xb2` data-slot *content extent* vs slot allocation (read-only). For every descriptor of every loose `rendering/**/*.rx2`\n(one title per run), locate the paired pixel-data entry (DW8 upper = file-table index, handoff 02), and measure (a) the slot bytes from the\nfile table, (b) the extent = offset of the last non-zero byte + 1 within the slot, (c) the extent rounded up to 4 KiB. Per shape\n(w, h, format, mips, dim, packed) the census keeps the distribution of slot bytes, extents and the ratio, so the question \"is the shipped\nslot a tight chain length or a padded allocation?\" and the mip-chain length formula can be answered from data rather than from the slot.\nAlso tests candidate chain-length models against the 4 KiB-rounded extent: M_tile (sum of 32 x 32-block tile-aligned levels), M_tile_pk*/M_4k_pk* (sub-levels tile-sized or\n4 KiB-aligned, levels with max(w, h) <= N blocks packed once), and reports per-model match counts.\nUsage: python r60_rw4xb2_slot_data_extent.py <out.json> [--titles nhl13,nhl10] [--max N]\n",
+ "started": "2026-09-21T18:41:23-0600",
+ "titles": {
+  "nhl09": {
+   "files": 11105,
+   "seconds": 98,
+   "tightness": {
+    "slot_eq_extent4k": 11758,
+    "slot_mod_8192_zero": 17680,
+    "slot_gt_extent4k": 5922
+   },
+   "models": {
+    "M_4k_nopack:eq": 806,
+    "M_4k_nopack:over": 16874,
+    "M_4k_pk1:eq": 806,
+    "M_4k_pk1:over": 16874,
+    "M_4k_pk16:eq": 812,
+    "M_4k_pk16:over": 224,
+    "M_4k_pk16:under": 16644,
+    "M_4k_pk2:eq": 806,
+    "M_4k_pk2:over": 16874,
+    "M_4k_pk4:eq": 1331,
+    "M_4k_pk4:over": 2856,
+    "M_4k_pk4:under": 13493,
+    "M_4k_pk8:eq": 922,
+    "M_4k_pk8:over": 484,
+    "M_4k_pk8:under": 16274,
+    "M_tile:eq": 806,
+    "M_tile:over": 16874,
+    "M_tile_pk16_4k:eq": 812,
+    "M_tile_pk16_4k:over": 224,
+    "M_tile_pk16_4k:under": 16644,
+    "M_tile_pk16_tile:eq": 1065,
+    "M_tile_pk16_tile:over": 230,
+    "M_tile_pk16_tile:under": 16385,
+    "M_tile_pk8_4k:eq": 922,
+    "M_tile_pk8_4k:over": 484,
+    "M_tile_pk8_4k:under": 16274
+   },
+   "shapes": [
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 3804,
+     "slot": {
+      "196608": 3804
+     },
+     "extent4k": {
+      "196608": 3796,
+      "192512": 8
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 2158,
+     "slot": {
+      "720896": 2158
+     },
+     "extent4k": {
+      "720896": 2150,
+      "716800": 8
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      8,
+      1,
+      1
+     ],
+     "n": 2092,
+     "slot": {
+      "65536": 2092
+     },
+     "extent4k": {
+      "57344": 2092
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 1315,
+     "slot": {
+      "106496": 1315
+     },
+     "extent4k": {
+      "106496": 1257,
+      "102400": 52,
+      "98304": 5,
+      "94208": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1309,
+     "slot": {
+      "65536": 1309
+     },
+     "extent4k": {
+      "65536": 1287,
+      "61440": 22
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 1267,
+     "slot": {
+      "393216": 1267
+     },
+     "extent4k": {
+      "385024": 1236,
+      "393216": 22,
+      "389120": 9
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 764,
+     "slot": {
+      "1441792": 764
+     },
+     "extent4k": {
+      "1433600": 764
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT5",
+      11,
+      1,
+      1
+     ],
+     "n": 563,
+     "slot": {
+      "1441792": 563
+     },
+     "extent4k": {
+      "1433600": 479,
+      "1441792": 84
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "8_8_8_8",
+      9,
+      1,
+      1
+     ],
+     "n": 483,
+     "slot": {
+      "360448": 483
+     },
+     "extent4k": {
+      "360448": 483
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 398,
+     "slot": {
+      "32768": 398
+     },
+     "extent4k": {
+      "32768": 396,
+      "28672": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 397,
+     "slot": {
+      "131072": 397
+     },
+     "extent4k": {
+      "122880": 353,
+      "131072": 44
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 388,
+     "slot": {
+      "106496": 388
+     },
+     "extent4k": {
+      "106496": 311,
+      "102400": 64,
+      "98304": 11,
+      "94208": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 338,
+     "slot": {
+      "131072": 338
+     },
+     "extent4k": {
+      "131072": 263,
+      "126976": 13,
+      "118784": 13,
+      "122880": 12,
+      "114688": 11,
+      "90112": 6
+     }
+    },
+    {
+     "shape": [
+      1024,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 314,
+     "slot": {
+      "1417216": 314
+     },
+     "extent4k": {
+      "1417216": 314
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 300,
+     "slot": {
+      "262144": 300
+     },
+     "extent4k": {
+      "262144": 300
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 229,
+     "slot": {
+      "131072": 229
+     },
+     "extent4k": {
+      "122880": 228,
+      "131072": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 186,
+     "slot": {
+      "262144": 186
+     },
+     "extent4k": {
+      "262144": 182,
+      "249856": 4
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 169,
+     "slot": {
+      "1441792": 169
+     },
+     "extent4k": {
+      "1433600": 169
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 128,
+     "slot": {
+      "393216": 128
+     },
+     "extent4k": {
+      "385024": 126,
+      "393216": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 91,
+     "slot": {
+      "24576": 91
+     },
+     "extent4k": {
+      "24576": 89,
+      "4096": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 72,
+     "slot": {
+      "131072": 72
+     },
+     "extent4k": {
+      "122880": 72
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT1",
+      6,
+      1,
+      1
+     ],
+     "n": 69,
+     "slot": {
+      "16384": 69
+     },
+     "extent4k": {
+      "16384": 69
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 62,
+     "slot": {
+      "368640": 62
+     },
+     "extent4k": {
+      "368640": 62
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 60,
+     "slot": {
+      "24576": 60
+     },
+     "extent4k": {
+      "24576": 60
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 47,
+     "slot": {
+      "737280": 47
+     },
+     "extent4k": {
+      "737280": 47
+     }
+    },
+    {
+     "shape": [
+      64,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 44,
+     "slot": {
+      "32768": 44
+     },
+     "extent4k": {
+      "32768": 44
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 44,
+     "slot": {
+      "196608": 44
+     },
+     "extent4k": {
+      "196608": 44
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 42,
+     "slot": {
+      "737280": 42
+     },
+     "extent4k": {
+      "737280": 42
+     }
+    },
+    {
+     "shape": [
+      32,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 42,
+     "slot": {
+      "16384": 42
+     },
+     "extent4k": {
+      "16384": 42
+     }
+    },
+    {
+     "shape": [
+      512,
+      2048,
+      "DXT3",
+      12,
+      1,
+      1
+     ],
+     "n": 41,
+     "slot": {
+      "1441792": 41
+     },
+     "extent4k": {
+      "1441792": 41
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 39,
+     "slot": {
+      "196608": 39
+     },
+     "extent4k": {
+      "196608": 39
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 36,
+     "slot": {
+      "131072": 36
+     },
+     "extent4k": {
+      "126976": 36
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 35,
+     "slot": {
+      "212992": 35
+     },
+     "extent4k": {
+      "212992": 35
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 31,
+     "slot": {
+      "229376": 31
+     },
+     "extent4k": {
+      "229376": 31
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 30,
+     "slot": {
+      "32768": 30
+     },
+     "extent4k": {
+      "32768": 29,
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 28,
+     "slot": {
+      "49152": 28
+     },
+     "extent4k": {
+      "45056": 28
+     }
+    },
+    {
+     "shape": [
+      1024,
+      128,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 24,
+     "slot": {
+      "122880": 24
+     },
+     "extent4k": {
+      "122880": 24
+     }
+    },
+    {
+     "shape": [
+      256,
+      32,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 24,
+     "slot": {
+      "49152": 24
+     },
+     "extent4k": {
+      "45056": 24
+     }
+    },
+    {
+     "shape": [
+      256,
+      32,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 24,
+     "slot": {
+      "24576": 24
+     },
+     "extent4k": {
+      "24576": 24
+     }
+    },
+    {
+     "shape": [
+      4,
+      4,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 17,
+     "slot": {
+      "8192": 17
+     },
+     "extent4k": {
+      "8192": 17
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 16,
+     "slot": {
+      "40960": 16
+     },
+     "extent4k": {
+      "40960": 16
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 14,
+     "slot": {
+      "16384": 14
+     },
+     "extent4k": {
+      "16384": 13,
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 14,
+     "slot": {
+      "16384": 14
+     },
+     "extent4k": {
+      "16384": 14
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 12,
+     "slot": {
+      "16384": 12
+     },
+     "extent4k": {
+      "16384": 12
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 12,
+     "slot": {
+      "65536": 12
+     },
+     "extent4k": {
+      "65536": 10,
+      "57344": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 11,
+     "slot": {
+      "40960": 11
+     },
+     "extent4k": {
+      "40960": 11
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      1,
+      3,
+      0
+     ],
+     "n": 10,
+     "slot": {
+      "196608": 10
+     },
+     "extent4k": {
+      "196608": 10
+     }
+    },
+    {
+     "shape": [
+      64,
+      160,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 8,
+     "slot": {
+      "32768": 8
+     },
+     "extent4k": {
+      "20480": 8
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 8,
+     "slot": {
+      "81920": 8
+     },
+     "extent4k": {
+      "77824": 8
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "n": 7,
+     "slot": {
+      "65536": 7
+     },
+     "extent4k": {
+      "57344": 7
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 5,
+     "slot": {
+      "212992": 5
+     },
+     "extent4k": {
+      "212992": 3,
+      "208896": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "212992": 4
+     },
+     "extent4k": {
+      "208896": 4
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 4,
+     "slot": {
+      "16384": 4
+     },
+     "extent4k": {
+      "12288": 4
+     }
+    },
+    {
+     "shape": [
+      8,
+      8,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 4,
+     "slot": {
+      "8192": 4
+     },
+     "extent4k": {
+      "4096": 4
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT5",
+      10,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "393216": 3
+     },
+     "extent4k": {
+      "393216": 2,
+      "385024": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "81920": 3
+     },
+     "extent4k": {
+      "81920": 3
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      8,
+      3,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "540672": 2
+     },
+     "extent4k": {
+      "540672": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "8_8_8_8",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "5603328": 2
+     },
+     "extent4k": {
+      "5603328": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "368640": 2
+     },
+     "extent4k": {
+      "368640": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXN",
+      7,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "49152": 2
+     },
+     "extent4k": {
+      "40960": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "114688": 2
+     },
+     "extent4k": {
+      "114688": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      64,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "114688": 2
+     },
+     "extent4k": {
+      "114688": 1,
+      "106496": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "262144": 2
+     },
+     "extent4k": {
+      "262144": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "49152": 2
+     },
+     "extent4k": {
+      "45056": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      32,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "16384": 2
+     },
+     "extent4k": {
+      "16384": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      1280,
+      720,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "491520": 1
+     },
+     "extent4k": {
+      "491520": 1
+     }
+    },
+    {
+     "shape": [
+      640,
+      480,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "163840": 1
+     },
+     "extent4k": {
+      "163840": 1
+     }
+    },
+    {
+     "shape": [
+      2048,
+      1024,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "1417216": 1
+     },
+     "extent4k": {
+      "1417216": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      7,
+      3,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "540672": 1
+     },
+     "extent4k": {
+      "540672": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "32768": 1
+     },
+     "extent4k": {
+      "32768": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "737280": 1
+     },
+     "extent4k": {
+      "733184": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT5",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "212992": 1
+     },
+     "extent4k": {
+      "208896": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "24576": 1
+     },
+     "extent4k": {
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      16,
+      "DXT3",
+      5,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "720896": 1
+     },
+     "extent4k": {
+      "720896": 1
+     }
+    },
+    {
+     "shape": [
+      2048,
+      512,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "1048576": 1
+     },
+     "extent4k": {
+      "1048576": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "393216": 1
+     },
+     "extent4k": {
+      "393216": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "393216": 1
+     },
+     "extent4k": {
+      "393216": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      10,
+      3,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "1179648": 1
+     },
+     "extent4k": {
+      "1179648": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "212992": 1
+     },
+     "extent4k": {
+      "212992": 1
+     }
+    }
+   ],
+   "examples_M_4k_pk1_mismatch": [
+    {
+     "file": "rendering/adboard/adboard_trans_rgb.rx2",
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 63360,
+     "extent4k": 65536,
+     "model": 94208
+    },
+    {
+     "file": "rendering/barrier/barrier_0_cm.rx2",
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 106496,
+     "extent": 104256,
+     "extent4k": 106496,
+     "model": 126976
+    },
+    {
+     "file": "rendering/barrier/barrier_0_nm.rx2",
+     "shape": [
+      512,
+      256,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 212992,
+     "extent": 206656,
+     "extent4k": 208896,
+     "model": 249856
+    },
+    {
+     "file": "rendering/barrier/barrier_0_sm.rx2",
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 106496,
+     "extent": 104256,
+     "extent4k": 106496,
+     "model": 126976
+    },
+    {
+     "file": "rendering/blocker/texlib_1.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 126632,
+     "extent4k": 126976,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_11.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 42815,
+     "extent4k": 45056,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_11.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 67576,
+     "extent4k": 69632,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_16.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 118088,
+     "extent4k": 118784,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_17.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 116984,
+     "extent4k": 118784,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_18.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 78184,
+     "extent4k": 81920,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_18.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 86464,
+     "extent4k": 90112,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_6.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 41224,
+     "extent4k": 45056,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_6.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 63350,
+     "extent4k": 65536,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_0_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_0_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_0_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_100_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_100_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_100_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_10_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_10_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_10_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_11_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_11_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_11_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62237,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_12_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_12_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_12_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_14_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_14_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_14_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_15_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_15_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_15_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_16_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_16_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_16_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_17_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_17_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_17_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_18_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_18_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_18_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_19_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_19_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_19_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_1_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_1_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_1_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 61752,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_20_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_20_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_20_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_21_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_21_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_21_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_2_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_2_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_2_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62237,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_3_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_3_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    }
+   ]
+  },
+  "nhl10": {
+   "files": 9256,
+   "seconds": 143,
+   "tightness": {
+    "slot_eq_extent4k": 10054,
+    "slot_mod_8192_zero": 16482,
+    "slot_gt_extent4k": 6428
+   },
+   "models": {
+    "M_4k_nopack:eq": 784,
+    "M_4k_nopack:over": 15698,
+    "M_4k_pk1:eq": 784,
+    "M_4k_pk1:over": 15698,
+    "M_4k_pk16:eq": 791,
+    "M_4k_pk16:over": 224,
+    "M_4k_pk16:under": 15467,
+    "M_4k_pk2:eq": 784,
+    "M_4k_pk2:over": 15698,
+    "M_4k_pk4:eq": 1347,
+    "M_4k_pk4:over": 1698,
+    "M_4k_pk4:under": 13437,
+    "M_4k_pk8:eq": 907,
+    "M_4k_pk8:over": 448,
+    "M_4k_pk8:under": 15127,
+    "M_tile:eq": 784,
+    "M_tile:over": 15698,
+    "M_tile_pk16_4k:eq": 791,
+    "M_tile_pk16_4k:over": 224,
+    "M_tile_pk16_4k:under": 15467,
+    "M_tile_pk16_tile:eq": 978,
+    "M_tile_pk16_tile:over": 231,
+    "M_tile_pk16_tile:under": 15273,
+    "M_tile_pk8_4k:eq": 907,
+    "M_tile_pk8_4k:over": 448,
+    "M_tile_pk8_4k:under": 15127
+   },
+   "shapes": [
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 3371,
+     "slot": {
+      "196608": 3371
+     },
+     "extent4k": {
+      "196608": 3361,
+      "192512": 10
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      8,
+      1,
+      1
+     ],
+     "n": 2356,
+     "slot": {
+      "65536": 2356
+     },
+     "extent4k": {
+      "57344": 2356
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 2230,
+     "slot": {
+      "720896": 2230
+     },
+     "extent4k": {
+      "720896": 2220,
+      "716800": 10
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 1476,
+     "slot": {
+      "393216": 1476
+     },
+     "extent4k": {
+      "385024": 1476
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1025,
+     "slot": {
+      "65536": 1025
+     },
+     "extent4k": {
+      "65536": 1018,
+      "61440": 6,
+      "57344": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 818,
+     "slot": {
+      "1441792": 818
+     },
+     "extent4k": {
+      "1433600": 818
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT5",
+      11,
+      1,
+      1
+     ],
+     "n": 619,
+     "slot": {
+      "1441792": 619
+     },
+     "extent4k": {
+      "1433600": 533,
+      "1441792": 86
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 596,
+     "slot": {
+      "32768": 596
+     },
+     "extent4k": {
+      "32768": 595,
+      "28672": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "8_8_8_8",
+      9,
+      1,
+      1
+     ],
+     "n": 536,
+     "slot": {
+      "360448": 536
+     },
+     "extent4k": {
+      "360448": 536
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 476,
+     "slot": {
+      "131072": 476
+     },
+     "extent4k": {
+      "131072": 394,
+      "126976": 21,
+      "114688": 19,
+      "118784": 16,
+      "122880": 10,
+      "90112": 4
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 447,
+     "slot": {
+      "131072": 447
+     },
+     "extent4k": {
+      "122880": 402,
+      "131072": 45
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 388,
+     "slot": {
+      "106496": 388
+     },
+     "extent4k": {
+      "106496": 310,
+      "102400": 67,
+      "98304": 8,
+      "94208": 3
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 286,
+     "slot": {
+      "262144": 286
+     },
+     "extent4k": {
+      "262144": 282,
+      "249856": 4
+     }
+    },
+    {
+     "shape": [
+      1024,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 224,
+     "slot": {
+      "1417216": 224
+     },
+     "extent4k": {
+      "1417216": 224
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 217,
+     "slot": {
+      "1441792": 217
+     },
+     "extent4k": {
+      "1433600": 217
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 175,
+     "slot": {
+      "106496": 175
+     },
+     "extent4k": {
+      "106496": 113,
+      "102400": 56,
+      "98304": 5,
+      "94208": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 129,
+     "slot": {
+      "393216": 129
+     },
+     "extent4k": {
+      "385024": 126,
+      "393216": 3
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 86,
+     "slot": {
+      "24576": 86
+     },
+     "extent4k": {
+      "24576": 86
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 66,
+     "slot": {
+      "24576": 66
+     },
+     "extent4k": {
+      "24576": 64,
+      "4096": 2
+     }
+    },
+    {
+     "shape": [
+      2048,
+      1024,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 64,
+     "slot": {
+      "1417216": 64
+     },
+     "extent4k": {
+      "1417216": 64
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 63,
+     "slot": {
+      "368640": 63
+     },
+     "extent4k": {
+      "368640": 63
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 48,
+     "slot": {
+      "737280": 48
+     },
+     "extent4k": {
+      "737280": 48
+     }
+    },
+    {
+     "shape": [
+      64,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 45,
+     "slot": {
+      "32768": 45
+     },
+     "extent4k": {
+      "32768": 45
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 45,
+     "slot": {
+      "196608": 45
+     },
+     "extent4k": {
+      "196608": 45
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 43,
+     "slot": {
+      "131072": 43
+     },
+     "extent4k": {
+      "122880": 42,
+      "131072": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 43,
+     "slot": {
+      "131072": 43
+     },
+     "extent4k": {
+      "122880": 43
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 43,
+     "slot": {
+      "737280": 43
+     },
+     "extent4k": {
+      "737280": 43
+     }
+    },
+    {
+     "shape": [
+      512,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 43,
+     "slot": {
+      "720896": 43
+     },
+     "extent4k": {
+      "720896": 43
+     }
+    },
+    {
+     "shape": [
+      32,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 42,
+     "slot": {
+      "16384": 42
+     },
+     "extent4k": {
+      "16384": 42
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 37,
+     "slot": {
+      "212992": 37
+     },
+     "extent4k": {
+      "212992": 37
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 36,
+     "slot": {
+      "131072": 36
+     },
+     "extent4k": {
+      "126976": 36
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 33,
+     "slot": {
+      "229376": 33
+     },
+     "extent4k": {
+      "229376": 33
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 32,
+     "slot": {
+      "32768": 32
+     },
+     "extent4k": {
+      "32768": 31,
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 28,
+     "slot": {
+      "49152": 28
+     },
+     "extent4k": {
+      "45056": 28
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 27,
+     "slot": {
+      "81920": 27
+     },
+     "extent4k": {
+      "77824": 27
+     }
+    },
+    {
+     "shape": [
+      1024,
+      128,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 26,
+     "slot": {
+      "122880": 26
+     },
+     "extent4k": {
+      "122880": 26
+     }
+    },
+    {
+     "shape": [
+      256,
+      32,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 26,
+     "slot": {
+      "49152": 26
+     },
+     "extent4k": {
+      "45056": 26
+     }
+    },
+    {
+     "shape": [
+      256,
+      32,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 26,
+     "slot": {
+      "24576": 26
+     },
+     "extent4k": {
+      "24576": 26
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 20,
+     "slot": {
+      "1048576": 20
+     },
+     "extent4k": {
+      "1048576": 20
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 16,
+     "slot": {
+      "131072": 16
+     },
+     "extent4k": {
+      "131072": 16
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 16,
+     "slot": {
+      "65536": 16
+     },
+     "extent4k": {
+      "65536": 16
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 14,
+     "slot": {
+      "40960": 14
+     },
+     "extent4k": {
+      "40960": 14
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 14,
+     "slot": {
+      "16384": 14
+     },
+     "extent4k": {
+      "16384": 13,
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 14,
+     "slot": {
+      "16384": 14
+     },
+     "extent4k": {
+      "16384": 14
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 13,
+     "slot": {
+      "65536": 13
+     },
+     "extent4k": {
+      "65536": 11,
+      "57344": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 12,
+     "slot": {
+      "16384": 12
+     },
+     "extent4k": {
+      "16384": 12
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "n": 10,
+     "slot": {
+      "65536": 10
+     },
+     "extent4k": {
+      "57344": 10
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 9,
+     "slot": {
+      "40960": 9
+     },
+     "extent4k": {
+      "40960": 9
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      1,
+      3,
+      0
+     ],
+     "n": 7,
+     "slot": {
+      "196608": 7
+     },
+     "extent4k": {
+      "196608": 7
+     }
+    },
+    {
+     "shape": [
+      64,
+      160,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 6,
+     "slot": {
+      "32768": 6
+     },
+     "extent4k": {
+      "28672": 6
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 5,
+     "slot": {
+      "212992": 5
+     },
+     "extent4k": {
+      "212992": 3,
+      "208896": 2
+     }
+    },
+    {
+     "shape": [
+      8,
+      8,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 5,
+     "slot": {
+      "8192": 5
+     },
+     "extent4k": {
+      "4096": 5
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 4,
+     "slot": {
+      "16384": 4
+     },
+     "extent4k": {
+      "12288": 4
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT5",
+      10,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "393216": 4
+     },
+     "extent4k": {
+      "385024": 2,
+      "393216": 2
+     }
+    },
+    {
+     "shape": [
+      4,
+      4,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "8192": 4
+     },
+     "extent4k": {
+      "8192": 4
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "212992": 3
+     },
+     "extent4k": {
+      "208896": 3
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      8,
+      3,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "540672": 2
+     },
+     "extent4k": {
+      "540672": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "368640": 2
+     },
+     "extent4k": {
+      "368640": 2
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT1",
+      6,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "16384": 2
+     },
+     "extent4k": {
+      "16384": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      64,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "114688": 2
+     },
+     "extent4k": {
+      "114688": 1,
+      "110592": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "81920": 2
+     },
+     "extent4k": {
+      "81920": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "262144": 2
+     },
+     "extent4k": {
+      "262144": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      1280,
+      720,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "491520": 1
+     },
+     "extent4k": {
+      "491520": 1
+     }
+    },
+    {
+     "shape": [
+      640,
+      480,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "163840": 1
+     },
+     "extent4k": {
+      "163840": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      7,
+      3,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "540672": 1
+     },
+     "extent4k": {
+      "540672": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "32768": 1
+     },
+     "extent4k": {
+      "32768": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "737280": 1
+     },
+     "extent4k": {
+      "733184": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT5",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "212992": 1
+     },
+     "extent4k": {
+      "208896": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXN",
+      7,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "40960": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "24576": 1
+     },
+     "extent4k": {
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      16,
+      "DXT3",
+      5,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "114688": 1
+     },
+     "extent4k": {
+      "114688": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      2048,
+      512,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "1048576": 1
+     },
+     "extent4k": {
+      "1048576": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "393216": 1
+     },
+     "extent4k": {
+      "393216": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "196608": 1
+     },
+     "extent4k": {
+      "196608": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      10,
+      3,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "1179648": 1
+     },
+     "extent4k": {
+      "1179648": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "212992": 1
+     },
+     "extent4k": {
+      "212992": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "45056": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      32,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "16384": 1
+     }
+    }
+   ],
+   "examples_M_4k_pk1_mismatch": [
+    {
+     "file": "rendering/adboard/adboard_trans_rgb.rx2",
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 63360,
+     "extent4k": 65536,
+     "model": 94208
+    },
+    {
+     "file": "rendering/banner/banner_0_0_cm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/banner/banner_0_0_nm.rx2",
+     "shape": [
+      128,
+      128,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 55104,
+     "extent4k": 57344,
+     "model": 86016
+    },
+    {
+     "file": "rendering/banner/banner_0_0_sm.rx2",
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "slot": 24576,
+     "extent": 21312,
+     "extent4k": 24576,
+     "model": 36864
+    },
+    {
+     "file": "rendering/banner/banner_0_1_cm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/banner/banner_0_1_nm.rx2",
+     "shape": [
+      128,
+      128,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 55104,
+     "extent4k": 57344,
+     "model": 86016
+    },
+    {
+     "file": "rendering/banner/banner_0_1_sm.rx2",
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "slot": 24576,
+     "extent": 21312,
+     "extent4k": 24576,
+     "model": 36864
+    },
+    {
+     "file": "rendering/barrier/barrier_0_cm.rx2",
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 106496,
+     "extent": 104256,
+     "extent4k": 106496,
+     "model": 126976
+    },
+    {
+     "file": "rendering/barrier/barrier_0_nm.rx2",
+     "shape": [
+      512,
+      256,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 212992,
+     "extent": 206656,
+     "extent4k": 208896,
+     "model": 249856
+    },
+    {
+     "file": "rendering/barrier/barrier_0_sm.rx2",
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 106496,
+     "extent": 104256,
+     "extent4k": 106496,
+     "model": 126976
+    },
+    {
+     "file": "rendering/blocker/texlib_1.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 126632,
+     "extent4k": 126976,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_11.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 42815,
+     "extent4k": 45056,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_11.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 67576,
+     "extent4k": 69632,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_17.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 116984,
+     "extent4k": 118784,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_18.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 78184,
+     "extent4k": 81920,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker/texlib_18.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "slot": 131072,
+     "extent": 86464,
+     "extent4k": 90112,
+     "model": 131072
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_0_26_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_0_26_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_0_26_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_100_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_100_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_100_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_101_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_101_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_101_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_102_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_102_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_102_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_103_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_103_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_103_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_104_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_104_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_104_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_105_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_105_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_105_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_106_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_106_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_106_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_107_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_107_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_107_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_108_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_108_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_108_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_109_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_109_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_109_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_11_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_11_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_11_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_12_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_12_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_12_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_14_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_14_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_14_sm.rx2",
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 62272,
+     "extent4k": 65536,
+     "model": 77824
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_15_am.rx2",
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "slot": 32768,
+     "extent": 29504,
+     "extent4k": 32768,
+     "model": 45056
+    },
+    {
+     "file": "rendering/blocker_common/blocker_0_15_nm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382784,
+     "extent4k": 385024,
+     "model": 413696
+    }
+   ]
+  },
+  "nhl13": {
+   "files": 14086,
+   "seconds": 71,
+   "tightness": {
+    "slot_eq_extent4k": 14463,
+    "slot_mod_8192_zero": 25934,
+    "slot_gt_extent4k": 11471
+   },
+   "models": {
+    "M_4k_nopack:eq": 1622,
+    "M_4k_nopack:over": 24080,
+    "M_4k_nopack:under": 232,
+    "M_4k_pk1:eq": 1622,
+    "M_4k_pk1:over": 24080,
+    "M_4k_pk1:under": 232,
+    "M_4k_pk16:eq": 1629,
+    "M_4k_pk16:over": 462,
+    "M_4k_pk16:under": 23843,
+    "M_4k_pk2:eq": 1622,
+    "M_4k_pk2:over": 24080,
+    "M_4k_pk2:under": 232,
+    "M_4k_pk4:eq": 2516,
+    "M_4k_pk4:over": 7051,
+    "M_4k_pk4:under": 16367,
+    "M_4k_pk8:eq": 1650,
+    "M_4k_pk8:over": 910,
+    "M_4k_pk8:under": 23374,
+    "M_tile:eq": 1622,
+    "M_tile:over": 24080,
+    "M_tile:under": 232,
+    "M_tile_pk16_4k:eq": 1629,
+    "M_tile_pk16_4k:over": 462,
+    "M_tile_pk16_4k:under": 23843,
+    "M_tile_pk16_tile:eq": 2078,
+    "M_tile_pk16_tile:over": 475,
+    "M_tile_pk16_tile:under": 23381,
+    "M_tile_pk8_4k:eq": 1650,
+    "M_tile_pk8_4k:over": 910,
+    "M_tile_pk8_4k:under": 23374
+   },
+   "shapes": [
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 3934,
+     "slot": {
+      "196608": 3934
+     },
+     "extent4k": {
+      "196608": 3922,
+      "192512": 6,
+      "188416": 4,
+      "184320": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 2442,
+     "slot": {
+      "720896": 2442
+     },
+     "extent4k": {
+      "720896": 2432,
+      "4096": 10
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 1994,
+     "slot": {
+      "393216": 1994
+     },
+     "extent4k": {
+      "385024": 1994
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      8,
+      1,
+      1
+     ],
+     "n": 1736,
+     "slot": {
+      "65536": 1736
+     },
+     "extent4k": {
+      "57344": 1708,
+      "65536": 26,
+      "53248": 1,
+      "61440": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT5",
+      8,
+      1,
+      1
+     ],
+     "n": 1700,
+     "slot": {
+      "81920": 1700
+     },
+     "extent4k": {
+      "77824": 1700
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT5",
+      7,
+      1,
+      1
+     ],
+     "n": 1700,
+     "slot": {
+      "49152": 1700
+     },
+     "extent4k": {
+      "45056": 1700
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1538,
+     "slot": {
+      "65536": 1538
+     },
+     "extent4k": {
+      "65536": 1500,
+      "61440": 23,
+      "57344": 13,
+      "4096": 1,
+      "53248": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 1307,
+     "slot": {
+      "1441792": 1307
+     },
+     "extent4k": {
+      "1433600": 1307
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT5",
+      10,
+      1,
+      1
+     ],
+     "n": 1058,
+     "slot": {
+      "393216": 1058
+     },
+     "extent4k": {
+      "385024": 927,
+      "393216": 131
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 900,
+     "slot": {
+      "368640": 900
+     },
+     "extent4k": {
+      "368640": 900
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "8_8_8_8",
+      9,
+      1,
+      1
+     ],
+     "n": 843,
+     "slot": {
+      "360448": 843
+     },
+     "extent4k": {
+      "360448": 843
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 719,
+     "slot": {
+      "131072": 719
+     },
+     "extent4k": {
+      "131072": 582,
+      "126976": 47,
+      "61440": 14,
+      "118784": 11,
+      "69632": 10,
+      "4096": 10
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 575,
+     "slot": {
+      "131072": 575
+     },
+     "extent4k": {
+      "122880": 502,
+      "131072": 71,
+      "126976": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 468,
+     "slot": {
+      "106496": 468
+     },
+     "extent4k": {
+      "106496": 451,
+      "102400": 10,
+      "98304": 5,
+      "94208": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 420,
+     "slot": {
+      "1441792": 420
+     },
+     "extent4k": {
+      "1433600": 418,
+      "1441792": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 412,
+     "slot": {
+      "262144": 412
+     },
+     "extent4k": {
+      "262144": 380,
+      "249856": 8,
+      "258048": 7,
+      "200704": 5,
+      "245760": 3,
+      "241664": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 335,
+     "slot": {
+      "131072": 335
+     },
+     "extent4k": {
+      "131072": 232,
+      "122880": 80,
+      "126976": 22,
+      "118784": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 314,
+     "slot": {
+      "262144": 314
+     },
+     "extent4k": {
+      "262144": 227,
+      "258048": 27,
+      "253952": 12,
+      "106496": 8,
+      "184320": 7,
+      "249856": 6
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 296,
+     "slot": {
+      "32768": 296
+     },
+     "extent4k": {
+      "32768": 283,
+      "28672": 10,
+      "20480": 2,
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 285,
+     "slot": {
+      "393216": 285
+     },
+     "extent4k": {
+      "385024": 276,
+      "393216": 9
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 269,
+     "slot": {
+      "106496": 269
+     },
+     "extent4k": {
+      "106496": 256,
+      "102400": 7,
+      "98304": 4,
+      "94208": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 233,
+     "slot": {
+      "196608": 233
+     },
+     "extent4k": {
+      "196608": 233
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "8_8_8_8",
+      1,
+      1,
+      0
+     ],
+     "n": 232,
+     "slot": {
+      "8192": 232
+     },
+     "extent4k": {
+      "8192": 232
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 223,
+     "slot": {
+      "40960": 223
+     },
+     "extent4k": {
+      "40960": 216,
+      "36864": 3,
+      "32768": 3,
+      "28672": 1
+     }
+    },
+    {
+     "shape": [
+      2048,
+      1024,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 203,
+     "slot": {
+      "1417216": 203
+     },
+     "extent4k": {
+      "1417216": 201,
+      "4096": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 104,
+     "slot": {
+      "212992": 104
+     },
+     "extent4k": {
+      "208896": 97,
+      "212992": 7
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 100,
+     "slot": {
+      "524288": 100
+     },
+     "extent4k": {
+      "524288": 100
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 87,
+     "slot": {
+      "24576": 87
+     },
+     "extent4k": {
+      "24576": 85,
+      "20480": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 86,
+     "slot": {
+      "65536": 86
+     },
+     "extent4k": {
+      "65536": 78,
+      "61440": 4,
+      "57344": 3,
+      "53248": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 84,
+     "slot": {
+      "368640": 84
+     },
+     "extent4k": {
+      "368640": 84
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 81,
+     "slot": {
+      "737280": 81
+     },
+     "extent4k": {
+      "733184": 81
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      9,
+      3,
+      1
+     ],
+     "n": 67,
+     "slot": {
+      "786432": 67
+     },
+     "extent4k": {
+      "778240": 67
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 65,
+     "slot": {
+      "737280": 65
+     },
+     "extent4k": {
+      "737280": 65
+     }
+    },
+    {
+     "shape": [
+      32,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 61,
+     "slot": {
+      "16384": 61
+     },
+     "extent4k": {
+      "16384": 61
+     }
+    },
+    {
+     "shape": [
+      64,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 61,
+     "slot": {
+      "32768": 61
+     },
+     "extent4k": {
+      "32768": 56,
+      "28672": 5
+     }
+    },
+    {
+     "shape": [
+      512,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 60,
+     "slot": {
+      "720896": 60
+     },
+     "extent4k": {
+      "720896": 60
+     }
+    },
+    {
+     "shape": [
+      2048,
+      128,
+      "DXT3",
+      12,
+      1,
+      1
+     ],
+     "n": 55,
+     "slot": {
+      "491520": 55
+     },
+     "extent4k": {
+      "491520": 55
+     }
+    },
+    {
+     "shape": [
+      4,
+      4,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 54,
+     "slot": {
+      "8192": 54
+     },
+     "extent4k": {
+      "8192": 53,
+      "4096": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 51,
+     "slot": {
+      "24576": 51
+     },
+     "extent4k": {
+      "24576": 42,
+      "20480": 8,
+      "16384": 1
+     }
+    },
+    {
+     "shape": [
+      2048,
+      1024,
+      "DXT3",
+      12,
+      1,
+      1
+     ],
+     "n": 50,
+     "slot": {
+      "2834432": 50
+     },
+     "extent4k": {
+      "2830336": 50
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 50,
+     "slot": {
+      "212992": 50
+     },
+     "extent4k": {
+      "212992": 50
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT5",
+      11,
+      1,
+      1
+     ],
+     "n": 40,
+     "slot": {
+      "1441792": 40
+     },
+     "extent4k": {
+      "1441792": 35,
+      "1433600": 5
+     }
+    },
+    {
+     "shape": [
+      1024,
+      128,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 40,
+     "slot": {
+      "122880": 40
+     },
+     "extent4k": {
+      "122880": 40
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 38,
+     "slot": {
+      "65536": 38
+     },
+     "extent4k": {
+      "65536": 38
+     }
+    },
+    {
+     "shape": [
+      256,
+      64,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 34,
+     "slot": {
+      "65536": 34
+     },
+     "extent4k": {
+      "61440": 32,
+      "65536": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 32,
+     "slot": {
+      "16384": 32
+     },
+     "extent4k": {
+      "16384": 32
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 28,
+     "slot": {
+      "16384": 28
+     },
+     "extent4k": {
+      "16384": 28
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 26,
+     "slot": {
+      "131072": 26
+     },
+     "extent4k": {
+      "131072": 26
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 26,
+     "slot": {
+      "65536": 26
+     },
+     "extent4k": {
+      "65536": 26
+     }
+    },
+    {
+     "shape": [
+      32,
+      2048,
+      "DXT3",
+      12,
+      1,
+      1
+     ],
+     "n": 25,
+     "slot": {
+      "393216": 25
+     },
+     "extent4k": {
+      "393216": 25
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 22,
+     "slot": {
+      "1048576": 22
+     },
+     "extent4k": {
+      "1048576": 14,
+      "954368": 8
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 21,
+     "slot": {
+      "40960": 21
+     },
+     "extent4k": {
+      "40960": 20,
+      "36864": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 21,
+     "slot": {
+      "212992": 21
+     },
+     "extent4k": {
+      "208896": 21
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 20,
+     "slot": {
+      "524288": 20
+     },
+     "extent4k": {
+      "524288": 10,
+      "368640": 4,
+      "520192": 2,
+      "307200": 2,
+      "315392": 1,
+      "454656": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT5",
+      7,
+      1,
+      1
+     ],
+     "n": 20,
+     "slot": {
+      "49152": 20
+     },
+     "extent4k": {
+      "49152": 11,
+      "40960": 4,
+      "45056": 4,
+      "36864": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 17,
+     "slot": {
+      "196608": 17
+     },
+     "extent4k": {
+      "196608": 16,
+      "192512": 1
+     }
+    },
+    {
+     "shape": [
+      8,
+      8,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 15,
+     "slot": {
+      "8192": 15
+     },
+     "extent4k": {
+      "8192": 15
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 14,
+     "slot": {
+      "16384": 14
+     },
+     "extent4k": {
+      "16384": 13,
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 13,
+     "slot": {
+      "81920": 13
+     },
+     "extent4k": {
+      "81920": 11,
+      "77824": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 12,
+     "slot": {
+      "16384": 12
+     },
+     "extent4k": {
+      "16384": 12
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "8_8_8_8",
+      1,
+      1,
+      0
+     ],
+     "n": 11,
+     "slot": {
+      "262144": 11
+     },
+     "extent4k": {
+      "262144": 11
+     }
+    },
+    {
+     "shape": [
+      4,
+      4,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 10,
+     "slot": {
+      "8192": 10
+     },
+     "extent4k": {
+      "8192": 10
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 9,
+     "slot": {
+      "524288": 9
+     },
+     "extent4k": {
+      "524288": 9
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 9,
+     "slot": {
+      "262144": 9
+     },
+     "extent4k": {
+      "262144": 9
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 9,
+     "slot": {
+      "49152": 9
+     },
+     "extent4k": {
+      "49152": 9
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "n": 8,
+     "slot": {
+      "65536": 8
+     },
+     "extent4k": {
+      "57344": 8
+     }
+    },
+    {
+     "shape": [
+      1024,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 8,
+     "slot": {
+      "1417216": 8
+     },
+     "extent4k": {
+      "1417216": 8
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 7,
+     "slot": {
+      "131072": 7
+     },
+     "extent4k": {
+      "122880": 7
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT1",
+      6,
+      1,
+      1
+     ],
+     "n": 7,
+     "slot": {
+      "16384": 7
+     },
+     "extent4k": {
+      "16384": 7
+     }
+    },
+    {
+     "shape": [
+      64,
+      160,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 6,
+     "slot": {
+      "32768": 6
+     },
+     "extent4k": {
+      "28672": 6
+     }
+    },
+    {
+     "shape": [
+      160,
+      176,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 6,
+     "slot": {
+      "65536": 6
+     },
+     "extent4k": {
+      "65536": 6
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT3",
+      6,
+      1,
+      1
+     ],
+     "n": 6,
+     "slot": {
+      "32768": 6
+     },
+     "extent4k": {
+      "24576": 4,
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 6,
+     "slot": {
+      "131072": 6
+     },
+     "extent4k": {
+      "131072": 6
+     }
+    },
+    {
+     "shape": [
+      32,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 6,
+     "slot": {
+      "24576": 6
+     },
+     "extent4k": {
+      "24576": 6
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 5,
+     "slot": {
+      "16384": 5
+     },
+     "extent4k": {
+      "12288": 5
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 5,
+     "slot": {
+      "65536": 5
+     },
+     "extent4k": {
+      "65536": 5
+     }
+    },
+    {
+     "shape": [
+      512,
+      4096,
+      "DXT1",
+      13,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "1433600": 4
+     },
+     "extent4k": {
+      "1433600": 4
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "98304": 4
+     },
+     "extent4k": {
+      "98304": 4
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "32768": 4
+     },
+     "extent4k": {
+      "32768": 4
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "81920": 4
+     },
+     "extent4k": {
+      "81920": 4
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "16384": 4
+     },
+     "extent4k": {
+      "16384": 4
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "212992": 3
+     },
+     "extent4k": {
+      "208896": 3
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT3",
+      7,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "49152": 3
+     },
+     "extent4k": {
+      "49152": 2,
+      "40960": 1
+     }
+    },
+    {
+     "shape": [
+      8,
+      8,
+      "DXN",
+      1,
+      1,
+      0
+     ],
+     "n": 3,
+     "slot": {
+      "16384": 3
+     },
+     "extent4k": {
+      "12288": 3
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "65536": 2
+     },
+     "extent4k": {
+      "65536": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "49152": 2
+     },
+     "extent4k": {
+      "45056": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "344064": 2
+     },
+     "extent4k": {
+      "344064": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "32768": 2
+     },
+     "extent4k": {
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "49152": 2
+     },
+     "extent4k": {
+      "40960": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "65536": 2
+     },
+     "extent4k": {
+      "65536": 2
+     }
+    },
+    {
+     "shape": [
+      16,
+      2,
+      "DXT1",
+      5,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      4,
+      2,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      64,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "114688": 2
+     },
+     "extent4k": {
+      "114688": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "393216": 2
+     },
+     "extent4k": {
+      "393216": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      16,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "32768": 2
+     },
+     "extent4k": {
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "229376": 2
+     },
+     "extent4k": {
+      "229376": 1,
+      "225280": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "24576": 2
+     },
+     "extent4k": {
+      "24576": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      32,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "16384": 2
+     },
+     "extent4k": {
+      "16384": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      16,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "16384": 2
+     },
+     "extent4k": {
+      "16384": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      64,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "32768": 2
+     },
+     "extent4k": {
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      32,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "98304": 2
+     },
+     "extent4k": {
+      "94208": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "393216": 2
+     },
+     "extent4k": {
+      "393216": 2
+     }
+    },
+    {
+     "shape": [
+      1280,
+      720,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "491520": 1
+     },
+     "extent4k": {
+      "491520": 1
+     }
+    },
+    {
+     "shape": [
+      640,
+      480,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "163840": 1
+     },
+     "extent4k": {
+      "163840": 1
+     }
+    },
+    {
+     "shape": [
+      160,
+      176,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "32768": 1
+     },
+     "extent4k": {
+      "32768": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      1,
+      3,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "98304": 1
+     },
+     "extent4k": {
+      "98304": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      8,
+      3,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "540672": 1
+     },
+     "extent4k": {
+      "540672": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "16384": 1
+     }
+    },
+    {
+     "shape": [
+      4,
+      4,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "737280": 1
+     },
+     "extent4k": {
+      "733184": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "81920": 1
+     },
+     "extent4k": {
+      "77824": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT5",
+      4,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "196608": 1
+     },
+     "extent4k": {
+      "196608": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      512,
+      "DXT5",
+      2,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "98304": 1
+     },
+     "extent4k": {
+      "98304": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      8,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "90112": 1
+     },
+     "extent4k": {
+      "90112": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      4,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "114688": 1
+     },
+     "extent4k": {
+      "110592": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "49152": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      2,
+      "DXN",
+      5,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "12288": 1
+     }
+    },
+    {
+     "shape": [
+      4,
+      2,
+      "DXN",
+      3,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "12288": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXN",
+      7,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "40960": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      16,
+      "DXT3",
+      5,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "81920": 1
+     },
+     "extent4k": {
+      "77824": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT1",
+      2,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "98304": 1
+     },
+     "extent4k": {
+      "98304": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "114688": 1
+     },
+     "extent4k": {
+      "114688": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT3",
+      2,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "163840": 1
+     },
+     "extent4k": {
+      "159744": 1
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT5",
+      6,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "32768": 1
+     },
+     "extent4k": {
+      "32768": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      64,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      128,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "49152": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      32,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "24576": 1
+     },
+     "extent4k": {
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "737280": 1
+     },
+     "extent4k": {
+      "737280": 1
+     }
+    },
+    {
+     "shape": [
+      2048,
+      64,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "229376": 1
+     },
+     "extent4k": {
+      "229376": 1
+     }
+    }
+   ],
+   "examples_M_4k_pk1_mismatch": [
+    {
+     "file": "rendering/adboard/adboard_trans_rgb.rx2",
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 63360,
+     "extent4k": 65536,
+     "model": 94208
+    },
+    {
+     "file": "rendering/banner/banner_0_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_0_nm.rx2",
+     "shape": [
+      256,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 212992,
+     "extent": 206656,
+     "extent4k": 208896,
+     "model": 249856
+    },
+    {
+     "file": "rendering/banner/banner_0_sm.rx2",
+     "shape": [
+      128,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 40960,
+     "extent": 38720,
+     "extent4k": 40960,
+     "model": 61440
+    },
+    {
+     "file": "rendering/banner/banner_108_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_10_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_11_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_12_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_131_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_132_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_133_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_134_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_135_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_136_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_137_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_138_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_139_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_13_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_141_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_142_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_143_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_144_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_145_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_147_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_148_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_149_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_14_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_150_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_151_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_152_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_153_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_154_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_155_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_156_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_157_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_158_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_159_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_15_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_161_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_162_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_163_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_16_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_17_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_180_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_181_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_182_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_183_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_184_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_186_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_187_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_188_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_189_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_18_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_190_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_191_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_192_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_193_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_194_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_195_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_196_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    }
+   ]
+  },
+  "legacy": {
+   "files": 16260,
+   "seconds": 139,
+   "tightness": {
+    "slot_eq_extent4k": 16196,
+    "slot_mod_8192_zero": 29171,
+    "slot_gt_extent4k": 12975
+   },
+   "models": {
+    "M_4k_nopack:eq": 2086,
+    "M_4k_nopack:over": 26840,
+    "M_4k_nopack:under": 245,
+    "M_4k_pk1:eq": 2086,
+    "M_4k_pk1:over": 26840,
+    "M_4k_pk1:under": 245,
+    "M_4k_pk16:eq": 2094,
+    "M_4k_pk16:over": 731,
+    "M_4k_pk16:under": 26346,
+    "M_4k_pk2:eq": 2086,
+    "M_4k_pk2:over": 26840,
+    "M_4k_pk2:under": 245,
+    "M_4k_pk4:eq": 3044,
+    "M_4k_pk4:over": 8201,
+    "M_4k_pk4:under": 17926,
+    "M_4k_pk8:eq": 2117,
+    "M_4k_pk8:over": 1202,
+    "M_4k_pk8:under": 25852,
+    "M_tile:eq": 2086,
+    "M_tile:over": 26840,
+    "M_tile:under": 245,
+    "M_tile_pk16_4k:eq": 2094,
+    "M_tile_pk16_4k:over": 731,
+    "M_tile_pk16_4k:under": 26346,
+    "M_tile_pk16_tile:eq": 2567,
+    "M_tile_pk16_tile:over": 745,
+    "M_tile_pk16_tile:under": 25859,
+    "M_tile_pk8_4k:eq": 2117,
+    "M_tile_pk8_4k:over": 1202,
+    "M_tile_pk8_4k:under": 25852
+   },
+   "shapes": [
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 4213,
+     "slot": {
+      "196608": 4213
+     },
+     "extent4k": {
+      "196608": 4200,
+      "192512": 6,
+      "188416": 4,
+      "184320": 2,
+      "4096": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 2729,
+     "slot": {
+      "720896": 2729
+     },
+     "extent4k": {
+      "720896": 2705,
+      "4096": 24
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 2189,
+     "slot": {
+      "393216": 2189
+     },
+     "extent4k": {
+      "385024": 2189
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      8,
+      1,
+      1
+     ],
+     "n": 1963,
+     "slot": {
+      "65536": 1963
+     },
+     "extent4k": {
+      "57344": 1935,
+      "65536": 26,
+      "53248": 1,
+      "61440": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT5",
+      8,
+      1,
+      1
+     ],
+     "n": 1926,
+     "slot": {
+      "81920": 1926
+     },
+     "extent4k": {
+      "77824": 1926
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT5",
+      7,
+      1,
+      1
+     ],
+     "n": 1926,
+     "slot": {
+      "49152": 1926
+     },
+     "extent4k": {
+      "45056": 1926
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1680,
+     "slot": {
+      "65536": 1680
+     },
+     "extent4k": {
+      "65536": 1636,
+      "61440": 27,
+      "57344": 15,
+      "4096": 1,
+      "53248": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 1351,
+     "slot": {
+      "1441792": 1351
+     },
+     "extent4k": {
+      "1433600": 1351
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT5",
+      10,
+      1,
+      1
+     ],
+     "n": 1110,
+     "slot": {
+      "393216": 1110
+     },
+     "extent4k": {
+      "385024": 976,
+      "393216": 134
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 995,
+     "slot": {
+      "368640": 995
+     },
+     "extent4k": {
+      "368640": 995
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 929,
+     "slot": {
+      "131072": 929
+     },
+     "extent4k": {
+      "131072": 711,
+      "126976": 73,
+      "4096": 24,
+      "118784": 17,
+      "61440": 16,
+      "122880": 12
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "8_8_8_8",
+      9,
+      1,
+      1
+     ],
+     "n": 904,
+     "slot": {
+      "360448": 904
+     },
+     "extent4k": {
+      "360448": 904
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 752,
+     "slot": {
+      "131072": 752
+     },
+     "extent4k": {
+      "122880": 676,
+      "131072": 74,
+      "126976": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 518,
+     "slot": {
+      "106496": 518
+     },
+     "extent4k": {
+      "106496": 498,
+      "102400": 10,
+      "98304": 7,
+      "94208": 3
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 514,
+     "slot": {
+      "262144": 514
+     },
+     "extent4k": {
+      "262144": 482,
+      "249856": 8,
+      "258048": 7,
+      "200704": 5,
+      "245760": 3,
+      "241664": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 509,
+     "slot": {
+      "262144": 509
+     },
+     "extent4k": {
+      "262144": 360,
+      "4096": 53,
+      "258048": 25,
+      "253952": 12,
+      "106496": 10,
+      "184320": 7
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 503,
+     "slot": {
+      "1441792": 503
+     },
+     "extent4k": {
+      "1433600": 499,
+      "1441792": 4
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 346,
+     "slot": {
+      "131072": 346
+     },
+     "extent4k": {
+      "131072": 241,
+      "122880": 83,
+      "126976": 21,
+      "118784": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 339,
+     "slot": {
+      "32768": 339
+     },
+     "extent4k": {
+      "32768": 327,
+      "28672": 9,
+      "20480": 2,
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 302,
+     "slot": {
+      "393216": 302
+     },
+     "extent4k": {
+      "385024": 293,
+      "393216": 9
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 300,
+     "slot": {
+      "40960": 300
+     },
+     "extent4k": {
+      "40960": 294,
+      "36864": 4,
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 294,
+     "slot": {
+      "106496": 294
+     },
+     "extent4k": {
+      "106496": 278,
+      "102400": 9,
+      "98304": 4,
+      "94208": 3
+     }
+    },
+    {
+     "shape": [
+      2048,
+      1024,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 254,
+     "slot": {
+      "1417216": 254
+     },
+     "extent4k": {
+      "1417216": 249,
+      "4096": 5
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 246,
+     "slot": {
+      "196608": 246
+     },
+     "extent4k": {
+      "196608": 246
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "8_8_8_8",
+      1,
+      1,
+      0
+     ],
+     "n": 245,
+     "slot": {
+      "8192": 245
+     },
+     "extent4k": {
+      "8192": 245
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 165,
+     "slot": {
+      "524288": 165
+     },
+     "extent4k": {
+      "524288": 165
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 123,
+     "slot": {
+      "212992": 123
+     },
+     "extent4k": {
+      "208896": 116,
+      "212992": 7
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 122,
+     "slot": {
+      "737280": 122
+     },
+     "extent4k": {
+      "733184": 122
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 91,
+     "slot": {
+      "24576": 91
+     },
+     "extent4k": {
+      "24576": 89,
+      "20480": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 91,
+     "slot": {
+      "368640": 91
+     },
+     "extent4k": {
+      "368640": 91
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 89,
+     "slot": {
+      "65536": 89
+     },
+     "extent4k": {
+      "65536": 81,
+      "61440": 4,
+      "57344": 3,
+      "53248": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      128,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 74,
+     "slot": {
+      "122880": 74
+     },
+     "extent4k": {
+      "122880": 74
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      9,
+      3,
+      1
+     ],
+     "n": 70,
+     "slot": {
+      "786432": 70
+     },
+     "extent4k": {
+      "778240": 70
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 69,
+     "slot": {
+      "737280": 69
+     },
+     "extent4k": {
+      "737280": 69
+     }
+    },
+    {
+     "shape": [
+      4,
+      4,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 68,
+     "slot": {
+      "8192": 68
+     },
+     "extent4k": {
+      "8192": 68
+     }
+    },
+    {
+     "shape": [
+      2048,
+      1024,
+      "DXT3",
+      12,
+      1,
+      1
+     ],
+     "n": 67,
+     "slot": {
+      "2834432": 67
+     },
+     "extent4k": {
+      "2830336": 67
+     }
+    },
+    {
+     "shape": [
+      32,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 64,
+     "slot": {
+      "16384": 64
+     },
+     "extent4k": {
+      "16384": 64
+     }
+    },
+    {
+     "shape": [
+      64,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 64,
+     "slot": {
+      "32768": 64
+     },
+     "extent4k": {
+      "32768": 59,
+      "28672": 5
+     }
+    },
+    {
+     "shape": [
+      512,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 63,
+     "slot": {
+      "720896": 63
+     },
+     "extent4k": {
+      "720896": 63
+     }
+    },
+    {
+     "shape": [
+      2048,
+      128,
+      "DXT3",
+      12,
+      1,
+      1
+     ],
+     "n": 58,
+     "slot": {
+      "491520": 58
+     },
+     "extent4k": {
+      "491520": 58
+     }
+    },
+    {
+     "shape": [
+      4,
+      4,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 58,
+     "slot": {
+      "8192": 58
+     },
+     "extent4k": {
+      "8192": 57,
+      "4096": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 52,
+     "slot": {
+      "24576": 52
+     },
+     "extent4k": {
+      "24576": 44,
+      "20480": 8
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 52,
+     "slot": {
+      "212992": 52
+     },
+     "extent4k": {
+      "212992": 52
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 41,
+     "slot": {
+      "131072": 41
+     },
+     "extent4k": {
+      "131072": 41
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 41,
+     "slot": {
+      "65536": 41
+     },
+     "extent4k": {
+      "65536": 40,
+      "4096": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT5",
+      11,
+      1,
+      1
+     ],
+     "n": 41,
+     "slot": {
+      "1441792": 41
+     },
+     "extent4k": {
+      "1441792": 36,
+      "1433600": 5
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 38,
+     "slot": {
+      "65536": 38
+     },
+     "extent4k": {
+      "65536": 38
+     }
+    },
+    {
+     "shape": [
+      32,
+      2048,
+      "DXT3",
+      12,
+      1,
+      1
+     ],
+     "n": 37,
+     "slot": {
+      "393216": 37
+     },
+     "extent4k": {
+      "393216": 37
+     }
+    },
+    {
+     "shape": [
+      256,
+      64,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 34,
+     "slot": {
+      "65536": 34
+     },
+     "extent4k": {
+      "61440": 32,
+      "65536": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      256,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 34,
+     "slot": {
+      "212992": 34
+     },
+     "extent4k": {
+      "208896": 34
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 32,
+     "slot": {
+      "16384": 32
+     },
+     "extent4k": {
+      "16384": 32
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 22,
+     "slot": {
+      "40960": 22
+     },
+     "extent4k": {
+      "40960": 21,
+      "36864": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 22,
+     "slot": {
+      "1048576": 22
+     },
+     "extent4k": {
+      "1048576": 14,
+      "954368": 8
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 21,
+     "slot": {
+      "16384": 21
+     },
+     "extent4k": {
+      "16384": 21
+     }
+    },
+    {
+     "shape": [
+      1024,
+      1024,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 20,
+     "slot": {
+      "524288": 20
+     },
+     "extent4k": {
+      "524288": 10,
+      "368640": 4,
+      "520192": 2,
+      "307200": 2,
+      "315392": 1,
+      "454656": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT5",
+      7,
+      1,
+      1
+     ],
+     "n": 20,
+     "slot": {
+      "49152": 20
+     },
+     "extent4k": {
+      "49152": 11,
+      "40960": 4,
+      "45056": 4,
+      "36864": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 19,
+     "slot": {
+      "196608": 19
+     },
+     "extent4k": {
+      "196608": 18,
+      "192512": 1
+     }
+    },
+    {
+     "shape": [
+      8,
+      8,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 15,
+     "slot": {
+      "8192": 15
+     },
+     "extent4k": {
+      "8192": 15
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 14,
+     "slot": {
+      "16384": 14
+     },
+     "extent4k": {
+      "16384": 13,
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 13,
+     "slot": {
+      "81920": 13
+     },
+     "extent4k": {
+      "81920": 11,
+      "77824": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 12,
+     "slot": {
+      "16384": 12
+     },
+     "extent4k": {
+      "16384": 12
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "8_8_8_8",
+      1,
+      1,
+      0
+     ],
+     "n": 11,
+     "slot": {
+      "262144": 11
+     },
+     "extent4k": {
+      "262144": 11
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 9,
+     "slot": {
+      "524288": 9
+     },
+     "extent4k": {
+      "524288": 9
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 9,
+     "slot": {
+      "262144": 9
+     },
+     "extent4k": {
+      "262144": 9
+     }
+    },
+    {
+     "shape": [
+      1024,
+      2048,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 9,
+     "slot": {
+      "1417216": 9
+     },
+     "extent4k": {
+      "1417216": 9
+     }
+    },
+    {
+     "shape": [
+      128,
+      64,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 9,
+     "slot": {
+      "49152": 9
+     },
+     "extent4k": {
+      "49152": 9
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXN",
+      8,
+      1,
+      1
+     ],
+     "n": 7,
+     "slot": {
+      "65536": 7
+     },
+     "extent4k": {
+      "57344": 7
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 7,
+     "slot": {
+      "16384": 7
+     },
+     "extent4k": {
+      "16384": 7
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 7,
+     "slot": {
+      "131072": 7
+     },
+     "extent4k": {
+      "122880": 7
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT3",
+      6,
+      1,
+      1
+     ],
+     "n": 7,
+     "slot": {
+      "32768": 7
+     },
+     "extent4k": {
+      "24576": 5,
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT1",
+      6,
+      1,
+      1
+     ],
+     "n": 7,
+     "slot": {
+      "16384": 7
+     },
+     "extent4k": {
+      "16384": 7
+     }
+    },
+    {
+     "shape": [
+      64,
+      160,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 6,
+     "slot": {
+      "32768": 6
+     },
+     "extent4k": {
+      "28672": 6
+     }
+    },
+    {
+     "shape": [
+      160,
+      176,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 6,
+     "slot": {
+      "65536": 6
+     },
+     "extent4k": {
+      "65536": 6
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 6,
+     "slot": {
+      "131072": 6
+     },
+     "extent4k": {
+      "131072": 6
+     }
+    },
+    {
+     "shape": [
+      32,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 6,
+     "slot": {
+      "24576": 6
+     },
+     "extent4k": {
+      "24576": 6
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 5,
+     "slot": {
+      "16384": 5
+     },
+     "extent4k": {
+      "12288": 5
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT3",
+      1,
+      1,
+      0
+     ],
+     "n": 5,
+     "slot": {
+      "65536": 5
+     },
+     "extent4k": {
+      "65536": 5
+     }
+    },
+    {
+     "shape": [
+      512,
+      4096,
+      "DXT1",
+      13,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "1433600": 4
+     },
+     "extent4k": {
+      "1433600": 4
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "98304": 4
+     },
+     "extent4k": {
+      "98304": 4
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "32768": 4
+     },
+     "extent4k": {
+      "32768": 4
+     }
+    },
+    {
+     "shape": [
+      128,
+      256,
+      "DXT3",
+      9,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "81920": 4
+     },
+     "extent4k": {
+      "81920": 4
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 4,
+     "slot": {
+      "16384": 4
+     },
+     "extent4k": {
+      "16384": 4
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "212992": 3
+     },
+     "extent4k": {
+      "208896": 3
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT3",
+      7,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "49152": 3
+     },
+     "extent4k": {
+      "49152": 2,
+      "40960": 1
+     }
+    },
+    {
+     "shape": [
+      8,
+      8,
+      "DXN",
+      1,
+      1,
+      0
+     ],
+     "n": 3,
+     "slot": {
+      "16384": 3
+     },
+     "extent4k": {
+      "12288": 3
+     }
+    },
+    {
+     "shape": [
+      512,
+      64,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 3,
+     "slot": {
+      "114688": 3
+     },
+     "extent4k": {
+      "114688": 3
+     }
+    },
+    {
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "65536": 2
+     },
+     "extent4k": {
+      "65536": 2
+     }
+    },
+    {
+     "shape": [
+      1280,
+      720,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "491520": 2
+     },
+     "extent4k": {
+      "491520": 2
+     }
+    },
+    {
+     "shape": [
+      640,
+      480,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "163840": 2
+     },
+     "extent4k": {
+      "163840": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      32,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "49152": 2
+     },
+     "extent4k": {
+      "45056": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      512,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "344064": 2
+     },
+     "extent4k": {
+      "344064": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "32768": 2
+     },
+     "extent4k": {
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXT5",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "49152": 2
+     },
+     "extent4k": {
+      "40960": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "65536": 2
+     },
+     "extent4k": {
+      "65536": 2
+     }
+    },
+    {
+     "shape": [
+      16,
+      2,
+      "DXT1",
+      5,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      4,
+      2,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "8192": 2
+     },
+     "extent4k": {
+      "8192": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      1024,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "393216": 2
+     },
+     "extent4k": {
+      "393216": 2
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT1",
+      16,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "32768": 2
+     },
+     "extent4k": {
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "229376": 2
+     },
+     "extent4k": {
+      "229376": 1,
+      "225280": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      128,
+      "DXT1",
+      8,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "24576": 2
+     },
+     "extent4k": {
+      "24576": 2
+     }
+    },
+    {
+     "shape": [
+      64,
+      32,
+      "DXT1",
+      7,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "16384": 2
+     },
+     "extent4k": {
+      "16384": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      16,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 2,
+     "slot": {
+      "16384": 2
+     },
+     "extent4k": {
+      "16384": 2
+     }
+    },
+    {
+     "shape": [
+      256,
+      64,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "32768": 2
+     },
+     "extent4k": {
+      "32768": 2
+     }
+    },
+    {
+     "shape": [
+      512,
+      32,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "98304": 2
+     },
+     "extent4k": {
+      "94208": 2
+     }
+    },
+    {
+     "shape": [
+      1024,
+      256,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 2,
+     "slot": {
+      "393216": 2
+     },
+     "extent4k": {
+      "393216": 2
+     }
+    },
+    {
+     "shape": [
+      160,
+      176,
+      "DXT1",
+      1,
+      1,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "32768": 1
+     },
+     "extent4k": {
+      "32768": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "DXT5",
+      1,
+      3,
+      0
+     ],
+     "n": 1,
+     "slot": {
+      "98304": 1
+     },
+     "extent4k": {
+      "98304": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      8,
+      3,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "540672": 1
+     },
+     "extent4k": {
+      "540672": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "16384": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      512,
+      "DXT3",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "737280": 1
+     },
+     "extent4k": {
+      "733184": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXN",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "81920": 1
+     },
+     "extent4k": {
+      "77824": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT5",
+      4,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "196608": 1
+     },
+     "extent4k": {
+      "196608": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      512,
+      "DXT5",
+      2,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "98304": 1
+     },
+     "extent4k": {
+      "98304": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      128,
+      "8_8_8_8",
+      8,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "90112": 1
+     },
+     "extent4k": {
+      "90112": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT5",
+      4,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "114688": 1
+     },
+     "extent4k": {
+      "110592": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      256,
+      "DXT1",
+      3,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "49152": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      2,
+      "DXN",
+      5,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "12288": 1
+     }
+    },
+    {
+     "shape": [
+      4,
+      2,
+      "DXN",
+      3,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "12288": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      64,
+      "DXN",
+      7,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "40960": 1
+     }
+    },
+    {
+     "shape": [
+      16,
+      16,
+      "DXT3",
+      5,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "16384": 1
+     },
+     "extent4k": {
+      "8192": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      128,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "81920": 1
+     },
+     "extent4k": {
+      "77824": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT1",
+      2,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "98304": 1
+     },
+     "extent4k": {
+      "98304": 1
+     }
+    },
+    {
+     "shape": [
+      1024,
+      64,
+      "DXT1",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "114688": 1
+     },
+     "extent4k": {
+      "114688": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      512,
+      "DXT3",
+      2,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "163840": 1
+     },
+     "extent4k": {
+      "159744": 1
+     }
+    },
+    {
+     "shape": [
+      32,
+      32,
+      "DXT5",
+      6,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "32768": 1
+     },
+     "extent4k": {
+      "32768": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      64,
+      "DXT5",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      64,
+      128,
+      "DXT3",
+      8,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "49152": 1
+     },
+     "extent4k": {
+      "49152": 1
+     }
+    },
+    {
+     "shape": [
+      256,
+      32,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "24576": 1
+     },
+     "extent4k": {
+      "24576": 1
+     }
+    },
+    {
+     "shape": [
+      128,
+      512,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "65536": 1
+     },
+     "extent4k": {
+      "65536": 1
+     }
+    },
+    {
+     "shape": [
+      512,
+      1024,
+      "DXN",
+      11,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "737280": 1
+     },
+     "extent4k": {
+      "737280": 1
+     }
+    },
+    {
+     "shape": [
+      2048,
+      64,
+      "DXT1",
+      12,
+      1,
+      1
+     ],
+     "n": 1,
+     "slot": {
+      "229376": 1
+     },
+     "extent4k": {
+      "229376": 1
+     }
+    }
+   ],
+   "examples_M_4k_pk1_mismatch": [
+    {
+     "file": "rendering/adboard/adboard_trans_rgb.rx2",
+     "shape": [
+      512,
+      128,
+      "DXT1",
+      10,
+      1,
+      1
+     ],
+     "slot": 65536,
+     "extent": 63360,
+     "extent4k": 65536,
+     "model": 94208
+    },
+    {
+     "file": "rendering/banner/banner_0_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_0_nm.rx2",
+     "shape": [
+      256,
+      512,
+      "DXN",
+      10,
+      1,
+      1
+     ],
+     "slot": 212992,
+     "extent": 206656,
+     "extent4k": 208896,
+     "model": 249856
+    },
+    {
+     "file": "rendering/banner/banner_0_sm.rx2",
+     "shape": [
+      128,
+      256,
+      "DXT1",
+      9,
+      1,
+      1
+     ],
+     "slot": 40960,
+     "extent": 38720,
+     "extent4k": 40960,
+     "model": 61440
+    },
+    {
+     "file": "rendering/banner/banner_108_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_10_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_11_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_12_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_131_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_132_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_133_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_134_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_135_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_136_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_137_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_138_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_139_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_13_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_141_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_142_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_143_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_144_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_145_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_147_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_148_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_149_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_14_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_150_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_151_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_152_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_153_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_154_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_155_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_156_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_157_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_158_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_159_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_15_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_161_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_162_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_163_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_16_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_17_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_180_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_181_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_182_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_183_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_184_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_186_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382781,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_187_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_188_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_189_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_18_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_190_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_191_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_192_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_193_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_194_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_195_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382780,
+     "extent4k": 385024,
+     "model": 413696
+    },
+    {
+     "file": "rendering/banner/banner_196_cm.rx2",
+     "shape": [
+      512,
+      512,
+      "DXT3",
+      10,
+      1,
+      1
+     ],
+     "slot": 393216,
+     "extent": 382782,
+     "extent4k": 385024,
+     "model": 413696
+    }
+   ]
+  }
+ },
+ "finished": "2026-09-21T18:48:53-0600"
+}

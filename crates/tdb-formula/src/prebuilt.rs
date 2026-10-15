@@ -53,7 +53,8 @@ pub fn eval_prebuilt(
             if ctx.career_gp_pro == 0 {
                 return Some(8.0);
             }
-            let ppg = (ctx.career_g_pro as f64 + ctx.career_a_pro as f64) / ctx.career_gp_pro as f64;
+            let ppg =
+                (ctx.career_g_pro as f64 + ctx.career_a_pro as f64) / ctx.career_gp_pro as f64;
             let bias = 8.0 + (ppg - 0.5) * 10.0;
             Some(bias.round().clamp(0.0, 15.0))
         }

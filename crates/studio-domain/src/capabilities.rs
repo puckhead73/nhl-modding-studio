@@ -88,9 +88,9 @@ impl Capabilities {
             year_ufa: has_field(db, "ubPc", "GKKz"),
             junior_team: has_field(db, "ubPc", "ZbNy"),
             draft_team: has_field(db, "ubPc", "vgWu"),
-            draft_year: has_field(db, "ubPc", "YKzW"),
+            draft_year: has_field(db, "ubPc", "YKzW") || has_field(db, "ubPc", "ygQP"),
             draft_round: has_field(db, "ubPc", "ccjU"),
-            draft_pick: has_field(db, "ubPc", "tTfW"),
+            draft_pick: has_field(db, "ubPc", "tTfW") || has_field(db, "ubPc", "oUjf"),
             rookie_ahl: has_field(db, "ubPc", "ywRO"),
             rookie_chl: has_field(db, "ubPc", "BQVU"),
             has_skater_equip: has_table(db, "xmja"),
@@ -112,7 +112,11 @@ fn has_table(db: &TdbFile, studio_table: &str) -> bool {
 /// `true` iff `studio_table` exists in this file and carries a field with the given studio id.
 fn has_field(db: &TdbFile, studio_table: &str, studio_field: &str) -> bool {
     db.table_canonical(studio_table)
-        .map(|t| t.fields.iter().any(|f| f.id.canonical(db.endian) == studio_field))
+        .map(|t| {
+            t.fields
+                .iter()
+                .any(|f| f.id.canonical(db.endian) == studio_field)
+        })
         .unwrap_or(false)
 }
 
@@ -132,7 +136,10 @@ fn count_ratings(db: &TdbFile, meta: &FieldMetaIndex, studio_table: &str) -> (us
             continue;
         }
         total += 1;
-        if rating_suffix(&m.name).and_then(|s| rating_label(studio_table, s)).is_some() {
+        if rating_suffix(&m.name)
+            .and_then(|s| rating_label(studio_table, s))
+            .is_some()
+        {
             labelled += 1;
         }
     }

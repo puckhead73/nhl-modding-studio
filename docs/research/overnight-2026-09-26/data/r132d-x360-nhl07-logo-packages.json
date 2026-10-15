@@ -1,0 +1,605 @@
+{
+ "note": "R132d - R132 applied unchanged to Xbox 360 NHL 07 (`fe/ion/artassets/<family>/*.big` of the loose tree), completing the NHL 07 -> 11 range.\nUsage: python r132d_x360_nhl07_logo_packages.py <out.json>\n\nR132 - League 1.4 / Teams 2.4 \"different dimensions\" on the older package forms (developer ledger: \"RW4-in-BIGF: whether the loose RW4\ndescriptor rule + the Apt quad rewrite apply inside the 07-11 package form is unmeasured\"). Read-only over the Xbox 360 loose trees.\nPer logo package `fe/ion/artassets/<family>/*.big` (families: team logos, small / wide / dynasty / calendar, league logos, small / wide):\n  wrapper    : whole-file RefPack (NHL 08-10 per receipt 13) or plain BIGF; unwrapped with the 2026-09-21 speech-model decoder;\n  members    : BIGF directory (names, sizes); texture member = the member whose bytes are RW4 (`\\x89RW4`) or XPR2 (largest if several);\n  texture    : RW4xb2 - file-table chunk types, raster count, the primary raster's (w, h, format) decoded as R107 documents; XPR2 - w, h;\n  Apt rule   : Studio's 12 -> Legacy dimension rule (assets.rs rewrite_apt_geometry): member `<n+1>` of 288 bytes whose six vertices at +96\n               (stride 32) are (0,H) (0,0) (W,0) (W,0) (W,H) (0,H) for the texture's (W, H), and member `0` = \"Apt Data:\" whose object table\n               (16 + u32@16) carries W, H as u32 at +20 and as f32 at +96.\nClasses per package: full-texture quad (rule holds) / display-crop quad (record present, vertices differ) / layout absent / not a logo package.\nNHL 12 (XPR2 packages) is run as the control where Studio already resizes. Nothing is written; no member is re-encoded.\nUsage: python r132_old_logo_package_resize_inputs.py <out.json>\n",
+ "trees": {
+  "x360-nhl07": {
+   "teamlogos": {
+    "packages": 57,
+    "wrappers": {
+     "plain BIGF": 57
+    },
+    "texture_member_wrappers": {
+     "stored": 57
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 57
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 56,
+     "display-crop quad": 1
+    },
+    "descriptors_by_size": {
+     "256x256 ARGB8 payload 262144": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100": 2
+     },
+     "256x256 ARGB8 payload []": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008200000200001086001fe0ff00000c14000000000000020008000100": 54
+     },
+     "32x32 ARGB8 payload 4096": {
+      "0000000301000000000000000000000000000000ffff0000ffff000080400002000000860003e01f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008200000200000086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": 262144,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008200000200001086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 256,
+       "h": 256,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008200000200001086001fe0ff00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogossmall": {
+    "packages": 56,
+    "wrappers": {
+     "plain BIGF": 56
+    },
+    "texture_member_wrappers": {
+     "stored": 56
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 56
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 56
+    },
+    "descriptors_by_size": {
+     "128x64 ARGB8 payload 32768": {
+      "0000000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100": 2
+     },
+     "128x64 ARGB8 payload []": {
+      "0000000301000000000000000000000000000000ffff0000ffff000081000002000010860007e07f00000c14000000000000020008000100": 54
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff000081000002000000860007e07f00000c14000000000000020008000100",
+       "payload_bytes": 32768,
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff000081000002000010860007e07f00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff000081000002000010860007e07f00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "teamlogoswide": {
+    "packages": 56,
+    "wrappers": {
+     "plain BIGF": 56
+    },
+    "texture_member_wrappers": {
+     "stored": 56
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 56
+    },
+    "classes": {
+     "display-crop quad": 56
+    },
+    "descriptors_by_size": {
+     "512x248 ARGB8 payload 524288": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008400000200000086001ee1ff00000c14000000000000020008000100": 2
+     },
+     "512x248 ARGB8 payload []": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008400000200001086001ee1ff00000c14000000000000020008000100": 54
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 512,
+       "h": 248,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008400000200000086001ee1ff00000c14000000000000020008000100",
+       "payload_bytes": 524288,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 512,
+       "h": 248,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008400000200001086001ee1ff00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "8",
+       "9"
+      ],
+      "texture_member": "8",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 512,
+       "h": 248,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008400000200001086001ee1ff00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   },
+   "teamlogoscalendar": {
+    "packages": 56,
+    "wrappers": {
+     "plain BIGF": 56
+    },
+    "texture_member_wrappers": {
+     "stored": 56
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 56
+    },
+    "classes": {
+     "display-crop quad": 56
+    },
+    "descriptors_by_size": {
+     "100x88 ARGB8 payload 49152": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100": 2
+     },
+     "100x88 ARGB8 payload []": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008100000200001086000ae06300000c14000000000000020008000100": 54
+     }
+    },
+    "samples": [
+     {
+      "file": "t0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008100000200000086000ae06300000c14000000000000020008000100",
+       "payload_bytes": 49152,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008100000200001086000ae06300000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "t10.big",
+      "members": [
+       "0",
+       "1",
+       "6",
+       "7"
+      ],
+      "texture_member": "6",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 88,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008100000200001086000ae06300000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   },
+   "leaguelogos": {
+    "packages": 2,
+    "wrappers": {
+     "plain BIGF": 2
+    },
+    "texture_member_wrappers": {
+     "stored": 2
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 2
+    },
+    "classes": {
+     "display-crop quad": 2
+    },
+    "descriptors_by_size": {
+     "100x104 ARGB8 payload 65536": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008100000200000086000c606300000c14000000000000020008000100": 2
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 104,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008100000200000086000c606300000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "4",
+       "5"
+      ],
+      "texture_member": "4",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 100,
+       "h": 104,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008100000200000086000c606300000c14000000000000020008000100",
+       "payload_bytes": 65536,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   },
+   "leaguelogossmall": {
+    "packages": 1,
+    "wrappers": {
+     "plain BIGF": 1
+    },
+    "texture_member_wrappers": {
+     "stored": 1
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 1
+    },
+    "classes": {
+     "full-texture quad (rule holds)": 1
+    },
+    "descriptors_by_size": {
+     "128x64 ARGB8 payload []": {
+      "0000000301000000000000000000000000000000ffff0000ffff000081000002000010860007e07f00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 128,
+       "h": 64,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff000081000002000010860007e07f00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "full-texture quad (rule holds)"
+     }
+    ]
+   },
+   "leaguelogoswide": {
+    "packages": 2,
+    "wrappers": {
+     "plain BIGF": 2
+    },
+    "texture_member_wrappers": {
+     "stored": 2
+    },
+    "texture_forms": {
+     "RW4xb2 1r ARGB8": 2
+    },
+    "classes": {
+     "display-crop quad": 2
+    },
+    "descriptors_by_size": {
+     "512x248 ARGB8 payload []": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008400000200001086001ee1ff00000c14000000000000020008000100": 1
+     },
+     "512x248 ARGB8 payload 524288": {
+      "0000000301000000000000000000000000000000ffff0000ffff00008400000200000086001ee1ff00000c14000000000000020008000100": 1
+     }
+    },
+    "samples": [
+     {
+      "file": "l0.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x0",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 512,
+       "h": 248,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008400000200001086001ee1ff00000c14000000000000020008000100",
+       "payload_bytes": [],
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     },
+     {
+      "file": "l1.big",
+      "members": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ],
+      "texture_member": "2",
+      "texture": {
+       "container": "RW4xb2",
+       "chunk_types": [
+        "0x10031",
+        "0x20003"
+       ],
+       "rasters": 1,
+       "w": 512,
+       "h": 248,
+       "fmt": "ARGB8",
+       "descriptor_hex": "0000000301000000000000000000000000000000ffff0000ffff00008400000200000086001ee1ff00000c14000000000000020008000100",
+       "payload_bytes": 524288,
+       "member_wrapper": "stored"
+      },
+      "class": "display-crop quad"
+     }
+    ]
+   }
+  }
+ }
+}

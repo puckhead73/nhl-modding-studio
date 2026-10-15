@@ -1,0 +1,1037 @@
+{
+ "note": "R94 - the unexplained words of the `ABKC` bank tree (R89 \u00a74): sample-list entry words S (u24) and X (u16), and the 32-bit name hash.\nControlled offline tests only; no meaning is assigned from plausibility. Read-only over the loose trees.\n\nS tests (stream entries): S is identical for the same (bank, record) on PS3 and X360 (platform-independent?); within a list the\n  entries sorted by S give increments dS; dS is compared with num_samples x k for k in {1, 2, 4}, with (num_samples + terminal trim),\n  with the stream byte length, with the block count, and its residue classes (dS mod 2 / 4 / 8 / 30 / 60 / 64) are recorded; the\n  ratio dS / num_samples distribution per (rate, cc); whether S restarts at 0 per list or per bank; whether the S order equals the\n  list order or the record-index order. Ram entries: S vs the 1-based ordinal (R89) re-checked.\nX tests: census by (record type, loop, codec, cc, rate, weight, bank); is X constant within a list? bit decomposition of the large\n  values (0xdf1f, 0xcc34, 0xcf30 ...); X vs the owner class.\nHash tests: (1) is the hash a function of the name (one hash per distinct name across all banks and both platforms)? collisions?\n  (2) is the C table sorted by hash / by name / by node? (3) candidate algorithms x string variants (as-is, lower, upper, without the\n  class suffix, with a trailing NUL) on a TRAINING set of 300 distinct names; any candidate matching >= 95 % is then tested on the\n  HELD-OUT remainder and must predict every held-out pair; every candidate tried is listed with its match count.\nUsage: python r94_abk_sx_hash.py <out.json> [--trees a,b]\n",
+ "trees": [
+  "ps3-nhl15",
+  "x360-nhl15",
+  "ps3-nhl11",
+  "x360-nhl10",
+  "ps3-legacy",
+  "x360-nhl12"
+ ],
+ "banks": 1279,
+ "elapsed_s": 1.6,
+ "hash": {
+  "distinct_names": 1467,
+  "names_with_more_than_one_hash": 1103,
+  "examples_multi": {
+   "crowdPauseDelayTime_snd": [
+    103354546,
+    577114290,
+    675287218,
+    1616777394
+   ],
+   "crowdKillDelayTime_snd": [
+    103380790,
+    577140534,
+    675313462,
+    1616803638
+   ],
+   "sm_crowdAmbience_v": [
+    103358451,
+    577118195,
+    675291123,
+    1616781299,
+    1697456115
+   ],
+   "crowdReactionsMasterVol_snd": [
+    103351736,
+    577111480,
+    675284408,
+    1616774584
+   ],
+   "introNISCrowdFilt_snd": [
+    103374522,
+    577134266,
+    675307194,
+    1616797370
+   ]
+  },
+  "hash_collisions_distinct_names": 24,
+  "examples_collisions": {
+   "1616793655": [
+    "ch_livid_v",
+    "homeScoredOnGenSamplePicker_msg"
+   ],
+   "103372111": [
+    "Reactions_24_snd",
+    "ooh02samplePicker_msg"
+   ],
+   "103359364": [
+    "badPenCallManySamplePicker_snd",
+    "colorDelay3_snd"
+   ],
+   "103365501": [
+    "reaction17_snd",
+    "streamStatus_snd"
+   ],
+   "103351299": [
+    "c_anticipationHigh",
+    "c_chantSweep"
+   ]
+  },
+  "c_table_order": {
+   "by_hash": 6,
+   "by_name": 98,
+   "by_node": 0,
+   "banks": 1279
+  },
+  "train_size": 52,
+  "held_out_size": 312,
+  "trials_top10": [
+   {
+    "hash": "fnv1",
+    "variant": "as_is",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1",
+    "variant": "lower",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1",
+    "variant": "upper",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1",
+    "variant": "nul",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1",
+    "variant": "no_suffix",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1",
+    "variant": "no_suffix_lower",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1",
+    "variant": "no_prefix_h_",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1",
+    "variant": "reversed",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1a",
+    "variant": "as_is",
+    "train_matches": 0,
+    "train_size": 52
+   },
+   {
+    "hash": "fnv1a",
+    "variant": "lower",
+    "train_matches": 0,
+    "train_size": 52
+   }
+  ],
+  "winners": [],
+  "candidates_tried": 200,
+  "sample_pairs": [
+   [
+    "EOP_Music_Sting",
+    35156061
+   ],
+   [
+    "Instance_clearing_6",
+    103359748
+   ],
+   [
+    "Reactions_24_snd",
+    103372111
+   ],
+   [
+    "Reactions_31_snd",
+    103364955
+   ],
+   [
+    "Reactions_38_snd",
+    103356043
+   ],
+   [
+    "SkateV2_AccelfromStart90s_SP",
+    1419863259
+   ],
+   [
+    "SkateV2_bwd_L_hard_SP",
+    1419858495
+   ],
+   [
+    "SkateV2_bwd_R_reg_Snd",
+    1419866354
+   ]
+  ]
+ },
+ "S": {
+  "platform_pairs_same": 2006,
+  "platform_pairs_different": 1073,
+  "ram_S_eq_idx_plus_1_or_pos_plus_1": {
+   "(True, True)": 2002,
+   "(False, False)": 4410,
+   "(False, True)": 253,
+   "(True, False)": 3148
+  },
+  "stream_S_min_is_0_per_list": {
+   "true": 66,
+   "false": 666
+  },
+  "order": {
+   "list_order_nondecreasing": 576,
+   "idx_order_nondecreasing": 576,
+   "lists": 732
+  },
+  "dS_mod": {
+   "(2, True)": 14993,
+   "(3, False)": 10328,
+   "(3, True)": 4665,
+   "(4, True)": 14993,
+   "(5, False)": 11866,
+   "(5, True)": 3127,
+   "(7, False)": 12842,
+   "(7, True)": 2151,
+   "(8, False)": 7603,
+   "(8, True)": 7390,
+   "(16, False)": 11440,
+   "(16, True)": 3553,
+   "(30, False)": 14059,
+   "(30, True)": 934,
+   "(60, False)": 14059,
+   "(60, True)": 934,
+   "(64, False)": 14031,
+   "(64, True)": 962
+  },
+  "dS_over_num_samples": {
+   "rate44100|cc0|loop0": {
+    "n": 8075,
+    "min": 0.0012,
+    "median": 1.2498,
+    "max": 576.6448
+   },
+   "rate22050|cc1|loop0": {
+    "n": 8,
+    "min": 4.0265,
+    "median": 4.0305,
+    "max": 4.0308
+   },
+   "rate22050|cc0|loop0": {
+    "n": 2496,
+    "min": 2.0112,
+    "median": 2.0138,
+    "max": 634.6513
+   },
+   "rate48000|cc0|loop0": {
+    "n": 1758,
+    "min": 0.0003,
+    "median": 2.0056,
+    "max": 275.6161
+   },
+   "rate48000|cc1|loop0": {
+    "n": 46,
+    "min": 0.2457,
+    "median": 4.0068,
+    "max": 4.0071
+   },
+   "rate24000|cc0|loop0": {
+    "n": 2037,
+    "min": 2.0105,
+    "median": 2.0112,
+    "max": 467.4934
+   },
+   "rate44100|cc1|loop0": {
+    "n": 206,
+    "min": 0.0035,
+    "median": 0.346,
+    "max": 4.0095
+   },
+   "rate48000|cc3|loop0": {
+    "n": 135,
+    "min": 0.0,
+    "median": 0.0003,
+    "max": 0.0012
+   },
+   "rate36000|cc0|loop0": {
+    "n": 136,
+    "min": 2.0071,
+    "median": 2.0074,
+    "max": 2.0081
+   },
+   "rate36000|cc1|loop0": {
+    "n": 60,
+    "min": 0.045,
+    "median": 1.202,
+    "max": 4.0086
+   },
+   "rate31000|cc1|loop1": {
+    "n": 6,
+    "min": 4.0114,
+    "median": 4.0123,
+    "max": 4.0143
+   },
+   "rate36000|cc3|loop0": {
+    "n": 2,
+    "min": 0.0001,
+    "median": 0.0001,
+    "max": 0.0001
+   },
+   "rate24000|cc1|loop0": {
+    "n": 1,
+    "min": 262.0707,
+    "median": 262.0707,
+    "max": 262.0707
+   },
+   "rate32000|cc1|loop0": {
+    "n": 17,
+    "min": 0.045,
+    "median": 1.4729,
+    "max": 5.1261
+   },
+   "rate32000|cc1|loop1": {
+    "n": 4,
+    "min": 4.0111,
+    "median": 4.0119,
+    "max": 4.0139
+   },
+   "rate36000|cc1|loop1": {
+    "n": 6,
+    "min": 4.0099,
+    "median": 4.0106,
+    "max": 4.0123
+   }
+  },
+  "exact_relations": {
+   "dS == 2*num_samples": 0,
+   "dS == num_samples": 0,
+   "dS == 4*num_samples": 0,
+   "dS == 2*(cc+1)*num_samples": 0,
+   "dS == stream_bytes": 0,
+   "dS == stream_bytes+body": 0,
+   "rows": 14993
+  },
+  "rows": 14993,
+  "examples": [
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 0,
+    "next_idx": 1,
+    "S": 0,
+    "dS": 57208,
+    "num_samples": 28496,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 7168,
+    "blocks": 15
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 1,
+    "next_idx": 2,
+    "S": 57208,
+    "dS": 60136,
+    "num_samples": 29952,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 7808,
+    "blocks": 15
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 3,
+    "next_idx": 4,
+    "S": 176968,
+    "dS": 34288,
+    "num_samples": 17068,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 4800,
+    "blocks": 9
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 4,
+    "next_idx": 5,
+    "S": 211256,
+    "dS": 25156,
+    "num_samples": 12510,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 3648,
+    "blocks": 7
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 5,
+    "next_idx": 6,
+    "S": 236412,
+    "dS": 28836,
+    "num_samples": 14350,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 4288,
+    "blocks": 7
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 6,
+    "next_idx": 7,
+    "S": 265248,
+    "dS": 30612,
+    "num_samples": 15229,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 4416,
+    "blocks": 8
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 7,
+    "next_idx": 8,
+    "S": 295860,
+    "dS": 45840,
+    "num_samples": 22828,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 6144,
+    "blocks": 12
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 8,
+    "next_idx": 9,
+    "S": 341700,
+    "dS": 37768,
+    "num_samples": 18800,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 5824,
+    "blocks": 10
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 9,
+    "next_idx": 10,
+    "S": 379468,
+    "dS": 32944,
+    "num_samples": 16395,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 5248,
+    "blocks": 8
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 10,
+    "next_idx": 11,
+    "S": 412412,
+    "dS": 30128,
+    "num_samples": 14987,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 4352,
+    "blocks": 7
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 11,
+    "next_idx": 12,
+    "S": 442540,
+    "dS": 32392,
+    "num_samples": 16119,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 4288,
+    "blocks": 8
+   },
+   {
+    "tree": "ps3-nhl15",
+    "bank": "ambientskatesandpunches.abk",
+    "idx": 12,
+    "next_idx": 13,
+    "S": 474932,
+    "dS": 34756,
+    "num_samples": 17302,
+    "rate": 44100,
+    "cc": 0,
+    "loop": 0,
+    "X": 0,
+    "stream_bytes": 4608,
+    "blocks": 9
+   }
+  ]
+ },
+ "X": {
+  "in_list_constant": {
+   "True": 2804,
+   "False": 79
+  },
+  "census_top40": [
+   {
+    "key": [
+     "ps3-",
+     "ram",
+     0,
+     5,
+     0,
+     22050,
+     100,
+     "0x0000"
+    ],
+    "n": 1420
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     0,
+     3,
+     0,
+     24000,
+     100,
+     "0x0000"
+    ],
+    "n": 1387
+   },
+   {
+    "key": [
+     "ps3-",
+     "ram",
+     0,
+     5,
+     0,
+     44100,
+     100,
+     "0x0000"
+    ],
+    "n": 1380
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     0,
+     3,
+     0,
+     22050,
+     100,
+     "0x0000"
+    ],
+    "n": 1283
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     44100,
+     100,
+     "0x0000"
+    ],
+    "n": 1255
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     44100,
+     100,
+     "0x0000"
+    ],
+    "n": 1120
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     44100,
+     100,
+     "0x0001"
+    ],
+    "n": 1063
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     22050,
+     100,
+     "0x0000"
+    ],
+    "n": 928
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     22050,
+     100,
+     "0x0000"
+    ],
+    "n": 921
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     44100,
+     100,
+     "0x0001"
+    ],
+    "n": 920
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     44100,
+     100,
+     "0x0002"
+    ],
+    "n": 765
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     44100,
+     100,
+     "0x0002"
+    ],
+    "n": 642
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     24000,
+     80,
+     "0x0000"
+    ],
+    "n": 536
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     44100,
+     100,
+     "0x0003"
+    ],
+    "n": 508
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     24000,
+     80,
+     "0x0001"
+    ],
+    "n": 460
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     0,
+     3,
+     0,
+     36000,
+     100,
+     "0x0000"
+    ],
+    "n": 448
+   },
+   {
+    "key": [
+     "ps3-",
+     "ram",
+     0,
+     5,
+     1,
+     44100,
+     100,
+     "0xdf1f"
+    ],
+    "n": 404
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     44100,
+     100,
+     "0x0011"
+    ],
+    "n": 358
+   },
+   {
+    "key": [
+     "ps3-",
+     "ram",
+     0,
+     5,
+     0,
+     48000,
+     100,
+     "0x0000"
+    ],
+    "n": 350
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     44100,
+     100,
+     "0x0003"
+    ],
+    "n": 350
+   },
+   {
+    "key": [
+     "ps3-",
+     "ram",
+     1,
+     5,
+     1,
+     44100,
+     100,
+     "0xdf1f"
+    ],
+    "n": 338
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     22050,
+     100,
+     "0x0001"
+    ],
+    "n": 314
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     22050,
+     100,
+     "0x0001"
+    ],
+    "n": 312
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     0,
+     3,
+     1,
+     32000,
+     100,
+     "0xdf1f"
+    ],
+    "n": 309
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     1,
+     3,
+     1,
+     32000,
+     100,
+     "0xdf1f"
+    ],
+    "n": 305
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     44100,
+     100,
+     "0x0011"
+    ],
+    "n": 304
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     0,
+     3,
+     0,
+     24000,
+     80,
+     "0x0000"
+    ],
+    "n": 288
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     24000,
+     100,
+     "0x0001"
+    ],
+    "n": 284
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     48000,
+     100,
+     "0x0001"
+    ],
+    "n": 271
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     3,
+     48000,
+     100,
+     "0xdf1f"
+    ],
+    "n": 239
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     44100,
+     100,
+     "0x0004"
+    ],
+    "n": 237
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     24000,
+     70,
+     "0x0000"
+    ],
+    "n": 226
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     48000,
+     100,
+     "0x0003"
+    ],
+    "n": 207
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     48000,
+     100,
+     "0x0000"
+    ],
+    "n": 192
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     44100,
+     80,
+     "0x0002"
+    ],
+    "n": 183
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     0,
+     3,
+     3,
+     36000,
+     100,
+     "0xdf1f"
+    ],
+    "n": 169
+   },
+   {
+    "key": [
+     "x360",
+     "stream",
+     0,
+     3,
+     0,
+     24000,
+     100,
+     "0x0000"
+    ],
+    "n": 160
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     48000,
+     100,
+     "0x0002"
+    ],
+    "n": 153
+   },
+   {
+    "key": [
+     "x360",
+     "ram",
+     0,
+     3,
+     0,
+     32000,
+     100,
+     "0x0000"
+    ],
+    "n": 152
+   },
+   {
+    "key": [
+     "ps3-",
+     "stream",
+     0,
+     5,
+     0,
+     24000,
+     80,
+     "0x0000"
+    ],
+    "n": 148
+   }
+  ],
+  "distinct_X": 32
+ }
+}

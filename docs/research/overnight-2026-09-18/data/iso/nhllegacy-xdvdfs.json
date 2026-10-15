@@ -1,0 +1,1053 @@
+{
+ "iso": "X:/Games/Emulation/Roms/XBOX360/NHL Legacy/NHL Legacy Edition (USA, Europe) (En,Fr,De,Ru).iso",
+ "layout": "xgd3",
+ "base": 34078720,
+ "root_sector": 2116879,
+ "root_size": 2048,
+ "entries": [
+  {
+   "path": "$SystemUpdate",
+   "sector": 3496817,
+   "size": 6520,
+   "attr": 144
+  },
+  {
+   "path": "$SystemUpdate/AvatarEditor.xex",
+   "sector": 3496821,
+   "size": 18378752,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/BiometricSetup.xex",
+   "sector": 3505795,
+   "size": 5808128,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/dash.ExtraAVCodecs.xex",
+   "sector": 3508631,
+   "size": 3448832,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/dash.ExtraAVCodecs2.xex",
+   "sector": 3510315,
+   "size": 495616,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Dash.FieldCalibration.lex",
+   "sector": 3510557,
+   "size": 630784,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Dash.Kiosk.lex",
+   "sector": 3510865,
+   "size": 303104,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/dash.natalpregame.xex",
+   "sector": 3511013,
+   "size": 593920,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Dash.NetworkStorage.lex",
+   "sector": 3511303,
+   "size": 200704,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Dash.NuiTroubleshooter.lex",
+   "sector": 3511401,
+   "size": 2465792,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Dash.Search.xex",
+   "sector": 3512605,
+   "size": 761856,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/dash.xex",
+   "sector": 3512977,
+   "size": 15683584,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/dashnui.xex",
+   "sector": 3520635,
+   "size": 3219456,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/FFFE07DF00000001",
+   "sector": 3522207,
+   "size": 1150976,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/FFFE07DF00000002",
+   "sector": 3522769,
+   "size": 16064512,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/FFFE07DF00000006",
+   "sector": 3530613,
+   "size": 7962624,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/FFFE07DF00000008",
+   "sector": 3534501,
+   "size": 33013760,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Guide.AccountRecovery.xex",
+   "sector": 3550621,
+   "size": 958464,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Guide.AvatarMiniCreator.xex",
+   "sector": 3551089,
+   "size": 495616,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Guide.CSVTrans.xex",
+   "sector": 3551331,
+   "size": 102400,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Guide.Fitness.xex",
+   "sector": 3551381,
+   "size": 200704,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Guide.NuiTroubleshooter.xex",
+   "sector": 3551479,
+   "size": 729088,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Guide.TFA.xex",
+   "sector": 3551835,
+   "size": 729088,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.AvatarEditor.xex.common.xzp",
+   "sector": 3552191,
+   "size": 53103,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.AvatarEditor.xex.controlp.xzp",
+   "sector": 3552217,
+   "size": 7531,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.AvatarEditor.xex.MEDIA.xzp",
+   "sector": 3552221,
+   "size": 39169,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.BiometricSetup.xex.biometri.xzp",
+   "sector": 3552241,
+   "size": 32797,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.BiometricSetup.xex.controlp.xzp",
+   "sector": 3552258,
+   "size": 7531,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.CreateProfile.xex.cp.xzp",
+   "sector": 3552262,
+   "size": 18903,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.FamilyCenter.xex.familyce.xzp",
+   "sector": 3552272,
+   "size": 2707,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.FamilyCenter.xex.familyco.xzp",
+   "sector": 3552274,
+   "size": 3799,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.FamilyWizard.lex.familyco.xzp",
+   "sector": 3552276,
+   "size": 3799,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.FamilyWizard.lex.xzp.xzp",
+   "sector": 3552278,
+   "size": 41660,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.FieldCalibration.lex.fieldxzp.xzp",
+   "sector": 3552299,
+   "size": 8765,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.LF.GamerTagChange.lex.DashUI.xzp",
+   "sector": 3552304,
+   "size": 11728,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.AccountMgmt.lex.DashUI.xzp",
+   "sector": 3552310,
+   "size": 16802,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.ContentExplorer.lex.DashUI.xzp",
+   "sector": 3552319,
+   "size": 42136,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.Core.xex.SharedUI.xzp",
+   "sector": 3552340,
+   "size": 79922,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.LiveSignup.lex.DashUI.xzp",
+   "sector": 3552380,
+   "size": 36861,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.LiveSignup.lex.media.xzp",
+   "sector": 3552398,
+   "size": 30216,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.MicrosoftStore.lex.CntryUI.xzp",
+   "sector": 3552413,
+   "size": 22906,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.MicrosoftStore.lex.DashUI.xzp",
+   "sector": 3552425,
+   "size": 10912,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.MicrosoftStore.lex.media.xzp",
+   "sector": 3552431,
+   "size": 30216,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.MP.Purchase.lex.DashUI.xzp",
+   "sector": 3552446,
+   "size": 2128,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.natalpregame.xex.natalpre.xzp",
+   "sector": 3552448,
+   "size": 5078,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.NetworkStorage.lex.xzp.xzp",
+   "sector": 3552451,
+   "size": 10510,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.NuiTroubleshooter.lex.nuitsxzp.xzp",
+   "sector": 3552457,
+   "size": 43186,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.OnlineCommon.lex.ekmedia.xzp",
+   "sector": 3552479,
+   "size": 561,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.OnlineCommon.lex.vkmedia.xzp",
+   "sector": 3552480,
+   "size": 11859,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.PrivacyUI.xex.familyco.xzp",
+   "sector": 3552486,
+   "size": 3799,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.PrivacyUI.xex.privacyu.xzp",
+   "sector": 3552488,
+   "size": 92634,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.Search.lex.dashsear.xzp",
+   "sector": 3552534,
+   "size": 2984,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.Search.lex.vkmedia.xzp",
+   "sector": 3552536,
+   "size": 11859,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.Search.xex.dashsear.xzp",
+   "sector": 3552542,
+   "size": 36267,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.Search.xex.vkmedia.xzp",
+   "sector": 3552560,
+   "size": 11859,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Dash.Social.lex.xzp.xzp",
+   "sector": 3552566,
+   "size": 20494,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.arcade.xzp",
+   "sector": 3552577,
+   "size": 1996,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.consoles.xzp",
+   "sector": 3552578,
+   "size": 362899,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.controlp.xzp",
+   "sector": 3552756,
+   "size": 7531,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.contui.xzp",
+   "sector": 3552760,
+   "size": 14286,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.dashcomm.xzp",
+   "sector": 3552767,
+   "size": 53103,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.dashmain.xzp",
+   "sector": 3552793,
+   "size": 1215,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.download.xzp",
+   "sector": 3552794,
+   "size": 24303,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.dvd.xzp",
+   "sector": 3552806,
+   "size": 13566,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.epix.xzp",
+   "sector": 3552813,
+   "size": 15091,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.gamer.xzp",
+   "sector": 3552821,
+   "size": 2288,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.gamercar.xzp",
+   "sector": 3552823,
+   "size": 6357,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.hubui.xzp",
+   "sector": 3552827,
+   "size": 2386,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.iptv.xzp",
+   "sector": 3552829,
+   "size": 5486,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.memory.xzp",
+   "sector": 3552832,
+   "size": 70344,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.music.xzp",
+   "sector": 3552867,
+   "size": 25496,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.network.xzp",
+   "sector": 3552880,
+   "size": 123321,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.oobe.xzp",
+   "sector": 3552941,
+   "size": 15809,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.parental.xzp",
+   "sector": 3552949,
+   "size": 5881,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.pictures.xzp",
+   "sector": 3552952,
+   "size": 5697,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.SharedUI.xzp",
+   "sector": 3552955,
+   "size": 79922,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.signinpr.xzp",
+   "sector": 3552995,
+   "size": 5276,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.signupbo.xzp",
+   "sector": 3552998,
+   "size": 3699,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.slots.xzp",
+   "sector": 3553000,
+   "size": 3249,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.socxzp.xzp",
+   "sector": 3553002,
+   "size": 18394,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.thermal.xzp",
+   "sector": 3553011,
+   "size": 4425,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dash.xex.videos.xzp",
+   "sector": 3553014,
+   "size": 12068,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.dashnui.xex.speechpa.xzp",
+   "sector": 3553020,
+   "size": 4481,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.deviceselector.xex.media.xzp",
+   "sector": 3553023,
+   "size": 16178,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.DvdXPlayer.xex.dashcomm.xzp",
+   "sector": 3553031,
+   "size": 53103,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.DvdXPlayer.xex.dvd.xzp",
+   "sector": 3553057,
+   "size": 13566,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.GamerProfile.xex.gp.xzp",
+   "sector": 3553064,
+   "size": 50001,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.AccountRecovery.xex.media.xzp",
+   "sector": 3553089,
+   "size": 5411,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.AccountRecovery.xex.shdmedia.xzp",
+   "sector": 3553092,
+   "size": 71613,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.AvatarMiniCreator.xex.avatarmc.xzp",
+   "sector": 3553127,
+   "size": 2611,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.Beacons.xex.media.xzp",
+   "sector": 3553129,
+   "size": 16050,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.ChatAndMessenger.xex.media.xzp",
+   "sector": 3553137,
+   "size": 8701,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.CSVTrans.xex.CSVTrans.xzp",
+   "sector": 3553142,
+   "size": 12275,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.Fitness.xex.fitness.xzp",
+   "sector": 3553148,
+   "size": 44301,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.Friends.xex.friends.xzp",
+   "sector": 3553170,
+   "size": 59244,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Download.xex.HudDLUI.xzp",
+   "sector": 3553199,
+   "size": 9045,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Download.xex.SharedUI.xzp",
+   "sector": 3553204,
+   "size": 81773,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.LiveAccount.xex.HudLAUI.xzp",
+   "sector": 3553244,
+   "size": 49340,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.LiveAccount.xex.SharedUI.xzp",
+   "sector": 3553269,
+   "size": 81773,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.NuiPurchase.xex.HudPurUI.xzp",
+   "sector": 3553309,
+   "size": 28117,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.NuiPurchase.xex.SharedUI.xzp",
+   "sector": 3553323,
+   "size": 81773,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Payment.xex.HudPayUI.xzp",
+   "sector": 3553363,
+   "size": 32135,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Payment.xex.SharedUI.xzp",
+   "sector": 3553379,
+   "size": 81773,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.PaymentInst.xex.HudPiUI.xzp",
+   "sector": 3553419,
+   "size": 49876,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.PaymentInst.xex.SharedUI.xzp",
+   "sector": 3553444,
+   "size": 73306,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Purchase.xex.HudPurUI.xzp",
+   "sector": 3553480,
+   "size": 23903,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Purchase.xex.SharedUI.xzp",
+   "sector": 3553492,
+   "size": 81773,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Subscriptions.xex.HudSubUI.xzp",
+   "sector": 3553532,
+   "size": 12602,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.MP.Subscriptions.xex.SharedUI.xzp",
+   "sector": 3553539,
+   "size": 81773,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.NetworkStorage.xex.media.xzp",
+   "sector": 3553579,
+   "size": 6935,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.NuiCommunity.xex.media.xzp",
+   "sector": 3553583,
+   "size": 24091,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.NuiTroubleshooter.xex.media.xzp",
+   "sector": 3553595,
+   "size": 75302,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.PlayerFeedback.xex.Feedback.xzp",
+   "sector": 3553632,
+   "size": 48264,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.SocialPost.xex.media.xzp",
+   "sector": 3553656,
+   "size": 25567,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.TFA.xex.media.xzp",
+   "sector": 3553669,
+   "size": 45293,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Guide.Voicemail.xex.media.xzp",
+   "sector": 3553692,
+   "size": 6596,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.hud.xex.hud.xzp",
+   "sector": 3553696,
+   "size": 42667,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.huduiskin.xex.xam.xzp",
+   "sector": 3553717,
+   "size": 59756,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.LiveSignup.xex.controlp.xzp",
+   "sector": 3553747,
+   "size": 7531,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.LiveSignup.xex.media1.xzp",
+   "sector": 3553751,
+   "size": 197704,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.LiveSignup.xex.media2.xzp",
+   "sector": 3553848,
+   "size": 22906,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.MiniMediaPlayer.xex.media.xzp",
+   "sector": 3553860,
+   "size": 14981,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.nuihud.xex.media.xzp",
+   "sector": 3553868,
+   "size": 2873,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.signin.xex.signin.xzp",
+   "sector": 3553870,
+   "size": 36187,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Title.NewLiveSignup.xex.app.xzp",
+   "sector": 3553888,
+   "size": 68106,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Title.NewLiveSignup.xex.ccapp.xzp",
+   "sector": 3553922,
+   "size": 30216,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Title.NewLiveSignup.xex.controlp.xzp",
+   "sector": 3553937,
+   "size": 7531,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Title.NewLiveSignup.xex.embedded.xzp",
+   "sector": 3553941,
+   "size": 561,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Title.NewLiveSignup.xex.media.xzp",
+   "sector": 3553942,
+   "size": 71613,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Title.NewLiveSignup.xex.media2.xzp",
+   "sector": 3553977,
+   "size": 22906,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.Title.NewLiveSignup.xex.vkmedia.xzp",
+   "sector": 3553989,
+   "size": 11859,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.updater.xex.updater.xzp",
+   "sector": 3553995,
+   "size": 9804,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.vk.xex.vk.xzp",
+   "sector": 3554000,
+   "size": 11859,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.xam.xex.controlp.xzp",
+   "sector": 3554006,
+   "size": 958,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.xam.xex.gamercrd.xzp",
+   "sector": 3554007,
+   "size": 6389,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.xam.xex.mplayer.xzp",
+   "sector": 3554011,
+   "size": 1492,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.xam.xex.shrdres.xzp",
+   "sector": 3554012,
+   "size": 14021,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/L.xam.xex.xam.xzp",
+   "sector": 3554019,
+   "size": 874,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/natalsu.xex",
+   "sector": 3554020,
+   "size": 69632,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/nuihud.xex",
+   "sector": 3554054,
+   "size": 69632,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/PlayReady.xex",
+   "sector": 3554088,
+   "size": 3219456,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/su20076000_00000000",
+   "sector": 3555660,
+   "size": 11784192,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/system.manifest",
+   "sector": 3561414,
+   "size": 32036,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Title.Zune.xex",
+   "sector": 3561430,
+   "size": 21938176,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Xam.Community.xex",
+   "sector": 3572142,
+   "size": 335872,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Xam.WordRegister.xex",
+   "sector": 3572306,
+   "size": 69632,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/XenonSCLatin.xtt",
+   "sector": 3572340,
+   "size": 1392640,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/XimeDic.xex",
+   "sector": 3573020,
+   "size": 659456,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/XimeDicCh.xex",
+   "sector": 3573342,
+   "size": 167936,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/ximedicex.xex",
+   "sector": 3573424,
+   "size": 430080,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/XimeDic_CHS.xex",
+   "sector": 3573634,
+   "size": 69632,
+   "attr": 32
+  },
+  {
+   "path": "$SystemUpdate/Xna_TitleLauncher.xex",
+   "sector": 3573668,
+   "size": 512000,
+   "attr": 32
+  },
+  {
+   "path": "audioboot.big",
+   "sector": 2105413,
+   "size": 1381808,
+   "attr": 128
+  },
+  {
+   "path": "audioboot2.big",
+   "sector": 2087179,
+   "size": 5635728,
+   "attr": 128
+  },
+  {
+   "path": "boot.big",
+   "sector": 2106088,
+   "size": 11184432,
+   "attr": 128
+  },
+  {
+   "path": "cache.big",
+   "sector": 2220053,
+   "size": 312439568,
+   "attr": 128
+  },
+  {
+   "path": "cacheaudio.big",
+   "sector": 2181124,
+   "size": 79725376,
+   "attr": 128
+  },
+  {
+   "path": "cacheboot.big",
+   "sector": 2089931,
+   "size": 31705408,
+   "attr": 128
+  },
+  {
+   "path": "cachemovie.big",
+   "sector": 2175710,
+   "size": 11086736,
+   "attr": 128
+  },
+  {
+   "path": "cacheoverlay.big",
+   "sector": 2174006,
+   "size": 3487968,
+   "attr": 128
+  },
+  {
+   "path": "cacherender.big",
+   "sector": 1370403,
+   "size": 1458552880,
+   "attr": 128
+  },
+  {
+   "path": "data0.big",
+   "sector": 2159637,
+   "size": 29427680,
+   "attr": 128
+  },
+  {
+   "path": "default.xex",
+   "sector": 2111777,
+   "size": 10448896,
+   "attr": 128
+  },
+  {
+   "path": "gamedata",
+   "sector": 2116880,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/aidata.big",
+   "sector": 2116881,
+   "size": 1504,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim",
+   "sector": 2155705,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/anim/faceposer.big",
+   "sector": 2155706,
+   "size": 8050064,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/gps.big",
+   "sector": 2116882,
+   "size": 2487,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/nis.big",
+   "sector": 2116884,
+   "size": 79504208,
+   "attr": 128
+  },
+  {
+   "path": "nocache.big",
+   "sector": 2372612,
+   "size": 2301830880,
+   "attr": 128
+  },
+  {
+   "path": "nocacherender.big",
+   "sector": 423696,
+   "size": 1938855744,
+   "attr": 128
+  },
+  {
+   "path": "nxeart",
+   "sector": 2111551,
+   "size": 462848,
+   "attr": 128
+  },
+  {
+   "path": "options.viv",
+   "sector": 2111550,
+   "size": 284,
+   "attr": 128
+  },
+  {
+   "path": "renderboot.big",
+   "sector": 2082588,
+   "size": 9401248,
+   "attr": 128
+  }
+ ]
+}

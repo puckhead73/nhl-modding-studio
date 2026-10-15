@@ -6,20 +6,30 @@ use std::path::{Path, PathBuf};
 
 use studio_domain::{player_view, FieldView, PlayerView};
 use tdb_core::TdbFile;
-use tdb_relations::{PlayerKind, RosterModel};
 use tdb_defs::FieldMetaIndex;
 use tdb_enums::EnumRegistry;
+use tdb_relations::RosterModel;
 
 fn nat_display(v: &PlayerView) -> String {
-    v.all_fields.iter().find(|f| f.studio_field == "Lelh").map(|f| f.display.clone()).unwrap_or_default()
+    v.all_fields
+        .iter()
+        .find(|f| f.studio_field == "Lelh")
+        .map(|f| f.display.clone())
+        .unwrap_or_default()
 }
 
 fn origin_display(v: &PlayerView) -> String {
-    v.all_fields.iter().find(|f| f.studio_field == "QvxI").map(|f| f.display.clone()).unwrap_or_default()
+    v.all_fields
+        .iter()
+        .find(|f| f.studio_field == "QvxI")
+        .map(|f| f.display.clone())
+        .unwrap_or_default()
 }
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn fixtures() -> (Vec<u8>, FieldMetaIndex, EnumRegistry) {
@@ -34,9 +44,17 @@ fn fixtures() -> (Vec<u8>, FieldMetaIndex, EnumRegistry) {
 
 fn last_name(db: &TdbFile, bio: u32) -> String {
     let t = db.table_canonical("ubPc").unwrap();
-    let f = t.fields.iter().find(|f| f.id.canonical(db.endian) == "QbMR").unwrap();
+    let f = t
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == "QbMR")
+        .unwrap();
     db.read_inline_str(t, bio, f)
-        .map(|b| String::from_utf8_lossy(b).trim_end_matches('\0').to_string())
+        .map(|b| {
+            String::from_utf8_lossy(b)
+                .trim_end_matches('\0')
+                .to_string()
+        })
         .unwrap_or_default()
 }
 
@@ -56,7 +74,11 @@ fn view_of(name: &str) -> (Vec<u8>, PlayerView) {
 }
 
 fn attr<'a>(v: &'a PlayerView, label: &str) -> Option<&'a FieldView> {
-    v.attributes.flat.iter().find(|a| a.label == label).and_then(|a| a.field.as_ref())
+    v.attributes
+        .flat
+        .iter()
+        .find(|a| a.label == label)
+        .and_then(|a| a.field.as_ref())
 }
 
 /// Ratings display on the 50..99 gen6 scale (stored + 50), not the modern +36 — verified: our tool
@@ -71,7 +93,11 @@ fn ratings_use_the_gen6_plus_50_scale() {
         (decoded + 50).to_string(),
         "gen6 ratings show stored + 50 (50..99 scale)"
     );
-    assert_eq!(passing.edit_offset, Some(50), "friendly edit stages input - 50");
+    assert_eq!(
+        passing.edit_offset,
+        Some(50),
+        "friendly edit stages input - 50"
+    );
 }
 
 /// Weight is `raw + 150` lb on gen6 (150..275), not the modern `+120`. DiPenta raw 54 → 204 lb.
@@ -88,12 +114,26 @@ fn weight_uses_the_gen6_plus_150_base() {
 #[test]
 fn skater_player_type_vocab_and_value() {
     let (_b, v) = view_of("Weight");
-    let style = v.attributes.style.as_ref().and_then(|s| s.field.as_ref()).expect("style field");
-    assert_eq!(style.enum_label.as_deref(), Some("Playmaker"), "Weight is a Playmaker");
+    let style = v
+        .attributes
+        .style
+        .as_ref()
+        .and_then(|s| s.field.as_ref())
+        .expect("style field");
+    assert_eq!(
+        style.enum_label.as_deref(),
+        Some("Playmaker"),
+        "Weight is a Playmaker"
+    );
     // A forward only sees the 3..=7 forward roles (plus its own value); no defenseman roles.
     let labels: Vec<&str> = style.enum_options.iter().map(|(_, l)| l.as_str()).collect();
-    assert!(labels.contains(&"Playmaker") && labels.contains(&"Sniper") && labels.contains(&"Grinder"));
-    assert!(!labels.contains(&"Defensive"), "a forward's dropdown excludes defenseman roles");
+    assert!(
+        labels.contains(&"Playmaker") && labels.contains(&"Sniper") && labels.contains(&"Grinder")
+    );
+    assert!(
+        !labels.contains(&"Defensive"),
+        "a forward's dropdown excludes defenseman roles"
+    );
     assert_eq!(v.header.style_label.as_deref(), Some("Playmaker"));
 }
 
@@ -101,18 +141,31 @@ fn skater_player_type_vocab_and_value() {
 #[test]
 fn defenseman_player_type_is_restricted() {
     let (_b, v) = view_of("DiPenta");
-    let style = v.attributes.style.as_ref().and_then(|s| s.field.as_ref()).expect("style field");
+    let style = v
+        .attributes
+        .style
+        .as_ref()
+        .and_then(|s| s.field.as_ref())
+        .expect("style field");
     assert_eq!(style.enum_label.as_deref(), Some("Defensive"));
     let labels: Vec<&str> = style.enum_options.iter().map(|(_, l)| l.as_str()).collect();
     assert!(labels.contains(&"Defensive") && labels.contains(&"Offensive"));
-    assert!(!labels.contains(&"Sniper"), "a defenseman's dropdown excludes forward roles");
+    assert!(
+        !labels.contains(&"Sniper"),
+        "a defenseman's dropdown excludes forward roles"
+    );
 }
 
 /// Goalie player types: Bryzgalov = Butterfly (g_style raw 2).
 #[test]
 fn goalie_player_type_value() {
     let (_b, v) = view_of("Bryzgalov");
-    let style = v.attributes.style.as_ref().and_then(|s| s.field.as_ref()).expect("goalie style");
+    let style = v
+        .attributes
+        .style
+        .as_ref()
+        .and_then(|s| s.field.as_ref())
+        .expect("goalie style");
     assert_eq!(style.enum_label.as_deref(), Some("Butterfly"));
     assert_eq!(v.header.style_label.as_deref(), Some("Butterfly"));
 }
@@ -133,18 +186,35 @@ fn nationality_uses_gen6_country_table_and_audit_is_clean() {
             .unwrap_or_else(|| panic!("{name} in roster"));
         player_view(&db, &meta, &enums, &model, p.player_id).unwrap()
     };
-    assert_eq!(nat_display(&view("Afinogenov")), "Russia", "gen6 code 75 = Russia, not Lithuania");
+    assert_eq!(
+        nat_display(&view("Afinogenov")),
+        "Russia",
+        "gen6 code 75 = Russia, not Lithuania"
+    );
     assert_eq!(nat_display(&view("Bartecko")), "Slovakia");
-    assert_eq!(nat_display(&view("Sakic")), "Canada", "North-American codes unchanged");
+    assert_eq!(
+        nat_display(&view("Sakic")),
+        "Canada",
+        "North-American codes unchanged"
+    );
     assert_eq!(nat_display(&view("Alfredsson")), "Sweden");
 
     // The gen6 nationality/birth-state/player-style codes no longer flood the audit.
     let findings = tdb_domain_validation::enum_vocabulary(&db, &enums);
     let geo: Vec<_> = findings
         .iter()
-        .filter(|f| matches!((f.table.as_str(), f.field.as_str()), ("ubPc", "Lelh") | ("ubPc", "QvxI") | ("eGlu", "QgFs")))
+        .filter(|f| {
+            matches!(
+                (f.table.as_str(), f.field.as_str()),
+                ("ubPc", "Lelh") | ("ubPc", "QvxI") | ("eGlu", "QgFs")
+            )
+        })
         .collect();
-    assert!(geo.is_empty(), "no gen6 geo/style enum-vocabulary findings, got {}", geo.len());
+    assert!(
+        geo.is_empty(),
+        "no gen6 geo/style enum-vocabulary findings, got {}",
+        geo.len()
+    );
 }
 
 /// The "Origin" (birth-state) field resolves NHL07's own nation range, pinned by well-known players'
@@ -162,10 +232,26 @@ fn origin_birthplace_codes_resolve() {
             .unwrap_or_else(|| panic!("{name} in roster"));
         player_view(&db, &meta, &enums, &model, p.player_id).unwrap()
     };
-    assert_eq!(origin_display(&view("Nolan")), "Northern Ireland", "Owen Nolan born in Belfast");
-    assert_eq!(origin_display(&view("Regehr")), "Brazil", "Robyn Regehr born in Recife");
-    assert_eq!(origin_display(&view("Kolzig")), "South Africa", "Kölzig born in Johannesburg");
-    assert_eq!(origin_display(&view("Park")), "South Korea", "Richard Park born in Seoul");
+    assert_eq!(
+        origin_display(&view("Nolan")),
+        "Northern Ireland",
+        "Owen Nolan born in Belfast"
+    );
+    assert_eq!(
+        origin_display(&view("Regehr")),
+        "Brazil",
+        "Robyn Regehr born in Recife"
+    );
+    assert_eq!(
+        origin_display(&view("Kolzig")),
+        "South Africa",
+        "Kölzig born in Johannesburg"
+    );
+    assert_eq!(
+        origin_display(&view("Park")),
+        "South Korea",
+        "Richard Park born in Seoul"
+    );
     assert_eq!(origin_display(&view("Kasparaitis")), "Lithuania");
 }
 
@@ -173,11 +259,21 @@ fn origin_birthplace_codes_resolve() {
 #[test]
 fn no_biases_or_traits_exposed() {
     let (_b, v) = view_of("Weight");
-    for bias in ["Shoot / Pass Bias", "Defense / Offense Bias", "Pass / Carry Bias"] {
-        assert!(attr(&v, bias).is_none(), "gen6 hides the '{bias}' AI slider");
+    for bias in [
+        "Shoot / Pass Bias",
+        "Defense / Offense Bias",
+        "Pass / Carry Bias",
+    ] {
+        assert!(
+            attr(&v, bias).is_none(),
+            "gen6 hides the '{bias}' AI slider"
+        );
     }
     assert!(v.attributes.traits.is_empty(), "NHL07 has no traits system");
-    assert!(v.attributes.trait_options.is_empty(), "NHL07 has no trait vocabulary");
+    assert!(
+        v.attributes.trait_options.is_empty(),
+        "NHL07 has no trait vocabulary"
+    );
     // The renamed gen6 ratings surface with their in-game names.
     assert!(attr(&v, "Injury Resist").is_some());
     assert!(attr(&v, "Penalty Resist").is_some());

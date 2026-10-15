@@ -1,0 +1,6054 @@
+[
+ {
+  "title": "nhl07",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)\\data0.big",
+  "entry": 610,
+  "offset": 84622976,
+  "stored_size": 5358,
+  "pkg_len": 5358,
+  "pkg_sha16": "d9d640f31d8c7599",
+  "outer": "refpack",
+  "outer_decoded_len": 74016,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 69632,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 100,
+       "height": 104,
+       "buf_len": 65536
+      }
+     ],
+     "len": 69632
+    }
+   },
+   {
+    "name": "3",
+    "offset": 73728,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl07",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)\\data0.big",
+  "entry": 612,
+  "offset": 84633152,
+  "stored_size": 10453,
+  "pkg_len": 10453,
+  "pkg_sha16": "6051f673c7ac9661",
+  "outer": "refpack",
+  "outer_decoded_len": 41312,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 36912,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [],
+     "len": 36912
+    }
+   },
+   {
+    "name": "3",
+    "offset": 41024,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl07",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)\\data0.big",
+  "entry": 613,
+  "offset": 84643648,
+  "stored_size": 230571,
+  "pkg_len": 230571,
+  "pkg_sha16": "f9562f0b4aa0a6c0",
+  "outer": "refpack",
+  "outer_decoded_len": 532832,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 528432,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [],
+     "len": 528432
+    }
+   },
+   {
+    "name": "3",
+    "offset": 532544,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl08",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)\\data0.big",
+  "entry": 1165,
+  "offset": 430012288,
+  "stored_size": 8228,
+  "pkg_len": 8228,
+  "pkg_sha16": "ea0d392605d2894f",
+  "outer": "refpack",
+  "outer_decoded_len": 24864,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 264,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 384,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "8",
+    "offset": 4096,
+    "size": 20480,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 64,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "9",
+    "offset": 24576,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl08",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)\\data0.big",
+  "entry": 1172,
+  "offset": 430082816,
+  "stored_size": 4322,
+  "pkg_len": 4322,
+  "pkg_sha16": "18b286bc8b080289",
+  "outer": "refpack",
+  "outer_decoded_len": 24864,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 20480,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x54",
+       "width": 128,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "3",
+    "offset": 24576,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl08",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)\\data0.big",
+  "entry": 1173,
+  "offset": 430087168,
+  "stored_size": 105984,
+  "pkg_len": 105984,
+  "pkg_sha16": "0ec8b03fabfc7b23",
+  "outer": "refpack",
+  "outer_decoded_len": 270624,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "6",
+    "offset": 4096,
+    "size": 266240,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 256,
+       "height": 256,
+       "buf_len": 262144
+      }
+     ],
+     "len": 266240
+    }
+   },
+   {
+    "name": "7",
+    "offset": 270336,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)\\fe.big",
+  "entry": 1292,
+  "offset": 63747520,
+  "stored_size": 8216,
+  "pkg_len": 8216,
+  "pkg_sha16": "47f630ac4c98f5a6",
+  "outer": "refpack",
+  "outer_decoded_len": 24864,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 264,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 384,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "8",
+    "offset": 4096,
+    "size": 20480,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 64,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "9",
+    "offset": 24576,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)\\fe.big",
+  "entry": 1303,
+  "offset": 63836480,
+  "stored_size": 52529,
+  "pkg_len": 52529,
+  "pkg_sha16": "8cd2c2cdd21bb2cd",
+  "outer": "refpack",
+  "outer_decoded_len": 270624,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 266240,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 256,
+       "height": 256,
+       "buf_len": 262144
+      }
+     ],
+     "len": 266240
+    }
+   },
+   {
+    "name": "3",
+    "offset": 270336,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)\\fe.big",
+  "entry": 1305,
+  "offset": 63919744,
+  "stored_size": 4313,
+  "pkg_len": 4313,
+  "pkg_sha16": "a05f0461ed6e20eb",
+  "outer": "refpack",
+  "outer_decoded_len": 24864,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 20480,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x54",
+       "width": 128,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "3",
+    "offset": 24576,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)\\fe.big",
+  "entry": 1306,
+  "offset": 63924096,
+  "stored_size": 105973,
+  "pkg_len": 105973,
+  "pkg_sha16": "a37a4bf90c97f511",
+  "outer": "refpack",
+  "outer_decoded_len": 270624,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "6",
+    "offset": 4096,
+    "size": 266240,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 256,
+       "height": 256,
+       "buf_len": 262144
+      }
+     ],
+     "len": 266240
+    }
+   },
+   {
+    "name": "7",
+    "offset": 270336,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\fe.big",
+  "entry": 1608,
+  "offset": 75065024,
+  "stored_size": 7853,
+  "pkg_len": 7853,
+  "pkg_sha16": "dcb4f73b83e4affc",
+  "outer": "refpack",
+  "outer_decoded_len": 24880,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "6",
+    "offset": 4096,
+    "size": 20480,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 64,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "7",
+    "offset": 24576,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\fe.big",
+  "entry": 1620,
+  "offset": 75162496,
+  "stored_size": 43874,
+  "pkg_len": 43874,
+  "pkg_sha16": "e9ecb1ff1f35d8d5",
+  "outer": "refpack",
+  "outer_decoded_len": 270640,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 266240,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 256,
+       "height": 256,
+       "buf_len": 262144
+      }
+     ],
+     "len": 266240
+    }
+   },
+   {
+    "name": "3",
+    "offset": 270336,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\fe.big",
+  "entry": 1623,
+  "offset": 75263936,
+  "stored_size": 4250,
+  "pkg_len": 4250,
+  "pkg_sha16": "d829874be0c8bfb2",
+  "outer": "refpack",
+  "outer_decoded_len": 24880,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 20480,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x54",
+       "width": 128,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "3",
+    "offset": 24576,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\fe.big",
+  "entry": 1624,
+  "offset": 75268224,
+  "stored_size": 66682,
+  "pkg_len": 66682,
+  "pkg_sha16": "06e7131e8d7470d2",
+  "outer": "refpack",
+  "outer_decoded_len": 270640,
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 64,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "1",
+    "offset": 320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   },
+   {
+    "name": "2",
+    "offset": 4096,
+    "size": 266240,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 256,
+       "height": 256,
+       "buf_len": 262144
+      }
+     ],
+     "len": 266240
+    }
+   },
+   {
+    "name": "3",
+    "offset": 270336,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\fe.big",
+  "entry": 2789,
+  "offset": 94534080,
+  "stored_size": 8496,
+  "pkg_len": 8496,
+  "pkg_sha16": "ea6dfa9db10371ff",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 768,
+    "size": 7583,
+    "refpack": true,
+    "decoded_len": 20480,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 64,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8384,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8448,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\fe.big",
+  "entry": 2803,
+  "offset": 94647264,
+  "stored_size": 44720,
+  "pkg_len": 44720,
+  "pkg_sha16": "5a942460557f51df",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 43829,
+    "refpack": true,
+    "decoded_len": 266240,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 256,
+       "height": 256,
+       "buf_len": 262144
+      }
+     ],
+     "len": 266240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 44608,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 44672,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\fe.big",
+  "entry": 2810,
+  "offset": 94876656,
+  "stored_size": 4272,
+  "pkg_len": 4272,
+  "pkg_sha16": "a06d902e19a5ce76",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 3332,
+    "refpack": true,
+    "decoded_len": 20480,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x54",
+       "width": 128,
+       "height": 64,
+       "buf_len": 16384
+      }
+     ],
+     "len": 20480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4160,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4224,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11\\fe.big",
+  "entry": 2822,
+  "offset": 94928432,
+  "stored_size": 67632,
+  "pkg_len": 67632,
+  "pkg_sha16": "d8f206bb2856b34b",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 66744,
+    "refpack": true,
+    "decoded_len": 266240,
+    "payload": {
+     "kind": "RW4xb2",
+     "textures": [
+      {
+       "name": "tex0",
+       "format": "0x86",
+       "width": 256,
+       "height": 256,
+       "buf_len": 262144
+      }
+     ],
+     "len": 266240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 67520,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 67584,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\cache.big",
+  "entry": 3592,
+  "offset": 146857936,
+  "stored_size": 8304,
+  "pkg_len": 8304,
+  "pkg_sha16": "960720c2cbd6f7ec",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 768,
+    "size": 7415,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 64,
+     "height": 64,
+     "dw10": 3092,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8192,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8256,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\cache.big",
+  "entry": 3607,
+  "offset": 146970912,
+  "stored_size": 44592,
+  "pkg_len": 44592,
+  "pkg_sha16": "a9f62507400f0711",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 43663,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 44480,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 44544,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\cache.big",
+  "entry": 3620,
+  "offset": 147401488,
+  "stored_size": 4208,
+  "pkg_len": 4208,
+  "pkg_sha16": "8eaaea01c689b773",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 3313,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "DXT5",
+     "format_byte": 84,
+     "width": 128,
+     "height": 64,
+     "dw10": 3344,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4096,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4160,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\cache.big",
+  "entry": 3633,
+  "offset": 147457088,
+  "stored_size": 67632,
+  "pkg_len": 67632,
+  "pkg_sha16": "2e54b3dc2516b9a2",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 66734,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 67520,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 67584,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\cache.big",
+  "entry": 3836,
+  "offset": 217398864,
+  "stored_size": 8176,
+  "pkg_len": 8176,
+  "pkg_sha16": "a7167e6dd99e697d",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7415,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 64,
+     "height": 64,
+     "dw10": 3092,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8128,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8128,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\cache.big",
+  "entry": 3851,
+  "offset": 217509920,
+  "stored_size": 44464,
+  "pkg_len": 44464,
+  "pkg_sha16": "15d3a31ae554865a",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 43663,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 44416,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 44416,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\cache.big",
+  "entry": 3864,
+  "offset": 217938832,
+  "stored_size": 4080,
+  "pkg_len": 4080,
+  "pkg_sha16": "effcc6baa6455b77",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3313,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "DXT5",
+     "format_byte": 84,
+     "width": 128,
+     "height": 64,
+     "dw10": 3344,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4032,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4032,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13\\cache.big",
+  "entry": 3877,
+  "offset": 217992768,
+  "stored_size": 67504,
+  "pkg_len": 67504,
+  "pkg_sha16": "ae942b93e99abb66",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 66734,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 67456,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 67456,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\cache.big",
+  "entry": 4103,
+  "offset": 152616288,
+  "stored_size": 8176,
+  "pkg_len": 8176,
+  "pkg_sha16": "a7167e6dd99e697d",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7415,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 64,
+     "height": 64,
+     "dw10": 3092,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8128,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8128,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\cache.big",
+  "entry": 4118,
+  "offset": 152725488,
+  "stored_size": 44464,
+  "pkg_len": 44464,
+  "pkg_sha16": "15d3a31ae554865a",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 43663,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 44416,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 44416,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\cache.big",
+  "entry": 4131,
+  "offset": 153142112,
+  "stored_size": 4080,
+  "pkg_len": 4080,
+  "pkg_sha16": "effcc6baa6455b77",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3313,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "DXT5",
+     "format_byte": 84,
+     "width": 128,
+     "height": 64,
+     "dw10": 3344,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4032,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4032,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14\\cache.big",
+  "entry": 4144,
+  "offset": 153195600,
+  "stored_size": 67504,
+  "pkg_len": 67504,
+  "pkg_sha16": "ae942b93e99abb66",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 66734,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 67456,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 67456,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\cache.big",
+  "entry": 3590,
+  "offset": 124596880,
+  "stored_size": 8176,
+  "pkg_len": 8176,
+  "pkg_sha16": "a7167e6dd99e697d",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7415,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 64,
+     "height": 64,
+     "dw10": 3092,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8128,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8128,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\cache.big",
+  "entry": 3605,
+  "offset": 124706080,
+  "stored_size": 44464,
+  "pkg_len": 44464,
+  "pkg_sha16": "15d3a31ae554865a",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 43663,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 44416,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 44416,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\cache.big",
+  "entry": 3618,
+  "offset": 125122704,
+  "stored_size": 4080,
+  "pkg_len": 4080,
+  "pkg_sha16": "effcc6baa6455b77",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3313,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "DXT5",
+     "format_byte": 84,
+     "width": 128,
+     "height": 64,
+     "dw10": 3344,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4032,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4032,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\cache.big",
+  "entry": 3631,
+  "offset": 125176192,
+  "stored_size": 67504,
+  "pkg_len": 67504,
+  "pkg_sha16": "ae942b93e99abb66",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 66734,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 67456,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 67456,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "x360",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\cache.big",
+  "entry": 4072,
+  "offset": 142609696,
+  "stored_size": 8176,
+  "pkg_len": 8176,
+  "pkg_sha16": "a7167e6dd99e697d",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7415,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 64,
+     "height": 64,
+     "dw10": 3092,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8128,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8128,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "x360",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\cache.big",
+  "entry": 4088,
+  "offset": 142725920,
+  "stored_size": 44464,
+  "pkg_len": 44464,
+  "pkg_sha16": "15d3a31ae554865a",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 43663,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 44416,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 44416,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "x360",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\cache.big",
+  "entry": 4102,
+  "offset": 143155520,
+  "stored_size": 4080,
+  "pkg_len": 4080,
+  "pkg_sha16": "effcc6baa6455b77",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3313,
+    "refpack": true,
+    "decoded_len": 16480,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "DXT5",
+     "format_byte": 84,
+     "width": 128,
+     "height": 64,
+     "dw10": 3344,
+     "data_size": 16384,
+     "pixel_start": 96,
+     "len": 16480
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4032,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4032,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "x360",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\cache.big",
+  "entry": 4116,
+  "offset": 143212896,
+  "stored_size": 67504,
+  "pkg_len": 67504,
+  "pkg_sha16": "ae942b93e99abb66",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 66734,
+    "refpack": true,
+    "decoded_len": 262240,
+    "payload": {
+     "kind": "XPR2/TX2D",
+     "format": "8_8_8_8",
+     "format_byte": 134,
+     "width": 256,
+     "height": 256,
+     "dw10": 3092,
+     "data_size": 262144,
+     "pixel_start": 96,
+     "len": 262240
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 67456,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 67456,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl08",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 08\\PS3_GAME\\USRDIR\\data0.big",
+  "entry": 1136,
+  "offset": 504026496,
+  "stored_size": 17696,
+  "pkg_len": 17696,
+  "pkg_sha16": "9aa4eb2a0d598471",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 264,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "9",
+    "offset": 448,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 768,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "8",
+    "offset": 768,
+    "size": 16896,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 16896
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 17664,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 17664,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl08",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 08\\PS3_GAME\\USRDIR\\data0.big",
+  "entry": 1143,
+  "offset": 504182272,
+  "stored_size": 9440,
+  "pkg_len": 9440,
+  "pkg_sha16": "d82760b0d06ec57e",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 8704,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 8704
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 9408,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 9408,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl08",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 08\\PS3_GAME\\USRDIR\\data0.big",
+  "entry": 1144,
+  "offset": 504191744,
+  "stored_size": 263392,
+  "pkg_len": 263392,
+  "pkg_sha16": "037c6c4431ed21ea",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 262656,
+    "refpack": false,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 262656
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 263360,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 263360,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 09\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1295,
+  "offset": 64768192,
+  "stored_size": 8352,
+  "pkg_len": 8352,
+  "pkg_sha16": "0da214734c69c578",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 264,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "9",
+    "offset": 448,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 768,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "8",
+    "offset": 768,
+    "size": 7531,
+    "refpack": true,
+    "decoded_len": 16896,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 16896
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8320,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8320,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 09\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1306,
+  "offset": 64856320,
+  "stored_size": 51808,
+  "pkg_len": 51808,
+  "pkg_sha16": "e2d89e517a12ce4b",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 51060,
+    "refpack": true,
+    "decoded_len": 262656,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 262656
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 51776,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 51776,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 09\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1308,
+  "offset": 64935360,
+  "stored_size": 4576,
+  "pkg_len": 4576,
+  "pkg_sha16": "f5b417a4aadde775",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3821,
+    "refpack": true,
+    "decoded_len": 8704,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 8704
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4544,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4544,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl09",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 09\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1309,
+  "offset": 64939968,
+  "stored_size": 102112,
+  "pkg_len": 102112,
+  "pkg_sha16": "0857ca64f7664722",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 101349,
+    "refpack": true,
+    "decoded_len": 262656,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 262656
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 102080,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 102080,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 10\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1608,
+  "offset": 76271232,
+  "stored_size": 8048,
+  "pkg_len": 8048,
+  "pkg_sha16": "ce187bc8d04cf6ac",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7282,
+    "refpack": true,
+    "decoded_len": 16896,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 16896
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8000,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8000,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 10\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1620,
+  "offset": 76369280,
+  "stored_size": 39792,
+  "pkg_len": 39792,
+  "pkg_sha16": "c9217342e9499521",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 38979,
+    "refpack": true,
+    "decoded_len": 262656,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 262656
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39744,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39744,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 10\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1623,
+  "offset": 76457792,
+  "stored_size": 4656,
+  "pkg_len": 4656,
+  "pkg_sha16": "c6cd314acb90c412",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 3715,
+    "refpack": true,
+    "decoded_len": 8704,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 8704
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 4544,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 4608,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl10",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 10\\PS3_GAME\\USRDIR\\fe.big",
+  "entry": 1624,
+  "offset": 76462464,
+  "stored_size": 56624,
+  "pkg_len": 56624,
+  "pkg_sha16": "6206c29519953f02",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 55849,
+    "refpack": true,
+    "decoded_len": 262656,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 262656
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56576,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56576,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogos\\l0.big",
+  "loose": true,
+  "stored_size": 8176,
+  "pkg_len": 8176,
+  "pkg_sha16": "b6dbf8bd7b448182",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 768,
+    "size": 7282,
+    "refpack": true,
+    "decoded_len": 16896,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 16896
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 8064,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 8128,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogosbig\\l0.big",
+  "loose": true,
+  "stored_size": 39920,
+  "pkg_len": 39920,
+  "pkg_sha16": "0404c7108c1b8370",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 38979,
+    "refpack": true,
+    "decoded_len": 262656,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 262656
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39808,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39872,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogossmall\\l0.big",
+  "loose": true,
+  "stored_size": 4016,
+  "pkg_len": 4016,
+  "pkg_sha16": "3a8ef1dbc8d9c2d7",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 3103,
+    "refpack": true,
+    "decoded_len": 8704,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 8704
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 3904,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 3968,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl11",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogoswide\\l0.big",
+  "loose": true,
+  "stored_size": 56752,
+  "pkg_len": 56752,
+  "pkg_sha16": "87a176dc6571ebfa",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 55849,
+    "refpack": true,
+    "decoded_len": 262656,
+    "payload": {
+     "kind": "RW4ps3",
+     "len": 262656
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56640,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56704,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 12\\[BLUS 30791] NHL\u00ae 12\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogos\\l0.big",
+  "loose": true,
+  "stored_size": 7984,
+  "pkg_len": 7984,
+  "pkg_sha16": "a113a8edaf0b883e",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 768,
+    "size": 7082,
+    "refpack": true,
+    "decoded_len": 16512,
+    "payload": {
+     "kind": "DDS",
+     "width": 64,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 16512
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 7872,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 7936,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 12\\[BLUS 30791] NHL\u00ae 12\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogosbig\\l0.big",
+  "loose": true,
+  "stored_size": 39792,
+  "pkg_len": 39792,
+  "pkg_sha16": "324a18fc10f1104f",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 38853,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39680,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39744,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 12\\[BLUS 30791] NHL\u00ae 12\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogossmall\\l0.big",
+  "loose": true,
+  "stored_size": 4016,
+  "pkg_len": 4016,
+  "pkg_sha16": "59331228f3336840",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 3094,
+    "refpack": true,
+    "decoded_len": 8320,
+    "payload": {
+     "kind": "DDS",
+     "width": 128,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": "DXT5",
+     "rgb_bits": 0,
+     "pf_flags": 4,
+     "len": 8320
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 3904,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 3968,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl12",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 12\\[BLUS 30791] NHL\u00ae 12\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogoswide\\l0.big",
+  "loose": true,
+  "stored_size": 56560,
+  "pkg_len": 56560,
+  "pkg_sha16": "9a591990c368ad3c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 768,
+    "size": 55619,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56448,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56512,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 13\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogos\\l0.big",
+  "loose": true,
+  "stored_size": 7856,
+  "pkg_len": 7856,
+  "pkg_sha16": "595b884b4a587d97",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7082,
+    "refpack": true,
+    "decoded_len": 16512,
+    "payload": {
+     "kind": "DDS",
+     "width": 64,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 16512
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 7808,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 7808,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 13\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogosbig\\l0.big",
+  "loose": true,
+  "stored_size": 39664,
+  "pkg_len": 39664,
+  "pkg_sha16": "5109e37ab5d86c5c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 38853,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39616,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39616,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 13\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogossmall\\l0.big",
+  "loose": true,
+  "stored_size": 3888,
+  "pkg_len": 3888,
+  "pkg_sha16": "3a09a48694757e88",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3094,
+    "refpack": true,
+    "decoded_len": 8320,
+    "payload": {
+     "kind": "DDS",
+     "width": 128,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": "DXT5",
+     "rgb_bits": 0,
+     "pf_flags": 4,
+     "len": 8320
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 3840,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 3840,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl13",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 13\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogoswide\\l0.big",
+  "loose": true,
+  "stored_size": 56432,
+  "pkg_len": 56432,
+  "pkg_sha16": "0ab7202757b3967c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 55619,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56384,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56384,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogos\\l0.big",
+  "loose": true,
+  "stored_size": 7856,
+  "pkg_len": 7856,
+  "pkg_sha16": "595b884b4a587d97",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7082,
+    "refpack": true,
+    "decoded_len": 16512,
+    "payload": {
+     "kind": "DDS",
+     "width": 64,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 16512
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 7808,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 7808,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogosbig\\l0.big",
+  "loose": true,
+  "stored_size": 39664,
+  "pkg_len": 39664,
+  "pkg_sha16": "5109e37ab5d86c5c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 38853,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39616,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39616,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogossmall\\l0.big",
+  "loose": true,
+  "stored_size": 3888,
+  "pkg_len": 3888,
+  "pkg_sha16": "3a09a48694757e88",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3094,
+    "refpack": true,
+    "decoded_len": 8320,
+    "payload": {
+     "kind": "DDS",
+     "width": 128,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": "DXT5",
+     "rgb_bits": 0,
+     "pf_flags": 4,
+     "len": 8320
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 3840,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 3840,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl14",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogoswide\\l0.big",
+  "loose": true,
+  "stored_size": 56432,
+  "pkg_len": 56432,
+  "pkg_sha16": "0ab7202757b3967c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 55619,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56384,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56384,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogos\\l0.big",
+  "loose": true,
+  "stored_size": 7856,
+  "pkg_len": 7856,
+  "pkg_sha16": "595b884b4a587d97",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7082,
+    "refpack": true,
+    "decoded_len": 16512,
+    "payload": {
+     "kind": "DDS",
+     "width": 64,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 16512
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 7808,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 7808,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogosbig\\l0.big",
+  "loose": true,
+  "stored_size": 39664,
+  "pkg_len": 39664,
+  "pkg_sha16": "5109e37ab5d86c5c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 38853,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39616,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39616,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogossmall\\l0.big",
+  "loose": true,
+  "stored_size": 3888,
+  "pkg_len": 3888,
+  "pkg_sha16": "3a09a48694757e88",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3094,
+    "refpack": true,
+    "decoded_len": 8320,
+    "payload": {
+     "kind": "DDS",
+     "width": 128,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": "DXT5",
+     "rgb_bits": 0,
+     "pf_flags": 4,
+     "len": 8320
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 3840,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 3840,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhl15",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogoswide\\l0.big",
+  "loose": true,
+  "stored_size": 56432,
+  "pkg_len": 56432,
+  "pkg_sha16": "0ab7202757b3967c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 55619,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56384,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56384,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogos\\l0.big",
+  "loose": true,
+  "stored_size": 7856,
+  "pkg_len": 7856,
+  "pkg_sha16": "595b884b4a587d97",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7082,
+    "refpack": true,
+    "decoded_len": 16512,
+    "payload": {
+     "kind": "DDS",
+     "width": 64,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 16512
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 7808,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 7808,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogosbig\\l0.big",
+  "loose": true,
+  "stored_size": 39664,
+  "pkg_len": 39664,
+  "pkg_sha16": "5109e37ab5d86c5c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 38853,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39616,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39616,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogossmall\\l0.big",
+  "loose": true,
+  "stored_size": 3888,
+  "pkg_len": 3888,
+  "pkg_sha16": "3a09a48694757e88",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3094,
+    "refpack": true,
+    "decoded_len": 8320,
+    "payload": {
+     "kind": "DDS",
+     "width": 128,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": "DXT5",
+     "rgb_bits": 0,
+     "pf_flags": 4,
+     "len": 8320
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 3840,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 3840,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\fe\\ion\\artassets\\leaguelogoswide\\l0.big",
+  "loose": true,
+  "stored_size": 56432,
+  "pkg_len": 56432,
+  "pkg_sha16": "0ab7202757b3967c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 55619,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56384,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56384,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3-cache",
+  "family": "leaguelogos",
+  "member": "fe/ion/artassets/leaguelogos/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\cache.big",
+  "entry": 4068,
+  "offset": 139669648,
+  "stored_size": 7856,
+  "pkg_len": 7856,
+  "pkg_sha16": "595b884b4a587d97",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 256,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "7",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "6",
+    "offset": 704,
+    "size": 7082,
+    "refpack": true,
+    "decoded_len": 16512,
+    "payload": {
+     "kind": "DDS",
+     "width": 64,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 16512
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 7808,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 7808,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3-cache",
+  "family": "leaguelogosbig",
+  "member": "fe/ion/artassets/leaguelogosbig/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\cache.big",
+  "entry": 4084,
+  "offset": 139778256,
+  "stored_size": 39664,
+  "pkg_len": 39664,
+  "pkg_sha16": "5109e37ab5d86c5c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 38853,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 39616,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 39616,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3-cache",
+  "family": "leaguelogossmall",
+  "member": "fe/ion/artassets/leaguelogossmall/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\cache.big",
+  "entry": 4098,
+  "offset": 140158256,
+  "stored_size": 3888,
+  "pkg_len": 3888,
+  "pkg_sha16": "3a09a48694757e88",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 3094,
+    "refpack": true,
+    "decoded_len": 8320,
+    "payload": {
+     "kind": "DDS",
+     "width": 128,
+     "height": 64,
+     "mipmaps": 0,
+     "fourcc": "DXT5",
+     "rgb_bits": 0,
+     "pf_flags": 4,
+     "len": 8320
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 3840,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 3840,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ },
+ {
+  "title": "nhllegacy",
+  "platform": "ps3-cache",
+  "family": "leaguelogoswide",
+  "member": "fe/ion/artassets/leaguelogoswide/l0.big",
+  "source": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\cache.big",
+  "entry": 4112,
+  "offset": 140213072,
+  "stored_size": 56432,
+  "pkg_len": 56432,
+  "pkg_sha16": "0ab7202757b3967c",
+  "outer": "BIGF",
+  "container": "BIGF",
+  "members": [
+   {
+    "name": "0",
+    "offset": 128,
+    "size": 240,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "4170742044617461"
+    }
+   },
+   {
+    "name": "3",
+    "offset": 384,
+    "size": 288,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "0000012000000001"
+    }
+   },
+   {
+    "name": "sg1",
+    "offset": 704,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "2",
+    "offset": 704,
+    "size": 55619,
+    "refpack": true,
+    "decoded_len": 262272,
+    "payload": {
+     "kind": "DDS",
+     "width": 256,
+     "height": 256,
+     "mipmaps": 0,
+     "fourcc": null,
+     "rgb_bits": 32,
+     "pf_flags": 65,
+     "len": 262272
+    }
+   },
+   {
+    "name": "sg2",
+    "offset": 56384,
+    "size": 0,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": ""
+    }
+   },
+   {
+    "name": "1",
+    "offset": 56384,
+    "size": 32,
+    "refpack": false,
+    "payload": {
+     "kind": "?",
+     "magic": "41707420636f6e73"
+    }
+   }
+  ]
+ }
+]

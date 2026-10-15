@@ -1,0 +1,77 @@
+2026-09-18 00:19:10 [status]   step: rename incoming -> live
+2026-09-18 00:19:10 [status]   step: verify
+2026-09-18 00:19:10 [status] rollback prerequisites: emulator stopped=True; primary source=absent; secondary source=original
+2026-09-18 00:19:10 [status] rollback plan: NOOP - live is already the original
+2026-09-18 00:30:26 [status] state: Live=original (len 777373328, sha 1c41f578a595dbd5...) | Original=absent | Incoming=absent | Used=[] | Candidate=candidate (len 777373328, sha 4876cd2b3f4b5187...) | Secondary=original (len 777373328, sha 1c41f578a595dbd5...)
+2026-09-18 00:30:26 [status] derived state: S0-stock
+2026-09-18 00:30:27 [status] check emulator stopped             PASS  
+2026-09-18 00:30:27 [status] check no loose game-tree DB dir    PASS  H:\Emulators\ShadPS4\Games\CUSA18182\nhl\data\common\gamemodes
+2026-09-18 00:30:27 [status] check mods_folder empty            PASS  0 entries
+2026-09-18 00:30:27 [status] check patches empty                PASS  0 entries
+2026-09-18 00:30:27 [status] check cheats empty                 PASS  0 entries
+2026-09-18 00:30:27 [status] check custom_configs empty         PASS  0 entries
+2026-09-18 00:30:27 [status] check candidate verified           PASS  candidate (len 777373328, sha 4876cd2b3f4b5187...)
+2026-09-18 00:30:27 [status] check emulator exe identity        PASS  H:\Emulators\ShadPS4\shadPS4.exe
+2026-09-18 00:30:27 [status] check config unchanged vs E0       PASS  0 differing lines (window position ignored)
+2026-09-18 00:30:27 [status] environment qualification: PASS (applies to install completion only)
+2026-09-18 00:30:27 [status] install plan: MUTATE - install from stock
+2026-09-18 00:30:27 [status]   step: copy candidate -> incoming (needs free space)
+2026-09-18 00:30:27 [status]   step: verify incoming = candidate
+2026-09-18 00:30:27 [status]   step: rename live -> original
+2026-09-18 00:30:27 [status]   step: rename incoming -> live
+2026-09-18 00:30:27 [status]   step: verify
+2026-09-18 00:30:27 [status] rollback prerequisites: emulator stopped=True; primary source=absent; secondary source=original
+2026-09-18 00:30:27 [status] rollback plan: NOOP - live is already the original
+2026-09-18 00:38:13 [status] state: Live=original (len 777373328, sha 1c41f578a595dbd5...) | Original=absent | Incoming=absent | Used=[] | Candidate=candidate (len 777373328, sha 4876cd2b3f4b5187...) | Secondary=original (len 777373328, sha 1c41f578a595dbd5...)
+2026-09-18 00:38:13 [status] derived state: S0-stock
+2026-09-18 00:38:14 [status] check emulator stopped             PASS  
+2026-09-18 00:38:14 [status] check no loose game-tree DB dir    PASS  H:\Emulators\ShadPS4\Games\CUSA18182\nhl\data\common\gamemodes
+2026-09-18 00:38:14 [status] check mods_folder empty            PASS  0 entries
+2026-09-18 00:38:14 [status] check patches empty                PASS  0 entries
+2026-09-18 00:38:14 [status] check cheats empty                 PASS  0 entries
+2026-09-18 00:38:14 [status] check custom_configs empty         PASS  0 entries
+2026-09-18 00:38:14 [status] check candidate verified           PASS  candidate (len 777373328, sha 4876cd2b3f4b5187...)
+2026-09-18 00:38:14 [status] check emulator exe identity        PASS  H:\Emulators\ShadPS4\shadPS4.exe
+2026-09-18 00:38:14 [status] check config unchanged vs E0       PASS  0 differing lines (window position ignored)
+2026-09-18 00:38:14 [status] environment qualification: PASS (applies to install completion only)
+2026-09-18 00:38:14 [status] install plan: MUTATE - install from stock
+2026-09-18 00:38:14 [status]   step: copy candidate -> incoming (needs free space)
+2026-09-18 00:38:14 [status]   step: verify incoming = candidate
+2026-09-18 00:38:14 [status]   step: rename live -> original
+2026-09-18 00:38:14 [status]   step: rename incoming -> live
+2026-09-18 00:38:14 [status]   step: verify
+2026-09-18 00:38:14 [status] rollback prerequisites: emulator stopped=True; primary source=absent; secondary source=original
+2026-09-18 00:38:14 [status] rollback plan: NOOP - live is already the original
+2026-09-18 00:38:17 [install] state: Live=original (len 777373328, sha 1c41f578a595dbd5...) | Original=absent | Incoming=absent | Used=[] | Candidate=candidate (len 777373328, sha 4876cd2b3f4b5187...) | Secondary=original (len 777373328, sha 1c41f578a595dbd5...)
+2026-09-18 00:38:17 [install] derived state: S0-stock
+2026-09-18 00:38:17 [install] check emulator stopped             PASS  
+2026-09-18 00:38:17 [install] check no loose game-tree DB dir    PASS  H:\Emulators\ShadPS4\Games\CUSA18182\nhl\data\common\gamemodes
+2026-09-18 00:38:17 [install] check mods_folder empty            PASS  0 entries
+2026-09-18 00:38:17 [install] check patches empty                PASS  0 entries
+2026-09-18 00:38:17 [install] check cheats empty                 PASS  0 entries
+2026-09-18 00:38:17 [install] check custom_configs empty         PASS  0 entries
+2026-09-18 00:38:17 [install] check candidate verified           PASS  candidate (len 777373328, sha 4876cd2b3f4b5187...)
+2026-09-18 00:38:17 [install] check emulator exe identity        PASS  H:\Emulators\ShadPS4\shadPS4.exe
+2026-09-18 00:38:17 [install] check config unchanged vs E0       PASS  0 differing lines (window position ignored)
+2026-09-18 00:38:17 [install] install plan: MUTATE - install from stock
+2026-09-18 00:38:17 [install]   step: copy candidate -> incoming (needs free space)
+2026-09-18 00:38:17 [install]   step: verify incoming = candidate
+2026-09-18 00:38:17 [install]   step: rename live -> original
+2026-09-18 00:38:17 [install]   step: rename incoming -> live
+2026-09-18 00:38:17 [install]   step: verify
+2026-09-18 00:38:18 [install] copy: copied inxp_00.big.X-candidate -> inxp_00.big.e1-incoming (777373328 B)
+2026-09-18 00:38:20 [install] copy: verified inxp_00.big.e1-incoming = 4876cd2b3f4b51878fcbf08f8a56249df2eecbc6c086340b869fc9eada9da582
+2026-09-18 00:38:20 [install] rename1: renamed inxp_00.big -> inxp_00.big.e1-original
+2026-09-18 00:38:20 [install] rename2: renamed inxp_00.big.e1-incoming -> inxp_00.big
+2026-09-18 00:38:23 [install] INSTALLED: live = candidate (verified); original retained beside it (verified)
+2026-09-18 00:42:22 [rollback] state: Live=candidate (len 777373328, sha 4876cd2b3f4b5187...) | Original=original (len 777373328, sha 1c41f578a595dbd5...) | Incoming=absent | Used=[] | Candidate=candidate (len 777373328, sha 4876cd2b3f4b5187...) | Secondary=original (len 777373328, sha 1c41f578a595dbd5...)
+2026-09-18 00:42:22 [rollback] derived state: S1-installed
+2026-09-18 00:42:22 [rollback] rollback plan: MUTATE - restore from the primary source
+2026-09-18 00:42:22 [rollback]   step: rename live -> used
+2026-09-18 00:42:22 [rollback]   step: rename original -> live
+2026-09-18 00:42:22 [rollback]   step: verify live = original
+2026-09-18 00:42:22 [rollback]   step: remove used (only if it is the verified candidate)
+2026-09-18 00:42:22 [rollback] rename1: renamed inxp_00.big -> inxp_00.big.e1-candidate-used-20260918-004222-821
+2026-09-18 00:42:22 [rollback] rename2: renamed inxp_00.big.e1-original -> inxp_00.big
+2026-09-18 00:42:24 [rollback] removed inxp_00.big.e1-candidate-used-20260918-004222-821 (used candidate; verified candidate bytes)
+2026-09-18 00:42:24 [rollback] ROLLED BACK: live = original (verified)

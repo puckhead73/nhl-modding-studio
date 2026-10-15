@@ -57,9 +57,17 @@ impl HumanReport {
 /// Resolve the metadata display name for a studio `(table, field)` id pair, if one exists and is
 /// non-empty. The meta index is keyed by the on-disk **raw** ids, so we translate through the parsed
 /// table (studio id → descriptor → raw id) the same way the view layer does.
-fn field_label(db: &TdbFile, meta: &FieldMetaIndex, studio_table: &str, studio_field: &str) -> Option<String> {
+fn field_label(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    studio_table: &str,
+    studio_field: &str,
+) -> Option<String> {
     let table = db.table_canonical(studio_table)?;
-    let f = table.fields.iter().find(|f| f.id.canonical(db.endian) == studio_field)?;
+    let f = table
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == studio_field)?;
     meta.field(&table.id.raw(), &f.id.raw())
         .map(|m| m.name.clone())
         .filter(|n| !n.is_empty())
@@ -95,19 +103,33 @@ pub fn humanize(
 ) -> HumanReport {
     // Build name lookups once. If the entity model can't be built (a db variant without the roster
     // tables), we still resolve field labels and fall back to generic entity phrasing.
-    let (teams, players): (HashMap<u64, String>, HashMap<u64, String>) = match RosterModel::build(db) {
-        Ok(model) => (
-            view::team_summaries(db, meta, enums, &model)
-                .iter()
-                .map(|t| (t.team_id, team_label(t)))
-                .collect(),
-            view::player_summaries(db, meta, enums, &model)
-                .iter()
-                .map(|p| (p.player_id, player_label(p)))
-                .collect(),
-        ),
-        Err(_) => (HashMap::new(), HashMap::new()),
-    };
+    let (teams, players): (HashMap<u64, String>, HashMap<u64, String>) =
+        match RosterModel::build(db) {
+            Ok(model) => (
+                // Name lookups only: league labels are not part of finding text, so an
+                // unresolved catalog is sufficient here.
+                view::team_summaries(
+                    db,
+                    meta,
+                    enums,
+                    &model,
+                    &crate::leagues::LeagueCatalog::build(
+                        db,
+                        meta,
+                        &crate::leagues::LeagueVocabularies::default(),
+                        None,
+                    ),
+                )
+                    .iter()
+                    .map(|t| (t.team_id, team_label(t)))
+                    .collect(),
+                view::player_summaries(db, meta, enums, &model)
+                    .iter()
+                    .map(|p| (p.player_id, player_label(p)))
+                    .collect(),
+            ),
+            Err(_) => (HashMap::new(), HashMap::new()),
+        };
 
     let out = findings
         .into_iter()
@@ -116,7 +138,8 @@ pub fn humanize(
             let player = f.player_id.and_then(|id| players.get(&id).cloned());
             let flabel = field_label(db, meta, &f.table, &f.field);
 
-            let (title, message) = render(&f, team.as_deref(), player.as_deref(), flabel.as_deref());
+            let (title, message) =
+                render(&f, team.as_deref(), player.as_deref(), flabel.as_deref());
 
             // Location prefers the concrete entity; for field-scoped findings (FK / enum) the field
             // name is the most meaningful anchor.
@@ -145,9 +168,21 @@ pub fn humanize(
 }
 
 /// The (title, message) for a finding — plain language, referencing resolved names where available.
-fn render(f: &Finding, team: Option<&str>, player: Option<&str>, flabel: Option<&str>) -> (String, String) {
-    let team_or = |fallback: &str| team.map(str::to_string).unwrap_or_else(|| fallback.to_string());
-    let player_or = |fallback: &str| player.map(str::to_string).unwrap_or_else(|| fallback.to_string());
+fn render(
+    f: &Finding,
+    team: Option<&str>,
+    player: Option<&str>,
+    flabel: Option<&str>,
+) -> (String, String) {
+    let team_or = |fallback: &str| {
+        team.map(str::to_string)
+            .unwrap_or_else(|| fallback.to_string())
+    };
+    let player_or = |fallback: &str| {
+        player
+            .map(str::to_string)
+            .unwrap_or_else(|| fallback.to_string())
+    };
 
     match f.predicate {
         "companion_presence" => (

@@ -20,7 +20,9 @@ use tdb_enums::EnumRegistry;
 use tdb_relations::RosterModel;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn probe(rel_db: &str) -> BirthdateEncoding {

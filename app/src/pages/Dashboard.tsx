@@ -117,6 +117,11 @@ export function Dashboard() {
         <Stat label="Header CRC" value={p.header_crc_ok ? "OK" : "MISMATCH"} />
         <Stat label="Unsaved" value={p.dirty ? "yes" : "no"} />
       </div>
+      {p.dictionary_problem ? (
+        <p className="rounded border border-amber-700/60 bg-amber-900/30 px-2 py-1 text-xs text-amber-200" data-testid="dictionary-problem">
+          {p.dictionary_problem}
+        </p>
+      ) : null}
 
       <Card
         title="Validation"

@@ -1,0 +1,83 @@
+{
+ "note": "R139c - where R84's packet-header check (T2) fails inside the X360 NHL 10 -> Legacy ram sub-streams R139b decoded exactly: for every\nsub-stream (a `w0 | packets` chunk) with a T2 failure, the failing packet indices vs the packet count, and the failing header values.\nRead-only. Usage: python r139c_t2_packet_positions.py <out.json>",
+ "titles": {
+  "x360-nhl10": {
+   "substreams_with_T2_failure": 82,
+   "positions": {
+    "1 failing packet(s), not all at the tail": 13,
+    "1 failing packet(s), all at the tail": 67,
+    "2 failing packet(s), not all at the tail": 2
+   },
+   "header_values": {
+    "{'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}": 83,
+    "{'frame_count': 2, 'frame_offset_bits': 16384, 'metadata': 0, 'skip': 0}": 1
+   }
+  },
+  "x360-nhl11": {
+   "substreams_with_T2_failure": 79,
+   "positions": {
+    "1 failing packet(s), not all at the tail": 13,
+    "1 failing packet(s), all at the tail": 65,
+    "2 failing packet(s), not all at the tail": 1
+   },
+   "header_values": {
+    "{'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}": 80
+   }
+  },
+  "x360-nhl12": {
+   "substreams_with_T2_failure": 81,
+   "positions": {
+    "1 failing packet(s), not all at the tail": 22,
+    "1 failing packet(s), all at the tail": 56,
+    "2 failing packet(s), not all at the tail": 3
+   },
+   "header_values": {
+    "{'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}": 84
+   }
+  },
+  "x360-nhl13": {
+   "substreams_with_T2_failure": 101,
+   "positions": {
+    "1 failing packet(s), not all at the tail": 21,
+    "1 failing packet(s), all at the tail": 78,
+    "2 failing packet(s), not all at the tail": 2
+   },
+   "header_values": {
+    "{'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}": 103
+   }
+  },
+  "x360-nhl14": {
+   "substreams_with_T2_failure": 100,
+   "positions": {
+    "1 failing packet(s), not all at the tail": 20,
+    "1 failing packet(s), all at the tail": 78,
+    "2 failing packet(s), not all at the tail": 2
+   },
+   "header_values": {
+    "{'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}": 102
+   }
+  },
+  "x360-nhl15": {
+   "substreams_with_T2_failure": 101,
+   "positions": {
+    "1 failing packet(s), not all at the tail": 20,
+    "1 failing packet(s), all at the tail": 79,
+    "2 failing packet(s), not all at the tail": 2
+   },
+   "header_values": {
+    "{'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}": 103
+   }
+  },
+  "x360-legacy": {
+   "substreams_with_T2_failure": 98,
+   "positions": {
+    "1 failing packet(s), not all at the tail": 20,
+    "1 failing packet(s), all at the tail": 76,
+    "2 failing packet(s), not all at the tail": 2
+   },
+   "header_values": {
+    "{'frame_count': 0, 'frame_offset_bits': 32767, 'metadata': 0, 'skip': 0}": 100
+   }
+  }
+ }
+}

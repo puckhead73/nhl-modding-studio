@@ -1,0 +1,1212 @@
+{
+ "nhl15": {
+  "arenas": 178,
+  "fields_present": [
+   "goalhorn",
+   "periodhorn",
+   "arenaaudioid",
+   "cityaudioid"
+  ],
+  "distinct": {
+   "goalhorn": {
+    "n": 42,
+    "min": 0,
+    "max": 136,
+    "top": [
+     [
+      0,
+      109
+     ],
+     [
+      35,
+      21
+     ],
+     [
+      21,
+      3
+     ],
+     [
+      23,
+      3
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      8,
+      2
+     ]
+    ]
+   },
+   "periodhorn": {
+    "n": 41,
+    "min": 0,
+    "max": 136,
+    "top": [
+     [
+      0,
+      109
+     ],
+     [
+      32,
+      22
+     ],
+     [
+      21,
+      3
+     ],
+     [
+      23,
+      3
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      8,
+      2
+     ]
+    ]
+   },
+   "arenaaudioid": {
+    "n": 158,
+    "min": 0,
+    "max": 701,
+    "top": [
+     [
+      255,
+      13
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      8,
+      2
+     ],
+     [
+      11,
+      2
+     ],
+     [
+      511,
+      2
+     ]
+    ]
+   },
+   "cityaudioid": {
+    "n": 156,
+    "min": 0,
+    "max": 511,
+    "top": [
+     [
+      255,
+      13
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      21,
+      3
+     ],
+     [
+      23,
+      3
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      8,
+      2
+     ]
+    ]
+   }
+  },
+  "by_league": {
+   "0": {
+    "teams": 32,
+    "goalhorn_ids": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "1": {
+    "teams": 30,
+    "goalhorn_ids": [
+     0,
+     136
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "2": {
+    "teams": 12,
+    "goalhorn_ids": [
+     45
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "3": {
+    "teams": 14,
+    "goalhorn_ids": [
+     61
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "4": {
+    "teams": 14,
+    "goalhorn_ids": [
+     0,
+     30,
+     31,
+     32,
+     33,
+     34,
+     35,
+     36,
+     38,
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "5": {
+    "teams": 14,
+    "goalhorn_ids": [
+     0,
+     35
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "6": {
+    "teams": 12,
+    "goalhorn_ids": [
+     0
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "7": {
+    "teams": 21,
+    "goalhorn_ids": [
+     35,
+     61
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "8": {
+    "teams": 20,
+    "goalhorn_ids": [
+     0,
+     20
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "9": {
+    "teams": 18,
+    "goalhorn_ids": [
+     0
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "10": {
+    "teams": 22,
+    "goalhorn_ids": [
+     0,
+     4,
+     11
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "11": {
+    "teams": 2,
+    "goalhorn_ids": [
+     0
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "12": {
+    "teams": 1,
+    "goalhorn_ids": [
+     0
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "13": {
+    "teams": 30,
+    "goalhorn_ids": [
+     0
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "14": {
+    "teams": 4,
+    "goalhorn_ids": [
+     21,
+     23
+    ],
+    "custom": 0,
+    "element_ids": []
+   }
+  }
+ },
+ "nhl18": {
+  "arenas": 303,
+  "fields_present": [
+   "goalhorn",
+   "periodhorn",
+   "arenaaudioid",
+   "cityaudioid"
+  ],
+  "distinct": {
+   "goalhorn": {
+    "n": 33,
+    "min": 0,
+    "max": 41,
+    "top": [
+     [
+      41,
+      253
+     ],
+     [
+      31,
+      8
+     ],
+     [
+      14,
+      5
+     ],
+     [
+      2,
+      2
+     ],
+     [
+      5,
+      2
+     ],
+     [
+      7,
+      2
+     ]
+    ]
+   },
+   "periodhorn": {
+    "n": 41,
+    "min": 0,
+    "max": 136,
+    "top": [
+     [
+      0,
+      188
+     ],
+     [
+      32,
+      33
+     ],
+     [
+      45,
+      19
+     ],
+     [
+      61,
+      16
+     ],
+     [
+      13,
+      5
+     ],
+     [
+      1,
+      2
+     ]
+    ]
+   },
+   "arenaaudioid": {
+    "n": 157,
+    "min": 0,
+    "max": 1023,
+    "top": [
+     [
+      0,
+      33
+     ],
+     [
+      1023,
+      25
+     ],
+     [
+      511,
+      20
+     ],
+     [
+      71,
+      19
+     ],
+     [
+      87,
+      16
+     ],
+     [
+      255,
+      13
+     ]
+    ]
+   },
+   "cityaudioid": {
+    "n": 157,
+    "min": 0,
+    "max": 1999,
+    "top": [
+     [
+      0,
+      33
+     ],
+     [
+      1999,
+      25
+     ],
+     [
+      511,
+      20
+     ],
+     [
+      71,
+      19
+     ],
+     [
+      87,
+      16
+     ],
+     [
+      255,
+      13
+     ]
+    ]
+   }
+  },
+  "by_league": {
+   "0": {
+    "teams": 35,
+    "goalhorn_ids": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "1": {
+    "teams": 30,
+    "goalhorn_ids": [
+     2,
+     26,
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "2": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "3": {
+    "teams": 15,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "4": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "5": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "6": {
+    "teams": 12,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "7": {
+    "teams": 12,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "8": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "9": {
+    "teams": 8,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "10": {
+    "teams": 21,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "11": {
+    "teams": 20,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "12": {
+    "teams": 18,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "13": {
+    "teams": 22,
+    "goalhorn_ids": [
+     5,
+     12,
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "14": {
+    "teams": 2,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "15": {
+    "teams": 27,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "17": {
+    "teams": 8,
+    "goalhorn_ids": [
+     0,
+     7,
+     25,
+     29,
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "18": {
+    "teams": 2,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "19": {
+    "teams": 2,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   },
+   "20": {
+    "teams": 6,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": []
+   }
+  }
+ },
+ "nhl21": {
+  "arenas": 450,
+  "fields_present": [
+   "goalhorn",
+   "goalhorniscustom",
+   "goalhornelement1",
+   "goalhornelement2",
+   "goalhornelement3",
+   "goalhornflair",
+   "goalhornblastsnum",
+   "goalhornblast1length",
+   "goalhornblast2length",
+   "goalhornblast3length",
+   "goalhornpause1length",
+   "goalhornpause2length",
+   "periodhorn",
+   "arenaaudioid",
+   "cityaudioid"
+  ],
+  "distinct": {
+   "goalhorn": {
+    "n": 33,
+    "min": 1,
+    "max": 690,
+    "top": [
+     [
+      41,
+      286
+     ],
+     [
+      25,
+      60
+     ],
+     [
+      690,
+      11
+     ],
+     [
+      14,
+      6
+     ],
+     [
+      26,
+      6
+     ],
+     [
+      1,
+      5
+     ]
+    ]
+   },
+   "goalhorniscustom": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornelement1": {
+    "n": 1,
+    "min": 501,
+    "max": 501,
+    "top": [
+     [
+      501,
+      450
+     ]
+    ]
+   },
+   "goalhornelement2": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornelement3": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornflair": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornblastsnum": {
+    "n": 1,
+    "min": 1,
+    "max": 1,
+    "top": [
+     [
+      1,
+      450
+     ]
+    ]
+   },
+   "goalhornblast1length": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornblast2length": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornblast3length": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornpause1length": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "goalhornpause2length": {
+    "n": 1,
+    "min": 0,
+    "max": 0,
+    "top": [
+     [
+      0,
+      450
+     ]
+    ]
+   },
+   "periodhorn": {
+    "n": 3,
+    "min": 0,
+    "max": 2,
+    "top": [
+     [
+      0,
+      442
+     ],
+     [
+      1,
+      7
+     ],
+     [
+      2,
+      1
+     ]
+    ]
+   },
+   "arenaaudioid": {
+    "n": 157,
+    "min": 0,
+    "max": 1023,
+    "top": [
+     [
+      24,
+      59
+     ],
+     [
+      0,
+      56
+     ],
+     [
+      511,
+      36
+     ],
+     [
+      87,
+      19
+     ],
+     [
+      1023,
+      16
+     ],
+     [
+      71,
+      13
+     ]
+    ]
+   },
+   "cityaudioid": {
+    "n": 158,
+    "min": 0,
+    "max": 1999,
+    "top": [
+     [
+      24,
+      59
+     ],
+     [
+      0,
+      56
+     ],
+     [
+      511,
+      36
+     ],
+     [
+      87,
+      19
+     ],
+     [
+      1999,
+      15
+     ],
+     [
+      71,
+      13
+     ]
+    ]
+   }
+  },
+  "by_league": {
+   "0": {
+    "teams": 35,
+    "goalhorn_ids": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "1": {
+    "teams": 31,
+    "goalhorn_ids": [
+     2,
+     26,
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "2": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "3": {
+    "teams": 15,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "4": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "5": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "6": {
+    "teams": 12,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "7": {
+    "teams": 11,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "8": {
+    "teams": 14,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "9": {
+    "teams": 8,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "10": {
+    "teams": 21,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "11": {
+    "teams": 20,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "12": {
+    "teams": 18,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "13": {
+    "teams": 22,
+    "goalhorn_ids": [
+     5,
+     12,
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "14": {
+    "teams": 2,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "15": {
+    "teams": 26,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "17": {
+    "teams": 12,
+    "goalhorn_ids": [
+     7,
+     25,
+     29,
+     41,
+     690
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "18": {
+    "teams": 2,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "19": {
+    "teams": 2,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "20": {
+    "teams": 6,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "21": {
+    "teams": 33,
+    "goalhorn_ids": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "22": {
+    "teams": 4,
+    "goalhorn_ids": [
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   },
+   "23": {
+    "teams": 97,
+    "goalhorn_ids": [
+     1,
+     2,
+     3,
+     5,
+     7,
+     8,
+     11,
+     14,
+     16,
+     19,
+     20,
+     22,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     41
+    ],
+    "custom": 0,
+    "element_ids": [
+     501
+    ]
+   }
+  }
+ }
+}

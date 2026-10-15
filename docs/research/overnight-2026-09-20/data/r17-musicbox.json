@@ -1,0 +1,6902 @@
+{
+ "note": "R17 \u2014 gen7 music box table (`audio/music/music_musicboxdata.bin`, 'MBX0', big-endian) and its binding to the music bank\n(`music_samples.sbr` SBKR ids). Header word 4 \u2192 (u32 record count, u32 first record offset). Record (36 B): u32 sample id | 5 \u00d7 u32 1 | u32 category | u32 kind | u32 ptr \u2192 pair of\nstring pointers (a \"VolumeType\" label and a context name such as LoseGame / WinGame / EndOfPeriod). Read-only; PS3 loose files of\nNHL 11 / 14 / 15 / Legacy. Usage: python r17_musicbox.py <out.json>\n",
+ "titles": {
+  "nhl11": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\music\\music_musicboxdata.bin",
+   "len": 18436,
+   "magic": "MBX0",
+   "header": [
+    "0x4d425830",
+    "0x20001",
+    "0x0",
+    "0x14",
+    "0xa8",
+    "0x4",
+    "0x18",
+    "0x0",
+    "0xffffffff",
+    "0x1",
+    "0x3c",
+    "0x0",
+    "0xffffffff",
+    "0x0",
+    "0xffffffff",
+    "0x4"
+   ],
+   "declared_count": 195,
+   "first_record": 176,
+   "records": [
+    {
+     "sample_id": 1,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 2,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 3,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 4,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 5,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 6,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 7,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 8,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 9,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 10,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 11,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 12,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 13,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 14,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 15,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 16,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 17,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 18,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 19,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 20,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 21,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 22,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 23,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 24,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 25,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 26,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 27,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 28,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 29,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 30,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 31,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 32,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 33,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 34,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 35,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 36,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 37,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 38,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 39,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 40,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 41,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 42,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 43,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 44,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 45,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 46,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 47,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 48,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 49,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 50,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 51,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 52,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 53,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 54,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 55,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 56,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 57,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 58,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 59,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 60,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 61,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 62,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 63,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 64,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 65,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 66,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 67,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 68,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 69,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 70,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 71,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 72,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 73,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 74,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 75,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 76,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 77,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 78,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 79,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 80,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 82,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 83,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 84,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 85,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 86,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 87,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 88,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 89,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 90,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 91,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 92,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 93,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 96,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 98,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 99,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 100,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 102,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 103,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 104,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 105,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 106,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 107,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 108,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 109,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 110,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 111,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 112,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 113,
+     "category": 1,
+     "kind": 8,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 114,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 115,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 116,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 117,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 118,
+     "category": 7,
+     "kind": 2,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 119,
+     "category": 7,
+     "kind": 2,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 120,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 121,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 122,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 123,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 124,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 125,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 126,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 127,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 128,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 129,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 130,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 131,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 132,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 133,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 134,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 135,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 136,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 137,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 138,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 139,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 140,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 141,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 142,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 143,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 144,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 145,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 146,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 147,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 148,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 149,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 150,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 151,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 152,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 153,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 154,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 155,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 156,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 157,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 158,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 159,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 161,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 162,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 164,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 165,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 166,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 167,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 168,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 169,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 170,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 171,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 172,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 173,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 174,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 175,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 176,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 177,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 178,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 179,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 180,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 181,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 182,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 183,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 184,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 185,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 186,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 187,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 188,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 189,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 190,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 191,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 192,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 193,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 194,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 195,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 196,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 197,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 198,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 199,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 200,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 201,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 202,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    }
+   ],
+   "bank_ids": 195,
+   "records_in_bank": 195,
+   "bank_ids_not_in_musicbox": [],
+   "category_census": {
+    "2": 27,
+    "4": 16,
+    "9": 16,
+    "3": 19,
+    "1": 22,
+    "8": 14,
+    "7": 75,
+    "6": 6
+   },
+   "kind_census": {
+    "1": 177,
+    "9": 12,
+    "8": 1,
+    "10": 3,
+    "2": 2
+   },
+   "context_census": {
+    "IntroNationalAnthem": 21,
+    "EndOfPeriod": 16,
+    "LoseGame": 8,
+    "PlayoffOrTournamentLose": 3,
+    "WinGame": 8,
+    "PlayoffOrTournamentWin": 3,
+    "AwayGoal": 8,
+    "HomeGoal": 11,
+    "MenuTunes": 22,
+    "TeamIntroduction": 14,
+    "OffPlayGeneric": 52,
+    "OffPlayOrgan": 23,
+    "PenaltyAway": 4,
+    "PenaltyHome": 2
+   },
+   "category_x_context": {
+    "1": {
+     "MenuTunes": 22
+    },
+    "2": {
+     "IntroNationalAnthem": 21,
+     "PlayoffOrTournamentLose": 3,
+     "PlayoffOrTournamentWin": 3
+    },
+    "3": {
+     "AwayGoal": 8,
+     "HomeGoal": 11
+    },
+    "4": {
+     "EndOfPeriod": 16
+    },
+    "6": {
+     "PenaltyAway": 4,
+     "PenaltyHome": 2
+    },
+    "7": {
+     "OffPlayGeneric": 52,
+     "OffPlayOrgan": 23
+    },
+    "8": {
+     "TeamIntroduction": 14
+    },
+    "9": {
+     "LoseGame": 8,
+     "WinGame": 8
+    }
+   }
+  },
+  "nhl14": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\music\\music_musicboxdata.bin",
+   "len": 20656,
+   "magic": "MBX0",
+   "header": [
+    "0x4d425830",
+    "0x20001",
+    "0x0",
+    "0x14",
+    "0x8c",
+    "0x3",
+    "0x18",
+    "0x0",
+    "0xffffffff",
+    "0x1",
+    "0x34",
+    "0x0",
+    "0xffffffff",
+    "0x3",
+    "0x78",
+    "0x40"
+   ],
+   "declared_count": 231,
+   "first_record": 148,
+   "records": [
+    {
+     "sample_id": 400,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 401,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 402,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 403,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 404,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 405,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 406,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 407,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 408,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 409,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 410,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 411,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 412,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 413,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 414,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 415,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 416,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 417,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 418,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 419,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 420,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 421,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 422,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 423,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 424,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 425,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 426,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 427,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 428,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 429,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 430,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 431,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 432,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 433,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 434,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 435,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 436,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 437,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 438,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 439,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 440,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 441,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 442,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 443,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 444,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 445,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 446,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 447,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 448,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 449,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 450,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 451,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 452,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 453,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 454,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 455,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 456,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 457,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 458,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 459,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 460,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 461,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 462,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 463,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 464,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 465,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 466,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 467,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 468,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 469,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 470,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 471,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 472,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 473,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 474,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 475,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 476,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 477,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 478,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 479,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 480,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 481,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 482,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 483,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 484,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 485,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 486,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 487,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 488,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 489,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 490,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 491,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 492,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 493,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 494,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 495,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 496,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 497,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 498,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 499,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 500,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 501,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 502,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 503,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 504,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 505,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 506,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 507,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 508,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 509,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 510,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 511,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 512,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 513,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 514,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 515,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 516,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 517,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 518,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 519,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 520,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 521,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 522,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 523,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 524,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 525,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 526,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 527,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 528,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 529,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 530,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 531,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 532,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 533,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 534,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 535,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 536,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 537,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 538,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 539,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 540,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 541,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 542,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 543,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 544,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 545,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 546,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 547,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 548,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 549,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 550,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 551,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 552,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 553,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 554,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 555,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 556,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 557,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 558,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 559,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 560,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 561,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 562,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 563,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 564,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 565,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 566,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 567,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 568,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 569,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 570,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 571,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 572,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 573,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 574,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 575,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 576,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 577,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 578,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 579,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 580,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 581,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 582,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 583,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 584,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 585,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 586,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 587,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 588,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 589,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 590,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 591,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 592,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 593,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 594,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 595,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 596,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 597,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 598,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 599,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 600,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 601,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 602,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 603,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 604,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 605,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 606,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 607,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 608,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 609,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 610,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 613,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 614,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 615,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 616,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 617,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 618,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 619,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 620,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 621,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 622,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 623,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 624,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 625,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 626,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 628,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 629,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 630,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 631,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 632,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 633,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    }
+   ],
+   "bank_ids": 231,
+   "records_in_bank": 231,
+   "bank_ids_not_in_musicbox": [],
+   "category_census": {
+    "2": 49,
+    "4": 16,
+    "9": 13,
+    "3": 21,
+    "1": 26,
+    "8": 26,
+    "7": 59,
+    "6": 21
+   },
+   "kind_census": {
+    "1": 218,
+    "10": 5,
+    "9": 8
+   },
+   "context_census": {
+    "IntroNationalAnthem": 21,
+    "EndOfPeriod": 16,
+    "LoseGame": 6,
+    "WinGame": 11,
+    "AwayGoal": 10,
+    "HomeGoal": 11,
+    "MenuTunes": 32,
+    "TeamIntroduction": 15,
+    "OffPlayGeneric": 67,
+    "OffPlayOrgan": 23,
+    "PenaltyAway": 4,
+    "PenaltyHome": 2,
+    "PlayoffOrTournamentLose": 6,
+    "PlayoffOrTournamentWin": 7
+   },
+   "category_x_context": {
+    "1": {
+     "MenuTunes": 26
+    },
+    "2": {
+     "IntroNationalAnthem": 21,
+     "PlayoffOrTournamentLose": 6,
+     "PlayoffOrTournamentWin": 7,
+     "TeamIntroduction": 3,
+     "OffPlayGeneric": 8,
+     "WinGame": 4
+    },
+    "3": {
+     "AwayGoal": 10,
+     "HomeGoal": 11
+    },
+    "4": {
+     "EndOfPeriod": 16
+    },
+    "6": {
+     "PenaltyAway": 4,
+     "PenaltyHome": 2,
+     "OffPlayGeneric": 9,
+     "MenuTunes": 6
+    },
+    "7": {
+     "OffPlayGeneric": 36,
+     "OffPlayOrgan": 23
+    },
+    "8": {
+     "TeamIntroduction": 12,
+     "OffPlayGeneric": 14
+    },
+    "9": {
+     "LoseGame": 6,
+     "WinGame": 7
+    }
+   }
+  },
+  "nhl15": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\music\\music_musicboxdata.bin",
+   "len": 25344,
+   "magic": "MBX0",
+   "header": [
+    "0x4d425830",
+    "0x20001",
+    "0x0",
+    "0x14",
+    "0x8c",
+    "0x3",
+    "0x18",
+    "0x0",
+    "0xffffffff",
+    "0x1",
+    "0x34",
+    "0x0",
+    "0xffffffff",
+    "0x3",
+    "0x78",
+    "0x40"
+   ],
+   "declared_count": 263,
+   "first_record": 148,
+   "records": [
+    {
+     "sample_id": 634,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 635,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 636,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 637,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 638,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 640,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 641,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 642,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 643,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 644,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 647,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 648,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 649,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 650,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 653,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 655,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 656,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 657,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 658,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 659,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 660,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 661,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 662,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 663,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 664,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 665,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 666,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 667,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 668,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 669,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 670,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 671,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 672,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 673,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 674,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 675,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 676,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 677,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 678,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 679,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 681,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 682,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 686,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 687,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 688,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 689,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 690,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 691,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 693,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 694,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 695,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 696,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 697,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 699,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 700,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 701,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 702,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 703,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 705,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 706,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 708,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 709,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 710,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 711,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 712,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 713,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 714,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 715,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 716,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 717,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 718,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 719,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 720,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 721,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 722,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 723,
+     "category": 1,
+     "kind": 10,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 724,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 725,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 726,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 727,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 728,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 729,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 730,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 731,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 732,
+     "category": 1,
+     "kind": 9,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 733,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 734,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 735,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 736,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 737,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 738,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 739,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 740,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 741,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 742,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 743,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 744,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 745,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 746,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 747,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 748,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 749,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 750,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 751,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 752,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 753,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 754,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 755,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 756,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 758,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 759,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 760,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 761,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 763,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 764,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 767,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 768,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 769,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 773,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 775,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 776,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 777,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 778,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 779,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 780,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 781,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 782,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 783,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 784,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 785,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 786,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 787,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 788,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 789,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 790,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 791,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 792,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 793,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 795,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 796,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 799,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 803,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 804,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 807,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 808,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 810,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 814,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 816,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 819,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 820,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 823,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 831,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 833,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 835,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 837,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 838,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 840,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 841,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 842,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 845,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 846,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 848,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 849,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 850,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 855,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 856,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 858,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 861,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 862,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 863,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 864,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 865,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 866,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 867,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 868,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 869,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 870,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 871,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 872,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 873,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 874,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 875,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 876,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 877,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 878,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 879,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 880,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 881,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 882,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 883,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 884,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 885,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 886,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 887,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 888,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 889,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 890,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 891,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 892,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 893,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 894,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 895,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 896,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 897,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 898,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 899,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 900,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 901,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 902,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 903,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 904,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 905,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 906,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 907,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 908,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 909,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 910,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 911,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 912,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 913,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 914,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 915,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 916,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 917,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 918,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 919,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 920,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 921,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 922,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 923,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 924,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 925,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 926,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 927,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 928,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 929,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 930,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 931,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 932,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 933,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 934,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 935,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 936,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 937,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 938,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 939,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 940,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 941,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 942,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 943,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 944,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 945,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 946,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 947,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 948,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 949,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 950,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 951,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 952,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 953,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 954,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 955,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 956,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    }
+   ],
+   "bank_ids": 263,
+   "records_in_bank": 263,
+   "bank_ids_not_in_musicbox": [],
+   "category_census": {
+    "9": 15,
+    "4": 16,
+    "3": 18,
+    "1": 36,
+    "2": 49,
+    "7": 82,
+    "6": 21,
+    "8": 26
+   },
+   "kind_census": {
+    "1": 241,
+    "9": 17,
+    "10": 5
+   },
+   "context_census": {
+    "LoseGame": 6,
+    "WinGame": 13,
+    "EndOfPeriod": 16,
+    "AwayGoal": 8,
+    "HomeGoal": 10,
+    "MenuTunes": 42,
+    "IntroNationalAnthem": 21,
+    "PlayoffOrTournamentLose": 6,
+    "PlayoffOrTournamentWin": 7,
+    "TeamIntroduction": 15,
+    "OffPlayGeneric": 90,
+    "OffPlayOrgan": 23,
+    "PenaltyAway": 4,
+    "PenaltyHome": 2
+   },
+   "category_x_context": {
+    "1": {
+     "MenuTunes": 36
+    },
+    "2": {
+     "IntroNationalAnthem": 21,
+     "PlayoffOrTournamentLose": 6,
+     "PlayoffOrTournamentWin": 7,
+     "TeamIntroduction": 3,
+     "OffPlayGeneric": 8,
+     "WinGame": 4
+    },
+    "3": {
+     "AwayGoal": 8,
+     "HomeGoal": 10
+    },
+    "4": {
+     "EndOfPeriod": 16
+    },
+    "6": {
+     "PenaltyAway": 4,
+     "PenaltyHome": 2,
+     "OffPlayGeneric": 9,
+     "MenuTunes": 6
+    },
+    "7": {
+     "OffPlayGeneric": 59,
+     "OffPlayOrgan": 23
+    },
+    "8": {
+     "TeamIntroduction": 12,
+     "OffPlayGeneric": 14
+    },
+    "9": {
+     "LoseGame": 6,
+     "WinGame": 9
+    }
+   }
+  },
+  "legacy": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\music\\music_musicboxdata.bin",
+   "len": 19352,
+   "magic": "MBX0",
+   "header": [
+    "0x4d425830",
+    "0x20001",
+    "0x0",
+    "0x14",
+    "0xa4",
+    "0x4",
+    "0x18",
+    "0x0",
+    "0xffffffff",
+    "0x1",
+    "0x3c",
+    "0x0",
+    "0xffffffff",
+    "0x0",
+    "0xffffffff",
+    "0x4"
+   ],
+   "declared_count": 239,
+   "first_record": 172,
+   "records": [
+    {
+     "sample_id": 634,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 638,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 640,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 647,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 648,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 649,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 650,
+     "category": 9,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 655,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 656,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 657,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 658,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 659,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 660,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 661,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 662,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 663,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 664,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 665,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 666,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 667,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 668,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 669,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 670,
+     "category": 4,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "EndOfPeriod"
+    },
+    {
+     "sample_id": 671,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 672,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 677,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 678,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 679,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 681,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 687,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 688,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 689,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 691,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 693,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 694,
+     "category": 1,
+     "kind": 8,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 700,
+     "category": 1,
+     "kind": 8,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 701,
+     "category": 1,
+     "kind": 7,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 702,
+     "category": 1,
+     "kind": 7,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 703,
+     "category": 1,
+     "kind": 7,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 706,
+     "category": 1,
+     "kind": 7,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 708,
+     "category": 1,
+     "kind": 7,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 711,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 716,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 717,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 718,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 719,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 721,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 722,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 726,
+     "category": 1,
+     "kind": 7,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 728,
+     "category": 1,
+     "kind": 7,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 729,
+     "category": 1,
+     "kind": 8,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 733,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 734,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 735,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 736,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 737,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 738,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 739,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 740,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 741,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 742,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 743,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 744,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 745,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 746,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 747,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 748,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 749,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 750,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 751,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 752,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 753,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "IntroNationalAnthem"
+    },
+    {
+     "sample_id": 754,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 755,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 759,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 763,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 767,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 769,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 775,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinterClassic"
+    },
+    {
+     "sample_id": 776,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinterClassic2012"
+    },
+    {
+     "sample_id": 777,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 778,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 779,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 780,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 781,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 782,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 783,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 784,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 785,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "LoseGame"
+    },
+    {
+     "sample_id": 786,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "WinGame"
+    },
+    {
+     "sample_id": 787,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "ShootoutIntro"
+    },
+    {
+     "sample_id": 788,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentLose"
+    },
+    {
+     "sample_id": 789,
+     "category": 2,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PlayoffOrTournamentWin"
+    },
+    {
+     "sample_id": 791,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 792,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 793,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 795,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 796,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 799,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 803,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 804,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 807,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 808,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 810,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 814,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 816,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 819,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 820,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 823,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 831,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 833,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 835,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 837,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 838,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 840,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 841,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 842,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 845,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 846,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 848,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 849,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 850,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 855,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 856,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 858,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 861,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 866,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 867,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 868,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 869,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 871,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 872,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 876,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 877,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 878,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 879,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 881,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 882,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 887,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 888,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 889,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 890,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 891,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 892,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 893,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 894,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 895,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 896,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 897,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 898,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 899,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 900,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 901,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 902,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 903,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 904,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 905,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 906,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 907,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 908,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 909,
+     "category": 7,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 910,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 911,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 912,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 913,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 914,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 915,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 916,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 917,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 918,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 919,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 920,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayOrgan"
+    },
+    {
+     "sample_id": 921,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 922,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyAway"
+    },
+    {
+     "sample_id": 923,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 924,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "PenaltyHome"
+    },
+    {
+     "sample_id": 925,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 926,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 927,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 928,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 929,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 930,
+     "category": 6,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 931,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 936,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 937,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 938,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 939,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 941,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 942,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 943,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 944,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 945,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 946,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 947,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 948,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 949,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 950,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 951,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 952,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 953,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 954,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 955,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 956,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "OffPlayGeneric"
+    },
+    {
+     "sample_id": 957,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 960,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 961,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 962,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 963,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 964,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 967,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 968,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 969,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 970,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 973,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 974,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 975,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 977,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 978,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 984,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 985,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 986,
+     "category": 8,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "TeamIntroduction"
+    },
+    {
+     "sample_id": 987,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 988,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 989,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 990,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 991,
+     "category": 1,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "MenuTunes"
+    },
+    {
+     "sample_id": 992,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 993,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 994,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 995,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 996,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 997,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 998,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "AwayGoal"
+    },
+    {
+     "sample_id": 999,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 1000,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 1001,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 1002,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 1003,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    },
+    {
+     "sample_id": 1004,
+     "category": 3,
+     "kind": 1,
+     "label": "VolumeType",
+     "context": "HomeGoal"
+    }
+   ],
+   "bank_ids": 239,
+   "records_in_bank": 239,
+   "bank_ids_not_in_musicbox": [],
+   "category_census": {
+    "9": 7,
+    "4": 16,
+    "3": 41,
+    "1": 20,
+    "2": 42,
+    "7": 68,
+    "6": 21,
+    "8": 24
+   },
+   "kind_census": {
+    "1": 229,
+    "8": 3,
+    "7": 7
+   },
+   "context_census": {
+    "LoseGame": 4,
+    "WinGame": 5,
+    "EndOfPeriod": 16,
+    "AwayGoal": 14,
+    "HomeGoal": 33,
+    "MenuTunes": 26,
+    "IntroNationalAnthem": 21,
+    "PlayoffOrTournamentLose": 4,
+    "PlayoffOrTournamentWin": 4,
+    "WinterClassic": 1,
+    "WinterClassic2012": 1,
+    "TeamIntroduction": 11,
+    "OffPlayGeneric": 60,
+    "ShootoutIntro": 1,
+    "OffPlayOrgan": 28,
+    "PenaltyAway": 6,
+    "PenaltyHome": 4
+   },
+   "category_x_context": {
+    "1": {
+     "MenuTunes": 20
+    },
+    "2": {
+     "IntroNationalAnthem": 21,
+     "PlayoffOrTournamentLose": 4,
+     "PlayoffOrTournamentWin": 4,
+     "WinterClassic": 1,
+     "WinterClassic2012": 1,
+     "TeamIntroduction": 1,
+     "OffPlayGeneric": 1,
+     "AwayGoal": 3,
+     "HomeGoal": 3,
+     "LoseGame": 1,
+     "WinGame": 1,
+     "ShootoutIntro": 1
+    },
+    "3": {
+     "AwayGoal": 11,
+     "HomeGoal": 30
+    },
+    "4": {
+     "EndOfPeriod": 16
+    },
+    "6": {
+     "PenaltyAway": 6,
+     "PenaltyHome": 4,
+     "OffPlayOrgan": 5,
+     "MenuTunes": 6
+    },
+    "7": {
+     "OffPlayGeneric": 45,
+     "OffPlayOrgan": 23
+    },
+    "8": {
+     "TeamIntroduction": 10,
+     "OffPlayGeneric": 14
+    },
+    "9": {
+     "LoseGame": 3,
+     "WinGame": 4
+    }
+   }
+  }
+ }
+}

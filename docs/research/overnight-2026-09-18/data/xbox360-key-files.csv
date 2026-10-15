@@ -1,0 +1,162 @@
+title,path,size,sha256,magic,anchor_match
+nhl07,default.xex,10858496,0fc761b260deec4c8a6b9686748d134f62fdf5d81825235a1b0f2db1bef52617,XEX2,
+nhl07,options.viv,348,af64823b7ffa0beea72336e3c6c10c72734bda64231b57390f8d764eb7fc2eaa,42494734,
+nhl07,db/NHL07NG-meta.xml,269813,c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520,efbbbf3c,= anchor
+nhl07,db/NHL07NG.db,4189776,67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3,TDB v6 (DB),= anchor
+nhl07,fe/loc/nhl_eng_us-databasehashedattributes.h,837,392dcd5a572882478784e8c03dd8735b58a288a40f7e0b77bdddc1a4e72cf1e9,,
+nhl07,fe/loc/nhl_eng_us-meta.xml,970,5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2,efbbbf3c,= anchor
+nhl07,fe/loc/nhl_eng_us.db,182500,5d3c0b0187b8d673b9642eaec4fabf346fc3451f9a3bf14e4e6bfb4cd61743c3,TDB v6 (DB),= anchor
+nhl08,default.xex,13185024,9386dba851e2a826de276c51ffb18708c228ce8f9c420c932734c160905e4658,XEX2,
+nhl08,options.viv,284,ca02e234951924f66a9dc748baa7fbf01ff9c2d846f70f9063732e6f96089e21,42494734,
+nhl08,version.txt,22,4afa5cc2f62dd1631e18c410449eb0376fdf73825ab7a35bf2599ad102d5e2c4,31323335,
+nhl08,db/nhlng-meta.xml,243270,d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1,efbbbf3c,= anchor
+nhl08,db/nhlng.db,1556560,587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9,TDB v6 (DB),= anchor
+nhl08,fe/loc/nhl_eng_us-meta.xml,970,5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2,efbbbf3c,= anchor
+nhl08,fe/loc/nhl_eng_us.db,267068,308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4,TDB v6 (DB),= anchor
+nhl09,cl.ini,8,ad68fad0851a814d844e61ff7849536b76d28e0195c43dacbf94db284b7a217f,31383031,
+nhl09,default.xex,6516736,dcaf909c5f087d155c9bf9501eb04cea4db3a1da97bbbf774853223cdad670aa,XEX2,
+nhl09,options.viv,348,d31d9ac003e65afac3522bf004a7b471febb5159fb91d8e9edd94954b08d0e41,42494734,
+nhl09,version.txt,21,d2cfa792db04f6572160c7ce2c78055d24394c6414430f91616bdcce4f9e6e1a,31383031,
+nhl09,db/nhlng-meta.xml,238947,3c32238ac784dfc8c9fa555ca3944bcad413c68f5c0e338f325bd372b6d079f4,efbbbf3c,= anchor
+nhl09,db/nhlng.db,1903376,0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb,TDB v6 (DB),= anchor
+nhl09,fe/loc/nhl_cze_cz.db,555652,7a6dc6616dc62526a78b23b62a365cfff346ff43dd4f77454e7473a12c25298c,TDB v6 (DB),no anchor
+nhl09,fe/loc/nhl_eng_us-meta.xml,970,5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2,efbbbf3c,= anchor
+nhl09,fe/loc/nhl_eng_us.db,513564,d9e0463b1b6b49d744273803785469ae9781b21c838cbb226526d66028b8727e,TDB v6 (DB),= anchor
+nhl09,fe/loc/nhl_fin_fi.db,526724,4e6a985041b8bd626839f9ceeec599d83ef508277b32ef4d8ca141b54e830089,TDB v6 (DB),no anchor
+nhl09,fe/loc/nhl_fre_fr-meta.xml,970,089aa9dd59e8fbfc9e02935993a5b86945eda575a1cfcfa9e7939c5118d73576,efbbbf3c,
+nhl09,fe/loc/nhl_fre_fr.db,544220,c93660d5e0c1466cba2409a0754c7fdcef95b95e4ff4ae95dd0fafe01f3286e6,TDB v6 (DB),no anchor
+nhl09,fe/loc/nhl_ger_de.db,543196,9b4cb7f4024835c50949195f7c2d2d2178a7ea2c2a6b6e1d6a87c8a67cfe8b8e,TDB v6 (DB),no anchor
+nhl09,fe/loc/nhl_rus_ru.db,689564,c01fb17b63ac70bdb47bb6b26585a3cec1d81d923dca0b7412b29aafe422d1ce,TDB v6 (DB),no anchor
+nhl09,fe/loc/nhl_swe_se.db,528468,e0e6c1f586b081113ac215ff9d68d9c2ca8c75017afc08f51912be1096588e24,TDB v6 (DB),no anchor
+nhl10,default.xex,7774208,ccd996d6c6acd9aa69531c564f3b33fcf5b2618ec568d7dfc5ec325f4a0b1669,XEX2,
+nhl10,nxeart,1585152,e3e4a2c8b60f5e8b3c3c8920311c797441175cd9a47887665cc363faf88052fc,50495253,
+nhl10,options.viv,284,4c27f5c5feeafe88b3752647032d8d008e5a449b76b17820461b94e03d7812fd,42494734,
+nhl10,db/nhlng-meta.xml,274595,6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964,efbbbf3c,= anchor
+nhl10,db/nhlng.db,1998232,e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703,TDB v6 (DB),= anchor
+nhl10,fe/loc/nhl_eng_us-meta.xml,970,5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2,efbbbf3c,= anchor
+nhl10,fe/loc/nhl_eng_us.db,667996,f1a9a1dd9e8f2851053750fabb6f3b42aa53f3cf45e021449652fdea1c042671,TDB v6 (DB),= anchor
+nhl10,fe/loc/nhl_fre_fr-meta.xml,970,089aa9dd59e8fbfc9e02935993a5b86945eda575a1cfcfa9e7939c5118d73576,efbbbf3c,
+nhl10,fe/loc/nhl_fre_fr.db,708964,95c10bf7416e54f3f14bd09ee3725d39e73909089801dcdfbea160635fb82403,TDB v6 (DB),no anchor
+nhl11,default.xex,8491008,e769d80857e204fd4a81b3c025d3e3bb78b3c8ab7d568030168cae4f46cacda1,XEX2,
+nhl11,nxeart,1507328,014a5e301195fe5f7a701d211cb5dcdeeab0177936d0e2bfdcd27f5d42f75184,50495253,
+nhl11,options.viv,284,f9b91452c95efb8851dd80007099d12ae8454840046c492f74b30da8e063066d,42494734,
+nhl11,db/draft_roster.db,1334472,eba04eae8d317887f309fa43e9940efac64f2f97cacbf0970530d15e8740afca,TDB v6 (DB),= anchor
+nhl11,db/nhlng-meta.xml,382671,a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f,XML,= anchor
+nhl11,db/nhlng.db,2739736,461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88,TDB v6 (DB),= anchor
+nhl11,fe/loc/nhl_eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b,efbbbf3c,= anchor
+nhl11,fe/loc/nhl_eng_us.db,811364,82520ab36988b7e384830c74c208cf7a7d8f80be34fd435242a5a067feedc22b,TDB v6 (DB),= anchor
+nhl11,fe/loc/nhl_fre_fr-meta.xml,962,a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85,efbbbf3c,
+nhl11,fe/loc/nhl_fre_fr.db,864372,cddca2282a5dd221741b8ea84ec734b0bc52b87fecdaba5c4c068e882295a56c,TDB v6 (DB),no anchor
+nhl12,default.xex,9109504,9950cd885343ae4e8502e55b98bbd2cb8c4840b9a41613e2dae438aa10bbeb51,XEX2,
+nhl12,nxeart,1433600,38e25bb9604f33c323af39d0c50eb0ea7ec427e90a40d2a9311a37fbb4acffda,50495253,
+nhl12,options.viv,284,bf3e42172e19081c7f10ee78fc397bd3ccaeccc02e6580ce84bff811ebf44940,42494734,
+nhl12,db/draft_roster.db,1817072,f2f0e02a4b2e0fbe0b7c25d03bbc0dca896582ff62bab30d74a2c7bbcc682834,TDB v6 (DB),= anchor
+nhl12,db/nhlng-meta.xml,397080,ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894,XML,= anchor
+nhl12,db/nhlng.db,3043876,94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d,TDB v6 (DB),= anchor
+nhl12,fe/loc/nhl_cze_cz-meta.xml,962,f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780,efbbbf3c,
+nhl12,fe/loc/nhl_cze_cz.db,1045828,088f90590889d2cedb002c82fa37279abfc5ea361ca1e35f0b3ba0cea2df436c,TDB v6 (DB),no anchor
+nhl12,fe/loc/nhl_eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b,efbbbf3c,= anchor
+nhl12,fe/loc/nhl_eng_us.db,936780,354a1905582faf3d45ae8a5ba4d7bddb51645f7af144f7864939536c8cc01fd7,TDB v6 (DB),= anchor
+nhl12,fe/loc/nhl_fin_fi-meta.xml,962,f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c,efbbbf3c,
+nhl12,fe/loc/nhl_fin_fi.db,969212,5f35ee84024efdb9c4312f3ff549844d11638999436e5e4c143a9238747d8d62,TDB v6 (DB),no anchor
+nhl12,fe/loc/nhl_fre_fr-meta.xml,962,a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85,efbbbf3c,
+nhl12,fe/loc/nhl_fre_fr.db,1003388,ed231331a4591f489729f3dd6b7b8de0606f34efa58f88e83e1e067111f41141,TDB v6 (DB),no anchor
+nhl12,fe/loc/nhl_ger_de-meta.xml,962,a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f,efbbbf3c,
+nhl12,fe/loc/nhl_ger_de.db,990972,cc14ba8b83e540070d439074832a7525580b0600d8fff6d80a7e5d76222c4da0,TDB v6 (DB),no anchor
+nhl12,fe/loc/nhl_lng_lg-meta.xml,790,58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03,efbbbf3c,
+nhl12,fe/loc/nhl_lng_lg.db,840084,dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9,TDB v6 (DB),no anchor
+nhl12,fe/loc/nhl_rus_ru-meta.xml,962,4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61,efbbbf3c,
+nhl12,fe/loc/nhl_rus_ru.db,1301332,712d9f089017a9c3b1fab02ba0069d814d6af62ce6a3c0e96f7fbfe49196afaa,TDB v6 (DB),no anchor
+nhl12,fe/loc/nhl_swe_se-meta.xml,962,f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3,efbbbf3c,
+nhl12,fe/loc/nhl_swe_se.db,965420,fbefebd07703c3b292c677bc64f4177bbeab4e4d64d01bc227d632bcee64f402,TDB v6 (DB),no anchor
+nhl13,default.xex,9826304,17caa7b32a43b711ac86a4baadf37233549fc2bdf92844d27116bb9490d26dee,XEX2,
+nhl13,nxeart,1646592,f9a37daa36ba9105bb2c5628e695284a4e4c1521df2cadf2010dc0284f8229a1,50495253,
+nhl13,options.viv,284,c032ad7e143d971d0cb7c7f4e3a26f221f5085a7aa0ba554e7935628bd77db8e,42494734,
+nhl13,db/draft_roster.db,1639900,907501c9d2d4c522e6a8d3584b34e3f8389b92bb10e8f894b496eed2e01f8ad3,TDB v6 (DB),= anchor
+nhl13,db/nhlng-meta.xml,438494,c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc,XML,= anchor
+nhl13,db/nhlng.db,2695068,64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb,TDB v6 (DB),= anchor
+nhl13,fe/loc/nhl_cze_cz-meta.xml,962,f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780,efbbbf3c,
+nhl13,fe/loc/nhl_cze_cz.db,1275692,cef76c62d2b502bb77d45171ded812cbb0e7e9c3427f57ede4d229a8e322f3fa,TDB v6 (DB),no anchor
+nhl13,fe/loc/nhl_eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b,efbbbf3c,= anchor
+nhl13,fe/loc/nhl_eng_us.db,1153044,b93fa83f8b4fb760eb48e3a274e1f95a7aaf19d868ba63be59218c41063486e5,TDB v6 (DB),= anchor
+nhl13,fe/loc/nhl_fin_fi-meta.xml,962,f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c,efbbbf3c,
+nhl13,fe/loc/nhl_fin_fi.db,1188716,0bb525ec12c54747574eb54392758772c3f000a498a1232b7f087404c3112f4d,TDB v6 (DB),no anchor
+nhl13,fe/loc/nhl_fre_fr-meta.xml,962,a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85,efbbbf3c,
+nhl13,fe/loc/nhl_fre_fr.db,1234756,5b62c26f1b2f5a8c9b113f2b8f904cedc054fabbff314303c1fb56dd951c4ff6,TDB v6 (DB),no anchor
+nhl13,fe/loc/nhl_ger_de-meta.xml,962,a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f,efbbbf3c,
+nhl13,fe/loc/nhl_ger_de.db,1222108,854e67cd9d7a71a516daf475d385de39b713a52809b86a3a1455cde8c0d91cfa,TDB v6 (DB),no anchor
+nhl13,fe/loc/nhl_lng_lg-meta.xml,790,58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03,efbbbf3c,
+nhl13,fe/loc/nhl_lng_lg.db,840084,dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9,TDB v6 (DB),no anchor
+nhl13,fe/loc/nhl_rus_ru-meta.xml,962,4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61,efbbbf3c,
+nhl13,fe/loc/nhl_rus_ru.db,1557204,7efe61486447d02d647d0f9c119fb269e7bd3db06a4cf90f8506f38c3352be18,TDB v6 (DB),no anchor
+nhl13,fe/loc/nhl_swe_se-meta.xml,962,f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3,efbbbf3c,
+nhl13,fe/loc/nhl_swe_se.db,1190812,fb9110bbb47d0b79fb1a854124d1f8602d0506dbb0ffa9b600e26cdcd92cc7b7,TDB v6 (DB),no anchor
+nhl14,default.xex,10436608,5dfbb082fd5435fde734878e2d605905cbf3a6c2b4e6eaa3dbe438c1dc607215,XEX2,
+nhl14,nxeart,1449984,7cf1af25355dd83cda42c9fb4a11eb5c87ccb90a401d45fe98b17f430b020d02,50495253,
+nhl14,options.viv,284,72c8cf8463b288f08b028018c09ccb8497b1faf293046c8353062316100ad102,42494734,
+nhl14,db/draft_roster.db,1665692,48701f43244298849a6c7a039d2980be9696440d02158416262fbab509fe6513,TDB v6 (DB),= anchor
+nhl14,db/dynamic_ratings.db,18860,f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90,TDB v6 (DB),= anchor
+nhl14,db/nhlng-meta.xml,444989,d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22,efbbbf3c,= anchor
+nhl14,db/nhlng.db,2820656,84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867,TDB v6 (DB),= anchor
+nhl14,fe/loc/nhl_cze_cz-meta.xml,962,f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780,efbbbf3c,
+nhl14,fe/loc/nhl_cze_cz.db,1892996,e70fa8c2b653bdf72a637d44299f59aa9faeb5f5fe1e41fdaf0a9199286f883e,TDB v6 (DB),no anchor
+nhl14,fe/loc/nhl_eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b,efbbbf3c,= anchor
+nhl14,fe/loc/nhl_eng_us.db,1703204,e5aff8285169e2ab0790f63f6def65c892f7cd42553bc71b622f42296c48ac74,TDB v6 (DB),= anchor
+nhl14,fe/loc/nhl_fin_fi-meta.xml,962,f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c,efbbbf3c,
+nhl14,fe/loc/nhl_fin_fi.db,1773348,1d394418ec09c434316ab8b83618d115cc8000147dd4c450312b2f11c21ce8e4,TDB v6 (DB),no anchor
+nhl14,fe/loc/nhl_fre_fr-meta.xml,962,a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85,efbbbf3c,
+nhl14,fe/loc/nhl_fre_fr.db,1824588,5df3c48d789b39ff77d7fa040a84bfd700538e55a4d893421f3eb526d89ba4ae,TDB v6 (DB),no anchor
+nhl14,fe/loc/nhl_ger_de-meta.xml,962,a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f,efbbbf3c,
+nhl14,fe/loc/nhl_ger_de.db,1804460,d32599fceb728f8706d2e650a9004ead71b2c9e99d25b6e7d5a86723499e6c9e,TDB v6 (DB),no anchor
+nhl14,fe/loc/nhl_lng_lg-meta.xml,790,58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03,efbbbf3c,
+nhl14,fe/loc/nhl_lng_lg.db,840084,dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9,TDB v6 (DB),no anchor
+nhl14,fe/loc/nhl_rus_ru-meta.xml,962,4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61,efbbbf3c,
+nhl14,fe/loc/nhl_rus_ru.db,2288612,7881581abaa78e08d948760f65969e83fb86a0782917aa92041c794a64265fc1,TDB v6 (DB),no anchor
+nhl14,fe/loc/nhl_swe_se-meta.xml,962,f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3,efbbbf3c,
+nhl14,fe/loc/nhl_swe_se.db,1760964,b85941cb122465fd5eea6d123eaf897d3096371632081e913ae9651e8c702c0c,TDB v6 (DB),no anchor
+nhl15,default.xex,10457088,ca73955a06d7832102ffbf4f6dacb94243f61a881146dcb2a825a7b71726b769,XEX2,
+nhl15,nxeart,663552,a501a3c3655ba936157a9a8a83300a8de23ddb00de7b0c2fcaa720c5b3f11cfa,50495253,
+nhl15,options.viv,284,445cb7bd64d8c009053fc28d4d51f0f449210fcecfad95d84cf4da937974817f,42494734,
+nhl15,db/draft_roster.db,1703808,39b4d04f7124497dde41c79c47bc99cab59e06bd64fcda27aaef5598c51b91e0,TDB v6 (DB),= anchor
+nhl15,db/dynamic_ratings.db,18860,f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90,TDB v6 (DB),= anchor
+nhl15,db/nhlng-meta.xml,445000,bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de,efbbbf3c,= anchor
+nhl15,db/nhlng.db,2890040,028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398,TDB v6 (DB),= anchor
+nhl15,fe/loc/nhl_cze_cz-meta.xml,962,f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780,efbbbf3c,
+nhl15,fe/loc/nhl_cze_cz.db,1923036,5a50119d4d966abcd1593ee7e74604e8ec0366962559af2affb6f5ec1bf83cf0,TDB v6 (DB),no anchor
+nhl15,fe/loc/nhl_eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b,efbbbf3c,= anchor
+nhl15,fe/loc/nhl_eng_us.db,1729660,86167614957bed34d9d829c0508d0e3ab2e533e59c424f56211d4383ab9cd614,TDB v6 (DB),= anchor
+nhl15,fe/loc/nhl_fin_fi-meta.xml,962,f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c,efbbbf3c,
+nhl15,fe/loc/nhl_fin_fi.db,1800636,3627641bba84e1795dcd76614feedf2662e15665edeb534347238fcdc8eaf55e,TDB v6 (DB),no anchor
+nhl15,fe/loc/nhl_fre_fr-meta.xml,962,a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85,efbbbf3c,
+nhl15,fe/loc/nhl_fre_fr.db,1854948,ed2c91b72d98cce90e1bc16cfe933ae4f1e7fa797a03a7c14188c3796ace7c53,TDB v6 (DB),no anchor
+nhl15,fe/loc/nhl_ger_de-meta.xml,962,a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f,efbbbf3c,
+nhl15,fe/loc/nhl_ger_de.db,1831340,2c20b06d6f9757356ddffd0c0cd2ef036a1a4fbd79e82c90818899eb9648e741,TDB v6 (DB),no anchor
+nhl15,fe/loc/nhl_lng_lg-meta.xml,790,58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03,efbbbf3c,
+nhl15,fe/loc/nhl_lng_lg.db,840084,dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9,TDB v6 (DB),no anchor
+nhl15,fe/loc/nhl_rus_ru-meta.xml,962,4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61,efbbbf3c,
+nhl15,fe/loc/nhl_rus_ru.db,2324700,5f64dbf17da5635725ea11aaa6fc7dac5b2c468e2a18bf9190924ecf3b976256,TDB v6 (DB),no anchor
+nhl15,fe/loc/nhl_swe_se-meta.xml,962,f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3,efbbbf3c,
+nhl15,fe/loc/nhl_swe_se.db,1788420,86897fa1ab9babb81b740d3cc5a3b25d257fefaac3ef80bba32d5617dd8b2682,TDB v6 (DB),no anchor
+nhllegacy,default.xex,10448896,d818eb15775c1fee34b057b0fc494b211535d07123230ee45bd7d40991c55624,XEX2,
+nhllegacy,nxeart,462848,1aea7900301ba381459b778b89151abdc94aada43e34549c289e835b01f1eff7,50495253,
+nhllegacy,options.viv,284,35687503fe73c46a549de91d6bb2462ac36ae5e9210382bad83ae3031de03e81,42494734,
+nhllegacy,db/draft_roster.db,1898964,2ade8a604f1e2b4509f9d823d93bda29594c7f802c54fafa5ec7ec05e6ec9acc,TDB v6 (DB),= anchor
+nhllegacy,db/dynamic_ratings.db,18860,f1efa6a2030ce3fc225631dc92107347627ddccca368b41c6140631831673c90,TDB v6 (DB),= anchor
+nhllegacy,db/nhlng-meta.xml,444404,99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de,efbbbf3c,= anchor
+nhllegacy,db/nhlng.db,2901504,105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230,TDB v6 (DB),= anchor
+nhllegacy,fe/loc/nhl_cze_cz-meta.xml,962,f0a592de5c409b4fe1c3a9f3eadf01f2f23bc1a65ab588fd449e6d1c38fbe780,efbbbf3c,
+nhllegacy,fe/loc/nhl_cze_cz.db,1953700,8bdcbe1f6e521760a36bc70e293c897815d8ac6a55ea1b881f1f66b548c22c84,TDB v6 (DB),no anchor
+nhllegacy,fe/loc/nhl_eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b,efbbbf3c,= anchor
+nhllegacy,fe/loc/nhl_eng_us.db,1759044,f00926ceff27d46f1e5264385468369cd60f91d54d9944dd5c8584bf6d9b8f70,TDB v6 (DB),= anchor
+nhllegacy,fe/loc/nhl_fin_fi-meta.xml,962,f7437cf7ad89b416f19a72cc9c8a25b96458cbe26c18e746cee781e760e14c2c,efbbbf3c,
+nhllegacy,fe/loc/nhl_fin_fi.db,1829916,daa3319de1a1b255bf7a6022b8c34b47d10e44872e784d8e693676ab18f7580d,TDB v6 (DB),no anchor
+nhllegacy,fe/loc/nhl_fre_fr-meta.xml,962,a9bd39d93152d1452f101d5a3cc0d89bb609746ca7641dcb2d04681c3864ce85,efbbbf3c,
+nhllegacy,fe/loc/nhl_fre_fr.db,1885124,9988f0efbb39c79f4ce04c5edd03fe7f2f0c76fbbd00bb1f6fbbc14201596d9d,TDB v6 (DB),no anchor
+nhllegacy,fe/loc/nhl_ger_de-meta.xml,962,a92095ce93a2c8e37c57162d9d0a54dc3251f64d73fb0193a6edb832ad0ade9f,efbbbf3c,
+nhllegacy,fe/loc/nhl_ger_de.db,1860740,8da6b92ba00d0c9a851dd7a390b5824dc154d8849e50906f17252fdcb813e44d,TDB v6 (DB),no anchor
+nhllegacy,fe/loc/nhl_lng_lg-meta.xml,790,58405c5dbe24c10317f8da64864fc460da88fc5bac393eac27b305ef6a8f1a03,efbbbf3c,
+nhllegacy,fe/loc/nhl_lng_lg.db,840084,dc9d319a51eb0f0a5b395d7a5c72fd00a20859d4cb386d67c7bd9e8845da8af9,TDB v6 (DB),no anchor
+nhllegacy,fe/loc/nhl_rus_ru-meta.xml,962,4818384378b3ab6f4737a6ee8427d45f3f3ed3c552d18cb59cb73551e1623d61,efbbbf3c,
+nhllegacy,fe/loc/nhl_rus_ru.db,2362116,3b7028da1aed903fb6a7fa9b7c0d2bed961fe8ea9a9f939435c4b0ed7ff202ec,TDB v6 (DB),no anchor
+nhllegacy,fe/loc/nhl_swe_se-meta.xml,962,f79a0d9c5f43a40c577cd540ab30fa60caabf486fc2cdfb09e8b70a811981cb3,efbbbf3c,
+nhllegacy,fe/loc/nhl_swe_se.db,1818364,07520bd878ed9a1d62888152cafdbe2115eda5e2414a28fc74be1d02ec3d1efd,TDB v6 (DB),no anchor

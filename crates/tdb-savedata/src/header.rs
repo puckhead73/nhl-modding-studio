@@ -113,7 +113,10 @@ impl SaveHeader {
             return Err(SaveError::TooShort);
         }
         let magic_bytes = &file[..MAGIC_LEN];
-        let n = magic_bytes.iter().position(|&b| b == 0).unwrap_or(MAGIC_LEN);
+        let n = magic_bytes
+            .iter()
+            .position(|&b| b == 0)
+            .unwrap_or(MAGIC_LEN);
         let magic = String::from_utf8_lossy(&magic_bytes[..n]).to_string();
         let save_type = SaveType::from_magic(&magic);
 

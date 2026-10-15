@@ -39,6 +39,16 @@ own enum (goalie-style.toml).
 kind = "operator-research"
 description = "Phase 5T unified default-style promotion (NHL Legacy default.db); re-verified vs the committed legacy anchor distribution in Spike S4, with NHLViewNG EXE RTTI `TNHLPlayerAiStyle` as (offset) corroboration"
 
+# Title scope (27 Sep 2026; research R122 = 2026-09-26 handoff 15, observations S1 / S2): skater styles are
+# numbered in three eras — NHL 07–09 have 7 codes (defence 1–2), NHL 10 has 9 (defence 1–3), NHL 11 onward 10
+# (defence 1–4); the titles' own dictionaries list exactly that many style names and the position split
+# matches. This ten-label table therefore applies from NHL 11 on (NHL 11–13 by continuity, split and label
+# set; confirmed on NHL Legacy). Attaching it earlier labelled NHL 10 forwards "Two-Way Defenseman" and
+# contradicted the NHL 07 vocabulary the player page shows on NHL 08 / 09. On NHL 08 / 09 the roster cell
+# shows that NHL 07 vocabulary (Studio's synthetic set); NHL 07's roster cell and NHL 10 show numbers.
+[scope]
+games = ["nhl11", "nhl12", "nhl13", "nhl14", "nhl15", "nhllegacy", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21"]
+
 [[bindings]]
 # eGlu (exhibition roster table) — the Spike S4 target field; distribution
 # verified to match dSvy (1-based, D 1..4 / F 5..10).

@@ -1,0 +1,35 @@
+$ python research/nhl08-roster-schema/scripts/update_semantics.py "anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658" anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml
+update attribute values over all 1578 fields of the meta: {'<absent>': 451, 'True': 1127}
+fields tdb-defs would treat as updatable (attribute != 'False'): 1578 ; fields explicitly marked update='True': 1127
+key attribute values: {'True': 79, '<absent>': 1499}
+fields that are both key and update=True: 0
+
+per table in group 'rosters': fields / update=True / unmarked / key ; unmarked field names ; update-table field set check
+  lVMf  exhibitiongoalieequipment       75 /  74 /  1 / zIBw             unmarked=['game_id'] ; update table JJDo == update+key: True
+  NDEo  customteamequipmenttable        32 /  31 /  1 / qEfv             unmarked=['index'] ; update table hTDj == update+key: True
+  ajmx  exhibitionskaterequipment       17 /  16 /  1 / zIBw             unmarked=['game_id'] ; update table MSZu == update+key: True
+  oYeE  exhibitionteamstrategies        11 /  10 /  1 / qEfv             unmarked=['index'] ; update table mASv == update+key: True
+  Roup  custompalettetable               5 /   4 /  1 / qEfv             unmarked=['index'] ; update table KjDh == update+key: True
+  nAUy  stockgoalieequipment            79 /  78 /  1 / XWot             unmarked=['key'] ; update table VDLc == update+key: True
+  QEoV  exhibitionfreeagents             1 /   0 /  1 / TWSX             unmarked=['playerindex'] ; no update table declared
+  ttOk  exhibitionteams                 31 /  23 /  8 / qEfv             unmarked=['index', 'original', 'smoke_g', 'itechvisorcolor', 'ahlaffiliate', 'table', 'smoke_b', 'smoke_r'] ; update table SREo == update+key: True
+  Vzjq  customfacetable                 13 /  12 /  1 / qFky             unmarked=['playerid'] ; update table PPVt == update+key: True
+  caBZ  exhibitionplayers                3 /   2 /  1 / qEfv             unmarked=['index'] ; update table qWeu == update+key: True
+  ulGe  exhibitionrostertable           71 /  70 /  1 / XWot             unmarked=['key'] ; update table vozd == update+key: True
+  vbHh  stockteamequipmenttable         33 /  32 /  1 / qEfv             unmarked=['index'] ; update table UHgc == update+key: True
+  cPbu  exhibitionplayerbiotable        32 /  31 /  1 / zIBw             unmarked=['game_id'] ; update table CvSu == update+key: True
+  OEtS  exhibitionarena                 33 /  32 /  1 / qEfv             unmarked=['index'] ; update table TUaR == update+key: True
+  yvSd  exhibitionskaterai              30 /  29 /  1 / zIBw             unmarked=['game_id'] ; update table RosT == update+key: True
+  yuHm  exhibitiongoalieai              26 /  25 /  1 / zIBw             unmarked=['game_id'] ; update table uyGF == update+key: True
+  sozv  stockteamcolorstable             6 /   3 /  3 / qEfv             unmarked=['index', 'team', 'colorid'] ; update table XGls == update+key: True
+
+fields marked update='True' across the whole meta whose table has NO updateshortname (marking without a write path):
+  tables: 0
+
+tables with updateshortname whose maxupdate != -1: [('leaguetransactiontable', '0'), ('leaguearena', '0'), ('leaguecustomfacetable', '0'), ('leaguerookiegoalieequipment', '0'), ('leaguenews', '0'), ('leaguecustomteamequipmenttable', '0')]
+tables with insertshortname but no deleteshortname: ['exhibitiongoalieequipment', 'exhibitionskaterequipment', 'exhibitionplayerbiotable', 'exhibitionskaterai', 'exhibitiongoalieai', 'stockteamcolorstable']
+tables with deleteshortname but no insertshortname: []
+tables with updateshortname but neither insert nor delete: ['customteamequipmenttable', 'exhibitionteamstrategies', 'custompalettetable', 'exhibitionteams', 'customfacetable', 'stockteamequipmenttable', 'stockteamjerseytable', 'exhibitiondlc', 'exhibitionarena']
+difflistproperty values: {'ENABLED': 79}
+tables with savegroups but no difflist ids at all: [('stockretirednumbertable', 'allloaded')]
+

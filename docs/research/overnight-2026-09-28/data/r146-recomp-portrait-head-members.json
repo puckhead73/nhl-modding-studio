@@ -1,0 +1,295 @@
+{
+ "note": "R146 - Legacy Recompiled portrait / head preview inputs as archive members (after-receipt-7 prompt, package 3 continuation). Read-only.\nClasses: `fe/ion/artassets/playerheads/<bucket>/p<N>.big` (large portraits), `fe/ion/artassets/playerheadssmall/<bucket>/p<N>.big`\n(small), `rendering/player/player_<N>.rx2` (head bundle) and `rendering/player/texlib_<N>.rx2` (head textures), plus any other\n`rendering/player/*`. Per class: members per archive, wrapper by 8-byte head (every member), duplicate paths across archives, id counts,\nhead ids with player_ but no texlib_ (and vice versa); a deterministic byte sample (the 3 smallest + 3 at even strides per class) unwrapped\n(research decoder) and compared with the X360 Legacy loose file. Sampled bytes are NOT extended to all members.\nUsage: python r146_recomp_portrait_head_members.py <out.json>",
+ "recomp_root": "H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test\\game",
+ "x360_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+ "classes": {
+  "portrait_large": {
+   "members": 9228,
+   "per_archive": {
+    "nocache.big": 9228
+   },
+   "wrappers": {
+    "stored": 9228
+   },
+   "duplicate_paths": {},
+   "duplicate_count": 0,
+   "distinct_ids": 9228,
+   "sample": [
+    {
+     "member": "fe/ion/artassets/playerheads/silhouettes/p60003.big",
+     "archive": "nocache.big",
+     "wrapper": "stored",
+     "stored": 4976,
+     "unwrapped_sha256": "51a751349b0d3eaa",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheads/silhouettes/p60001.big",
+     "archive": "nocache.big",
+     "wrapper": "stored",
+     "stored": 5296,
+     "unwrapped_sha256": "1ef051773557552a",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheads/silhouettes/p60000.big",
+     "archive": "nocache.big",
+     "wrapper": "stored",
+     "stored": 5424,
+     "unwrapped_sha256": "8f65a8e979c533be",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheads/p0_4000/p3726.big",
+     "archive": "nocache.big",
+     "wrapper": "stored",
+     "stored": 21360,
+     "unwrapped_sha256": "c7a139bb3c812195",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheads/p8001_12000/p11378.big",
+     "archive": "nocache.big",
+     "wrapper": "stored",
+     "stored": 22576,
+     "unwrapped_sha256": "7dc541d9fcec0c3d",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheads/p0_4000/p2294.big",
+     "archive": "nocache.big",
+     "wrapper": "stored",
+     "stored": 24112,
+     "unwrapped_sha256": "725756ec0e315e42",
+     "loose_present": true,
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "portrait_small": {
+   "members": 9229,
+   "per_archive": {
+    "cache.big": 9229
+   },
+   "wrappers": {
+    "stored": 9229
+   },
+   "duplicate_paths": {},
+   "duplicate_count": 0,
+   "distinct_ids": 9229,
+   "sample": [
+    {
+     "member": "fe/ion/artassets/playerheadssmall/silhouettes/p60001.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 1840,
+     "unwrapped_sha256": "ffa10e50d5a155b3",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheadssmall/silhouettes/p60000.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 1904,
+     "unwrapped_sha256": "e782a3b11db2799b",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheadssmall/silhouettes/p60003.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 1904,
+     "unwrapped_sha256": "b240927469317d9e",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheadssmall/p8001_12000/p8331.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 6512,
+     "unwrapped_sha256": "162a173e69129f22",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheadssmall/p4001_8000/p7294.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 6896,
+     "unwrapped_sha256": "9c756f45e36707d7",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "fe/ion/artassets/playerheadssmall/p8001_12000/p8922.big",
+     "archive": "cache.big",
+     "wrapper": "stored",
+     "stored": 7344,
+     "unwrapped_sha256": "cf13e947d6f3451d",
+     "loose_present": true,
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "head_bundle": {
+   "members": 904,
+   "per_archive": {
+    "cacherender.big": 904
+   },
+   "wrappers": {
+    "chunklzx": 904
+   },
+   "duplicate_paths": {},
+   "duplicate_count": 0,
+   "distinct_ids": 904,
+   "sample": [
+    {
+     "member": "rendering/player/player_186.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 75400,
+     "unwrapped_sha256": "bd1cd73cf1d6da3b",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/player_708.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 75454,
+     "unwrapped_sha256": "0340d7d7c9c1dd5c",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/player_179.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 75650,
+     "unwrapped_sha256": "d0ec3359a961417b",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/player_467.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 93160,
+     "unwrapped_sha256": "3067f09a8c9798b9",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/player_1157.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 96726,
+     "unwrapped_sha256": "e0a5c707c96d55e2",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/player_60178.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 99850,
+     "unwrapped_sha256": "c09c4867569cbfe6",
+     "loose_present": true,
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "head_texlib": {
+   "members": 685,
+   "per_archive": {
+    "cacherender.big": 685
+   },
+   "wrappers": {
+    "chunklzx": 685
+   },
+   "duplicate_paths": {},
+   "duplicate_count": 0,
+   "distinct_ids": 685,
+   "sample": [
+    {
+     "member": "rendering/player/texlib_30000.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 107374,
+     "unwrapped_sha256": "1dbd0556ed4fa741",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/texlib_584.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 111774,
+     "unwrapped_sha256": "2944bdfd906074cc",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/texlib_168.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 112636,
+     "unwrapped_sha256": "1cce6b1c21fed479",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/texlib_60192.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 155844,
+     "unwrapped_sha256": "2e58a311ec0cf77b",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/texlib_3766.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 162818,
+     "unwrapped_sha256": "2a0eb4b61f8a1181",
+     "loose_present": true,
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/player/texlib_60076.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 168860,
+     "unwrapped_sha256": "9e69eb1508290571",
+     "loose_present": true,
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "player_other": {
+   "members": 0,
+   "per_archive": {},
+   "wrappers": {},
+   "duplicate_paths": {},
+   "duplicate_count": 0,
+   "distinct_ids": null,
+   "sample": []
+  }
+ },
+ "head_pairing": {
+  "bundle_ids": 904,
+  "texlib_ids": 685,
+  "bundle_without_texlib": 219,
+  "texlib_without_bundle": 0
+ },
+ "player_other_shapes": {}
+}

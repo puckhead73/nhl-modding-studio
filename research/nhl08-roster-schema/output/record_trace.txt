@@ -1,0 +1,150 @@
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml cPbu 0 4 --only game_id,firstname,lastname,team,proteam,jersey,position,yeardrafted,contractdollars,headid,artid
+table cPbu = exhibitionplayerbiotable block=0x26df8 record_block=0x27020 rec=184B cur=2962 max=2962 alloc=2
+  [0 @0x27020] team=0 headid=10042 yeardrafted=40 firstname='Tommi' lastname='Santala' proteam=0 position=0 contractdollars=18 artid=1288 jersey=26 game_id=0
+  [1 @0x270d8] team=6 headid=10052 yeardrafted=39 firstname='Denis' lastname='Arkhipov' proteam=7 position=0 contractdollars=36 artid=1287 jersey=19 game_id=1
+  [2 @0x27190] team=49 headid=10026 yeardrafted=44 firstname='Lasse' lastname='Kukkonen' proteam=22 position=3 contractdollars=35 artid=1289 jersey=28 game_id=2
+  [3 @0x27248] team=15 headid=10028 yeardrafted=40 firstname='Tony' lastname='Salmelainen' proteam=16 position=1 contractdollars=26 artid=1290 jersey=8 game_id=3
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml cPbu 2958 4 --only game_id,firstname,lastname,team,proteam,jersey,position,yeardrafted,contractdollars,headid,artid
+table cPbu = exhibitionplayerbiotable block=0x26df8 record_block=0x27020 rec=184B cur=2962 max=2962 alloc=2
+  [2958 @0xabe30] team=0 headid=10000 yeardrafted=127 firstname='' lastname='' proteam=0 position=0 contractdollars=0 artid=0 jersey=0 game_id=5176
+  [2959 @0xabee8] team=0 headid=10000 yeardrafted=127 firstname='' lastname='' proteam=0 position=0 contractdollars=0 artid=0 jersey=0 game_id=5177
+  [2960 @0xabfa0] team=0 headid=10000 yeardrafted=127 firstname='' lastname='' proteam=0 position=0 contractdollars=0 artid=0 jersey=0 game_id=5178
+  [2961 @0xac058] team=0 headid=10000 yeardrafted=127 firstname='' lastname='' proteam=0 position=0 contractdollars=0 artid=0 jersey=0 game_id=5179
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml caBZ 0 5
+table caBZ = exhibitionplayers block=0xac110 record_block=0xac168 rec=4B cur=3257 max=3257 alloc=2
+  [0 @0xac168] table=0 index=0 playerid=0
+  [1 @0xac16c] table=0 index=1 playerid=1
+  [2 @0xac170] table=0 index=2 playerid=2
+  [3 @0xac174] table=0 index=3 playerid=3
+  [4 @0xac178] table=0 index=4 playerid=4
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml caBZ 2960 4
+table caBZ = exhibitionplayers block=0xac110 record_block=0xac168 rec=4B cur=3257 max=3257 alloc=2
+  [2960 @0xaefa8] table=0 index=3722 playerid=3862
+  [2961 @0xaefac] table=0 index=3723 playerid=3863
+  [2962 @0xaefb0] table=0 index=3724 playerid=3864
+  [2963 @0xaefb4] table=0 index=3725 playerid=3865
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml caBZ 3253 4
+table caBZ = exhibitionplayers block=0xac110 record_block=0xac168 rec=4B cur=3257 max=3257 alloc=2
+  [3253 @0xaf43c] table=1 index=5176 playerid=5176
+  [3254 @0xaf440] table=1 index=5177 playerid=5177
+  [3255 @0xaf444] table=1 index=5178 playerid=5178
+  [3256 @0xaf448] table=1 index=5179 playerid=5179
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ulGe 0 4 --only key,playerindex,team,rosterstatus,captain,jersey,l1c,l1lw,l1rw,g1
+table ulGe = exhibitionrostertable block=0xaf44c record_block=0xaf8e4 rec=16B cur=2525 max=2525 alloc=2
+  [0 @0xaf8e4] team=0 playerindex=89 g1=0 key=0 l1lw=0 l1c=0 rosterstatus=1 captain=0 l1rw=0 jersey=40
+  [1 @0xaf8f4] team=0 playerindex=276 g1=0 key=1 l1lw=0 l1c=0 rosterstatus=1 captain=0 l1rw=0 jersey=23
+  [2 @0xaf904] team=0 playerindex=312 g1=0 key=2 l1lw=0 l1c=0 rosterstatus=1 captain=0 l1rw=0 jersey=4
+  [3 @0xaf914] team=0 playerindex=403 g1=0 key=3 l1lw=0 l1c=0 rosterstatus=1 captain=0 l1rw=0 jersey=30
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ulGe 2521 4 --only key,playerindex,team,rosterstatus,jersey
+table ulGe = exhibitionrostertable block=0xaf44c record_block=0xaf8e4 rec=16B cur=2525 max=2525 alloc=2
+  [2521 @0xb9674] team=107 playerindex=2941 key=2696 rosterstatus=1 jersey=2
+  [2522 @0xb9684] team=107 playerindex=2961 key=2697 rosterstatus=1 jersey=10
+  [2523 @0xb9694] team=107 playerindex=3053 key=2698 rosterstatus=1 jersey=20
+  [2524 @0xb96a4] team=107 playerindex=3139 key=2699 rosterstatus=0 jersey=52
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml QEoV 0 5
+table QEoV = exhibitionfreeagents block=0x1f820 record_block=0x1f858 rec=4B cur=156 max=156 alloc=2
+  [0 @0x1f858] playerindex=0
+  [1 @0x1f85c] playerindex=152
+  [2 @0x1f860] playerindex=202
+  [3 @0x1f864] playerindex=204
+  [4 @0x1f868] playerindex=231
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ttOk 0 3 --only index,fullname,abbrname,league,conference,division,active,table,original
+table ttOk = exhibitionteams block=0xd0ed0 record_block=0xd10e8 rec=204B cur=138 max=138 alloc=2
+  [0 @0xd10e8] table=0 fullname='Anaheim Ducks�\x84�' active=1 division=5 original=0 league=0 abbrname='ANA' index=0 conference=0
+  [1 @0xd11b4] table=0 fullname='Atlanta Thrashers®' active=1 division=2 original=0 league=0 abbrname='ATL' index=1 conference=1
+  [2 @0xd1280] table=0 fullname='Boston Bruins®' active=1 division=0 original=0 league=0 abbrname='BOS' index=2 conference=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ttOk 30 2 --only index,fullname,abbrname,league,conference,division,active,table,original
+table ttOk = exhibitionteams block=0xd0ed0 record_block=0xd10e8 rec=204B cur=138 max=138 alloc=2
+  [30 @0xd28d0] table=0 fullname='Eastern All-Stars' active=1 division=0 original=0 league=0 abbrname='EAS' index=30 conference=0
+  [31 @0xd299c] table=0 fullname='Western All-Stars' active=1 division=0 original=0 league=0 abbrname='WES' index=31 conference=0
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ttOk 135 3 --only index,fullname,abbrname,league,conference,division,active,table,original
+table ttOk = exhibitionteams block=0xd0ed0 record_block=0xd10e8 rec=204B cur=138 max=138 alloc=2
+  [135 @0xd7c7c] table=1 fullname='Custom Team 27' active=0 division=0 original=0 league=5 abbrname='' index=135 conference=0
+  [136 @0xd7d48] table=1 fullname='Custom Team 28' active=0 division=0 original=0 league=5 abbrname='' index=136 conference=0
+  [137 @0xd7e14] table=1 fullname='Custom Team 29' active=0 division=0 original=0 league=5 abbrname='' index=137 conference=0
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml oYeE 0 2
+table oYeE = exhibitionteamstrategies block=0xd7ee0 record_block=0xd7fb8 rec=8B cur=138 max=138 alloc=2
+  [0 @0xd7fb8] offense1=0 offense4=1 opressure=1 offense3=0 forecheck=0 pp=2 offense2=2 index=0 defense=0 dpressure=2 pk=0
+  [1 @0xd7fc0] offense1=0 offense4=1 opressure=3 offense3=0 forecheck=1 pp=0 offense2=2 index=1 defense=2 dpressure=2 pk=2
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml OEtS 0 2 --only index,arenaname,cityname,maxattendance
+table OEtS = exhibitionarena block=0x1bc60 record_block=0x1be98 rec=104B cur=138 max=138 alloc=2
+  [0 @0x1be98] cityname='Anaheim, CA' maxattendance=17174 arenaname='Honda Center' index=0
+  [1 @0x1bf00] cityname='Atlanta, GA' maxattendance=18750 arenaname='Philips Arena�\x84�' index=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml yvSd 0 2 --only game_id,p_speed,p_passing,p_potential,p_style
+table yvSd = exhibitionskaterai block=0xb96fc record_block=0xb9904 rec=24B cur=2647 max=2647 alloc=2
+  [0 @0xb9904] p_style=3 p_potential=24 p_passing=27 p_speed=33 game_id=0
+  [1 @0xb991c] p_style=3 p_potential=25 p_passing=27 p_speed=29 game_id=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml yuHm 0 2 --only game_id,g_gsl,g_gsh,g_style,g_potential
+table yuHm = exhibitiongoalieai block=0x1fac8 record_block=0x1fc90 rec=20B cur=315 max=315 alloc=2
+  [0 @0x1fc90] g_potential=22 g_gsl=22 g_gsh=21 g_style=2 game_id=150
+  [1 @0x1fca4] g_potential=25 g_gsl=25 g_gsh=24 g_style=2 game_id=151
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml ajmx 0 2
+table ajmx = exhibitionskaterequipment block=0xc912c record_block=0xc9264 rec=12B cur=2647 max=2647 alloc=2
+  [0 @0xc9264] visortype=2 pantstypecode=1 socktapestyle=0 sticktapecolor=1 visorcolor=0 gloves=2 sticktapestylecode=1 skatebrand=4 jerseytuck=0 skaterocker=1 stickcurve=2 helmetbrand=2 shoulderpads=1 stickflex=1 stick=15 skatesocktuck=0 game_id=0
+  [1 @0xc9270] visortype=0 pantstypecode=0 socktapestyle=0 sticktapecolor=1 visorcolor=0 gloves=0 sticktapestylecode=1 skatebrand=6 jerseytuck=0 skaterocker=1 stickcurve=2 helmetbrand=5 shoulderpads=1 stickflex=1 stick=10 skatesocktuck=1 game_id=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml lVMf 0 1 --only game_id,stick,pads,blocker,trapper,masktype,keepcustomiftraded
+table lVMf = exhibitiongoalieequipment block=0x2152c record_block=0x21a04 rec=68B cur=315 max=315 alloc=2
+  [0 @0x21a04] pads=1 keepcustomiftraded=0 trapper=1 masktype=0 stick=0 game_id=150 blocker=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml nAUy 0 3 --only key,game_id,firstname,lastname,team,pads,blocker,trapper
+table nAUy = stockgoalieequipment block=0x130774 record_block=0x130c8c rec=148B cur=236 max=236 alloc=2
+  [0 @0x130c8c] pads=1 team=43 firstname='Michael' trapper=1 lastname='Wall' key=0 game_id=150 blocker=1
+  [1 @0x130d20] pads=0 team=45 firstname='Barry' trapper=0 lastname='Brust' key=1 game_id=151 blocker=0
+  [2 @0x130db4] pads=0 team=50 firstname='Martin' trapper=0 lastname='Houle' key=2 game_id=152 blocker=0
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml sozv 0 3
+table sozv = stockteamcolorstable block=0x13ce84 record_block=0x13cf0c rec=8B cur=143 max=143 alloc=2
+  [0 @0x13cf0c] team=0 color_b=74 colorid=0 color_g=115 index=0 color_r=139
+  [1 @0x13cf14] team=0 color_b=16 colorid=1 color_g=95 index=1 color_r=254
+  [2 @0x13cf1c] team=0 color_b=172 colorid=2 color_g=171 index=2 color_r=167
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml vbHh 0 2 --only index,team,era,brand,variant,equipment
+table vbHh = stockteamequipmenttable block=0x13d384 record_block=0x13d5bc rec=32B cur=8000 max=8000 alloc=2
+  [0 @0x13d5bc] team=0 brand=0 equipment=2 era=0 variant=0 index=0
+  [1 @0x13d5dc] team=0 brand=1 equipment=2 era=0 variant=0 index=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml Vzjq 0 2
+table Vzjq = customfacetable block=0x2768 record_block=0x2860 rec=8B cur=180 max=180 alloc=2
+  [0 @0x2860] facialhairstyle=0 freckles=0 wrinkles=0 hairstyle=0 eyedetail=0 eyebrowshape=0 eyebrowcolor=0 cutsscars=0 blackeye=0 facialhaircolor=0 playerid=5000 haircolor=0 skintexture=0
+  [1 @0x2868] facialhairstyle=0 freckles=0 wrinkles=0 hairstyle=0 eyedetail=0 eyebrowshape=0 eyebrowcolor=0 cutsscars=0 blackeye=0 facialhaircolor=0 playerid=5001 haircolor=0 skintexture=0
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml Roup 0 2
+table Roup = custompalettetable block=0x2e00 record_block=0x2e78 rec=4B cur=20 max=20 alloc=2
+  [0 @0x2e78] color_b=0 active=0 color_g=0 index=0 color_r=0
+  [1 @0x2e7c] color_b=0 active=0 color_g=0 index=1 color_r=0
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml NDEo 0 2 --only index,team,brand,variant,equipment
+table NDEo = customteamequipmenttable block=0x2ec8 record_block=0x30f0 rec=32B cur=600 max=600 alloc=2
+  [0 @0x30f0] team=109 brand=0 equipment=1 variant=1 index=0
+  [1 @0x3110] team=109 brand=0 equipment=2 variant=1 index=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml WdaS 0 1
+table WdaS = exhibitiondlc block=0x1f7c0 record_block=0x1f808 rec=24B cur=1 max=1 alloc=2
+  [0 @0x1f808] key='' index=0
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml LScw 0 2
+table LScw = stockretirednumbertable block=0x13c964 record_block=0x13c9bc rec=4B cur=120 max=120 alloc=2
+  [0 @0x13c9bc] team=0 jerseynumber=99 index=0
+  [1 @0x13c9c0] team=1 jerseynumber=99 index=1
+
+$ python research/nhl08-roster-schema/scripts/record_dump.py anchors/xbox360/nhl08/databases/nhlng.db 0 anchors/xbox360/nhl08/databases/nhlng-meta.xml puAP 0 2
+table puAP = stockteamjerseytable block=0x17bdbc record_block=0x17be24 rec=4B cur=138 max=138 alloc=2
+  [0 @0x17be24] jerseynew=0 team=0 jerseyold=2 jerseydownload=2
+  [1 @0x17be28] jerseynew=0 team=1 jerseyold=2 jerseydownload=2
+

@@ -1,0 +1,1198 @@
+# SYNTHETIC FIXTURE — every value below is INVENTED.
+#
+# It exists to exercise the `asset-output-profile/3` representations for which no real fact is
+# established anywhere in this repository: mesh vertex layouts, UV conventions, rigs and palettes,
+# audio bank/sample constraints, atlases and pools, mip policies, tiling alignment, the
+# `not-applicable` state, the candidate channel, correlated variants with structured selectors,
+# per-sub-property evidence, and — nowhere else in the repository — an established constraint at
+# `supported-target-constraint` scope carrying `force = "target-required"`.
+#
+# `fixturefour-synthetic` carries the three C0-AS3-R1 representations no real profile exercises:
+# two variants of one family arriving in DIFFERENT container chains, a `[corpus.bridge]` that
+# carries attribution across an extraction, and an established constraint at `specimen-observation`
+# scope — decided, and operative for nothing.
+#
+# THAT LAST ONE MATTERS AND IS ONLY LEGITIMATE HERE. No real target in this repository has a
+# demonstrated target requirement: nothing has been load-tested, acceptance-tested or checked
+# against a shipping manifest. The fixture carries one so the REFUSAL path — the one that says a
+# Build may not have another value — has a test, without any real profile claiming it.
+#
+# It is NOT a target profile. It carries `synthetic = true`, its targets are `fixtureone-synthetic`,
+# `fixturetwo-synthetic`, `fixturethree-synthetic` and `fixturefour-synthetic` (not catalog units),
+# it lives outside
+# `defs/adapters/`, and `tdb_canonical::asset_registry_population` EXCLUDES synthetic profiles.
+# Exercising a representation therefore cannot inflate coverage by a single row.
+#
+# Its `family` must still be one of the fourteen tracked families, because the vocabulary is closed;
+# `assets-arenas` is used so all three asset classes can be declared in one document.
+
+schema = "asset-output-profile/3"
+profile_version = 2
+family = "assets-arenas"
+synthetic = true
+note = "Synthetic. No value here describes any real game, and no citation here names a real audit."
+
+[[canonical_source]]
+role = "arena-mesh"
+class = "mesh"
+interchange = "mesh-canonical"
+retention = "unmodified"
+
+[[canonical_source]]
+role = "arena-texture"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+
+[[canonical_source]]
+role = "arena-audio"
+class = "audio"
+interchange = "pcm-s16"
+retention = "unmodified"
+
+# ========================================================== fully-populated synthetic target
+
+[[target_profile]]
+target = "fixtureone-synthetic"
+note = "Exercises every block in its established state, plus every dependency that only fires when two blocks are established together."
+
+[[target_profile.corpus]]
+id = "fixture-shipping-copy"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "complete"
+identity_source = "synthetic:fixture container header"
+inspected_files = 4096
+groups = ["current"]
+provenance = ["synthetic:fixture"]
+
+[[target_profile.path_family]]
+id = "heads"
+template = "heads/{player-slug}.gnf"
+tokens = ["player-slug"]
+case = "lower"
+bucket_resolution = "template-only"
+note = "The template resolves a path by itself, so no bucket directory is involved and none is observed. This is the shape a RESOLVED family has."
+
+[target_profile.discovery]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.discovery.value]
+scope = "archive-member"
+root = "assets/arena"
+recursive = true
+
+[target_profile.identity]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.identity.value]
+key = "player-slug"
+source = "synthetic:bio-table"
+ambiguity = "reject"
+
+[target_profile.container]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.container.value]
+outermost_layer_examined = true
+
+[[target_profile.container.value.layer]]
+format = "eb3"
+index = "offset-table"
+
+[[target_profile.container.value.layer]]
+format = "gnf"
+index = "none"
+note = "The innermost layer holds the payload itself, so it is the only one allowed to be index-free."
+
+[target_profile.path_rule]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.path_rule.value]
+families = ["heads"]
+family_selection = "synthetic:one family, chosen by the asset's canonical role"
+
+[target_profile.raster]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.raster.value]
+codec = "dxt5"
+color_space = "srgb"
+channels = ["r", "g", "b", "a"]
+alpha = "straight"
+
+[target_profile.dimensions]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.dimensions.value]
+width = 256
+height = 256
+variant = "detail"
+power_of_two = true
+
+[target_profile.mipmaps]
+state = "established"
+confidence = "derived"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+derivation = """
+PREMISES: (1) synthetic:fixture measures a 5-level chain on this synthetic target; (2) the
+established [dimensions] block gives a 256x256 surface, which admits at most 9 levels.
+APPLICABILITY: both premises are measured on THIS synthetic target.
+NOT ESTABLISHED: the filter is proposed from the same source and is not independently measured.
+"""
+provenance = ["synthetic:fixture"]
+
+[target_profile.mipmaps.value]
+policy = "fixed-count"
+count = 5
+filter = "box"
+
+[target_profile.compression]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.compression.value]
+payload = "chunkzip"
+deterministic = true
+
+[target_profile.tiling]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.tiling.value]
+kind = "gnf-tiled"
+alignment_bytes = 256
+
+[target_profile.atlas]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.atlas.value]
+sharing = "shared-surface"
+kind = "atlas"
+page_width = 1024
+page_height = 1024
+cell_x = 256
+cell_y = 512
+cell_width = 256
+cell_height = 256
+
+[target_profile.mesh_layout]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.mesh_layout.value]
+vertex_stride_bytes = 32
+index_format = "u16"
+winding = "ccw"
+coordinate_system = "y-up-lh"
+unit = "centimetre"
+lod_levels = 3
+
+[[target_profile.mesh_layout.value.vertex_attribute]]
+semantic = "position"
+component_type = "f32"
+component_count = 3
+byte_offset = 0
+
+[[target_profile.mesh_layout.value.vertex_attribute]]
+semantic = "normal"
+component_type = "i8-normalized"
+component_count = 4
+byte_offset = 12
+
+[[target_profile.mesh_layout.value.vertex_attribute]]
+semantic = "uv"
+index = 0
+component_type = "f16"
+component_count = 2
+byte_offset = 16
+
+[[target_profile.mesh_layout.value.vertex_attribute]]
+semantic = "uv"
+index = 1
+component_type = "f16"
+component_count = 2
+byte_offset = 20
+
+[[target_profile.mesh_layout.value.vertex_attribute]]
+semantic = "blend_index"
+component_type = "u8"
+component_count = 4
+byte_offset = 24
+
+[[target_profile.mesh_layout.value.vertex_attribute]]
+semantic = "blend_weight"
+component_type = "u8-normalized"
+component_count = 4
+byte_offset = 28
+
+[target_profile.uv]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.uv.value]
+origin = "top-left"
+wrap = "clamp"
+channel_count = 2
+
+[target_profile.rig]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.rig.value]
+bone_count = 122
+palette_size = 64
+max_weights_per_vertex = 4
+weight_quantization = "u8-normalized"
+bind_pose = "model-space"
+
+[target_profile.audio]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.audio.value]
+bank = "indexed-bank"
+codec = "pcm-s16"
+sample_rate_hz = 48000
+channels = 2
+bit_depth = 16
+loop_metadata = "preserved-opaque"
+max_duration_ms = 30000
+
+[target_profile.install]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.install.value]
+kind = "archive-append-relocate"
+size_policy = "allow-growth"
+repack = "index-update"
+backup = "whole-container-retained"
+updates_references = true
+
+[target_profile.runtime_lookup]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-shipping-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.runtime_lookup.value]
+source = "archive-member"
+patch_precedence = "patch-shadows-base"
+evidence = "synthetic:fixture load trace"
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster", "dimensions", "tiling"]
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
+
+# ================================ synthetic target exercising absence, pools and the candidate channel
+
+[[target_profile]]
+target = "fixturetwo-synthetic"
+note = "Exercises `not-applicable` with its reason, a pooled surface, a loose-file install and a non-operative candidate on an asset block."
+
+[[target_profile.corpus]]
+id = "fixture-two-copy"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "complete"
+identity_source = "synthetic:fixture container header"
+inspected_files = 512
+groups = ["current"]
+provenance = ["synthetic:fixture"]
+
+[[target_profile.path_family]]
+id = "logos"
+template = "logo_{team-id}_{variant}.dds"
+tokens = ["team-id", "variant"]
+case = "lower"
+bucket_resolution = "template-only"
+
+[target_profile.discovery]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.discovery.value]
+scope = "loose-tree"
+root = "art/logos"
+recursive = false
+
+[target_profile.identity]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.identity.value]
+key = "numeric-id"
+source = "synthetic:team-table"
+ambiguity = "manual-resolution"
+
+[target_profile.container]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.container.value]
+outermost_layer_examined = true
+
+[[target_profile.container.value.layer]]
+format = "loose-file"
+index = "none"
+
+[target_profile.path_rule]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.path_rule.value]
+families = ["logos"]
+family_selection = "synthetic:one family"
+
+[target_profile.raster]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.raster.value]
+codec = "l8"
+color_space = "linear"
+channels = ["r"]
+alpha = "none"
+
+[target_profile.dimensions]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.dimensions.value]
+width = 96
+height = 64
+variant = "hud"
+power_of_two = false
+
+[target_profile.mipmaps]
+state = "not-applicable"
+reason = "synthetic:fixture records this target's HUD surfaces as single-level: the loader indexes one surface per slot and has no level field to read. An unexamined chain would be `unknown` instead."
+
+[target_profile.compression]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.compression.value]
+payload = "none"
+deterministic = true
+
+[target_profile.tiling]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.tiling.value]
+kind = "linear"
+
+[target_profile.atlas]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.atlas.value]
+sharing = "shared-surface"
+kind = "pool"
+page_width = 512
+page_height = 512
+slot = 7
+
+[target_profile.mesh_layout]
+state = "unknown"
+
+[target_profile.mesh_layout.candidate]
+confidence = "asserted"
+scope = "specimen-observation"
+provenance = ["synthetic:neighbouring-fixture"]
+note = "Proposed from a neighbouring synthetic target's layout. A resemblance is not a bridge, so it stays non-operative — `established()` cannot see it — and it does not satisfy any operation requirement."
+
+[target_profile.mesh_layout.candidate.value]
+vertex_stride_bytes = 20
+index_format = "u16"
+winding = "cw"
+coordinate_system = "z-up-rh"
+unit = "metre"
+lod_levels = 1
+
+[[target_profile.mesh_layout.candidate.value.vertex_attribute]]
+semantic = "position"
+component_type = "f32"
+component_count = 3
+byte_offset = 0
+
+[[target_profile.mesh_layout.candidate.value.vertex_attribute]]
+semantic = "uv"
+component_type = "f16"
+component_count = 2
+byte_offset = 12
+
+[target_profile.uv]
+state = "unknown"
+
+[target_profile.rig]
+state = "not-applicable"
+reason = "synthetic:fixture records this target's logo geometry as an unskinned quad: the vertex layout carries no blend index or weight stream, so there is no rig to describe."
+
+[target_profile.audio]
+state = "unknown"
+
+[target_profile.install]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.install.value]
+kind = "loose-file"
+size_policy = "allow-growth"
+repack = "not-required"
+backup = "original-bytes-retained"
+
+[target_profile.runtime_lookup]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-two-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.runtime_lookup.value]
+source = "loose-file"
+patch_precedence = "no-patch-layer"
+evidence = "synthetic:fixture load trace"
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install"]
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster", "dimensions", "tiling", "mipmaps"]
+note = "Satisfied even though [mipmaps] is not established: `not-applicable` is a DECIDED fact an exporter can act on, and only `unknown` blocks."
+
+[[target_profile.operation]]
+operation = "rebuild"
+requires = ["mesh_layout", "uv"]
+note = "Blocked: both blocks are unknown, and the candidate on [mesh_layout] does not count toward either."
+
+# ============================== synthetic target exercising correlated variants and partial values
+
+[[target_profile]]
+target = "fixturethree-synthetic"
+note = """
+Exercises the `/3` additions end to end: two path families, three correlated variants whose selectors
+overlap in a way one query can resolve and another cannot, a partially known raster block, and an
+[atlas] established on `sharing` with its `kind` deliberately unknown.
+
+The `hero` variant carries a `target-required` codec so the REFUSAL path has a test; the `banner`
+variants carry `observed-source-format`, so a Build asking for a different codec there is BLOCKED
+rather than refused. That difference is the whole point of the force axis and it is only exercisable
+on a fixture, because no real target here has a demonstrated target requirement.
+"""
+
+[[target_profile.corpus]]
+id = "fixture-three-copy"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "incomplete"
+identity_source = "synthetic:fixture container header"
+inspected_files = 8192
+groups = ["current", "backup-labelled"]
+limitations = ["synthetic:fixture records no build string, so the exact build behind this corpus is unidentified."]
+provenance = ["synthetic:fixture"]
+
+[[target_profile.corpus]]
+id = "fixture-three-extraction"
+kind = "extracted-tree"
+attribution = "not-attributable"
+build_identification = "incomplete"
+identity_source = "synthetic:fixture extraction manifest"
+inspected_files = 8192
+groups = ["current"]
+limitations = ["An extraction. Nothing measured in it is attributable to the shipped target, however exhaustively it was inspected."]
+provenance = ["synthetic:fixture"]
+
+[[target_profile.path_family]]
+id = "hero"
+template = "hero/{numeric-id}.gnf"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "template-only"
+
+[[target_profile.path_family]]
+id = "banner"
+template = "banner/{variant}/{numeric-id}.gnf"
+tokens = ["variant", "numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "`{variant}` stands for a bucket directory nothing computes. Observed membership below is membership, not a rule — and it keeps [path_rule] unestablishable on this target."
+
+[[target_profile.path_family.observed_bucket]]
+directory = "b0_100"
+census = "synthetic:fixture census#banner_bucket_membership"
+census_digest = "0000000000000000000000000000000000000000000000000000000000000001"
+scope = "inspected-corpus-invariant"
+corpus = "fixture-three-copy"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "b101_200"
+census = "synthetic:fixture census#banner_bucket_membership"
+census_digest = "0000000000000000000000000000000000000000000000000000000000000001"
+scope = "inspected-corpus-invariant"
+corpus = "fixture-three-copy"
+note = "The census records ids above 200 in this folder. The membership lives there and not here, because a column of ranges in a profile reads as a lookup table."
+
+[[target_profile.variant]]
+id = "hero-256x256"
+note = "Selected by path family alone."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "hero"
+
+[target_profile.variant.raster]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.raster.value]
+codec = "dxt5"
+color_space = "srgb"
+channels = ["r", "g", "b", "a"]
+alpha = "straight"
+
+[target_profile.variant.dimensions]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.dimensions.value]
+width = 256
+height = 256
+variant = "hero"
+power_of_two = true
+
+[target_profile.variant.mipmaps]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.mipmaps.value]
+policy = "fixed-count"
+count = 3
+
+[target_profile.variant.tiling]
+state = "established"
+confidence = "measured"
+scope = "supported-target-constraint"
+force = "target-required"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.tiling.value]
+kind = "gnf-tiled"
+
+[[target_profile.variant]]
+id = "banner-512x128"
+note = "One of two forms inside the `banner` family. Only the stored size separates them, so a query giving the family alone is ambiguous between the two — and is refused rather than resolved."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "banner"
+
+[[target_profile.variant.selector]]
+dimension = "stored-dimensions"
+width = 512
+height = 128
+
+[target_profile.variant.raster]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.raster.value]
+codec = "bc7"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.raster.property.color_space]
+state = "unknown"
+reason = "synthetic:fixture records no colour space for this form, and filling one to complete the bundle is the failure this schema exists to prevent."
+scope = "inspected-corpus-invariant"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.raster.property.alpha]
+state = "unknown"
+reason = "synthetic:fixture decoded three banners, which is a specimen observation and not a target-wide alpha mode."
+scope = "specimen-observation"
+confidence = "measured"
+provenance = ["synthetic:fixture"]
+candidate_value = "straight"
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Circular: this variant is selected BY its stored size, so reporting that size as a finding about the variant would report the definition as the discovery."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+
+[target_profile.variant.tiling]
+state = "unknown"
+
+[target_profile.variant.tiling.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+note = "Three specimens decoded without a deswizzle. A proposal, not a corpus invariant."
+
+[target_profile.variant.tiling.candidate.value]
+kind = "linear"
+
+[[target_profile.variant]]
+id = "banner-512x256"
+note = "The second `banner` form. Its constraints sit inside it, so no reader can pair this size with the other form's codec."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "banner"
+
+[[target_profile.variant.selector]]
+dimension = "stored-dimensions"
+width = 512
+height = 256
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Provenance: the only inspection of this form was of an extraction, which is not attributable to the target."
+
+[target_profile.variant.raster.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "fixture-three-extraction"
+provenance = ["synthetic:fixture"]
+note = "Invariant over an extracted tree, which is why it is a proposal rather than a constraint."
+
+[target_profile.variant.raster.candidate.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Circular here too."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+
+[target_profile.variant.tiling]
+state = "unknown"
+
+[target_profile.discovery]
+state = "unknown"
+note = "Observed placement only."
+
+[target_profile.identity]
+state = "unknown"
+
+[target_profile.container]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+derivation = "Invariant across every inspected file in both groups. Force is `observed-source-format`: nothing here shows the target rejects another container, so reproducing this one is authorised and departing from it is blocked rather than refused."
+
+[target_profile.container.value]
+outermost_layer_examined = true
+
+[[target_profile.container.value.layer]]
+format = "gnf"
+index = "none"
+
+[target_profile.path_rule]
+state = "unknown"
+note = "The `banner` family's bucket resolution is unknown, and there are two families. Either blocks it."
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.compression]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+derivation = "Invariant across every inspected file in both groups; nothing shows the target rejects another payload codec."
+
+[target_profile.compression.value]
+payload = "chunkzip"
+deterministic = false
+
+[target_profile.atlas]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-three-copy"
+provenance = ["synthetic:fixture"]
+derivation = "Exactly one texture payload per container across every inspected file. That establishes that no surface is shared between assets, and nothing more."
+
+[target_profile.atlas.value]
+sharing = "per-asset-surface"
+
+[target_profile.atlas.property.kind]
+state = "unknown"
+reason = "Counting payloads per container does not distinguish an atlas from a pool from neither, and answers nothing about page geometry or slot addressing."
+scope = "inspected-corpus-invariant"
+confidence = "measured"
+provenance = ["synthetic:fixture"]
+
+[target_profile.mesh_layout]
+state = "unknown"
+
+[target_profile.uv]
+state = "unknown"
+
+[target_profile.rig]
+state = "unknown"
+
+[target_profile.audio]
+state = "unknown"
+
+[target_profile.install]
+state = "unknown"
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "Nothing establishes what the runtime loads, or what a patch layer would take precedence over."
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = ["container", "raster.codec", "raster.color_space", "dimensions", "atlas.kind"]
+note = "Blocked on every variant, and for different reasons per variant — which is what a per-sub-property requirement makes visible."
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
+
+# =====================================================================================
+# fixturefour-synthetic — C0-AS3-R1: per-variant containers, a provenance bridge, and a
+# specimen observation that is established and still decides nothing.
+# =====================================================================================
+
+[[target_profile]]
+target = "fixturefour-synthetic"
+note = """
+Three things no real profile in this repository can demonstrate.
+
+FIRST, two forms of one family that do NOT share a container. The `loose` form is a bare texture on
+disk; the `packed` form is a member of an archive. `[container]` is therefore stated per variant and
+left unknown at target level, which is the other half of the rule fixturethree exercises: there the
+one chain is shared and no variant restates it. Deciding it at both levels is refused, so a reader
+never has to ask which level wins.
+
+SECOND, a `[corpus.bridge]`. `fixture-four-extraction` is an extraction and is not attributable by
+construction — but the extractor wrote a manifest naming the archive member each file came from, and
+that manifest is a record which survived the extraction. With it, the extraction supports the
+placement facts extracting normally discards. Without it, the same bytes support nothing of the sort.
+
+THIRD, `[tiling]` established at `specimen-observation` scope, on the unattributable
+`fixture-four-loose-specimens`. It is a true statement about four decoded files and it is NOT
+operative: `AssetConstraint::operative` does not return it, no operation's requirement is satisfied
+by it, and a Build that proposes another tiling is BLOCKED rather than checked against it. Recording
+it beats discarding it — somebody measured those files — and recording it does not promote it.
+"""
+
+[[target_profile.corpus]]
+id = "fixture-four-copy"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "complete"
+identity_source = "synthetic:fixture container header and build string"
+inspected_files = 4096
+groups = ["current"]
+provenance = ["synthetic:fixture"]
+
+[[target_profile.corpus]]
+id = "fixture-four-extraction"
+kind = "extracted-tree"
+attribution = "not-attributable"
+build_identification = "complete"
+identity_source = "synthetic:fixture extraction manifest"
+inspected_files = 2048
+groups = ["current"]
+limitations = ["An extraction: the tree itself is not something the title ships. What it carries here it carries through its bridge, not through its own standing."]
+provenance = ["synthetic:fixture"]
+
+[target_profile.corpus.bridge]
+method = "archive-member-manifest"
+original_corpus = "fixture-four-copy"
+provenance = ["synthetic:fixture extraction manifest"]
+note = "The manifest names the archive member every extracted file came from, so the placement the extraction would otherwise have discarded is recoverable. A bridge is that record — not a claim that one existed."
+
+[[target_profile.corpus]]
+id = "fixture-four-loose-specimens"
+kind = "extracted-tree"
+attribution = "not-attributable"
+build_identification = "incomplete"
+identity_source = "synthetic:fixture specimen list"
+inspected_files = 4
+groups = ["current"]
+limitations = ["Four named files, kept as an example. No bridge, so nothing here reaches a placement fact or speaks for the target."]
+provenance = ["synthetic:fixture"]
+
+[[target_profile.path_family]]
+id = "loose"
+template = "loose/{numeric-id}.tex"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "template-only"
+
+[[target_profile.path_family]]
+id = "packed"
+template = "packed/{numeric-id}.tex"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "template-only"
+
+# ---- the loose form: no archive around it -------------------------------------------
+[[target_profile.variant]]
+id = "loose-texture"
+note = "A bare texture on disk. Its chain is one layer long and has no index."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "loose"
+
+[target_profile.variant.container]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-four-copy"
+provenance = ["synthetic:fixture"]
+derivation = "Every inspected file of this form is a bare texture. Force is `observed-source-format`: nothing here shows the target refuses another chain."
+
+[target_profile.variant.container.value]
+outermost_layer_examined = true
+
+[[target_profile.variant.container.value.layer]]
+format = "dds"
+index = "none"
+
+[target_profile.variant.raster]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-four-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.raster.value]
+codec = "dxt1"
+channels = ["r", "g", "b"]
+color_space = "srgb"
+alpha = "none"
+
+[target_profile.variant.dimensions]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-four-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.dimensions.value]
+width = 128
+height = 128
+variant = "loose"
+power_of_two = true
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+
+[target_profile.variant.tiling]
+state = "established"
+confidence = "measured"
+scope = "specimen-observation"
+force = "observed-source-format"
+corpus = "fixture-four-loose-specimens"
+provenance = ["synthetic:fixture"]
+note = "Four decoded specimens. ESTABLISHED — somebody measured them and this is what they found — and NOT operative: it speaks for those four files, so no Build reads it and no operation requiring [tiling] is satisfied by it."
+
+[target_profile.variant.tiling.value]
+kind = "linear"
+
+# ---- the packed form: an archive member ----------------------------------------------
+[[target_profile.variant]]
+id = "packed-member"
+note = "The same family, arriving inside an archive. A different chain, stated where it holds."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "packed"
+
+[target_profile.variant.container]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-four-copy"
+provenance = ["synthetic:fixture"]
+derivation = "Every inspected file of this form is an archive member. Two forms, two chains: correlating the chain with the form is what keeps a Build from planning a loose write into an archive."
+
+[target_profile.variant.container.value]
+outermost_layer_examined = true
+
+[[target_profile.variant.container.value.layer]]
+format = "bigf"
+index = "name-table"
+
+[[target_profile.variant.container.value.layer]]
+format = "dds"
+index = "none"
+
+[target_profile.variant.raster]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-four-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.raster.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+color_space = "srgb"
+alpha = "straight"
+
+[target_profile.variant.dimensions]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-four-copy"
+provenance = ["synthetic:fixture"]
+
+[target_profile.variant.dimensions.value]
+width = 256
+height = 256
+variant = "packed"
+power_of_two = true
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+
+[target_profile.variant.tiling]
+state = "unknown"
+
+# ---- target level ---------------------------------------------------------------------
+[target_profile.discovery]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "fixture-four-extraction"
+provenance = ["synthetic:fixture extraction manifest"]
+derivation = "A PLACEMENT fact resting on an extraction, which is legitimate here and nowhere else in this repository: the bridge names the archive member each extracted file came from, so where the files sat is recorded rather than reconstructed from the extractor's output layout."
+
+[target_profile.discovery.value]
+scope = "archive-member"
+root = "packed"
+recursive = false
+
+[target_profile.identity]
+state = "unknown"
+
+[target_profile.container]
+state = "unknown"
+note = "Deliberately unknown: the two forms do not share a chain, so each states its own. A shared value here would be a third answer neither form carries."
+
+[target_profile.path_rule]
+state = "unknown"
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.compression]
+state = "unknown"
+
+[target_profile.atlas]
+state = "unknown"
+
+[target_profile.mesh_layout]
+state = "unknown"
+
+[target_profile.uv]
+state = "unknown"
+
+[target_profile.rig]
+state = "unknown"
+
+[target_profile.audio]
+state = "unknown"
+
+[target_profile.install]
+state = "unknown"
+
+[target_profile.runtime_lookup]
+state = "unknown"
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions"]
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+note = "Requires [tiling], which the loose form establishes only at specimen scope — so this operation stays blocked on that form. Established is not operative."

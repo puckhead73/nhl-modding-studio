@@ -1,0 +1,238 @@
+{
+ "note": "R134 - Players 3.4 on the archive-held PS3 titles (NHL 08 -> 14; R53 walked only PS3 NHL 15 / Legacy): portrait and head member names\nfrom the title's archives (EB via the R104 member map; BIG4 via big4_list), joined to the anchor's exhibitionplayerbiotable (artid, headid)\nexactly as R124 did for the loose trees: files per family, roster rows with / without a portrait / head file, head texture libraries,\nextra per-head texture files (`head_<id>_cm`, `hair_<id>_cm`), pool floor (Studio's data-driven rule) and unused targets. Listing only.\nUsage: python r134_ps3_archive_portrait_head_containment.py <out.json>\n",
+ "titles": {
+  "ps3-nhl08": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 08\\PS3_GAME\\USRDIR",
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "bio_rows": 2962,
+   "pool_floor": 10000,
+   "files": {
+    "portraits": 3493,
+    "head_meshes": 442,
+    "texlibs": 0,
+    "head_cm_textures": 0,
+    "hair_cm_textures": 242
+   },
+   "sources": {
+    "data0.big": 3493,
+    "data1.big": 442
+   },
+   "rows_by_head_class": {
+    "non-pool / mesh": 162,
+    "non-pool / no mesh": 336,
+    "pool / mesh": 2464
+   },
+   "rows_by_portrait_flag": {
+    "hasportrait=None / file": 2782
+   },
+   "roster_heads_with_texlib": 0,
+   "roster_heads_with_head_cm": 0,
+   "unused_head_meshes": 180,
+   "unused_portraits": 710,
+   "missing_head_files_sample": [
+    3000,
+    3005,
+    3007,
+    3008,
+    3009,
+    3011,
+    3023,
+    3025,
+    3039,
+    3041
+   ]
+  },
+  "ps3-nhl09": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 09\\PS3_GAME\\USRDIR",
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "bio_rows": 3968,
+   "pool_floor": 10000,
+   "files": {
+    "portraits": 2920,
+    "head_meshes": 480,
+    "texlibs": 0,
+    "head_cm_textures": 0,
+    "hair_cm_textures": 343
+   },
+   "sources": {
+    "fe.big": 2920,
+    "player.big": 480
+   },
+   "rows_by_head_class": {
+    "non-pool / mesh": 252,
+    "non-pool / no mesh": 5,
+    "pool / mesh": 3711
+   },
+   "rows_by_portrait_flag": {
+    "hasportrait=0 / file": 1,
+    "hasportrait=0 / no file": 1078,
+    "hasportrait=1 / file": 2705
+   },
+   "roster_heads_with_texlib": 0,
+   "roster_heads_with_head_cm": 0,
+   "unused_head_meshes": 129,
+   "unused_portraits": 214,
+   "missing_head_files_sample": [
+    3034,
+    3074,
+    3373,
+    3802,
+    3886
+   ]
+  },
+  "ps3-nhl10": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 10\\PS3_GAME\\USRDIR",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "bio_rows": 3933,
+   "pool_floor": 10000,
+   "files": {
+    "portraits": 3637,
+    "head_meshes": 742,
+    "texlibs": 0,
+    "head_cm_textures": 522,
+    "hair_cm_textures": 394
+   },
+   "sources": {
+    "fe.big": 3637,
+    "player.big": 742
+   },
+   "rows_by_head_class": {
+    "non-pool / mesh": 272,
+    "pool / mesh": 3661
+   },
+   "rows_by_portrait_flag": {
+    "hasportrait=0 / file": 4,
+    "hasportrait=0 / no file": 795,
+    "hasportrait=1 / file": 2954
+   },
+   "roster_heads_with_texlib": 0,
+   "roster_heads_with_head_cm": 370,
+   "unused_head_meshes": 372,
+   "unused_portraits": 679,
+   "missing_head_files_sample": []
+  },
+  "ps3-nhl11": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "bio_rows": 5310,
+   "pool_floor": 10000,
+   "files": {
+    "portraits": 5397,
+    "head_meshes": 821,
+    "texlibs": 0,
+    "head_cm_textures": 601,
+    "hair_cm_textures": 470
+   },
+   "sources": {
+    "fe.big": 5397,
+    "rendercache.big": 821
+   },
+   "rows_by_head_class": {
+    "non-pool / mesh": 257,
+    "pool / mesh": 5053
+   },
+   "rows_by_portrait_flag": {
+    "hasportrait=0 / file": 1,
+    "hasportrait=0 / no file": 860,
+    "hasportrait=1 / file": 4269
+   },
+   "roster_heads_with_texlib": 0,
+   "roster_heads_with_head_cm": 424,
+   "unused_head_meshes": 397,
+   "unused_portraits": 1130,
+   "missing_head_files_sample": []
+  },
+  "ps3-nhl12": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 12\\[BLUS 30791] NHL® 12\\PS3_GAME\\USRDIR",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "bio_rows": 5395,
+   "pool_floor": 10000,
+   "files": {
+    "portraits": 6158,
+    "head_meshes": 778,
+    "texlibs": 0,
+    "head_cm_textures": 559,
+    "hair_cm_textures": 461
+   },
+   "sources": {
+    "nocacherender.big": 6158,
+    "cacherender.big": 778
+   },
+   "rows_by_head_class": {
+    "non-pool / mesh": 256,
+    "pool / mesh": 5139
+   },
+   "rows_by_portrait_flag": {
+    "hasportrait=0 / file": 1,
+    "hasportrait=0 / no file": 786,
+    "hasportrait=1 / file": 4427
+   },
+   "roster_heads_with_texlib": 0,
+   "roster_heads_with_head_cm": 432,
+   "unused_head_meshes": 346,
+   "unused_portraits": 1730,
+   "missing_head_files_sample": []
+  },
+  "ps3-nhl13": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 13\\PS3_GAME\\USRDIR",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "bio_rows": 5412,
+   "pool_floor": 10000,
+   "files": {
+    "portraits": 6823,
+    "head_meshes": 817,
+    "texlibs": 598,
+    "head_cm_textures": 0,
+    "hair_cm_textures": 0
+   },
+   "sources": {
+    "nocacherender.big": 6823,
+    "cacherender.big": 817
+   },
+   "rows_by_head_class": {
+    "non-pool / mesh": 270,
+    "pool / mesh": 5142
+   },
+   "rows_by_portrait_flag": {
+    "hasportrait=0 / file": 93,
+    "hasportrait=0 / no file": 841,
+    "hasportrait=1 / file": 4298
+   },
+   "roster_heads_with_texlib": 442,
+   "roster_heads_with_head_cm": 0,
+   "unused_head_meshes": 375,
+   "unused_portraits": 2433,
+   "missing_head_files_sample": []
+  },
+  "ps3-nhl14": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "bio_rows": 5374,
+   "pool_floor": 10000,
+   "files": {
+    "portraits": 7678,
+    "head_meshes": 841,
+    "texlibs": 622,
+    "head_cm_textures": 0,
+    "hair_cm_textures": 0
+   },
+   "sources": {
+    "nocacherender.big": 7678,
+    "cacherender.big": 841
+   },
+   "rows_by_head_class": {
+    "non-pool / mesh": 263,
+    "pool / mesh": 5111
+   },
+   "rows_by_portrait_flag": {
+    "hasportrait=0 / no file": 652,
+    "hasportrait=1 / file": 4542
+   },
+   "roster_heads_with_texlib": 441,
+   "roster_heads_with_head_cm": 0,
+   "unused_head_meshes": 400,
+   "unused_portraits": 3138,
+   "missing_head_files_sample": []
+  }
+ }
+}

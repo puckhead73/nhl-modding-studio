@@ -269,31 +269,19 @@ fn read_u32_be(data: &[u8], offset: usize) -> Result<u32, ContainerError> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::Path;
+    use crate::fixtures::{require, TEMPLATE_PLAYER_MESH};
 
-    fn template_path() -> std::path::PathBuf {
-        Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("..")
-            .join("..")
-            .join("Working Assets")
-            .join("Template Mesh")
-            .join("player_20500.rx2")
-    }
-
-    fn load_template() -> Option<Vec<u8>> {
-        let p = template_path();
-        if !p.is_file() {
-            return None;
-        }
-        std::fs::read(p).ok()
+    /// The five-submesh head template is private game data. Every case
+    /// that needs it is `#[ignore]`d and fails loudly when selected
+    /// without a configured fixture root — see [`crate::fixtures`].
+    fn load_template() -> Vec<u8> {
+        require(TEMPLATE_PLAYER_MESH)
     }
 
     #[test]
+    #[ignore = "private fixture mesh/player_20500.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn round_trip_template_byte_identical() {
-        let Some(data) = load_template() else {
-            eprintln!("skipping: template player_20500.rx2 not present");
-            return;
-        };
+        let data = load_template();
         let c = parse(&data).expect("parse");
         let out = c.encode();
         assert_eq!(
@@ -320,10 +308,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "private fixture mesh/player_20500.rx2: set NHL_STUDIO_FIXTURES and select with --ignored (docs/validation/c0-fx1-explicit-fixture-tests.md)"]
     fn replace_payload_grows_data_size_and_reflows() {
-        let Some(data) = load_template() else {
-            return;
-        };
+        let data = load_template();
         let mut c = parse(&data).expect("parse");
         // Find the first raw payload and swap its bytes for something
         // a different size. The container should re-flow subsequent

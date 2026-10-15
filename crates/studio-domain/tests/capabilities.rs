@@ -14,14 +14,15 @@ use tdb_core::TdbFile;
 use tdb_defs::FieldMetaIndex;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn probe(rel_db: &str, rel_meta: &str) -> Capabilities {
     let bytes = std::fs::read(repo(rel_db)).unwrap();
     let db = TdbFile::parse(&bytes).unwrap();
-    let meta =
-        FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(rel_meta)).unwrap()).unwrap();
+    let meta = FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(rel_meta)).unwrap()).unwrap();
     Capabilities::probe(&db, &meta)
 }
 
@@ -45,8 +46,9 @@ fn legacy_carries_the_full_optional_set() {
     assert!(c.rookie_chl);
     assert_eq!(c.skater_ratings_total, 26);
     assert_eq!(c.skater_ratings_labelled, 26);
-    assert_eq!(c.goalie_ratings_total, 21);
-    assert_eq!(c.goalie_ratings_labelled, 21);
+    // 20 since 26 Sep: goalie `consistency` (stored 0 / 1 / 2, R118) is no longer classified as a rating.
+    assert_eq!(c.goalie_ratings_total, 20);
+    assert_eq!(c.goalie_ratings_labelled, 20);
 }
 
 /// NHL 10 (Xbox anchor): no arena link, no draft/junior/UFA fields, no style — but its `p_*`/`g_*`
@@ -126,7 +128,10 @@ fn nhl07_is_the_gen6_shape() {
     assert_eq!(c.skater_ratings_labelled, 19);
     assert_eq!(c.goalie_ratings_total, 15);
     assert_eq!(c.goalie_ratings_labelled, 14);
-    assert_eq!(c.main_team_offset, 0, "raw dXSB = team id (verified against the roster)");
+    assert_eq!(
+        c.main_team_offset, 0,
+        "raw dXSB = team id (verified against the roster)"
+    );
 }
 
 /// PS4 NHL 21 (little-endian): the full optional set probes present; the `c_*` ratings (7-bit
@@ -147,5 +152,6 @@ fn ps4_nhl21_probes_clean_on_little_endian() {
     assert_eq!(c.skater_ratings_total, 27, "26 classic + backskating");
     assert_eq!(c.skater_ratings_labelled, 27);
     assert_eq!(c.goalie_ratings_labelled, c.goalie_ratings_total);
-    assert!(c.goalie_ratings_total >= 21);
+    // >= 20 since 26 Sep: goalie `consistency` is not a rating (R118; tests/goalie_consistency.rs).
+    assert!(c.goalie_ratings_total >= 20);
 }

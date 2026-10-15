@@ -1,0 +1,1590 @@
+{
+ "note": "R125b - goalie mask assignment levels (package 4). Read-only.\n(1) NHL 08 / 09: `exhibitiongoalieequipment.hascustommask` / `maskcolor` / `maskpattern` / `maskrank` / `masktype` value sets, the\n    cross-table hascustommask x maskcolor, and maskcolor's containment in the mask-paint position (n3 of `goaliehelmet_<a>_<b>_<c>_<d>`).\n(2) NHL 10 -> PS4 21 (+ genuine NHL 20): team-level `exhibitionteams.goaliemask<k>_{starter,backup}`: per slot the non-zero share and the\n    values' containment in the title's goalie maskid value set (gen7 loose trees: also in the mask-paint file position); and, per goalie\n    (roster -> team, the goalie's main team `dXSB`-free join through `exhibitionrostertable.teamid` where present), whether goalies with\n    maskid 0 belong to teams whose slots are non-zero - the \"maskid 0 = team mask\" reading is a CANDIDATE only.\nUsage: python r125b_goalie_mask_levels.py <out.json>\n",
+ "titles": {
+  "xbox360-nhl08": {
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "goalie_rows": 315,
+   "paint_file_ids": 119,
+   "nhl08_09": {
+    "hascustommask": [
+     [
+      0,
+      315
+     ]
+    ],
+    "maskcolor": [
+     [
+      0,
+      113
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      2
+     ],
+     [
+      3,
+      2
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      5,
+      2
+     ],
+     [
+      6,
+      2
+     ],
+     [
+      7,
+      2
+     ],
+     [
+      8,
+      2
+     ],
+     [
+      9,
+      2
+     ],
+     [
+      10,
+      2
+     ],
+     [
+      11,
+      2
+     ],
+     [
+      12,
+      2
+     ],
+     [
+      13,
+      2
+     ],
+     [
+      14,
+      2
+     ],
+     [
+      15,
+      2
+     ],
+     [
+      16,
+      2
+     ],
+     [
+      17,
+      2
+     ],
+     [
+      18,
+      2
+     ],
+     [
+      19,
+      2
+     ],
+     [
+      20,
+      2
+     ],
+     [
+      21,
+      2
+     ],
+     [
+      22,
+      2
+     ],
+     [
+      23,
+      2
+     ],
+     [
+      24,
+      2
+     ],
+     [
+      25,
+      2
+     ],
+     [
+      26,
+      2
+     ],
+     [
+      27,
+      2
+     ],
+     [
+      28,
+      2
+     ],
+     [
+      29,
+      2
+     ],
+     [
+      34,
+      2
+     ],
+     [
+      35,
+      2
+     ],
+     [
+      38,
+      3
+     ],
+     [
+      40,
+      1
+     ],
+     [
+      41,
+      1
+     ],
+     [
+      42,
+      2
+     ],
+     [
+      43,
+      1
+     ],
+     [
+      44,
+      3
+     ],
+     [
+      45,
+      2
+     ],
+     [
+      46,
+      2
+     ]
+    ],
+    "maskpattern": [
+     [
+      0,
+      315
+     ]
+    ],
+    "maskrank": [
+     [
+      0,
+      197
+     ],
+     [
+      1,
+      118
+     ]
+    ],
+    "masktype": [
+     [
+      0,
+      309
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      4
+     ]
+    ],
+    "hascustommask_x_maskcolor_nonzero": {
+     "custom=0 maskcolor_nonzero=False": 113,
+     "custom=0 maskcolor_nonzero=True": 202
+    },
+    "maskcolor_in_paint_ids": "99/99",
+    "maskcolor_missing": []
+   }
+  },
+  "xbox360-nhl09": {
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "goalie_rows": 415,
+   "paint_file_ids": 172,
+   "nhl08_09": {
+    "hascustommask": [
+     [
+      0,
+      415
+     ]
+    ],
+    "maskcolor": [
+     [
+      0,
+      70
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      2
+     ],
+     [
+      3,
+      2
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      5,
+      2
+     ],
+     [
+      6,
+      2
+     ],
+     [
+      7,
+      2
+     ],
+     [
+      8,
+      2
+     ],
+     [
+      9,
+      2
+     ],
+     [
+      10,
+      2
+     ],
+     [
+      11,
+      2
+     ],
+     [
+      12,
+      2
+     ],
+     [
+      13,
+      2
+     ],
+     [
+      14,
+      2
+     ],
+     [
+      15,
+      2
+     ],
+     [
+      16,
+      2
+     ],
+     [
+      17,
+      2
+     ],
+     [
+      18,
+      2
+     ],
+     [
+      19,
+      2
+     ],
+     [
+      20,
+      2
+     ],
+     [
+      21,
+      2
+     ],
+     [
+      22,
+      2
+     ],
+     [
+      23,
+      2
+     ],
+     [
+      24,
+      2
+     ],
+     [
+      25,
+      2
+     ],
+     [
+      26,
+      2
+     ],
+     [
+      27,
+      2
+     ],
+     [
+      28,
+      2
+     ],
+     [
+      29,
+      2
+     ],
+     [
+      34,
+      2
+     ],
+     [
+      35,
+      2
+     ],
+     [
+      38,
+      3
+     ],
+     [
+      40,
+      1
+     ],
+     [
+      42,
+      2
+     ],
+     [
+      43,
+      3
+     ],
+     [
+      44,
+      2
+     ],
+     [
+      45,
+      2
+     ],
+     [
+      46,
+      2
+     ],
+     [
+      47,
+      2
+     ]
+    ],
+    "maskpattern": [
+     [
+      0,
+      415
+     ]
+    ],
+    "maskrank": [
+     [
+      0,
+      221
+     ],
+     [
+      1,
+      183
+     ],
+     [
+      2,
+      11
+     ]
+    ],
+    "masktype": [
+     [
+      0,
+      396
+     ],
+     [
+      1,
+      9
+     ],
+     [
+      2,
+      8
+     ],
+     [
+      100,
+      1
+     ],
+     [
+      103,
+      1
+     ]
+    ],
+    "hascustommask_x_maskcolor_nonzero": {
+     "custom=0 maskcolor_nonzero=False": 70,
+     "custom=0 maskcolor_nonzero=True": 345
+    },
+    "maskcolor_in_paint_ids": "149/149",
+    "maskcolor_missing": []
+   }
+  },
+  "xbox360-nhl10": {
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "goalie_rows": 434,
+   "paint_file_ids": 241,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 182,
+     "nonzero": 182,
+     "distinct_nonzero": 121,
+     "in_goalie_maskids": 113,
+     "in_paint_ids": 121,
+     "max": 249
+    },
+    "goaliemask0_starter": {
+     "teams": 182,
+     "nonzero": 181,
+     "distinct_nonzero": 149,
+     "in_goalie_maskids": 113,
+     "in_paint_ids": 149,
+     "max": 252
+    },
+    "goaliemask1_backup": {
+     "teams": 182,
+     "nonzero": 182,
+     "distinct_nonzero": 40,
+     "in_goalie_maskids": 35,
+     "in_paint_ids": 40,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 182,
+     "nonzero": 181,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 31,
+     "in_paint_ids": 45,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 182,
+     "nonzero": 182,
+     "distinct_nonzero": 23,
+     "in_goalie_maskids": 17,
+     "in_paint_ids": 23,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 182,
+     "nonzero": 181,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 33,
+     "in_paint_ids": 49,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 182,
+     "nonzero": 167,
+     "distinct_nonzero": 7,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 7,
+     "max": 7
+    },
+    "goaliemask3_starter": {
+     "teams": 182,
+     "nonzero": 182,
+     "distinct_nonzero": 7,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 7,
+     "max": 7
+    },
+    "goaliemask4_backup": {
+     "teams": 182,
+     "nonzero": 167,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 182,
+     "nonzero": 182,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 182,
+     "nonzero": 167,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 182,
+     "nonzero": 182,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": 6,
+     "max": 6
+    }
+   }
+  },
+  "xbox360-nhl11": {
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "goalie_rows": 550,
+   "paint_file_ids": 243,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 242,
+     "nonzero": 242,
+     "distinct_nonzero": 122,
+     "in_goalie_maskids": 112,
+     "in_paint_ids": 122,
+     "max": 254
+    },
+    "goaliemask0_starter": {
+     "teams": 242,
+     "nonzero": 241,
+     "distinct_nonzero": 155,
+     "in_goalie_maskids": 131,
+     "in_paint_ids": 155,
+     "max": 253
+    },
+    "goaliemask1_backup": {
+     "teams": 242,
+     "nonzero": 242,
+     "distinct_nonzero": 40,
+     "in_goalie_maskids": 37,
+     "in_paint_ids": 40,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 242,
+     "nonzero": 241,
+     "distinct_nonzero": 46,
+     "in_goalie_maskids": 45,
+     "in_paint_ids": 46,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 242,
+     "nonzero": 242,
+     "distinct_nonzero": 23,
+     "in_goalie_maskids": 21,
+     "in_paint_ids": 23,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 242,
+     "nonzero": 241,
+     "distinct_nonzero": 50,
+     "in_goalie_maskids": 48,
+     "in_paint_ids": 50,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 242,
+     "nonzero": 223,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 242,
+     "nonzero": 240,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 242,
+     "nonzero": 223,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 242,
+     "nonzero": 240,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 242,
+     "nonzero": 223,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 242,
+     "nonzero": 240,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 242,
+     "nonzero": 212,
+     "distinct_nonzero": 7,
+     "in_goalie_maskids": 7,
+     "in_paint_ids": 7,
+     "max": 66
+    },
+    "goaliemask6_starter": {
+     "teams": 242,
+     "nonzero": 211,
+     "distinct_nonzero": 66,
+     "in_goalie_maskids": 64,
+     "in_paint_ids": 66,
+     "max": 66
+    }
+   }
+  },
+  "xbox360-nhl13": {
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "goalie_rows": 537,
+   "paint_file_ids": 249,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 248,
+     "nonzero": 248,
+     "distinct_nonzero": 120,
+     "in_goalie_maskids": 111,
+     "in_paint_ids": 120,
+     "max": 256
+    },
+    "goaliemask0_starter": {
+     "teams": 248,
+     "nonzero": 247,
+     "distinct_nonzero": 155,
+     "in_goalie_maskids": 126,
+     "in_paint_ids": 155,
+     "max": 259
+    },
+    "goaliemask1_backup": {
+     "teams": 248,
+     "nonzero": 248,
+     "distinct_nonzero": 39,
+     "in_goalie_maskids": 34,
+     "in_paint_ids": 39,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 248,
+     "nonzero": 247,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 39,
+     "in_paint_ids": 45,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 248,
+     "nonzero": 248,
+     "distinct_nonzero": 22,
+     "in_goalie_maskids": 18,
+     "in_paint_ids": 22,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 248,
+     "nonzero": 247,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 43,
+     "in_paint_ids": 49,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 248,
+     "nonzero": 228,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 248,
+     "nonzero": 245,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 248,
+     "nonzero": 228,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 248,
+     "nonzero": 245,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 248,
+     "nonzero": 228,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 248,
+     "nonzero": 245,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 248,
+     "nonzero": 218,
+     "distinct_nonzero": 7,
+     "in_goalie_maskids": 7,
+     "in_paint_ids": 7,
+     "max": 66
+    },
+    "goaliemask6_starter": {
+     "teams": 248,
+     "nonzero": 217,
+     "distinct_nonzero": 65,
+     "in_goalie_maskids": 56,
+     "in_paint_ids": 65,
+     "max": 257
+    }
+   }
+  },
+  "xbox360-nhl15": {
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "goalie_rows": 556,
+   "paint_file_ids": 256,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 246,
+     "nonzero": 246,
+     "distinct_nonzero": 117,
+     "in_goalie_maskids": 111,
+     "in_paint_ids": 117,
+     "max": 264
+    },
+    "goaliemask0_starter": {
+     "teams": 246,
+     "nonzero": 245,
+     "distinct_nonzero": 157,
+     "in_goalie_maskids": 118,
+     "in_paint_ids": 157,
+     "max": 267
+    },
+    "goaliemask1_backup": {
+     "teams": 246,
+     "nonzero": 246,
+     "distinct_nonzero": 39,
+     "in_goalie_maskids": 35,
+     "in_paint_ids": 39,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 246,
+     "nonzero": 245,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 42,
+     "in_paint_ids": 45,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 246,
+     "nonzero": 246,
+     "distinct_nonzero": 22,
+     "in_goalie_maskids": 20,
+     "in_paint_ids": 22,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 246,
+     "nonzero": 245,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 45,
+     "in_paint_ids": 49,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 246,
+     "nonzero": 227,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 246,
+     "nonzero": 244,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 246,
+     "nonzero": 227,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 246,
+     "nonzero": 244,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 246,
+     "nonzero": 227,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 246,
+     "nonzero": 244,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 246,
+     "nonzero": 216,
+     "distinct_nonzero": 7,
+     "in_goalie_maskids": 7,
+     "in_paint_ids": 7,
+     "max": 66
+    },
+    "goaliemask6_starter": {
+     "teams": 246,
+     "nonzero": 215,
+     "distinct_nonzero": 65,
+     "in_goalie_maskids": 60,
+     "in_paint_ids": 65,
+     "max": 257
+    }
+   }
+  },
+  "xbox360-nhllegacy": {
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "goalie_rows": 566,
+   "paint_file_ids": 280,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 252,
+     "nonzero": 252,
+     "distinct_nonzero": 117,
+     "in_goalie_maskids": 107,
+     "in_paint_ids": 117,
+     "max": 290
+    },
+    "goaliemask0_starter": {
+     "teams": 252,
+     "nonzero": 251,
+     "distinct_nonzero": 162,
+     "in_goalie_maskids": 116,
+     "in_paint_ids": 162,
+     "max": 291
+    },
+    "goaliemask1_backup": {
+     "teams": 252,
+     "nonzero": 252,
+     "distinct_nonzero": 39,
+     "in_goalie_maskids": 32,
+     "in_paint_ids": 39,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 252,
+     "nonzero": 251,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 38,
+     "in_paint_ids": 45,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 252,
+     "nonzero": 252,
+     "distinct_nonzero": 22,
+     "in_goalie_maskids": 15,
+     "in_paint_ids": 22,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 252,
+     "nonzero": 251,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 39,
+     "in_paint_ids": 49,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 252,
+     "nonzero": 233,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 252,
+     "nonzero": 250,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 252,
+     "nonzero": 233,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 252,
+     "nonzero": 250,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 252,
+     "nonzero": 233,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 252,
+     "nonzero": 250,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 4,
+     "in_paint_ids": 6,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 252,
+     "nonzero": 222,
+     "distinct_nonzero": 8,
+     "in_goalie_maskids": 7,
+     "in_paint_ids": 8,
+     "max": 70
+    },
+    "goaliemask6_starter": {
+     "teams": 252,
+     "nonzero": 221,
+     "distinct_nonzero": 65,
+     "in_goalie_maskids": 54,
+     "in_paint_ids": 65,
+     "max": 257
+    }
+   }
+  },
+  "ps4-nhl15": {
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "goalie_rows": 559,
+   "paint_file_ids": null,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 246,
+     "nonzero": 246,
+     "distinct_nonzero": 117,
+     "in_goalie_maskids": 109,
+     "in_paint_ids": null,
+     "max": 264
+    },
+    "goaliemask0_starter": {
+     "teams": 246,
+     "nonzero": 245,
+     "distinct_nonzero": 157,
+     "in_goalie_maskids": 118,
+     "in_paint_ids": null,
+     "max": 267
+    },
+    "goaliemask1_backup": {
+     "teams": 246,
+     "nonzero": 246,
+     "distinct_nonzero": 39,
+     "in_goalie_maskids": 35,
+     "in_paint_ids": null,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 246,
+     "nonzero": 245,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 42,
+     "in_paint_ids": null,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 246,
+     "nonzero": 246,
+     "distinct_nonzero": 22,
+     "in_goalie_maskids": 20,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 246,
+     "nonzero": 245,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 45,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 246,
+     "nonzero": 227,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 246,
+     "nonzero": 244,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 246,
+     "nonzero": 227,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 246,
+     "nonzero": 244,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 246,
+     "nonzero": 227,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 246,
+     "nonzero": 244,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 246,
+     "nonzero": 216,
+     "distinct_nonzero": 7,
+     "in_goalie_maskids": 7,
+     "in_paint_ids": null,
+     "max": 66
+    },
+    "goaliemask6_starter": {
+     "teams": 246,
+     "nonzero": 215,
+     "distinct_nonzero": 65,
+     "in_goalie_maskids": 60,
+     "in_paint_ids": null,
+     "max": 257
+    }
+   }
+  },
+  "ps4-nhl18": {
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "goalie_rows": 714,
+   "paint_file_ids": null,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 296,
+     "nonzero": 296,
+     "distinct_nonzero": 115,
+     "in_goalie_maskids": 106,
+     "in_paint_ids": null,
+     "max": 290
+    },
+    "goaliemask0_starter": {
+     "teams": 296,
+     "nonzero": 295,
+     "distinct_nonzero": 219,
+     "in_goalie_maskids": 201,
+     "in_paint_ids": null,
+     "max": 344
+    },
+    "goaliemask1_backup": {
+     "teams": 296,
+     "nonzero": 296,
+     "distinct_nonzero": 39,
+     "in_goalie_maskids": 35,
+     "in_paint_ids": null,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 296,
+     "nonzero": 295,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 38,
+     "in_paint_ids": null,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 296,
+     "nonzero": 296,
+     "distinct_nonzero": 22,
+     "in_goalie_maskids": 19,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 296,
+     "nonzero": 295,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 42,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 296,
+     "nonzero": 275,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 296,
+     "nonzero": 292,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 296,
+     "nonzero": 275,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 296,
+     "nonzero": 292,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 296,
+     "nonzero": 275,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 296,
+     "nonzero": 292,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 5,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 296,
+     "nonzero": 296,
+     "distinct_nonzero": 8,
+     "in_goalie_maskids": 8,
+     "in_paint_ids": null,
+     "max": 70
+    },
+    "goaliemask6_starter": {
+     "teams": 296,
+     "nonzero": 295,
+     "distinct_nonzero": 66,
+     "in_goalie_maskids": 60,
+     "in_paint_ids": null,
+     "max": 257
+    },
+    "goaliemask7_backup": {
+     "teams": 296,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask7_starter": {
+     "teams": 296,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask8_backup": {
+     "teams": 296,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask8_starter": {
+     "teams": 296,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    }
+   }
+  },
+  "ps4-nhl20-real": {
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "goalie_rows": 773,
+   "paint_file_ids": null,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 416,
+     "nonzero": 416,
+     "distinct_nonzero": 123,
+     "in_goalie_maskids": 101,
+     "in_paint_ids": null,
+     "max": 290
+    },
+    "goaliemask0_starter": {
+     "teams": 416,
+     "nonzero": 413,
+     "distinct_nonzero": 218,
+     "in_goalie_maskids": 196,
+     "in_paint_ids": null,
+     "max": 383
+    },
+    "goaliemask1_backup": {
+     "teams": 416,
+     "nonzero": 416,
+     "distinct_nonzero": 42,
+     "in_goalie_maskids": 32,
+     "in_paint_ids": null,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 416,
+     "nonzero": 413,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 36,
+     "in_paint_ids": null,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 416,
+     "nonzero": 416,
+     "distinct_nonzero": 29,
+     "in_goalie_maskids": 19,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 416,
+     "nonzero": 413,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 37,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 416,
+     "nonzero": 388,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 416,
+     "nonzero": 413,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 416,
+     "nonzero": 388,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 416,
+     "nonzero": 413,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 416,
+     "nonzero": 388,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 416,
+     "nonzero": 413,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 416,
+     "nonzero": 416,
+     "distinct_nonzero": 8,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 70
+    },
+    "goaliemask6_starter": {
+     "teams": 416,
+     "nonzero": 415,
+     "distinct_nonzero": 66,
+     "in_goalie_maskids": 50,
+     "in_paint_ids": null,
+     "max": 257
+    },
+    "goaliemask7_backup": {
+     "teams": 416,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask7_starter": {
+     "teams": 416,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask8_backup": {
+     "teams": 416,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask8_starter": {
+     "teams": 416,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    }
+   }
+  },
+  "ps4-nhl21": {
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "goalie_rows": 749,
+   "paint_file_ids": null,
+   "team_slots": {
+    "goaliemask0_backup": {
+     "teams": 433,
+     "nonzero": 433,
+     "distinct_nonzero": 127,
+     "in_goalie_maskids": 104,
+     "in_paint_ids": null,
+     "max": 405
+    },
+    "goaliemask0_starter": {
+     "teams": 433,
+     "nonzero": 429,
+     "distinct_nonzero": 220,
+     "in_goalie_maskids": 197,
+     "in_paint_ids": null,
+     "max": 406
+    },
+    "goaliemask1_backup": {
+     "teams": 433,
+     "nonzero": 433,
+     "distinct_nonzero": 42,
+     "in_goalie_maskids": 31,
+     "in_paint_ids": null,
+     "max": 79
+    },
+    "goaliemask1_starter": {
+     "teams": 433,
+     "nonzero": 429,
+     "distinct_nonzero": 45,
+     "in_goalie_maskids": 35,
+     "in_paint_ids": null,
+     "max": 48
+    },
+    "goaliemask2_backup": {
+     "teams": 433,
+     "nonzero": 433,
+     "distinct_nonzero": 30,
+     "in_goalie_maskids": 18,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask2_starter": {
+     "teams": 433,
+     "nonzero": 429,
+     "distinct_nonzero": 49,
+     "in_goalie_maskids": 35,
+     "in_paint_ids": null,
+     "max": 50
+    },
+    "goaliemask3_backup": {
+     "teams": 433,
+     "nonzero": 406,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask3_starter": {
+     "teams": 433,
+     "nonzero": 430,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_backup": {
+     "teams": 433,
+     "nonzero": 406,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask4_starter": {
+     "teams": 433,
+     "nonzero": 430,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_backup": {
+     "teams": 433,
+     "nonzero": 406,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask5_starter": {
+     "teams": 433,
+     "nonzero": 430,
+     "distinct_nonzero": 6,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 6
+    },
+    "goaliemask6_backup": {
+     "teams": 433,
+     "nonzero": 433,
+     "distinct_nonzero": 8,
+     "in_goalie_maskids": 6,
+     "in_paint_ids": null,
+     "max": 70
+    },
+    "goaliemask6_starter": {
+     "teams": 433,
+     "nonzero": 432,
+     "distinct_nonzero": 66,
+     "in_goalie_maskids": 48,
+     "in_paint_ids": null,
+     "max": 257
+    },
+    "goaliemask7_backup": {
+     "teams": 433,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask7_starter": {
+     "teams": 433,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask8_backup": {
+     "teams": 433,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    },
+    "goaliemask8_starter": {
+     "teams": 433,
+     "nonzero": 0,
+     "distinct_nonzero": 0,
+     "in_goalie_maskids": 0,
+     "in_paint_ids": null,
+     "max": 0
+    }
+   }
+  }
+ }
+}

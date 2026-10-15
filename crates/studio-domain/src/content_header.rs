@@ -49,63 +49,135 @@ fn is_hex_name(s: &str, len: usize) -> bool {
     s.len() == len && s.bytes().all(|b| b.is_ascii_hexdigit())
 }
 
-/// Ensure the content-header sidecar for `save_file` exists, creating it if the file sits inside a
-/// recomp/Xenia content tree that carries a `Headers` index. Returns the sidecar path when one was
-/// created, `None` when nothing needed doing (sidecar already present, or the path is not inside a
-/// header-indexed content tree — a plain save folder stays untouched).
-pub fn ensure_content_header(save_file: &Path) -> Result<Option<PathBuf>> {
-    // Expected shape: <content>/<PROFILE16>/<TITLE8>/<TYPEDIR>/<NAME>/<file>.
+/// The header a template was cloned from: the sidecar file and its identity at planning time. A
+/// consumer that defers the write (the S2-C copied-target transaction) binds this input so a
+/// template that changes between planning and apply invalidates the plan instead of installing
+/// bytes derived from a file that no longer exists in that form.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TemplateInput {
+    pub path: PathBuf,
+    pub identity: tdb_txn::FileIdentity,
+}
+
+/// What a save file needs in the way of a content-header sidecar. Produced by
+/// [`plan_content_header`], which only **reads** the tree; the caller decides when (and through
+/// which writer) the bytes land.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum HeaderPlan {
+    /// The path is not inside a header-indexed content tree (a plain save folder, a content-shaped
+    /// tree without a `Headers/<type>` index, a name that does not fit the sidecar). Nothing to do.
+    NotIndexed,
+    /// The sidecar already exists at this path. It is preserved as-is — never rewritten.
+    Present(PathBuf),
+    /// The sidecar is missing; these are the exact bytes to place at `header_path`. `template` names
+    /// the same-type sibling the bytes were cloned from (with only the content name patched), or
+    /// `None` when the header was synthesized from the verified layout alone.
+    Required {
+        header_path: PathBuf,
+        bytes: Vec<u8>,
+        template: Option<TemplateInput>,
+    },
+}
+
+impl HeaderPlan {
+    /// The bytes and path when a header must be written.
+    pub fn required(&self) -> Option<(&Path, &[u8])> {
+        match self {
+            HeaderPlan::Required {
+                header_path, bytes, ..
+            } => Some((header_path, bytes)),
+            _ => None,
+        }
+    }
+}
+
+/// Plan the content-header sidecar for `save_file` without writing anything. The path must have
+/// the shape `<content>/<PROFILE16>/<TITLE8>/<TYPEDIR>/<NAME>/<file>` and the title directory must
+/// carry a `Headers/<TYPEDIR>` index for a header to be required at all — the planner never invents
+/// the layout. When a same-type sibling sidecar exists it is cloned as the template and reported as
+/// a bound input; otherwise the header is synthesized from the verified layout.
+pub fn plan_content_header(save_file: &Path) -> Result<HeaderPlan> {
     let Some(save_dir) = save_file.parent() else {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     };
     let Some(name) = save_dir.file_name().and_then(|n| n.to_str()) else {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     };
     let Some(type_dir) = save_dir.parent() else {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     };
     let Some(type_name) = type_dir.file_name().and_then(|n| n.to_str()) else {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     };
     let Some(title_dir) = type_dir.parent() else {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     };
     let (Some(title_name), Some(profile_name)) = (
         title_dir.file_name().and_then(|n| n.to_str()),
-        title_dir.parent().and_then(|p| p.file_name()).and_then(|n| n.to_str()),
+        title_dir
+            .parent()
+            .and_then(|p| p.file_name())
+            .and_then(|n| n.to_str()),
     ) else {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     };
     if !is_hex_name(title_name, 8) || !is_hex_name(profile_name, 16) {
-        return Ok(None); // not a content tree
+        return Ok(HeaderPlan::NotIndexed); // not a content tree
     }
     // The content name must fit its fixed region (with its NUL) and be plain ASCII.
     if name.len() >= NAME_REGION || !name.is_ascii() {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     }
 
     // Only trees that actually index through sidecars get one — never invent the layout.
     let headers_dir = title_dir.join("Headers").join(type_name);
     if !headers_dir.is_dir() {
-        return Ok(None);
+        return Ok(HeaderPlan::NotIndexed);
     }
     let header_path = headers_dir.join(format!("{name}.header"));
     if header_path.exists() {
-        return Ok(None);
+        return Ok(HeaderPlan::Present(header_path));
     }
 
-    let bytes = match template_header(&headers_dir, name) {
-        Some(mut t) => {
+    let (bytes, template) = match template_header(&headers_dir, name) {
+        Some((template_path, mut t)) => {
+            let identity = tdb_txn::FileIdentity::of_bytes(&t);
             patch_name(&mut t, name);
-            t
+            (
+                t,
+                Some(TemplateInput {
+                    path: template_path,
+                    identity,
+                }),
+            )
         }
-        None => synthesize_header(name, profile_name, title_name),
+        None => (synthesize_header(name, profile_name, title_name), None),
     };
-    std::fs::write(&header_path, bytes).map_err(|source| DomainError::Io {
-        path: header_path.display().to_string(),
-        source,
-    })?;
-    Ok(Some(header_path))
+    Ok(HeaderPlan::Required {
+        header_path,
+        bytes,
+        template,
+    })
+}
+
+/// Ensure the content-header sidecar for `save_file` exists, creating it if the file sits inside a
+/// recomp/Xenia content tree that carries a `Headers` index. Returns the sidecar path when one was
+/// created, `None` when nothing needed doing (sidecar already present, or the path is not inside a
+/// header-indexed content tree — a plain save folder stays untouched). The direct writer over
+/// [`plan_content_header`]; the transaction path consumes the plan instead.
+pub fn ensure_content_header(save_file: &Path) -> Result<Option<PathBuf>> {
+    match plan_content_header(save_file)? {
+        HeaderPlan::NotIndexed | HeaderPlan::Present(_) => Ok(None),
+        HeaderPlan::Required {
+            header_path, bytes, ..
+        } => {
+            std::fs::write(&header_path, bytes).map_err(|source| DomainError::Io {
+                path: header_path.display().to_string(),
+                source,
+            })?;
+            Ok(Some(header_path))
+        }
+    }
 }
 
 /// The save-type prefix of a content name (`"ROSTER 20260723000649"` → `"ROSTER"`).
@@ -114,8 +186,8 @@ fn type_prefix(name: &str) -> &str {
 }
 
 /// A sibling sidecar of the same save type to clone (any vintage — stale ones are fine, the game's
-/// display strings inside are what we want to preserve).
-fn template_header(headers_dir: &Path, name: &str) -> Option<Vec<u8>> {
+/// display strings inside are what we want to preserve), with the path it was read from.
+fn template_header(headers_dir: &Path, name: &str) -> Option<(PathBuf, Vec<u8>)> {
     let prefix = type_prefix(name);
     let entries = std::fs::read_dir(headers_dir).ok()?;
     let mut candidates: Vec<PathBuf> = entries
@@ -132,7 +204,7 @@ fn template_header(headers_dir: &Path, name: &str) -> Option<Vec<u8>> {
     for p in candidates {
         if let Ok(bytes) = std::fs::read(&p) {
             if bytes.len() == HEADER_LEN {
-                return Some(bytes);
+                return Some((p, bytes));
             }
         }
     }
@@ -186,7 +258,10 @@ mod tests {
         assert_eq!(&h[0x14..0x16], &[0, 0]);
         assert_eq!(&h[0x108..0x11D], b"ROSTER 20260723000649");
         assert_eq!(h[0x11D], 0);
-        assert_eq!(&h[0x138..0x140], &[0xB1, 0x3E, 0xBA, 0xBE, 0xBA, 0xBE, 0xBA, 0xBE]);
+        assert_eq!(
+            &h[0x138..0x140],
+            &[0xB1, 0x3E, 0xBA, 0xBE, 0xBA, 0xBE, 0xBA, 0xBE]
+        );
         assert_eq!(&h[0x140..0x144], &[0x45, 0x41, 0x09, 0xEC]);
         assert_eq!(&h[0x144..0x148], &[0, 0, 0, 0]);
     }
@@ -196,7 +271,10 @@ mod tests {
         let mut h = vec![0xAAu8; HEADER_LEN];
         patch_name(&mut h, "ROSTER 1");
         assert_eq!(&h[0x108..0x110], b"ROSTER 1");
-        assert!(h[0x110..0x138].iter().all(|&b| b == 0), "stale tail cleared");
+        assert!(
+            h[0x110..0x138].iter().all(|&b| b == 0),
+            "stale tail cleared"
+        );
         assert_eq!(h[0x107], 0xAA, "bytes before the region untouched");
         assert_eq!(h[0x138], 0xAA, "bytes after the region untouched");
     }

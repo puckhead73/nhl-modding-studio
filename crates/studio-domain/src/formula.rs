@@ -5,7 +5,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use tdb_fhm_store::AttributeMaxima;
-use tdb_formula::{compute, name_key, EaRating, EaRatingSet, FormulaProfile, PositionGroup, StatsContext};
+use tdb_formula::{
+    compute, name_key, EaRating, EaRatingSet, FormulaProfile, PositionGroup, StatsContext,
+};
 
 use crate::historical::{FhmCorpus, FhmError};
 
@@ -104,6 +106,40 @@ pub fn compute_person_career_ratings(
     profile: &FormulaProfile,
     maxima: &AttributeMaxima,
 ) -> Result<Option<CareerRatings>, FhmError> {
+    let Some((group, computed)) = computed_seasons(corpus, person_id, profile, maxima)? else {
+        return Ok(None);
+    };
+
+    let best_season_year = best_season(&computed);
+    let seasons = computed
+        .iter()
+        .map(|s| CareerSeasonOverall {
+            season_year: s.year,
+            overall: s.overall,
+        })
+        .collect();
+    let position = group.as_str().to_string();
+    let career_average = average_view(&computed.iter().collect::<Vec<_>>(), &position);
+    let peak3 = average_view(&top_seasons_by_overall(&computed, 3), &position);
+
+    Ok(Some(CareerRatings {
+        position,
+        seasons,
+        best_season_year,
+        career_average,
+        peak3,
+    }))
+}
+
+/// Run the full formula pipeline over every one of a person's playing seasons — the shared
+/// intermediate behind both the career compilations and the Legends composite. `None` when the
+/// person is absent, has no derivable position, or produced no usable season.
+fn computed_seasons(
+    corpus: &FhmCorpus,
+    person_id: i64,
+    profile: &FormulaProfile,
+    maxima: &AttributeMaxima,
+) -> Result<Option<(PositionGroup, Vec<SeasonComputed>)>, FhmError> {
     let Some(id) = corpus.person_identity(person_id)? else {
         return Ok(None);
     };
@@ -142,7 +178,7 @@ pub fn compute_person_career_ratings(
         let fhm_values = corpus.player_fhm_values(person_id, year)?;
         let set = compute(profile, group, &fhm_values, &stats, bucket);
         // A season contributes only if it produced ratings or carries raw FHM inputs.
-        if !(set.ratings.iter().any(|r| r.value.is_some()) || !fhm_values.is_empty()) {
+        if !set.ratings.iter().any(|r| r.value.is_some()) && fhm_values.is_empty() {
             continue;
         }
         computed.push(SeasonComputed {
@@ -152,29 +188,127 @@ pub fn compute_person_career_ratings(
             fhm_values,
         });
     }
-    if computed.is_empty() {
-        return Ok(None);
-    }
+    Ok((!computed.is_empty()).then_some((group, computed)))
+}
 
-    let best_season_year = best_season(&computed);
-    let seasons = computed
+/// A player's Legends rating — the peak-composite the Legends builder ranks on.
+pub struct LegendsRatings {
+    /// `forward` / `defenseman` / `goalie` — the group the composite was computed under.
+    pub position: String,
+    /// The composited rating set. Every EA attribute is the mean of that attribute's three highest
+    /// season values, and `overall` is the EA Overall formula run over those composites.
+    pub set: EaRatingSet,
+    /// How many playing seasons fed the composite (fewer than 3 means the mean is over what exists).
+    pub seasons_used: i64,
+    /// The raw FHM inputs, composited the same way — what the Formulas live preview shows beneath
+    /// the EA values, and what the archetype classifier ran on.
+    pub fhm_values: BTreeMap<String, f64>,
+}
+
+/// Compute a person's Legends composite: each EA attribute independently takes the mean of its three
+/// highest season values, then the EA Overall formula runs over the composited attributes.
+///
+/// This is deliberately NOT the Peak-3 view. Peak 3 picks the three best *seasons* and averages
+/// everything from them; the Legends composite lets a winger's best Speed and best Slapshot come
+/// from different years, and it re-derives Overall from the composite rather than averaging the
+/// per-season Overalls — a mean of Overalls is not the Overall of the mean.
+pub fn compute_person_legends_ratings(
+    corpus: &FhmCorpus,
+    person_id: i64,
+    profile: &FormulaProfile,
+    maxima: &AttributeMaxima,
+) -> Result<Option<LegendsRatings>, FhmError> {
+    let Some((group, computed)) = computed_seasons(corpus, person_id, profile, maxima)? else {
+        return Ok(None);
+    };
+    let Some((set, fhm_values)) = legends_view(&computed, group) else {
+        return Ok(None);
+    };
+    Ok(Some(LegendsRatings {
+        position: group.as_str().to_string(),
+        set,
+        seasons_used: computed.len() as i64,
+        fhm_values,
+    }))
+}
+
+/// The number of top seasons composited per attribute.
+const LEGENDS_TOP_N: usize = 3;
+
+/// Fold per-season computed ratings into the Legends composite (see
+/// [`compute_person_legends_ratings`]). `None` for an empty season set.
+fn legends_view(
+    seasons: &[SeasonComputed],
+    group: PositionGroup,
+) -> Option<(EaRatingSet, BTreeMap<String, f64>)> {
+    let template_set = &seasons.first()?.set;
+
+    // Per EA attribute: the mean of its three highest season values.
+    let ratings: Vec<EaRating> = template_set
+        .ratings
         .iter()
-        .map(|s| CareerSeasonOverall {
-            season_year: s.year,
-            overall: s.overall,
+        .map(|template| EaRating {
+            ea_key: template.ea_key.clone(),
+            value: top_mean(seasons.iter().filter_map(|s| {
+                s.set
+                    .ratings
+                    .iter()
+                    .find(|r| r.ea_key == template.ea_key)
+                    .and_then(|r| r.value)
+                    .map(|v| v as f64)
+            }))
+            .map(|m| m.round() as i32),
+            raw_offset: template.raw_offset,
+            scale_min: template.scale_min,
+            scale_max: template.scale_max,
         })
         .collect();
-    let position = group.as_str().to_string();
-    let career_average = average_view(&computed.iter().collect::<Vec<_>>(), &position);
-    let peak3 = average_view(&top_seasons_by_overall(&computed, 3), &position);
 
-    Ok(Some(CareerRatings {
-        position,
-        seasons,
-        best_season_year,
-        career_average,
-        peak3,
-    }))
+    // Overall from the COMPOSITED attributes — the same lookup shape `compute` uses per season.
+    let lookup = |k: &str| {
+        ratings
+            .iter()
+            .find(|r| r.ea_key == k)
+            .and_then(|r| r.value)
+            .map(|v| v as f64)
+    };
+    let overall = Some(match group {
+        PositionGroup::Goalie => tdb_formula::overall::ea_goalie_overall(lookup),
+        PositionGroup::Defenseman => tdb_formula::overall::ea_skater_overall(lookup, true),
+        PositionGroup::Forward => tdb_formula::overall::ea_skater_overall(lookup, false),
+    });
+
+    // Archetype classifies off raw FHM inputs, so composite those the same way before classifying —
+    // a Legends player's style should describe the peak version of them, not their last season.
+    let mut composite_fhm: BTreeMap<String, f64> = BTreeMap::new();
+    let keys: BTreeSet<&String> = seasons.iter().flat_map(|s| s.fhm_values.keys()).collect();
+    for key in keys {
+        if let Some(m) = top_mean(
+            seasons
+                .iter()
+                .filter_map(|s| s.fhm_values.get(key).copied()),
+        ) {
+            composite_fhm.insert(key.clone(), m);
+        }
+    }
+
+    Some((
+        EaRatingSet {
+            position: group.as_str().to_string(),
+            ratings,
+            overall,
+            archetype: tdb_formula::archetype::classify(&composite_fhm, group.as_str()),
+        },
+        composite_fhm,
+    ))
+}
+
+/// Mean of the [`LEGENDS_TOP_N`] highest values in `vals` (all of them when fewer exist).
+fn top_mean(vals: impl Iterator<Item = f64>) -> Option<f64> {
+    let mut v: Vec<f64> = vals.collect();
+    v.sort_by(|a, b| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
+    v.truncate(LEGENDS_TOP_N);
+    mean(&v)
 }
 
 /// One season's fully-computed ratings — the intermediate the career fold averages over.
@@ -240,14 +374,20 @@ fn average_view(seasons: &[&SeasonComputed], position: &str) -> Option<ComputedR
         })
         .collect();
 
-    let overalls: Vec<f64> = seasons.iter().filter_map(|s| s.overall.map(|v| v as f64)).collect();
+    let overalls: Vec<f64> = seasons
+        .iter()
+        .filter_map(|s| s.overall.map(|v| v as f64))
+        .collect();
     let overall = mean(&overalls).map(|m| m.round() as i32);
 
     // Raw FHM columns: union of keys, mean over the seasons carrying each.
     let mut fhm_values: BTreeMap<String, f64> = BTreeMap::new();
     let keys: BTreeSet<&String> = seasons.iter().flat_map(|s| s.fhm_values.keys()).collect();
     for key in keys {
-        let vals: Vec<f64> = seasons.iter().filter_map(|s| s.fhm_values.get(key).copied()).collect();
+        let vals: Vec<f64> = seasons
+            .iter()
+            .filter_map(|s| s.fhm_values.get(key).copied())
+            .collect();
         if let Some(m) = mean(&vals) {
             fhm_values.insert(key.clone(), m);
         }
@@ -299,7 +439,11 @@ mod career_tests {
             season(2001, Some(90), Some(90)),
             season(2002, Some(90), Some(70)),
         ];
-        assert_eq!(best_season(&s), Some(2001), "tie on 90 breaks to the earlier year");
+        assert_eq!(
+            best_season(&s),
+            Some(2001),
+            "tie on 90 breaks to the earlier year"
+        );
         assert_eq!(best_season(&[season(1999, None, None)]), None);
     }
 
@@ -311,7 +455,10 @@ mod career_tests {
             season(2002, Some(90), Some(70)),
         ];
         let top2 = top_seasons_by_overall(&s, 2);
-        assert_eq!(top2.iter().map(|x| x.year).collect::<Vec<_>>(), vec![2001, 2002]);
+        assert_eq!(
+            top2.iter().map(|x| x.year).collect::<Vec<_>>(),
+            vec![2001, 2002]
+        );
 
         let avg = average_view(&s.iter().collect::<Vec<_>>(), "forward").unwrap();
         assert_eq!(avg.set.overall, Some(87)); // (80+90+90)/3 = 86.67 → 87

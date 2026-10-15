@@ -19,6 +19,13 @@ Four-value jersey tuck side on the skater equipment table. Ypqj is a
 kind = "operator-research"
 description = "Task #61 single-attribute equip.db diff (NHL Legacy default.db, 2026)"
 
+# Title scope (coordinator decision, 25 Sep 2026): these labels were established on NHL Legacy
+# (PS3 textures / catalogue CSVs; Xbox 360 shares the id→file grammar; Recompiled by identity).
+# Studio shows them only on a project opened as NHL Legacy; every other title shows the stored id
+# as a number — a label from here is never borrowed for another title's ids.
+[scope]
+games = ["nhllegacy"]
+
 [[bindings]]
 field_name = "Jersey Tuck"
 field_raw_id = "Ypqj"

@@ -1,0 +1,877 @@
+# Target adapter — NHL 15, Xbox 360 (gen7, big-endian, TDB v6). Schema `target-adapter/2`.
+#
+# EVIDENCE-BACKED EXAMPLE, DELIBERATELY PARTIAL. Seven canonical properties over nine physical
+# fields, each citing in-repo evidence. It is not a claim that this target is fully mapped:
+# `coverage_declared` states exactly what fraction of the physical schema is mapped, and the unmapped
+# remainder is a recorded gap, never an implied identity mapping.
+#
+# Rules this file is validated against (crates/tdb-canonical):
+#   * every `canonical` resolves to a property in defs/canonical/project-schema.toml;
+#   * every `table` reference resolves to a [[table]] declaration in this file;
+#   * every mapping declares BOTH a read and a write transform — a non-identity read with an
+#     unknown write is refused (Q07a.1: "every read transform must have a verified inverse write");
+#   * every constraint block declares `established` / `unknown` / `not-applicable`. An established
+#     block must carry a confidence other than "unknown", at least one provenance citation and a
+#     `value` table; an unknown or not-applicable block must carry none of those;
+#   * a placeholder string ("unknown", "tbd", "") is never a value — an unestablished identity is an
+#     ABSENT key;
+#   * a `default` may not be a placeholder — an unknown target default BLOCKS rather than
+#     substituting;
+#   * an adapter may never declare `qualification = "game-verified"`. Qualification comes from the
+#     evidence system (docs/plans/qa-evidence-contract.md), never from a schema file.
+#
+# Confidence, per fact:
+#   measured — read directly out of committed evidence (the schema snapshot, an audit's table);
+#   derived  — a measured fact on other material plus a stated argument that it carries here;
+#   asserted — recorded from repository source/prose with a citation, not independently measured.
+
+schema = "target-adapter/2"
+adapter_version = 2
+canonical_schema_version = 1
+target = "nhl15-xbox360"
+generation = "gen7"
+endian = "big"
+tdb_version = 6
+physical_snapshot = "docs/audits/data/schema/xbox360-nhl15.json"
+
+# 134 tables / 2969 fields exist in the snapshot; 9 physical fields are mapped here (the three
+# birth-date components count individually).
+[coverage_declared]
+tables_total = 134
+fields_total = 2969
+fields_mapped = 9
+note = "Representative sample. The unmapped remainder is UNKNOWN, not identity-mapped."
+
+# --------------------------------------------------------------------------------------------
+# Target tables. Every `table` reference in this file must resolve here, so a typo cannot quietly
+# become a new table.
+# --------------------------------------------------------------------------------------------
+
+[[table]]
+id = "ubPc"
+name = "exhibitionplayerbiotable"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc"]
+
+[[table]]
+id = "ZBac"
+name = "exhibitionplayers"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ZBac"]
+
+[[table]]
+id = "eGlu"
+name = "exhibitionrostertable"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#eGlu"]
+
+[[table]]
+id = "kOtt"
+name = "exhibitionteams"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#kOtt"]
+
+[[table]]
+id = "dSvy"
+name = "exhibitionskaterai"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#dSvy"]
+
+[[table]]
+id = "xmja"
+name = "exhibitionskaterequipment"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#xmja"]
+
+[[table]]
+id = "mHuy"
+name = "exhibitiongoalieai"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#mHuy"]
+
+[[table]]
+id = "fMVl"
+name = "exhibitiongoalieequipment"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#fMVl"]
+
+# --------------------------------------------------------------------------------------------
+# Mappings.
+# --------------------------------------------------------------------------------------------
+
+# --- names: inline fixed-width text, NOT a string pool -----------------------------------------
+# CORRECTION (package C0-CAN1). The v1 adapter declared `string-pool` for this mapping. The schema
+# snapshot records `kind_code = 0` / `meta_type = "string"` with a byte-aligned 200-bit width, and
+# `tdb_core::TdbFile::read_inline_str` / `set_inline_str` implement exactly that: a fixed-width,
+# NUL-padded, byte-budgeted field inside the record. There is no pool. The v1 claim was wrong and is
+# corrected here rather than carried forward.
+
+[[mapping]]
+canonical = "player.first_name"
+table = "ubPc"
+field = "HdeP"
+read_transform = "inline-string"
+write_transform = "inline-string"
+inverse_verified = false
+confidence = "measured"
+qualification = "implemented"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+note = "The inline-string codec itself round-trips on this anchor (mutation matrix row xbox360,nhl15,inline-string,BGwe,vIys), but no named case exercises THIS field, so inverse_verified stays false."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.HdeP"]
+[mapping.storage.value]
+kind = "inline-string"
+bit_offset = 376
+bit_width = 200
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "big"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records this field's `key` and `updatable` flags directly. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; its matrix carries a row for THIS title and platform, so its scope covers this target rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc (kind_code = 0)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+[mapping.transform.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "200 bits = a 25-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.value]
+storage = "inline-fixed"
+byte_capacity = 25
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block, so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+[[mapping]]
+canonical = "player.last_name"
+table = "ubPc"
+field = "QbMR"
+read_transform = "inline-string"
+write_transform = "inline-string"
+inverse_verified = false
+confidence = "measured"
+qualification = "implemented"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.QbMR"]
+[mapping.storage.value]
+kind = "inline-string"
+bit_offset = 576
+bit_width = 200
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "big"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records this field's `key` and `updatable` flags directly. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; its matrix carries a row for THIS title and platform, so its scope covers this target rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc (kind_code = 0)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+[mapping.transform.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.QbMR",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+[mapping.string_storage.value]
+storage = "inline-fixed"
+byte_capacity = 25
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block, so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --- birth date: one canonical value over three target fields ----------------------------------
+
+[[mapping]]
+canonical = "player.birth_date"
+table = "ubPc"
+read_transform = "index-origin-0"
+write_transform = "index-origin-0"
+inverse_verified = true
+confidence = "measured"
+qualification = "automated-tested"
+automated_case = "studio_domain::birthdate_encoding"
+provenance = ["crates/studio-domain/tests/birthdate_encoding.rs"]
+note = "Month/day are 0-indexed on NHL 11-21, so canonical (1-indexed) maps with a -1 on write and +1 on read. EA's metadata is byte-identical to the 1-indexed case (rangelow=0 rangehigh=15), so the convention is PROBED from stored values, never assumed from the metadata. The year field is a raw 8-bit count and is not index-shifted; the index-origin transform applies to the month and day components."
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = ["crates/studio-domain/tests/birthdate_encoding.rs"]
+[mapping.transform.value]
+kind = "index-origin"
+index_origin = 0
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records this field's `key` and `updatable` flags directly. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; its matrix carries a row for THIS title and platform, so its scope covers this target rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block, so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+[[mapping.component]]
+role = "year"
+field = "qFnd"
+[mapping.component.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.qFnd"]
+[mapping.component.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 816
+bit_width = 8
+signedness = "unsigned"
+range_low = 0
+range_high = 255
+endian = "big"
+
+[[mapping.component]]
+role = "month"
+field = "JKLp"
+[mapping.component.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.JKLp"]
+[mapping.component.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 977
+bit_width = 4
+signedness = "unsigned"
+range_low = 0
+range_high = 15
+endian = "big"
+
+[[mapping.component]]
+role = "day"
+field = "Kswi"
+[mapping.component.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.Kswi"]
+[mapping.component.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 959
+bit_width = 5
+signedness = "unsigned"
+range_low = 0
+range_high = 31
+endian = "big"
+
+# --- handedness: an enum vocabulary WITH its stored codes --------------------------------------
+
+[[mapping]]
+canonical = "player.shoots"
+table = "ubPc"
+# CORRECTION (C0-CAN1-R2). Identity and bit layout are measured here; the stored-code
+# meaning is not, so the transform names say `unresolved` and the mapping is blocked.
+field = "GRkp"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.GRkp"]
+note = "BLOCKER: the handedness stored codes are not established for this target. The snapshot measures that `ubPc.GRkp` exists, is named `handedness` and is 1 bit wide with a declared range of 0..1. Which of those two codes means `left` is a cross-title proposal only, so reading or writing handedness through this mapping would be a guess with a 50% failure mode and no error."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.GRkp"]
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 981
+bit_width = 1
+signedness = "unsigned"
+range_low = 0
+range_high = 1
+endian = "big"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.GRkp",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records this field's `key` and `updatable` flags directly. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; its matrix carries a row for THIS title and platform, so its scope covers this target rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+# CORRECTION (C0-CAN1-R2). An `enum-code` transform decodes through the vocabulary above.
+# With the codes unproven here, the transform cannot be operative either.
+[mapping.transform]
+state = "unknown"
+note = "Unusable while the stored codes are not established on this target."
+[mapping.transform.candidate]
+confidence = "asserted"
+provenance = ["defs/enums/handedness.toml"]
+note = "PROPOSED, NOT OPERATIVE. Promotes together with the enumeration."
+[mapping.transform.candidate.value]
+kind = "enum-code"
+
+# CORRECTION (package C0-CAN1-R2). This was `derived`. Under the architect's rule a
+# derivation needs established premises APPLICABLE TO THIS TARGET, and a cross-title
+# analogy with no proven equivalence bridge is a candidate however well the layouts match.
+# `defs/enums/handedness.toml` states its own anchor: a 22-player audit of NHL Legacy
+# `default.db`. It claims no scope beyond that title, and nothing in this repository bridges
+# it to this one. A matching field id and a matching 1-bit width are exactly the kind of
+# resemblance that does not carry a stored-code meaning across titles.
+[mapping.enumeration]
+state = "unknown"
+note = "The stored codes for handedness are not established on this target."
+[mapping.enumeration.candidate]
+confidence = "asserted"
+provenance = ["defs/enums/handedness.toml#entries"]
+note = "PROPOSED, NOT OPERATIVE. Operator-confirmed 0=Left / 1=Right against a 22-player anchor set on NHL Legacy default.db (21/22 match). To promote this, confirm the code mapping against named players on THIS target's anchor."
+[mapping.enumeration.candidate.value]
+[[mapping.enumeration.candidate.value.entry]]
+code = 0
+canonical = "left"
+[[mapping.enumeration.candidate.value.entry]]
+code = 1
+canonical = "right"
+
+# CORRECTION (package C0-CAN1-R1). This block previously declared `encoding = "none"` at confidence
+# `measured`, arguing that a 1-bit field over a two-value vocabulary has no spare code. That is an
+# INFERENCE FROM A DECLARED RANGE, not a measurement: a declared range does not prove that every code
+# in it carries an ordinary value, and it says nothing about whether the game signals "no handedness
+# recorded" some other way. The reasoning is kept as a candidate, where nothing acts on it.
+[mapping.null_sentinel]
+state = "unknown"
+note = "Whether this target can encode `absent` for handedness is not established. Export blocks rather than assuming every stored 0 is a genuine left shot."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.GRkp"]
+note = "PROPOSED, NOT OPERATIVE. The field is 1 bit with a declared range of 0..1 and the vocabulary has two values, so no code is left spare. To promote this, show the game carries no separate absence signal for handedness — the range alone cannot."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block, so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --- ratings: a proven linear offset over a 6-bit store, on the skater companion ----------------
+
+[[mapping]]
+canonical = "player.rating_overall"
+table = "dSvy"
+field = "eWUF"
+read_transform = "offset+36"
+write_transform = "offset-36"
+inverse_verified = true
+confidence = "derived"
+qualification = "implemented"
+automated_case = "studio_domain::ratings_write_codec"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/tests/ratings_write_codec.rs",
+  "docs/audits/data/schema/xbox360-nhl15.json#dSvy.eWUF",
+]
+note = "The write is the exact inverse of the read, proven per offset regime over real anchors; the gen7 6-bit regime resolves edit_offset 36 (NHL07 gen6 uses 50 and PS4 uses 0 — those are their own adapters' facts, never inherited). That `dSvy.eWUF` is the stored overall is DERIVED from the field's EA metadata name `c_overall` in the snapshot; the named case reads a skater's first rating cell rather than this field specifically, so the mapping is `implemented`, not `automated-tested`. The human range 36..99 is DERIVED by the validator from the transform and the storage range — it is never declared, so the two cannot contradict each other."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#dSvy.eWUF"]
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 24
+bit_width = 6
+signedness = "unsigned"
+range_low = 0
+range_high = 63
+endian = "big"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#dSvy.eWUF",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records this field's `key` and `updatable` flags directly. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; its matrix carries a row for THIS title and platform, so its scope covers this target rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/ratings-write-codec.md"]
+derivation = "PREMISES. (1) MEASURED on this target: the field is 6-bit with declared range 0..63 (see [mapping.storage]). (2) MEASURED on this target: the title is gen7 — NHL 07 is the only gen6 title in the catalog and it ships a different database entirely. (3) ESTABLISHED and applicable to this target BY NAME: the ratings-write-codec audit's regime table states the offset per regime and scopes the 6-bit/offset-36 row to `NHL 10 -> Legacy / 11-21 (PS3/X360)`, which names this title; the offset is resolved by a per-database probe (`sixbit_rating_offset`), not a hardcoded constant, so it is determined from the target rather than assumed from a neighbour. CONCLUSION: edit_offset is 36 here, and write is the exact inverse of read. NOT ESTABLISHED: the named case `ratings_write_codec.rs` ran the gen7 6-bit regime on nhl14/ps3, not on this target, which is why this is derived and not measured."
+[mapping.transform.value]
+kind = "linear-offset"
+offset = 36
+
+# CORRECTION (C0-CAN1-R1). Previously `encoding = "none"` at `measured`, on the argument that every
+# code 0..63 is a legal rating. Same defect: a declared range does not prove no code in it is
+# reserved. A stored 0 (human 36) is exactly the shape an "unrated" marker would take, and nothing
+# in the repository rules that out.
+[mapping.null_sentinel]
+state = "unknown"
+note = "Whether any stored code on this field is reserved for `absent` is not established."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#dSvy.eWUF"]
+note = "PROPOSED, NOT OPERATIVE. The declared range 0..63 has no gap. To promote this, show that a stored 0 is a real rating rather than an unrated marker."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+# CORRECTION (C0-CAN1-R2). This predicate selects skater rows by position CODE. The code
+# assignment comes from `defs/enums/position.toml`, whose stated anchor is NHL Legacy
+# `default.db`; it is a cross-title proposal here, so it must not drive an operative
+# applicability constraint. The companion STRUCTURE is a separate matter (see
+# [[companion_rule]]); what is unproven is which stored codes are skaters.
+[mapping.applicability]
+state = "unknown"
+note = "Which records this mapping applies to is not established, because the position codes that would decide it are not established on this target."
+[mapping.applicability.candidate]
+confidence = "asserted"
+provenance = [
+  "docs/audits/roster-relationships.md#player-companion-records",
+  "defs/enums/position.toml",
+]
+note = "PROPOSED, NOT OPERATIVE. `dSvy` is the skater ratings companion, so this mapping would apply to bio rows whose position code is a skater code. Promotes with the position discriminator."
+[mapping.applicability.candidate.value]
+kind = "target-predicate"
+table = "ubPc"
+field = "vjla"
+codes = [0, 1, 2, 3]
+
+[[mapping]]
+canonical = "player.rating_speed"
+table = "dSvy"
+field = "AdEb"
+read_transform = "offset+36"
+write_transform = "offset-36"
+inverse_verified = true
+confidence = "derived"
+qualification = "implemented"
+automated_case = "studio_domain::ratings_write_codec"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/tests/ratings_write_codec.rs",
+  "docs/audits/data/schema/xbox360-nhl15.json#dSvy.AdEb",
+]
+note = "Resolves the v1 adapter's `unknown-field-identity` omission of this property: the snapshot names `dSvy.AdEb` as `c_speed`. Same 6-bit / offset-36 regime as the overall."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#dSvy.AdEb"]
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 176
+bit_width = 6
+signedness = "unsigned"
+range_low = 0
+range_high = 63
+endian = "big"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#dSvy.AdEb",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records this field's `key` and `updatable` flags directly. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; its matrix carries a row for THIS title and platform, so its scope covers this target rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/ratings-write-codec.md"]
+derivation = "PREMISES. (1) MEASURED on this target: the field is 6-bit with declared range 0..63 (see [mapping.storage]). (2) MEASURED on this target: the title is gen7 — NHL 07 is the only gen6 title in the catalog and it ships a different database entirely. (3) ESTABLISHED and applicable to this target BY NAME: the ratings-write-codec audit's regime table states the offset per regime and scopes the 6-bit/offset-36 row to `NHL 10 -> Legacy / 11-21 (PS3/X360)`, which names this title; the offset is resolved by a per-database probe (`sixbit_rating_offset`), not a hardcoded constant, so it is determined from the target rather than assumed from a neighbour. CONCLUSION: edit_offset is 36 here, and write is the exact inverse of read. NOT ESTABLISHED: the named case `ratings_write_codec.rs` ran the gen7 6-bit regime on nhl14/ps3, not on this target, which is why this is derived and not measured."
+[mapping.transform.value]
+kind = "linear-offset"
+offset = 36
+
+# CORRECTION (C0-CAN1-R2). This predicate selects skater rows by position CODE. The code
+# assignment comes from `defs/enums/position.toml`, whose stated anchor is NHL Legacy
+# `default.db`; it is a cross-title proposal here, so it must not drive an operative
+# applicability constraint. The companion STRUCTURE is a separate matter (see
+# [[companion_rule]]); what is unproven is which stored codes are skaters.
+[mapping.applicability]
+state = "unknown"
+note = "Which records this mapping applies to is not established, because the position codes that would decide it are not established on this target."
+[mapping.applicability.candidate]
+confidence = "asserted"
+provenance = [
+  "docs/audits/roster-relationships.md#player-companion-records",
+  "defs/enums/position.toml",
+]
+note = "PROPOSED, NOT OPERATIVE. `dSvy` is the skater ratings companion, so this mapping would apply to bio rows whose position code is a skater code. Promotes with the position discriminator."
+[mapping.applicability.candidate.value]
+kind = "target-predicate"
+table = "ubPc"
+field = "vjla"
+codes = [0, 1, 2, 3]
+
+# --- main team: a foreign key with a real -1 null sentinel --------------------------------------
+
+[[mapping]]
+canonical = "player.team"
+table = "ubPc"
+# CORRECTION (C0-CAN1-R1). The identity of this field is measured; the ENCODING it carries is not.
+# The transform names therefore say `unresolved` rather than spelling an origin nothing proves, the
+# qualification is `blocked` with the blocker recorded, and the three unproven claims (index origin,
+# sentinel meaning, foreign-key parent) are preserved below as NON-OPERATIVE candidates.
+field = "dXSB"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.dXSB"]
+note = "BLOCKER: the index origin of the main-team pointer is not established for this target. `Capabilities::main_team_offset` PROBES it at runtime precisely because it is not a constant, and the repository holds no measurement of it for NHL 15 Xbox 360 — the one asserted `main_team_offset` value in a named test case is NHL 07, a different title. What is measured here is that `ubPc.dXSB` exists, is named `team`, and how its bits are laid out. Reading or writing a team through it needs the origin, so this mapping cannot export until the candidate below is promoted."
+
+[mapping.storage]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.dXSB",
+  "docs/audits/scalar-mutation-audit.md#the-codec-taxonomy",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records bit offset 48, width 8 and a declared range of -1..254 for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit defines the codec taxonomy over `tdb_defs::FieldMeta` and classifies `range_low == -1, not two-s-complement` as the neg1-sentinel regime; that classification is mechanical over any FieldMeta and its matrix is run over all 27 anchors, this one included, so it is not an analogy from a neighbouring title. CONCLUSION: the all-ones bit pattern on this field decodes to the value -1. NOT ESTABLISHED: what a decoded -1 MEANS here — see [mapping.null_sentinel], which is unknown for exactly that reason. This block is a decode fact only."
+note = "The offset, width and declared range -1..254 are read straight from the snapshot. The `neg1-sentinel` SIGNEDNESS is derived by applying the codec taxonomy's own rule — `range_low == -1`, not two's-complement — to that measured range. This is a DECODE fact (the all-ones bit pattern decodes to the value -1) and nothing more; what -1 MEANS is the separate, unproven question handled by [mapping.null_sentinel] below."
+[mapping.storage.value]
+kind = "fixed-bit-uint"
+bit_offset = 48
+bit_width = 8
+signedness = "neg1-sentinel"
+range_low = -1
+range_high = 254
+endian = "big"
+
+[mapping.status]
+state = "established"
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.dXSB",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+]
+derivation = "PREMISES. (1) MEASURED on this target: the snapshot records this field's `key` and `updatable` flags directly. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam; its matrix carries a row for THIS title and platform, so its scope covers this target rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+# CORRECTION (C0-CAN1-R1). Previously established at confidence `asserted`, citing a runtime probe.
+# A documented runtime expectation is not a measurement of this target, and an asserted claim may not
+# be operative — the human range, any Clear-to-Defaults value and any Build mapping would otherwise
+# be built on it.
+[mapping.transform]
+state = "unknown"
+note = "The main-team index origin is not established for this target."
+[mapping.transform.candidate]
+confidence = "asserted"
+provenance = ["crates/studio-domain/src/capabilities.rs#main_team_offset"]
+note = "PROPOSED, NOT OPERATIVE. `Capabilities::main_team_offset` documents 1 on NHL Legacy / 11-21 (raw = team id + 1, 0 = free agent) against 0 on NHL 09/10, and probes it from the roster graph at runtime. To promote this, measure the origin on this target's anchor the way `capabilities.rs` probes it, and name the case."
+[mapping.transform.candidate.value]
+kind = "index-origin"
+index_origin = 1
+
+# CORRECTION (C0-CAN1-R1). Previously established at `measured`. The codec taxonomy does describe
+# `neg1-sentinel` as "the nullable / none encoding", but that classification is keyed on the declared
+# range alone; no evidence in this repository shows a stored -1 in THIS field meaning "no main team",
+# and the competing reading is live — `capabilities.rs` documents 0, not -1, as the free-agent marker
+# under the origin-1 encoding. Two candidate sentinels cannot both be operative, so neither is.
+[mapping.null_sentinel]
+state = "unknown"
+note = "The stored code that means `absent` for the main team is not established on this target. Until it is, a Build cannot round-trip a player with no main team through this field."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = [
+  "docs/audits/scalar-mutation-audit.md#the-codec-taxonomy",
+  "crates/studio-domain/src/capabilities.rs#main_team_offset",
+]
+note = "PROPOSED, NOT OPERATIVE, AND INTERNALLY CONTESTED. Reading A: the codec taxonomy classes `range_low == -1` as the nullable encoding, so raw all-ones = -1 would mean `absent`. Reading B: `capabilities.rs` documents 0 as the free-agent marker under the origin-1 encoding, which would make -1 something else again. The value below records reading A only. To promote either, show what the game stores for a player with no main team."
+[mapping.null_sentinel.candidate.value]
+encoding = "raw-all-ones"
+raw = -1
+canonical_meaning = "absent"
+
+# CORRECTION (C0-CAN1-R1). Previously established at `asserted`. The audit's declared bridge hop is
+# `eGlu.dXSB -> kOtt.vfEq`; extending it to the BIO table's `dXSB` is a name-based inference about a
+# different table, and an inferred foreign key is exactly the kind of claim that must not be
+# operative — a Build would follow it.
+[mapping.foreign_key]
+state = "unknown"
+note = "Nothing in the repository establishes the parent this bio-table field points at."
+[mapping.foreign_key.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/roster-relationships.md#the-roster-player-bridge-chain"]
+note = "PROPOSED, NOT OPERATIVE. The audit confirms `eGlu.dXSB -> kOtt.vfEq` (implicit, naming-confirmed) for the ROSTER table. `ubPc.dXSB` shares the name and plausibly the team-id space. To promote this, show value containment from `ubPc.dXSB` into `kOtt.vfEq` on this anchor, as the staging work did for the `eGlu` hop. The `index_origin` below inherits the unproven origin above and is doubly non-operative."
+[mapping.foreign_key.candidate.value]
+parent_table = "kOtt"
+parent_key_field = "vfEq"
+declaration = "implicit-by-name"
+index_origin = 1
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/xbox360-nhl15.json#ubPc.record_len_bytes"]
+note = "The table is a fixed-width record block, so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
+
+# --------------------------------------------------------------------------------------------
+# Capacity. The GEN7 main DB is PACKED (max_records == current_records), so it does not expose the
+# ceiling; the vanilla ROSTER save does. `source` records which file each number came from, because
+# reading the ceiling off the wrong one silently understates it by roughly half.
+# --------------------------------------------------------------------------------------------
+
+[[capacity]]
+table = "ubPc"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/roster-capacity.md#gen7--ps3--xbox360"]
+note = "Measured on the PS3 vanilla ROSTER save. The anchor set ships no Xbox 360 ROSTER save, but its `nhlng.db` is byte-identical to PS3's, so the same inner-TDB ceiling applies — DERIVED, with the argument stated."
+derivation = "PREMISES. (1) MEASURED, per title: the roster-capacity audit reads `max_records` and `current_records` for this table from a real PS3 vanilla ROSTER save that parsed CRC-clean, and its GEN7 table carries a row for NHL 15 by name. (2) ESTABLISHED equivalence bridge: `PS3 = Xbox360 databases are byte-identical` per game — same tables, record counts and record lengths — stated in the anchors manifest as VERIFIED for all of NHL 10-15 + Legacy, which includes this title; the two platforms diverge only in the save-file container, never in the DB. CONCLUSION: the PS3 inner-TDB ceiling is this target's ceiling. NOT ESTABLISHED: no Xbox 360 ROSTER save was decoded, which is why this is derived and not measured; the audit says so itself."
+[capacity.declared.value]
+ceiling_records = 7034
+population_records = 5534
+source = "roster-save-max-records"
+
+[[capacity]]
+table = "ZBac"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/roster-capacity.md#gen7--ps3--xbox360"]
+derivation = "PREMISES. (1) MEASURED, per title: the roster-capacity audit reads `max_records` and `current_records` for this table from a real PS3 vanilla ROSTER save that parsed CRC-clean, and its GEN7 table carries a row for NHL 15 by name. (2) ESTABLISHED equivalence bridge: `PS3 = Xbox360 databases are byte-identical` per game — same tables, record counts and record lengths — stated in the anchors manifest as VERIFIED for all of NHL 10-15 + Legacy, which includes this title; the two platforms diverge only in the save-file container, never in the DB. CONCLUSION: the PS3 inner-TDB ceiling is this target's ceiling. NOT ESTABLISHED: no Xbox 360 ROSTER save was decoded, which is why this is derived and not measured; the audit says so itself."
+[capacity.declared.value]
+ceiling_records = 8948
+population_records = 5942
+source = "roster-save-max-records"
+
+[[capacity]]
+table = "eGlu"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/roster-capacity.md#gen7--ps3--xbox360"]
+derivation = "PREMISES. (1) MEASURED, per title: the roster-capacity audit reads `max_records` and `current_records` for this table from a real PS3 vanilla ROSTER save that parsed CRC-clean, and its GEN7 table carries a row for NHL 15 by name. (2) ESTABLISHED equivalence bridge: `PS3 = Xbox360 databases are byte-identical` per game — same tables, record counts and record lengths — stated in the anchors manifest as VERIFIED for all of NHL 10-15 + Legacy, which includes this title; the two platforms diverge only in the save-file container, never in the DB. CONCLUSION: the PS3 inner-TDB ceiling is this target's ceiling. NOT ESTABLISHED: no Xbox 360 ROSTER save was decoded, which is why this is derived and not measured; the audit says so itself."
+[capacity.declared.value]
+ceiling_records = 10619
+population_records = 5511
+source = "roster-save-max-records"
+
+[[capacity]]
+table = "dSvy"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/roster-capacity.md#gen7--ps3--xbox360"]
+derivation = "PREMISES. (1) MEASURED, per title: the roster-capacity audit reads `max_records` and `current_records` for this table from a real PS3 vanilla ROSTER save that parsed CRC-clean, and its GEN7 table carries a row for NHL 15 by name. (2) ESTABLISHED equivalence bridge: `PS3 = Xbox360 databases are byte-identical` per game — same tables, record counts and record lengths — stated in the anchors manifest as VERIFIED for all of NHL 10-15 + Legacy, which includes this title; the two platforms diverge only in the save-file container, never in the DB. CONCLUSION: the PS3 inner-TDB ceiling is this target's ceiling. NOT ESTABLISHED: no Xbox 360 ROSTER save was decoded, which is why this is derived and not measured; the audit says so itself."
+[capacity.declared.value]
+ceiling_records = 6479
+population_records = 4978
+source = "roster-save-max-records"
+
+[[capacity]]
+table = "xmja"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/roster-capacity.md#gen7--ps3--xbox360"]
+derivation = "PREMISES. (1) MEASURED, per title: the roster-capacity audit reads `max_records` and `current_records` for this table from a real PS3 vanilla ROSTER save that parsed CRC-clean, and its GEN7 table carries a row for NHL 15 by name. (2) ESTABLISHED equivalence bridge: `PS3 = Xbox360 databases are byte-identical` per game — same tables, record counts and record lengths — stated in the anchors manifest as VERIFIED for all of NHL 10-15 + Legacy, which includes this title; the two platforms diverge only in the save-file container, never in the DB. CONCLUSION: the PS3 inner-TDB ceiling is this target's ceiling. NOT ESTABLISHED: no Xbox 360 ROSTER save was decoded, which is why this is derived and not measured; the audit says so itself."
+[capacity.declared.value]
+ceiling_records = 6479
+population_records = 4978
+source = "roster-save-max-records"
+
+[[capacity]]
+table = "mHuy"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/roster-capacity.md#gen7--ps3--xbox360"]
+derivation = "PREMISES. (1) MEASURED, per title: the roster-capacity audit reads `max_records` and `current_records` for this table from a real PS3 vanilla ROSTER save that parsed CRC-clean, and its GEN7 table carries a row for NHL 15 by name. (2) ESTABLISHED equivalence bridge: `PS3 = Xbox360 databases are byte-identical` per game — same tables, record counts and record lengths — stated in the anchors manifest as VERIFIED for all of NHL 10-15 + Legacy, which includes this title; the two platforms diverge only in the save-file container, never in the DB. CONCLUSION: the PS3 inner-TDB ceiling is this target's ceiling. NOT ESTABLISHED: no Xbox 360 ROSTER save was decoded, which is why this is derived and not measured; the audit says so itself."
+[capacity.declared.value]
+ceiling_records = 855
+population_records = 556
+source = "roster-save-max-records"
+
+[[capacity]]
+table = "fMVl"
+[capacity.declared]
+state = "established"
+confidence = "derived"
+provenance = ["docs/audits/roster-capacity.md#gen7--ps3--xbox360"]
+derivation = "PREMISES. (1) MEASURED, per title: the roster-capacity audit reads `max_records` and `current_records` for this table from a real PS3 vanilla ROSTER save that parsed CRC-clean, and its GEN7 table carries a row for NHL 15 by name. (2) ESTABLISHED equivalence bridge: `PS3 = Xbox360 databases are byte-identical` per game — same tables, record counts and record lengths — stated in the anchors manifest as VERIFIED for all of NHL 10-15 + Legacy, which includes this title; the two platforms diverge only in the save-file container, never in the DB. CONCLUSION: the PS3 inner-TDB ceiling is this target's ceiling. NOT ESTABLISHED: no Xbox 360 ROSTER save was decoded, which is why this is derived and not measured; the audit says so itself."
+[capacity.declared.value]
+ceiling_records = 855
+population_records = 556
+source = "roster-save-max-records"
+
+[[capacity]]
+table = "kOtt"
+[capacity.declared]
+state = "unknown"
+note = "The roster-capacity audit covers the seven roster-bearing tables only. The team table's ceiling is not established for this target and is recorded as unknown rather than read off the packed main DB, which would understate it."
+
+# --------------------------------------------------------------------------------------------
+# Companion / cardinality. A Player is the `ubPc` bio row plus companion rows that SHARE its primary
+# key `wBIz` — a shared-key 1:1, not a declared foreign key.
+# --------------------------------------------------------------------------------------------
+
+# CORRECTION (package C0-CAN1-R2). Previously established at `measured`, and the citation does
+# cover this title: the roster-relationships audit verifies the shared-key 1:1 companion model
+# and the skater/goalie requirement across nhl11 -> legacy, which includes NHL 15.
+#
+# It is a candidate anyway, and for a dependency reason rather than an evidence reason. Every
+# companion below is conditioned on `position-skater` or `position-goalie`, and nothing
+# establishes how this target tells those apart — [position_discriminator] is itself a candidate.
+# A rule that cannot be evaluated cannot be operative, so the validator refuses it, and that
+# refusal is correct: acting on this rule would mean guessing which rows are goalies and then
+# demanding or tearing down companion records on the strength of the guess.
+#
+# The audit's finding is not lost. It is recorded below, and it promotes the moment the
+# discriminator does.
+[[companion_rule]]
+primary_table = "ubPc"
+[companion_rule.declared]
+state = "unknown"
+note = "Not evaluable on this target: the companion set is position-conditioned and the position codes are not established here."
+[companion_rule.declared.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/roster-relationships.md#player-companion-records-confirmed--11-via-shared-key-wbiz",
+  "docs/audits/relational-operation-audit.md#the-invariant-battery-after-every-applied-operation",
+]
+note = "PROPOSED, NOT OPERATIVE — blocked on a dependency, not on missing evidence. The audit verifies this exact rule over nhl11 -> legacy, a range that includes NHL 15, and the engine enforces it at save time as the `companion_presence` predicate. It promotes to established as soon as [position_discriminator] does; no further companion evidence is needed."
+[companion_rule.declared.candidate.value]
+shared_key_field = "wBIz"
+[[companion_rule.declared.candidate.value.companion]]
+table = "dSvy"
+cardinality = "one-to-one"
+applies_when = "position-skater"
+[[companion_rule.declared.candidate.value.companion]]
+table = "xmja"
+cardinality = "one-to-one"
+applies_when = "position-skater"
+[[companion_rule.declared.candidate.value.companion]]
+table = "mHuy"
+cardinality = "one-to-one"
+applies_when = "position-goalie"
+[[companion_rule.declared.candidate.value.companion]]
+table = "fMVl"
+cardinality = "one-to-one"
+applies_when = "position-goalie"
+
+# CORRECTION (C0-CAN1-R2). Previously `derived`. The 3-bit width and 0..7 range ARE measured
+# on this target; the code ASSIGNMENT (0..3 skater, 4 goalie) is not. `defs/enums/position.toml`
+# states its anchor as a named-player audit of NHL Legacy `default.db` and claims no scope
+# beyond it. Sharing a field id and a width with that title is a resemblance, not a bridge.
+#
+# Because nothing establishes how skater and goalie are told apart here, no position-conditioned
+# rule in this file may be operative — see [[companion_rule]] and the ratings applicability
+# blocks above, both of which are candidates for exactly this reason.
+[position_discriminator]
+state = "unknown"
+note = "How this target distinguishes skaters from goalies is not established."
+[position_discriminator.candidate]
+confidence = "asserted"
+provenance = [
+  "defs/enums/position.toml",
+  "docs/audits/data/schema/xbox360-nhl15.json#ubPc.vjla",
+]
+note = "PROPOSED, NOT OPERATIVE. The snapshot measures a 3-bit `position` field with range 0..7 on this target. The code assignment below was operator-confirmed against five named players on NHL Legacy default.db. To promote it, confirm the assignment against named players on THIS target's anchor."
+[position_discriminator.candidate.value]
+table = "ubPc"
+field = "vjla"
+skater_codes = [0, 1, 2, 3]
+goalie_codes = [4]

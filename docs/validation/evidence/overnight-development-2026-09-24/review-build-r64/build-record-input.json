@@ -1,0 +1,20 @@
+{
+  "candidate": "NHL Modding Studio rc-20260928-r64",
+  "built": "2026-09-28T13:39:55-06:00 .. 13:42:36-06:00",
+  "command": "CARGO_INCREMENTAL=0 npm run build -- --no-bundle (repo root; tauri build; existing target\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 952,
+  "dirty_manifest_sha256": "80bb06f642771e070ca1fe06709492d371ec1bb49d4b37e8380f26beac0acd65",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "b7ab3ce5d5a03cb1255a0a1b78d76a04a4608511a5935c997146206fd73577ba",
+  "exe_bytes": 50621952,
+  "defs_tree_sha256": "20c3b1833a4ce1125a2cc58d1b67a0cda2c6feaaf0b75b2ad0c0f711438fcf8b",
+  "frontend_dist_tree_sha256": "f0833e6e327c42231f9d927140d35cbeab278a42717358a5968d4b430b8e2386",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "developer receipts through 64 (r59 + 61 Hockey Shop rollback correction F1, 62 Recompiled public-path regression (test only), 63 PS4 head reassignment and reviewed-plan applies, 64 internal-bundling record and NHL 11-13 companion-style lock)",
+  "tree_sha_definition": "SHA-256 of '<relpath>\t<sha256>\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

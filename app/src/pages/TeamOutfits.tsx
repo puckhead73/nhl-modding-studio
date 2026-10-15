@@ -1,3 +1,4 @@
+import { assetRoot } from "../lib/assetRoot";
 // Team Outfits — the team-centric counterpart to the player-asset export. Where that page writes
 // each player's head art named by the player, this writes each team's jersey, pants and socks named
 // by the team (e.g. `detroit_red_wings_jersey_0_0_cm.png`). One run covers the whole roster; the
@@ -24,7 +25,7 @@ type RunResult = { kind: "cancelled" } | { kind: "done"; summary: OutfitExportSu
 
 export function TeamOutfitsPage() {
   const { project, install } = useProject();
-  const installDir = install?.install_dir ?? null;
+  const installDir = assetRoot(install) ?? null;
   const [result, setResult] = useState<RunResult | null>(null);
 
   // Only the art roots are needed here — not the (heavy) per-player asset scan the browse page runs.

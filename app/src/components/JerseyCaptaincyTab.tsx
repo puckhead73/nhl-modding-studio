@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
+import { useRosterEdit } from "../lib/useRosterEdit";
+import { refreshFields } from "../lib/useFieldEdit";
 import { EmptyState, Spinner } from "./primitives";
 import { isDressed } from "../lib/teamPresentation";
 import type { LineEntryDto } from "../bindings/LineEntryDto";
@@ -19,11 +21,10 @@ const GRID_COLS = 9;
 /// retired checkboxes in the middle, and the Captain / Alternate pickers on the right.
 ///
 ///  - Jersey assignments write the per-team slot number (`eGlu.sVRt`) through the audited
-///    `set_jersey_number` op (unique within the team; dropping a taken number steals it —
-///    the previous holder's number is cleared first).
+///    `set_jersey_number` op (unique within the team; a taken number is refused).
 ///  - Retired-number toggles append / remove `wcSL` rows (`retire_jersey` / `unretire_jersey`).
-///  - Captaincy picks go through `set_captaincy` (`eGlu.mCcl`), which auto-demotes a prior
-///    captain; only DRESSED players (`ZBac.RREB` not Scratched / In-Minors) may hold a role.
+///  - Captaincy replacements go through one `set_team_roster` transaction; only dressed
+///    players (`eGlu.hSZj`) may be promoted.
 export function JerseyCaptaincyTab({
   projectId,
   teamId,
@@ -35,27 +36,17 @@ export function JerseyCaptaincyTab({
   retiredNumbers: number[];
 }) {
   const qc = useQueryClient();
-  const { update } = useProject();
+  const { project, update } = useProject();
+  const supportsRetired = project?.tables?.some(t => t.id === "wcSL") ?? false;
   const lines = useQuery({
     queryKey: ["lines", projectId, teamId],
     queryFn: () => call("lines_view", { projectId, teamId }),
   });
 
-  const refresh = async () => {
-    await qc.invalidateQueries();
-    update(await call("project_summary", { projectId }));
-  };
-
-  const assignMut = useMutation({
-    // Steal-aware assign: clear the current holder's number first, then set the new one.
-    mutationFn: async (v: { player: number; number: number; stealFrom?: number }) => {
-      if (v.stealFrom !== undefined) {
-        await call("set_jersey_number", { projectId, team: teamId, player: v.stealFrom, number: 0 });
-      }
-      return call("set_jersey_number", { projectId, team: teamId, player: v.player, number: v.number });
-    },
-    onSuccess: refresh,
-  });
+  const refresh = () => { void refreshFields(qc, projectId, update).catch(() => {}); };
+  const assignMut = useRosterEdit(projectId, teamId,
+    (v: { player: number; number: number }) => call("set_jersey_number", { projectId, team: teamId, player: v.player, number: v.number }),
+    (before, v) => ({ ...before, entries: before.entries.map(e => e.player_id === v.player ? { ...e, jersey: v.number } : e) }));
   const retiredMut = useMutation({
     mutationFn: (v: { number: number; retire: boolean }) =>
       call(v.retire ? "retire_jersey" : "unretire_jersey", {
@@ -65,18 +56,17 @@ export function JerseyCaptaincyTab({
       }),
     onSuccess: refresh,
   });
-  const captaincyMut = useMutation({
-    mutationFn: async (v: { demote?: number; promote?: number; role: number }) => {
-      if (v.demote !== undefined) {
-        await call("set_captaincy", { projectId, team: teamId, player: v.demote, role: 0 });
+  const captaincyMut = useRosterEdit(projectId, teamId,
+    async (v: { demote?: number; promote?: number; role: number }, before) => {
+      const writes: Array<[number, string, number]> = [];
+      for (const entry of before?.entries ?? []) {
+        if (entry.player_id === v.promote) writes.push([entry.slot_record, "mCcl", v.role]);
+        else if (entry.player_id === v.demote) writes.push([entry.slot_record, "mCcl", 0]);
       }
-      if (v.promote !== undefined) {
-        return call("set_captaincy", { projectId, team: teamId, player: v.promote, role: v.role });
-      }
-      return null;
+      return writes.length ? call("set_team_roster", { projectId, team: teamId, writes }) : null;
     },
-    onSuccess: refresh,
-  });
+    (before, v) => ({ ...before, entries: before.entries.map(e => e.player_id === v.promote ? { ...e, captaincy: v.role }
+      : e.player_id === v.demote ? { ...e, captaincy: 0 } : e) }));
 
   if (lines.isLoading) return <Spinner label="Loading roster…" />;
   if (lines.isError) return <p className="text-rose-400">{String(lines.error)}</p>;
@@ -104,7 +94,6 @@ export function JerseyCaptaincyTab({
     assignMut.mutate({
       player,
       number,
-      stealFrom: holder?.player_id != null ? holder.player_id : undefined,
     });
   };
 
@@ -120,6 +109,7 @@ export function JerseyCaptaincyTab({
         />
         <div className="flex flex-col gap-4">
           <NumberGrid
+            supportsRetired={supportsRetired}
             assigned={assigned}
             retired={retired}
             busy={retiredMut.isPending}
@@ -143,9 +133,7 @@ export function JerseyCaptaincyTab({
         </div>
       </div>
       <p className="text-[11px] text-slate-500">
-        Drag a number onto a player's slot to assign it; numbers steal from whoever currently
-        holds them. Assignments write the per-team slot number (eGlu.sVRt), retired checkboxes
-        write wcSL rows, and captaincy picks write eGlu.mCcl — all audited and undoable.
+        Drag a number onto a player to assign it. Numbers already worn by a teammate must be cleared first.
       </p>
     </div>
   );
@@ -278,11 +266,13 @@ function RosterRow({
 // ---------------------------------------------------------------------------
 
 function NumberGrid({
+  supportsRetired,
   assigned,
   retired,
   busy,
   onToggleRetired,
 }: {
+  supportsRetired: boolean;
   assigned: Set<number>;
   retired: Set<number>;
   busy: boolean;
@@ -296,12 +286,11 @@ function NumberGrid({
             Numbers
           </span>
           <span className="text-[11px] text-slate-500">
-            {assigned.size} assigned · {retired.size} retired
+          {assigned.size} assigned{supportsRetired ? ` · ${retired.size} retired` : ""}
           </span>
         </div>
         <p className="mt-0.5 text-[10px] text-slate-500">
-          Drag a number onto a player's slot to assign it. The checkbox beside each number marks
-          it as a retired jersey.
+          Drag a number onto a player to assign it.{supportsRetired && " The checkbox marks a retired jersey."}
         </p>
       </header>
       <div className="grid w-fit gap-1.5 p-3" style={{ gridTemplateColumns: `repeat(${GRID_COLS}, auto)` }}>
@@ -324,7 +313,7 @@ function NumberGrid({
             >
               {n}
             </span>
-            <input
+            {supportsRetired && <input
               type="checkbox"
               checked={retired.has(n)}
               disabled={busy}
@@ -332,7 +321,7 @@ function NumberGrid({
               aria-label={`Mark #${n} as retired`}
               title="Retired"
               className="h-3 w-3 cursor-pointer accent-orange-500"
-            />
+            />}
           </div>
         ))}
       </div>

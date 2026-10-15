@@ -1,9 +1,9 @@
 //! Era-correct rating scale, verified against the anchors. PS3/X360 store ratings 6-bit `0..63`
 //! (display/edit `+36` → the 36..99 scale); every PS4 title stores them 7-bit `0..99` — the human
-//! value directly, no offset. The classification is metadata-driven (`p_`/`g_`/`c_` name prefixes
-//! + declared range), so NHL 10–13's `p_*`/`g_*` fields resolve too. This is the regression guard
-//! for the PS4 `+36` bug (ids are identical across generations, so an id-keyed offset silently
-//! corrupted every PS4 rating display and edit).
+//! value directly, no offset. The classification is metadata-driven (`p_`/`g_`/`c_` name
+//! prefixes + declared range), so NHL 10–13's `p_*`/`g_*` fields resolve too. This is the
+//! regression guard for the PS4 `+36` bug (ids are identical across generations, so an
+//! id-keyed offset silently corrupted every PS4 rating display and edit).
 
 use std::path::{Path, PathBuf};
 
@@ -13,20 +13,24 @@ use tdb_defs::FieldMetaIndex;
 use tdb_enums::EnumRegistry;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 
 fn fields(rel_db: &str, rel_meta: &str, table: &str) -> Vec<FieldView> {
     let bytes = std::fs::read(repo(rel_db)).unwrap();
     let db = TdbFile::parse(&bytes).unwrap();
-    let meta =
-        FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(rel_meta)).unwrap()).unwrap();
+    let meta = FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(rel_meta)).unwrap()).unwrap();
     let enums = EnumRegistry::from_dir(repo("defs/enums")).unwrap();
     entity_fields(&db, &meta, &enums, table, 0)
 }
 
 fn by_name<'a>(fields: &'a [FieldView], name: &str) -> &'a FieldView {
-    fields.iter().find(|f| f.name == name).unwrap_or_else(|| panic!("{name} present"))
+    fields
+        .iter()
+        .find(|f| f.name == name)
+        .unwrap_or_else(|| panic!("{name} present"))
 }
 
 /// Legacy (PS3): `c_speed` is 6-bit 0..63 storage — +36 display and edit offset.

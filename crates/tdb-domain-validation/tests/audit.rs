@@ -245,7 +245,11 @@ fn dup_on_team_clean_on_anchor() {
 fn patch_eglu(bytes: &[u8], record: u32, field: &str, value: u64) -> Vec<u8> {
     let db = TdbFile::parse(bytes).unwrap();
     let eglu = db.table_canonical("eGlu").unwrap();
-    let f = eglu.fields.iter().find(|f| f.id.canonical(db.endian) == field).unwrap();
+    let f = eglu
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == field)
+        .unwrap();
     let mut buf = bytes.to_vec();
     assert!(db.set_u64(&mut buf, eglu, record, f, value));
     db.recompute_crcs(&mut buf);
@@ -259,7 +263,11 @@ fn dup_on_team_flags_same_player_twice() {
     let bytes = anchor("ps3/nhllegacy/databases/nhlng.db");
     let db = TdbFile::parse(&bytes).unwrap();
     let eglu = db.table_canonical("eGlu").unwrap();
-    let xswt = eglu.fields.iter().find(|f| f.id.canonical(db.endian) == "XSWT").unwrap();
+    let xswt = eglu
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == "XSWT")
+        .unwrap();
     // Both records must live on team 0; copy record 0's occupant onto record 1.
     let occupant0 = db.read_u64(eglu, 0, xswt).unwrap();
     drop(db);
@@ -268,7 +276,9 @@ fn dup_on_team_flags_same_player_twice() {
     let dirty = TdbFile::parse(&buf).unwrap();
     let findings = dup_on_team(&dirty);
     assert!(
-        findings.iter().any(|f| f.field == "XSWT" && f.severity == Severity::Error),
+        findings
+            .iter()
+            .any(|f| f.field == "XSWT" && f.severity == Severity::Error),
         "same player on two slots of a team must be flagged, got {findings:?}"
     );
 }
@@ -283,7 +293,9 @@ fn dup_on_team_flags_duplicate_jersey() {
     let dirty = TdbFile::parse(&buf).unwrap();
     let findings = dup_on_team(&dirty);
     assert!(
-        findings.iter().any(|f| f.field == "sVRt" && f.severity == Severity::Error),
+        findings
+            .iter()
+            .any(|f| f.field == "sVRt" && f.severity == Severity::Error),
         "duplicate jersey within a team must be flagged, got {findings:?}"
     );
 
@@ -329,7 +341,10 @@ fn vanilla_anchor_is_write_clean_and_flags_documented_exceptions() {
         .iter()
         .filter(|f| f.severity == Severity::Warning)
         .collect();
-    assert!(!warns.is_empty(), "expected the documented FK exceptions as warnings");
+    assert!(
+        !warns.is_empty(),
+        "expected the documented FK exceptions as warnings"
+    );
     assert!(
         warns.iter().any(|f| f.table == "PuTc" && f.field == "vfEq"),
         "team-links orphan-by-design values should warn"
@@ -337,7 +352,10 @@ fn vanilla_anchor_is_write_clean_and_flags_documented_exceptions() {
     // ...but the documented secondary null sentinel is now recognized as a placeholder and excluded
     // (it is not a dangling key, so flagging it only cried wolf).
     assert!(
-        !report.findings.iter().any(|f| f.table == "ZBac" && f.field == "ykFq"),
+        !report
+            .findings
+            .iter()
+            .any(|f| f.table == "ZBac" && f.field == "ykFq"),
         "ZBac.ykFq = 16382 is a known null sentinel and must no longer be flagged"
     );
 }
@@ -375,12 +393,17 @@ fn nhl07_free_list_index_rows_are_not_dangling_refs() {
         .find(|b| b.source_table == "ZBac" && b.source_field == "ykFq")
         .expect("player-index-to-bio edge");
     let raw = audit_edge(&db, index_edge).unwrap();
-    assert!(raw.dangling.len() >= 100, "raw edge sees the free-list rows as unresolved");
+    assert!(
+        raw.dangling.len() >= 100,
+        "raw edge sees the free-list rows as unresolved"
+    );
 
     // ...but the predicate recognizes them as unreferenced free-list slots and raises none.
     let findings = referential_integrity(&db, &relations);
     assert!(
-        !findings.iter().any(|f| f.table == "ZBac" && f.field == "ykFq"),
+        !findings
+            .iter()
+            .any(|f| f.table == "ZBac" && f.field == "ykFq"),
         "free-list index rows must not surface as broken player references; got {}",
         findings.iter().filter(|f| f.table == "ZBac").count()
     );
@@ -404,6 +427,14 @@ fn nhl07_audit_is_write_clean_without_false_floods() {
         report.count(Severity::Warning),
         report.count(Severity::Info),
     );
-    assert_eq!(report.count(Severity::Error), 0, "no Error findings on NHL07");
-    assert_eq!(report.count(Severity::Warning), 0, "no Warning findings on NHL07");
+    assert_eq!(
+        report.count(Severity::Error),
+        0,
+        "no Error findings on NHL07"
+    );
+    assert_eq!(
+        report.count(Severity::Warning),
+        0,
+        "no Warning findings on NHL07"
+    );
 }

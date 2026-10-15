@@ -45,14 +45,22 @@ struct Person {
 
 fn main() -> Res<()> {
     let mut args = std::env::args().skip(1);
-    let root = args.next().ok_or("usage: tdb-fhm-build <export-root> <out.db>")?;
-    let out = args.next().ok_or("usage: tdb-fhm-build <export-root> <out.db>")?;
+    let root = args
+        .next()
+        .ok_or("usage: tdb-fhm-build <export-root> <out.db>")?;
+    let out = args
+        .next()
+        .ok_or("usage: tdb-fhm-build <export-root> <out.db>")?;
     let root = PathBuf::from(root);
 
     let mut seasons = discover_seasons(&root)?;
-    seasons.sort_by(|a, b| b.0.cmp(&a.0)); // newest first
+    seasons.sort_by_key(|s| std::cmp::Reverse(s.0)); // newest first
     if seasons.is_empty() {
-        return Err(format!("no YYYY-YYYY.lg season folders found under {}", root.display()).into());
+        return Err(format!(
+            "no YYYY-YYYY.lg season folders found under {}",
+            root.display()
+        )
+        .into());
     }
     eprintln!(
         "found {} seasons ({}..={})",
@@ -109,7 +117,8 @@ fn main() -> Res<()> {
     // Fallback: ratings-less people who nonetheless have a goalie career line are goalies. (Skaters
     // without ratings have no position source in the data, so they stay unset.)
     {
-        let mut stmt = tx.prepare("SELECT DISTINCT person_id FROM career_stat WHERE kind='goalie'")?;
+        let mut stmt =
+            tx.prepare("SELECT DISTINCT person_id FROM career_stat WHERE kind='goalie'")?;
         let goalie_ids: HashSet<i64> = stmt
             .query_map([], |r| r.get(0))?
             .collect::<Result<HashSet<_>, _>>()?;
@@ -159,11 +168,7 @@ fn main() -> Res<()> {
     write_meta(&tx, "source_root", &root.display().to_string())?;
     write_meta(&tx, "season_count", &seasons.len().to_string())?;
     write_meta(&tx, "person_count", &persons.len().to_string())?;
-    write_meta(
-        &tx,
-        "season_min",
-        &seasons.last().unwrap().0.to_string(),
-    )?;
+    write_meta(&tx, "season_min", &seasons.last().unwrap().0.to_string())?;
     write_meta(&tx, "season_max", &seasons.first().unwrap().0.to_string())?;
 
     tx.commit()?;
@@ -394,7 +399,15 @@ fn ingest_season(
     drop(ins_rs);
 
     // Careers — source each person once, from the newest season they carry career rows.
-    ingest_careers(tx, year, dir, &season_pid, team_ref, league_ref, career_done)?;
+    ingest_careers(
+        tx,
+        year,
+        dir,
+        &season_pid,
+        team_ref,
+        league_ref,
+        career_done,
+    )?;
     // Draft origin — once per person, newest-first.
     ingest_draft(tx, year, dir, &season_pid, team_ref, draft_done)?;
     // Contract — once per person, newest-first.
@@ -438,7 +451,13 @@ fn load_ratings(dir: &Path) -> Res<HashMap<i64, Ratings>> {
         let rw = i0(g(&h, r, "RW"));
         // Primary position = whichever position carries the highest grade (FHM rates the natural
         // position 20). Ties break by priority G > C > LW > RW > D; D folds LD/RD. is_goalie ⟺ G won.
-        let cand = [("G", gg), ("C", c), ("LW", lw), ("RW", rw), ("D", ld.max(rd))];
+        let cand = [
+            ("G", gg),
+            ("C", c),
+            ("LW", lw),
+            ("RW", rw),
+            ("D", ld.max(rd)),
+        ];
         let maxv = cand.iter().map(|(_, v)| *v).max().unwrap_or(0);
         let position = if maxv <= 0 {
             String::new()
@@ -524,8 +543,16 @@ fn ingest_careers(
             None => continue,
         };
         // Active files use "Team Id"/"League Id"; retired files use "TeamId"/"LeagueId".
-        let team_key = if h.contains_key("Team Id") { "Team Id" } else { "TeamId" };
-        let league_key = if h.contains_key("League Id") { "League Id" } else { "LeagueId" };
+        let team_key = if h.contains_key("Team Id") {
+            "Team Id"
+        } else {
+            "TeamId"
+        };
+        let league_key = if h.contains_key("League Id") {
+            "League Id"
+        } else {
+            "LeagueId"
+        };
         let cols: Vec<(String, usize)> = h.iter().map(|(k, v)| (k.clone(), *v)).collect();
 
         for r in &rows {
@@ -748,8 +775,11 @@ fn discover_seasons(root: &Path) -> Res<Vec<(i64, PathBuf)>> {
     Ok(out)
 }
 
+/// A parsed semicolon CSV: the header's column-name -> index map, plus its data rows.
+type CsvTable = (HashMap<String, usize>, Vec<StringRecord>);
+
 /// Open a semicolon CSV; return `None` if the file is missing or header-only.
-fn read_table(path: &Path) -> Res<Option<(HashMap<String, usize>, Vec<StringRecord>)>> {
+fn read_table(path: &Path) -> Res<Option<CsvTable>> {
     if !path.exists() {
         return Ok(None);
     }

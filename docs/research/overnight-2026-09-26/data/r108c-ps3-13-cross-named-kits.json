@@ -1,0 +1,178 @@
+{
+ "note": "R108c - the PS3 NHL 13 kit members whose internal raster names carry another id (R108b): do DB rows reference the outer tuple and the\ninternal tuple; does a member with the internal tuple exist; are the pixel payloads identical? Anchor `anchors/ps3/nhl13` (read-only) and\nthe NHL 13 EB archive members (decoded in memory). Usage: python r108c_ps3_13_cross_named_kits.py <out.json>\n",
+ "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+ "pairs": [
+  {
+   "outer": "rendering/jersey/texlib_1_421_2.rpsgl",
+   "internal_named": "rendering/jersey/texlib_1_400_2.rpsgl",
+   "outer_member": {
+    "archive": "nocacherender.big",
+    "row": 1742,
+    "decoded_sha256": "b4210b10dfac5a613eb762044a98678dc6e76a8c7795238c6cce577a9f905650",
+    "payload_sha256": "ef80a4bec4eae96ee2f15c18ed5b84d71ba8cfde95de5f66a8bdb3433b79318e",
+    "payload_bytes": 3670384,
+    "names": [
+     "font_1_400_2_cm.Raster",
+     "font_1_400_2_nm.Raster",
+     "font_1_400_2_sm.Raster",
+     "jersey_1_400_2_cm.Raster",
+     "jersey_1_400_2_sm.Raster",
+     "jersey_1_400_2_0_nm.Raster"
+    ]
+   },
+   "internal_member": {
+    "archive": "nocacherender.big",
+    "row": 1690,
+    "decoded_sha256": "b4210b10dfac5a613eb762044a98678dc6e76a8c7795238c6cce577a9f905650",
+    "payload_sha256": "ef80a4bec4eae96ee2f15c18ed5b84d71ba8cfde95de5f66a8bdb3433b79318e",
+    "payload_bytes": 3670384,
+    "names": [
+     "font_1_400_2_cm.Raster",
+     "font_1_400_2_nm.Raster",
+     "font_1_400_2_sm.Raster",
+     "jersey_1_400_2_cm.Raster",
+     "jersey_1_400_2_sm.Raster",
+     "jersey_1_400_2_0_nm.Raster"
+    ]
+   },
+   "payload_identical": true
+  },
+  {
+   "outer": "rendering/pant/texlib_1_421_2.rpsgl",
+   "internal_named": "rendering/pant/texlib_1_400_2.rpsgl",
+   "outer_member": {
+    "archive": "cacherender.big",
+    "row": 7039,
+    "decoded_sha256": "ace7fc52d5489251d3c8d533dbdea8dfa5db53b009672410f8593059ff590bf3",
+    "payload_sha256": "c6c80a863e9688b9a6050c5f414f29ee22b48008a5a2e05d7a8c9d4875d155b4",
+    "payload_bytes": 568120,
+    "names": [
+     "pant_1_400_2_cm.Raster",
+     "pant_1_400_2_nm.Raster",
+     "pant_1_400_2_sm.Raster"
+    ]
+   },
+   "internal_member": {
+    "archive": "cacherender.big",
+    "row": 6987,
+    "decoded_sha256": "ace7fc52d5489251d3c8d533dbdea8dfa5db53b009672410f8593059ff590bf3",
+    "payload_sha256": "c6c80a863e9688b9a6050c5f414f29ee22b48008a5a2e05d7a8c9d4875d155b4",
+    "payload_bytes": 568120,
+    "names": [
+     "pant_1_400_2_cm.Raster",
+     "pant_1_400_2_nm.Raster",
+     "pant_1_400_2_sm.Raster"
+    ]
+   },
+   "payload_identical": true
+  },
+  {
+   "outer": "rendering/sock/sock_1_421_2_cm.rpsgl",
+   "internal_named": "rendering/sock/sock_1_400_2_cm.rpsgl",
+   "outer_member": {
+    "archive": "cacherender.big",
+    "row": 9886,
+    "decoded_sha256": "94f69c40e22cb236a02b06f64dafbbfa54e5f49813be4f3335818af8dc80b3b7",
+    "payload_sha256": "6722715b86408fb2a4485eea64758743834d1a4d113797655c7b5dddeeefd810",
+    "payload_bytes": 349544,
+    "names": [
+     "sock_1_400_2_cm.Raster"
+    ]
+   },
+   "internal_member": {
+    "archive": "cacherender.big",
+    "row": 9834,
+    "decoded_sha256": "94f69c40e22cb236a02b06f64dafbbfa54e5f49813be4f3335818af8dc80b3b7",
+    "payload_sha256": "6722715b86408fb2a4485eea64758743834d1a4d113797655c7b5dddeeefd810",
+    "payload_bytes": 349544,
+    "names": [
+     "sock_1_400_2_cm.Raster"
+    ]
+   },
+   "payload_identical": true
+  },
+  {
+   "outer": "rendering/jersey/name_1_138_2_cm.rpsgl",
+   "internal_named": "rendering/jersey/name_1_138_1_cm.rpsgl",
+   "outer_member": {
+    "archive": "nocacherender.big",
+    "row": 528,
+    "decoded_sha256": "184ca8189cb03b9b4857bbda60b72708f8419ec2451bce249aeaa41cb1cc94bc",
+    "payload_sha256": "6bd396bc107a9a755e653ecfd62b3edc9c3f17ea5fc5b5a687955a9dbad4443d",
+    "payload_bytes": 349524,
+    "names": [
+     "name_1_138_1_cm.Raster"
+    ]
+   },
+   "internal_member": {
+    "archive": "nocacherender.big",
+    "row": 527,
+    "decoded_sha256": "184ca8189cb03b9b4857bbda60b72708f8419ec2451bce249aeaa41cb1cc94bc",
+    "payload_sha256": "6bd396bc107a9a755e653ecfd62b3edc9c3f17ea5fc5b5a687955a9dbad4443d",
+    "payload_bytes": 349524,
+    "names": [
+     "name_1_138_1_cm.Raster"
+    ]
+   },
+   "payload_identical": true
+  },
+  {
+   "outer": "rendering/jersey/name_1_421_2_cm.rpsgl",
+   "internal_named": "rendering/jersey/name_1_400_2_cm.rpsgl",
+   "outer_member": null,
+   "internal_member": {
+    "archive": "nocacherender.big",
+    "row": 820,
+    "decoded_sha256": "d3caccb07da2e9284d370d43fa43b1f4bdff000d882fe03832ffb2ac033ce439",
+    "payload_sha256": "1767b52688e5654cf4ce2db39bf09f531232be3261699a660ff7fb9f52fdce4e",
+    "payload_bytes": 349524,
+    "names": [
+     "name_1_400_2_cm.Raster"
+    ]
+   },
+   "payload_identical": null
+  }
+ ],
+ "db": {
+  "(1,421,2)": [],
+  "(1,400,2)": [
+   {
+    "teamid": 167,
+    "jerseyindex": 2,
+    "isdefault": 0
+   }
+  ],
+  "(1,138,2)": [
+   {
+    "teamid": 42,
+    "jerseyindex": 2,
+    "isdefault": 0
+   }
+  ],
+  "(1,138,1)": [
+   {
+    "teamid": 42,
+    "jerseyindex": 0,
+    "isdefault": 1
+   }
+  ],
+  "teams_artid_421": [
+   [
+    184,
+    "Sherbrooke Phoenix"
+   ]
+  ],
+  "teams_artid_400": [
+   [
+    167,
+    "Sudbury Wolves"
+   ]
+  ],
+  "teams_artid_138": [
+   [
+    42,
+    "Hershey Bears\u00ae"
+   ]
+  ]
+ }
+}

@@ -1,0 +1,117 @@
+# NHL 09 (PS3 / Xbox 360). 4-bit league code, old conference/division pair, no European or CHL
+# schedule tables.
+name = "gen7-nhl09"
+description = "NHL 09 team league codes"
+applies_to = ["nhl09"]
+
+[schema]
+league_table = "kOtt"
+league_field = "xMjj"
+league_width = 4
+required_fields = ["kOtt.rasz"]
+forbidden_tables = ["fsLK", "vlni", "jEiu"]
+
+[source]
+kind = "anchor-measurement"
+description = "L1.1-A cross-tab of kOtt.xMjj against member-team abbreviations, nhlng.db 0f7c826b...d6cb"
+
+# Dictionary keys (LOC-W1, 2026-09-18): `dictionary_key` per code is a HYPOTHESIS — the key family
+# is present in this title's own `nhl_eng_us.db` (verified by hash-resolved lookup on both platform
+# anchors) and the same family is the traced table on NHL Legacy Xbox 360, but no executable of this
+# title was inspected. Codes without a key have no matching key in the dictionary.
+# R1 F5 + research handoff P1.1-X (2026-09-18, docs/research/overnight-2026-09-18/10-phase1-league-identity-xbox360.md): the code -> key table is a static
+# pointer table in each Xbox 360 executable, decrypted and read tonight; every key was resolved in the
+# title's own dictionary (each X: copy equals the committed Xbox 360 anchor). `traced` below is scoped by
+# [key_witness] to those Xbox targets; the PS3 copies of the same vocabulary show `by-reference` (their
+# executables are encrypted and were not inspected; the PS3 database/dictionary equal the Xbox bytes on
+# NHL 10-Legacy, which raises the prior but is not a trace). Which screens read a key is untraced everywhere.
+[key_witness]
+traced_on = [{ game = "nhl09", platform = "xbox" }]
+source = "Xbox 360 default.xex static league pointer table (nhl09 pointer table at VA 0x83054ce0 (image 18dceeb870b2…)); research probes league_tables.py / ptr_table.py"
+otherwise = "by-reference"
+
+[[entries]]
+raw = 0
+label = "NHL"
+confidence = "candidate"
+evidence = "32 rows: ANA, ATL, BOS, BUF ..."
+dictionary_key = "NHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 1
+label = "AHL"
+confidence = "candidate"
+evidence = "29 rows: ALB, BIN, BRP, CHA ..."
+dictionary_key = "AHL"
+key_evidence = "traced"
+
+[[entries]]
+raw = 2
+label = "Elitserien (Sweden)"
+confidence = "candidate"
+evidence = "12 rows: BIF, DIF, FBK, VF ..."
+dictionary_key = "elitserien"
+key_evidence = "traced"
+
+[[entries]]
+raw = 3
+label = "SM-liiga (Finland)"
+confidence = "candidate"
+evidence = "14 rows: ASS, BLU, IFK, HPK ..."
+dictionary_key = "SMLIIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 4
+label = "DEL (Germany)"
+confidence = "candidate"
+evidence = "15 rows: AUG, EBB, EVD, DEG, FRL, HHF, HAN, ING ..."
+dictionary_key = "DEL"
+key_evidence = "traced"
+# P1.1-X: the NHL 09 executable binds code 4 to the key `DEL` (both `DEL` and `TXT_LEAGUE_DEL` exist in its dictionaries with text "DEL"); a re-point of TXT_LEAGUE_DEL would not change the label
+
+[[entries]]
+raw = 5
+label = "Extraliga (Czech)"
+confidence = "candidate"
+evidence = "14 rows: CBE, KVA, KLA, LBC, LIT, PCE, PLZ, SLA ..."
+dictionary_key = "TXT_LEAGUE_O2_EXTRALIGA"
+key_evidence = "traced"
+
+[[entries]]
+raw = 6
+label = "Russian League"
+confidence = "candidate"
+evidence = "20 rows: MVD, VIT, TRA, SEV, CSKA, DYN, AKB, AMUR ..."
+dictionary_key = "TXT_LEAGUE_SUPER_LEAGUE"
+key_evidence = "traced"
+
+[[entries]]
+raw = 7
+label = "National Teams"
+confidence = "candidate"
+evidence = "21 rows: AUS, BEL, CAN, CZE ..."
+dictionary_key = "NATIONAL"
+key_evidence = "traced"
+# raw 8: one row (CEN) - unidentified, left raw.
+
+[[entries]]
+raw = 9
+label = "Custom Teams"
+confidence = "candidate"
+evidence = "30 rows with empty abbreviations"
+dictionary_key = "CUSTOM_TEAMS"
+key_evidence = "traced"
+
+# Codes present in the executable enum with no stock team row on the anchors (P1.1-X §2): the
+# label is the traced key's text in the title's own dictionary. Whether a team assigned one of these
+# codes is accepted by the game is a runtime question.
+[[entries]]
+raw = 8
+label = "Historic Teams"
+confidence = "enum"
+evidence = "no team row on the anchors; NHL 09 pointer table entry 8 -> HISTORIC_TEAMS ('Historic Team'); the batch's raw code 8 'CEN' lead"
+dictionary_key = "HISTORIC_TEAMS"
+key_evidence = "traced"
+

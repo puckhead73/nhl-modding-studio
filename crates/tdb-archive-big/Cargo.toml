@@ -5,7 +5,12 @@ version = "0.0.0"
 edition.workspace = true
 rust-version.workspace = true
 publish.workspace = true
+license.workspace = true
 
 [dependencies]
 thiserror = "1"
 tdb-archive-codec = { path = "../tdb-archive-codec" }
+sha2 = "0.10"
+
+[dev-dependencies]
+serde_json = "1"

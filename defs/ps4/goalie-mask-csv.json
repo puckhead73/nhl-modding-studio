@@ -1,0 +1,37 @@
+{
+ "about": "PS4 goalie-mask Creation Zone list (goaliemaskinfo.csv in inxp_00.big) identity per title and its assetid rule (research R135 \u00a75, 28 Sep 2026): NHL 17 / 18 assetid is an ordinal; NHL 19-21 assetid = stylerenderassetid x 1000 + patternrenderassetid. Studio reads a title's list only when the member hashes to this value for the open project's title (receipt 54).",
+ "from": "docs/research/overnight-2026-09-28/data/r135-ps4-goalie-mask-pairs.json",
+ "from_sha256": "1e00060a82c010b86855b19133e078aa4f5c384ed50b044354d6d22399451b8d",
+ "titles": {
+  "nhl17": {
+   "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+   "sha256": "b7224fed583b99e5c5c29a6cfc3b97e475abe375cda278ed4105e6f6a09fe629",
+   "rows": 28,
+   "assetid_rule": "ordinal"
+  },
+  "nhl18": {
+   "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+   "sha256": "b7224fed583b99e5c5c29a6cfc3b97e475abe375cda278ed4105e6f6a09fe629",
+   "rows": 28,
+   "assetid_rule": "ordinal"
+  },
+  "nhl19": {
+   "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+   "sha256": "0573c36d23249b11161c5e9848f142eac8e353ccf33da4f91849f06ca1368533",
+   "rows": 38,
+   "assetid_rule": "style_x1000_plus_pattern"
+  },
+  "nhl21": {
+   "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+   "sha256": "c4920c36b481f247b89125709baf00db0f0690650f2f53960b55aa1176a81575",
+   "rows": 53,
+   "assetid_rule": "style_x1000_plus_pattern"
+  },
+  "nhl20": {
+   "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+   "sha256": "c2d54977ef5b6d8ad5df12e4ac5cdd36d33751b80af38e135fd80f69b3ced200",
+   "rows": 50,
+   "assetid_rule": "style_x1000_plus_pattern"
+  }
+ }
+}

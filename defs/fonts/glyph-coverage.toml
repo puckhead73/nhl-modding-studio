@@ -1,0 +1,385 @@
+# Shipped-font glyph coverage per title tree — consumed from research 2026-09-21 handoff 09
+# (`research-r34-fonts-encoding`, `data/r34-font-glyph-coverage.json`): the union of every shipped
+# TrueType `cmap` per tree, as code-point ranges. A tree with no loose fonts (PS3 08/09/10/12: in-archive,
+# not opened) is listed with `measured = false`. Static evidence only: which font a screen uses and the
+# console system-font fallback are not established (the glyph gate stays a runtime card).
+source_sha256 = "a3c10fe137ca5a5ecba2f093bd97a77fbda7f6cf4c4007355ebf1b8bc71fe635"
+
+[[trees]]
+tree = "ps3-nhl08"
+measured = false
+fonts = []
+union_count = 0
+ranges = [
+]
+
+[[trees]]
+tree = "ps3-nhl09"
+measured = false
+fonts = []
+union_count = 0
+ranges = [
+]
+
+[[trees]]
+tree = "ps3-nhl10"
+measured = false
+fonts = []
+union_count = 0
+ranges = [
+]
+
+[[trees]]
+tree = "ps3-nhl11"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 334
+ranges = [
+  "U+0009", "U+0020-U+007E", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+011A-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2013-U+2014",
+  "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044", "U+20AC",
+  "U+2113", "U+2116", "U+2122", "U+2126", "U+212E", "U+2202", "U+2206", "U+220F",
+  "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248", "U+2260", "U+2264-U+2265",
+  "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "ps3-nhl12"
+measured = false
+fonts = []
+union_count = 0
+ranges = [
+]
+
+[[trees]]
+tree = "ps3-nhl13"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 337
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+011A-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "ps3-nhl14"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 339
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+0118-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "ps3-nhl15"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 339
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+0118-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "ps3-nhllegacy"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 339
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+0118-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "ps4-nhl15"
+measured = true
+fonts = ["data/common/font/dinengschriftstd.ttf", "data/common/font/felt.ttf", "data/common/font/felt_finefine.ttf", "data/common/font/marker.ttf", "data/common/font/rough.ttf", "data/common/font/rough_outline.ttf", "data/common/font/unitedsansrgbksmcaps.ttf", "data/common/font/webkitfont/helveticaneueltstd-bd.ttf", "data/common/font/webkitfont/helveticaneueltstd-roman.ttf", "data/common/font/webkitfont/klavikabasic-bold.ttf", "data/common/font/webkitfont/klavikabasic-medium.ttf", "ui/fonts/knul-bold.ttf", "ui/fonts/knul-light.ttf", "ui/fonts/knul-regular.ttf", "ui/fonts/nbcsn_frank-bold.ttf", "ui/fonts/nbcsn_frank-bolditalic.ttf", "ui/fonts/nbcsn_frank-medium.ttf", "ui/fonts/nbcsn_frank-regular.ttf", "ui/fonts/tradegothicltstd-bdcn20.ttf", "ui/fonts/tradegothicltstd-bold.ttf"]
+union_count = 619
+ranges = [
+  "U+0000", "U+0002", "U+0009", "U+0020-U+007E", "U+00A0-U+017E", "U+0192", "U+01CD-U+01DC", "U+01DE-U+01DF",
+  "U+01E6-U+01E7", "U+01FA-U+01FF", "U+0218-U+021B", "U+0228-U+022B", "U+0237", "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD",
+  "U+0323", "U+032D", "U+0331", "U+0394", "U+03A9", "U+03BC", "U+03C0", "U+0401-U+040C",
+  "U+040E-U+044F", "U+0451-U+045C", "U+045E-U+045F", "U+0462-U+0463", "U+0472-U+0475", "U+0490-U+0491", "U+04D9", "U+1E04-U+1E05",
+  "U+1E0C-U+1E0F", "U+1E12-U+1E13", "U+1E24-U+1E25", "U+1E2E-U+1E2F", "U+1E36-U+1E37", "U+1E3C-U+1E3F", "U+1E44-U+1E47", "U+1E4A-U+1E4D",
+  "U+1E50-U+1E53", "U+1E62-U+1E63", "U+1E6C-U+1E71", "U+1E80-U+1E85", "U+1E92-U+1E93", "U+1EA1", "U+1EAC-U+1EAD", "U+1EB8-U+1EB9",
+  "U+1EBC-U+1EBD", "U+1EC6-U+1EC7", "U+1ECA-U+1ECD", "U+1ED8-U+1ED9", "U+1EE4-U+1EE5", "U+1EF2-U+1EF3", "U+2013-U+2015", "U+2018-U+201A",
+  "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044", "U+2074", "U+20AC",
+  "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202", "U+2206",
+  "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248", "U+2260",
+  "U+2264-U+2265", "U+25CA", "U+E000-U+E001", "U+EFED-U+EFF9", "U+F6C1-U+F6C2", "U+F6C5", "U+F6C9-U+F6D8", "U+F8FF",
+  "U+FB00-U+FB04",
+]
+
+[[trees]]
+tree = "ps4-nhl16"
+measured = true
+fonts = ["data/common/font/dinengschriftstd.ttf", "data/common/font/felt.ttf", "data/common/font/felt_finefine.ttf", "data/common/font/marker.ttf", "data/common/font/roboto-medium.ttf", "data/common/font/rough.ttf", "data/common/font/rough_outline.ttf", "data/common/font/tradegothicltstd-bdcn20.ttf", "data/common/font/unitedsansrgbksmcaps.ttf", "data/common/font/webkitfont/helveticaneueltstd-bd.ttf", "data/common/font/webkitfont/helveticaneueltstd-roman.ttf", "data/common/font/webkitfont/klavikabasic-bold.ttf", "data/common/font/webkitfont/klavikabasic-medium.ttf", "ui/fonts/knul-bold.ttf", "ui/fonts/knul-light.ttf", "ui/fonts/knul-regular.ttf", "ui/fonts/nbcsn_frank-bold.ttf", "ui/fonts/nbcsn_frank-bolditalic.ttf", "ui/fonts/nbcsn_frank-medium.ttf", "ui/fonts/nbcsn_frank-regular.ttf", "ui/fonts/roboto-black.ttf", "ui/fonts/roboto-bold.ttf", "ui/fonts/roboto-light.ttf", "ui/fonts/roboto-regular.ttf", "ui/fonts/tradegothicltstd-bdcn20.ttf", "ui/fonts/tradegothicltstd-bold.ttf"]
+union_count = 1043
+ranges = [
+  "U+0000", "U+0002", "U+0009", "U+000D", "U+0020-U+007E", "U+00A0-U+017F", "U+0192", "U+01A0-U+01A1",
+  "U+01AF-U+01B0", "U+01CD-U+01DC", "U+01DE-U+01DF", "U+01E6-U+01E7", "U+01F0", "U+01FA-U+01FF", "U+0218-U+021B", "U+0228-U+022B",
+  "U+0237", "U+0259", "U+02BC", "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+02F3", "U+0300-U+0301",
+  "U+0303", "U+0309", "U+030F", "U+0323", "U+032D", "U+0331", "U+0384-U+038A", "U+038C",
+  "U+038E-U+03A1", "U+03A3-U+03CE", "U+03D1-U+03D2", "U+03D6", "U+0400-U+0486", "U+0488-U+0513", "U+1E00-U+1E01", "U+1E04-U+1E05",
+  "U+1E0C-U+1E0F", "U+1E12-U+1E13", "U+1E24-U+1E25", "U+1E2E-U+1E2F", "U+1E36-U+1E37", "U+1E3C-U+1E3F", "U+1E44-U+1E47", "U+1E4A-U+1E4D",
+  "U+1E50-U+1E53", "U+1E62-U+1E63", "U+1E6C-U+1E71", "U+1E80-U+1E85", "U+1E92-U+1E93", "U+1EA0-U+1EF9", "U+1F4D", "U+2000-U+200B",
+  "U+2013-U+2015", "U+2017-U+201E", "U+2020-U+2022", "U+2025-U+2026", "U+2030", "U+2032-U+2033", "U+2039-U+203A", "U+203C",
+  "U+2044", "U+2074", "U+207F", "U+20A3-U+20A4", "U+20A7", "U+20A9", "U+20AB-U+20AC", "U+2105",
+  "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+215B-U+215E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+E000-U+E001", "U+EE01-U+EE02", "U+EFED-U+EFF9", "U+F040-U+F049", "U+F050-U+F059",
+  "U+F060-U+F069", "U+F070-U+F075", "U+F080-U+F089", "U+F090-U+F099", "U+F0A0-U+F0A9", "U+F0B0-U+F0B5", "U+F6C1-U+F6C3", "U+F8FF",
+  "U+FB00-U+FB04", "U+FEFF", "U+FFFC-U+FFFD",
+]
+
+[[trees]]
+tree = "ps4-nhl17"
+measured = true
+fonts = ["data/common/font/dinengschriftstd.ttf", "data/common/font/felt.ttf", "data/common/font/felt_finefine.ttf", "data/common/font/marker.ttf", "data/common/font/roboto-medium.ttf", "data/common/font/rough.ttf", "data/common/font/rough_outline.ttf", "data/common/font/tradegothicltstd-bdcn20.ttf", "data/common/font/unitedsansrgbksmcaps.ttf", "data/common/font/webkitfont/helveticaneueltstd-bd.ttf", "data/common/font/webkitfont/helveticaneueltstd-roman.ttf", "data/common/font/webkitfont/klavikabasic-bold.ttf", "data/common/font/webkitfont/klavikabasic-medium.ttf", "ui/fonts/nbcsn_frank-bold.ttf", "ui/fonts/nbcsn_frank-bolditalic.ttf", "ui/fonts/nbcsn_frank-medium.ttf", "ui/fonts/nbcsn_frank-regular.ttf", "ui/fonts/roboto-bold.ttf", "ui/fonts/roboto-light.ttf", "ui/fonts/roboto-regular.ttf", "ui/fonts/robotocondensed-bold.ttf", "ui/fonts/robotocondensed-light.ttf", "ui/fonts/tradegothicltstd-bdcn20.ttf", "ui/fonts/tradegothicnumbers.ttf"]
+union_count = 1002
+ranges = [
+  "U+0000", "U+0002", "U+000D", "U+0020-U+007E", "U+00A0-U+017F", "U+018F", "U+0192", "U+01A0-U+01A1",
+  "U+01AF-U+01B0", "U+01F0", "U+01FA-U+01FF", "U+0218-U+021B", "U+0237", "U+0259", "U+02BC", "U+02C6-U+02C7",
+  "U+02C9", "U+02D8-U+02DD", "U+02F3", "U+0300-U+0301", "U+0303", "U+0309", "U+030F", "U+0323",
+  "U+0384-U+038A", "U+038C", "U+038E-U+03A1", "U+03A3-U+03CE", "U+03D1-U+03D2", "U+03D6", "U+0400-U+0486", "U+0488-U+0513",
+  "U+1E00-U+1E01", "U+1E3E-U+1E3F", "U+1E80-U+1E85", "U+1EA0-U+1EF9", "U+1F4D", "U+2000-U+200B", "U+2010-U+2011", "U+2013-U+2015",
+  "U+2017-U+201E", "U+2020-U+2022", "U+2025-U+2027", "U+2030", "U+2032-U+2033", "U+2039-U+203A", "U+203C", "U+2044",
+  "U+2074", "U+207F", "U+20A3-U+20A4", "U+20A6-U+20AC", "U+20B1", "U+20B9-U+20BA", "U+20BC-U+20BD", "U+2105",
+  "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+215B-U+215E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+E000-U+E001", "U+EE01-U+EE02", "U+EFED-U+EFF9", "U+F040-U+F049", "U+F050-U+F059",
+  "U+F060-U+F069", "U+F070-U+F07B", "U+F080-U+F089", "U+F090-U+F099", "U+F0A0-U+F0A9", "U+F0B0-U+F0BB", "U+F6C1-U+F6C3", "U+F8FF",
+  "U+FB00-U+FB04", "U+FEFF", "U+FFFC-U+FFFD",
+]
+
+[[trees]]
+tree = "ps4-nhl18"
+measured = true
+fonts = ["data/common/font/dinengschriftstd.ttf", "data/common/font/felt.ttf", "data/common/font/felt_finefine.ttf", "data/common/font/marker.ttf", "data/common/font/roboto-medium.ttf", "data/common/font/rough.ttf", "data/common/font/rough_outline.ttf", "data/common/font/tradegothicltstd-bdcn20.ttf", "data/common/font/unitedsansrgbksmcaps.ttf", "data/common/font/webkitfont/helveticaneueltstd-bd.ttf", "data/common/font/webkitfont/helveticaneueltstd-roman.ttf", "data/common/font/webkitfont/klavikabasic-bold.ttf", "data/common/font/webkitfont/klavikabasic-medium.ttf", "ui/fonts/flamacondensed-basic-italic.ttf", "ui/fonts/flamacondensed-bold.ttf", "ui/fonts/flamacondensed-medium-italic.ttf", "ui/fonts/flamacondensed-medium.ttf", "ui/fonts/flamasemicondensed-basic.ttf", "ui/fonts/flamaultracondensed-basic.ttf", "ui/fonts/flamaultracondensed-medium-italic.ttf", "ui/fonts/flamaultracondensed-medium.ttf", "ui/fonts/nbcsn_frank-bold.ttf", "ui/fonts/nbcsn_frank-medium.ttf", "ui/fonts/nbcsn_frank-regular.ttf", "ui/fonts/tradegothicltstd-bdcn20.ttf"]
+union_count = 1100
+ranges = [
+  "U+0000", "U+0002", "U+000D", "U+0020-U+007E", "U+00A0-U+017F", "U+0192", "U+01A0-U+01A1", "U+01AF-U+01B0",
+  "U+01F0", "U+01FA-U+01FF", "U+0218-U+021B", "U+0237", "U+0259", "U+02BC", "U+02C6-U+02C7", "U+02C9",
+  "U+02D8-U+02DD", "U+02F3", "U+0300-U+0301", "U+0303", "U+0309", "U+030F", "U+0323", "U+0384-U+038A",
+  "U+038C", "U+038E-U+03A1", "U+03A3-U+03CE", "U+03D1-U+03D2", "U+03D6", "U+0400-U+0486", "U+0488-U+0513", "U+1E00-U+1E01",
+  "U+1E3E-U+1E3F", "U+1E80-U+1E85", "U+1E9E", "U+1EA0-U+1EF9", "U+1F4D", "U+2000-U+200B", "U+2013-U+2015", "U+2017-U+201E",
+  "U+2020-U+2022", "U+2025-U+2026", "U+2030", "U+2032-U+2033", "U+2039-U+203A", "U+203C", "U+2044", "U+2070",
+  "U+2074-U+2079", "U+207D-U+2089", "U+208D-U+208E", "U+20A3-U+20A4", "U+20A7", "U+20A9-U+20AC", "U+2105", "U+2113",
+  "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2153-U+215E", "U+2190-U+2193", "U+2196-U+2199",
+  "U+2202", "U+2206", "U+220F", "U+2211-U+2213", "U+2215", "U+2219-U+221A", "U+221E", "U+222B",
+  "U+2248", "U+2260", "U+2264-U+2265", "U+22C5", "U+25A0-U+25A1", "U+25AA", "U+25B2", "U+25BA",
+  "U+25BC", "U+25C4", "U+25CA", "U+25E2-U+25E5", "U+E000-U+E001", "U+E131-U+E136", "U+E138-U+E139", "U+E13C",
+  "U+E13E", "U+E38C-U+E38D", "U+E402-U+E40B", "U+E40D-U+E410", "U+E413-U+E414", "U+E416-U+E41F", "U+E421-U+E424", "U+E488",
+  "U+E533", "U+E53F", "U+E541-U+E549", "U+EE01-U+EE02", "U+EFED-U+EFF9", "U+F040-U+F049", "U+F050-U+F05A", "U+F060-U+F069",
+  "U+F070-U+F07B", "U+F080-U+F089", "U+F090-U+F09A", "U+F0A0-U+F0A9", "U+F0B0-U+F0BC", "U+F1BC", "U+F2BC", "U+F6C1-U+F6C3",
+  "U+F8FF", "U+FB00-U+FB04", "U+FEFF", "U+FFFC-U+FFFD",
+]
+
+[[trees]]
+tree = "ps4-nhl19"
+measured = true
+fonts = ["data/common/font/dinengschriftstd.ttf", "data/common/font/felt.ttf", "data/common/font/felt_finefine.ttf", "data/common/font/marker.ttf", "data/common/font/roboto-medium.ttf", "data/common/font/rough.ttf", "data/common/font/rough_outline.ttf", "data/common/font/tradegothicltstd-bdcn20.ttf", "data/common/font/unitedsansrgbksmcaps.ttf", "data/common/font/webkitfont/helveticaneueltstd-bd.ttf", "data/common/font/webkitfont/helveticaneueltstd-roman.ttf", "data/common/font/webkitfont/klavikabasic-bold.ttf", "data/common/font/webkitfont/klavikabasic-medium.ttf", "ui/fonts/flamacondensed-bold.ttf", "ui/fonts/flamacondensed-medium-italic.ttf", "ui/fonts/flamacondensed-medium.ttf", "ui/fonts/flamacondensed-superslant-basic-italic.ttf", "ui/fonts/flamacondensed-superslant-extrabold-italic.ttf", "ui/fonts/flamasemicondensed-basic.ttf", "ui/fonts/flamaultracondensed-basic.ttf", "ui/fonts/flamaultracondensed-medium-italic.ttf", "ui/fonts/flamaultracondensed-medium.ttf", "ui/fonts/nbcsn_frank-bold.ttf", "ui/fonts/nbcsn_frank-medium.ttf", "ui/fonts/nbcsn_frank-regular.ttf", "ui/fonts/tradegothicltstd-bdcn20.ttf"]
+union_count = 1113
+ranges = [
+  "U+0000", "U+0002", "U+000D", "U+0020-U+007E", "U+00A0-U+017F", "U+0192", "U+01A0-U+01A1", "U+01AF-U+01B0",
+  "U+01F0", "U+01FA-U+01FF", "U+0211", "U+0218-U+021B", "U+0221", "U+0237", "U+0243", "U+0253",
+  "U+0259", "U+02BC", "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+02F3", "U+0300-U+0301", "U+0303",
+  "U+0309", "U+030F", "U+0323", "U+0384-U+038A", "U+038C", "U+038E-U+03A1", "U+03A3-U+03CE", "U+03D1-U+03D2",
+  "U+03D6", "U+0400-U+0486", "U+0488-U+0513", "U+1E00-U+1E01", "U+1E3E-U+1E3F", "U+1E80-U+1E85", "U+1E9E", "U+1EA0-U+1EF9",
+  "U+1F4D", "U+2000-U+200B", "U+2010-U+2015", "U+2017-U+201E", "U+2020-U+2022", "U+2025-U+2026", "U+202F-U+2030", "U+2032-U+2033",
+  "U+2039-U+203A", "U+203C", "U+2044", "U+205F", "U+2070", "U+2074-U+2079", "U+207D-U+2089", "U+208D-U+208E",
+  "U+20A3-U+20A4", "U+20A7", "U+20A9-U+20AC", "U+2105", "U+2113", "U+2116", "U+2120", "U+2122",
+  "U+2126", "U+212E", "U+2153-U+215E", "U+2190-U+2193", "U+2196-U+2199", "U+2202", "U+2206", "U+220F",
+  "U+2211-U+2213", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248", "U+2260", "U+2264-U+2265",
+  "U+22C5", "U+25A0-U+25A1", "U+25AA", "U+25B2", "U+25BA", "U+25BC", "U+25C4", "U+25CA",
+  "U+25E2-U+25E5", "U+25FC", "U+E000-U+E001", "U+E131-U+E136", "U+E138-U+E139", "U+E13C", "U+E13E", "U+E38C-U+E38D",
+  "U+E402-U+E40B", "U+E40D-U+E410", "U+E413-U+E414", "U+E416-U+E41F", "U+E421-U+E424", "U+E488", "U+E533", "U+E53F",
+  "U+E541-U+E549", "U+EE01-U+EE02", "U+EFED-U+EFF9", "U+F040-U+F049", "U+F050-U+F05A", "U+F060-U+F069", "U+F070-U+F07B", "U+F080-U+F089",
+  "U+F090-U+F09A", "U+F0A0-U+F0A9", "U+F0B0-U+F0BF", "U+F1BC", "U+F2BC", "U+F6C1-U+F6C3", "U+F8FF", "U+FB00-U+FB04",
+  "U+FEFF", "U+FFFC-U+FFFD",
+]
+
+[[trees]]
+tree = "ps4-nhl20"
+measured = true
+fonts = ["data/common/font/dinengschriftstd.ttf", "data/common/font/felt.ttf", "data/common/font/felt_finefine.ttf", "data/common/font/marker.ttf", "data/common/font/roboto-medium.ttf", "data/common/font/rough.ttf", "data/common/font/rough_outline.ttf", "data/common/font/tradegothicltstd-bdcn20.ttf", "data/common/font/unitedsansrgbksmcaps.ttf", "data/common/font/webkitfont/helveticaneueltstd-bd.ttf", "data/common/font/webkitfont/helveticaneueltstd-roman.ttf", "data/common/font/webkitfont/klavikabasic-bold.ttf", "data/common/font/webkitfont/klavikabasic-medium.ttf", "ui/fonts/flamacondensed-bold.ttf", "ui/fonts/flamacondensed-medium-italic.ttf", "ui/fonts/flamacondensed-medium.ttf", "ui/fonts/flamacondensed-superslant-basic-italic.ttf", "ui/fonts/flamacondensed-superslant-extrabold-italic.ttf", "ui/fonts/flamasemicondensed-basic.ttf", "ui/fonts/flamaultracondensed-basic.ttf", "ui/fonts/flamaultracondensed-medium-italic.ttf", "ui/fonts/flamaultracondensed-medium.ttf", "ui/fonts/nbcsn_frank-bold.ttf", "ui/fonts/nbcsn_frank-medium.ttf", "ui/fonts/nbcsn_frank-regular.ttf", "ui/fonts/nnrektoratstd-heavy-italic.ttf", "ui/fonts/nnrektoratstd-heavy.ttf", "ui/fonts/nnrektoratstd-regular-italic.ttf", "ui/fonts/nnrektoratstd-regular.ttf", "ui/fonts/stratum1-bold-italic.ttf", "ui/fonts/stratum1-bold.ttf", "ui/fonts/stratum1-regular-italic.ttf", "ui/fonts/stratum1-regular.ttf", "ui/fonts/tradegothicltstd-bdcn20.ttf"]
+union_count = 1138
+ranges = [
+  "U+0000-U+0002", "U+000C-U+000D", "U+0020-U+007E", "U+00A0-U+017F", "U+0192", "U+01A0-U+01A1", "U+01AF-U+01B0", "U+01CD-U+01DC",
+  "U+01F0", "U+01FA-U+01FF", "U+0211", "U+0218-U+021B", "U+0221", "U+0237", "U+0243", "U+0253",
+  "U+0259", "U+02BC", "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+02F3", "U+0300-U+0301", "U+0303-U+0304",
+  "U+0306-U+0309", "U+030C", "U+030F", "U+0323", "U+0326", "U+0384-U+038A", "U+038C", "U+038E-U+03A1",
+  "U+03A3-U+03CE", "U+03D1-U+03D2", "U+03D6", "U+0400-U+0486", "U+0488-U+0513", "U+1E00-U+1E01", "U+1E3E-U+1E3F", "U+1E80-U+1E85",
+  "U+1E9E", "U+1EA0-U+1EF9", "U+1F4D", "U+2000-U+200B", "U+2010-U+2015", "U+2017-U+201E", "U+2020-U+2022", "U+2025-U+2026",
+  "U+202F-U+2030", "U+2032-U+2033", "U+2039-U+203A", "U+203C", "U+2044", "U+205F", "U+2070", "U+2074-U+2079",
+  "U+207D-U+2089", "U+208D-U+208E", "U+20A3-U+20A4", "U+20A7", "U+20A9-U+20AC", "U+2105", "U+2113", "U+2116",
+  "U+2120", "U+2122", "U+2126", "U+212E", "U+2153-U+215E", "U+2190-U+2193", "U+2196-U+2199", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2213", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+22C5", "U+25A0-U+25A1", "U+25AA", "U+25B2", "U+25BA", "U+25BC",
+  "U+25C4", "U+25CA", "U+25E2-U+25E5", "U+25FC", "U+E000-U+E001", "U+E131-U+E136", "U+E138-U+E139", "U+E13C",
+  "U+E13E", "U+E38C-U+E38D", "U+E402-U+E40B", "U+E40D-U+E410", "U+E413-U+E414", "U+E416-U+E41F", "U+E421-U+E424", "U+E488",
+  "U+E533", "U+E53F", "U+E541-U+E549", "U+EE01-U+EE02", "U+EFED-U+EFF9", "U+F040-U+F049", "U+F050-U+F05A", "U+F060-U+F069",
+  "U+F070-U+F07B", "U+F080-U+F089", "U+F090-U+F09A", "U+F0A0-U+F0A9", "U+F0B0-U+F0BF", "U+F1BC", "U+F2BC", "U+F3BC",
+  "U+F6C1-U+F6C3", "U+F8FF", "U+FB00-U+FB04", "U+FEFF", "U+FFFC-U+FFFD",
+]
+
+[[trees]]
+tree = "ps4-nhl21"
+measured = true
+fonts = ["data/common/font/dinengschriftstd.ttf", "data/common/font/felt.ttf", "data/common/font/felt_finefine.ttf", "data/common/font/marker.ttf", "data/common/font/roboto-medium.ttf", "data/common/font/rough.ttf", "data/common/font/rough_outline.ttf", "data/common/font/tradegothicltstd-bdcn20.ttf", "data/common/font/unitedsansrgbksmcaps.ttf", "data/common/font/webkitfont/helveticaneueltstd-bd.ttf", "data/common/font/webkitfont/helveticaneueltstd-roman.ttf", "data/common/font/webkitfont/klavikabasic-bold.ttf", "data/common/font/webkitfont/klavikabasic-medium.ttf", "ui/fonts/nnrektoratstd-heavy-italic.ttf", "ui/fonts/nnrektoratstd-heavy-outline.ttf", "ui/fonts/nnrektoratstd-heavy.ttf", "ui/fonts/nnrektoratstd-regular-italic.ttf", "ui/fonts/nnrektoratstd-regular.ttf", "ui/fonts/stratum1-bold-italic.ttf", "ui/fonts/stratum1-bold.ttf", "ui/fonts/stratum1-regular-italic.ttf", "ui/fonts/stratum1-regular.ttf", "ui/fonts/tradegothicltstd-bdcn20.ttf"]
+union_count = 1044
+ranges = [
+  "U+0000-U+0002", "U+000C-U+000D", "U+0020-U+007E", "U+00A0-U+017F", "U+0192", "U+01A0-U+01A1", "U+01AF-U+01B0", "U+01CD-U+01DC",
+  "U+01F0", "U+01FA-U+01FF", "U+0218-U+021B", "U+0237", "U+0259", "U+02BC", "U+02C6-U+02C7", "U+02C9",
+  "U+02D8-U+02DD", "U+02F3", "U+0300-U+0301", "U+0303-U+0304", "U+0306-U+0309", "U+030C", "U+030F", "U+0323",
+  "U+0326", "U+0384-U+038A", "U+038C", "U+038E-U+03A1", "U+03A3-U+03CE", "U+03D1-U+03D2", "U+03D6", "U+0400-U+0486",
+  "U+0488-U+0513", "U+1E00-U+1E01", "U+1E3E-U+1E3F", "U+1E80-U+1E85", "U+1E9E", "U+1EA0-U+1EF9", "U+1F4D", "U+2000-U+200B",
+  "U+2013-U+2015", "U+2017-U+201E", "U+2020-U+2022", "U+2025-U+2026", "U+2030", "U+2032-U+2033", "U+2039-U+203A", "U+203C",
+  "U+2044", "U+2070", "U+2074-U+2079", "U+207F-U+2089", "U+20A3-U+20A4", "U+20A7", "U+20A9", "U+20AB-U+20AC",
+  "U+2105", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+215B-U+215E",
+  "U+2190-U+2193", "U+2202", "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E",
+  "U+222B", "U+2248", "U+2260", "U+2264-U+2265", "U+25CA", "U+E000-U+E001", "U+EE01-U+EE02", "U+EFED-U+EFF9",
+  "U+F040-U+F049", "U+F050-U+F05A", "U+F060-U+F069", "U+F070-U+F07B", "U+F080-U+F089", "U+F090-U+F09A", "U+F0A0-U+F0A9", "U+F0B0-U+F0BF",
+  "U+F1BC", "U+F2BC", "U+F3BC", "U+F6C1-U+F6C3", "U+F8FF", "U+FB00-U+FB04", "U+FEFF", "U+FFFC-U+FFFD",
+]
+
+[[trees]]
+tree = "xbox360-nhl09"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf"]
+union_count = 322
+ranges = [
+  "U+0009", "U+0020-U+007E", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+011A-U+011B", "U+0147-U+0148", "U+0152-U+0153",
+  "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192", "U+02C6",
+  "U+02DC", "U+0410-U+044F", "U+0451", "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026",
+  "U+2030", "U+2039-U+203A", "U+2044", "U+20AC", "U+2113", "U+2116", "U+2122", "U+2126",
+  "U+212E", "U+2202", "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E",
+  "U+222B", "U+2248", "U+2260", "U+2264-U+2265", "U+25CA", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "xbox360-nhl10"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 334
+ranges = [
+  "U+0009", "U+0020-U+007E", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+011A-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2013-U+2014",
+  "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044", "U+20AC",
+  "U+2113", "U+2116", "U+2122", "U+2126", "U+212E", "U+2202", "U+2206", "U+220F",
+  "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248", "U+2260", "U+2264-U+2265",
+  "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "xbox360-nhl11"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 334
+ranges = [
+  "U+0009", "U+0020-U+007E", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+011A-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2013-U+2014",
+  "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044", "U+20AC",
+  "U+2113", "U+2116", "U+2122", "U+2126", "U+212E", "U+2202", "U+2206", "U+220F",
+  "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248", "U+2260", "U+2264-U+2265",
+  "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "xbox360-nhl12"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 336
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+011A-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2122", "U+2126", "U+212E", "U+2202", "U+2206",
+  "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248", "U+2260",
+  "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "xbox360-nhl13"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 337
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+011A-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "xbox360-nhl14"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 339
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+0118-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "xbox360-nhl15"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 339
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+0118-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]
+
+[[trees]]
+tree = "xbox360-nhllegacy"
+measured = true
+fonts = ["eahelveticaneueconbol-mod.ttf", "eahelveticaneuehv-mod.ttf", "eahelveticaneuemed-mod.ttf", "rockeb.ttf"]
+union_count = 339
+ranges = [
+  "U+0009", "U+0020-U+007F", "U+00A0-U+00FF", "U+010C-U+010F", "U+0115", "U+0118-U+011B", "U+0131", "U+0147-U+0148",
+  "U+0152-U+0153", "U+0158-U+0159", "U+0160-U+0161", "U+0164-U+0165", "U+016E-U+016F", "U+0178-U+0179", "U+017D-U+017E", "U+0192",
+  "U+02C6-U+02C7", "U+02C9", "U+02D8-U+02DD", "U+03C0", "U+0401", "U+0410-U+044F", "U+0451", "U+2011",
+  "U+2013-U+2014", "U+2018-U+201A", "U+201C-U+201E", "U+2020-U+2022", "U+2026", "U+2030", "U+2039-U+203A", "U+2044",
+  "U+20AC", "U+2113", "U+2116", "U+2120", "U+2122", "U+2126", "U+212E", "U+2202",
+  "U+2206", "U+220F", "U+2211-U+2212", "U+2215", "U+2219-U+221A", "U+221E", "U+222B", "U+2248",
+  "U+2260", "U+2264-U+2265", "U+25CA", "U+F001-U+F002", "U+FB01-U+FB02",
+]

@@ -1,0 +1,3159 @@
+{
+ "note": "R61 \u2014 PS4 EA-MP3 (SNS codec `0x0b`, NHL 15\u201317 speech; sfx everywhere) block structure and preview feasibility. Read-only over the banks;\nthe only writes are temporary MP3 / WAV files in the session scratchpad (removed unless --keep).\n\nMeasured per sampled record: `.sbr` DSET record (.SID, .OFF, .DUR) \u2192 `.sbs` SNS block stream (`0x48` SNR header, `0x44` data blocks with\nu24 size | u32 samples-in-block | payload, `0x45` end) \u2192 the payload's leading bytes before the first MPEG sync, the MPEG-1 Layer III\nheader found there (bitrate / rate / channel mode), and then whether the payload is a tiling sequence of MPEG frames (the naive\n\"concatenate and hand to ffmpeg\" hypothesis) or an EA granule container with the subsequent frame headers removed. Also counts the\nsamples-in-block quantum and runs the naive ffmpeg decode per vector so the refusal is measured, not assumed.\nUsage: python r61_ea_mp3_block_structure.py <out.json> [--titles nhl15,nhl16,nhl17] [--per-title 6] [--keep]\n",
+ "ffmpeg": "ffmpeg version 8.1.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+ "titles": {
+  "nhl15": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA00561\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbr",
+   "records": 149,
+   "summary": {
+    "vectors": 8,
+    "codec_0x0b": 8,
+    "first_block_prefix_6": 8,
+    "later_block_prefix_2": 8,
+    "one_mpeg_header_per_sample": 8,
+    "frames_tile_payload": 0,
+    "naive_decode_ok": 0,
+    "block_samples_10368": 8
+   },
+   "vectors": [
+    {
+     "sid": 332,
+     "off": 453990976,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 77428
+     },
+     "sns_bytes": 21820,
+     "sns_sha256": "50854ef9d1b2fe1662cb2696c8e3cad3a93bd5a734c39c8b98ddc6064b2af72d",
+     "blocks": 8,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      4852
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 5014
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 2658
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2850
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2610
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2658
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2514
+      },
+      {
+       "block": 6,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2418
+      },
+      {
+       "block": 7,
+       "prefix_bytes": 2,
+       "prefix_hex": "c200",
+       "payload_bytes": 1018
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 6,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 7,
+       "header": {
+        "bitrate_kbps": 64,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 192
+       },
+       "frames_walked": 1,
+       "walk_end": 194,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 8,
+     "sync_candidates": 189,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 0000014952014900] Header missing"
+     }
+    },
+    {
+     "sid": 360,
+     "off": 454530528,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 66450
+     },
+     "sns_bytes": 19584,
+     "sns_sha256": "306b4604185c6eab4ba63512c29a3f172ab3efcf47a715a6515896c83152d8ee",
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      4242
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4774
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2610
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 2946
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2562
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2850
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 2802
+      },
+      {
+       "block": 6,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 968
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      },
+      {
+       "block": 6,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 7,
+     "sync_candidates": 165,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000001b77fa895c0] Header missing"
+     }
+    },
+    {
+     "sid": 5587,
+     "off": 455029312,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 72020
+     },
+     "sns_bytes": 21012,
+     "sns_sha256": "f4a6973b25170dbc1725d6d6a79b0dd33dda8a09e8f064f2f99226078f06f8a3",
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      9812
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 5062
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2634
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "c200",
+       "payload_bytes": 2370
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2370
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 3618
+      },
+      {
+       "block": 6,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2418
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 64,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 192
+       },
+       "frames_walked": 1,
+       "walk_end": 194,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 6,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 7,
+     "sync_candidates": 214,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000001da55b9a600] Header missing"
+     }
+    },
+    {
+     "sid": 5616,
+     "off": 455510912,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 60740
+     },
+     "sns_bytes": 20096,
+     "sns_sha256": "bae7ea44b6c8c3b39f468f5e57d7a1ba9e0d1e3712e12b4f5045ef5b5a7cdb0b",
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      8900
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4774
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2610
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 3666
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 2994
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 3258
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 2728
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 6,
+     "sync_candidates": 138,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000002dd908bb500] Header missing"
+     }
+    },
+    {
+     "sid": 5645,
+     "off": 456007680,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 65719
+     },
+     "sns_bytes": 20880,
+     "sns_sha256": "8a235cff07c7c668e1b00fcf0e0d06a508a884d3e3f9b76a3a5eb9541fc90dfa",
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      3511
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4774
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 3042
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 3234
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2850
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2706
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 3186
+      },
+      {
+       "block": 6,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 1016
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 6,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 7,
+     "sync_candidates": 166,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000001fca099bec0] Header missing"
+     }
+    },
+    {
+     "sid": 5671,
+     "off": 456470368,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 85703
+     },
+     "sns_bytes": 24820,
+     "sns_sha256": "4762d55c43e10c309d46c649b6729597089a69052829d2e8119ef27b4b0bcddc",
+     "blocks": 9,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      2759
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 4966
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2370
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 2754
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2514
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2418
+      },
+      {
+       "block": 6,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2994
+      },
+      {
+       "block": 7,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 3618
+      },
+      {
+       "block": 8,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 630
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 6,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 7,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      },
+      {
+       "block": 8,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 9,
+     "sync_candidates": 242,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 0000021b7002e980] Header missing"
+     }
+    },
+    {
+     "sid": 5698,
+     "off": 456913760,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 59060
+     },
+     "sns_bytes": 18484,
+     "sns_sha256": "75c901d42dca13c8a2546bdfcf8e11b6bd24fe233eb25aec5c819b2b1127f03d",
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      7220
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 4726
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 2754
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 2682
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2754
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 3810
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 1694
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 6,
+     "sync_candidates": 137,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000001fa872675c0] Header missing"
+     }
+    },
+    {
+     "sid": 35147,
+     "off": 457322368,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 56832
+     },
+     "sns_bytes": 15384,
+     "sns_sha256": "b69ef55acba0f790e3e53a9e4de334a0d210499fe3afe8099e8aacd4922a768b",
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      4992
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4726
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2418
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 2370
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2274
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 1066
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 6,
+     "sync_candidates": 117,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000001272d76c500] Header missing"
+     }
+    }
+   ]
+  },
+  "nhl16": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA01909\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp_and_cb.sbr",
+   "records": 92,
+   "summary": {
+    "vectors": 8,
+    "codec_0x0b": 8,
+    "first_block_prefix_6": 8,
+    "later_block_prefix_2": 8,
+    "one_mpeg_header_per_sample": 8,
+    "frames_tile_payload": 0,
+    "naive_decode_ok": 0,
+    "block_samples_10368": 8
+   },
+   "vectors": [
+    {
+     "sid": 3347,
+     "off": 619400480,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 80212
+     },
+     "sns_bytes": 23816,
+     "sns_sha256": "f89b46c3894017958e49a67d1aafc4c93d1d3d6cbd2216111e3463d007d32a2f",
+     "blocks": 8,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      7636
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 4822
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 3042
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 2370
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 3330
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2610
+      },
+      {
+       "block": 6,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2778
+      },
+      {
+       "block": 7,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2318
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 6,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 7,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 8,
+     "sync_candidates": 242,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 00000204853e9080] Header missing"
+     }
+    },
+    {
+     "sid": 3363,
+     "off": 619609120,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 74354
+     },
+     "sns_bytes": 23584,
+     "sns_sha256": "09971b246dc3618f0bfb9ee2316bac04eae8052d7dbf8928cd833073eece4c63",
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      12146
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 4630
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2370
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 3330
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 3042
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2370
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 3234
+      },
+      {
+       "block": 6,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 4534
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 6,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 7,
+     "sync_candidates": 208,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 00000259d9e72780] Header missing"
+     }
+    },
+    {
+     "sid": 3376,
+     "off": 619715456,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 56907
+     },
+     "sns_bytes": 18744,
+     "sns_sha256": "ebc8b13cd2eeecb0d8f91b06cafff95a740f6b1988a65300f00a203759ec3473",
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      5067
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 5398
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2706
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2706
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2706
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 3570
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 1594
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 6,
+     "sync_candidates": 154,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 0000021682dbab80] Header missing"
+     }
+    },
+    {
+     "sid": 3389,
+     "off": 619916480,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 41702
+     },
+     "sns_bytes": 13088,
+     "sns_sha256": "eaf44e8c02b9a863ae569828dfcfc644c30ba665c00bc35447a07d4964bc9018",
+     "blocks": 4,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10598
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4534
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2514
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 2850
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "4202",
+       "payload_bytes": 3140
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 192,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 576
+       },
+       "frames_walked": 1,
+       "walk_end": 578,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 4,
+     "sync_candidates": 205,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000002a4abfe2400] Header missing"
+     }
+    },
+    {
+     "sid": 3402,
+     "off": 620136096,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 59700
+     },
+     "sns_bytes": 18844,
+     "sns_sha256": "721c6d9d667504d198832748ee2e0a5675b8719eb785b1135813edf0c077b831",
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      7860
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 5782
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2322
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 3618
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 2126
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 6,
+     "sync_candidates": 190,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000002375545b380] Header missing"
+     }
+    },
+    {
+     "sid": 3415,
+     "off": 620371360,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 57740
+     },
+     "sns_bytes": 17788,
+     "sns_sha256": "4b8fee591587f657e6102825832dfc9a9b362c676f3753e2234c54e08e3135d6",
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      5900
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 5494
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2610
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2514
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2418
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2898
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 1788
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 6,
+     "sync_candidates": 179,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000001cbb8aac1c0] Header missing"
+     }
+    },
+    {
+     "sid": 3428,
+     "off": 620601568,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 56972
+     },
+     "sns_bytes": 18168,
+     "sns_sha256": "fba4a88b068075f867b7ea68d094a83986b25af08ba1c18b3319afc99c1b6621",
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      5132
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 5878
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 2514
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 2562
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 3042
+      },
+      {
+       "block": 5,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 1642
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 5,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 6,
+     "sync_candidates": 209,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000002a6bd93a000] Header missing"
+     }
+    },
+    {
+     "sid": 3441,
+     "off": 620838336,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 54298
+     },
+     "sns_bytes": 17172,
+     "sns_sha256": "781655f5f2ce77f09e00768d56f96e0860be3ee0ff946e3173c44faa81a08244",
+     "blocks": 5,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      12826
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 4726
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "c200",
+       "payload_bytes": 2466
+      },
+      {
+       "block": 2,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2562
+      },
+      {
+       "block": 3,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 2802
+      },
+      {
+       "block": 4,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 4560
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 64,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 192
+       },
+       "frames_walked": 1,
+       "walk_end": 194,
+       "tiles": false
+      },
+      {
+       "block": 2,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      },
+      {
+       "block": 3,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      },
+      {
+       "block": 4,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 5,
+     "sync_candidates": 197,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 00000247546ea7c0] Header missing"
+     }
+    }
+   ]
+  },
+  "nhl17": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA04326\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples.sbr",
+   "records": 3863,
+   "summary": {
+    "vectors": 8,
+    "codec_0x0b": 8,
+    "first_block_prefix_6": 8,
+    "later_block_prefix_2": 8,
+    "one_mpeg_header_per_sample": 8,
+    "frames_tile_payload": 0,
+    "naive_decode_ok": 3,
+    "block_samples_10368": 8
+   },
+   "vectors": [
+    {
+     "sid": 15360,
+     "off": 706393376,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 19295
+     },
+     "sns_bytes": 7224,
+     "sns_sha256": "6f0876ac7aa3eb4e172586e4484fdffb9a47e9758400d28bb949c9378d71f334",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      8927
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "268a80040000",
+       "payload_bytes": 4822
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "8201",
+       "payload_bytes": 2368
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 294,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 128,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 384
+       },
+       "frames_walked": 1,
+       "walk_end": 386,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 202,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 00000142a792ebc0] Header missing"
+     }
+    },
+    {
+     "sid": 15935,
+     "off": 708257088,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 21311
+     },
+     "sns_bytes": 8092,
+     "sns_sha256": "1c3078e0dd0711849a32c3cf676f78203bc902cd4ba28a34cb5dfb72e6a87059",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      10943
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4870
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 3188
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 115,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 0000022129a92500] Header missing"
+     }
+    },
+    {
+     "sid": 16498,
+     "off": 709693056,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 18506
+     },
+     "sns_bytes": 7896,
+     "sns_sha256": "ec9c4f32345bee4d736d37f8276d2c3e9a8b639344a7d3af8c2e5da53d8c3380",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      8138
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "968980040000",
+       "payload_bytes": 4966
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2896
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 48,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 144
+       },
+       "frames_walked": 1,
+       "walk_end": 150,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 156,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000002f0b9862900] Header missing"
+     }
+    },
+    {
+     "sid": 17056,
+     "off": 710710944,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 13600
+     },
+     "sns_bytes": 6300,
+     "sns_sha256": "2442791ac7d4128ae6c4e4b87118896ff26dbf607d933db9ff0e5028b174b335",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      3232
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 5206
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 1062
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 83,
+     "naive_decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "[mp3float @ 000001f7d79ffc00] Header missing",
+      "wav_rate": 48000,
+      "wav_frames": 2304,
+      "wav_channels": 1
+     }
+    },
+    {
+     "sid": 64397,
+     "off": 712657376,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 13211
+     },
+     "sns_bytes": 5964,
+     "sns_sha256": "21f987c36eca41436294e23d43eafbb4be5c07b678f8a1195d5081764a4d0169",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      2843
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4726
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "e201",
+       "payload_bytes": 1206
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 160,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 480
+       },
+       "frames_walked": 1,
+       "walk_end": 482,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 40,
+     "naive_decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "[mp3float @ 00000261b101ca80] Header missing",
+      "wav_rate": 48000,
+      "wav_frames": 2304,
+      "wav_channels": 1
+     }
+    },
+    {
+     "sid": 69157,
+     "off": 714578592,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 15401
+     },
+     "sns_bytes": 6832,
+     "sns_sha256": "3adb0744e2c2ee36308897ea5224ebb7385b6f5bb8d9238627a41989fef7c58a",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      5033
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4918
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "5201",
+       "payload_bytes": 1882
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 112,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 336
+       },
+       "frames_walked": 1,
+       "walk_end": 338,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 66,
+     "naive_decode": {
+      "ffmpeg_rc": 0,
+      "stderr": "[mp3float @ 0000018007742d00] Header missing",
+      "wav_rate": 48000,
+      "wav_frames": 2304,
+      "wav_channels": 1
+     }
+    },
+    {
+     "sid": 85639,
+     "off": 719447168,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 20959
+     },
+     "sns_bytes": 9388,
+     "sns_sha256": "64d6a51c14ab2addb52ffb39856fb804926df42e1454d5abd2166fd66ac30b84",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      10591
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 5398
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "f200",
+       "payload_bytes": 3956
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 242,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 71,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000002ce9ce60dc0] Header missing"
+     }
+    },
+    {
+     "sid": 86622,
+     "off": 721498112,
+     "snr": {
+      "version": 1,
+      "codec": "ea-mp3",
+      "codec_code": 11,
+      "channel_config": 0,
+      "sample_rate": 48000,
+      "type": "stream",
+      "loop": 0,
+      "num_samples": 19373
+     },
+     "sns_bytes": 7272,
+     "sns_sha256": "7ae563423c63acb5a9187e00d82dfa1bf01da19478ea652a6c7f12662665984f",
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      9005
+     ],
+     "prefixes": [
+      {
+       "block": 0,
+       "prefix_bytes": 6,
+       "prefix_hex": "f68980040000",
+       "payload_bytes": 4774
+      },
+      {
+       "block": 1,
+       "prefix_bytes": 2,
+       "prefix_hex": "2201",
+       "payload_bytes": 2464
+      }
+     ],
+     "mpeg_headers": [
+      {
+       "block": 0,
+       "header": {
+        "bitrate_kbps": 80,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 240
+       },
+       "frames_walked": 1,
+       "walk_end": 246,
+       "tiles": false
+      },
+      {
+       "block": 1,
+       "header": {
+        "bitrate_kbps": 96,
+        "sample_rate": 48000,
+        "padding": 0,
+        "mode": "mono",
+        "frame_bytes": 288
+       },
+       "frames_walked": 1,
+       "walk_end": 290,
+       "tiles": false
+      }
+     ],
+     "mpeg_headers_total": 2,
+     "sync_candidates": 180,
+     "naive_decode": {
+      "ffmpeg_rc": 69,
+      "stderr": "[mp3float @ 000002c5fd480500] Header missing"
+     }
+    }
+   ]
+  }
+ }
+}

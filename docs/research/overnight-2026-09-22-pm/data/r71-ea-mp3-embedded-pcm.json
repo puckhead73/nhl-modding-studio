@@ -1,0 +1,3758 @@
+{
+ "note": "R71 - PS4 EA-MP3 (SNS codec 0x0b): where do the 1 152 embedded PCM samples belong, and does the sized-frame contract hold up\nagainst malformed input? (read-only over the banks; temporary .mp3/.wav in R71_SCRATCH, removed unless --keep)\n\nCoordinator review 2026-09-22 F2: keep the embedded PCM's role open, verify robustness before handing over a contract, treat\nffmpeg `mp3` / `mp3float` as one code base. This probe measures, on the same 24 vectors as r61 / r67:\n\n  T1 junction scan   for every lag L in [0, 2400]: how well does the decoded stream continued from sample L follow the embedded PCM?\n                     Measured with a linear-prediction model (order 16) fitted on the PCM's tail and applied across the splice, and the\n                     mirror model fitted on the decoded side predicting backwards into the PCM; the normalised residual is the junction\n                     cost J(L). Reported: argmin L, J at the candidate lags 0 (pre-roll), 529 (decoder delay), 576 (encoder delay),\n                     1105 (encoder + decoder delay), 1152 (replace frame 0), 2257 (replace + delay), the median J over all L, and the same\n                     scan with ANOTHER vector's PCM as a control (a real junction must beat the control by a margin at a consistent L).\n  T2 cross-correlation   normalised cross-correlation of the full embedded PCM against the decoded stream over lags 0..4000 (FFT), best\n                     lag + value, second-best, and the control (other vector's PCM).\n  T3 onset           where the decoded stream's energy first rises (the MPEG decoder's warm-up / delay zone), in samples.\n  T4 tail            the decoded stream's trailing near-silence, compared with the declared trim (frames x 1152 - num_samples), with\n                     trim + 47 and with trim + 1152 (the three hypotheses give different tails); weak evidence, reported as such.\n  T5 robustness      the r67 grammar parser exercised on mutated copies of each vector's blocks: a truncated last block, a size word\n                     pointing past the payload, a size word shortened by one, the 0x8000 flag forced onto a later frame, pcm_samples\n                     forced to 0 / 4096, and a dropped middle block (reservoir continuity: main_data_begin of the next frame vs the\n                     bytes actually available). Every mutation must be *refused by name*, never decoded silently.\n  T6 reservoir       on the unmodified stream, for every frame: main_data_begin <= reservoir bytes accumulated from the previous\n                     frames (MPEG-1 mono: frame bytes - 4 header - 17 side info - CRC), so the concatenated stream is self-consistent.\n\nUsage: python r71_ea_mp3_embedded_pcm.py <out.json> [--titles nhl15,nhl16,nhl17] [--per-title 8] [--keep]\n",
+ "ffmpeg": "ffmpeg version 8.1.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+ "candidate_lags": {
+  "B_preroll_0": 0,
+  "decoder_delay_529": 529,
+  "encoder_delay_576": 576,
+  "both_delays_1105": 1105,
+  "A_replace_1152": 1152,
+  "A_plus_delays_2257": 2257
+ },
+ "titles": {
+  "nhl15": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA00561\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbr",
+   "vectors": [
+    {
+     "sid": 332,
+     "off": 453990976,
+     "sns_sha256": "50854ef9d1b2fe1662cb2696c8e3cad3a93bd5a734c39c8b98ddc6064b2af72d",
+     "num_samples": 77428,
+     "blocks": 8,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 7: size 98 at 920 exceeds payload 1015",
+       "frames": 63,
+       "mpeg_bytes": 18288
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2668 at 0 exceeds payload 2658",
+       "frames": 9,
+       "mpeg_bytes": 2688
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 8747 at 385 exceeds payload 2658",
+       "frames": 9,
+       "mpeg_bytes": 2688
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 386, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2688
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 67060 != SNR num_samples 77428",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 68,
+       "mpeg_bytes": 19296
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 68,
+     "trim": 908,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 78336,
+       "channels": 1,
+       "pcm_sha256": "f1c47be65aeb7ebe8f1cc82fac6822b7f8c3c3d2fff7708d900801e7a04cbd2d"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 78336,
+       "channels": 1,
+       "pcm_sha256": "7df9562ea87c052ef21808deb0bb9b36cdbf9af6f2d998ba5937e23911b88c1f"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 2369,
+      "min_cost": 2.6683852997866215,
+      "median_cost": 69.81388876277677,
+      "cost_at": {
+       "B_preroll_0": 15186166314.726976,
+       "decoder_delay_529": 342.78541344926276,
+       "encoder_delay_576": 175.44290799701142,
+       "both_delays_1105": 131.59075985725073,
+       "A_replace_1152": 8.649922597087677,
+       "A_plus_delays_2257": 10.188146745799934
+      },
+      "lags_within_10pct_of_min": [
+       2335,
+       2349,
+       2355,
+       2361,
+       2369,
+       2383,
+       2390,
+       2396,
+       2397
+      ]
+     },
+     "T2": {
+      "best_lag": 2982,
+      "best_ncc": 0.1500676015381224,
+      "second_lag": 613,
+      "second_ncc": 0.14990290887777868,
+      "median_ncc": 0.001469409518264752
+     },
+     "T3": {
+      "onset_sample": 4128,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 1088.1732398841648,
+      "rms_at_2304": 492.1123156861653,
+      "embedded_rms": 1521.597075923299
+     },
+     "first_sample_over_1_lsb": 264,
+     "T4": {
+      "silent_tail_samples": 960,
+      "threshold": 20.43010068851651,
+      "trim": 908,
+      "trim_plus_47": 955,
+      "trim_plus_1152": 2060,
+      "decoded_len": 78336
+     },
+     "T1_control": {
+      "other_sid": 360,
+      "argmin_lag": 2199,
+      "min_cost": 0.13818779402124148,
+      "median_cost": 25.252308869922302,
+      "cost_at": {
+       "B_preroll_0": 17363935740.619114,
+       "decoder_delay_529": 393.5090302953463,
+       "encoder_delay_576": 197.01194096319074,
+       "both_delays_1105": 43.516231800275925,
+       "A_replace_1152": 1.1278263318325894,
+       "A_plus_delays_2257": 2.4280156285617243
+      }
+     },
+     "T2_control": {
+      "best_lag": 1013,
+      "best_ncc": 0.18855557306114062,
+      "second_lag": 531,
+      "second_ncc": 0.18217150513904598,
+      "median_ncc": -0.00013398037056337332
+     },
+     "renderings": {
+      "mpeg_only_sha256": "f1c47be65aeb7ebe8f1cc82fac6822b7f8c3c3d2fff7708d900801e7a04cbd2d",
+      "mpeg_only_len": 78336,
+      "candidate_A_sha256": "ee9537042818897b6c4a42cad93c8d413482e982fd182246a5a5cf2b1b5b6c0f",
+      "candidate_A_len": 78336,
+      "candidate_B_sha256": "f5aefa162d6c25335356a41d41043d03467a9f781694b90963644b57e4b0f019",
+      "candidate_B_len": 79488
+     }
+    },
+    {
+     "sid": 360,
+     "off": 454530528,
+     "sns_sha256": "306b4604185c6eab4ba63512c29a3f172ab3efcf47a715a6515896c83152d8ee",
+     "num_samples": 66450,
+     "blocks": 7,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 6: size 98 at 870 exceeds payload 965",
+       "frames": 54,
+       "mpeg_bytes": 16128
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2620 at 0 exceeds payload 2610",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 8954 at 289 exceeds payload 2610",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 290, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 56082 != SNR num_samples 66450",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 58,
+       "mpeg_bytes": 17088
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 58,
+     "trim": 366,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "a8c5f28c2ff27512c763de3c0a0cdb0546873cf9de1ba0832ad393cdc8611e63"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "c240d9c044d6d08ab42ffea5246fa6f422bcf37a470cfd73144bdeb6617a62ec"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.1164389169102694,
+      "median_cost": 12.00913652656755,
+      "cost_at": {
+       "B_preroll_0": 17363935740.927723,
+       "decoder_delay_529": 12.20012904594575,
+       "encoder_delay_576": 18.14960819374054,
+       "both_delays_1105": 0.5556243102515824,
+       "A_replace_1152": 0.1164389169102694,
+       "A_plus_delays_2257": 3.7094338127948445
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 1016,
+      "best_ncc": 0.21939790469939416,
+      "second_lag": 788,
+      "second_ncc": 0.20560337882399599,
+      "median_ncc": -4.862797630390777e-05
+     },
+     "T3": {
+      "onset_sample": 4416,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 1625.9470477488908,
+      "rms_at_2304": 898.7007693980609,
+      "embedded_rms": 1609.5672342041544
+     },
+     "first_sample_over_1_lsb": 203,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 16.279286683813062,
+      "trim": 366,
+      "trim_plus_47": 413,
+      "trim_plus_1152": 1518,
+      "decoded_len": 66816
+     },
+     "T1_control": {
+      "other_sid": 5587,
+      "argmin_lag": 2241,
+      "min_cost": 0.6300265738341569,
+      "median_cost": 250.15168727343615,
+      "cost_at": {
+       "B_preroll_0": 179408172063.72928,
+       "decoder_delay_529": 147.0262208039173,
+       "encoder_delay_576": 208.48328677927034,
+       "both_delays_1105": 60.2140417722691,
+       "A_replace_1152": 93.31070414148019,
+       "A_plus_delays_2257": 181.11336465898543
+      }
+     },
+     "T2_control": {
+      "best_lag": 1149,
+      "best_ncc": 0.1947120789552725,
+      "second_lag": 1480,
+      "second_ncc": 0.17170883288292668,
+      "median_ncc": -0.0011052315176174222
+     },
+     "renderings": {
+      "mpeg_only_sha256": "a8c5f28c2ff27512c763de3c0a0cdb0546873cf9de1ba0832ad393cdc8611e63",
+      "mpeg_only_len": 66816,
+      "candidate_A_sha256": "b6c081de1598d8d76740c0628dd9213ea3df50e67abe580b62332a0d455cab2e",
+      "candidate_A_len": 66816,
+      "candidate_B_sha256": "2efd53cccf0febd4ca4e39348a653b07b9623392e74cf8c6fd60e79d8c80ad58",
+      "candidate_B_len": 67968
+     }
+    },
+    {
+     "sid": 5587,
+     "off": 455029312,
+     "sns_sha256": "f4a6973b25170dbc1725d6d6a79b0dd33dda8a09e8f064f2f99226078f06f8a3",
+     "num_samples": 72020,
+     "blocks": 7,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 6: size 146 at 2272 exceeds payload 2415",
+       "frames": 54,
+       "mpeg_bytes": 16104
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2476 at 0 exceeds payload 2466",
+       "frames": 9,
+       "mpeg_bytes": 2736
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 8850 at 241 exceeds payload 2466",
+       "frames": 9,
+       "mpeg_bytes": 2736
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2736
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 61652 != SNR num_samples 72020",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 63,
+       "mpeg_bytes": 18504
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 63,
+     "trim": 556,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 72576,
+       "channels": 1,
+       "pcm_sha256": "0f7534b902ae1ce0ea41a9fc9fa5d6b98a8e1e6e161b135ea95d373ceddf4adf"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 72576,
+       "channels": 1,
+       "pcm_sha256": "23a5c80f312edea1b7fe352b1e670e946aa86e9a29ef8ade91898fae325b942a"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.4397481366182394,
+      "median_cost": 515.1663818236952,
+      "cost_at": {
+       "B_preroll_0": 179408172063.10828,
+       "decoder_delay_529": 11013.07061402299,
+       "encoder_delay_576": 12725.457299922347,
+       "both_delays_1105": 149.5190028148141,
+       "A_replace_1152": 0.4397481366182394,
+       "A_plus_delays_2257": 14.666639969204887
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 314,
+      "best_ncc": 0.16247692828021404,
+      "second_lag": 543,
+      "second_ncc": 0.12173974002390939,
+      "median_ncc": 0.0003851765421990788
+     },
+     "T3": {
+      "onset_sample": 1728,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 1031.2305099168339,
+      "rms_at_2304": 6588.322708746387,
+      "embedded_rms": 1649.848411071117
+     },
+     "first_sample_over_1_lsb": 255,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 15.724771480178966,
+      "trim": 556,
+      "trim_plus_47": 603,
+      "trim_plus_1152": 1708,
+      "decoded_len": 72576
+     },
+     "T1_control": {
+      "other_sid": 5616,
+      "argmin_lag": 1497,
+      "min_cost": 0.05029600954758365,
+      "median_cost": 92.4583581408736,
+      "cost_at": {
+       "B_preroll_0": 1449992648.8641062,
+       "decoder_delay_529": 95.25693956850995,
+       "encoder_delay_576": 97.1776145583044,
+       "both_delays_1105": 2.0484115736398842,
+       "A_replace_1152": 73.17030242118858,
+       "A_plus_delays_2257": 42.55145144793777
+      }
+     },
+     "T2_control": {
+      "best_lag": 1694,
+      "best_ncc": 0.15050242600225386,
+      "second_lag": 1419,
+      "second_ncc": 0.12125955702747923,
+      "median_ncc": 0.00035350856322378157
+     },
+     "renderings": {
+      "mpeg_only_sha256": "0f7534b902ae1ce0ea41a9fc9fa5d6b98a8e1e6e161b135ea95d373ceddf4adf",
+      "mpeg_only_len": 72576,
+      "candidate_A_sha256": "c09478dfa49dadad0e32bebd8756437314263e768dbab559b5521f47c50b850a",
+      "candidate_A_len": 72576,
+      "candidate_B_sha256": "8845c21c8093a8dec5271f5148f4810775d02e61d4f8f9d86663b418be4ec997",
+      "candidate_B_len": 73728
+     }
+    },
+    {
+     "sid": 5616,
+     "off": 455510912,
+     "sns_sha256": "bae7ea44b6c8c3b39f468f5e57d7a1ba9e0d1e3712e12b4f5045ef5b5a7cdb0b",
+     "num_samples": 60740,
+     "blocks": 6,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 5: size 170 at 2558 exceeds payload 2725",
+       "frames": 45,
+       "mpeg_bytes": 14904
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2620 at 0 exceeds payload 2610",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29283 at 241 exceeds payload 2610",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 50372 != SNR num_samples 60740",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 53,
+       "mpeg_bytes": 17616
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 53,
+     "trim": 316,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 61056,
+       "channels": 1,
+       "pcm_sha256": "f099b875aa6432a608cd9fb23766021d3d07ca6ea7184b07531daba9153e330b"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 61056,
+       "channels": 1,
+       "pcm_sha256": "fb2389b0a5b4b11ac1a5f003f600bf0f4c161035eef29128f1144059ccdabc85"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.00995526063784544,
+      "median_cost": 0.8798454788430636,
+      "cost_at": {
+       "B_preroll_0": 1449992648.8894782,
+       "decoder_delay_529": 6.574161867955104,
+       "encoder_delay_576": 2.7207360996406575,
+       "both_delays_1105": 1.0872603174867537,
+       "A_replace_1152": 0.00995526063784544,
+       "A_plus_delays_2257": 1.251511277776978
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 237,
+      "best_ncc": 0.2950096858774138,
+      "second_lag": 325,
+      "second_ncc": 0.23207607916336706,
+      "median_ncc": -0.00020682489148440494
+     },
+     "T3": {
+      "onset_sample": 3648,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 401.0868567613088,
+      "rms_at_2304": 44.50819212983905,
+      "embedded_rms": 1236.5753521571178
+     },
+     "first_sample_over_1_lsb": 243,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 12.668053437368235,
+      "trim": 316,
+      "trim_plus_47": 363,
+      "trim_plus_1152": 1468,
+      "decoded_len": 61056
+     },
+     "T1_control": {
+      "other_sid": 5645,
+      "argmin_lag": 1153,
+      "min_cost": 0.11661745098998838,
+      "median_cost": 4.612391233847095,
+      "cost_at": {
+       "B_preroll_0": 11803828625.05409,
+       "decoder_delay_529": 62.19411377987919,
+       "encoder_delay_576": 25.090073864696535,
+       "both_delays_1105": 0.7552287991627806,
+       "A_replace_1152": 0.15844990569487893,
+       "A_plus_delays_2257": 8.690012700200656
+      }
+     },
+     "T2_control": {
+      "best_lag": 1744,
+      "best_ncc": 0.12691687856828934,
+      "second_lag": 2102,
+      "second_ncc": 0.12478373179549457,
+      "median_ncc": -0.0005518275658414936
+     },
+     "renderings": {
+      "mpeg_only_sha256": "f099b875aa6432a608cd9fb23766021d3d07ca6ea7184b07531daba9153e330b",
+      "mpeg_only_len": 61056,
+      "candidate_A_sha256": "0ff430098bc86d317fadda54970aa0ad4dd9476e81eb25cae64629f8e28fa7d9",
+      "candidate_A_len": 61056,
+      "candidate_B_sha256": "86f68f1c24ffd248f1c8fc29bb0edd50c9a9d170fb1c88504cab65b278052eef",
+      "candidate_B_len": 62208
+     }
+    },
+    {
+     "sid": 5645,
+     "off": 456007680,
+     "sns_sha256": "8a235cff07c7c668e1b00fcf0e0d06a508a884d3e3f9b76a3a5eb9541fc90dfa",
+     "num_samples": 65719,
+     "blocks": 7,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 6: size 98 at 918 exceeds payload 1013",
+       "frames": 54,
+       "mpeg_bytes": 17376
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 3052 at 0 exceeds payload 3042",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 8704 at 241 exceeds payload 3042",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 55351 != SNR num_samples 65719",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 58,
+       "mpeg_bytes": 18384
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 58,
+     "trim": 1097,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "280e6b351737711844264c78a4c939529c276a601d62fdf3d6715b0d64ed7d02"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "e94e2cef2c0dc75911008af9ac8c2870939543569873e9eda6721719d8059cef"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1430,
+      "min_cost": 0.312390503817959,
+      "median_cost": 22.87462045998377,
+      "cost_at": {
+       "B_preroll_0": 11803828624.261171,
+       "decoder_delay_529": 8853.192402599685,
+       "encoder_delay_576": 2535.242729972163,
+       "both_delays_1105": 70.56966513385791,
+       "A_replace_1152": 0.3998500679022185,
+       "A_plus_delays_2257": 2.6987537502179912
+      },
+      "lags_within_10pct_of_min": [
+       1430,
+       1831,
+       1900
+      ]
+     },
+     "T2": {
+      "best_lag": 343,
+      "best_ncc": 0.17392143059533882,
+      "second_lag": 866,
+      "second_ncc": 0.13815704047386643,
+      "median_ncc": 0.0001073352096019924
+     },
+     "T3": {
+      "onset_sample": 3168,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 1022.2315713265104,
+      "rms_at_2304": 711.7685353516737,
+      "embedded_rms": 1400.8876603707974
+     },
+     "first_sample_over_1_lsb": 338,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 16.150829821269372,
+      "trim": 1097,
+      "trim_plus_47": 1144,
+      "trim_plus_1152": 2249,
+      "decoded_len": 66816
+     },
+     "T1_control": {
+      "other_sid": 5671,
+      "argmin_lag": 2131,
+      "min_cost": 1.8666038412714088,
+      "median_cost": 54.47046980521557,
+      "cost_at": {
+       "B_preroll_0": 44564837195.2354,
+       "decoder_delay_529": 33424.23366055069,
+       "encoder_delay_576": 9499.65497658351,
+       "both_delays_1105": 149.74630980042693,
+       "A_replace_1152": 30.042819991086382,
+       "A_plus_delays_2257": 2.445414400105621
+      }
+     },
+     "T2_control": {
+      "best_lag": 47,
+      "best_ncc": 0.10120834576126003,
+      "second_lag": 477,
+      "second_ncc": 0.0868259406952054,
+      "median_ncc": 0.00013145178127709118
+     },
+     "renderings": {
+      "mpeg_only_sha256": "280e6b351737711844264c78a4c939529c276a601d62fdf3d6715b0d64ed7d02",
+      "mpeg_only_len": 66816,
+      "candidate_A_sha256": "9757cd09a10cb1bc7ca78adafb70e6ca75c8ca118a8b73981911ac0e35577b18",
+      "candidate_A_len": 66816,
+      "candidate_B_sha256": "b61ab13197e1625611c50c168ed16ea643a7d91697b43d6a30cb76345ed04991",
+      "candidate_B_len": 67968
+     }
+    },
+    {
+     "sid": 5671,
+     "off": 456470368,
+     "sns_sha256": "4762d55c43e10c309d46c649b6729597089a69052829d2e8119ef27b4b0bcddc",
+     "num_samples": 85703,
+     "blocks": 9,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 8: size 98 at 532 exceeds payload 627",
+       "frames": 72,
+       "mpeg_bytes": 21648
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2380 at 0 exceeds payload 2370",
+       "frames": 9,
+       "mpeg_bytes": 2640
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 8753 at 289 exceeds payload 2370",
+       "frames": 9,
+       "mpeg_bytes": 2640
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 290, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2640
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 75335 != SNR num_samples 85703",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 75,
+       "mpeg_bytes": 22272
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 75,
+     "trim": 697,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 86400,
+       "channels": 1,
+       "pcm_sha256": "67538d8016e9f55a050babb6b9b024b550883a41ea01e542a70baebea7bca245"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 86400,
+       "channels": 1,
+       "pcm_sha256": "415f3c5dedc9e71ea96b41731490ccd305baacdf125fc9d0fdc60510db977be9"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 2289,
+      "min_cost": 1.2096954853341626,
+      "median_cost": 73.5133617953532,
+      "cost_at": {
+       "B_preroll_0": 44564837195.475494,
+       "decoder_delay_529": 11882.89940529839,
+       "encoder_delay_576": 6568.89764855858,
+       "both_delays_1105": 11.361974732623521,
+       "A_replace_1152": 11.58623086313863,
+       "A_plus_delays_2257": 7.609761484131242
+      },
+      "lags_within_10pct_of_min": [
+       2198,
+       2247,
+       2248,
+       2275,
+       2288,
+       2289,
+       2340
+      ]
+     },
+     "T2": {
+      "best_lag": 588,
+      "best_ncc": 0.20581979662806651,
+      "second_lag": 1190,
+      "second_ncc": 0.17419929274770732,
+      "median_ncc": 7.393700597838216e-05
+     },
+     "T3": {
+      "onset_sample": 3648,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 1140.6889685258934,
+      "rms_at_2304": 490.5861714996323,
+      "embedded_rms": 1559.65815927232
+     },
+     "first_sample_over_1_lsb": 298,
+     "T4": {
+      "silent_tail_samples": 672,
+      "threshold": 20.068436731561057,
+      "trim": 697,
+      "trim_plus_47": 744,
+      "trim_plus_1152": 1849,
+      "decoded_len": 86400
+     },
+     "T1_control": {
+      "other_sid": 5698,
+      "argmin_lag": 2028,
+      "min_cost": 0.05205917224940871,
+      "median_cost": 71.90376927254641,
+      "cost_at": {
+       "B_preroll_0": 140662777026.76718,
+       "decoder_delay_529": 37502.25536398285,
+       "encoder_delay_576": 20571.461449042876,
+       "both_delays_1105": 117.69413830363422,
+       "A_replace_1152": 124.303961312482,
+       "A_plus_delays_2257": 4.052299807892574
+      }
+     },
+     "T2_control": {
+      "best_lag": 1899,
+      "best_ncc": 0.20803110014554793,
+      "second_lag": 3072,
+      "second_ncc": 0.19318204694517954,
+      "median_ncc": 0.0009387933867590774
+     },
+     "renderings": {
+      "mpeg_only_sha256": "67538d8016e9f55a050babb6b9b024b550883a41ea01e542a70baebea7bca245",
+      "mpeg_only_len": 86400,
+      "candidate_A_sha256": "ce98bb75941e6aa814cc1268376e40ed7a758ab42f71c0f6f08c7c43c4fcca6d",
+      "candidate_A_len": 86400,
+      "candidate_B_sha256": "2d664fbc841d7f934e7c73a3c50099b59b9d17925b51b25fd42aea86bc2eb7e4",
+      "candidate_B_len": 87552
+     }
+    },
+    {
+     "sid": 5698,
+     "off": 456913760,
+     "sns_sha256": "75c901d42dca13c8a2546bdfcf8e11b6bd24fe233eb25aec5c819b2b1127f03d",
+     "num_samples": 59060,
+     "blocks": 6,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 5: size 98 at 1596 exceeds payload 1691",
+       "frames": 45,
+       "mpeg_bytes": 14328
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2764 at 0 exceeds payload 2754",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29348 at 385 exceeds payload 2754",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 386, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 48692 != SNR num_samples 59060",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 52,
+       "mpeg_bytes": 16008
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 52,
+     "trim": 844,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "ff644901f09271b269812fb34c91c2c2e32c24b7642773ada867e4c0f9593516"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "546254f94e1743d2f93b1401e80d87a9ded97bf1ffa8d45114a6b8c7345b050c"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1653,
+      "min_cost": 0.07708756578407709,
+      "median_cost": 34.94890323634208,
+      "cost_at": {
+       "B_preroll_0": 140662777026.1204,
+       "decoder_delay_529": 80.75380452343968,
+       "encoder_delay_576": 38.41676876001495,
+       "both_delays_1105": 48.726664396810115,
+       "A_replace_1152": 0.08882999794216805,
+       "A_plus_delays_2257": 5.1509921332795185
+      },
+      "lags_within_10pct_of_min": [
+       1653,
+       1720
+      ]
+     },
+     "T2": {
+      "best_lag": 583,
+      "best_ncc": 0.16790320424749966,
+      "second_lag": 487,
+      "second_ncc": 0.16545486635029472,
+      "median_ncc": -1.8606275033520563e-05
+     },
+     "T3": {
+      "onset_sample": 2880,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 1002.7228503346942,
+      "rms_at_2304": 1889.8246115711372,
+      "embedded_rms": 1435.004919174689
+     },
+     "first_sample_over_1_lsb": 201,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 16.052438804153127,
+      "trim": 844,
+      "trim_plus_47": 891,
+      "trim_plus_1152": 1996,
+      "decoded_len": 59904
+     },
+     "T1_control": {
+      "other_sid": 35147,
+      "argmin_lag": 1616,
+      "min_cost": 0.8551873926056304,
+      "median_cost": 55.16808706015579,
+      "cost_at": {
+       "B_preroll_0": 442982751727.44604,
+       "decoder_delay_529": 269.6403855558572,
+       "encoder_delay_576": 110.69093153206482,
+       "both_delays_1105": 58.87403948369699,
+       "A_replace_1152": 8.920128940229128,
+       "A_plus_delays_2257": 12.808046533425417
+      }
+     },
+     "T2_control": {
+      "best_lag": 274,
+      "best_ncc": 0.1338463948552223,
+      "second_lag": 730,
+      "second_ncc": 0.13375005152514452,
+      "median_ncc": -0.00017068364775945627
+     },
+     "renderings": {
+      "mpeg_only_sha256": "ff644901f09271b269812fb34c91c2c2e32c24b7642773ada867e4c0f9593516",
+      "mpeg_only_len": 59904,
+      "candidate_A_sha256": "d607aa38f7d5c62de114194429b8eb3ca5720bc520982813e31e946e6d3a7be4",
+      "candidate_A_len": 59904,
+      "candidate_B_sha256": "2d713fd37b88e43159fff1889f19a92f2a4ac1ef022c8751cad582fbe9f04173",
+      "candidate_B_len": 61056
+     }
+    },
+    {
+     "sid": 35147,
+     "off": 457322368,
+     "sns_sha256": "b69ef55acba0f790e3e53a9e4de334a0d210499fe3afe8099e8aacd4922a768b",
+     "num_samples": 56832,
+     "blocks": 6,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 5: size 98 at 968 exceeds payload 1063",
+       "frames": 45,
+       "mpeg_bytes": 11856
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2428 at 0 exceeds payload 2418",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29194 at 289 exceeds payload 2418",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 290, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 46464 != SNR num_samples 56832",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 50,
+       "mpeg_bytes": 12912
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 50,
+     "trim": 768,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "c1c9cfd408b525eefe5c099baf7dff6550a3728cefbea99ea89f191cfb8d88f1"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "1e7472b7eb571ee3fef936dcd8266cc66b320831d235d4936b8612f4c810b710"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1910,
+      "min_cost": 1.0149016115977367,
+      "median_cost": 123.46512158066017,
+      "cost_at": {
+       "B_preroll_0": 442982751727.9904,
+       "decoder_delay_529": 6865.824439577882,
+       "encoder_delay_576": 1311.4699967773531,
+       "both_delays_1105": 177.0648213767796,
+       "A_replace_1152": 1.1173096334734396,
+       "A_plus_delays_2257": 20.253440434237223
+      },
+      "lags_within_10pct_of_min": [
+       1910,
+       2196
+      ]
+     },
+     "T2": {
+      "best_lag": 587,
+      "best_ncc": 0.2039458187623029,
+      "second_lag": 491,
+      "second_ncc": 0.18546297932021155,
+      "median_ncc": -0.0005574247855521765
+     },
+     "T3": {
+      "onset_sample": 4032,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 1513.0143512483064,
+      "rms_at_2304": 795.3714541017927,
+      "embedded_rms": 1751.4223042069582
+     },
+     "first_sample_over_1_lsb": 277,
+     "T4": {
+      "silent_tail_samples": 768,
+      "threshold": 18.12263825369545,
+      "trim": 768,
+      "trim_plus_47": 815,
+      "trim_plus_1152": 1920,
+      "decoded_len": 57600
+     },
+     "T1_control": {
+      "other_sid": 3347,
+      "argmin_lag": 1899,
+      "min_cost": 0.3978746088814603,
+      "median_cost": 25.931918014056507,
+      "cost_at": {
+       "B_preroll_0": 366953497093.1635,
+       "decoder_delay_529": 5679.030874068113,
+       "encoder_delay_576": 1090.4694849036787,
+       "both_delays_1105": 30.641943113640114,
+       "A_replace_1152": 2.2036397926367823,
+       "A_plus_delays_2257": 5.008144639126679
+      }
+     },
+     "T2_control": {
+      "best_lag": 3258,
+      "best_ncc": 0.3372601569221033,
+      "second_lag": 3534,
+      "second_ncc": 0.32964609541128415,
+      "median_ncc": -0.0027246037887858855
+     },
+     "renderings": {
+      "mpeg_only_sha256": "c1c9cfd408b525eefe5c099baf7dff6550a3728cefbea99ea89f191cfb8d88f1",
+      "mpeg_only_len": 57600,
+      "candidate_A_sha256": "cee0454e93daaa2ca21fc780c829207bf13f55a9d583131ee1041743901288a6",
+      "candidate_A_len": 57600,
+      "candidate_B_sha256": "f2269a81db7f417e09bc01f45f65301309d104a8dc33561602b6cebb2d01004c",
+      "candidate_B_len": 58752
+     }
+    }
+   ]
+  },
+  "nhl16": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA01909\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp_and_cb.sbr",
+   "vectors": [
+    {
+     "sid": 3347,
+     "off": 619400480,
+     "sns_sha256": "f89b46c3894017958e49a67d1aafc4c93d1d3d6cbd2216111e3463d007d32a2f",
+     "num_samples": 80212,
+     "blocks": 8,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 7: size 194 at 2124 exceeds payload 2315",
+       "frames": 63,
+       "mpeg_bytes": 18984
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 3052 at 0 exceeds payload 3042",
+       "frames": 9,
+       "mpeg_bytes": 2496
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 487 (ea_frame at 481, size 666, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2496
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 482, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2496
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 69844 != SNR num_samples 80212",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 70,
+       "mpeg_bytes": 21288
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 70,
+     "trim": 428,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 80640,
+       "channels": 1,
+       "pcm_sha256": "14090b5699770c493f997ea40375872cc30f444b37d410784158f3c231ff2e3c"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 80640,
+       "channels": 1,
+       "pcm_sha256": "a576800ee58fe9eb6b76433662e55d8c4fadd59132619715098d124b9a641c33"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.07561404317149759,
+      "median_cost": 10.797395891511751,
+      "cost_at": {
+       "B_preroll_0": 366953497092.7164,
+       "decoder_delay_529": 366953497092.257,
+       "encoder_delay_576": 366953497092.4493,
+       "both_delays_1105": 2.8513392005337623,
+       "A_replace_1152": 0.07561404317149759,
+       "A_plus_delays_2257": 19.53204363580099
+      },
+      "lags_within_10pct_of_min": [
+       1152,
+       1885,
+       2018
+      ]
+     },
+     "T2": {
+      "best_lag": 0,
+      "best_ncc": 0.8277810751952206,
+      "second_lag": 351,
+      "second_ncc": 0.6966926576137615,
+      "median_ncc": -0.011633060855852265
+     },
+     "T3": {
+      "onset_sample": 1056,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 2810.215416565072,
+      "rms_at_2304": 3663.9122518945965,
+      "embedded_rms": 1163.2050602334816
+     },
+     "first_sample_over_1_lsb": 861,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 17.14937554899012,
+      "trim": 428,
+      "trim_plus_47": 475,
+      "trim_plus_1152": 1580,
+      "decoded_len": 80640
+     },
+     "T1_control": {
+      "other_sid": 3363,
+      "argmin_lag": 2323,
+      "min_cost": 0.010334408392537292,
+      "median_cost": 24.632797682988883,
+      "cost_at": {
+       "B_preroll_0": 2741607315669.3105,
+       "decoder_delay_529": 2741607315668.969,
+       "encoder_delay_576": 2741607315669.742,
+       "both_delays_1105": 11.628145117762783,
+       "A_replace_1152": 19.88444766247554,
+       "A_plus_delays_2257": 63.51870509931713
+      }
+     },
+     "T2_control": {
+      "best_lag": 2029,
+      "best_ncc": 0.3699202389851211,
+      "second_lag": 2392,
+      "second_ncc": 0.35749769743461585,
+      "median_ncc": -0.004879884619324063
+     },
+     "renderings": {
+      "mpeg_only_sha256": "14090b5699770c493f997ea40375872cc30f444b37d410784158f3c231ff2e3c",
+      "mpeg_only_len": 80640,
+      "candidate_A_sha256": "670a835d0bce19e8ef9402177db14e0464ef2bf1f0a76dac8fdd1abe4c71e644",
+      "candidate_A_len": 80640,
+      "candidate_B_sha256": "08f468fa4d6e0842006e307e8d79fa407a3d72f36dc01de0f43176cec787ed4f",
+      "candidate_B_len": 81792
+     }
+    },
+    {
+     "sid": 3363,
+     "off": 619609120,
+     "sns_sha256": "09971b246dc3618f0bfb9ee2316bac04eae8052d7dbf8928cd833073eece4c63",
+     "num_samples": 74354,
+     "blocks": 7,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 6: size 482 at 4052 exceeds payload 4531",
+       "frames": 54,
+       "mpeg_bytes": 16560
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2380 at 0 exceeds payload 2370",
+       "frames": 9,
+       "mpeg_bytes": 2304
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29337 at 241 exceeds payload 2370",
+       "frames": 9,
+       "mpeg_bytes": 2304
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2304
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 63986 != SNR num_samples 74354",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 65,
+       "mpeg_bytes": 21072
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 65,
+     "trim": 526,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 74880,
+       "channels": 1,
+       "pcm_sha256": "72b3db71a128ef78aab7f543024281f0087f243fce9733c601cb8a4106797225"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 74880,
+       "channels": 1,
+       "pcm_sha256": "c10514b67010d22d0b06ada7a2b72956ff00f1094a73c0f4a8cb978044e09b12"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1215,
+      "min_cost": 0.003218767624452209,
+      "median_cost": 27.53695110544932,
+      "cost_at": {
+       "B_preroll_0": 2741607315668.8667,
+       "decoder_delay_529": 74.03914334747407,
+       "encoder_delay_576": 62.56446868167862,
+       "both_delays_1105": 6.0948234505374215,
+       "A_replace_1152": 0.003873868916880928,
+       "A_plus_delays_2257": 32.506552548583855
+      },
+      "lags_within_10pct_of_min": [
+       1214,
+       1215,
+       1218
+      ]
+     },
+     "T2": {
+      "best_lag": 363,
+      "best_ncc": 0.8181881998601178,
+      "second_lag": 720,
+      "second_ncc": 0.7393585495473339,
+      "median_ncc": -0.002195687958601792
+     },
+     "T3": {
+      "onset_sample": 1056,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 5456.999748030047,
+      "rms_at_2304": 11242.704811991789,
+      "embedded_rms": 4588.169967919005
+     },
+     "first_sample_over_1_lsb": 170,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 23.96071992078415,
+      "trim": 526,
+      "trim_plus_47": 573,
+      "trim_plus_1152": 1678,
+      "decoded_len": 74880
+     },
+     "T1_control": {
+      "other_sid": 3376,
+      "argmin_lag": 1831,
+      "min_cost": 0.014952732699897239,
+      "median_cost": 51.38384175220984,
+      "cost_at": {
+       "B_preroll_0": 8223406521887.21,
+       "decoder_delay_529": 189.49261706240472,
+       "encoder_delay_576": 172.05104108186012,
+       "both_delays_1105": 30.312567149838014,
+       "A_replace_1152": 86.72199257057757,
+       "A_plus_delays_2257": 8.488967005411105
+      }
+     },
+     "T2_control": {
+      "best_lag": 533,
+      "best_ncc": 0.33643431233131227,
+      "second_lag": 885,
+      "second_ncc": 0.2945452304872375,
+      "median_ncc": 0.0027522432634174464
+     },
+     "renderings": {
+      "mpeg_only_sha256": "72b3db71a128ef78aab7f543024281f0087f243fce9733c601cb8a4106797225",
+      "mpeg_only_len": 74880,
+      "candidate_A_sha256": "dae698b931bc9b60274839c90239040a055dd192f1009476c4f6cbf6343e0802",
+      "candidate_A_len": 74880,
+      "candidate_B_sha256": "2fbdb9f618de8edcdd1061e4a87f3d468f9cbdf8da26dcf1c4edd1f20c813b7c",
+      "candidate_B_len": 76032
+     }
+    },
+    {
+     "sid": 3376,
+     "off": 619715456,
+     "sns_sha256": "ebc8b13cd2eeecb0d8f91b06cafff95a740f6b1988a65300f00a203759ec3473",
+     "num_samples": 56907,
+     "blocks": 6,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 5: size 194 at 1400 exceeds payload 1591",
+       "frames": 45,
+       "mpeg_bytes": 14688
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2716 at 0 exceeds payload 2706",
+       "frames": 9,
+       "mpeg_bytes": 3072
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 21134 at 241 exceeds payload 2706",
+       "frames": 9,
+       "mpeg_bytes": 3072
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 3072
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 46539 != SNR num_samples 56907",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 50,
+       "mpeg_bytes": 16272
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 50,
+     "trim": 693,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "dd97e4c7d367be70d4d23f38b500bfb45553b397218aba992930c581e037e8f8"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "bfd36c11d5847f48775a5fa7b9441679e281972910f0ba9d3b8ff36d80eaf8d6"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.00787640104882834,
+      "median_cost": 58.14360239510456,
+      "cost_at": {
+       "B_preroll_0": 8223406521887.218,
+       "decoder_delay_529": 40.131330208616156,
+       "encoder_delay_576": 60.39838782762494,
+       "both_delays_1105": 47.38674800228561,
+       "A_replace_1152": 0.00787640104882834,
+       "A_plus_delays_2257": 85.70383304378093
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 2377,
+      "best_ncc": 0.49533989843361304,
+      "second_lag": 356,
+      "second_ncc": 0.4683616338163343,
+      "median_ncc": -0.0030589154018951657
+     },
+     "T3": {
+      "onset_sample": 1056,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 6005.475982905102,
+      "rms_at_2304": 2691.1381130945324,
+      "embedded_rms": 2770.4881285589568
+     },
+     "first_sample_over_1_lsb": 176,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 16.31814864960773,
+      "trim": 693,
+      "trim_plus_47": 740,
+      "trim_plus_1152": 1845,
+      "decoded_len": 57600
+     },
+     "T1_control": {
+      "other_sid": 3389,
+      "argmin_lag": 1148,
+      "min_cost": 0.06504530370660415,
+      "median_cost": 65.92214862010552,
+      "cost_at": {
+       "B_preroll_0": 3515315269545.606,
+       "decoder_delay_529": 17.34906642823179,
+       "encoder_delay_576": 37.746054890501334,
+       "both_delays_1105": 104.7997931552364,
+       "A_replace_1152": 429.5657076167358,
+       "A_plus_delays_2257": 93.35371231850402
+      }
+     },
+     "T2_control": {
+      "best_lag": 15,
+      "best_ncc": 0.4521684626998357,
+      "second_lag": 88,
+      "second_ncc": 0.3654748352738139,
+      "median_ncc": 0.0009522576484395834
+     },
+     "renderings": {
+      "mpeg_only_sha256": "dd97e4c7d367be70d4d23f38b500bfb45553b397218aba992930c581e037e8f8",
+      "mpeg_only_len": 57600,
+      "candidate_A_sha256": "c3f0105def0ec7a389b733a550ad7713e4debd2d7f9cfdafe92d29e8b694b007",
+      "candidate_A_len": 57600,
+      "candidate_B_sha256": "096c1a8f8a5cded3a997ec47c16b1b954d0a63b7e8de8f13844dcf31099b3d91",
+      "candidate_B_len": 58752
+     }
+    },
+    {
+     "sid": 3389,
+     "off": 619916480,
+     "sns_sha256": "eaf44e8c02b9a863ae569828dfcfc644c30ba665c00bc35447a07d4964bc9018",
+     "num_samples": 41702,
+     "blocks": 4,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 3: size 290 at 2850 exceeds payload 3137",
+       "frames": 27,
+       "mpeg_bytes": 7536
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2524 at 0 exceeds payload 2514",
+       "frames": 9,
+       "mpeg_bytes": 2208
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29184 at 241 exceeds payload 2514",
+       "frames": 9,
+       "mpeg_bytes": 2208
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2208
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 31334 != SNR num_samples 41702",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 37,
+       "mpeg_bytes": 10656
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 37,
+     "trim": 922,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 42624,
+       "channels": 1,
+       "pcm_sha256": "f6b64d0deb966ee4f34174c3b0dd01ccb588a72ac10411cb4073dd228116278b"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 42624,
+       "channels": 1,
+       "pcm_sha256": "2d26641adf1254ae97ec8deda58b25f35413a3da9cdd0d4965a53ada9a68ad05"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.021135687835659764,
+      "median_cost": 222.80237214705576,
+      "cost_at": {
+       "B_preroll_0": 3515315269545.6113,
+       "decoder_delay_529": 7959.249556175977,
+       "encoder_delay_576": 167017.62801745097,
+       "both_delays_1105": 119.65344622147572,
+       "A_replace_1152": 0.021135687835659764,
+       "A_plus_delays_2257": 69.84783647802975
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 0,
+      "best_ncc": 0.5995023241290566,
+      "second_lag": 514,
+      "second_ncc": 0.5124146317107765,
+      "median_ncc": -0.009418030065618855
+     },
+     "T3": {
+      "onset_sample": 1056,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 5424.48911860985,
+      "rms_at_2304": 5835.39027989988,
+      "embedded_rms": 1124.7909821261114
+     },
+     "first_sample_over_1_lsb": 192,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 20.208088461586428,
+      "trim": 922,
+      "trim_plus_47": 969,
+      "trim_plus_1152": 2074,
+      "decoded_len": 42624
+     },
+     "T1_control": {
+      "other_sid": 3402,
+      "argmin_lag": 1462,
+      "min_cost": 0.05420460191688886,
+      "median_cost": 190.36699425664966,
+      "cost_at": {
+       "B_preroll_0": 2654415880294.7915,
+       "decoder_delay_529": 6074.230671970381,
+       "encoder_delay_576": 127103.59483724232,
+       "both_delays_1105": 56.127554290263824,
+       "A_replace_1152": 414.51618221742353,
+       "A_plus_delays_2257": 191.43897015047992
+      }
+     },
+     "T2_control": {
+      "best_lag": 305,
+      "best_ncc": 0.3272562951673152,
+      "second_lag": 392,
+      "second_ncc": 0.3054178298594561,
+      "median_ncc": -0.000865173802419959
+     },
+     "renderings": {
+      "mpeg_only_sha256": "f6b64d0deb966ee4f34174c3b0dd01ccb588a72ac10411cb4073dd228116278b",
+      "mpeg_only_len": 42624,
+      "candidate_A_sha256": "5b59df7e930a7dd1315e969cbde9bd23608c7bc1f4cddd9a26df5f2315cbe901",
+      "candidate_A_len": 42624,
+      "candidate_B_sha256": "707b002d93d25988848204d6e071dde27a269145b13472c0bd0c56deb9c1874c",
+      "candidate_B_len": 43776
+     }
+    },
+    {
+     "sid": 3402,
+     "off": 620136096,
+     "sns_sha256": "721c6d9d667504d198832748ee2e0a5675b8719eb785b1135813edf0c077b831",
+     "num_samples": 59700,
+     "blocks": 6,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 5: size 338 at 1788 exceeds payload 2123",
+       "frames": 45,
+       "mpeg_bytes": 14256
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2476 at 0 exceeds payload 2466",
+       "frames": 9,
+       "mpeg_bytes": 3456
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29184 at 241 exceeds payload 2466",
+       "frames": 9,
+       "mpeg_bytes": 3456
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 3456
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 49332 != SNR num_samples 59700",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 52,
+       "mpeg_bytes": 16368
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 52,
+     "trim": 204,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "5ddc80cdf8b32c60ac96295478ecd179743f26fc8dd6dd9b2215be058a0450eb"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "15c83092a854bb87ff4f8ba703ef43dafd6621a6b534e5fb43ffdff0b5f0b1f5"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1343,
+      "min_cost": 0.060627114952294586,
+      "median_cost": 90.5079409233671,
+      "cost_at": {
+       "B_preroll_0": 2654415880294.7925,
+       "decoder_delay_529": 71.62654262369882,
+       "encoder_delay_576": 45.76201364306725,
+       "both_delays_1105": 118.21273647532209,
+       "A_replace_1152": 0.06148227884500725,
+       "A_plus_delays_2257": 16.404628915284736
+      },
+      "lags_within_10pct_of_min": [
+       1152,
+       1343
+      ]
+     },
+     "T2": {
+      "best_lag": 332,
+      "best_ncc": 0.8691308140476162,
+      "second_lag": 653,
+      "second_ncc": 0.5628655811335863,
+      "median_ncc": -0.011926706022139067
+     },
+     "T3": {
+      "onset_sample": 1152,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 8932.273724277413,
+      "rms_at_2304": 3362.636498158848,
+      "embedded_rms": 2951.936416745277
+     },
+     "first_sample_over_1_lsb": 163,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 23.432527260928016,
+      "trim": 204,
+      "trim_plus_47": 251,
+      "trim_plus_1152": 1356,
+      "decoded_len": 59904
+     },
+     "T1_control": {
+      "other_sid": 3415,
+      "argmin_lag": 2138,
+      "min_cost": 0.060153632342290576,
+      "median_cost": 8.277125105590253,
+      "cost_at": {
+       "B_preroll_0": 46890068670.48759,
+       "decoder_delay_529": 1.7407442540240499,
+       "encoder_delay_576": 0.5887132782766645,
+       "both_delays_1105": 8.896771202912474,
+       "A_replace_1152": 51.89560831854839,
+       "A_plus_delays_2257": 13.274921687564223
+      }
+     },
+     "T2_control": {
+      "best_lag": 119,
+      "best_ncc": 0.8047781040270372,
+      "second_lag": 440,
+      "second_ncc": 0.5007507481833644,
+      "median_ncc": 0.00018681612253043938
+     },
+     "renderings": {
+      "mpeg_only_sha256": "5ddc80cdf8b32c60ac96295478ecd179743f26fc8dd6dd9b2215be058a0450eb",
+      "mpeg_only_len": 59904,
+      "candidate_A_sha256": "cde346cc5ee4c86d9982855951a5786b23467272eea44b005835008417f089a8",
+      "candidate_A_len": 59904,
+      "candidate_B_sha256": "30bb40f30449aa396d2e7f10737278fda577828ec7c2b737ee77dbd11cdfddf5",
+      "candidate_B_len": 61056
+     }
+    },
+    {
+     "sid": 3415,
+     "off": 620371360,
+     "sns_sha256": "4b8fee591587f657e6102825832dfc9a9b362c676f3753e2234c54e08e3135d6",
+     "num_samples": 57740,
+     "blocks": 6,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 5: size 338 at 1450 exceeds payload 1785",
+       "frames": 45,
+       "mpeg_bytes": 13536
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2620 at 0 exceeds payload 2610",
+       "frames": 9,
+       "mpeg_bytes": 3168
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 21150 at 241 exceeds payload 2610",
+       "frames": 9,
+       "mpeg_bytes": 3168
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 3168
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 47372 != SNR num_samples 57740",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 51,
+       "mpeg_bytes": 15312
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 51,
+     "trim": 1012,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 58752,
+       "channels": 1,
+       "pcm_sha256": "d6d448514af4e8b90d55e5aeea00ada8f94e8fb8ccf42cb7964e3c76b89ec3f1"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 58752,
+       "channels": 1,
+       "pcm_sha256": "c4b667551a39df34f70358cb2d824ed1a0bc452f448218b21b158680f5c020a0"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1808,
+      "min_cost": 0.010700171568749138,
+      "median_cost": 8.81790567553434,
+      "cost_at": {
+       "B_preroll_0": 46890068670.46836,
+       "decoder_delay_529": 3.48426622397018,
+       "encoder_delay_576": 3.7770402128396006,
+       "both_delays_1105": 5.27214129455027,
+       "A_replace_1152": 0.01895265152988003,
+       "A_plus_delays_2257": 179.9686514741742
+      },
+      "lags_within_10pct_of_min": [
+       1808
+      ]
+     },
+     "T2": {
+      "best_lag": 340,
+      "best_ncc": 0.7696892639002314,
+      "second_lag": 657,
+      "second_ncc": 0.5734656773465167,
+      "median_ncc": -0.006699349860452069
+     },
+     "T3": {
+      "onset_sample": 1152,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 3483.8669831453094,
+      "rms_at_2304": 8291.24530378278,
+      "embedded_rms": 2619.052436129228
+     },
+     "first_sample_over_1_lsb": 167,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 24.176918975038543,
+      "trim": 1012,
+      "trim_plus_47": 1059,
+      "trim_plus_1152": 2164,
+      "decoded_len": 58752
+     },
+     "T1_control": {
+      "other_sid": 3428,
+      "argmin_lag": 1466,
+      "min_cost": 0.06669942789782285,
+      "median_cost": 94.39040184921923,
+      "cost_at": {
+       "B_preroll_0": 475808964776.6385,
+       "decoder_delay_529": 40.7570198231482,
+       "encoder_delay_576": 39.758880389985784,
+       "both_delays_1105": 249.3441531175707,
+       "A_replace_1152": 78.10463758517393,
+       "A_plus_delays_2257": 206.19142122506568
+      }
+     },
+     "T2_control": {
+      "best_lag": 894,
+      "best_ncc": 0.5371223108371398,
+      "second_lag": 576,
+      "second_ncc": 0.5077966176205974,
+      "median_ncc": -0.005130751725706311
+     },
+     "renderings": {
+      "mpeg_only_sha256": "d6d448514af4e8b90d55e5aeea00ada8f94e8fb8ccf42cb7964e3c76b89ec3f1",
+      "mpeg_only_len": 58752,
+      "candidate_A_sha256": "36afc3aeb079a6e49286e83f246ed31bd47ede345de55fd4886601588ccd8e68",
+      "candidate_A_len": 58752,
+      "candidate_B_sha256": "ba7aff81e690666f248fd9c9f39aa2a4768b58778a507f38aa771e5f2f154daa",
+      "candidate_B_len": 59904
+     }
+    },
+    {
+     "sid": 3428,
+     "off": 620601568,
+     "sns_sha256": "fba4a88b068075f867b7ea68d094a83986b25af08ba1c18b3319afc99c1b6621",
+     "num_samples": 56972,
+     "blocks": 6,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 5: size 194 at 1448 exceeds payload 1639",
+       "frames": 45,
+       "mpeg_bytes": 14064
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2524 at 0 exceeds payload 2514",
+       "frames": 9,
+       "mpeg_bytes": 3552
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 21145 at 337 exceeds payload 2514",
+       "frames": 9,
+       "mpeg_bytes": 3552
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 338, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 3552
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 46604 != SNR num_samples 56972",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 50,
+       "mpeg_bytes": 15696
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 50,
+     "trim": 628,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "ffa2b15fe104bd71b4084ce8d7f350eeb798465a1fabda182bf3429cbb08dcc6"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "dcbaf362b116d961a3b3ada78d2524e3496f2ca48a82b57a306ffa6eb6a59055"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.06972313429178956,
+      "median_cost": 85.88891379702459,
+      "cost_at": {
+       "B_preroll_0": 475808964776.65454,
+       "decoder_delay_529": 44.450900826792754,
+       "encoder_delay_576": 55.240349021882565,
+       "both_delays_1105": 74.52566014213963,
+       "A_replace_1152": 0.06972313429178956,
+       "A_plus_delays_2257": 238.3695955673414
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 376,
+      "best_ncc": 0.7993459229404546,
+      "second_lag": 743,
+      "second_ncc": 0.5901192306674137,
+      "median_ncc": -0.006316615640408891
+     },
+     "T3": {
+      "onset_sample": 1152,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 6821.159248220447,
+      "rms_at_2304": 5344.143514750516,
+      "embedded_rms": 2687.3273214873734
+     },
+     "first_sample_over_1_lsb": 161,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 19.529004738467517,
+      "trim": 628,
+      "trim_plus_47": 675,
+      "trim_plus_1152": 1780,
+      "decoded_len": 57600
+     },
+     "T1_control": {
+      "other_sid": 3441,
+      "argmin_lag": 1147,
+      "min_cost": 0.11558075548260166,
+      "median_cost": 40.52922558126228,
+      "cost_at": {
+       "B_preroll_0": 200516505965.5035,
+       "decoder_delay_529": 23.981665731297632,
+       "encoder_delay_576": 23.21775422213229,
+       "both_delays_1105": 4.231748784135623,
+       "A_replace_1152": 188.4215908694099,
+       "A_plus_delays_2257": 9.007362147707132
+      }
+     },
+     "T2_control": {
+      "best_lag": 246,
+      "best_ncc": 0.5641047550499539,
+      "second_lag": 613,
+      "second_ncc": 0.42401743740592834,
+      "median_ncc": -0.004042586460069367
+     },
+     "renderings": {
+      "mpeg_only_sha256": "ffa2b15fe104bd71b4084ce8d7f350eeb798465a1fabda182bf3429cbb08dcc6",
+      "mpeg_only_len": 57600,
+      "candidate_A_sha256": "6644e5a8d99d09505b9a053c6b315c5127c231939350856666e6c79ed7d60c1f",
+      "candidate_A_len": 57600,
+      "candidate_B_sha256": "8f08b1e8de7c6f078b55fcf40cf811deec91d9cc5f09fadfd340c2722d472da5",
+      "candidate_B_len": 58752
+     }
+    },
+    {
+     "sid": 3441,
+     "off": 620838336,
+     "sns_sha256": "781655f5f2ce77f09e00768d56f96e0860be3ee0ff946e3173c44faa81a08244",
+     "num_samples": 54298,
+     "blocks": 5,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 4: size 170 at 4390 exceeds payload 4557",
+       "frames": 36,
+       "mpeg_bytes": 10176
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2476 at 0 exceeds payload 2466",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 8932 at 193 exceeds payload 2466",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 194, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "dropped_middle_block": {
+       "refused": true,
+       "reason": "sum of declared block samples 43930 != SNR num_samples 54298",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 48,
+       "mpeg_bytes": 14712
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 48,
+     "trim": 998,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 55296,
+       "channels": 1,
+       "pcm_sha256": "29e8780f4fec7fe0d109877658658ee245a56010f11ea3468d15bf22dcc619c2"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 55296,
+       "channels": 1,
+       "pcm_sha256": "8af58204cfe6285ee5094ab035bfa4b2e26da80b4e4d8aa0cca817a48bf6e360"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.12973116815239308,
+      "median_cost": 346.3516328954831,
+      "cost_at": {
+       "B_preroll_0": 200516505966.271,
+       "decoder_delay_529": 589.1350291906489,
+       "encoder_delay_576": 575.8383927835126,
+       "both_delays_1105": 65.35487855674565,
+       "A_replace_1152": 0.12973116815239308,
+       "A_plus_delays_2257": 0.7424379987241775
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 269,
+      "best_ncc": 0.8142299771780722,
+      "second_lag": 514,
+      "second_ncc": 0.6093146716787082,
+      "median_ncc": -0.006033181276779615
+     },
+     "T3": {
+      "onset_sample": 1152,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 5996.115734894549,
+      "rms_at_2304": 3480.8681672704392,
+      "embedded_rms": 2250.3918526450875
+     },
+     "first_sample_over_1_lsb": 215,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 21.079599866582157,
+      "trim": 998,
+      "trim_plus_47": 1045,
+      "trim_plus_1152": 2150,
+      "decoded_len": 55296
+     },
+     "T1_control": {
+      "other_sid": 15360,
+      "argmin_lag": 1017,
+      "min_cost": 2.104819008619929,
+      "median_cost": 1074.7702634184332,
+      "cost_at": {
+       "B_preroll_0": 3582003969.9325156,
+       "decoder_delay_529": 14.009921170347374,
+       "encoder_delay_576": 12.796965091609477,
+       "both_delays_1105": 404.20216460873957,
+       "A_replace_1152": 404.31344938301856,
+       "A_plus_delays_2257": 672.4952914005931
+      }
+     },
+     "T2_control": {
+      "best_lag": 6,
+      "best_ncc": 0.086208230457649,
+      "second_lag": 1749,
+      "second_ncc": 0.06801627547024791,
+      "median_ncc": 0.0031712995044573854
+     },
+     "renderings": {
+      "mpeg_only_sha256": "29e8780f4fec7fe0d109877658658ee245a56010f11ea3468d15bf22dcc619c2",
+      "mpeg_only_len": 55296,
+      "candidate_A_sha256": "fb1965458a85535d87875daece6eb920f29011319b61f94d0dbd7e27a029c56f",
+      "candidate_A_len": 55296,
+      "candidate_B_sha256": "723490f4b9f6756ad2138bbb15b84308335e7bfd3d59ec730f0bd0ede0f800a1",
+      "candidate_B_len": 56448
+     }
+    }
+   ]
+  },
+  "nhl17": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA04326\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples.sbr",
+   "vectors": [
+    {
+     "sid": 15360,
+     "off": 706393376,
+     "sns_sha256": "6f0876ac7aa3eb4e172586e4484fdffb9a47e9758400d28bb949c9378d71f334",
+     "num_samples": 19295,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 338 at 2030 exceeds payload 2365",
+       "frames": 9,
+       "mpeg_bytes": 2496
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2378 at 0 exceeds payload 2368",
+       "frames": 9,
+       "mpeg_bytes": 2496
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29383 at 385 exceeds payload 2368",
+       "frames": 9,
+       "mpeg_bytes": 2496
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 386, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2496
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 17,
+       "mpeg_bytes": 4848
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 17,
+     "trim": 289,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "6ca240f0d3d9b3dd7c6978b4a34af27623e5ece9e1e46bee6f44ec536649c0ca"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "071431c250f937b3e04df64d2ddb02014aa7dfecae52bb6f76ce9fe1f13c48e3"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.48975687038529836,
+      "median_cost": 182.85154880308244,
+      "cost_at": {
+       "B_preroll_0": 3582003968.9320884,
+       "decoder_delay_529": 146.26641549791202,
+       "encoder_delay_576": 62.14884885416997,
+       "both_delays_1105": 26.516107664616655,
+       "A_replace_1152": 0.48975687038529836,
+       "A_plus_delays_2257": 406.6428179475641
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 909,
+      "best_ncc": 0.2918927471933113,
+      "second_lag": 328,
+      "second_ncc": 0.2908060560399129,
+      "median_ncc": 0.0007687228181446526
+     },
+     "T3": {
+      "onset_sample": 3840,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 733.6340623907807,
+      "rms_at_2304": 1446.737317063237,
+      "embedded_rms": 237.4254799025253
+     },
+     "first_sample_over_1_lsb": 288,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 19.811330727781133,
+      "trim": 289,
+      "trim_plus_47": 336,
+      "trim_plus_1152": 1441,
+      "decoded_len": 19584
+     },
+     "T1_control": {
+      "other_sid": 15935,
+      "argmin_lag": 573,
+      "min_cost": 1.0203942836903104,
+      "median_cost": 171.43807047535253,
+      "cost_at": {
+       "B_preroll_0": 72283566.11691462,
+       "decoder_delay_529": 3.0742730585071003,
+       "encoder_delay_576": 1.6910372711731596,
+       "both_delays_1105": 14.140443254850561,
+       "A_replace_1152": 88.08992005115512,
+       "A_plus_delays_2257": 4127.813634973697
+      }
+     },
+     "T2_control": {
+      "best_lag": 245,
+      "best_ncc": 0.14573083661800437,
+      "second_lag": 2769,
+      "second_ncc": 0.13535452870047923,
+      "median_ncc": 0.004908833650114001
+     },
+     "renderings": {
+      "mpeg_only_sha256": "6ca240f0d3d9b3dd7c6978b4a34af27623e5ece9e1e46bee6f44ec536649c0ca",
+      "mpeg_only_len": 19584,
+      "candidate_A_sha256": "270b698fc74a8edab814ca265f55807038da6a4580cf17c8180dee2aa7713e29",
+      "candidate_A_len": 19584,
+      "candidate_B_sha256": "155eb90ce6ec22f11adfd664c75eb3863c1c9b37590d95d12c70198e0f98e5d9",
+      "candidate_B_len": 20736
+     }
+    },
+    {
+     "sid": 15935,
+     "off": 708257088,
+     "sns_sha256": "1c3078e0dd0711849a32c3cf676f78203bc902cd4ba28a34cb5dfb72e6a87059",
+     "num_samples": 21311,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 242 at 2946 exceeds payload 3185",
+       "frames": 9,
+       "mpeg_bytes": 2544
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 3198 at 0 exceeds payload 3188",
+       "frames": 9,
+       "mpeg_bytes": 2544
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 247 (ea_frame at 241, size 704, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2544
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2544
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 19,
+       "mpeg_bytes": 5712
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 19,
+     "trim": 577,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "d96ee13b2d88640b3fc21dfb45f5483e16893fc0adcdbfbd7d94fdd7192d4e9e"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "b2d4c3523ed4b892ec5c8c1f1ed64475a28dcf30bf62bdb6eb361ac7878d700f"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1021,
+      "min_cost": 1.789787780991432,
+      "median_cost": 11585.132138026855,
+      "cost_at": {
+       "B_preroll_0": 72283566.21634322,
+       "decoder_delay_529": 72283565.84760873,
+       "encoder_delay_576": 72283565.93515128,
+       "both_delays_1105": 2.4849194050675134,
+       "A_replace_1152": 2.445136330050057,
+       "A_plus_delays_2257": 208219.18032705667
+      },
+      "lags_within_10pct_of_min": [
+       1020,
+       1021,
+       1032,
+       1036,
+       1040,
+       1041,
+       1050,
+       1061,
+       1066,
+       1067,
+       1071
+      ]
+     },
+     "T2": {
+      "best_lag": 263,
+      "best_ncc": 0.2619036040045615,
+      "second_lag": 994,
+      "second_ncc": 0.21213716722418896,
+      "median_ncc": 0.0016750784157527187
+     },
+     "T3": {
+      "onset_sample": 2016,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 421.7216573167662,
+      "rms_at_2304": 4464.676540868703,
+      "embedded_rms": 136.26489151546787
+     },
+     "first_sample_over_1_lsb": 880,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 21.79728687499937,
+      "trim": 577,
+      "trim_plus_47": 624,
+      "trim_plus_1152": 1729,
+      "decoded_len": 21888
+     },
+     "T1_control": {
+      "other_sid": 16498,
+      "argmin_lag": 1137,
+      "min_cost": 0.32846700396536377,
+      "median_cost": 2629.011038938968,
+      "cost_at": {
+       "B_preroll_0": 93108675.49805424,
+       "decoder_delay_529": 93108675.00717263,
+       "encoder_delay_576": 93108675.02029444,
+       "both_delays_1105": 2.0396893814487926,
+       "A_replace_1152": 1.5463459056821365,
+       "A_plus_delays_2257": 43996.401216209
+      }
+     },
+     "T2_control": {
+      "best_lag": 3291,
+      "best_ncc": 0.2106135458656768,
+      "second_lag": 2746,
+      "second_ncc": 0.16508364502471465,
+      "median_ncc": 0.0025529486749185123
+     },
+     "renderings": {
+      "mpeg_only_sha256": "d96ee13b2d88640b3fc21dfb45f5483e16893fc0adcdbfbd7d94fdd7192d4e9e",
+      "mpeg_only_len": 21888,
+      "candidate_A_sha256": "6df0ab70731a662c55a9d77f0be3243c9bb093534d7f2cbf916267003a5d250d",
+      "candidate_A_len": 21888,
+      "candidate_B_sha256": "0e30e460734654f66470ce6fd305713f851203afa97ce461f39ad3bf211fdd5c",
+      "candidate_B_len": 23040
+     }
+    },
+    {
+     "sid": 16498,
+     "off": 709693056,
+     "sns_sha256": "ec9c4f32345bee4d736d37f8276d2c3e9a8b639344a7d3af8c2e5da53d8c3380",
+     "num_samples": 18506,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 482 at 2414 exceeds payload 2893",
+       "frames": 9,
+       "mpeg_bytes": 2640
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2906 at 0 exceeds payload 2896",
+       "frames": 9,
+       "mpeg_bytes": 2640
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29195 at 289 exceeds payload 2896",
+       "frames": 9,
+       "mpeg_bytes": 2640
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 290, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2640
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 17,
+       "mpeg_bytes": 5520
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 17,
+     "trim": 1078,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "e44c9d5bede67dc895302af9edd9b450bba75a8e144e59327c5ae6da5dc6227e"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "dc411f507d0164e8c9c92aef7f8562e76f855c9476ba03bec38de7ef53974b65"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.007046285337193087,
+      "median_cost": 1.1694879676722656,
+      "cost_at": {
+       "B_preroll_0": 93108675.0055586,
+       "decoder_delay_529": 0.05760181316475184,
+       "encoder_delay_576": 0.3932325655850061,
+       "both_delays_1105": 0.058675214635331714,
+       "A_replace_1152": 0.007046285337193087,
+       "A_plus_delays_2257": 50.95194109198466
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 1064,
+      "best_ncc": 0.3257926214138813,
+      "second_lag": 346,
+      "second_ncc": 0.29086998558017746,
+      "median_ncc": -0.00015374224856970362
+     },
+     "T3": {
+      "onset_sample": 3072,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 546.1078762479076,
+      "rms_at_2304": 833.1914170825333,
+      "embedded_rms": 252.65118205080034
+     },
+     "first_sample_over_1_lsb": 274,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 20.048072106849574,
+      "trim": 1078,
+      "trim_plus_47": 1125,
+      "trim_plus_1152": 2230,
+      "decoded_len": 19584
+     },
+     "T1_control": {
+      "other_sid": 17056,
+      "argmin_lag": 2252,
+      "min_cost": 0.006303880143311531,
+      "median_cost": 14.956449146160914,
+      "cost_at": {
+       "B_preroll_0": 571258805382.7155,
+       "decoder_delay_529": 623.840229929349,
+       "encoder_delay_576": 1912.8532826534306,
+       "both_delays_1105": 17.22791732559479,
+       "A_replace_1152": 2.904757163977247,
+       "A_plus_delays_2257": 0.012264248441393044
+      }
+     },
+     "T2_control": {
+      "best_lag": 2487,
+      "best_ncc": 0.6517609610999365,
+      "second_lag": 2224,
+      "second_ncc": 0.6365266639478578,
+      "median_ncc": -0.01538863308670873
+     },
+     "renderings": {
+      "mpeg_only_sha256": "e44c9d5bede67dc895302af9edd9b450bba75a8e144e59327c5ae6da5dc6227e",
+      "mpeg_only_len": 19584,
+      "candidate_A_sha256": "4c5ff347c04e3aa3e42efe8da95296b9e1583be53530da9733fd55a85be20701",
+      "candidate_A_len": 19584,
+      "candidate_B_sha256": "fd84754d61957281b400e1a2cf38d56340788824af0a7c62f8ef6637500f4062",
+      "candidate_B_len": 20736
+     }
+    },
+    {
+     "sid": 17056,
+     "off": 710710944,
+     "sns_sha256": "2442791ac7d4128ae6c4e4b87118896ff26dbf607d933db9ff0e5028b174b335",
+     "num_samples": 13600,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 290 at 772 exceeds payload 1059",
+       "frames": 9,
+       "mpeg_bytes": 2880
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 1072 at 0 exceeds payload 1062",
+       "frames": 9,
+       "mpeg_bytes": 2880
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 25291 at 289 exceeds payload 1062",
+       "frames": 9,
+       "mpeg_bytes": 2880
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 290, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2880
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 12,
+       "mpeg_bytes": 3936
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 12,
+     "trim": 224,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "47c83fe333aec7afc79c8e02ff22c384a192fb75f62a9226b4788c9cd2212a5f"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "b6d17d8cecb94d8f97077edc68e87a8cb8654842bdfdb14af0eaa4a1cada2849"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1285,
+      "min_cost": 0.0157186628979164,
+      "median_cost": 175.20261565992547,
+      "cost_at": {
+       "B_preroll_0": 571258805382.7888,
+       "decoder_delay_529": 19.32638447500009,
+       "encoder_delay_576": 30.835775563546132,
+       "both_delays_1105": 12.180725393161374,
+       "A_replace_1152": 0.0763237184518123,
+       "A_plus_delays_2257": 103.28368641441921
+      },
+      "lags_within_10pct_of_min": [
+       1285
+      ]
+     },
+     "T2": {
+      "best_lag": 285,
+      "best_ncc": 0.8122284669670634,
+      "second_lag": 560,
+      "second_ncc": 0.699037862482728,
+      "median_ncc": -0.01941699962555654
+     },
+     "T3": {
+      "onset_sample": 1152,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 6214.550259438195,
+      "rms_at_2304": 5854.780764647241,
+      "embedded_rms": 2220.2107681557445
+     },
+     "first_sample_over_1_lsb": 170,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 26.012772634687607,
+      "trim": 224,
+      "trim_plus_47": 271,
+      "trim_plus_1152": 1376,
+      "decoded_len": 13824
+     },
+     "T1_control": {
+      "other_sid": 64397,
+      "argmin_lag": 1049,
+      "min_cost": 0.006610169286770706,
+      "median_cost": 76.6837147186851,
+      "cost_at": {
+       "B_preroll_0": 2933515497312.033,
+       "decoder_delay_529": 77.45409805214176,
+       "encoder_delay_576": 186.26447833110498,
+       "both_delays_1105": 0.7701198359387715,
+       "A_replace_1152": 0.5135605154929022,
+       "A_plus_delays_2257": 6.993103948464031
+      }
+     },
+     "T2_control": {
+      "best_lag": 3979,
+      "best_ncc": 0.24787138663994918,
+      "second_lag": 3757,
+      "second_ncc": 0.221317820490118,
+      "median_ncc": 0.0068408927299611535
+     },
+     "renderings": {
+      "mpeg_only_sha256": "47c83fe333aec7afc79c8e02ff22c384a192fb75f62a9226b4788c9cd2212a5f",
+      "mpeg_only_len": 13824,
+      "candidate_A_sha256": "74cf0fdf4ce780e7dd757e50b1fcfdd6e061074e8392630940cf91f3ea3e9f5c",
+      "candidate_A_len": 13824,
+      "candidate_B_sha256": "83c09b329ecf733c5b685fcd322cafd8b97172175ff4135c4633a5612b2f013a",
+      "candidate_B_len": 14976
+     }
+    },
+    {
+     "sid": 64397,
+     "off": 712657376,
+     "sns_sha256": "21f987c36eca41436294e23d43eafbb4be5c07b678f8a1195d5081764a4d0169",
+     "num_samples": 13211,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 242 at 964 exceeds payload 1203",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 1216 at 0 exceeds payload 1206",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 25308 at 481 exceeds payload 1206",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 482, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2400
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 12,
+       "mpeg_bytes": 3600
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 12,
+     "trim": 613,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "274cce521a1e001086a2029d694e1401f11498e6e441b47c04d6a63e932a4148"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "017cdf5590d1138be34610d166790453b248db5a8e6b07d94a7222962d890f44"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.0032651931181847324,
+      "median_cost": 27.03570877033433,
+      "cost_at": {
+       "B_preroll_0": 2933515497311.9893,
+       "decoder_delay_529": 1509.2700795057362,
+       "encoder_delay_576": 463.2234790989807,
+       "both_delays_1105": 6.9778135759411315,
+       "A_replace_1152": 0.0032651931181847324,
+       "A_plus_delays_2257": 39.20418350193546
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 199,
+      "best_ncc": 0.3386636065389739,
+      "second_lag": 280,
+      "second_ncc": 0.269781465895281,
+      "median_ncc": 0.0002460890230456729
+     },
+     "T3": {
+      "onset_sample": 2880,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 2654.660775566877,
+      "rms_at_2304": 705.7416238137959,
+      "embedded_rms": 1844.4472608119395
+     },
+     "first_sample_over_1_lsb": 211,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 22.19235345626522,
+      "trim": 613,
+      "trim_plus_47": 660,
+      "trim_plus_1152": 1765,
+      "decoded_len": 13824
+     },
+     "T1_control": {
+      "other_sid": 69157,
+      "argmin_lag": 1014,
+      "min_cost": 0.04678647698864162,
+      "median_cost": 26.538045587709508,
+      "cost_at": {
+       "B_preroll_0": 63081972090.62238,
+       "decoder_delay_529": 32.216831366912565,
+       "encoder_delay_576": 11.222525561548736,
+       "both_delays_1105": 46.412691605692686,
+       "A_replace_1152": 0.4730734909937287,
+       "A_plus_delays_2257": 45.677488510652836
+      }
+     },
+     "T2_control": {
+      "best_lag": 3709,
+      "best_ncc": 0.2850943771631312,
+      "second_lag": 1911,
+      "second_ncc": 0.2758165240279604,
+      "median_ncc": -0.003554898177469317
+     },
+     "renderings": {
+      "mpeg_only_sha256": "274cce521a1e001086a2029d694e1401f11498e6e441b47c04d6a63e932a4148",
+      "mpeg_only_len": 13824,
+      "candidate_A_sha256": "8b4a337084bc738861e45005ee3e8b3e2a8cb2ba7fe028c41e62d8b8f4bd1fd1",
+      "candidate_A_len": 13824,
+      "candidate_B_sha256": "06114ac20fd5bb2888c4ea0cdd3f38e3a0d3b1cad78a4e78303356a605a8f48f",
+      "candidate_B_len": 14976
+     }
+    },
+    {
+     "sid": 69157,
+     "off": 714578592,
+     "sns_sha256": "3adb0744e2c2ee36308897ea5224ebb7385b6f5bb8d9238627a41989fef7c58a",
+     "num_samples": 15401,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 338 at 1544 exceeds payload 1879",
+       "frames": 9,
+       "mpeg_bytes": 2592
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 1892 at 0 exceeds payload 1882",
+       "frames": 9,
+       "mpeg_bytes": 2592
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29331 at 337 exceeds payload 1882",
+       "frames": 9,
+       "mpeg_bytes": 2592
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 338, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2592
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 14,
+       "mpeg_bytes": 4464
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 14,
+     "trim": 727,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 16128,
+       "channels": 1,
+       "pcm_sha256": "c30931cda7b8ad113b79896b82f0d2ef7de80e4c44e2fcff386b9a574499205d"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 16128,
+       "channels": 1,
+       "pcm_sha256": "c6eeff1cccf2fd65700181da96b6a2dcabdb6cacab512794003bb79cce94652b"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1116,
+      "min_cost": 0.0006397242848492595,
+      "median_cost": 27.04902989407624,
+      "cost_at": {
+       "B_preroll_0": 63081972091.10818,
+       "decoder_delay_529": 63081972090.61814,
+       "encoder_delay_576": 63081972090.64781,
+       "both_delays_1105": 0.043051172807461326,
+       "A_replace_1152": 0.0011019556173217896,
+       "A_plus_delays_2257": 50.967542873187774
+      },
+      "lags_within_10pct_of_min": [
+       1116,
+       1117,
+       1248
+      ]
+     },
+     "T2": {
+      "best_lag": 590,
+      "best_ncc": 0.4124556770099799,
+      "second_lag": 8,
+      "second_ncc": 0.38392617143602753,
+      "median_ncc": 0.0007744802983081987
+     },
+     "T3": {
+      "onset_sample": 1920,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 837.6285100408971,
+      "rms_at_2304": 1364.2689930569657,
+      "embedded_rms": 559.8893360088124
+     },
+     "first_sample_over_1_lsb": 864,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 25.75464028016003,
+      "trim": 727,
+      "trim_plus_47": 774,
+      "trim_plus_1152": 1879,
+      "decoded_len": 16128
+     },
+     "T1_control": {
+      "other_sid": 85639,
+      "argmin_lag": 1243,
+      "min_cost": 0.016648343929331837,
+      "median_cost": 31.707073148767623,
+      "cost_at": {
+       "B_preroll_0": 95512430778.45735,
+       "decoder_delay_529": 95512430778.02295,
+       "encoder_delay_576": 95512430778.03876,
+       "both_delays_1105": 0.06640424326383107,
+       "A_replace_1152": 0.32743150103020263,
+       "A_plus_delays_2257": 76.2436767404007
+      }
+     },
+     "T2_control": {
+      "best_lag": 2243,
+      "best_ncc": 0.065584249300339,
+      "second_lag": 1972,
+      "second_ncc": 0.06310410919321026,
+      "median_ncc": -0.0014749469806065339
+     },
+     "renderings": {
+      "mpeg_only_sha256": "c30931cda7b8ad113b79896b82f0d2ef7de80e4c44e2fcff386b9a574499205d",
+      "mpeg_only_len": 16128,
+      "candidate_A_sha256": "532bf758c3d83e9599769a76031371e9893a08adc404b086be347f21b60a5e8b",
+      "candidate_A_len": 16128,
+      "candidate_B_sha256": "2d7f7eef93327c8dc49e998f9eb1ea0dd2768d73ee687f47083ec5d86ca6d482",
+      "candidate_B_len": 17280
+     }
+    },
+    {
+     "sid": 85639,
+     "off": 719447168,
+     "sns_sha256": "64d6a51c14ab2addb52ffb39856fb804926df42e1454d5abd2166fd66ac30b84",
+     "num_samples": 20959,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 482 at 3474 exceeds payload 3953",
+       "frames": 9,
+       "mpeg_bytes": 3072
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 3966 at 0 exceeds payload 3956",
+       "frames": 9,
+       "mpeg_bytes": 3072
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 21130 at 241 exceeds payload 3956",
+       "frames": 9,
+       "mpeg_bytes": 3072
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 242, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 3072
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 19,
+       "mpeg_bytes": 7008
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 19,
+     "trim": 929,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "015383d4a330cd808df8091c6c0c5edf61323a562b741eff1ff5b6ab04265ba0"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "95874bb4a1ebd586cc5a489482db3d4221027a7de3a3936997f97be18dde4a7d"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1638,
+      "min_cost": 0.02941996915560791,
+      "median_cost": 53.87834346931174,
+      "cost_at": {
+       "B_preroll_0": 95512430778.45735,
+       "decoder_delay_529": 95512430778.15411,
+       "encoder_delay_576": 95512430778.37466,
+       "both_delays_1105": 0.5955883883113272,
+       "A_replace_1152": 0.03438998632578863,
+       "A_plus_delays_2257": 0.11315903229062957
+      },
+      "lags_within_10pct_of_min": [
+       1638
+      ]
+     },
+     "T2": {
+      "best_lag": 987,
+      "best_ncc": 0.2366688572169625,
+      "second_lag": 285,
+      "second_ncc": 0.2363338335946218,
+      "median_ncc": 0.0012021883491616073
+     },
+     "T3": {
+      "onset_sample": 2304,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 857.8987168269535,
+      "rms_at_2304": 3395.1942215554227,
+      "embedded_rms": 997.7060290047866
+     },
+     "first_sample_over_1_lsb": 864,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 13.951980086890304,
+      "trim": 929,
+      "trim_plus_47": 976,
+      "trim_plus_1152": 2081,
+      "decoded_len": 21888
+     },
+     "T1_control": {
+      "other_sid": 86622,
+      "argmin_lag": 1693,
+      "min_cost": 0.03414375248301023,
+      "median_cost": 105.70433999086129,
+      "cost_at": {
+       "B_preroll_0": 150933863343.0475,
+       "decoder_delay_529": 150933863343.61838,
+       "encoder_delay_576": 150933863344.86548,
+       "both_delays_1105": 78.4262400903655,
+       "A_replace_1152": 62.11815825630489,
+       "A_plus_delays_2257": 105.70433999086129
+      }
+     },
+     "T2_control": {
+      "best_lag": 287,
+      "best_ncc": 0.17576688535366364,
+      "second_lag": 386,
+      "second_ncc": 0.15273016405468584,
+      "median_ncc": 0.0023220086077001033
+     },
+     "renderings": {
+      "mpeg_only_sha256": "015383d4a330cd808df8091c6c0c5edf61323a562b741eff1ff5b6ab04265ba0",
+      "mpeg_only_len": 21888,
+      "candidate_A_sha256": "a1fd2dad5c68b64521c67d731dcfe353d118df45d7789250eb3d75b9442deb04",
+      "candidate_A_len": 21888,
+      "candidate_B_sha256": "55004ae862302717a4527a0a4cb7167740ba736a497f9829c29fdc9a98e25401",
+      "candidate_B_len": 23040
+     }
+    },
+    {
+     "sid": 86622,
+     "off": 721498112,
+     "sns_sha256": "7ae563423c63acb5a9187e00d82dfa1bf01da19478ea652a6c7f12662665984f",
+     "num_samples": 19373,
+     "blocks": 2,
+     "robustness": {
+      "truncated_last_block_minus_3_bytes": {
+       "refused": true,
+       "reason": "block 1: size 338 at 2126 exceeds payload 2461",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "size_word_past_payload_block1": {
+       "refused": true,
+       "reason": "block 1: size 2474 at 0 exceeds payload 2464",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "size_word_minus_one_block1": {
+       "refused": true,
+       "reason": "block 1: size 29193 at 289 exceeds payload 2464",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "flag_forced_on_block1_frame0": {
+       "refused": true,
+       "reason": "block 1: no MPEG header at 6 (ea_frame at 0, size 290, flag True)",
+       "frames": 9,
+       "mpeg_bytes": 2448
+      },
+      "pcm_samples_forced_0": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "pcm_samples_forced_4096": {
+       "refused": true,
+       "reason": "block 0: a frame size does not tile its ea_frame",
+       "frames": 0,
+       "mpeg_bytes": 0
+      },
+      "unmodified": {
+       "refused": false,
+       "reason": null,
+       "frames": 17,
+       "mpeg_bytes": 4896
+      }
+     },
+     "embedded_pcm_samples": 1152,
+     "total_frames": 17,
+     "trim": 211,
+     "decode": {
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "4943d3355ca7ef05b5775cfaedff59ad1b0742af1d65a22cafe734a92f41f8da"
+      },
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "849368b92b5ddd2204f6cbde95f61184cc527403f56e6203682290b9a8b0a59b"
+      }
+     },
+     "fixed_vs_float_max_abs_diff": 1.0,
+     "T1": {
+      "argmin_lag": 1152,
+      "min_cost": 0.01173312941105403,
+      "median_cost": 61.26525670814957,
+      "cost_at": {
+       "B_preroll_0": 150933863342.61356,
+       "decoder_delay_529": 357.76264551838983,
+       "encoder_delay_576": 287.65165043366443,
+       "both_delays_1105": 2.5842970525311766,
+       "A_replace_1152": 0.01173312941105403,
+       "A_plus_delays_2257": 1.1749555290760647
+      },
+      "lags_within_10pct_of_min": [
+       1152
+      ]
+     },
+     "T2": {
+      "best_lag": 0,
+      "best_ncc": 0.3917543266561628,
+      "second_lag": 438,
+      "second_ncc": 0.3888757820878442,
+      "median_ncc": 0.0008500287234747783
+     },
+     "T3": {
+      "onset_sample": 3744,
+      "rms_first_win": 0.0,
+      "rms_at_1152": 684.8298222307982,
+      "rms_at_2304": 1415.179825145907,
+      "embedded_rms": 541.00215649601
+     },
+     "first_sample_over_1_lsb": 231,
+     "T4": {
+      "silent_tail_samples": 0,
+      "threshold": 20.931852365992636,
+      "trim": 211,
+      "trim_plus_47": 258,
+      "trim_plus_1152": 1363,
+      "decoded_len": 19584
+     },
+     "T1_control": {
+      "other_sid": 332,
+      "argmin_lag": 1050,
+      "min_cost": 2.5527562454359867,
+      "median_cost": 21.498682175761946,
+      "cost_at": {
+       "B_preroll_0": 15186166314.850447,
+       "decoder_delay_529": 32.71992336780846,
+       "encoder_delay_576": 33.95741537997578,
+       "both_delays_1105": 13.344736584130239,
+       "A_replace_1152": 24.688048793900546,
+       "A_plus_delays_2257": 35.71785816309446
+      }
+     },
+     "T2_control": {
+      "best_lag": 3837,
+      "best_ncc": 0.0651448514621128,
+      "second_lag": 169,
+      "second_ncc": 0.06463621198944985,
+      "median_ncc": 4.455978163961986e-05
+     },
+     "renderings": {
+      "mpeg_only_sha256": "4943d3355ca7ef05b5775cfaedff59ad1b0742af1d65a22cafe734a92f41f8da",
+      "mpeg_only_len": 19584,
+      "candidate_A_sha256": "b5a2e32ba4359aa1d8832a5abee6b52400d5c5c58f462efd6385aad21876be1a",
+      "candidate_A_len": 19584,
+      "candidate_B_sha256": "afe7fc24ca352b3d5db209d1bbba6bdb0855257ace5f80333bb4473ffd3bfc17",
+      "candidate_B_len": 20736
+     }
+    }
+   ]
+  }
+ },
+ "summary": {
+  "vectors": 24,
+  "T1_argmin_histogram": {
+   "1152": 12,
+   "2369": 1,
+   "1430": 1,
+   "2289": 1,
+   "1653": 1,
+   "1910": 1,
+   "1215": 1,
+   "1343": 1,
+   "1808": 1,
+   "1021": 1,
+   "1285": 1,
+   "1116": 1
+  },
+  "T1_control_argmin_histogram": {
+   "2199": 1,
+   "2241": 1,
+   "1497": 1,
+   "1153": 1,
+   "2131": 1,
+   "2028": 1,
+   "1616": 1,
+   "1899": 1,
+   "2323": 1,
+   "1831": 1,
+   "1148": 1,
+   "1462": 1
+  },
+  "T2_best_lag_histogram": {
+   "0": 3,
+   "2982": 1,
+   "1016": 1,
+   "314": 1,
+   "237": 1,
+   "343": 1,
+   "588": 1,
+   "583": 1,
+   "587": 1,
+   "363": 1,
+   "2377": 1,
+   "332": 1
+  },
+  "T2_control_best_lag_histogram": {
+   "1013": 1,
+   "1149": 1,
+   "1694": 1,
+   "1744": 1,
+   "47": 1,
+   "1899": 1,
+   "274": 1,
+   "3258": 1,
+   "2029": 1,
+   "533": 1,
+   "15": 1,
+   "305": 1
+  },
+  "T1_cost_B_preroll_0": {
+   "median": 145798320184.36697,
+   "control_median": 145798320184.90735,
+   "vectors_where_real_beats_control_by_2x": 10
+  },
+  "T1_cost_decoder_delay_529": {
+   "median": 350.2740294838263,
+   "control_median": 168.25941893316102,
+   "vectors_where_real_beats_control_by_2x": 10
+  },
+  "T1_cost_encoder_delay_576": {
+   "median": 231.54727921533794,
+   "control_median": 179.15775970648255,
+   "vectors_where_real_beats_control_by_2x": 10
+  },
+  "T1_cost_both_delays_1105": {
+   "median": 11.771350062892449,
+   "control_median": 30.477255131739064,
+   "vectors_where_real_beats_control_by_2x": 12
+  },
+  "T1_cost_A_replace_1152": {
+   "median": 0.07266858873164357,
+   "control_median": 40.96921415481739,
+   "vectors_where_real_beats_control_by_2x": 21
+  },
+  "T1_cost_A_plus_delays_2257": {
+   "median": 19.892742035019104,
+   "control_median": 39.13465480551612,
+   "vectors_where_real_beats_control_by_2x": 10
+  },
+  "first_sample_over_1_lsb": [
+   161,
+   163,
+   167,
+   170,
+   170,
+   176,
+   192,
+   201,
+   203,
+   211,
+   215,
+   231,
+   243,
+   255,
+   264,
+   274,
+   277,
+   288,
+   298,
+   338,
+   861,
+   864,
+   864,
+   880
+  ],
+  "T3_onset_histogram": {
+   "1152": 5,
+   "1056": 4,
+   "3648": 2,
+   "2880": 2,
+   "4128": 1,
+   "4416": 1,
+   "1728": 1,
+   "3168": 1,
+   "4032": 1,
+   "3840": 1,
+   "2016": 1,
+   "3072": 1
+  },
+  "T4_tail_minus_trim": [
+   52,
+   -366,
+   -556,
+   -316,
+   -1097,
+   -25,
+   -844,
+   0,
+   -428,
+   -526,
+   -693,
+   -922,
+   -204,
+   -1012,
+   -628,
+   -998,
+   -289,
+   -577,
+   -1078,
+   -224,
+   -613,
+   -727,
+   -929,
+   -211
+  ],
+  "T5_robustness": {
+   "dropped_middle_block refused": 16,
+   "flag_forced_on_block1_frame0 refused": 24,
+   "pcm_samples_forced_0 refused": 24,
+   "pcm_samples_forced_4096 refused": 24,
+   "size_word_minus_one_block1 refused": 24,
+   "size_word_past_payload_block1 refused": 24,
+   "truncated_last_block_minus_3_bytes refused": 24,
+   "unmodified accepted": 24
+  },
+  "T6_reservoir_consistent_unmodified": 24
+ }
+}

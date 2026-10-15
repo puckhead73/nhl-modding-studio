@@ -10,7 +10,9 @@ use tdb_fhm::schema::{SCHEMA_SQL, SCHEMA_VERSION};
 use tdb_fhm::slug::person_slug;
 
 fn repo(rel: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .join(rel)
 }
 fn s(p: PathBuf) -> String {
     p.to_str().unwrap().to_string()
@@ -24,8 +26,16 @@ const DEFS: &str = "defs";
 fn write_corpus(path: &Path) {
     let conn = Connection::open(path).unwrap();
     conn.execute_batch(SCHEMA_SQL).unwrap();
-    conn.execute("INSERT INTO meta(key,value) VALUES ('schema_version', ?1)", [SCHEMA_VERSION.to_string()]).unwrap();
-    conn.execute("INSERT INTO meta(key,value) VALUES ('person_count', '1')", []).unwrap();
+    conn.execute(
+        "INSERT INTO meta(key,value) VALUES ('schema_version', ?1)",
+        [SCHEMA_VERSION.to_string()],
+    )
+    .unwrap();
+    conn.execute(
+        "INSERT INTO meta(key,value) VALUES ('person_count', '1')",
+        [],
+    )
+    .unwrap();
     let slug = person_slug("Import", "Fresh", "1995-03-04");
     conn.execute(
         "INSERT INTO person(person_id, slug, first_name, last_name, dob, height, weight, hand,
@@ -37,12 +47,14 @@ fn write_corpus(path: &Path) {
         "INSERT INTO player_season(person_id, season_year, src_player_id, team_id, height, weight)
          VALUES (1, 2024, 10, -1, 72, 200)",
         [],
-    ).unwrap();
+    )
+    .unwrap();
     conn.execute(
         "INSERT INTO ratings_season(person_id, season_year, c, ability, potential, attrs_json)
          VALUES (1, 2024, 80, 80.0, 80.0, '{}')",
         [],
-    ).unwrap();
+    )
+    .unwrap();
 }
 
 fn import_item_dto(team: u64) -> studio_api::ImportItemDto {
@@ -82,17 +94,29 @@ fn roster_builder_preview_commit_and_ledger_dedup() {
     assert_eq!(preview.players_after, preview.players_before + 1);
     assert_eq!(preview.items.len(), 1);
     assert_eq!(preview.items[0].outcome, "created");
-    assert!(!preview.items[0].already_imported, "first import is not a dup");
-    assert_eq!(reg.list_players(id).unwrap().len(), before, "preview did not mutate");
+    assert!(
+        !preview.items[0].already_imported,
+        "first import is not a dup"
+    );
+    assert_eq!(
+        reg.list_players(id).unwrap().len(),
+        before,
+        "preview did not mutate"
+    );
 
     // Commit: the create lands, and the result echoes the freshly-created wBIz.
     let result = reg.import_commit(id, &items).unwrap();
     assert_eq!(result.items[0].outcome, "created");
-    let new_id = result.items[0].ea_player_id.expect("the created wBIz is surfaced");
+    let new_id = result.items[0]
+        .ea_player_id
+        .expect("the created wBIz is surfaced");
     assert!(new_id != 0, "a real player id, not the 0 placeholder");
     let players = reg.list_players(id).unwrap();
     assert_eq!(players.len(), before + 1, "commit added the player");
-    assert!(players.iter().any(|p| p.player_id == new_id), "the created id is a real player on the roster");
+    assert!(
+        players.iter().any(|p| p.player_id == new_id),
+        "the created id is a real player on the roster"
+    );
 
     // Re-preview the same cart: the ledger now flags this person-season as already imported.
     let again = reg.import_preview(id, &items).unwrap();

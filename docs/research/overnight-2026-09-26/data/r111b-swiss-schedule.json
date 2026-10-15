@@ -1,0 +1,641 @@
+{
+ "note": "R111b - `swissschedule` structure: league resolved by a member club name (a team whose fullname contains 'Davos' - HC Davos, a Swiss\nNational League club on every inspected title), slots = that league's members ranked by `index` (R13 / handoff 12 convention). Reports\nmembers, games, games per team, games per pair histogram, home/away imbalance, whether slots beyond the member count occur.\nSources: X360 Legacy anchor, PS4 NHL 21 anchor, real NHL 20 (hash-checked copy), NHL 19 base (anchors/ps4/nhl20). Read-only.\nUsage: python r111b_swiss_schedule.py <out.json>\n",
+ "sources": [
+  {
+   "label": "ps4-nhl20-real (CUSA15439 install copy)",
+   "sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "league_id": 6,
+   "members": 12,
+   "member_names": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ],
+   "games": 300,
+   "slots_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "slots_beyond_members": [],
+   "games_per_team": {
+    "50": 12
+   },
+   "pairs": 66,
+   "games_per_pair": {
+    "4": 48,
+    "6": 18
+   },
+   "home_away_imbalance_per_pair": {
+    "0": 66
+   },
+   "max_count_pair_graph": {
+    "count": 6,
+    "components": [
+     [
+      0,
+      3,
+      7,
+      8
+     ],
+     [
+      2,
+      5,
+      10,
+      11
+     ],
+     [
+      1,
+      4,
+      6,
+      9
+     ]
+    ],
+    "component_sizes": [
+     4,
+     4,
+     4
+    ],
+    "components_are_cliques": true,
+    "component_names": [
+     [
+      "",
+      "",
+      "",
+      ""
+     ],
+     [
+      "",
+      "",
+      "",
+      ""
+     ],
+     [
+      "",
+      "",
+      "",
+      ""
+     ]
+    ]
+   },
+   "group_fields_by_component": {
+    "conferencegroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ],
+    "divisiongroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ],
+    "leaguegroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ]
+   },
+   "groups_match_a_db_field": []
+  },
+  {
+   "label": "ps4-nhl19-base (anchors/ps4/nhl20 = mislabeled copy)",
+   "sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "league_id": 6,
+   "members": 12,
+   "member_names": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ],
+   "games": 300,
+   "slots_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "slots_beyond_members": [],
+   "games_per_team": {
+    "50": 12
+   },
+   "pairs": 66,
+   "games_per_pair": {
+    "4": 48,
+    "6": 18
+   },
+   "home_away_imbalance_per_pair": {
+    "0": 66
+   },
+   "max_count_pair_graph": {
+    "count": 6,
+    "components": [
+     [
+      0,
+      3,
+      7,
+      10
+     ],
+     [
+      2,
+      4,
+      6,
+      9
+     ],
+     [
+      1,
+      5,
+      8,
+      11
+     ]
+    ],
+    "component_sizes": [
+     4,
+     4,
+     4
+    ],
+    "components_are_cliques": true,
+    "component_names": [
+     [
+      "",
+      "",
+      "",
+      ""
+     ],
+     [
+      "",
+      "",
+      "",
+      ""
+     ],
+     [
+      "",
+      "",
+      "",
+      ""
+     ]
+    ]
+   },
+   "group_fields_by_component": {
+    "conferencegroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ],
+    "divisiongroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ],
+    "leaguegroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ]
+   },
+   "groups_match_a_db_field": []
+  },
+  {
+   "label": "ps4-nhl21",
+   "sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "league_id": 6,
+   "members": 12,
+   "member_names": [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ],
+   "games": 300,
+   "slots_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "slots_beyond_members": [],
+   "games_per_team": {
+    "50": 12
+   },
+   "pairs": 66,
+   "games_per_pair": {
+    "4": 48,
+    "6": 18
+   },
+   "home_away_imbalance_per_pair": {
+    "0": 66
+   },
+   "max_count_pair_graph": {
+    "count": 6,
+    "components": [
+     [
+      0,
+      3,
+      7,
+      8
+     ],
+     [
+      2,
+      5,
+      10,
+      11
+     ],
+     [
+      1,
+      4,
+      6,
+      9
+     ]
+    ],
+    "component_sizes": [
+     4,
+     4,
+     4
+    ],
+    "components_are_cliques": true,
+    "component_names": [
+     [
+      "",
+      "",
+      "",
+      ""
+     ],
+     [
+      "",
+      "",
+      "",
+      ""
+     ],
+     [
+      "",
+      "",
+      "",
+      ""
+     ]
+    ]
+   },
+   "group_fields_by_component": {
+    "conferencegroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ],
+    "divisiongroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ],
+    "leaguegroup": [
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ],
+     [
+      20,
+      20,
+      20,
+      20
+     ]
+    ]
+   },
+   "groups_match_a_db_field": []
+  },
+  {
+   "label": "xbox360-nhllegacy",
+   "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "league_id": 6,
+   "members": 12,
+   "member_names": [
+    "HC Ambri-Piotta",
+    "SC Bern",
+    "EHC Biel",
+    "HC Davos",
+    "HC Fribourg-Gottéron",
+    "Genève-Servette HC",
+    "Kloten Flyers",
+    "HC Lausanne",
+    "HC Lugano",
+    "SCL Tigers",
+    "EV Zug",
+    "ZSC Lions"
+   ],
+   "games": 300,
+   "slots_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "slots_beyond_members": [],
+   "games_per_team": {
+    "50": 12
+   },
+   "pairs": 66,
+   "games_per_pair": {
+    "4": 48,
+    "6": 18
+   },
+   "home_away_imbalance_per_pair": {
+    "0": 66
+   },
+   "max_count_pair_graph": {
+    "count": 6,
+    "components": [
+     [
+      0,
+      2,
+      8,
+      10
+     ],
+     [
+      1,
+      4,
+      5,
+      7
+     ],
+     [
+      3,
+      6,
+      9,
+      11
+     ]
+    ],
+    "component_sizes": [
+     4,
+     4,
+     4
+    ],
+    "components_are_cliques": true,
+    "component_names": [
+     [
+      "HC Ambri-Piotta",
+      "EHC Biel",
+      "HC Lugano",
+      "EV Zug"
+     ],
+     [
+      "SC Bern",
+      "HC Fribourg-Gottéron",
+      "Genève-Servette HC",
+      "HC Lausanne"
+     ],
+     [
+      "HC Davos",
+      "Kloten Flyers",
+      "SCL Tigers",
+      "ZSC Lions"
+     ]
+    ]
+   },
+   "group_fields_by_component": {
+    "conferencegroup": [
+     [
+      15,
+      15,
+      15,
+      15
+     ],
+     [
+      15,
+      15,
+      15,
+      15
+     ],
+     [
+      15,
+      15,
+      15,
+      15
+     ]
+    ],
+    "divisiongroup": [
+     [
+      15,
+      15,
+      15,
+      15
+     ],
+     [
+      15,
+      15,
+      15,
+      15
+     ],
+     [
+      15,
+      15,
+      15,
+      15
+     ]
+    ],
+    "leaguegroup": [
+     [
+      15,
+      15,
+      15,
+      15
+     ],
+     [
+      15,
+      15,
+      15,
+      15
+     ],
+     [
+      15,
+      15,
+      15,
+      15
+     ]
+    ]
+   },
+   "groups_match_a_db_field": []
+  }
+ ]
+}

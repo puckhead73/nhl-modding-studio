@@ -1,0 +1,33 @@
+﻿{
+  "root": "\\\\?\\H:\\Emulators\\ShadPS4\\Games\\CUSA26280",
+  "layers": [
+    {
+      "name": "Data",
+      "head": 477856,
+      "base": null,
+      "superbundles": [
+        "Gen4b/contentlaunchsb",
+        "Gen4b/contentsb",
+        "Gen4b/globals",
+        "Gen4b/globalsfull",
+        "Gen4b/levels/game/game",
+        "Gen4b/movies",
+        "Gen4b/ui",
+        "Gen4b/worldssb"
+      ],
+      "initfs": "encrypted (opaque)",
+      "chunkmanifest": true
+    }
+  ],
+  "warnings": [
+    "Read-only catalogue: roster editing and deployment are not enabled. Data and Patch are shown separately."
+  ]
+}
+{"assets":134775,"bundles":9678,"empty":0,"first_bundle":"gen4b/content/character/crowd/prop/male/hat/textures/licensed/ottawa/crowd_prop_male_hat_ottawa_color_crowd_brt","layer":"Data","superbundle":"Gen4b/contentlaunchsb","toc_chunks":13911}
+{"assets":454401,"bundles":27582,"empty":0,"first_bundle":"gen4b/content/character/skater/goalie/blocker/nhl/carolina/textures/goalie_blocker_nhl_carolina_original_right_goalie_blocker_brt","layer":"Data","superbundle":"Gen4b/contentsb","toc_chunks":45073}
+{"assets":6324,"bundles":42,"empty":0,"first_bundle":"gen4b/gauntlet/outdoor_bank_sfx_ambience_thelot.sbr","layer":"Data","superbundle":"Gen4b/globals","toc_chunks":23852}
+{"assets":3,"bundles":1,"empty":0,"first_bundle":"gen4b/content/common/configs/bundles/dummy_sba","layer":"Data","superbundle":"Gen4b/globalsfull","toc_chunks":38339}
+{"assets":13671,"bundles":1,"empty":0,"first_bundle":"gen4b/levels/game/game","layer":"Data","superbundle":"Gen4b/levels/game/game","toc_chunks":1721}
+{"assets":1350,"bundles":389,"empty":0,"first_bundle":"gen4b/nhl/data/common/movie/transitions/wcoh_transition_in/wcoh_transition_in","layer":"Data","superbundle":"Gen4b/movies","toc_chunks":427}
+{"assets":267,"bundles":9,"empty":0,"first_bundle":"gen4b/globals/configs/fonts_config_languageformat_czech","layer":"Data","superbundle":"Gen4b/ui","toc_chunks":0}
+{"assets":292840,"bundles":5512,"empty":1,"first_bundle":"gen4b/content/worlds/stadiums/outdoortier2_901/environment_replay","layer":"Data","superbundle":"Gen4b/worldssb","toc_chunks":9248}

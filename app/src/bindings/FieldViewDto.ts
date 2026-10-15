@@ -40,4 +40,14 @@ raw_int: number | null,
 /**
  * Text for string fields (`null` for integers).
  */
-text: string | null, range_low: number | null, range_high: number | null, editable: boolean, is_string: boolean, };
+text: string | null, range_low: number | null, range_high: number | null, editable: boolean, is_string: boolean, 
+/**
+ * Inline strings only: the byte width the value must fit (UTF-8 bytes); `null` for integers.
+ */
+text_max_bytes: number | null, 
+/**
+ * Title-scoped vocabularies: where the labels come from ("labels established for NHL Legacy —
+ * …") or why the field has none on this title ("…: no catalogue for NHL 10 — …"); `null` for
+ * unscoped vocabularies and for fields without one.
+ */
+vocabulary_note: string | null, };

@@ -1,0 +1,56 @@
+# Per-family asset output profile — player portraits (Q07a.1).
+#
+# A profile says how a canonical source asset becomes the bytes ONE target consumes. Canonical
+# sources stay non-destructive and high fidelity; everything here is a derivation recipe, and a
+# derived output is a reproducible artefact, never canonical Project data.
+#
+# Same evidence discipline as a database adapter: every fact carries provenance, confidence and
+# qualification, `unknown` is a legal recorded value that BLOCKS, and no profile may declare
+# `qualification = "game-verified"`.
+#
+# COVERAGE. One family, one target profile. Every other (family, target) pair is UNMAPPED — see
+# docs/validation/c0-06-canonical-project-and-adapters.md §5.
+
+schema = "asset-output-profile/1"
+profile_version = 1
+family = "assets-portraits"
+
+[canonical_source]
+kind = "raster"
+description = "A lossless RGBA source image at the highest available resolution, retained unmodified."
+format = "rgba8"
+
+[[target_profile]]
+target = "nhllegacy-xbox360"
+# The chain the prior-app port established, preserved verbatim from the capability CSV's `format`
+# column rather than decomposed into invented variant tokens.
+container_chain = "BIGF->refpack->XPR2/RX2"
+raster_codec = "unknown"
+dimensions = "unknown"
+mipmaps = "unknown"
+swizzle = "xbox-tiled"
+atlas = "unknown"
+install_rule = "extracted-file"
+confidence = "asserted"
+qualification = "implemented"
+provenance = ["docs/audits/data/assets/nhllegacy/xbox360/capability.csv"]
+note = """
+The capability CSV records discover/identify/preview/export/replace as `pass` and `install` as the
+undefined token `external` (contract Q-A: no meaning is invented and no install qualification
+results). Dimensions, mip layout and the exact raster codec are NOT pinned by any in-repo audit and
+are therefore `unknown`, which blocks export rather than substituting a plausible default.
+"""
+
+[[target_profile]]
+target = "nhl21-ps4"
+container_chain = "unknown"
+raster_codec = "unknown"
+dimensions = "unknown"
+mipmaps = "unknown"
+swizzle = "unknown"
+atlas = "unknown"
+install_rule = "unknown"
+confidence = "unknown"
+qualification = "unknown"
+provenance = []
+note = "Registered as an explicit unknown so the gap is visible in the coverage enumeration. A wholly-unknown profile blocks; it is never treated as absent, and never inherits the Legacy chain."

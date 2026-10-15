@@ -1,0 +1,123 @@
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml cPbu 0 4 --only game_id,firstname,lastname,team,jersey,position,contractdollars,yeardrafted
+table cPbu (exhibitionplayerbiotable) block=0x89768 record_block=0x89a70 rec=508B cur=2250 max=2250
+  [0 @0x89a70] team=89 yeardrafted=63 firstname='Vitalij' lastname='Aab' position=1 contractdollars=0 jersey=79 game_id=200
+  [1 @0x89c6c] team=64 yeardrafted=63 firstname='Teemu' lastname='Aalto' position=3 contractdollars=0 jersey=38 game_id=201
+  [2 @0x89e68] team=77 yeardrafted=34 firstname='Antti' lastname='Aalto' position=2 contractdollars=0 jersey=14 game_id=202
+  [3 @0x8a064] team=72 yeardrafted=63 firstname='Antti' lastname='Aarnio' position=2 contractdollars=0 jersey=43 game_id=203
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml aUhv 0 4 --only game_id,firstname,lastname,team,jersey,position
+table aUhv (stockplayerbiotable) block=0x2cfcbc record_block=0x2cffc4 rec=508B cur=2250 max=2250
+  [0 @0x2cffc4] team=89 firstname='Vitalij' lastname='Aab' position=1 jersey=79 game_id=200
+  [1 @0x2d01c0] team=64 firstname='Teemu' lastname='Aalto' position=3 jersey=38 game_id=201
+  [2 @0x2d03bc] team=77 firstname='Antti' lastname='Aalto' position=2 jersey=14 game_id=202
+  [3 @0x2d05b8] team=72 firstname='Antti' lastname='Aarnio' position=2 jersey=43 game_id=203
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml caBZ 0 6
+table caBZ (exhibitionplayers) block=0x1a0b48 record_block=0x1a0ba0 rec=4B cur=2790 max=2790
+  [0 @0x1a0ba0] table=0 index=0 playerid=0
+  [1 @0x1a0ba4] table=0 index=1 playerid=1
+  [2 @0x1a0ba8] table=0 index=2 playerid=2
+  [3 @0x1a0bac] table=0 index=3 playerid=3
+  [4 @0x1a0bb0] table=0 index=4 playerid=4
+  [5 @0x1a0bb4] table=0 index=5 playerid=5
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml caBZ 198 4
+table caBZ (exhibitionplayers) block=0x1a0b48 record_block=0x1a0ba0 rec=4B cur=2790 max=2790
+  [198 @0x1a0eb8] table=0 index=198 playerid=198
+  [199 @0x1a0ebc] table=0 index=199 playerid=199
+  [200 @0x1a0ec0] table=0 index=200 playerid=200
+  [201 @0x1a0ec4] table=0 index=201 playerid=201
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml caBZ 2248 5
+table caBZ (exhibitionplayers) block=0x1a0b48 record_block=0x1a0ba0 rec=4B cur=2790 max=2790
+  [2248 @0x1a2ec0] table=0 index=2648 playerid=2694
+  [2249 @0x1a2ec4] table=0 index=2649 playerid=2695
+  [2250 @0x1a2ec8] table=0 index=2650 playerid=2696
+  [2251 @0x1a2ecc] table=0 index=2651 playerid=2697
+  [2252 @0x1a2ed0] table=0 index=2652 playerid=2698
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml caBZ 2786 4
+table caBZ (exhibitionplayers) block=0x1a0b48 record_block=0x1a0ba0 rec=4B cur=2790 max=2790
+  [2786 @0x1a3728] table=0 index=3335 playerid=3348
+  [2787 @0x1a372c] table=0 index=3336 playerid=3349
+  [2788 @0x1a3730] table=0 index=3337 playerid=3350
+  [2789 @0x1a3734] table=0 index=3340 playerid=3353
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml ulGe 0 4 --only playerindex,team,rosterstatus,captain
+table ulGe (exhibitionrostertable) block=0x1a3738 record_block=0x1a3bc0 rec=16B cur=2516 max=2516
+  [0 @0x1a3bc0] team=89 playerindex=200 rosterstatus=1 captain=0
+  [1 @0x1a3bd0] team=64 playerindex=201 rosterstatus=1 captain=0
+  [2 @0x1a3be0] team=77 playerindex=202 rosterstatus=1 captain=0
+  [3 @0x1a3bf0] team=72 playerindex=203 rosterstatus=2 captain=0
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml ulGe 2512 4 --only playerindex,team,rosterstatus
+table ulGe (exhibitionrostertable) block=0x1a3738 record_block=0x1a3bc0 rec=16B cur=2516 max=2516
+  [2512 @0x1ad8c0] team=27 playerindex=3335 rosterstatus=2
+  [2513 @0x1ad8d0] team=6 playerindex=3336 rosterstatus=2
+  [2514 @0x1ad8e0] team=16 playerindex=3337 rosterstatus=1
+  [2515 @0x1ad8f0] team=9 playerindex=3340 rosterstatus=1
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml cPbu 2248 2 --only game_id,firstname,lastname,team
+table cPbu (exhibitionplayerbiotable) block=0x89768 record_block=0x89a70 rec=508B cur=2250 max=2250
+  [2248 @0x1a0750] team=16 firstname='Greg' lastname='Zanon' game_id=3350
+  [2249 @0x1a094c] team=9 firstname='Mike' lastname='Smith' game_id=3353
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml ttOk 0 6
+table ttOk (exhibitionteams) block=0x1b78e4 record_block=0x1b794c rec=4B cur=93 max=93
+  [0 @0x1b794c] table=0 division=0 teamid=0 index=0
+  [1 @0x1b7950] table=0 division=0 teamid=1 index=1
+  [2 @0x1b7954] table=0 division=0 teamid=2 index=2
+  [3 @0x1b7958] table=0 division=0 teamid=3 index=3
+  [4 @0x1b795c] table=0 division=0 teamid=4 index=4
+  [5 @0x1b7960] table=0 division=0 teamid=5 index=5
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml ttOk 89 4
+table ttOk (exhibitionteams) block=0x1b78e4 record_block=0x1b794c rec=4B cur=93 max=93
+  [89 @0x1b7ab0] table=0 division=0 teamid=89 index=89
+  [90 @0x1b7ab4] table=0 division=0 teamid=90 index=90
+  [91 @0x1b7ab8] table=0 division=0 teamid=91 index=91
+  [92 @0x1b7abc] table=0 division=0 teamid=92 index=92
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml UzqH 0 1 --only index,fullname
+table UzqH (stockteamtable) block=0x3f1470 record_block=0x3f15c8 rec=596B cur=93 max=93
+  [0 @0x3f15c8] fullname='Anaheim Ducks�\x84�' index=0
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml UzqH 64 1 --only index,fullname
+table UzqH (stockteamtable) block=0x3f1470 record_block=0x3f15c8 rec=596B cur=93 max=93
+  [64 @0x3faac8] fullname='Timrå IK' index=64
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml UzqH 89 1 --only index,fullname
+table UzqH (stockteamtable) block=0x3f1470 record_block=0x3f15c8 rec=596B cur=93 max=93
+  [89 @0x3fe4fc] fullname='Adler Mannheim' index=89
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml QEoV 0 4
+table QEoV (exhibitionfreeagents) block=0x88578 record_block=0x885b0 rec=4B cur=74 max=74
+  [0 @0x885b0] playerindex=238
+  [1 @0x885b4] playerindex=267
+  [2 @0x885b8] playerindex=358
+  [3 @0x885bc] playerindex=376
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml bZvB 0 1
+table bZvB (rosterversiontable) block=0x1c4ef0 record_block=0x1c4f38 rec=68B cur=1 max=1
+  [0 @0x1c4f38] version='05Aug05' index=0
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml OEtS 0 3
+table OEtS (exhibitionarena) block=0x6e064 record_block=0x6e0bc rec=4B cur=93 max=93
+  [0 @0x6e0bc] table=0 arenaid=0 index=0
+  [1 @0x6e0c0] table=0 arenaid=1 index=1
+  [2 @0x6e0c4] table=0 arenaid=2 index=2
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml oYeE 0 2
+table oYeE (exhibitionteamstrategies) block=0x1b7ac0 record_block=0x1b7b98 rec=8B cur=93 max=93
+  [0 @0x1b7b98] offense1=2 offense4=1 opressure=0 offense3=1 forecheck=0 pp=0 offense2=2 index=0 defense=0 dpressure=0 pk=0
+  [1 @0x1b7ba0] offense1=0 offense4=1 opressure=1 offense3=2 forecheck=1 pp=1 offense2=0 index=1 defense=1 dpressure=1 pk=2
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml EhOn 0 3 --only game_id,firstname,lastname,team
+table EhOn (exhibitiondownloadplayerbio) block=0x6e800 record_block=0x6eb08 rec=508B cur=200 max=200
+  [0 @0x6eb08] team=0 firstname='Roster' lastname='PlaceHolder1' game_id=0
+  [1 @0x6ed04] team=0 firstname='Roster' lastname='PlaceHolder2' game_id=1
+  [2 @0x6ef00] team=0 firstname='Roster' lastname='PlaceHolder3' game_id=2
+
+$ python research/nhl07-roster-schema/scripts/record_dump.py anchors/xbox360/nhl07/databases/NHL07NG.db 0 anchors/xbox360/nhl07/databases/NHL07NG-meta.xml MqdK 0 1
+table MqdK (customplayerbiotable) block=0xe38 record_block=0x1130 rec=508B cur=0 max=0
+

@@ -1,0 +1,273 @@
+{
+ "note": "R29 \u2014 codec / decoder feasibility probe for the speech sample streams (read-only on sources; one sample per class is copied to the\nsession scratchpad, decode attempts run with the locally installed ffmpeg 8.1 (winget), every temporary file is removed).\n\nClasses: X360 NHL 15 pbp (EALayer3 v1, 0x05), X360 NHL 13 pbp (codec 0x09, 32 kHz), X360 NHL 10 pbp (EA-XMA, 0x03), PS4 NHL 15 pbp (EA-MP3, 0x0b),\nPS4 NHL 21 pbp (EA-Opus, 0x0c). Measures the SNS data-payload framing of each class and records whether ffmpeg decodes it (raw / after a\nmeasured prefix strip / inside a synthesized RIFF-XMA2 header). Findings are written to <out.json>; no audio is retained.\nUsage: python r29_codec_feasibility.py <out.json>\n",
+ "ffmpeg": "ffmpeg version 8.1.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+ "results": {
+  "x360-nhl15-pbp-ealayer3v1": {
+   "sid": 219,
+   "snr": {
+    "version": 1,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 58585
+   },
+   "sns_blocks": 9,
+   "stream_bytes": 13192,
+   "payload_bytes": 13118,
+   "first_payloads": [
+    [
+     9263,
+     2667,
+     "00cc70eb3e002b9d00130101"
+    ],
+    [
+     9216,
+     2037,
+     "00cc1bc276c7d37a17c09200"
+    ],
+    [
+     9216,
+     2174,
+     "00cc1e1b06cb5161db400000"
+    ]
+   ],
+   "attempts": [
+    {
+     "note": "no local decoder (ffmpeg 8.1 has none); vgmstream implements EALayer3 v1 (public source, not consulted here)",
+     "first_bytes": "00cc70eb3e002b9d001301018c140e30"
+    }
+   ]
+  },
+  "x360-nhl13-pbp-0x09": {
+   "sid": 77369,
+   "snr": {
+    "version": 1,
+    "codec": "codec-0x09-unidentified",
+    "codec_code": 9,
+    "channel_config": 0,
+    "sample_rate": 32000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 70200
+   },
+   "sns_blocks": 13,
+   "stream_bytes": 8344,
+   "payload_bytes": 8237,
+   "first_payloads": [
+    [
+     6531,
+     905,
+     "6e3b8481e27000007fffffff"
+    ],
+    [
+     6400,
+     910,
+     "5a3f84eef13e156acd34fd64"
+    ],
+    [
+     6400,
+     783,
+     "4a33cd76611b1cb35d5b889a"
+    ]
+   ],
+   "attempts": [
+    {
+     "u16 BE length-prefixed frames": [
+      [
+       6531,
+       905,
+       [
+        [
+         "bad",
+         28219
+        ]
+       ],
+       false
+      ],
+      [
+       6400,
+       910,
+       [
+        [
+         "bad",
+         23103
+        ]
+       ],
+       false
+      ],
+      [
+       6400,
+       783,
+       [
+        [
+         "bad",
+         18995
+        ]
+       ],
+       false
+      ]
+     ],
+     "note": "no ffmpeg attempt: the community EA SNS codec table names 0x09 EA-Speex (unverified locally); ffmpeg has a speex decoder but needs Ogg framing and the frame size"
+    }
+   ]
+  },
+  "x360-nhl10-pbp-xma": {
+   "sid": 77369,
+   "snr": {
+    "version": 1,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 0,
+    "sample_rate": 24000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 52650
+   },
+   "sns_blocks": 13,
+   "stream_bytes": 20516,
+   "payload_bytes": 20411,
+   "first_payloads": [
+    [
+     4736,
+     2005,
+     "00001f54280001000b43fc03"
+    ],
+    [
+     5632,
+     1951,
+     "00001e7c2c0001000c5bfc00"
+    ],
+    [
+     4608,
+     1930,
+     "00001e28240001000ca1fc00"
+    ]
+   ],
+   "attempts": [
+    {
+     "synthesized RIFF WAVEFORMATEX 0x166 (XMA2, block 0x800) + ffmpeg xma2": [
+      true,
+      "[xma2 @ 000001b7932c5980] frame[0] would have to skip 8162 bits\n[aist#0:0/xma2 @ 000001b7917f2b00] [dec:xma2 @ 000001b7932c53c0] Error submitting packet to decoder: Invalid data found when processing input\n[xma2 @ 000001b7932c5980] frame[0] would have to skip 17712 bits\n[xma2 @ 000001b7932c5980] fra"
+     ],
+     "payload leading u32 (candidate bit length)": [
+      8020,
+      7804,
+      7720,
+      7744
+     ]
+    }
+   ]
+  },
+  "ps4-nhl15-pbp": {
+   "sid": 18316,
+   "snr": {
+    "version": 1,
+    "codec": "ea-mp3",
+    "codec_code": 11,
+    "channel_config": 0,
+    "sample_rate": 48000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 22770
+   },
+   "sns_blocks": 4,
+   "stream_bytes": 8380,
+   "payload_bytes": 8348,
+   "first_payloads": [
+    [
+     10368,
+     4822,
+     "f68980040000fffb64c40000"
+    ],
+    [
+     12402,
+     3526,
+     "f200fffb64c417800f7d4753"
+    ]
+   ],
+   "attempts": [
+    {
+     "ffmpeg -f mp3 on concatenated payloads": [
+      false,
+      "[in#0 @ 0000020c24762480] Failed to find two consecutive MPEG audio frames.\n[in#0 @ 0000020c247e4380] Error opening input: Invalid data found when processing input\nError opening input file E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-21\\probes\\ps4-nhl15-pbp.bin.\nError ope"
+     ]
+    },
+    {
+     "sync offsets per payload": [
+      2,
+      6
+     ],
+     "ffmpeg -f mp3 after stripping to the first ff fb sync": [
+      false,
+      "[mp3float @ 000002107ad505c0] Header missing\n[aist#0:0/mp3 @ 000002107ad54880] [dec:mp3float @ 000002107ad4c040] Error submitting packet to decoder: Invalid data found when processing input\n[mp3float @ 000002107ad505c0] Header missing\n[aist#0:0/mp3 @ 000002107ad54880] [dec:mp3float @ 000002107ad4c04"
+     ]
+    }
+   ]
+  },
+  "ps4-nhl21-pbp": {
+   "sid": 43342,
+   "snr": {
+    "version": 1,
+    "codec": "ea-opus",
+    "codec_code": 12,
+    "channel_config": 0,
+    "sample_rate": 48000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 12073
+   },
+   "sns_blocks": 4,
+   "stream_bytes": 1772,
+   "payload_bytes": 1738,
+   "first_payloads": [
+    [
+     10248,
+     1441,
+     "00aef87fe66219f729b89f9c"
+    ],
+    [
+     1825,
+     297,
+     "0081f85e455bc1bfc649db00"
+    ]
+   ],
+   "attempts": [
+    {
+     "u16 BE length-prefixed packets tile every payload": [
+      [
+       10248,
+       1441,
+       [
+        174,
+        99,
+        114,
+        129,
+        129,
+        129,
+        129,
+        129,
+        129,
+        129,
+        129
+       ],
+       true
+      ],
+      [
+       1825,
+       297,
+       [
+        129,
+        164
+       ],
+       true
+      ]
+     ],
+     "note": "decodable with libopus per packet (Ogg packetization or the raw API); not attempted here"
+    }
+   ]
+  }
+ }
+}

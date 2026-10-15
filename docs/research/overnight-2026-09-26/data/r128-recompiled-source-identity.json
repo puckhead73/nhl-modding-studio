@@ -1,0 +1,264 @@
+{
+ "note": "R128 - Legacy Recompiled source identity (research-only; read-only). Every file under the registered Recompiled install's `game\\`\ndirectory (H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test\\game, the instance inspected 2026-09-18) is hashed (SHA-256) and compared with\nthe same relative path in the Xbox 360 NHL Legacy tree on X:. Also: the anchor `anchors/xbox360/nhllegacy/databases/nhlng.db` hash vs the X:\ntree's loose `db/nhlng.db`, and the Recompiled save directory's structure (per save: file names, sizes, SHA-256 of the files, first 16 bytes\nas hex - no content decoded, nothing copied). Identity of bytes, not of runtime behaviour: the recompiled executable may read the same bytes\ndifferently; runtime evidence stays separate.\nUsage: python r128_recompiled_source_identity.py <out.json>\n",
+ "recomp_root": "H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test",
+ "x360_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+ "files": [
+  {
+   "path": "audioboot.big",
+   "bytes": 1381808,
+   "recomp_sha256": "37b89e918706b508bbdbb3716a5c165569152354dd3bdbdb07d90c297eaf6326",
+   "x360_sha256": "37b89e918706b508bbdbb3716a5c165569152354dd3bdbdb07d90c297eaf6326",
+   "identical": true
+  },
+  {
+   "path": "audioboot2.big",
+   "bytes": 5635728,
+   "recomp_sha256": "c21da26a48b23081cd92445d1878b5925a600fdb55e78afbc1b0aa900c2361ec",
+   "x360_sha256": "c21da26a48b23081cd92445d1878b5925a600fdb55e78afbc1b0aa900c2361ec",
+   "identical": true
+  },
+  {
+   "path": "boot.big",
+   "bytes": 11184432,
+   "recomp_sha256": "6b4b88db2de4014d07875a9995abfc69a18ad4a2a80d6d96b981243a3d70a3dd",
+   "x360_sha256": "6b4b88db2de4014d07875a9995abfc69a18ad4a2a80d6d96b981243a3d70a3dd",
+   "identical": true
+  },
+  {
+   "path": "cache.big",
+   "bytes": 312439568,
+   "recomp_sha256": "9cd1cf7d31eaef0047a7061424f7f07408fee7cb155c9648fda5611ca9596fdf",
+   "x360_sha256": "9cd1cf7d31eaef0047a7061424f7f07408fee7cb155c9648fda5611ca9596fdf",
+   "identical": true
+  },
+  {
+   "path": "cacheaudio.big",
+   "bytes": 79725376,
+   "recomp_sha256": "eb472fc68802c4f75aff0510a79bab870d000979a0abce4a9b2d2c0133a87ae5",
+   "x360_sha256": "eb472fc68802c4f75aff0510a79bab870d000979a0abce4a9b2d2c0133a87ae5",
+   "identical": true
+  },
+  {
+   "path": "cacheboot.big",
+   "bytes": 31705408,
+   "recomp_sha256": "b558b4f6354b3f13bdedb499524c8068a488cd5a17d332f497d8c33bd782c989",
+   "x360_sha256": "b558b4f6354b3f13bdedb499524c8068a488cd5a17d332f497d8c33bd782c989",
+   "identical": true
+  },
+  {
+   "path": "cachemovie.big",
+   "bytes": 11086736,
+   "recomp_sha256": "8b3f2c28c3c0b834bd31f273a52f1bce5235dbe334674f5e928c44ea3297bfaa",
+   "x360_sha256": "8b3f2c28c3c0b834bd31f273a52f1bce5235dbe334674f5e928c44ea3297bfaa",
+   "identical": true
+  },
+  {
+   "path": "cacheoverlay.big",
+   "bytes": 3487968,
+   "recomp_sha256": "ab5d1c1497171484c86a90a92042eac7b70bc35b4cda8f5f36bdc19e3a7e3910",
+   "x360_sha256": "ab5d1c1497171484c86a90a92042eac7b70bc35b4cda8f5f36bdc19e3a7e3910",
+   "identical": true
+  },
+  {
+   "path": "cacherender.big",
+   "bytes": 1458552880,
+   "recomp_sha256": "e05179835ff2099b01a3085c335f6b8d6cb8de52cd5cf7ecee23e948d586d6d2",
+   "x360_sha256": "e05179835ff2099b01a3085c335f6b8d6cb8de52cd5cf7ecee23e948d586d6d2",
+   "identical": true
+  },
+  {
+   "path": "data0.big",
+   "bytes": 29427680,
+   "recomp_sha256": "7d4a441ad067e2df3ae71b32d8942903f766decbac693f655ef2fdfeff51b998",
+   "x360_sha256": "7d4a441ad067e2df3ae71b32d8942903f766decbac693f655ef2fdfeff51b998",
+   "identical": true
+  },
+  {
+   "path": "default - Copy.xex",
+   "bytes": 10448896,
+   "recomp_sha256": "d818eb15775c1fee34b057b0fc494b211535d07123230ee45bd7d40991c55624",
+   "x360_sha256": null,
+   "identical": null,
+   "same_bytes_as": "default.xex"
+  },
+  {
+   "path": "default.xex",
+   "bytes": 10448896,
+   "recomp_sha256": "d818eb15775c1fee34b057b0fc494b211535d07123230ee45bd7d40991c55624",
+   "x360_sha256": "d818eb15775c1fee34b057b0fc494b211535d07123230ee45bd7d40991c55624",
+   "identical": true
+  },
+  {
+   "path": "nocache.big",
+   "bytes": 2301830880,
+   "recomp_sha256": "9ac38034cc777416efb6240594b5e1074df662deb12f663e864773d66dab410e",
+   "x360_sha256": "9ac38034cc777416efb6240594b5e1074df662deb12f663e864773d66dab410e",
+   "identical": true
+  },
+  {
+   "path": "nocacherender.big",
+   "bytes": 1938855744,
+   "recomp_sha256": "649cc6f223b147daeb8147e7a834fb5c2eda786d9447063e6a25a6d1da225cfd",
+   "x360_sha256": "649cc6f223b147daeb8147e7a834fb5c2eda786d9447063e6a25a6d1da225cfd",
+   "identical": true
+  },
+  {
+   "path": "nxeart",
+   "bytes": 462848,
+   "recomp_sha256": "1aea7900301ba381459b778b89151abdc94aada43e34549c289e835b01f1eff7",
+   "x360_sha256": "1aea7900301ba381459b778b89151abdc94aada43e34549c289e835b01f1eff7",
+   "identical": true
+  },
+  {
+   "path": "options.viv",
+   "bytes": 284,
+   "recomp_sha256": "35687503fe73c46a549de91d6bb2462ac36ae5e9210382bad83ae3031de03e81",
+   "x360_sha256": "35687503fe73c46a549de91d6bb2462ac36ae5e9210382bad83ae3031de03e81",
+   "identical": true
+  },
+  {
+   "path": "renderboot.big",
+   "bytes": 9401248,
+   "recomp_sha256": "72a6498007d645fa32443b84acfccdd9a8261baeba0a2890d24977796cd2a490",
+   "x360_sha256": "72a6498007d645fa32443b84acfccdd9a8261baeba0a2890d24977796cd2a490",
+   "identical": true
+  },
+  {
+   "path": "gamedata\\aidata.big",
+   "bytes": 1504,
+   "recomp_sha256": "8cebe46396750c0142a95ba0b5e6c3862c98409bc7649f886d60d901bfe672b2",
+   "x360_sha256": "8cebe46396750c0142a95ba0b5e6c3862c98409bc7649f886d60d901bfe672b2",
+   "identical": true
+  },
+  {
+   "path": "gamedata\\gps.big",
+   "bytes": 2487,
+   "recomp_sha256": "8a83bedaf9d453efc79f15b5065dc22485bf5b09674df702a594d6e7fa948144",
+   "x360_sha256": "8a83bedaf9d453efc79f15b5065dc22485bf5b09674df702a594d6e7fa948144",
+   "identical": true
+  },
+  {
+   "path": "gamedata\\nis.big",
+   "bytes": 79504208,
+   "recomp_sha256": "cc92118299e7b7b39b6fe87c7217b282a3c2a377b6494bb64cccd71d654ce1c0",
+   "x360_sha256": "cc92118299e7b7b39b6fe87c7217b282a3c2a377b6494bb64cccd71d654ce1c0",
+   "identical": true
+  },
+  {
+   "path": "gamedata\\anim\\faceposer.big",
+   "bytes": 8050064,
+   "recomp_sha256": "190f3ecc9f2b0bde3422d706d793eb257d8383fdf31fbd4052564acbbd4eff23",
+   "x360_sha256": "190f3ecc9f2b0bde3422d706d793eb257d8383fdf31fbd4052564acbbd4eff23",
+   "identical": true
+  }
+ ],
+ "summary": {
+  "files": 21,
+  "identical": 20,
+  "different": [],
+  "recomp_only": [
+   "default - Copy.xex"
+  ],
+  "bytes": 6303634643
+ },
+ "exe": {
+  "nhllegacy.exe": "7264bec63ee716d4d6b0d9e8914b0f17ecc1f7351a9e045190b6dc99b750d24b"
+ },
+ "anchor_vs_x360_loose_db": {
+  "anchor_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+  "x360_loose_db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230"
+ },
+ "saves": [
+  {
+   "save": "BUILDYOURAI 20260915213449",
+   "files": [
+    {
+     "name": "BUILDYOURAI 20260915213449",
+     "bytes": 2664,
+     "sha256": "4bd4532b4496f398e6f630d99dabbe3cd3150d7e295fac1a77874ed235d2e391",
+     "head16": "5458545f4255494c445f594f55525f00"
+    }
+   ]
+  },
+  {
+   "save": "DYNASTY 20260815043618",
+   "files": [
+    {
+     "name": "DYNASTY 20260815043618",
+     "bytes": 4579240,
+     "sha256": "6b5b5ed06504e66785fc2dd32e51f9f2d6e8232687828b4b742d0f3e955e70fb",
+     "head16": "44796e61737479000000000000000000"
+    }
+   ]
+  },
+  {
+   "save": "DYNASTY 20260815045633A",
+   "files": [
+    {
+     "name": "DYNASTY 20260815045633A",
+     "bytes": 4579240,
+     "sha256": "9157f10986b6eb2281495381a087a10b59561b627bc36312e32b3fe008ef8761",
+     "head16": "44796e61737479000000000000000000"
+    }
+   ]
+  },
+  {
+   "save": "HOCKEYCARD 20260723054108",
+   "files": [
+    {
+     "name": "HOCKEYCARD 20260723054108",
+     "bytes": 3072092,
+     "sha256": "d199310a03a8ec1ce2fdfc8f9fc320b660c4e26d250e695527d751f66bbe921b",
+     "head16": "486f636b657943617264730000000000"
+    }
+   ]
+  },
+  {
+   "save": "PROFILE 20260815045633",
+   "files": [
+    {
+     "name": "PROFILE 20260815045633",
+     "bytes": 1366008,
+     "sha256": "9898c5534a51a38f49061a613420aabb696200b149f2c58d8b84edfef9bd6801",
+     "head16": "5573657250726f66696c6546696c6500"
+    }
+   ]
+  },
+  {
+   "save": "ROSTER 20260814040808",
+   "files": [
+    {
+     "name": "ROSTER 20260814040808",
+     "bytes": 2456120,
+     "sha256": "d12034cb7337d4eee8ee13a770078741a0efbe6d8d901fd71754c0c16e853f54",
+     "head16": "526f7374657246696c65000000000000"
+    }
+   ]
+  }
+ ],
+ "save_headers": [
+  "BUILDYOURAI 20260915213449.header",
+  "DYNASTY 20260815043618.header",
+  "DYNASTY 20260815045633A.header",
+  "HOCKEYCARD 20260723054108.header",
+  "PROFILE 20260815045633.header",
+  "ROSTER 20260814040808.header"
+ ],
+ "archived_main_db": {
+  "archive": "cacheboot.big",
+  "member": "db/nhlng.db",
+  "offset": 18177856,
+  "bytes": 2901504,
+  "stored": true,
+  "head": "DB\u0000\b",
+  "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+  "equals_anchor": true,
+  "read_from": "Recompiled game\\cacheboot.big (identical file to the X360 tree)"
+ },
+ "anchor_save_layout": {
+  "anchors/xbox360/nhllegacy/savefiles/ROSTER 20260627060052": {
+   "bytes": 2456120,
+   "head16": "RosterFile + zeros"
+  }
+ }
+}

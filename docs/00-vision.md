@@ -17,8 +17,9 @@ spans a decade-plus of EA NHL titles, multiple platforms, save data, and a rich 
    reach raw tables, batch operations, and cross-database imports.
 2. **Correctness over convenience.** Game data is fragile and version-specific. We never silently
    corrupt a database. Writes are validated, reversible where possible, and explained.
-3. **Version- and platform-honest.** We model the real differences between NHL 10–21 and between
-   Xbox / PS3 / PS4 / Legacy rather than pretending they are uniform.
+3. **Version- and platform-honest.** We model the real differences across NHL 07–21, Legacy and
+   Legacy Recompiled, and between Xbox 360 / PS3 / PS4 / Legacy Recomp, rather than pretending they
+   are uniform.
 4. **No piracy, no copyrighted data.** The tool edits the user's own legally obtained files and
    ships none of EA's content.
 5. **Longevity.** Clear architecture and documentation so the project outlives any single author.

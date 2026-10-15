@@ -1,0 +1,234 @@
+{
+ "eboot": "H:/Emulators/ShadPS4/Games/CUSA07569/eboot.bin",
+ "format": "SELF",
+ "relative_relocs": 221239,
+ "tables": [
+  {
+   "va": 73724736,
+   "stride": 8,
+   "count": 73,
+   "west_index": 5,
+   "entries": [
+    {
+     "key": "NHL"
+    },
+    {
+     "key": "NHL"
+    },
+    {
+     "key": "NHL"
+    },
+    {
+     "key": "NHL"
+    },
+    {
+     "key": "NHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "NHLDivisionA"
+    },
+    {
+     "key": "NHLDivisionB"
+    },
+    {
+     "key": "NHLDivisionC"
+    },
+    {
+     "key": "NHLDivisionD"
+    },
+    {
+     "key": "AHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "AtlanticDivision"
+    },
+    {
+     "key": "NorthDivision"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "PacificDivision"
+    },
+    {
+     "key": "TXT_LEAGUE_O2_EXTRALIGA"
+    },
+    {
+     "key": "TXT_LEAGUE_SWISS_LEAGUE"
+    },
+    {
+     "key": "SMLIIGA"
+    },
+    {
+     "key": "TXT_LEAGUE_DEL"
+    },
+    {
+     "key": "elitserien"
+    },
+    {
+     "key": "TXT_LEAGUE_NORWAY"
+    },
+    {
+     "key": "OHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "EastDivision"
+    },
+    {
+     "key": "MidwestDivision"
+    },
+    {
+     "key": "WestDivision"
+    },
+    {
+     "key": "QMJHL"
+    },
+    {
+     "key": "EastDivision"
+    },
+    {
+     "key": "MaritimesDivision"
+    },
+    {
+     "key": "WestDivision"
+    },
+    {
+     "key": "WHL"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "BcDivision"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "EastDivision"
+    },
+    {
+     "key": "UsDivision"
+    },
+    {
+     "key": "TournamentFile"
+    },
+    {
+     "key": "PoolA"
+    },
+    {
+     "key": "PoolB"
+    },
+    {
+     "key": "Playoffs"
+    },
+    {
+     "key": "ConferenceA"
+    },
+    {
+     "key": "ConferenceB"
+    },
+    {
+     "key": "DivisionA"
+    },
+    {
+     "key": "DivisionB"
+    },
+    {
+     "key": "DivisionC"
+    },
+    {
+     "key": "DivisionD"
+    },
+    {
+     "key": "CUSTOM_TEAMS"
+    },
+    {
+     "key": "WesternConference"
+    },
+    {
+     "key": "EasternConference"
+    },
+    {
+     "key": "CentralDivision"
+    },
+    {
+     "key": "MountainDivision"
+    },
+    {
+     "key": "NorthDivision"
+    },
+    {
+     "key": "SouthDivision"
+    },
+    {
+     "key": "ECHL"
+    },
+    {
+     "key": "TXT_CHAMPIONS_LEAGUE"
+    },
+    {
+     "key": "TXT_LEAGUE_EBEL"
+    },
+    {
+     "key": "Allsvenskan"
+    },
+    {
+     "key": "TXT_GROUP_A"
+    },
+    {
+     "key": "TXT_GROUP_B"
+    },
+    {
+     "key": "TXT_GROUP_C"
+    },
+    {
+     "key": "TXT_GROUP_D"
+    },
+    {
+     "key": "TXT_GROUP_E"
+    },
+    {
+     "key": "TXT_GROUP_F"
+    },
+    {
+     "key": "TXT_GROUP_G"
+    },
+    {
+     "key": "TXT_GROUP_H"
+    },
+    {
+     "key": "TXT_PLACEMENT_POOL"
+    },
+    {
+     "key": "TXT_QUALIFYING_POOL"
+    }
+   ]
+  }
+ ]
+}

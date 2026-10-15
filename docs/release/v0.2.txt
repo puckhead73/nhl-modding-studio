@@ -1,0 +1,29 @@
+NHL Modding Studio v0.2 - Windows x64 playtest
+
+Download NHL.Modding.Studio.v0.2.Windows.x64.zip, extract the entire archive
+into a new local folder, and run nhl-studio.exe. Keep its bundled folders together.
+The application version is 0.2.0. Save existing projects before switching builds.
+
+This release packages the current source, including work since the initial playtest:
+- Save Editor and expanded early-game database/save handling.
+- NHL 07/08 mod-package activation and career-stat replay corrections.
+- NHL 07 uniform art-ID mapping and paired goalie-pad previews.
+- NHL 08/09 goalie mask paint selection.
+- Recovery of deleted installed textures from verified original backups.
+- Current asset, roster, historical-data and game/platform tooling updates.
+
+The complete bundle includes the historical database, approved fresh-project
+baselines, game definitions, audio and PKG helpers with their source/notices,
+and a private Microsoft WebView2 runtime. Personal projects, profiles, caches,
+import ledgers, original game archives and personal saves are not included.
+
+BUILD packages staged edits as .nhlmod; Send to Mod Manager prepares activation.
+This does not provide a general repacker for arbitrary loose files into game BIG
+archives. Keep the existing extracted asset structure for loose-file workflows.
+
+This is an unsigned prerelease. Existing feature limitations and the release
+readiness items in BUILD-RECORD.json and THIRD-PARTY-NOTICES.txt remain disclosed.
+Publication is not a claim of final release readiness or all-title in-game validation.
+
+Report issues with v0.2, game/platform, reproduction steps, expected and actual
+results, exact error text, and screenshots where helpful.

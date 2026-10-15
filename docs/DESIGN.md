@@ -2,7 +2,15 @@
 
 > **Canonical architecture document.** Derived from the prior app's design brief
 > ([rebuild-design.md](rebuild-design.md), kept as the reference source) and updated for the
-> agreed release-candidate scope. For sequencing see [ROADMAP.md](ROADMAP.md).
+> agreed scope. For sequencing use the
+> [project completion roadmap](plans/project-completion-roadmap.md); [ROADMAP.md](ROADMAP.md)
+> retains the original phase history and its stale NHL 10–21 framing.
+>
+> **Scope note (2026-09-07):** current scope is the **17 catalog entries** — NHL 07–21, NHL Legacy
+> and NHL Legacy Recompiled — on the catalog's actual platform combinations (**27 shipping
+> targets**); NHL 07 PS3 is research-only and there is no Xbox One target. Where the text below
+> still reads "NHL 10–21" as a design-era framing it has been corrected in place; the
+> architectural content is unchanged. Nothing here promotes a target: no cell is game-verified.
 >
 > **The database-editing model is binding and lives in [EDIT-MODEL.md](EDIT-MODEL.md)** — the
 > metadata-driven, entity-first, illegal-states-unrepresentable contract distilled from NHLViewNG
@@ -25,10 +33,12 @@ layer, and experimental research code (recomp, NHL2K10 RE, rig-audit, head-impor
 interleaved with shipping features. The rebuild carries forward **100% of the core studio +
 production-tool functionality** on the proven engine, with clean layering.
 
-## Scope (release candidate)
+## Scope
 
-- **Titles:** NHL 10 → NHL 21.
-- **Platforms:** Xbox, PS3, **PS4**, and the NHL Legacy Recompilation (Xbox-derived).
+- **Titles:** NHL 07 → NHL 21, NHL Legacy and NHL Legacy Recompiled — **17 catalog entries**.
+- **Platforms:** Xbox 360, PS3, **PS4**, and the NHL Legacy Recompilation (Xbox-derived), on the
+  catalog's actual combinations — **27 shipping targets**, not a Cartesian matrix. NHL 07 PS3 is a
+  research copy rather than a shipping target, and no Xbox One target exists.
 - **In:** DB editing (players/teams/arenas/jerseys), roster/lines/transactions (incl. historical
   import **and** manual player-select roster construction), parity save+write, FHM historical import,
   EA rating formulas, and the asset tools (portraits, logos, textures, appearance, equipment/hockey-shop,
@@ -40,10 +50,12 @@ production-tool functionality** on the proven engine, with clean layering.
   tunable patcher.
 
 > **Scope delta vs. the reference app.** The reference app proved **Legacy/14/15** on
-> **PS3/Xbox/Recomp**. The RC target adds **PS4** (net-new: little-endian x86 + a different save
-> container) and the **full NHL 10–21 title range** (per-title schema reversing for years the
-> reference app did not cover). These are net-new work, not ports — tracked explicitly in
-> [ROADMAP.md](ROADMAP.md) and [01-scope-and-compatibility.md](01-scope-and-compatibility.md).
+> **PS3/Xbox/Recomp**. This project extends that to **PS4** (little-endian x86 + a different save
+> container) and to the **full NHL 07–21 title range**. Both are now implemented to varying
+> depth — PS4 database and container paths and per-title schemas across the catalog exist and carry
+> automated anchor coverage — but implementation is not qualification. Remaining work is sequenced
+> in the [completion roadmap](plans/project-completion-roadmap.md); per-target evidence levels live
+> in [01-scope-and-compatibility.md](01-scope-and-compatibility.md).
 
 ## Stack & rationale
 
@@ -109,14 +121,20 @@ rather than port the existing module graph verbatim. The value is in re-layering
 
 ## Engine crate set (consolidated)
 
-Port logic faithfully — it is verified. Extend the codec/schema/platform layers for the new
-RC scope (PS4 + full title range).
+Port logic faithfully — it is verified. Extend the codec/schema/platform layers across the full
+scope (PS4 + the whole title range).
+
+> The table below is the **intended** consolidation. For the crates that actually exist today — 20
+> of them, including `tdb-formula`, `tdb-headmesh`, `blender-job`, `tdb-qa` and
+> `tdb-archive-codec`, with the UI read models living inside `studio-domain` (`view.rs`,
+> `team_tabs.rs`, `surfaces.rs`) rather than a separate `tdb-view-models` crate — see
+> [STATE-OF-THE-REPO.md](STATE-OF-THE-REPO.md) section 2.
 
 | Crate | Responsibility | Notes |
 |---|---|---|
 | **tdb-core** | TDB parse/serialize, header/table/field/record model, CRC, Huffman type-66, RawId namespace reversal, endian | Crown jewel. Endian handling extends to PS4 (little-endian x86). |
 | **tdb-edit** | `EditSession`, `EditValue`, field/row ops, undo/redo, stage-time `validate_edit`, type-66 pool rebuild, swap-pop orphan guard | Fold `tdb-expand` (capacity growth) in here or adjacent. |
-| **tdb-defs** | `FieldMeta` index (name/range/bit-depth/update/fk), multi-flavor loader, byte-reversed-namespace bridge | Metadata backbone. **Extends to per-title schemas across NHL 10–21.** |
+| **tdb-defs** | `FieldMeta` index (name/range/bit-depth/update/fk), multi-flavor loader, byte-reversed-namespace bridge | Metadata backbone. **Extends to per-title schemas across NHL 07–21.** |
 | **tdb-savedata** | PS3/Xbox save containers (v1/v2/v4), extract + pack, checksum reversal | **Add PS4 save container + finish v1 / Xbox-STFS write-back.** |
 | **tdb-enums** | Enum value↔label registry (TOML) | Small. |
 | **tdb-relations** | Confirmed FK / relationship registry + (optional) discovery | Keep confirmed registry; demote heuristic discovery to a dev-only tool. |
@@ -132,7 +150,8 @@ RC scope (PS4 + full title range).
 
 ### Cross-cutting: the (title, platform) registry
 
-A central registry resolves **(title ∈ NHL 10–21, platform ∈ Xbox|PS3|PS4|Recomp) → schema + codec**
+A central registry resolves **(title ∈ NHL 07–21 + Legacy/Recompiled, platform ∈ Xbox|PS3|PS4|Recomp)
+→ schema + codec**
 (field layout, endianness, packing, save container). New titles/platforms plug in here rather than
 scattering conditionals. Endianness and container differences live in the codec layer and never leak
 into `studio-domain` or the UI.
@@ -230,7 +249,7 @@ Functional checklist for the rebuild (each row = a view/feature + backing system
    `FieldMeta`; (b) operation-time: entity invariants in repairing transactions; (c) save-time:
    whole-DB domain audit (companion model, roster-block coherence, dup-on-team, dangling FKs).
 3. **FieldMeta backbone** — canonical (table,field)→meta index; range bounds (signed-aware),
-   update/read-only flag, FK parent. Extends per-title across NHL 10–21.
+   update/read-only flag, FK parent. Extends per-title across NHL 07–21.
 4. **Save spine** — produce bytes → parse+audit → external-edit guard → atomic write+backup →
    refresh handle → drop session.
 5. **Save containers** — detect by body-marker (not the version field, which lies); extract inflates
@@ -269,5 +288,6 @@ Functional checklist for the rebuild (each row = a view/feature + backing system
   harness, not copy-paste.
 - **Asset codec edge cases** (rpsgl mip tails, type-66 pool-fit) — port with regression fixtures.
 - **Save-container variants** — v1/Xbox write-back unfinished in the reference; PS4 is net-new.
-- **Full title-range scope** — per-title schema reversing across NHL 10–21 is unproven for years the
-  reference app did not cover; treat as discovery work, gate by verified support.
+- **Full title-range scope** — per-title schema reversing across NHL 07–21 exists and is exercised
+  against the 27 anchors, but no target is game-verified; keep gating support on recorded evidence
+  per (title, platform) rather than on the presence of code or a green test run.

@@ -51,6 +51,11 @@ pub struct RelBinding {
     pub source_field: String,
     pub target_table: String,
     pub target_field: String,
+    /// When `true`, the source field has no null encoding: `0` and the all-ones pattern are real
+    /// values and take part in the audit (e.g. a league code whose `0` is the NHL row). Default
+    /// `false` keeps the generic sentinel rule.
+    #[serde(default)]
+    pub no_null_sentinels: bool,
     #[serde(default)]
     pub evidence_notes: String,
 }
@@ -139,7 +144,9 @@ impl RelationRegistry {
 
     /// Resolve the edge a source `(table, field)` points along, if it is a confirmed FK.
     pub fn resolve(&self, table: &str, field: &str) -> Option<ResolvedEdge<'_>> {
-        let &(ri, bi) = self.by_source.get(&(table.to_string(), field.to_string()))?;
+        let &(ri, bi) = self
+            .by_source
+            .get(&(table.to_string(), field.to_string()))?;
         let relationship = &self.relationships[ri];
         Some(ResolvedEdge {
             relationship,

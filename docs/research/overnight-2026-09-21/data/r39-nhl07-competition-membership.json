@@ -1,0 +1,756 @@
+{
+ "note": "R39 - NHL 07 (gen6 schema) competition membership and schedule structure, on both NHL07NG.db anchors (X360 = PS3). Read-only.\n\nstockteamtable carries league / conference / division directly; exhibitionteams is the thin (table, division, teamid, index) selector,\nall zeros except teamid == index (stock only, no custom rows). Schedule tables reference teams by RANK inside their league (the order of\nthe league's rows in stockteamtable): nhlschedule{small,medium,longleap,longnoleap} on league 0 (ids 0-31 incl. the two All-Star rows\n30 / 31), intl{del,elitserien,smliiga}schedule on leagues 4 / 2 / 3 (ids 0..n-1). Pair-class quotas are measured per table.\nUsage: python r39_nhl07_competition_membership.py <out.json>\n",
+ "anchors": {
+  "xbox360": {
+   "stockteamtable_rows": 93,
+   "exhibitionteams_rows": 93,
+   "exhibitionteams_all_table0_division0": true,
+   "exhibitionteams_teamid_eq_index": 93,
+   "customteamtable_rows": 0,
+   "leagues": {
+    "0": {
+     "teams": 32,
+     "index_range": [
+      0,
+      31
+     ],
+     "conference_division_groups": {
+      "0/0": 2,
+      "0/3": 5,
+      "0/4": 5,
+      "0/5": 5,
+      "1/0": 5,
+      "1/1": 5,
+      "1/2": 5
+     },
+     "first_names": [
+      "Anaheim",
+      "Atlanta",
+      "Boston"
+     ]
+    },
+    "1": {
+     "teams": 21,
+     "index_range": [
+      32,
+      52
+     ],
+     "conference_division_groups": {
+      "1/0": 21
+     },
+     "first_names": [
+      "Austria",
+      "Belarus",
+      "Canada"
+     ]
+    },
+    "2": {
+     "teams": 12,
+     "index_range": [
+      53,
+      64
+     ],
+     "conference_division_groups": {
+      "0/0": 12
+     },
+     "first_names": [
+      "Bryn\u00e4s",
+      "Djurg\u00e5rden",
+      "F\u00e4rjestad"
+     ]
+    },
+    "3": {
+     "teams": 13,
+     "index_range": [
+      65,
+      77
+     ],
+     "conference_division_groups": {
+      "0/0": 13
+     },
+     "first_names": [
+      "\u00c4ss\u00e4t",
+      "Blues",
+      "HIFK"
+     ]
+    },
+    "4": {
+     "teams": 14,
+     "index_range": [
+      78,
+      91
+     ],
+     "conference_division_groups": {
+      "0/0": 14
+     },
+     "first_names": [
+      "Augsburg",
+      "Berlin",
+      "D\u00fcsseldorf"
+     ]
+    },
+    "5": {
+     "teams": 1,
+     "index_range": [
+      92,
+      92
+     ],
+     "conference_division_groups": {
+      "0/0": 1
+     },
+     "first_names": [
+      "Davos"
+     ]
+    }
+   },
+   "schedules": {
+    "nhlschedulelongleap": {
+     "rows": 1231,
+     "max_records": 1231,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "82": 30
+     },
+     "months_0_indexed": {
+      "0": 188,
+      "1": 187,
+      "2": 218,
+      "3": 55,
+      "9": 170,
+      "10": 202,
+      "11": 211
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 210,
+      "1": 151
+     },
+     "pair_classes": {
+      "conference x4": 150,
+      "division x8": 60,
+      "cross x1": 150
+     },
+     "allstar_games": 1
+    },
+    "nhlschedulelongnoleap": {
+     "rows": 1231,
+     "max_records": 1231,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "82": 30
+     },
+     "months_0_indexed": {
+      "0": 188,
+      "1": 187,
+      "2": 218,
+      "3": 55,
+      "9": 170,
+      "10": 202,
+      "11": 211
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 210,
+      "1": 151
+     },
+     "pair_classes": {
+      "conference x4": 150,
+      "division x8": 60,
+      "cross x1": 150
+     },
+     "allstar_games": 1
+    },
+    "nhlschedulemedium": {
+     "rows": 871,
+     "max_records": 871,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "58": 30
+     },
+     "months_0_indexed": {
+      "0": 174,
+      "1": 151,
+      "2": 181,
+      "3": 51,
+      "10": 152,
+      "11": 162
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 435,
+      "1": 1
+     },
+     "pair_classes": {
+      "conference x2": 150,
+      "cross x2": 225,
+      "division x2": 60
+     },
+     "allstar_games": 1
+    },
+    "nhlschedulesmall": {
+     "rows": 436,
+     "max_records": 436,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "29": 30
+     },
+     "months_0_indexed": {
+      "0": 157,
+      "1": 107,
+      "2": 154,
+      "3": 18
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "1": 436
+     },
+     "pair_classes": {
+      "cross x1": 225,
+      "conference x1": 150,
+      "division x1": 60
+     },
+     "allstar_games": 1
+    },
+    "intldelschedule": {
+     "rows": 364,
+     "max_records": 364,
+     "league": 4,
+     "ids": [
+      0,
+      13
+     ],
+     "league_members": 14,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "52": 14
+     },
+     "months_0_indexed": {
+      "0": 65,
+      "1": 43,
+      "2": 31,
+      "8": 29,
+      "9": 72,
+      "10": 56,
+      "11": 68
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "pair_game_counts": {
+      "4": 91
+     }
+    },
+    "intlelitserienschedule": {
+     "rows": 300,
+     "max_records": 300,
+     "league": 2,
+     "ids": [
+      0,
+      11
+     ],
+     "league_members": 12,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "50": 12
+     },
+     "months_0_indexed": {
+      "0": 61,
+      "1": 44,
+      "2": 6,
+      "8": 19,
+      "9": 71,
+      "10": 55,
+      "11": 44
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 66
+     },
+     "pair_game_counts": {
+      "4": 48,
+      "6": 18
+     }
+    },
+    "intlsmliigaschedule": {
+     "rows": 364,
+     "max_records": 364,
+     "league": 3,
+     "ids": [
+      0,
+      12
+     ],
+     "league_members": 13,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "56": 13
+     },
+     "months_0_indexed": {
+      "0": 69,
+      "1": 53,
+      "2": 30,
+      "8": 41,
+      "9": 71,
+      "10": 59,
+      "11": 41
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 78
+     },
+     "pair_game_counts": {
+      "4": 56,
+      "6": 18,
+      "8": 4
+     }
+    }
+   }
+  },
+  "ps3": {
+   "stockteamtable_rows": 93,
+   "exhibitionteams_rows": 93,
+   "exhibitionteams_all_table0_division0": true,
+   "exhibitionteams_teamid_eq_index": 93,
+   "customteamtable_rows": 0,
+   "leagues": {
+    "0": {
+     "teams": 32,
+     "index_range": [
+      0,
+      31
+     ],
+     "conference_division_groups": {
+      "0/0": 2,
+      "0/3": 5,
+      "0/4": 5,
+      "0/5": 5,
+      "1/0": 5,
+      "1/1": 5,
+      "1/2": 5
+     },
+     "first_names": [
+      "Anaheim",
+      "Atlanta",
+      "Boston"
+     ]
+    },
+    "1": {
+     "teams": 21,
+     "index_range": [
+      32,
+      52
+     ],
+     "conference_division_groups": {
+      "1/0": 21
+     },
+     "first_names": [
+      "Austria",
+      "Belarus",
+      "Canada"
+     ]
+    },
+    "2": {
+     "teams": 12,
+     "index_range": [
+      53,
+      64
+     ],
+     "conference_division_groups": {
+      "0/0": 12
+     },
+     "first_names": [
+      "Bryn\u00e4s",
+      "Djurg\u00e5rden",
+      "F\u00e4rjestad"
+     ]
+    },
+    "3": {
+     "teams": 13,
+     "index_range": [
+      65,
+      77
+     ],
+     "conference_division_groups": {
+      "0/0": 13
+     },
+     "first_names": [
+      "\u00c4ss\u00e4t",
+      "Blues",
+      "HIFK"
+     ]
+    },
+    "4": {
+     "teams": 14,
+     "index_range": [
+      78,
+      91
+     ],
+     "conference_division_groups": {
+      "0/0": 14
+     },
+     "first_names": [
+      "Augsburg",
+      "Berlin",
+      "D\u00fcsseldorf"
+     ]
+    },
+    "5": {
+     "teams": 1,
+     "index_range": [
+      92,
+      92
+     ],
+     "conference_division_groups": {
+      "0/0": 1
+     },
+     "first_names": [
+      "Davos"
+     ]
+    }
+   },
+   "schedules": {
+    "nhlschedulelongleap": {
+     "rows": 1231,
+     "max_records": 1231,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "82": 30
+     },
+     "months_0_indexed": {
+      "0": 188,
+      "1": 187,
+      "2": 218,
+      "3": 55,
+      "9": 170,
+      "10": 202,
+      "11": 211
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 210,
+      "1": 151
+     },
+     "pair_classes": {
+      "conference x4": 150,
+      "division x8": 60,
+      "cross x1": 150
+     },
+     "allstar_games": 1
+    },
+    "nhlschedulelongnoleap": {
+     "rows": 1231,
+     "max_records": 1231,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "82": 30
+     },
+     "months_0_indexed": {
+      "0": 188,
+      "1": 187,
+      "2": 218,
+      "3": 55,
+      "9": 170,
+      "10": 202,
+      "11": 211
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 210,
+      "1": 151
+     },
+     "pair_classes": {
+      "conference x4": 150,
+      "division x8": 60,
+      "cross x1": 150
+     },
+     "allstar_games": 1
+    },
+    "nhlschedulemedium": {
+     "rows": 871,
+     "max_records": 871,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "58": 30
+     },
+     "months_0_indexed": {
+      "0": 174,
+      "1": 151,
+      "2": 181,
+      "3": 51,
+      "10": 152,
+      "11": 162
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 435,
+      "1": 1
+     },
+     "pair_classes": {
+      "conference x2": 150,
+      "cross x2": 225,
+      "division x2": 60
+     },
+     "allstar_games": 1
+    },
+    "nhlschedulesmall": {
+     "rows": 436,
+     "max_records": 436,
+     "league": 0,
+     "ids": [
+      0,
+      31
+     ],
+     "league_members": 32,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "1": 2,
+      "29": 30
+     },
+     "months_0_indexed": {
+      "0": 157,
+      "1": 107,
+      "2": 154,
+      "3": 18
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "1": 436
+     },
+     "pair_classes": {
+      "cross x1": 225,
+      "conference x1": 150,
+      "division x1": 60
+     },
+     "allstar_games": 1
+    },
+    "intldelschedule": {
+     "rows": 364,
+     "max_records": 364,
+     "league": 4,
+     "ids": [
+      0,
+      13
+     ],
+     "league_members": 14,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "52": 14
+     },
+     "months_0_indexed": {
+      "0": 65,
+      "1": 43,
+      "2": 31,
+      "8": 29,
+      "9": 72,
+      "10": 56,
+      "11": 68
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 91
+     },
+     "pair_game_counts": {
+      "4": 91
+     }
+    },
+    "intlelitserienschedule": {
+     "rows": 300,
+     "max_records": 300,
+     "league": 2,
+     "ids": [
+      0,
+      11
+     ],
+     "league_members": 12,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "50": 12
+     },
+     "months_0_indexed": {
+      "0": 61,
+      "1": 44,
+      "2": 6,
+      "8": 19,
+      "9": 71,
+      "10": 55,
+      "11": 44
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 66
+     },
+     "pair_game_counts": {
+      "4": 48,
+      "6": 18
+     }
+    },
+    "intlsmliigaschedule": {
+     "rows": 364,
+     "max_records": 364,
+     "league": 3,
+     "ids": [
+      0,
+      12
+     ],
+     "league_members": 13,
+     "id_is_league_rank": true,
+     "games_per_team": {
+      "56": 13
+     },
+     "months_0_indexed": {
+      "0": 69,
+      "1": 53,
+      "2": 30,
+      "8": 41,
+      "9": 71,
+      "10": 59,
+      "11": 41
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_col_is_row_order": true,
+     "home_away_imbalance": {
+      "0": 78
+     },
+     "pair_game_counts": {
+      "4": 56,
+      "6": 18,
+      "8": 4
+     }
+    }
+   }
+  }
+ },
+ "x360_eq_ps3": true
+}

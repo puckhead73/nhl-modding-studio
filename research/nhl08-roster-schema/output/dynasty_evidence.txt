@@ -1,0 +1,240 @@
+$ python research/nhl08-roster-schema/scripts/dynasty_evidence.py "anchors/xbox360/nhl08/savefiles/DYNASTY1 20260718064632/DYNASTY1 20260718064632" anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml
+file size 2461712; embedded TDBs: ['@0x8d9bc size 525416 tables 111']
+non-TDB preamble [0x1C..0x8d9bc): 580000 bytes, 529283 zero, 50717 nonzero
+  first 64 bytes: 00 00 08 34 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 ff ff 00 00
+  0xFFFF word positions in first 256 bytes: [4, 18, 32, 46, 60, 74, 88, 102, 116, 130, 144, 158, 172, 186, 200, 214, 228, 242]
+inner TDB @0x8d9bc: tables 111 db_size 525416; tail 1356268 bytes all zero: True
+
+save  role    parent parent name                       recB   max   cur alloc     capacity groups
+WExj  insert  HUMb  leaguetasks                          8    39    39 6               64 league,dynasty,allloaded
+oWfM  delete  HUMb  leaguetasks                          4     0     0 2                0 league,dynasty,allloaded
+ioPQ  insert  kGzd  leaguefreeagents                     4   311   311 6              800 league,dynasty,allloaded
+oiBf  delete  kGzd  leaguefreeagents                     4     0     0 2                0 league,dynasty,allloaded
+HnSp  update  kGzd  leaguefreeagents                     4     0     0 2                0 league,dynasty,allloaded
+Qvri  insert  ubnj  leaguetransactiontable               8   200   200 6              200 league,dynasty,allloaded
+yNZN  delete  ubnj  leaguetransactiontable               4     0     0 2                0 league,dynasty,allloaded
+xIOP  update  ubnj  leaguetransactiontable               8     0     0 2                0 league,dynasty,allloaded
+tXWz  insert  kKzq  leaguecustomplayerremap              4     0     0 2             3000 league,dynasty,allloaded
+Ttsw  delete  kKzq  leaguecustomplayerremap              4     0     0 2                0 league,dynasty,allloaded
+esMb  insert  IALy  leagueawardstable                   88     0     0 2              500 league,dynasty,allloaded
+wiOU  delete  IALy  leagueawardstable                    4     0     0 2                0 league,dynasty,allloaded
+xFwu  insert  WRGI  leaguestates                         8    59    59 6              256 league,dynasty,allloaded
+TXSB  delete  WRGI  leaguestates                         4     0     0 2                0 league,dynasty,allloaded
+cSVD  update  WRGI  leaguestates                         8     0     0 2                0 league,dynasty,allloaded
+paEP  insert  xxMJ  leagueretirementtable               84     0     0 2              400 dynasty,allloaded
+fwKg  delete  xxMJ  leagueretirementtable                4     0     0 2                0 dynasty,allloaded
+KcZA  insert  CtBM  leagueplayerseasonstats             28     0     0 2            13500 league,dynasty,allloaded
+EeDv  delete  CtBM  leagueplayerseasonstats              4     0     0 2                0 league,dynasty,allloaded
+rbMB  update  CtBM  leagueplayerseasonstats             24     0     0 2                0 league,dynasty,allloaded
+Pwkd  insert  rgQY  leaguerostertable                   16  1314  1314 6             1600 league,dynasty,allloaded
+VeqS  delete  rgQY  leaguerostertable                    4     0     0 2                0 league,dynasty,allloaded
+azBc  update  rgQY  leaguerostertable                   12     0     0 2                0 league,dynasty,allloaded
+JVhE  insert  lqNn  leaguegoalieequipment               64   176   176 6              600 league,dynasty,allloaded
+XDvr  delete  lqNn  leaguegoalieequipment                4     0     0 2                0 league,dynasty,allloaded
+YGEl  update  lqNn  leaguegoalieequipment               64     0     0 2                0 league,dynasty,allloaded
+MWzC  insert  CwnF  leagueskaterequipment               12  1328  1328 6             3000 league,dynasty,allloaded
+CsRt  delete  CwnF  leagueskaterequipment                4     0     0 2                0 league,dynasty,allloaded
+tZGn  update  CwnF  leagueskaterequipment               12     0     0 2                0 league,dynasty,allloaded
+wtoq  insert  sziH  leaguerookiegoalieai                24    25    25 6               60 dynasty,allloaded
+mXaF  delete  sziH  leaguerookiegoalieai                 4     0     0 2                0 dynasty,allloaded
+PjxU  insert  QfUJ  leagueteamstrategies                 8    63    63 6               64 league,dynasty,allloaded
+BRfb  delete  QfUJ  leagueteamstrategies                 4     0     0 2                0 league,dynasty,allloaded
+ukol  update  QfUJ  leagueteamstrategies                 8     0     0 2                0 league,dynasty,allloaded
+yACS  insert  xLuM  leaguegmdata                       140    30    30 6               32 dynasty,allloaded
+kOYd  delete  xLuM  leaguegmdata                         4     0     0 2                0 dynasty,allloaded
+Lvfj  update  xLuM  leaguegmdata                       140     0     0 2                0 dynasty,allloaded
+DbqI  insert  AebM  leaguerookieskaterai                28   130   130 6              160 dynasty,allloaded
+hxYn  delete  AebM  leaguerookieskaterai                 4     0     0 2                0 dynasty,allloaded
+keBr  insert  kPYO  leaguegamestats                     16     0     0 2             2700 league,dynasty,allloaded
+moPE  delete  kPYO  leaguegamestats                      4     0     0 2                0 league,dynasty,allloaded
+Bqtt  insert  NFkQ  leagueplayercareerplayoffsstats     12     0     0 2             3000 dynasty,allloaded
+PcXC  delete  NFkQ  leagueplayercareerplayoffsstats      4     0     0 2                0 dynasty,allloaded
+gxsA  update  NFkQ  leagueplayercareerplayoffsstats     12     0     0 2                0 dynasty,allloaded
+aakN  insert  XrSd  leaguerookieplayerbiotable         140   155   155 6              160 dynasty,allloaded
+ksqi  delete  XrSd  leaguerookieplayerbiotable           4     0     0 2                0 dynasty,allloaded
+LpZo  update  XrSd  leaguerookieplayerbiotable           4     0     0 2                0 dynasty,allloaded
+JvZd  insert  wcLl  leaguetweaks                       256     4     4 6                4 league,dynasty,allloaded
+zFDS  delete  wcLl  leaguetweaks                         4     0     0 2                0 league,dynasty,allloaded
+wAMQ  update  wcLl  leaguetweaks                       256     0     0 2                0 league,dynasty,allloaded
+eiHK  insert  PSFv  leaguearena                        104    63    63 6               64 league,dynasty,allloaded
+coVl  delete  PSFv  leaguearena                          4     0     0 2                0 league,dynasty,allloaded
+TVyb  update  PSFv  leaguearena                        104     0     0 2                0 league,dynasty,allloaded
+xRqk  insert  dDxH  leaguerookieskaterequipment         12   130   130 6              160 dynasty,allloaded
+nzkL  delete  dDxH  leaguerookieskaterequipment          4     0     0 2                0 dynasty,allloaded
+ikxE  insert  SsSL  leaguecustompalettetable             4    20    20 6               20 league,dynasty,allloaded
+sqTr  delete  SsSL  leaguecustompalettetable             4     0     0 2                0 league,dynasty,allloaded
+DnUx  update  SsSL  leaguecustompalettetable             4     0     0 2                0 league,dynasty,allloaded
+lWmS  insert  FekM  leaguecustomfacetable                8     0     0 2              180 league,dynasty,allloaded
+rccd  delete  FekM  leaguecustomfacetable                4     0     0 2                0 league,dynasty,allloaded
+EZbT  update  FekM  leaguecustomfacetable                4     0     0 2                0 league,dynasty,allloaded
+HPAr  insert  wFSR  leagueteamseasonstats               36     0     0 2             1600 league,dynasty,allloaded
+BJaE  delete  wFSR  leagueteamseasonstats                4     0     0 2                0 league,dynasty,allloaded
+uMRy  update  wFSR  leagueteamseasonstats               36     0     0 2                0 league,dynasty,allloaded
+caki  insert  ulvZ  leaguerookiegoalieequipment         12    25    25 6               60 dynasty,allloaded
+qweN  delete  ulvZ  leaguerookiegoalieequipment          4     0     0 2                0 dynasty,allloaded
+FdZT  update  ulvZ  leaguerookiegoalieequipment          4     0     0 2                0 dynasty,allloaded
+SbrI  insert  Ewsk  leagueteamplayoffsstats             36     0     0 2              800 league,dynasty,allloaded
+wJln  delete  Ewsk  leagueteamplayoffsstats              4     0     0 2                0 league,dynasty,allloaded
+zMit  update  Ewsk  leagueteamplayoffsstats             32     0     0 2                0 league,dynasty,allloaded
+oiax  insert  ZXww  leaguenews                          32     0     0 2               64 league,dynasty,allloaded
+egAy  delete  ZXww  leaguenews                           4     0     0 2                0 league,dynasty,allloaded
+Rlnw  update  ZXww  leaguenews                          32     0     0 2                0 league,dynasty,allloaded
+OpEZ  insert  TKKI  leagueplayercareerseasonstats       16     0     0 2             3000 dynasty,allloaded
+UfKW  delete  TKKI  leagueplayercareerseasonstats        4     0     0 2                0 dynasty,allloaded
+byFg  update  TKKI  leagueplayercareerseasonstats       16     0     0 2                0 dynasty,allloaded
+OcqD  insert  TlmR  leagueteampractice                   8     2     2 6               64 league,dynasty,allloaded
+UqYs  delete  TlmR  leagueteampractice                   4     0     0 2                0 league,dynasty,allloaded
+bnru  update  TlmR  leagueteampractice                   8     0     0 2                0 league,dynasty,allloaded
+DnxP  insert  sbGR  leagueteams                        208    63    63 6               64 league,dynasty,allloaded
+dlfg  delete  sbGR  leagueteams                          4     0     0 2                0 league,dynasty,allloaded
+SoUW  update  sbGR  leagueteams                          4     0     0 2                0 league,dynasty,allloaded
+sFFn  insert  LwGR  leaguecustomteamequipmenttable      32     0     0 2              600 league,dynasty,allloaded
+OTLI  delete  LwGR  leaguecustomteamequipmenttable       4     0     0 2                0 league,dynasty,allloaded
+hygK  update  LwGR  leaguecustomteamequipmenttable      32     0     0 2                0 league,dynasty,allloaded
+naRH  insert  vHJZ  leagueoptions                      256     1     1 6                1 league,dynasty,allloaded
+lYzo  delete  vHJZ  leagueoptions                        4     0     0 2                0 league,dynasty,allloaded
+KtUe  update  vHJZ  leagueoptions                      256     0     0 2                0 league,dynasty,allloaded
+ZCvv  insert  uGze  leagueemaildata                      8  1200  1200 6             1200 dynasty,allloaded
+zYhA  delete  uGze  leagueemaildata                      4     0     0 2                0 dynasty,allloaded
+gTQc  insert  Icui  leaguerules                        256     2     2 6                2 league,dynasty,allloaded
+CpyT  delete  Icui  leaguerules                          4     0     0 2                0 league,dynasty,allloaded
+tktN  update  Icui  leaguerules                        256     0     0 2                0 league,dynasty,allloaded
+ULcv  insert  yvnq  leaguescheduletable                  8  2391  2391 6             2700 league,dynasty,allloaded
+CRmA  delete  yvnq  leaguescheduletable                  4     0     0 2                0 league,dynasty,allloaded
+tMBG  update  yvnq  leaguescheduletable                  8     0     0 2                0 league,dynasty,allloaded
+ogsK  insert  wiLv  leagueskaterai                      52  1328  1328 6             3000 league,dynasty,allloaded
+eiil  delete  wiLv  leagueskaterai                       4     0     0 2                0 league,dynasty,allloaded
+RPlb  update  wiLv  leagueskaterai                      52     0     0 2                0 league,dynasty,allloaded
+vmSc  insert  kPCA  leaguegoalieai                      48   176   176 6              600 league,dynasty,allloaded
+ZkIT  delete  kPCA  leaguegoalieai                       4     0     0 2                0 league,dynasty,allloaded
+WpPN  update  kPCA  leaguegoalieai                      48     0     0 2                0 league,dynasty,allloaded
+INYI  insert  sDbJ  leaguedraftpick                      4   150   150 6              150 dynasty,allloaded
+CHqn  delete  sDbJ  leaguedraftpick                      4     0     0 2                0 dynasty,allloaded
+talx  update  sDbJ  leaguedraftpick                      4     0     0 2                0 dynasty,allloaded
+fcdR  insert  MMxP  leagueplayerbiotable               188  1504  1504 6             3000 league,dynasty,allloaded
+lWze  delete  MMxP  leagueplayerbiotable                 4     0     0 2                0 league,dynasty,allloaded
+Krok  update  MMxP  leagueplayerbiotable                12     0     0 2                0 league,dynasty,allloaded
+aAMH  insert  juMS  leagueplayerplayoffsstats           28     0     0 2             7200 league,dynasty,allloaded
+gSOo  delete  juMS  leagueplayerplayoffsstats            4     0     0 2                0 league,dynasty,allloaded
+PPFi  update  juMS  leagueplayerplayoffsstats           24     0     0 2                0 league,dynasty,allloaded
+
+tables by (role, state): {('insert', 'populated'): 27, ('delete', 'empty'): 40, ('update', 'empty'): 31, ('insert', 'empty'): 13}
+(state, data_alloc_type, max==cur) distribution: {('populated', 6, True): 27, ('empty', 2, True): 84}
+sum(capacity x recB) over mapped tables = 1851752 ; db_size = 525416 of which record data 495484, schema-only 29932
+allocation test: schema-only + sum(capacity x recB) = 1881684 ; file - TDB base = 1881684 ; difference = 0
+alternative: db_size + sum((capacity - current) x recB) = 1881684
+save-group membership of the parents present: {'league': 83, 'dynasty': 111, 'allloaded': 111}
+dynasty-group parents: 40; present in save: 40; missing: []
+save table parents not in dynasty group: []
+directory order follows meta document order of parents (non-decreasing): True
+role sequence (first 24): ['insert', 'delete', 'insert', 'delete', 'update', 'insert', 'delete', 'update', 'insert', 'delete', 'insert', 'delete', 'insert', 'delete', 'update', 'insert', 'delete', 'insert', 'delete', 'update', 'insert', 'delete', 'update', 'insert']
+
+== populated tables: decoded samples ==
+WExj insert of HUMb (leaguetasks): cur=39 max=39 alloc=6
+   [0] index=1 enddate=39552 startdate=39352 type=1
+   [1] index=2 enddate=39627 startdate=39624 type=2
+   key column: unique=True range 1..48 ascending=True
+ioPQ insert of kGzd (leaguefreeagents): cur=311 max=311 alloc=6
+   [0] playerindex=673 ahlteamid=31
+   [1] playerindex=684 ahlteamid=31
+   key column: unique=True range 673..1503 ascending=True
+Qvri insert of ubnj (leaguetransactiontable): cur=200 max=200 alloc=6
+   [0] index=0 team=1 fromteam=1 draftpickid=1 date=0 transaction=0 playerid=1
+   [1] index=1 team=1 fromteam=1 draftpickid=1 date=0 transaction=0 playerid=1
+   key column: unique=True range 0..199 ascending=True
+xFwu insert of WRGI (leaguestates): cur=59 max=59 alloc=6
+   [0] type=0 value=39352 index=0
+   [1] type=1 value=0 index=0
+   key column: unique=True range 0..132 ascending=True
+Pwkd insert of rgQY (leaguerostertable): cur=1314 max=1314 alloc=6
+   [0] key=0 pk4_1rd=0 l2rw=0 s4=0 pp4_2lw=0 team=0 pk4_1lw=0 pp4_2rd=0 pp2c=0
+   [1] key=1 pk4_1rd=0 l2rw=0 s4=0 pp4_2lw=0 team=0 pk4_1lw=0 pp4_2rd=1 pp2c=0
+   key column: unique=True range 0..1470 ascending=True
+JVhE insert of lqNn (leaguegoalieequipment): cur=176 max=176 alloc=6
+   [0] index=3 trapperlogocolor_r=231 pads=19 trapperbasecolor_r=27 padsstrapcolor_r=27 padsstripe1color_g=88 blockerlogocolor_b=231 blockerbasecolor_b=27 benskeepcustomiftraded=1
+   [1] index=5 trapperlogocolor_r=27 pads=15 trapperbasecolor_r=27 padsstrapcolor_r=231 padsstripe1color_g=27 blockerlogocolor_b=231 blockerbasecolor_b=231 benskeepcustomiftraded=1
+   key column: unique=True range 3..1503 ascending=True
+MWzC insert of CwnF (leagueskaterequipment): cur=1328 max=1328 alloc=6
+   [0] index=0 visortype=2 pantstypecode=0 socktapestyle=0 sticktapecolor=1 visorcolor=0 gloves=2 sticktapestylecode=1 skatebrand=0
+   [1] index=1 visortype=0 pantstypecode=0 socktapestyle=0 sticktapecolor=1 visorcolor=0 gloves=1 sticktapestylecode=1 skatebrand=3
+   key column: unique=True range 0..1474 ascending=True
+wtoq insert of sziH (leaguerookiegoalieai): cur=25 max=25 alloc=6
+   [0] index=130 g_reboundcontrol=28 g_agility=34 g_paddledown=0 g_5hole=17 g_endurance=17 g_potential=13 g_consistency=19 g_speed=24
+   [1] index=131 g_reboundcontrol=24 g_agility=34 g_paddledown=0 g_5hole=24 g_endurance=25 g_potential=3 g_consistency=21 g_speed=24
+   key column: unique=True range 130..154 ascending=True
+PjxU insert of QfUJ (leagueteamstrategies): cur=63 max=63 alloc=6
+   [0] index=0 offense1=0 offense4=1 opressure=1 offense3=0 forecheck=0 pp=2 offense2=2 defense=0
+   [1] index=1 offense1=0 offense4=1 opressure=3 offense3=0 forecheck=1 pp=0 offense2=2 defense=2
+   key column: unique=True range 0..62 ascending=True
+yACS insert of xLuM (leaguegmdata): cur=30 max=30 alloc=6
+   [0] index=0 tradepoints=0 win=0 seasonticketprice=68 salary=49100000 tvcontractamount=26 beaherodollars=0 standings3=0 experiencepoints=0
+   [1] index=1 tradepoints=0 win=0 seasonticketprice=67 salary=43625000 tvcontractamount=27 beaherodollars=0 standings3=0 experiencepoints=0
+   key column: unique=True range 0..29 ascending=True
+DbqI insert of AebM (leaguerookieskaterai): cur=130 max=130 alloc=6
+   [0] index=0 p_aggression=35 p_endurance=1 p_durability=11 p_wristaccuracy=12 p_balance=21 off_defbias=6 p_style=3 p_poise=8
+   [1] index=1 p_aggression=24 p_endurance=1 p_durability=2 p_wristaccuracy=1 p_balance=20 off_defbias=9 p_style=3 p_poise=16
+   key column: unique=True range 0..129 ascending=True
+aakN insert of XrSd (leaguerookieplayerbiotable): cur=155 max=155 alloc=6
+   [0] index=0 headid=10097 state=66 birthplace='' audioid=1440 yeardrafted=0 firstname='NICK' height=25 skincolor=10
+   [1] index=1 headid=10033 state=75 birthplace='' audioid=940 yeardrafted=0 firstname='VIKTOR' height=16 skincolor=2
+   key column: unique=True range 0..154 ascending=True
+JvZd insert of wcLl (leaguetweaks): cur=4 max=4 alloc=6
+   [0] level=0 rules='\x04\x04\x04\x03\x02\x03\x05\x03\x05\x05\x05\x01\x06\x05\x04\x07\x05\x01\x05\x05\x02\x05\x04\x05\x04\x05\x05\x04\x06\x04\x04\x02\x04\x04\x04\x04'
+   [1] level=1 rules='\x04\x04\x04\x04\x04\x04\x04\x04\x04\x04\x04\x02\x05\x05\x04\x06\x04\x06\x05\x05\x04\x06\x03\x05\x03\x05\x06\x04\x05\x04\x04\x03\x04\x04\x04\x05'
+   key column: unique=True range 0..3 ascending=True
+eiHK insert of PSFv (leaguearena): cur=63 max=63 alloc=6
+   [0] index=0 icead3=1 icelogo=0 periodhorn=0 boardadshown=0 cityname='ANAHEIM, CA' roof=0 icequality=0 maxattendance=17174
+   [1] index=1 icead3=1 icelogo=1 periodhorn=1 boardadshown=0 cityname='ATLANTA, GA' roof=1 icequality=0 maxattendance=18750
+   key column: unique=True range 0..62 ascending=True
+xRqk insert of dDxH (leaguerookieskaterequipment): cur=130 max=130 alloc=6
+   [0] index=0 visortype=1 pantstypecode=0 socktapestyle=0 sticktapecolor=0 visorcolor=0 gloves=6 sticktapestylecode=0 skatebrand=6
+   [1] index=1 visortype=1 pantstypecode=0 socktapestyle=0 sticktapecolor=0 visorcolor=0 gloves=0 sticktapestylecode=0 skatebrand=9
+   key column: unique=True range 0..129 ascending=True
+ikxE insert of SsSL (leaguecustompalettetable): cur=20 max=20 alloc=6
+   [0] index=0 color_b=0 active=0 color_g=0 color_r=0
+   [1] index=1 color_b=0 active=0 color_g=0 color_r=0
+   key column: unique=True range 0..19 ascending=True
+caki insert of ulvZ (leaguerookiegoalieequipment): cur=25 max=25 alloc=6
+   [0] index=130 pads=0 pantstypecode=0 maskrank=0 hascustommask=0 hascustomblocker=0 stickcolor=251 sticktapecolor=0 trapper=1
+   [1] index=131 pads=8 pantstypecode=0 maskrank=0 hascustommask=0 hascustomblocker=0 stickcolor=247 sticktapecolor=0 trapper=19
+   key column: unique=True range 130..154 ascending=True
+OcqD insert of TlmR (leagueteampractice): cur=2 max=2 alloc=6
+   [0] index=0 g_strength=5 d_skating=5 g_puckcontrol=5 f_strength=5 g_quickness=5 f_shooting=5 f_handeye=5 d_shooting=5
+   [1] index=48 g_strength=5 d_skating=5 g_puckcontrol=5 f_strength=5 g_quickness=5 f_shooting=5 f_handeye=5 d_shooting=5
+   key column: unique=True range 0..48 ascending=True
+DnxP insert of sbGR (leagueteams): cur=63 max=63 alloc=6
+   [0] index=0 context=0 table=0 coachfirstname='RANDY' logo=0 smoke_r=252 shortname='ANAHEIM' smoke_g=95 fullname='ANAHEIM DUCKS�\x84�'
+   [1] index=1 context=0 table=0 coachfirstname='BOB' logo=0 smoke_r=70 shortname='ATLANTA' smoke_g=121 fullname='ATLANTA THRASHERS®'
+   key column: unique=True range 0..62 ascending=True
+naRH insert of vHJZ (leagueoptions): cur=1 max=1 alloc=6
+   [0] index=0 data='M\x01\x01\x01\x02\x03\x023=\x02[\x1f)[[[\x01\x01\x01\x01\x01\x02\x04\x01\x01\x02\x02\x02\x02\x02\x01\x02\x02\x02\x01\x02\x02\x02\x01\x02\x02\x01\x07\x02\x01\x05\x01\x02\x01\x01\x02\x02\x01\x02\x01\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02'
+   key column: unique=True range 0..0 ascending=True
+ZCvv insert of uGze (leagueemaildata): cur=1200 max=1200 alloc=6
+   [0] index=0 emaildata=2147483650
+   [1] index=1 emaildata=2147483659
+   key column: unique=True range 0..1199 ascending=True
+gTQc insert of Icui (leaguerules): cur=2 max=2 alloc=6
+   [0] level=0 rules='\x02\x01\x04\x03\x03\x02\x01\x02\x01\x03\x03\x01\x01\x01\x01'
+   [1] level=1 rules='\x02\x01\x04\x03\x03\x02\x01\x02\x01\x03\x03\x01\x01\x01\x01'
+   key column: unique=True range 0..1 ascending=True
+ULcv insert of yvnq (leaguescheduletable): cur=2391 max=2391 alloc=6
+   [0] index=0 round=0 status=0 day=28 league=0 month=8 home=13 away=0
+   [1] index=1 round=0 status=0 day=29 league=0 month=8 home=0 away=13
+   key column: unique=True range 0..2390 ascending=True
+ogsK insert of wiLv (leagueskaterai): cur=1328 max=1328 alloc=6
+   [0] index=0 p_aggression=22 delta_p_poise=20 p_endurance=25 delta_p_durability=25 delta_p_wristaccuracy=5 p_durability=25 p_wristaccuracy=5 p_balance=29
+   [1] index=1 p_aggression=31 delta_p_poise=35 p_endurance=36 delta_p_durability=30 delta_p_wristaccuracy=20 p_durability=30 p_wristaccuracy=20 p_balance=32
+   key column: unique=True range 0..1474 ascending=True
+vmSc insert of kPCA (leaguegoalieai): cur=176 max=176 alloc=6
+   [0] index=3 g_reboundcontrol=27 g_agility=36 delta_g_aggression=29 g_paddledown=1 g_5hole=30 g_endurance=32 delta_g_reboundcontrol=27 g_potential=30
+   [1] index=5 g_reboundcontrol=41 g_agility=40 delta_g_aggression=38 g_paddledown=1 g_5hole=40 g_endurance=43 delta_g_reboundcontrol=41 g_potential=38
+   key column: unique=True range 3..1503 ascending=True
+INYI insert of sDbJ (leaguedraftpick): cur=150 max=150 alloc=6
+   [0] index=0 teamindex=0 roundindex=0 ownerindex=0 playerindex=255
+   [1] index=1 teamindex=0 roundindex=1 ownerindex=0 playerindex=255
+   key column: unique=True range 0..149 ascending=True
+fcdR insert of MMxP (leagueplayerbiotable): cur=1504 max=1504 alloc=6
+   [0] index=0 table=0 team=0 contractis2way=0 headid=10069 haircap=1 contractlength=2 haircards_b=0 state=9
+   [1] index=1 table=0 team=0 contractis2way=0 headid=10066 haircap=1 contractlength=2 haircards_b=0 state=11
+   key column: unique=True range 0..1503 ascending=True
+

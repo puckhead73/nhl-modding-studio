@@ -25,9 +25,20 @@ fn reverse_id(id: &str) -> String {
 #[test]
 fn registry_loads_all_defs() {
     let reg = RelationRegistry::from_dir(defs_dir()).unwrap();
-    assert_eq!(reg.len(), 8, "expected the 8 shipped relationship defs");
+    assert_eq!(reg.len(), 9, "expected the 9 shipped relationship defs");
     // team-links carries two bindings, so edges exceed defs.
-    assert!(reg.edge_count() >= 9, "team-links should add a second edge");
+    assert!(reg.edge_count() >= 10, "team-links should add a second edge");
+    // LEAGUE-R1: the PS4 team -> stockleagues edge, with no null sentinels (0 and 31 are values).
+    let league = reg
+        .resolve("kOtt", "xMjj")
+        .expect("team league code -> stockleagues row");
+    assert_eq!(league.binding.target_table, "fsLK");
+    assert_eq!(league.binding.target_field, "aQrQ");
+    assert!(league.binding.no_null_sentinels);
+    assert!(
+        !reg.resolve("ubPc", "dXSB").unwrap().binding.no_null_sentinels,
+        "other edges keep the generic sentinel rule"
+    );
 }
 
 /// The EDIT-MODEL Layer 2 roster→player bridge: eGlu.XSWT → ZBac.vfEq (hop 1, 1:1), then
@@ -36,7 +47,9 @@ fn registry_loads_all_defs() {
 fn traverses_roster_to_player_bridge() {
     let reg = RelationRegistry::from_dir(defs_dir()).unwrap();
 
-    let hop1 = reg.resolve("eGlu", "XSWT").expect("hop 1 (roster slot → player index)");
+    let hop1 = reg
+        .resolve("eGlu", "XSWT")
+        .expect("hop 1 (roster slot → player index)");
     assert_eq!(hop1.binding.target_table, "ZBac");
     assert_eq!(hop1.binding.target_field, "vfEq");
     assert_eq!(hop1.relationship.cardinality, Cardinality::OneToOne);

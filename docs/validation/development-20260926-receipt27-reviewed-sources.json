@@ -1,0 +1,52 @@
+[
+  {
+    "path": "crates/studio-domain/src/attributes.rs",
+    "sha256": "1AB8749CBFB7BCAB3AD68D50F8491A38BD928444261715ACEB9315A950E16FFD",
+    "lastWriteTimeUtc": "2026-09-26T09:54:19.6627229Z"
+  },
+  {
+    "path": "crates/studio-domain/src/view.rs",
+    "sha256": "164572CB8A3DF90C77BD6DEC949E11FD5975383A5C3E7517C10BC745089ADE31",
+    "lastWriteTimeUtc": "2026-09-26T09:54:19.6637230Z"
+  },
+  {
+    "path": "crates/studio-domain/src/schedules.rs",
+    "sha256": "DF4DD446279F0062AC2F0CE83223D4901610815CAA5AE113A57ED7B68FB44F50",
+    "lastWriteTimeUtc": "2026-09-26T10:15:05.2867166Z"
+  },
+  {
+    "path": "crates/studio-domain/src/import.rs",
+    "sha256": "16FC78F1A7828A00B12D8D08F149A75DA1C2E0B4B1CD6280F4BBA3D44E1C2EF4",
+    "lastWriteTimeUtc": "2026-09-25T20:07:53.9182877Z"
+  },
+  {
+    "path": "crates/studio-domain/src/schedule_edit.rs",
+    "sha256": "5412239F96F428CE0F7B109B1031969F11CCDBBC0D515529988F4D05C9FD6706",
+    "lastWriteTimeUtc": "2026-09-26T10:08:28.3493579Z"
+  },
+  {
+    "path": "crates/studio-domain/tests/goalie_consistency.rs",
+    "sha256": "577F6BC0F9054F93E52D4AD881149F05F296DB2A99C8F860E3391E4479207D24",
+    "lastWriteTimeUtc": "2026-09-26T09:54:19.7096908Z"
+  },
+  {
+    "path": "crates/studio-domain/tests/equipment_gloves_helmets.rs",
+    "sha256": "4F1E3FEFB2843DCA6EE0E7E0ECECDFF39A8245D16406779D3A04F2E8B31E4599",
+    "lastWriteTimeUtc": "2026-09-26T10:34:35.8453628Z"
+  },
+  {
+    "path": "crates/studio-domain/tests/tournament_labels.rs",
+    "sha256": "847D34DEA12B06B458E7D2A4023FDD0C569843237BBDB1DB14D04BDFF2EB0609",
+    "lastWriteTimeUtc": "2026-09-26T10:13:42.5048193Z"
+  },
+  {
+    "path": "crates/studio-domain/tests/overall_formula.rs",
+    "sha256": "9751A5B4E1CE50F96634B3EB94F4B67C096C46A2BCAFB16476B0D4FD98213BF7",
+    "lastWriteTimeUtc": "2026-09-07T18:37:40.9539014Z"
+  },
+  {
+    "path": "app/src/components/LeagueScheduleCard.tsx",
+    "sha256": "9DF0246574D6103A37C0261C9E669DCDA0CBEA2543D748F07D391EE50A97C668",
+    "lastWriteTimeUtc": "2026-09-26T10:15:05.2887242Z"
+  }
+]

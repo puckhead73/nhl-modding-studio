@@ -8,6 +8,7 @@ import type { CareerStatsDto } from "../bindings/CareerStatsDto";
 import type { CareerSectionDto } from "../bindings/CareerSectionDto";
 import type { CareerRowDto } from "../bindings/CareerRowDto";
 import type { FieldViewDto } from "../bindings/FieldViewDto";
+import { EnumSelect } from "./EnumSelect";
 import type { PlayerViewDto } from "../bindings/PlayerViewDto";
 
 /// The Career Stats tab — the four stock career-stats sections (skater/goalie × regular
@@ -64,9 +65,19 @@ function Section({
 }) {
   const [adding, setAdding] = useState(false);
   return (
-    // No title bar — the table stands on its own (its title rides on the tooltip); Add Season
+    // A titled table: with up to four sections stacked (skater/goalie × regular season/playoffs) the
+    // column headers alone don't say which is which, so the domain's section title leads. Add Season
     // lives in a slim footer instead.
-    <section className="rounded-lg border border-slate-800 bg-slate-900/40" title={section.title}>
+    <section className="rounded-lg border border-slate-800 bg-slate-900/40">
+      <div className="flex items-baseline gap-2 border-b border-slate-800 px-3 py-1.5">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+          {section.title}
+        </h3>
+        <span className="text-[11px] text-slate-500">
+          {section.rows.length} {section.rows.length === 1 ? "season" : "seasons"}
+        </span>
+      </div>
+
       {adding && (
         <AddSeasonForm
           projectId={projectId}
@@ -177,6 +188,12 @@ function StatCell({
   if (!field.editable) {
     return <span className="px-1 font-mono text-xs text-slate-300">{field.display}</span>;
   }
+  if (field.enum_options.length > 0) {
+    return <span title={mut.error != null ? String(mut.error) : field.name}>
+      <EnumSelect label={field.name} value={field.decoded ?? 0} options={field.enum_options}
+        disabled={mut.isPending} onChange={(raw) => mut.mutate(raw)} />
+    </span>;
+  }
 
   const commit = () => {
     if (draft === baseline) return;
@@ -269,6 +286,7 @@ function AddSeasonForm({
   const [year, setYear] = useState(String(newestYear));
   const [league, setLeague] = useState(0);
   const [team, setTeam] = useState("");
+  const supportsTeam = section.team_code_supported !== false;
   const mut = useMutation({
     mutationFn: () =>
       call("add_career_season", {
@@ -277,7 +295,7 @@ function AddSeasonForm({
         playerId,
         yearEnd: Number(year),
         league,
-        team: team.trim(),
+        team: supportsTeam ? team.trim() : "",
       }),
     onSuccess: async () => {
       await qc.invalidateQueries();
@@ -287,7 +305,7 @@ function AddSeasonForm({
   });
 
   const yearOk = /^\d{4}$/.test(year.trim()) && Number(year) >= 1901 && Number(year) <= 2155;
-  const teamOk = team.trim().length > 0 && team.trim().length <= 12;
+  const teamOk = !supportsTeam || (team.trim().length > 0 && team.trim().length <= 12);
 
   return (
     <div className="flex flex-wrap items-end gap-3 border-b border-slate-800 bg-slate-900/60 px-3 py-2">
@@ -313,7 +331,7 @@ function AddSeasonForm({
           <option value={1}>AHL</option>
         </select>
       </label>
-      <label className="text-xs text-slate-400">
+      {supportsTeam ? <label className="text-xs text-slate-400">
         Team code
         <input
           type="text"
@@ -323,7 +341,7 @@ function AddSeasonForm({
           onChange={(e) => setTeam(e.target.value)}
           className="mt-0.5 block w-28 rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-100 focus:border-sky-600 focus:outline-none"
         />
-      </label>
+      </label> : <span className="pb-1 text-xs text-slate-500">This game does not store a team code in career rows.</span>}
       <button
         type="button"
         disabled={!yearOk || !teamOk || mut.isPending}

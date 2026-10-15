@@ -1,0 +1,59 @@
+﻿{
+  "root": "\\\\?\\H:\\Emulators\\ShadPS4\\Games\\CUSA37933",
+  "layers": [
+    {
+      "name": "Data",
+      "head": 981806,
+      "base": null,
+      "superbundles": [
+        "Gen4b/contentlaunchsb",
+        "Gen4b/contentsb",
+        "Gen4b/globals",
+        "Gen4b/globalsfull",
+        "Gen4b/levels/game/game",
+        "Gen4b/movies",
+        "Gen4b/ui",
+        "Gen4b/worldssb"
+      ],
+      "initfs": "encrypted (opaque)",
+      "chunkmanifest": true
+    },
+    {
+      "name": "Patch",
+      "head": 1023354,
+      "base": 981806,
+      "superbundles": [
+        "Gen4b/contentlaunchsb",
+        "Gen4b/contentsb",
+        "Gen4b/globals",
+        "Gen4b/globalsfull",
+        "Gen4b/levels/game/game",
+        "Gen4b/movies",
+        "Gen4b/ui",
+        "Gen4b/worldssb"
+      ],
+      "initfs": "encrypted (opaque)",
+      "chunkmanifest": false
+    }
+  ],
+  "warnings": [
+    "Patch/Gen4b/ui.toc is missing",
+    "Read-only catalogue: roster editing and deployment are not enabled. Data and Patch are shown separately."
+  ]
+}
+{"assets":569902,"bundles":78819,"empty":1,"first_bundle":"gen4b/ui/textures/common/icons/badges/small/eashl_skill_badge_502_launch_ui_textures_common_brt","layer":"Data","superbundle":"Gen4b/contentlaunchsb","toc_chunks":81704}
+{"assets":535526,"bundles":44249,"empty":0,"first_bundle":"gen4b/content/character/skater/league/nhl/columbus/adidas/away/branding_jersey_adidas_columbus_away_coeff_array_player_team_brt","layer":"Data","superbundle":"Gen4b/contentsb","toc_chunks":67903}
+{"assets":6549,"bundles":42,"empty":0,"first_bundle":"gen4b/gauntlet/outdoor_bank_sfx_ambience_thelot.sbr","layer":"Data","superbundle":"Gen4b/globals","toc_chunks":3264}
+{"assets":160352,"bundles":767,"empty":0,"first_bundle":"gen4b/content/nis/nis_bap_sm01_ind_var1_0/nis_bap_sm01_ind_var1_0_set_sublevel","layer":"Data","superbundle":"Gen4b/globalsfull","toc_chunks":1041}
+{"assets":14375,"bundles":1,"empty":0,"first_bundle":"gen4b/levels/game/game","layer":"Data","superbundle":"Gen4b/levels/game/game","toc_chunks":7120}
+{"assets":1218,"bundles":345,"empty":0,"first_bundle":"gen4b/nhl/data/common/movie/transitions/free_for_all_couch_transition_wipe_out_movie_common_brt","layer":"Data","superbundle":"Gen4b/movies","toc_chunks":389}
+{"assets":315,"bundles":10,"empty":0,"first_bundle":"gen4b/globals/configs/fonts_config_languageformat_swedish","layer":"Data","superbundle":"Gen4b/ui","toc_chunks":0}
+{"assets":333187,"bundles":5482,"empty":1,"first_bundle":"gen4b/content/worlds/stadiums/eashltier5_513/eashltier5_513","layer":"Data","superbundle":"Gen4b/worldssb","toc_chunks":9633}
+{"assets":202775,"bundles":8074,"empty":0,"first_bundle":"gen4b/content/character/skater/player/skate/bauer/vapor/components/player_skate_bauer_vapor_hyperlite_guard_half_dark_launch_player_skate_brt","layer":"Patch","superbundle":"Gen4b/contentlaunchsb","toc_chunks":6164}
+{"assets":231762,"bundles":10723,"empty":0,"first_bundle":"gen4b/content/character/skater/league/elite_swiss/kloten_flyers/nineties/away/sock_nineties_kloten_flyers_away_hq_asp_player_team_brt","layer":"Patch","superbundle":"Gen4b/contentsb","toc_chunks":13100}
+{"assets":6436,"bundles":4,"empty":0,"first_bundle":"gen4b/sfx/hornbank.sbr","layer":"Patch","superbundle":"Gen4b/globals","toc_chunks":187}
+{"assets":159282,"bundles":467,"empty":0,"first_bundle":"gen4b/content/nis/nis_bap_pa01_neutral_ind_var1_0/nis_bap_pa01_neutral_ind_var1_0","layer":"Patch","superbundle":"Gen4b/globalsfull","toc_chunks":0}
+{"assets":14392,"bundles":1,"empty":0,"first_bundle":"gen4b/levels/game/game","layer":"Patch","superbundle":"Gen4b/levels/game/game","toc_chunks":7}
+{"assets":33,"bundles":8,"empty":0,"first_bundle":"gen4b/nhl/data/common/movie/mainmenu/nhl24_main_menu_s1_2_movie_common_brt","layer":"Patch","superbundle":"Gen4b/movies","toc_chunks":7}
+{"layer":"Patch","status":"missing TOC; no overlay inferred","superbundle":"Gen4b/ui"}
+{"assets":289855,"bundles":910,"empty":0,"first_bundle":"gen4b/content/worlds/stadiums/customdallas_702/environment_common","layer":"Patch","superbundle":"Gen4b/worldssb","toc_chunks":75}

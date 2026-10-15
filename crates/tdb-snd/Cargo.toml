@@ -1,0 +1,18 @@
+[package]
+name = "tdb-snd"
+description = "Read-only readers for EA SND10 sound banks (SBle / SBbe .sbr + .sbs), the SNS block stream and the PS4 EA-MP3 (codec 0x0b) sized-frame grammar, plus a diagnostic MPEG-1 Layer III decode through Symphonia."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[dependencies]
+thiserror = "1"
+symphonia-bundle-mp3 = { version = "0.6", default-features = false, features = ["mp3"] }
+symphonia-core = "0.6"
+tdb-speex = { path = "../tdb-speex" }
+
+[dev-dependencies]
+sha2 = "0.10"
+serde_json = "1"

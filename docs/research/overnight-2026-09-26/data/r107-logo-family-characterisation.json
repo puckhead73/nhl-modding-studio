@@ -1,0 +1,1695 @@
+{
+ "note": "R107 (P1, review 2026-09-26) - neutral characterisation of `rendering/logo/texlib_{x}_{y}_{z}` on X360 / PS3 Legacy and NHL 15, against\nthe kit families (jersey / pant / sock / nameplate) and the centre-ice family. Read-only over the loose trees (the R104 identity samples\nshowed loose = unwrapped member for every family on these four trees; this probe does not re-derive precedence).\n\nPer member (RW4, first 128 KB; full read only when a descriptor lies beyond): file table, name dictionary (0xEC0010: name -> descriptor\nchunk index) and each 0x20003 raster descriptor decoded with the layouts the developer reader documents (read, not edited):\n  X360 RW4xb2 descriptor: +35 u8 format (0x52 DXT1 / 0x53 DXT3 / 0x54 DXT5, other values recorded raw), +37 u8 h -> (h+1)*8,\n                          +38 u16 w -> (w+1) & 0x1FFF        (crates/tdb-rx2/src/texlib.rs module doc)\n  PS3  RW4ps3 descriptor: +32..43 signature (low u16 of the u32 words at +32 / +36 / +40: 0x6007 0x6007 0x8035 = ARGB8; 0x83F3 0x83F3 0xFFFF = DXT5; others recorded raw),\n                          +48 u16 w, +50 u16 h, +52 u8 mips   (crates/tdb-rx2/src/texlib_ps3.rs module doc)\nReported per family: members, rasters per member, raster name pattern (digits -> #) and for each name suffix (the trailing index k of\n`logo_{a}_{b}_{c}_{k}` or the `_cm/_nm/_sm` role) the (w, h, format) distribution; tuple intersections of the logo family with each kit\nfamily's file tuples (id, style, variant) with full residual counts both ways; logo ids vs centre-ice ids.\nConsumer search (bounded, typed-string only): every loose file under the tree root smaller than 8 MB whose extension is not a texture /\nmesh / audio / archive container, scanned for `rendering/logo`, `logo/texlib`, `texlib_%`, `logo_%`, `%d_%d_%d`; hits listed with path +\ncontext. A miss is a scoped negative (executables are encrypted / not scanned; archive members not scanned).\nUsage: python r107_logo_family_characterisation.py <out.json>\n",
+ "trees": {
+  "x360-legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "families": {
+    "logo": {
+     "members": 1926,
+     "rasters_per_member": {
+      "3": 1926
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "k=0": {
+       "256x128 DXT5": 1926
+      },
+      "k=1": {
+       "128x64 DXT5": 1926
+      },
+      "k=2": {
+       "128x128 DXT5": 1926
+      }
+     }
+    },
+    "jersey": {
+     "members": 905,
+     "rasters_per_member": {
+      "6": 901,
+      "7": 3,
+      "1": 1
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "font_#_#_#_cm": {
+       "512x512 DXT5": 904
+      },
+      "font_#_#_#_nm": {
+       "512x512 fmt:0x71": 904
+      },
+      "font_#_#_#_sm": {
+       "512x512 DXT1": 904
+      },
+      "jersey_#_#_#_#_nm": {
+       "1024x1024 fmt:0x71": 908
+      },
+      "jersey_#_#_#_cm": {
+       "1024x1024 DXT1": 904
+      },
+      "jersey_#_#_#_sm": {
+       "1024x1024 DXT1": 904
+      }
+     }
+    },
+    "nameplate": {
+     "members": 904,
+     "rasters_per_member": {
+      "1": 904
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "name_#_#_#_cm": {
+       "256x256 ARGB8": 904
+      }
+     }
+    },
+    "pant": {
+     "members": 959,
+     "rasters_per_member": {
+      "3": 931,
+      "5": 28
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "pant_#_#_#_cm": {
+       "512x512 DXT1": 959
+      },
+      "pant_#_#_#_nm": {
+       "512x512 fmt:0x71": 959
+      },
+      "pant_#_#_#_rm": {
+       "4x8 DXT1": 28
+      },
+      "pant_#_#_#_roughness": {
+       "4x8 DXT1": 28
+      },
+      "pant_#_#_#_sm": {
+       "256x256 DXT1": 959
+      }
+     }
+    },
+    "sock": {
+     "members": 946,
+     "rasters_per_member": {
+      "1": 946
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "sock_#_#_#_cm": {
+       "1024x512 DXT1": 946
+      }
+     }
+    },
+    "centerlogo": {
+     "members": 231,
+     "rasters_per_member": {
+      "1": 231
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "centerlogo_#_cm": {
+       "1024x1024 DXT3": 231
+      }
+     }
+    }
+   },
+   "logo_vs_kit_tuples": {
+    "jersey": {
+     "logo": 1926,
+     "jersey": 905,
+     "common": 796,
+     "jersey_only": 109,
+     "logo_only": 1130,
+     "jersey_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "nameplate": {
+     "logo": 1926,
+     "nameplate": 904,
+     "common": 796,
+     "nameplate_only": 108,
+     "logo_only": 1130,
+     "nameplate_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "pant": {
+     "logo": 1926,
+     "pant": 959,
+     "common": 840,
+     "pant_only": 119,
+     "logo_only": 1086,
+     "pant_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       66,
+       1,
+       0
+      ],
+      [
+       66,
+       1,
+       1
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       69,
+       1,
+       2
+      ],
+      [
+       69,
+       1,
+       3
+      ]
+     ]
+    },
+    "sock": {
+     "logo": 1926,
+     "sock": 946,
+     "common": 829,
+     "sock_only": 117,
+     "logo_only": 1097,
+     "sock_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       66,
+       1,
+       0
+      ],
+      [
+       66,
+       1,
+       1
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       69,
+       1,
+       2
+      ],
+      [
+       69,
+       1,
+       3
+      ]
+     ]
+    }
+   },
+   "ids": {
+    "logo_ids": 348,
+    "centerlogo_ids": 231,
+    "kit_ids": 222,
+    "logo_and_centerlogo": 212,
+    "logo_and_kit": 221,
+    "logo_ids_without_kit_files": 127,
+    "kit_ids_without_logo_files": 1,
+    "sample_logo_ids_without_kit": [
+     32,
+     33,
+     77,
+     79,
+     80,
+     87,
+     111,
+     130,
+     140,
+     146,
+     147,
+     185,
+     186,
+     188,
+     195
+    ]
+   },
+   "logo_bc_grid": {
+    "0,0": 307,
+    "0,1": 305,
+    "0,2": 121,
+    "0,3": 100,
+    "0,4": 59,
+    "0,5": 38,
+    "0,6": 22,
+    "0,7": 16,
+    "0,8": 6,
+    "0,9": 6,
+    "0,10": 13,
+    "0,11": 13,
+    "0,12": 2,
+    "0,13": 2,
+    "0,14": 2,
+    "0,15": 2,
+    "0,16": 2,
+    "0,17": 2,
+    "0,18": 2,
+    "1,0": 239,
+    "1,1": 239,
+    "1,2": 135,
+    "1,3": 104,
+    "1,4": 74,
+    "1,5": 47,
+    "1,6": 26,
+    "1,7": 16,
+    "1,8": 2,
+    "1,9": 2,
+    "1,10": 2,
+    "1,11": 2,
+    "1,12": 2,
+    "1,13": 2,
+    "1,14": 2,
+    "1,15": 2,
+    "1,16": 2,
+    "1,17": 2,
+    "1,18": 2,
+    "1,19": 2,
+    "1,20": 2
+   },
+   "consumer_search": {
+    "files_scanned": 740,
+    "hits": []
+   }
+  },
+  "ps3-legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR",
+   "families": {
+    "logo": {
+     "members": 1928,
+     "rasters_per_member": {
+      "3": 1928
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "k=0": {
+       "256x128 DXT5 m8": 1928
+      },
+      "k=1": {
+       "128x64 DXT5 m7": 1928
+      },
+      "k=2": {
+       "128x128 DXT5 m8": 1928
+      }
+     }
+    },
+    "jersey": {
+     "members": 905,
+     "rasters_per_member": {
+      "6": 901,
+      "7": 3,
+      "1": 1
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "font_#_#_#_cm": {
+       "512x512 DXT5 m10": 904
+      },
+      "font_#_#_#_nm": {
+       "512x512 DXT5 m10": 904
+      },
+      "font_#_#_#_sm": {
+       "512x512 sig:83f1/83f1/ffff m10": 904
+      },
+      "jersey_#_#_#_#_nm": {
+       "1024x1024 DXT5 m11": 908
+      },
+      "jersey_#_#_#_cm": {
+       "1024x1024 sig:83f1/83f1/ffff m11": 904
+      },
+      "jersey_#_#_#_sm": {
+       "1024x1024 sig:83f1/83f1/ffff m11": 904
+      }
+     }
+    },
+    "nameplate": {
+     "members": 904,
+     "rasters_per_member": {
+      "1": 904
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "name_#_#_#_cm": {
+       "256x256 ARGB8 m9": 904
+      }
+     }
+    },
+    "pant": {
+     "members": 959,
+     "rasters_per_member": {
+      "3": 931,
+      "5": 28
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "pant_#_#_#_cm": {
+       "512x512 sig:83f1/83f1/ffff m10": 959
+      },
+      "pant_#_#_#_nm": {
+       "512x512 DXT5 m10": 959
+      },
+      "pant_#_#_#_rm": {
+       "4x4 sig:83f1/83f1/ffff m3": 28
+      },
+      "pant_#_#_#_roughness": {
+       "4x4 sig:83f1/83f1/ffff m3": 28
+      },
+      "pant_#_#_#_sm": {
+       "256x256 sig:83f1/83f1/ffff m9": 959
+      }
+     }
+    },
+    "sock": {
+     "members": 946,
+     "rasters_per_member": {
+      "1": 946
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "sock_#_#_#_cm": {
+       "1024x512 sig:83f1/83f1/ffff m11": 946
+      }
+     }
+    },
+    "centerlogo": {
+     "members": 231,
+     "rasters_per_member": {
+      "1": 231
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "centerlogo_#_cm": {
+       "1024x1024 sig:83f2/83f2/ffff m11": 231
+      }
+     }
+    }
+   },
+   "logo_vs_kit_tuples": {
+    "jersey": {
+     "logo": 1928,
+     "jersey": 905,
+     "common": 796,
+     "jersey_only": 109,
+     "logo_only": 1132,
+     "jersey_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "nameplate": {
+     "logo": 1928,
+     "nameplate": 904,
+     "common": 796,
+     "nameplate_only": 108,
+     "logo_only": 1132,
+     "nameplate_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "pant": {
+     "logo": 1928,
+     "pant": 959,
+     "common": 842,
+     "pant_only": 117,
+     "logo_only": 1086,
+     "pant_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       66,
+       1,
+       0
+      ],
+      [
+       66,
+       1,
+       1
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       69,
+       1,
+       2
+      ],
+      [
+       69,
+       1,
+       3
+      ]
+     ]
+    },
+    "sock": {
+     "logo": 1928,
+     "sock": 946,
+     "common": 829,
+     "sock_only": 117,
+     "logo_only": 1099,
+     "sock_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       66,
+       1,
+       0
+      ],
+      [
+       66,
+       1,
+       1
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       69,
+       1,
+       2
+      ],
+      [
+       69,
+       1,
+       3
+      ]
+     ]
+    }
+   },
+   "ids": {
+    "logo_ids": 348,
+    "centerlogo_ids": 231,
+    "kit_ids": 222,
+    "logo_and_centerlogo": 212,
+    "logo_and_kit": 221,
+    "logo_ids_without_kit_files": 127,
+    "kit_ids_without_logo_files": 1,
+    "sample_logo_ids_without_kit": [
+     32,
+     33,
+     77,
+     79,
+     80,
+     87,
+     111,
+     130,
+     140,
+     146,
+     147,
+     185,
+     186,
+     188,
+     195
+    ]
+   },
+   "logo_bc_grid": {
+    "0,0": 307,
+    "0,1": 305,
+    "0,2": 121,
+    "0,3": 100,
+    "0,4": 59,
+    "0,5": 38,
+    "0,6": 22,
+    "0,7": 16,
+    "0,8": 6,
+    "0,9": 6,
+    "0,10": 13,
+    "0,11": 13,
+    "0,12": 2,
+    "0,13": 2,
+    "0,14": 2,
+    "0,15": 2,
+    "0,16": 2,
+    "0,17": 2,
+    "0,18": 2,
+    "1,0": 239,
+    "1,1": 239,
+    "1,2": 135,
+    "1,3": 105,
+    "1,4": 75,
+    "1,5": 47,
+    "1,6": 26,
+    "1,7": 16,
+    "1,8": 2,
+    "1,9": 2,
+    "1,10": 2,
+    "1,11": 2,
+    "1,12": 2,
+    "1,13": 2,
+    "1,14": 2,
+    "1,15": 2,
+    "1,16": 2,
+    "1,17": 2,
+    "1,18": 2,
+    "1,19": 2,
+    "1,20": 2
+   },
+   "consumer_search": {
+    "files_scanned": 604,
+    "hits": []
+   }
+  },
+  "x360-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15",
+   "families": {
+    "logo": {
+     "members": 1784,
+     "rasters_per_member": {
+      "3": 1784
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "k=0": {
+       "256x128 DXT5": 1784
+      },
+      "k=1": {
+       "128x64 DXT5": 1784
+      },
+      "k=2": {
+       "128x128 DXT5": 1784
+      }
+     }
+    },
+    "jersey": {
+     "members": 683,
+     "rasters_per_member": {
+      "6": 680,
+      "7": 3
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "font_#_#_#_cm": {
+       "512x512 DXT5": 683
+      },
+      "font_#_#_#_nm": {
+       "512x512 fmt:0x71": 683
+      },
+      "font_#_#_#_sm": {
+       "512x512 DXT1": 683
+      },
+      "jersey_#_#_#_#_nm": {
+       "1024x1024 fmt:0x71": 686
+      },
+      "jersey_#_#_#_cm": {
+       "1024x1024 DXT1": 683
+      },
+      "jersey_#_#_#_sm": {
+       "1024x1024 DXT1": 683
+      }
+     }
+    },
+    "nameplate": {
+     "members": 683,
+     "rasters_per_member": {
+      "1": 683
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "name_#_#_#_cm": {
+       "256x256 ARGB8": 683
+      }
+     }
+    },
+    "pant": {
+     "members": 684,
+     "rasters_per_member": {
+      "3": 656,
+      "5": 28
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "pant_#_#_#_cm": {
+       "512x512 DXT1": 684
+      },
+      "pant_#_#_#_nm": {
+       "512x512 fmt:0x71": 684
+      },
+      "pant_#_#_#_rm": {
+       "4x8 DXT1": 28
+      },
+      "pant_#_#_#_roughness": {
+       "4x8 DXT1": 28
+      },
+      "pant_#_#_#_sm": {
+       "256x256 DXT1": 684
+      }
+     }
+    },
+    "sock": {
+     "members": 683,
+     "rasters_per_member": {
+      "1": 683
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "sock_#_#_#_cm": {
+       "1024x512 DXT1": 683
+      }
+     }
+    },
+    "centerlogo": {
+     "members": 226,
+     "rasters_per_member": {
+      "1": 226
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "centerlogo_#_cm": {
+       "1024x1024 DXT3": 226
+      }
+     }
+    }
+   },
+   "logo_vs_kit_tuples": {
+    "jersey": {
+     "logo": 1784,
+     "jersey": 683,
+     "common": 567,
+     "jersey_only": 116,
+     "logo_only": 1217,
+     "jersey_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "nameplate": {
+     "logo": 1784,
+     "nameplate": 683,
+     "common": 567,
+     "nameplate_only": 116,
+     "logo_only": 1217,
+     "nameplate_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "pant": {
+     "logo": 1784,
+     "pant": 684,
+     "common": 568,
+     "pant_only": 116,
+     "logo_only": 1216,
+     "pant_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "sock": {
+     "logo": 1784,
+     "sock": 683,
+     "common": 567,
+     "sock_only": 116,
+     "logo_only": 1217,
+     "sock_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    }
+   },
+   "ids": {
+    "logo_ids": 339,
+    "centerlogo_ids": 226,
+    "kit_ids": 213,
+    "logo_and_centerlogo": 202,
+    "logo_and_kit": 207,
+    "logo_ids_without_kit_files": 132,
+    "kit_ids_without_logo_files": 6,
+    "sample_logo_ids_without_kit": [
+     32,
+     33,
+     69,
+     77,
+     79,
+     80,
+     87,
+     96,
+     111,
+     127,
+     130,
+     140,
+     146,
+     147,
+     185
+    ]
+   },
+   "logo_bc_grid": {
+    "0,0": 301,
+    "0,1": 300,
+    "0,2": 118,
+    "0,3": 96,
+    "0,4": 56,
+    "0,5": 35,
+    "0,6": 17,
+    "0,7": 13,
+    "0,8": 3,
+    "0,9": 3,
+    "0,10": 2,
+    "0,11": 2,
+    "0,12": 2,
+    "0,13": 2,
+    "0,14": 2,
+    "0,15": 2,
+    "0,16": 2,
+    "0,17": 2,
+    "0,18": 2,
+    "1,0": 238,
+    "1,1": 238,
+    "1,2": 122,
+    "1,3": 89,
+    "1,4": 55,
+    "1,5": 26,
+    "1,6": 17,
+    "1,7": 13,
+    "1,8": 2,
+    "1,9": 2,
+    "1,10": 2,
+    "1,11": 2,
+    "1,12": 2,
+    "1,13": 2,
+    "1,14": 2,
+    "1,15": 2,
+    "1,16": 2,
+    "1,17": 2,
+    "1,18": 2,
+    "1,19": 2,
+    "1,20": 2
+   },
+   "consumer_search": {
+    "files_scanned": 766,
+    "hits": []
+   }
+  },
+  "ps3-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR",
+   "families": {
+    "logo": {
+     "members": 1786,
+     "rasters_per_member": {
+      "3": 1786
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "k=0": {
+       "256x128 DXT5 m8": 1786
+      },
+      "k=1": {
+       "128x64 DXT5 m7": 1786
+      },
+      "k=2": {
+       "128x128 DXT5 m8": 1786
+      }
+     }
+    },
+    "jersey": {
+     "members": 683,
+     "rasters_per_member": {
+      "6": 680,
+      "7": 3
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "font_#_#_#_cm": {
+       "512x512 DXT5 m10": 683
+      },
+      "font_#_#_#_nm": {
+       "512x512 DXT5 m10": 683
+      },
+      "font_#_#_#_sm": {
+       "512x512 sig:83f1/83f1/ffff m10": 683
+      },
+      "jersey_#_#_#_#_nm": {
+       "1024x1024 DXT5 m11": 686
+      },
+      "jersey_#_#_#_cm": {
+       "1024x1024 sig:83f1/83f1/ffff m11": 683
+      },
+      "jersey_#_#_#_sm": {
+       "1024x1024 sig:83f1/83f1/ffff m11": 683
+      }
+     }
+    },
+    "nameplate": {
+     "members": 683,
+     "rasters_per_member": {
+      "1": 683
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "name_#_#_#_cm": {
+       "256x256 ARGB8 m9": 683
+      }
+     }
+    },
+    "pant": {
+     "members": 684,
+     "rasters_per_member": {
+      "3": 656,
+      "5": 28
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "pant_#_#_#_cm": {
+       "512x512 sig:83f1/83f1/ffff m10": 684
+      },
+      "pant_#_#_#_nm": {
+       "512x512 DXT5 m10": 684
+      },
+      "pant_#_#_#_rm": {
+       "4x4 sig:83f1/83f1/ffff m3": 28
+      },
+      "pant_#_#_#_roughness": {
+       "4x4 sig:83f1/83f1/ffff m3": 28
+      },
+      "pant_#_#_#_sm": {
+       "256x256 sig:83f1/83f1/ffff m9": 684
+      }
+     }
+    },
+    "sock": {
+     "members": 683,
+     "rasters_per_member": {
+      "1": 683
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "sock_#_#_#_cm": {
+       "1024x512 sig:83f1/83f1/ffff m11": 683
+      }
+     }
+    },
+    "centerlogo": {
+     "members": 226,
+     "rasters_per_member": {
+      "1": 226
+     },
+     "unnamed_rasters": 0,
+     "roles": {
+      "centerlogo_#_cm": {
+       "1024x1024 sig:83f2/83f2/ffff m11": 226
+      }
+     }
+    }
+   },
+   "logo_vs_kit_tuples": {
+    "jersey": {
+     "logo": 1786,
+     "jersey": 683,
+     "common": 567,
+     "jersey_only": 116,
+     "logo_only": 1219,
+     "jersey_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "nameplate": {
+     "logo": 1786,
+     "nameplate": 683,
+     "common": 567,
+     "nameplate_only": 116,
+     "logo_only": 1219,
+     "nameplate_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "pant": {
+     "logo": 1786,
+     "pant": 684,
+     "common": 568,
+     "pant_only": 116,
+     "logo_only": 1218,
+     "pant_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    },
+    "sock": {
+     "logo": 1786,
+     "sock": 683,
+     "common": 567,
+     "sock_only": 116,
+     "logo_only": 1219,
+     "sock_only_sample": [
+      [
+       51,
+       0,
+       6
+      ],
+      [
+       51,
+       0,
+       7
+      ],
+      [
+       67,
+       1,
+       0
+      ],
+      [
+       67,
+       1,
+       1
+      ],
+      [
+       68,
+       0,
+       0
+      ],
+      [
+       68,
+       0,
+       1
+      ],
+      [
+       71,
+       1,
+       0
+      ],
+      [
+       71,
+       1,
+       1
+      ],
+      [
+       72,
+       1,
+       0
+      ],
+      [
+       72,
+       1,
+       1
+      ]
+     ]
+    }
+   },
+   "ids": {
+    "logo_ids": 339,
+    "centerlogo_ids": 226,
+    "kit_ids": 213,
+    "logo_and_centerlogo": 202,
+    "logo_and_kit": 207,
+    "logo_ids_without_kit_files": 132,
+    "kit_ids_without_logo_files": 6,
+    "sample_logo_ids_without_kit": [
+     32,
+     33,
+     69,
+     77,
+     79,
+     80,
+     87,
+     96,
+     111,
+     127,
+     130,
+     140,
+     146,
+     147,
+     185
+    ]
+   },
+   "logo_bc_grid": {
+    "0,0": 301,
+    "0,1": 300,
+    "0,2": 118,
+    "0,3": 96,
+    "0,4": 56,
+    "0,5": 35,
+    "0,6": 17,
+    "0,7": 13,
+    "0,8": 3,
+    "0,9": 3,
+    "0,10": 2,
+    "0,11": 2,
+    "0,12": 2,
+    "0,13": 2,
+    "0,14": 2,
+    "0,15": 2,
+    "0,16": 2,
+    "0,17": 2,
+    "0,18": 2,
+    "1,0": 238,
+    "1,1": 238,
+    "1,2": 122,
+    "1,3": 90,
+    "1,4": 56,
+    "1,5": 26,
+    "1,6": 17,
+    "1,7": 13,
+    "1,8": 2,
+    "1,9": 2,
+    "1,10": 2,
+    "1,11": 2,
+    "1,12": 2,
+    "1,13": 2,
+    "1,14": 2,
+    "1,15": 2,
+    "1,16": 2,
+    "1,17": 2,
+    "1,18": 2,
+    "1,19": 2,
+    "1,20": 2
+   },
+   "consumer_search": {
+    "files_scanned": 629,
+    "hits": []
+   }
+  }
+ }
+}

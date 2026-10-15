@@ -52,8 +52,15 @@ export function compareJerseys(a: TeamJerseyDto, b: TeamJerseyDto): number {
 
 /** `jJpM` labels with confirmed in-game meaning; other codes surface as `Equipment #N`. */
 export const EQUIPMENT_TYPE_LABELS: Record<number, string> = {
+  // Skater.
   5: "Gloves",
   8: "Helmet",
+  // Goalie (hHbv types 1/2/3). The type→piece assignment is a FLAGGED best-guess
+  // that must match GOALIE_TYPE_* in crates/studio-api/src/registry.rs — correct
+  // both together once verified in-game.
+  1: "Blocker",
+  2: "Trapper",
+  3: "Pads",
 };
 
 export const ERA_LABELS: Record<number, string> = { 0: "Reebok", 1: "90's" };
@@ -243,27 +250,8 @@ export function styleCode(label: string | null | undefined): string {
   );
 }
 
-/** Player Style vocabulary (`dSvy.QgFs`, confirmed) — borrowed for the provisional per-slot
- *  `eGlu.QgFs` archetype dropdown on the Lines roster rail. */
-export const PLAYER_STYLE_LABELS: Record<number, string> = {
-  1: "Defensive Defenseman",
-  2: "Offensive Defenseman",
-  3: "Enforcer Defenseman",
-  4: "Two-Way Defenseman",
-  5: "Grinder",
-  6: "Playmaker",
-  7: "Sniper",
-  8: "Power Forward",
-  9: "Two-Way Forward",
-  10: "Enforcer Forward",
-};
-
-/** Goalie Style vocabulary (`mHuy.QgFs`, confirmed). */
-export const GOALIE_STYLE_LABELS: Record<number, string> = {
-  0: "Standup",
-  1: "Hybrid",
-  2: "Butterfly",
-};
+// The roster-rail style labels come from the domain per title (research R122; 27 Sep 2026) — the former
+// Legacy-only constants here labelled every title's roster cell with NHL Legacy names.
 
 // ---------------------------------------------------------------------------
 // Lineup status (`eGlu.hSZj`) — the real per-slot dressed/scratched flag (Spike S4).

@@ -1,0 +1,265 @@
+{
+ "note": "R106 (rev. 2026-09-26: edge wording per review research-20260926-r102-r106-review.md; v1 output preserved as r106-team-art-inspection-graph-v1-20260925T2217.json) - team-art INSPECTION graph (Legacy X360 / PS3 first; review 2026-09-25 R97-R101): derived only from published JSONs (R56 handoff\nfacts cited, R102 layout, R103 per-row joins, R103b / R104 aliases and payload references). No new measurement. Nodes = DB identities and\nasset objects; edges = typed relations with an evidence status. It is an inspection graph: it lists what a re-key / rename would have to\ntouch or check, and it records every open requirement; it authorises nothing.\nStatuses: established (per-row or per-member measurement, cited) | association (naming association, runtime unobserved) | candidate |\nscoped-negative (a search that found nothing inside a stated scope) | open (not measured / not designed).\nUsage: python r106_team_art_inspection_graph.py <out.json>\n",
+ "trees": {
+  "x360-legacy": {
+   "nodes": {
+    "db.exhibitionteams.artid": {
+     "kind": "db-identity",
+     "note": "shared art key (handoff 04); several rows per id"
+    },
+    "db.stockteamjerseys(style,teamartid,variant)": {
+     "kind": "db-row-key",
+     "rows": 703
+    },
+    "asset.kit_jersey": {
+     "kind": "asset-family",
+     "members_parsed": 905,
+     "refused": 0
+    },
+    "asset.nameplate": {
+     "kind": "asset-family",
+     "members_parsed": 904,
+     "refused": 0
+    },
+    "asset.kit_pant": {
+     "kind": "asset-family",
+     "members_parsed": 959,
+     "refused": 0
+    },
+    "asset.kit_sock": {
+     "kind": "asset-family",
+     "members_parsed": 946,
+     "refused": 0
+    },
+    "asset.rink_logo": {
+     "kind": "asset-family",
+     "members_parsed": 1926,
+     "refused": 0
+    },
+    "asset.center_logo": {
+     "kind": "asset-family",
+     "members_parsed": 231,
+     "refused": 0
+    },
+    "asset.fe_crest t{id}.big": {
+     "kind": "asset-family",
+     "members": 318,
+     "container": "BIGF",
+     "inner_names": "shared vocabulary (0, 1, sg1, sg2 + numbered pairs in a minority) - meaning open"
+    },
+    "archive.EB name table": {
+     "kind": "container-structure",
+     "archives": 13
+    }
+   },
+   "edges": [
+    {
+     "from": "db.stockteamjerseys(style,teamartid,variant)",
+     "to": "asset.kit_jersey / kit_pant / kit_sock",
+     "relation": "file name = texlib_/sock_{style}_{teamartid}_{variant}",
+     "status": "established",
+     "evidence": "R56 per-row join (703 / 703 Legacy); developer resolver"
+    },
+    {
+     "from": "db.stockteamjerseys(style,teamartid,variant)",
+     "to": "asset.nameplate",
+     "relation": "file name = name_{style}_{teamartid}_{variant}_cm",
+     "status": "association",
+     "evidence": "R103: 703 / 703 rows, every discriminating row; runtime selection unobserved"
+    },
+    {
+     "from": "db.exhibitionteams.artid",
+     "to": "asset.rink_logo",
+     "relation": "file name texlib_{artid}_{a}_{b}; a, b = candidates",
+     "status": "candidate",
+     "evidence": "R103: ref. resolves 687 / 703 rows, 1244 tuples without a row; R105: a larger family overlapping the jersey file tuples (Legacy X360: 796 of 905 jersey tuples in common, 109 jersey-only, 1 130 logo-only); 'retired variants' and 'per-kit logo' are hypotheses; family label 'rink logo' inherited, unverified"
+    },
+    {
+     "from": "db.exhibitionteams.artid",
+     "to": "asset.fe_crest t{id}.big",
+     "relation": "file name t{artid}.big",
+     "status": "established",
+     "evidence": "handoff 04 / 2026-09-18 join"
+    },
+    {
+     "from": "asset.* (archive member)",
+     "to": "asset.* (loose file)",
+     "relation": "byte-identical alias after unwrap",
+     "status": "established (scoped)",
+     "evidence": "full-family comparison for nameplate and 'rink logo' members only (R103b {'jersey:chunklzx:decoded==loose': 904, 'logo:chunklzx:decoded==loose': 1926}); jersey / pant / sock / centre logo: 12 sampled pairs per family (R104 {'kit_jersey:chunklzx:equal': 12, 'nameplate:chunklzx:equal': 12, 'kit_pant:chunklzx:equal': 12, 'kit_sock:chunklzx:equal': 12, 'rink_logo:chunklzx:equal': 12, 'center_logo:chunklzx:equal': 12}) - other pairs unchecked; equal bytes say nothing about which copy the game reads"
+    },
+    {
+     "from": "asset.* (RW4 member)",
+     "to": "asset.* (same member)",
+     "relation": "name dictionary 0xEC0010 names every raster with the member's own tuple (jersey_/font_/pant_/sock_/name_/logo_/centerlogo_ + numbers)",
+     "status": "established",
+     "evidence": "R104 self_name {'kit_jersey:self': 5428, 'nameplate:self': 904, 'kit_pant:self': 2933, 'kit_sock:self': 946, 'rink_logo:self': 5778, 'center_logo:self': 231}; renaming a file leaves these internal names stale - whether the runtime looks rasters up by these names is open"
+    },
+    {
+     "from": "asset.* (RW4 member)",
+     "to": "other members / arenas",
+     "relation": "RW4 subreference / atom tables and external-arena list",
+     "status": "decoded: empty tables + three constant values",
+     "evidence": "R104: decoded subreference counts {'0': 5871}, atom counts {'0': 5871} (empty tables); external-arena list = three observed constant values {'04000000 ffb00000 04000000': 5871} on every member (their meaning is not decoded); see the separately scoped string / hash search edge; internal raster names remain a known dependency (self-name edge)"
+    },
+    {
+     "from": "asset.* (RW4 member, non-payload bytes)",
+     "to": "other team-art paths",
+     "relation": "ASCII stem or djb2 path hash",
+     "status": "scoped-negative",
+     "evidence": "R104: ASCII outside dictionaries 0; djb2 hits 0 over 5979008 bytes (random expectation 23.294); raster payloads not searched"
+    },
+    {
+     "from": "archive.EB name table",
+     "to": "asset.* (archive member)",
+     "relation": "fixed-width slot {u16 dir | basename}, row = {block, 0, size, djb2(path)}, rows in payload-offset order",
+     "status": "established",
+     "evidence": "R102 (71 archives, six trees)"
+    }
+   ],
+   "open_requirements": [
+    "same-length rename vs changed-length name-table rebuild (slot width = longest basename; dir table; payload offsets; archive_size)",
+    "header word 0x10 (unexplained)",
+    "runtime lookup key (name / hash / index / offset) and cache behaviour",
+    "internal RW4 raster names (0xEC0010) - rewrite or keep; runtime use unknown",
+    "loose-vs-archive precedence (which alias the game reads)",
+    "destination occupancy across DB team-art namespace, loose-only files, other archives / titles",
+    "rink-logo positions 2-3 and the family meaning",
+    "FE crest BIGF inner-name vocabulary (numbered pairs)",
+    "raster payload bytes (not searched; noise-dominated)",
+    "titles other than Legacy for payload references; PS4 (renames refused)",
+    "transaction / recovery design"
+   ]
+  },
+  "ps3-legacy": {
+   "nodes": {
+    "db.exhibitionteams.artid": {
+     "kind": "db-identity",
+     "note": "shared art key (handoff 04); several rows per id"
+    },
+    "db.stockteamjerseys(style,teamartid,variant)": {
+     "kind": "db-row-key",
+     "rows": 703
+    },
+    "asset.kit_jersey": {
+     "kind": "asset-family",
+     "members_parsed": 905,
+     "refused": 0
+    },
+    "asset.nameplate": {
+     "kind": "asset-family",
+     "members_parsed": 904,
+     "refused": 0
+    },
+    "asset.kit_pant": {
+     "kind": "asset-family",
+     "members_parsed": 959,
+     "refused": 0
+    },
+    "asset.kit_sock": {
+     "kind": "asset-family",
+     "members_parsed": 946,
+     "refused": 0
+    },
+    "asset.rink_logo": {
+     "kind": "asset-family",
+     "members_parsed": 1928,
+     "refused": 0
+    },
+    "asset.center_logo": {
+     "kind": "asset-family",
+     "members_parsed": 231,
+     "refused": 0
+    },
+    "asset.fe_crest t{id}.big": {
+     "kind": "asset-family",
+     "members": 318,
+     "container": "BIGF",
+     "inner_names": "shared vocabulary (0, 1, sg1, sg2 + numbered pairs in a minority) - meaning open"
+    },
+    "archive.EB name table": {
+     "kind": "container-structure",
+     "archives": 13
+    }
+   },
+   "edges": [
+    {
+     "from": "db.stockteamjerseys(style,teamartid,variant)",
+     "to": "asset.kit_jersey / kit_pant / kit_sock",
+     "relation": "file name = texlib_/sock_{style}_{teamartid}_{variant}",
+     "status": "established",
+     "evidence": "R56 per-row join (703 / 703 Legacy); developer resolver"
+    },
+    {
+     "from": "db.stockteamjerseys(style,teamartid,variant)",
+     "to": "asset.nameplate",
+     "relation": "file name = name_{style}_{teamartid}_{variant}_cm",
+     "status": "association",
+     "evidence": "R103: 703 / 703 rows, every discriminating row; runtime selection unobserved"
+    },
+    {
+     "from": "db.exhibitionteams.artid",
+     "to": "asset.rink_logo",
+     "relation": "file name texlib_{artid}_{a}_{b}; a, b = candidates",
+     "status": "candidate",
+     "evidence": "R103: ref. resolves 687 / 703 rows, 1246 tuples without a row; R105: a larger family overlapping the jersey file tuples (Legacy X360: 796 of 905 jersey tuples in common, 109 jersey-only, 1 130 logo-only); 'retired variants' and 'per-kit logo' are hypotheses; family label 'rink logo' inherited, unverified"
+    },
+    {
+     "from": "db.exhibitionteams.artid",
+     "to": "asset.fe_crest t{id}.big",
+     "relation": "file name t{artid}.big",
+     "status": "established",
+     "evidence": "handoff 04 / 2026-09-18 join"
+    },
+    {
+     "from": "asset.* (archive member)",
+     "to": "asset.* (loose file)",
+     "relation": "byte-identical alias after unwrap",
+     "status": "established (scoped)",
+     "evidence": "full-family comparison for nameplate and 'rink logo' members only (R103b {'jersey:chunkzip:decoded==loose': 904, 'logo:chunkzip:decoded==loose': 1928}); jersey / pant / sock / centre logo: 12 sampled pairs per family (R104 {'kit_jersey:chunkzip:equal': 12, 'nameplate:chunkzip:equal': 12, 'kit_pant:chunkzip:equal': 12, 'kit_sock:chunkzip:equal': 12, 'rink_logo:chunkzip:equal': 12, 'center_logo:chunkzip:equal': 12}) - other pairs unchecked; equal bytes say nothing about which copy the game reads"
+    },
+    {
+     "from": "asset.* (RW4 member)",
+     "to": "asset.* (same member)",
+     "relation": "name dictionary 0xEC0010 names every raster with the member's own tuple (jersey_/font_/pant_/sock_/name_/logo_/centerlogo_ + numbers)",
+     "status": "established",
+     "evidence": "R104 self_name {'kit_jersey:self': 5428, 'nameplate:self': 904, 'kit_pant:self': 2933, 'kit_sock:self': 946, 'rink_logo:self': 5784, 'center_logo:self': 231}; renaming a file leaves these internal names stale - whether the runtime looks rasters up by these names is open"
+    },
+    {
+     "from": "asset.* (RW4 member)",
+     "to": "other members / arenas",
+     "relation": "RW4 subreference / atom tables and external-arena list",
+     "status": "decoded: empty tables + three constant values",
+     "evidence": "R104: decoded subreference counts {'0': 5873}, atom counts {'0': 5873} (empty tables); external-arena list = three observed constant values {'04000000 ffb00000 04000000': 5873} on every member (their meaning is not decoded); see the separately scoped string / hash search edge; internal raster names remain a known dependency (self-name edge)"
+    },
+    {
+     "from": "asset.* (RW4 member, non-payload bytes)",
+     "to": "other team-art paths",
+     "relation": "ASCII stem or djb2 path hash",
+     "status": "scoped-negative",
+     "evidence": "R104: ASCII outside dictionaries 0; djb2 hits 0 over 5999500 bytes (random expectation 23.382); raster payloads not searched"
+    },
+    {
+     "from": "archive.EB name table",
+     "to": "asset.* (archive member)",
+     "relation": "fixed-width slot {u16 dir | basename}, row = {block, 0, size, djb2(path)}, rows in payload-offset order",
+     "status": "established",
+     "evidence": "R102 (71 archives, six trees)"
+    }
+   ],
+   "open_requirements": [
+    "same-length rename vs changed-length name-table rebuild (slot width = longest basename; dir table; payload offsets; archive_size)",
+    "header word 0x10 (unexplained)",
+    "runtime lookup key (name / hash / index / offset) and cache behaviour",
+    "internal RW4 raster names (0xEC0010) - rewrite or keep; runtime use unknown",
+    "loose-vs-archive precedence (which alias the game reads)",
+    "destination occupancy across DB team-art namespace, loose-only files, other archives / titles",
+    "rink-logo positions 2-3 and the family meaning",
+    "FE crest BIGF inner-name vocabulary (numbered pairs)",
+    "raster payload bytes (not searched; noise-dominated)",
+    "titles other than Legacy for payload references; PS4 (renames refused)",
+    "transaction / recovery design"
+   ]
+  }
+ }
+}

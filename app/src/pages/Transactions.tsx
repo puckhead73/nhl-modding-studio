@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
 import { call } from "../lib/client";
+import { queueFieldWrite } from "../lib/fieldWrites";
+import { refreshFields } from "../lib/useFieldEdit";
 import { useProject } from "../lib/project";
 import { Pill, Spinner } from "../components/primitives";
 import { ratingToneClass } from "../lib/ratingColor";
@@ -82,10 +83,23 @@ export function TransactionsPage() {
       .map(([id, label]) => ({ id, label }));
   }, [allTeams]);
 
-  const refresh = async () => {
-    await qc.invalidateQueries();
-    update(await call("project_summary", { projectId }));
-  };
+  const refresh = () => { void refreshFields(qc, projectId, update).catch(e => setError(String(e))); };
+
+  // Show moves in both rosters immediately, retaining snapshots for validation failures.
+  async function projectRoster(moves: Array<{ player: PlayerSummaryDto; team: number | null }>) {
+    await Promise.all([qc.cancelQueries({ queryKey: ["players", projectId] }), qc.cancelQueries({ queryKey: ["free-agents", projectId] })]);
+    const before = qc.getQueryData<PlayerSummaryDto[]>(["players", projectId]);
+    const beforePool = qc.getQueryData<PlayerSummaryDto[]>(["free-agents", projectId]);
+    qc.setQueryData<PlayerSummaryDto[]>(["players", projectId], rows => rows?.map(p => {
+      const move = moves.find(m => m.player.player_id === p.player_id);
+      return move ? { ...p, team_id: move.team } : p;
+    }));
+    qc.setQueryData<PlayerSummaryDto[]>(["free-agents", projectId], rows => [
+      ...(rows ?? []).filter(p => !moves.some(m => m.player.player_id === p.player_id)),
+      ...moves.filter(m => m.team === null).map(m => ({ ...m.player, team_id: null })),
+    ]);
+    return () => { qc.setQueryData(["players", projectId], before); qc.setQueryData(["free-agents", projectId], beforePool); };
+  }
 
   async function runAction(
     action: TxAction,
@@ -95,12 +109,16 @@ export function TransactionsPage() {
   ) {
     setBusy(true);
     setError(null);
+    let rollback: (() => void) | undefined;
     try {
+      if (subject.player && (action === "freeAgent" || (["move", "sign"].includes(action) && otherTeam !== null))) {
+        rollback = await projectRoster([{ player: subject.player, team: action === "freeAgent" ? null : otherTeam }]);
+      }
       const pid = subject.player?.player_id;
       switch (action) {
         case "move":
           if (pid == null || fromTeam === null || otherTeam === null) return;
-          await call("move_player", { projectId, player: pid, fromTeam, toTeam: otherTeam });
+          await queueFieldWrite(projectId, () => call("move_player", { projectId, player: pid, fromTeam, toTeam: otherTeam }));
           break;
         case "copy":
           if (pid == null || otherTeam === null) return;
@@ -108,11 +126,11 @@ export function TransactionsPage() {
           break;
         case "freeAgent":
           if (pid == null || fromTeam === null) return;
-          await call("release_to_fa", { projectId, fromTeam, player: pid });
+          await queueFieldWrite(projectId, () => call("release_to_fa", { projectId, fromTeam, player: pid }));
           break;
         case "sign":
           if (pid == null || otherTeam === null) return;
-          await call("sign_from_fa", { projectId, player: pid, toTeam: otherTeam });
+          await queueFieldWrite(projectId, () => call("sign_from_fa", { projectId, player: pid, toTeam: otherTeam }));
           break;
         case "delete":
           if (pid == null) return;
@@ -129,6 +147,7 @@ export function TransactionsPage() {
       }
       await refresh();
     } catch (e) {
+      rollback?.();
       setError(String(e));
     } finally {
       setBusy(false);
@@ -154,19 +173,23 @@ export function TransactionsPage() {
   // Trade = swap the two columns' selected occupants in place (both must be rostered, on different
   // teams). Acts on both selections at once, so it lives at the parent, not a column.
   async function runTrade() {
-    if (!selA?.team_id || !selB?.team_id) return;
+    if (selA?.team_id == null || selB?.team_id == null || selA.team_id === selB.team_id) return;
     setBusy(true);
     setError(null);
+    const a = selA, b = selB;
+    let rollback: (() => void) | undefined;
     try {
-      await call("trade_slots", {
+      rollback = await projectRoster([{ player: a, team: b.team_id }, { player: b, team: a.team_id }]);
+      await queueFieldWrite(projectId, () => call("trade_slots", {
         projectId,
-        aTeam: selA.team_id,
-        aPlayer: selA.player_id,
-        bTeam: selB.team_id,
-        bPlayer: selB.player_id,
-      });
+        aTeam: a.team_id!,
+        aPlayer: a.player_id,
+        bTeam: b.team_id!,
+        bPlayer: b.player_id,
+      }));
       await refresh();
     } catch (e) {
+      rollback?.();
       setError(String(e));
     } finally {
       setBusy(false);
@@ -174,7 +197,7 @@ export function TransactionsPage() {
   }
 
   const canTrade =
-    !!selA?.team_id && !!selB?.team_id && selA.team_id !== selB.team_id && !busy;
+    selA?.team_id != null && selB?.team_id != null && selA.team_id !== selB.team_id && !busy;
 
   if (teams.isLoading || players.isLoading) return <Spinner label="Loading rosters…" />;
   if (teams.isError) return <p className="text-rose-400">{String(teams.error)}</p>;
@@ -215,7 +238,7 @@ export function TransactionsPage() {
             tone="primary"
             disabled={!canTrade}
             title={
-              !selA?.team_id || !selB?.team_id
+              selA?.team_id == null || selB?.team_id == null
                 ? "Select a rostered player in each column"
                 : selA.team_id === selB.team_id
                   ? "Pick players on two different teams"
@@ -427,7 +450,7 @@ function TransactionColumn({
           poolLoading ? (
             <Spinner label="Loading free agents…" />
           ) : freeAgents.length === 0 ? (
-            <Hint>No free agents — every indexed player holds a roster slot.</Hint>
+            <Hint>No free agents available.</Hint>
           ) : (
             <RosterTable
               roster={freeAgents}
@@ -585,13 +608,7 @@ function RosterTable({
               </td>
               <td className="px-2 py-1">{p.first_name || "—"}</td>
               <td className="px-2 py-1 font-medium">
-                <Link
-                  to={`/app/database/players/${p.player_id}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="hover:text-sky-300"
-                >
-                  {p.last_name || "—"}
-                </Link>
+                {p.last_name || "—"}
               </td>
               <td className="px-2 py-1 text-slate-400">{p.position_label || "—"}</td>
               <td

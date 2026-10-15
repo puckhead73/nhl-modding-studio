@@ -1,0 +1,4590 @@
+{
+ "note": "R114 (review 2026-09-26 r107-r112, queue item 4) - layout facts a generator must preserve, per distinct source (R113 source list and\nhash de-duplication) and per round-robin / stock-partition / irregular league table: current_records vs max_records, the field list with\nbit widths, round / status value sets, whether `index` equals the row position, whether rows are in season-date order (Studio's\nseason_key: month >= 8 first, then month, day), dates span, and same-day double bookings (a slot in two games on one date). Read-only.\nUsage: python r114_schedule_table_layout.py <out.json>\n",
+ "sources": [
+  {
+   "label": "xbox360-nhl07",
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "tables": {
+    "intlelitserienschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3,
+      "status": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 77,
+     "same_day_double_bookings": 0
+    },
+    "intldelschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3,
+      "status": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      16
+     ],
+     "last_date (month0, day0)": [
+      2,
+      12
+     ],
+     "distinct_dates": 77,
+     "same_day_double_bookings": 0
+    },
+    "intlsmliigaschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3,
+      "status": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      8
+     ],
+     "distinct_dates": 110,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps3-nhl07",
+   "alias_of": "xbox360-nhl07"
+  },
+  {
+   "label": "xbox360-nhl08",
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "tables": {}
+  },
+  {
+   "label": "ps3-nhl08",
+   "alias_of": "xbox360-nhl08"
+  },
+  {
+   "label": "xbox360-nhl09",
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "tables": {}
+  },
+  {
+   "label": "ps3-nhl09",
+   "alias_of": "xbox360-nhl09"
+  },
+  {
+   "label": "xbox360-nhl10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "tables": {
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      12
+     ],
+     "distinct_dates": 70,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      8
+     ],
+     "last_date (month0, day0)": [
+      1,
+      18
+     ],
+     "distinct_dates": 85,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      10
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 67,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 420,
+     "max_records": 420,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      3
+     ],
+     "last_date (month0, day0)": [
+      2,
+      6
+     ],
+     "distinct_dates": 60,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 406,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 97,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps3-nhl10",
+   "alias_of": "xbox360-nhl10"
+  },
+  {
+   "label": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 612,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      8
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 139,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 680,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      22
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 133,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 792,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      16
+     ],
+     "last_date (month0, day0)": [
+      2,
+      13
+     ],
+     "distinct_dates": 129,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      4
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": false,
+     "first_date (month0, day0)": [
+      8,
+      8
+     ],
+     "last_date (month0, day0)": [
+      2,
+      4
+     ],
+     "distinct_dates": 78,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      1,
+      21
+     ],
+     "distinct_dates": 69,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 420,
+     "max_records": 420,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      2
+     ],
+     "last_date (month0, day0)": [
+      2,
+      20
+     ],
+     "distinct_dates": 100,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 406,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 84,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps3-nhl11",
+   "alias_of": "xbox360-nhl11"
+  },
+  {
+   "label": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 578,
+     "max_records": 578,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      7
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 145,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 680,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      17
+     ],
+     "distinct_dates": 132,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 792,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      21
+     ],
+     "last_date (month0, day0)": [
+      2,
+      17
+     ],
+     "distinct_dates": 135,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      14
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 93,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      16
+     ],
+     "last_date (month0, day0)": [
+      1,
+      19
+     ],
+     "distinct_dates": 82,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      7
+     ],
+     "last_date (month0, day0)": [
+      1,
+      24
+     ],
+     "distinct_dates": 73,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      2
+     ],
+     "last_date (month0, day0)": [
+      2,
+      12
+     ],
+     "distinct_dates": 76,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 406,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      14
+     ],
+     "last_date (month0, day0)": [
+      2,
+      14
+     ],
+     "distinct_dates": 96,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps3-nhl12",
+   "alias_of": "xbox360-nhl12"
+  },
+  {
+   "label": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 612,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 130,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 680,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 134,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 792,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 141,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      4
+     ],
+     "distinct_dates": 85,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": false,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      1,
+      25
+     ],
+     "distinct_dates": 62,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      1,
+      25
+     ],
+     "distinct_dates": 67,
+     "same_day_double_bookings": 21
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      10
+     ],
+     "distinct_dates": 71,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 406,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      11
+     ],
+     "distinct_dates": 95,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps3-nhl13",
+   "alias_of": "xbox360-nhl13"
+  },
+  {
+   "label": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 612,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      14
+     ],
+     "distinct_dates": 125,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 680,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      15
+     ],
+     "distinct_dates": 135,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 792,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      15
+     ],
+     "distinct_dates": 132,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 95,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      6
+     ],
+     "distinct_dates": 59,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      3
+     ],
+     "distinct_dates": 81,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 66,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 406,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      12
+     ],
+     "distinct_dates": 106,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps3-nhl14",
+   "alias_of": "xbox360-nhl14"
+  },
+  {
+   "label": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 612,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      20
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 680,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      23
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 138,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 792,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 135,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      4
+     ],
+     "distinct_dates": 81,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 52,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      1,
+      23
+     ],
+     "distinct_dates": 74,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 71,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 406,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      11
+     ],
+     "distinct_dates": 94,
+     "same_day_double_bookings": 1
+    }
+   }
+  },
+  {
+   "label": "ps3-nhl15",
+   "alias_of": "xbox360-nhl15"
+  },
+  {
+   "label": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 612,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      18
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 680,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      23
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 130,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 792,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      23
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 133,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 88,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      10
+     ],
+     "last_date (month0, day0)": [
+      2,
+      3
+     ],
+     "distinct_dates": 56,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      8
+     ],
+     "last_date (month0, day0)": [
+      1,
+      26
+     ],
+     "distinct_dates": 75,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 364,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      10
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 60,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 450,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      10
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 112,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps3-nhllegacy",
+   "alias_of": "xbox360-nhllegacy"
+  },
+  {
+   "label": "ps4-nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      20
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      23
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 138,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 852,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 135,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 390,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      4
+     ],
+     "distinct_dates": 81,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 52,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 360,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      1,
+      23
+     ],
+     "distinct_dates": 74,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 71,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 466,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      11
+     ],
+     "distinct_dates": 94,
+     "same_day_double_bookings": 1
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      18
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      23
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 130,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 852,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      23
+     ],
+     "last_date (month0, day0)": [
+      2,
+      19
+     ],
+     "distinct_dates": 133,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 88,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      10
+     ],
+     "last_date (month0, day0)": [
+      2,
+      3
+     ],
+     "distinct_dates": 56,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 360,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      8
+     ],
+     "last_date (month0, day0)": [
+      1,
+      26
+     ],
+     "distinct_dates": 75,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      10
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 60,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 510,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      10
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 112,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      21
+     ],
+     "last_date (month0, day0)": [
+      2,
+      17
+     ],
+     "distinct_dates": 126,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      18
+     ],
+     "distinct_dates": 132,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 852,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      22
+     ],
+     "last_date (month0, day0)": [
+      2,
+      18
+     ],
+     "distinct_dates": 133,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      16
+     ],
+     "last_date (month0, day0)": [
+      2,
+      8
+     ],
+     "distinct_dates": 94,
+     "same_day_double_bookings": 0
+    },
+    "wcschedule": {
+     "current_records": 17,
+     "max_records": 17,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0,
+      3,
+      4
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      16
+     ],
+     "last_date (month0, day0)": [
+      9,
+      0
+     ],
+     "distinct_dates": 11,
+     "same_day_double_bookings": 5
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      8
+     ],
+     "last_date (month0, day0)": [
+      2,
+      2
+     ],
+     "distinct_dates": 53,
+     "same_day_double_bookings": 0
+    },
+    "echlschedule": {
+     "current_records": 972,
+     "max_records": 1032,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      9,
+      13
+     ],
+     "last_date (month0, day0)": [
+      3,
+      7
+     ],
+     "distinct_dates": 142,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 360,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      6
+     ],
+     "last_date (month0, day0)": [
+      1,
+      24
+     ],
+     "distinct_dates": 71,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      1,
+      25
+     ],
+     "distinct_dates": 69,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 510,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      12
+     ],
+     "distinct_dates": 96,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 130,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      17
+     ],
+     "distinct_dates": 129,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 852,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      21
+     ],
+     "last_date (month0, day0)": [
+      2,
+      17
+     ],
+     "distinct_dates": 125,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      15
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 81,
+     "same_day_double_bookings": 0
+    },
+    "austrianschedule": {
+     "current_records": 324,
+     "max_records": 354,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0,
+      1
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      7
+     ],
+     "last_date (month0, day0)": [
+      2,
+      24
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "swedish2ndschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      6
+     ],
+     "distinct_dates": 106,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      7
+     ],
+     "last_date (month0, day0)": [
+      2,
+      3
+     ],
+     "distinct_dates": 53,
+     "same_day_double_bookings": 0
+    },
+    "echlschedule": {
+     "current_records": 972,
+     "max_records": 1032,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      9,
+      12
+     ],
+     "last_date (month0, day0)": [
+      3,
+      7
+     ],
+     "distinct_dates": 145,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      6
+     ],
+     "last_date (month0, day0)": [
+      2,
+      4
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      7
+     ],
+     "last_date (month0, day0)": [
+      2,
+      3
+     ],
+     "distinct_dates": 83,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 480,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      7
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 97,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl19-base",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      15
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 748,
+     "max_records": 852,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 123,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      14
+     ],
+     "last_date (month0, day0)": [
+      2,
+      13
+     ],
+     "distinct_dates": 71,
+     "same_day_double_bookings": 0
+    },
+    "austrianschedule": {
+     "current_records": 324,
+     "max_records": 354,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0,
+      1
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      24
+     ],
+     "distinct_dates": 69,
+     "same_day_double_bookings": 0
+    },
+    "swedish2ndschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 89,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 53,
+     "same_day_double_bookings": 0
+    },
+    "echlschedule": {
+     "current_records": 972,
+     "max_records": 1032,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      9,
+      11
+     ],
+     "last_date (month0, day0)": [
+      3,
+      6
+     ],
+     "distinct_dates": 144,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      3
+     ],
+     "distinct_dates": 75,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      2
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 480,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      13
+     ],
+     "distinct_dates": 105,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": false,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      20
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 133,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 748,
+     "max_records": 808,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 127,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      11
+     ],
+     "distinct_dates": 62,
+     "same_day_double_bookings": 0
+    },
+    "austrianschedule": {
+     "current_records": 270,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0,
+      1
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 66,
+     "same_day_double_bookings": 0
+    },
+    "swedish2ndschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      17
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 91,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 52,
+     "same_day_double_bookings": 0
+    },
+    "echlschedule": {
+     "current_records": 936,
+     "max_records": 996,
+     "fields": {
+      "away": 6,
+      "day": 5,
+      "home": 6,
+      "index": 11,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      9,
+      10
+     ],
+     "last_date (month0, day0)": [
+      3,
+      4
+     ],
+     "distinct_dates": 146,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 480,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      13
+     ],
+     "distinct_dates": 96,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)",
+   "alias_of": "ps4-nhl19-base"
+  },
+  {
+   "label": "ps4-nhl20-real",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": false,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      20
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 133,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 748,
+     "max_records": 808,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 127,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      11
+     ],
+     "distinct_dates": 62,
+     "same_day_double_bookings": 0
+    },
+    "austrianschedule": {
+     "current_records": 270,
+     "max_records": 300,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0,
+      1
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 66,
+     "same_day_double_bookings": 0
+    },
+    "swedish2ndschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      17
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 91,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      5
+     ],
+     "distinct_dates": 52,
+     "same_day_double_bookings": 0
+    },
+    "echlschedule": {
+     "current_records": 936,
+     "max_records": 996,
+     "fields": {
+      "away": 6,
+      "day": 5,
+      "home": 6,
+      "index": 11,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      9,
+      10
+     ],
+     "last_date (month0, day0)": [
+      3,
+      4
+     ],
+     "distinct_dates": 146,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      1,
+      28
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      12
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 79,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 480,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      13
+     ],
+     "distinct_dates": 96,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl19-patch56",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      19
+     ],
+     "last_date (month0, day0)": [
+      2,
+      15
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 748,
+     "max_records": 852,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      16
+     ],
+     "distinct_dates": 123,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      14
+     ],
+     "last_date (month0, day0)": [
+      2,
+      13
+     ],
+     "distinct_dates": 71,
+     "same_day_double_bookings": 0
+    },
+    "austrianschedule": {
+     "current_records": 324,
+     "max_records": 354,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0,
+      1
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      9
+     ],
+     "distinct_dates": 69,
+     "same_day_double_bookings": 0
+    },
+    "swedish2ndschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 89,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      7
+     ],
+     "distinct_dates": 53,
+     "same_day_double_bookings": 0
+    },
+    "echlschedule": {
+     "current_records": 972,
+     "max_records": 1032,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 11,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      9,
+      11
+     ],
+     "last_date (month0, day0)": [
+      3,
+      6
+     ],
+     "distinct_dates": 144,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 330,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      20
+     ],
+     "last_date (month0, day0)": [
+      2,
+      3
+     ],
+     "distinct_dates": 75,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 394,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      2
+     ],
+     "distinct_dates": 80,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 450,
+     "max_records": 480,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      null
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      13
+     ],
+     "last_date (month0, day0)": [
+      2,
+      13
+     ],
+     "distinct_dates": 105,
+     "same_day_double_bookings": 0
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl15-patch00",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "tables": {
+    "qmjhlschedule": {
+     "current_records": 612,
+     "max_records": 672,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      20
+     ],
+     "distinct_dates": 131,
+     "same_day_double_bookings": 0
+    },
+    "ohlschedule": {
+     "current_records": 680,
+     "max_records": 740,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      23
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 138,
+     "same_day_double_bookings": 0
+    },
+    "whlschedule": {
+     "current_records": 792,
+     "max_records": 852,
+     "fields": {
+      "away": 5,
+      "day": 5,
+      "home": 5,
+      "index": 10,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      18
+     ],
+     "last_date (month0, day0)": [
+      2,
+      21
+     ],
+     "distinct_dates": 135,
+     "same_day_double_bookings": 0
+    },
+    "swedishschedule": {
+     "current_records": 330,
+     "max_records": 390,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      4
+     ],
+     "distinct_dates": 81,
+     "same_day_double_bookings": 0
+    },
+    "czechschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 52,
+     "same_day_double_bookings": 0
+    },
+    "swissschedule": {
+     "current_records": 300,
+     "max_records": 360,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      1,
+      23
+     ],
+     "distinct_dates": 74,
+     "same_day_double_bookings": 0
+    },
+    "germanschedule": {
+     "current_records": 364,
+     "max_records": 424,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      11
+     ],
+     "last_date (month0, day0)": [
+      2,
+      0
+     ],
+     "distinct_dates": 71,
+     "same_day_double_bookings": 0
+    },
+    "finnishschedule": {
+     "current_records": 406,
+     "max_records": 466,
+     "fields": {
+      "away": 4,
+      "day": 5,
+      "home": 4,
+      "index": 9,
+      "month": 4,
+      "round": 3,
+      "status": 2
+     },
+     "round_values": [
+      0
+     ],
+     "status_values": [
+      0
+     ],
+     "index_equals_position": true,
+     "season_date_order": true,
+     "first_date (month0, day0)": [
+      8,
+      9
+     ],
+     "last_date (month0, day0)": [
+      2,
+      11
+     ],
+     "distinct_dates": 94,
+     "same_day_double_bookings": 1
+    }
+   }
+  }
+ ]
+}

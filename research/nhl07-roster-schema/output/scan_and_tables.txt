@@ -1,0 +1,169 @@
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1 --scan
+file size 1598888
+  TDB at 0x1c size 10476 (0x28ec) tables 31 ends 0x2908
+
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1 0x1c
+TDB @0x1c version=8 BE=True db_size=10476 tables=31 hdr_crc=4054dea1
+  DZfz (canon zfZD) block=0x12c rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=23 ni=0
+  YvhR (canon RhvY) block=0x2c4 rec=20B/159bits max=0 cur=0 alloc=2 unk18=0xffff nf=27 ni=0
+  znPC (canon CPnz) block=0x49c rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=11 ni=0
+  JhBt (canon tBhJ) block=0x574 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  mASv (canon vSAm) block=0x5ac rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=11 ni=0
+  eUOR (canon ROUe) block=0x684 rec=508B/4063bits max=0 cur=0 alloc=2 unk18=0xffff nf=45 ni=0
+  oCMe (canon eMCo) block=0x97c rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  HHLk (canon kLHH) block=0x9b4 rec=504B/4031bits max=0 cur=0 alloc=2 unk18=0xffff nf=44 ni=0
+  MVOx (canon xOVM) block=0xc9c rec=504B/4031bits max=0 cur=0 alloc=2 unk18=0xffff nf=42 ni=0
+  KboR (canon RobK) block=0xf64 rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=23 ni=0
+  Exae (canon eaxE) block=0x10fc rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  rcpY (canon Ypcr) block=0x1134 rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=23 ni=0
+  sAMA (canon AMAs) block=0x12cc rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  mGOv (canon vOGm) block=0x1304 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  fyFF (canon FFyf) block=0x133c rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=4 ni=0
+  dULq (canon qLUd) block=0x13a4 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  LZbD (canon DbZL) block=0x13dc rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  Frps (canon sprF) block=0x1434 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  ibGM (canon MGbi) block=0x146c rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=70 ni=0
+  AtUj (canon jUtA) block=0x18f4 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  vozd (canon dzov) block=0x192c rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=70 ni=0
+  CvSu (canon uSvC) block=0x1db4 rec=504B/4031bits max=0 cur=0 alloc=2 unk18=0xffff nf=43 ni=0
+  tMYP (canon PYMt) block=0x208c rec=68B/543bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  nGCg (canon gCGn) block=0x20d4 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  Iblm (canon mlbI) block=0x210c rec=68B/543bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  CTnc (canon cnTC) block=0x2154 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  RosT (canon TsoR) block=0x21ac rec=20B/159bits max=0 cur=0 alloc=2 unk18=0xffff nf=27 ni=0
+  uyGF (canon FGyu) block=0x2384 rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=23 ni=0
+  KERl (canon lREK) block=0x251c rec=20B/159bits max=0 cur=0 alloc=2 unk18=0xffff nf=27 ni=0
+  wKzK (canon KzKw) block=0x26f4 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  zrsU (canon Usrz) block=0x272c rec=20B/159bits max=0 cur=0 alloc=2 unk18=0xffff nf=27 ni=0
+
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl07/databases/NHL07NG.db --scan
+file size 4189776
+  TDB at 0x0 size 4189776 (0x3fee50) tables 90 ends 0x3fee50
+
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl07/databases/NHL07NG.db
+TDB @0x0 version=8 BE=True db_size=4189776 tables=90 hdr_crc=d9a12bdb
+  WluS (canon SulW) block=0x2e8 rec=560B/4479bits max=0 cur=0 alloc=2 unk18=0xffff nf=33 ni=0
+  Vzjq (canon qjzV) block=0x520 rec=36B/287bits max=0 cur=0 alloc=2 unk18=0xffff nf=88 ni=0
+  YzeG (canon GezY) block=0xac8 rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=23 ni=0
+  oDHy (canon yHDo) block=0xc60 rec=20B/159bits max=0 cur=0 alloc=2 unk18=0xffff nf=27 ni=0
+  MqdK (canon KdqM) block=0xe38 rec=508B/4063bits max=0 cur=0 alloc=2 unk18=0xffff nf=45 ni=0
+  xClF (canon FlCx) block=0x1130 rec=260B/2079bits max=173 cur=173 alloc=2 unk18=0xffff nf=3 ni=0
+  YELf (canon fLEY) block=0xc13c rec=564B/4511bits max=0 cur=0 alloc=2 unk18=0xffff nf=16 ni=0
+  TrVV (canon VVrT) block=0xc264 rec=4B/31bits max=74 cur=74 alloc=2 unk18=0xffff nf=1 ni=0
+  Smgy (canon ygmS) block=0xc3c4 rec=16B/127bits max=2516 cur=2516 alloc=2 unk18=0xffff nf=70 ni=0
+  AOIh (canon hIOA) block=0x1658c rec=68B/543bits max=1 cur=1 alloc=2 unk18=0xffff nf=2 ni=0
+  FovP (canon PvoF) block=0x16618 rec=16B/127bits max=50 cur=50 alloc=2 unk18=0xffff nf=23 ni=0
+  BojX (canon XjoB) block=0x16ad0 rec=508B/4063bits max=200 cur=200 alloc=2 unk18=0xffff nf=46 ni=0
+  dZCE (canon ECZd) block=0x2fab8 rec=20B/159bits max=150 cur=150 alloc=2 unk18=0xffff nf=27 ni=0
+  gtua (canon autg) block=0x30848 rec=164B/1311bits max=240 cur=240 alloc=2 unk18=0xffff nf=3 ni=0
+  lSMf (canon fMSl) block=0x3a260 rec=164B/1311bits max=1295 cur=1295 alloc=2 unk18=0xffff nf=4 ni=0
+  OEtS (canon StEO) block=0x6e064 rec=4B/31bits max=93 cur=93 alloc=2 unk18=0xffff nf=3 ni=0
+  EClp (canon plCE) block=0x6e230 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=15 ni=0
+  dDrd (canon drDd) block=0x6e348 rec=16B/127bits max=50 cur=50 alloc=2 unk18=0xffff nf=23 ni=0
+  EhOn (canon nOhE) block=0x6e800 rec=508B/4063bits max=200 cur=200 alloc=2 unk18=0xffff nf=46 ni=0
+  Raym (canon myaR) block=0x877e8 rec=20B/159bits max=150 cur=150 alloc=2 unk18=0xffff nf=27 ni=0
+  QEoV (canon VoEQ) block=0x88578 rec=4B/31bits max=74 cur=74 alloc=2 unk18=0xffff nf=1 ni=0
+  yuHm (canon mHuy) block=0x886d8 rec=16B/127bits max=235 cur=235 alloc=2 unk18=0xffff nf=23 ni=0
+  JLWf (canon fWLJ) block=0x89720 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  cPbu (canon ubPc) block=0x89768 rec=508B/4063bits max=2250 cur=2250 alloc=2 unk18=0xffff nf=46 ni=0
+  caBZ (canon ZBac) block=0x1a0b48 rec=4B/31bits max=2790 cur=2790 alloc=2 unk18=0xffff nf=3 ni=0
+  ulGe (canon eGlu) block=0x1a3738 rec=16B/127bits max=2516 cur=2516 alloc=2 unk18=0xffff nf=70 ni=0
+  FKif (canon fiKF) block=0x1ad900 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  yvSd (canon dSvy) block=0x1ad948 rec=20B/159bits max=2015 cur=2015 alloc=2 unk18=0xffff nf=27 ni=0
+  FJTs (canon sTJF) block=0x1b788c rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  ttOk (canon kOtt) block=0x1b78e4 rec=4B/31bits max=93 cur=93 alloc=2 unk18=0xffff nf=4 ni=0
+  oYeE (canon EeYo) block=0x1b7ac0 rec=8B/63bits max=93 cur=93 alloc=2 unk18=0xffff nf=11 ni=0
+  PwCR (canon RCwP) block=0x1b7e80 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  xZCi (canon iCZx) block=0x1b7ec8 rec=396B/3167bits max=0 cur=0 alloc=2 unk18=0xffff nf=58 ni=0
+  vfuv (canon vufv) block=0x1b8290 rec=8B/63bits max=364 cur=364 alloc=2 unk18=0xffff nf=7 ni=0
+  aWBf (canon fBWa) block=0x1b8e88 rec=8B/63bits max=300 cur=300 alloc=2 unk18=0xffff nf=7 ni=0
+  PlDA (canon ADlP) block=0x1b9880 rec=8B/63bits max=364 cur=364 alloc=2 unk18=0xffff nf=7 ni=0
+  PSFv (canon vFSP) block=0x1ba478 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  IALy (canon yLAI) block=0x1ba4d0 rec=328B/2623bits max=0 cur=0 alloc=2 unk18=0xffff nf=9 ni=0
+  RxFK (canon KFxR) block=0x1ba588 rec=560B/4479bits max=0 cur=0 alloc=2 unk18=0xffff nf=33 ni=0
+  FekM (canon MkeF) block=0x1ba7c0 rec=36B/287bits max=0 cur=0 alloc=2 unk18=0xffff nf=88 ni=0
+  kKzq (canon qzKk) block=0x1bad68 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  YJMJ (canon JMJY) block=0x1badb0 rec=564B/4511bits max=0 cur=0 alloc=2 unk18=0xffff nf=15 ni=0
+  sDbJ (canon JbDs) block=0x1baec8 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=5 ni=0
+  uGze (canon ezGu) block=0x1baf40 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  kGzd (canon dzGk) block=0x1baf88 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=1 ni=0
+  RQcZ (canon ZcQR) block=0x1bafc0 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=6 ni=0
+  kPYO (canon OYPk) block=0x1bb048 rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=19 ni=0
+  kPCA (canon ACPk) block=0x1bb1a0 rec=40B/319bits max=0 cur=0 alloc=2 unk18=0xffff nf=53 ni=0
+  ZXww (canon wwXZ) block=0x1bb518 rec=32B/255bits max=0 cur=0 alloc=2 unk18=0xffff nf=17 ni=0
+  vHJZ (canon ZJHv) block=0x1bb650 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  ccZn (canon nZcc) block=0x1bb698 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  MMxP (canon PxMM) block=0x1bb6e0 rec=516B/4127bits max=0 cur=0 alloc=2 unk18=0xffff nf=55 ni=0
+  juMS (canon SMuj) block=0x1bba78 rec=28B/223bits max=0 cur=0 alloc=2 unk18=0xffff nf=20 ni=0
+  CtBM (canon MBtC) block=0x1bbbe0 rec=28B/223bits max=0 cur=0 alloc=2 unk18=0xffff nf=20 ni=0
+  xxMJ (canon JMxx) block=0x1bbd48 rec=324B/2591bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  BRDa (canon aDRB) block=0x1bbda0 rec=508B/4063bits max=0 cur=0 alloc=2 unk18=0xffff nf=42 ni=0
+  sziH (canon Hizs) block=0x1bc068 rec=20B/159bits max=0 cur=0 alloc=2 unk18=0xffff nf=27 ni=0
+  cPLz (canon zLPc) block=0x1bc240 rec=24B/191bits max=0 cur=0 alloc=2 unk18=0xffff nf=31 ni=0
+  rgQY (canon YQgr) block=0x1bc458 rec=16B/127bits max=0 cur=0 alloc=2 unk18=0xffff nf=71 ni=0
+  Icui (canon iucI) block=0x1bc8f0 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  yvnq (canon qnvy) block=0x1bc938 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=7 ni=0
+  wiLv (canon vLiw) block=0x1bc9d0 rec=48B/383bits max=0 cur=0 alloc=2 unk18=0xffff nf=61 ni=0
+  WRGI (canon IGRW) block=0x1bcdc8 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=3 ni=0
+  HUMb (canon bMUH) block=0x1bce20 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=4 ni=0
+  Ewsk (canon kswE) block=0x1bce88 rec=32B/255bits max=0 cur=0 alloc=2 unk18=0xffff nf=43 ni=0
+  TlmR (canon RmlT) block=0x1bd160 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=13 ni=0
+  sbGR (canon RGbs) block=0x1bd258 rec=4B/31bits max=0 cur=0 alloc=2 unk18=0xffff nf=5 ni=0
+  wFSR (canon RSFw) block=0x1bd2d0 rec=36B/287bits max=0 cur=0 alloc=2 unk18=0xffff nf=43 ni=0
+  QfUJ (canon JUfQ) block=0x1bd5a8 rec=8B/63bits max=0 cur=0 alloc=2 unk18=0xffff nf=11 ni=0
+  wcLl (canon lLcw) block=0x1bd680 rec=2044B/16351bits max=0 cur=0 alloc=2 unk18=0xffff nf=2 ni=0
+  ubRu (canon uRbu) block=0x1bd6c8 rec=8B/63bits max=1231 cur=1231 alloc=2 unk18=0xffff nf=7 ni=0
+  bGsk (canon ksGb) block=0x1bfdd8 rec=8B/63bits max=1231 cur=1231 alloc=2 unk18=0xffff nf=7 ni=0
+  Nyyq (canon qyyN) block=0x1c24e8 rec=8B/63bits max=871 cur=871 alloc=2 unk18=0xffff nf=7 ni=0
+  pVcz (canon zcVp) block=0x1c40b8 rec=8B/63bits max=436 cur=436 alloc=2 unk18=0xffff nf=7 ni=0
+  bZvB (canon BvZb) block=0x1c4ef0 rec=68B/543bits max=1 cur=1 alloc=2 unk18=0xffff nf=2 ni=0
+  zbuc (canon cubz) block=0x1c4f7c rec=560B/4479bits max=96 cur=96 alloc=2 unk18=0xffff nf=33 ni=0
+  Urkm (canon mkrU) block=0x1d23b4 rec=328B/2623bits max=197 cur=197 alloc=2 unk18=0xffff nf=9 ni=0
+  pDCn (canon nCDp) block=0x1e20d4 rec=120B/959bits max=174 cur=174 alloc=2 unk18=0xffff nf=16 ni=0
+  OqAO (canon OAqO) block=0x1e738c rec=116B/927bits max=2397 cur=2397 alloc=2 unk18=0xffff nf=14 ni=0
+  FfSU (canon USfF) block=0x22b2b8 rec=120B/959bits max=452 cur=452 alloc=2 unk18=0xffff nf=17 ni=0
+  ySst (canon tsSy) block=0x2387d0 rec=120B/959bits max=5010 cur=5010 alloc=2 unk18=0xffff nf=15 ni=0
+  GYmv (canon vmYG) block=0x2cb558 rec=4B/31bits max=96 cur=96 alloc=2 unk18=0xffff nf=2 ni=0
+  TJKL (canon LKJT) block=0x2cb720 rec=16B/127bits max=235 cur=235 alloc=2 unk18=0xffff nf=23 ni=0
+  gBrU (canon UrBg) block=0x2cc768 rec=12B/95bits max=157 cur=157 alloc=2 unk18=0xffff nf=10 ni=0
+  bwVx (canon xVwb) block=0x2ccf8c rec=8B/63bits max=1425 cur=1425 alloc=2 unk18=0xffff nf=8 ni=0
+  aUhv (canon vhUa) block=0x2cfcbc rec=508B/4063bits max=2250 cur=2250 alloc=2 unk18=0xffff nf=46 ni=0
+  iZyc (canon cyZi) block=0x3e709c rec=12B/95bits max=16 cur=16 alloc=2 unk18=0xffff nf=13 ni=0
+  wBzc (canon czBw) block=0x3e7254 rec=16B/127bits max=30 cur=30 alloc=2 unk18=0xffff nf=13 ni=0
+  LsXI (canon IXsL) block=0x3e752c rec=20B/159bits max=2015 cur=2015 alloc=2 unk18=0xffff nf=27 ni=0
+  UzqH (canon HqzU) block=0x3f1470 rec=596B/4767bits max=93 cur=93 alloc=2 unk18=0xffff nf=19 ni=0
+
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658 --scan
+file size 1238480
+  TDB at 0x1c size 14780 (0x39bc) tables 30 ends 0x39d8
+
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl09/savefiles/ROSTER1 20260717230804/ROSTER1 20260717230804 --scan
+file size 1573216
+  TDB at 0x1c size 1573188 (0x180144) tables 19 ends 0x180160
+
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl09/savefiles/ROSTER1 20260717230804/ROSTER1 20260717230804 0x1c
+TDB @0x1c version=8 BE=True db_size=1573188 tables=19 hdr_crc=b1080199
+  AJKN (canon NKJA) block=0xcc rec=8B/63bits max=1190 cur=1160 alloc=2 unk18=0xffff nf=7 ni=0
+  Vzjq (canon qjzV) block=0x2694 rec=8B/63bits max=180 cur=180 alloc=2 unk18=0xffff nf=12 ni=0
+  Roup (canon puoR) block=0x2d1c rec=4B/31bits max=20 cur=20 alloc=2 unk18=0xffff nf=5 ni=0
+  NDEo (canon oEDN) block=0x2de4 rec=32B/255bits max=600 cur=600 alloc=2 unk18=0xffff nf=32 ni=0
+  OEtS (canon StEO) block=0x7b0c rec=92B/735bits max=188 cur=188 alloc=2 unk18=0xffff nf=13 ni=0
+  WdaS (canon SadW) block=0xbf94 rec=24B/191bits max=1 cur=1 alloc=2 unk18=0xffff nf=2 ni=0
+  QEoV (canon VoEQ) block=0xbff4 rec=4B/31bits max=960 cur=160 alloc=2 unk18=0xffff nf=1 ni=0
+  yuHm (canon mHuy) block=0xcf2c rec=24B/191bits max=515 cur=415 alloc=2 unk18=0xffff nf=30 ni=0
+  lVMf (canon fMVl) block=0x1017c rec=68B/543bits max=515 cur=415 alloc=2 unk18=0xffff nf=74 ni=0
+  cPbu (canon ubPc) block=0x18f10 rec=184B/1471bits max=4568 cur=3968 alloc=2 unk18=0xffff nf=33 ni=0
+  caBZ (canon ZBac) block=0xe6488 rec=4B/31bits max=5740 cur=4240 alloc=2 unk18=0xffff nf=3 ni=0
+  ulGe (canon eGlu) block=0xebe90 rec=16B/127bits max=6400 cur=3900 alloc=2 unk18=0xffff nf=71 ni=0
+  yvSd (canon dSvy) block=0x105328 rec=24B/191bits max=4049 cur=3549 alloc=2 unk18=0xffff nf=34 ni=0
+  ajmx (canon xmja) block=0x11d108 rec=8B/63bits max=4049 cur=3549 alloc=2 unk18=0xffff nf=15 ni=0
+  ttOk (canon kOtt) block=0x1250a8 rec=212B/1695bits max=188 cur=188 alloc=2 unk18=0xffff nf=31 ni=0
+  oYeE (canon EeYo) block=0x12ee70 rec=8B/63bits max=188 cur=188 alloc=2 unk18=0xffff nf=11 ni=0
+  nAUy (canon yUAn) block=0x12f528 rec=148B/1183bits max=481 cur=381 alloc=2 unk18=0xffff nf=78 ni=0
+  sozv (canon vzos) block=0x141044 rec=8B/63bits max=203 cur=143 alloc=2 unk18=0xffff nf=6 ni=0
+  vbHh (canon hHbv) block=0x141724 rec=32B/255bits max=8000 cur=8000 alloc=2 unk18=0xffff nf=33 ni=0
+
+$ python research/nhl07-roster-schema/scripts/tdb_scan.py anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1 --scan
+file size 2720632
+  TDB at 0x1c size 690188 (0xa880c) tables 77 ends 0xa8828
+

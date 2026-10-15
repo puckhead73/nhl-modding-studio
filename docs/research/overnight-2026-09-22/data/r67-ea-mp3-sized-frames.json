@@ -1,0 +1,9182 @@
+{
+ "note": "R67 - PS4 EA-MP3 (SNS codec 0x0b, NHL 15-17 speech): parse each data block as a chain of SIZED frames and test the reading on all\nr61 vectors (read-only over the banks; temporary .mp3/.wav in the scratchpad, removed unless --keep).\n\nGrammar under test (from the r61 prefix values, which read as little-endian u16 = MPEG frame bytes + 2):\n    ea_frame := u16le hdr ; [ u32le pcm_samples ; ] mpeg_frame ; [ pcm_samples x s16le ]\n        size  = hdr & 0x7fff          total bytes of the ea_frame including the u16\n        flag  = hdr & 0x8000          when set, a u32le PCM sample count follows and that many s16le samples trail the MPEG frame\n    block payload := ea_frame+        (no padding; the sizes must tile the payload exactly)\nEvery MPEG frame keeps its own 4-byte header (so nothing was \"removed\"); frames may use the bit reservoir (main_data_begin) - the side\ninfo is parsed so that is measured, not assumed. Decoding is done twice with independent implementations inside ffmpeg (`mp3` fixed-point\nand `mp3float`) on the concatenated MPEG frames; the declared SNR num_samples, the WAV sample counts, channel and rate, and the embedded\nPCM are all compared. Nothing is written back; no encoder is claimed.\nUsage: python r67_ea_mp3_sized_frames.py <out.json> [--titles nhl15,nhl16,nhl17] [--per-title 8] [--keep]\n",
+ "ffmpeg": "ffmpeg version 8.1.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+ "titles": {
+  "nhl15": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA00561\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp.sbr",
+   "records": 149,
+   "summary": {
+    "vectors": 8,
+    "grammar_tiles_every_block": 8,
+    "nine_frames_per_full_block": 8,
+    "flag_only_on_first_frame": 8,
+    "pcm_1152_on_first_frame": 8,
+    "block_first_frame_main_data_begin_0": 0,
+    "reservoir_used_within_blocks": 8,
+    "decode_mp3_ok": 8,
+    "decode_mp3float_ok": 8,
+    "decoders_agree_exactly": 0,
+    "declared_samples_matched": 0
+   },
+   "vectors": [
+    {
+     "sid": 332,
+     "off": 453990976,
+     "sns_sha256": "50854ef9d1b2fe1662cb2696c8e3cad3a93bd5a734c39c8b98ddc6064b2af72d",
+     "num_samples": 77428,
+     "blocks": 8,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      4852
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5014,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        242,
+        338,
+        290,
+        290,
+        242,
+        290,
+        290,
+        482
+       ],
+       "bitrates": [
+        80,
+        80,
+        112,
+        96,
+        96,
+        80,
+        96,
+        96,
+        160
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        22,
+        14,
+        2,
+        11,
+        38,
+        4,
+        23,
+        20
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2658,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        290,
+        338,
+        242,
+        290,
+        242,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        128,
+        96,
+        112,
+        80,
+        96,
+        80,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        1,
+        46,
+        24,
+        39,
+        7,
+        45,
+        3,
+        10,
+        6
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2850,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        338,
+        290,
+        338,
+        338,
+        482,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        112,
+        96,
+        112,
+        112,
+        160,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        7,
+        14,
+        42,
+        18,
+        46,
+        13,
+        59,
+        11,
+        13
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2610,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        386,
+        242,
+        386,
+        290,
+        290,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        80,
+        128,
+        80,
+        128,
+        96,
+        96,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        33,
+        43,
+        23,
+        11,
+        13,
+        8,
+        23,
+        43,
+        41
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2658,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        242,
+        386,
+        290,
+        290,
+        242,
+        338,
+        338
+       ],
+       "bitrates": [
+        96,
+        80,
+        80,
+        128,
+        96,
+        96,
+        80,
+        112,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        29,
+        37,
+        28,
+        15,
+        14,
+        5,
+        8,
+        7,
+        21
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 10368,
+       "payload": 2514,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        290,
+        290,
+        290,
+        290,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        14,
+        26,
+        4,
+        4,
+        18,
+        46,
+        27,
+        18,
+        17
+       ],
+       "exact": true
+      },
+      {
+       "block": 6,
+       "declared_samples": 10368,
+       "payload": 2418,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        290,
+        242,
+        338,
+        242,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        80,
+        112,
+        80,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        41,
+        27,
+        5,
+        42,
+        3,
+        47,
+        19,
+        35,
+        11
+       ],
+       "exact": true
+      },
+      {
+       "block": 7,
+       "declared_samples": 4852,
+       "payload": 1018,
+       "frames": 5,
+       "error": null,
+       "sizes": [
+        194,
+        242,
+        242,
+        242,
+        98
+       ],
+       "bitrates": [
+        64,
+        80,
+        80,
+        80,
+        32
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        47,
+        1,
+        17,
+        18,
+        43
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 68,
+     "mpeg_bytes": 19296,
+     "frames_x1152": 78336,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "9877b5d2d4c37f0f48b061f90d1e5835b3e384a6cff8039e6b0600ca0a0610bd",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 78336,
+       "channels": 1,
+       "pcm_sha256": "7df9562ea87c052ef21808deb0bb9b36cdbf9af6f2d998ba5937e23911b88c1f"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 78336,
+       "channels": 1,
+       "pcm_sha256": "f1c47be65aeb7ebe8f1cc82fac6822b7f8c3c3d2fff7708d900801e7a04cbd2d"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 78336,
+     "declared_minus_decoded": -908,
+     "embedded_pcm_best_lag_in_decoded": 1139,
+     "embedded_pcm_corr": 0.2239,
+     "embedded_pcm_peak": 6704,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 2.24,
+      "B_embedded_then_decoded_from_0": 0.673,
+      "decoded_frame_boundary_jumps_median": 0.626,
+      "decoded_first_1152_rms": 213.0,
+      "decoded_1152_2304_rms": 984.2,
+      "embedded_rms": 1521.6,
+      "embedded_first8": [
+       0,
+       -27,
+       364,
+       -537,
+       -689,
+       2084,
+       -173,
+       -2897
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 360,
+     "off": 454530528,
+     "sns_sha256": "306b4604185c6eab4ba63512c29a3f172ab3efcf47a715a6515896c83152d8ee",
+     "num_samples": 66450,
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      4242
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4774,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        290,
+        242,
+        242,
+        242,
+        338,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        80,
+        80,
+        112,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        2,
+        46,
+        41,
+        35,
+        2,
+        32,
+        19,
+        4
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2610,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        290,
+        290,
+        242,
+        242,
+        290,
+        290,
+        290,
+        386
+       ],
+       "bitrates": [
+        96,
+        96,
+        96,
+        80,
+        80,
+        96,
+        96,
+        96,
+        128
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        1,
+        2,
+        24,
+        33,
+        21,
+        17,
+        18,
+        46,
+        31
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2946,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        578,
+        242,
+        386,
+        242,
+        290,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        128,
+        192,
+        80,
+        128,
+        80,
+        96,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        43,
+        0,
+        95,
+        36,
+        13,
+        8,
+        42,
+        31,
+        18
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2562,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        290,
+        290,
+        242,
+        242,
+        290,
+        242,
+        386,
+        290
+       ],
+       "bitrates": [
+        96,
+        96,
+        96,
+        80,
+        80,
+        96,
+        80,
+        128,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        21,
+        28,
+        12,
+        28,
+        15,
+        1,
+        43,
+        19,
+        18
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2850,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        338,
+        242,
+        386,
+        338,
+        242,
+        290,
+        482
+       ],
+       "bitrates": [
+        80,
+        96,
+        112,
+        80,
+        128,
+        112,
+        80,
+        96,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        30,
+        10,
+        5,
+        45,
+        7,
+        35,
+        3,
+        5,
+        7
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 10368,
+       "payload": 2802,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        338,
+        290,
+        386,
+        290,
+        338,
+        290,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        112,
+        96,
+        128,
+        96,
+        112,
+        96,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        94,
+        23,
+        20,
+        44,
+        14,
+        45,
+        25,
+        31,
+        35
+       ],
+       "exact": true
+      },
+      {
+       "block": 6,
+       "declared_samples": 4242,
+       "payload": 968,
+       "frames": 4,
+       "error": null,
+       "sizes": [
+        290,
+        290,
+        290,
+        98
+       ],
+       "bitrates": [
+        96,
+        96,
+        96,
+        32
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        40,
+        5,
+        2,
+        43
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 58,
+     "mpeg_bytes": 17088,
+     "frames_x1152": 66816,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "006d63a8abc84a89a045a684b958dbfc974bb795dfe35dbe37e45fe08aa2355d",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "c240d9c044d6d08ab42ffea5246fa6f422bcf37a470cfd73144bdeb6617a62ec"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "a8c5f28c2ff27512c763de3c0a0cdb0546873cf9de1ba0832ad393cdc8611e63"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 66816,
+     "declared_minus_decoded": -366,
+     "embedded_pcm_best_lag_in_decoded": 1172,
+     "embedded_pcm_corr": 0.2777,
+     "embedded_pcm_peak": 6331,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.52,
+      "B_embedded_then_decoded_from_0": 0.814,
+      "decoded_frame_boundary_jumps_median": 0.469,
+      "decoded_first_1152_rms": 338.9,
+      "decoded_1152_2304_rms": 1285.5,
+      "embedded_rms": 1609.6,
+      "embedded_first8": [
+       1,
+       -5,
+       -163,
+       442,
+       91,
+       -1111,
+       -1230,
+       827
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 5587,
+     "off": 455029312,
+     "sns_sha256": "f4a6973b25170dbc1725d6d6a79b0dd33dda8a09e8f064f2f99226078f06f8a3",
+     "num_samples": 72020,
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      9812
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5062,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        482,
+        290,
+        242,
+        290,
+        338,
+        242,
+        242,
+        386
+       ],
+       "bitrates": [
+        80,
+        160,
+        96,
+        80,
+        96,
+        112,
+        80,
+        80,
+        128
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        0,
+        31,
+        22,
+        8,
+        46,
+        29,
+        31,
+        41
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        290,
+        290,
+        290,
+        290,
+        290,
+        242
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        96,
+        96,
+        96,
+        96,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        39,
+        13,
+        30,
+        5,
+        22,
+        21,
+        18,
+        27,
+        27
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2634,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        386,
+        482,
+        170,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        128,
+        160,
+        56,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        19,
+        0,
+        25,
+        18,
+        24,
+        91,
+        10,
+        30,
+        29
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2370,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        194,
+        242,
+        290,
+        242,
+        290,
+        290,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        64,
+        80,
+        96,
+        80,
+        96,
+        96,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        42,
+        3,
+        7,
+        44,
+        21,
+        38,
+        29,
+        40,
+        17
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2370,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        290,
+        242,
+        242,
+        242,
+        290,
+        194,
+        338
+       ],
+       "bitrates": [
+        80,
+        96,
+        96,
+        80,
+        80,
+        80,
+        96,
+        64,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        31,
+        18,
+        9,
+        31,
+        6,
+        8,
+        0,
+        45,
+        5
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 10368,
+       "payload": 3618,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        290,
+        578,
+        674,
+        578,
+        338,
+        290,
+        338
+       ],
+       "bitrates": [
+        80,
+        96,
+        96,
+        192,
+        224,
+        192,
+        112,
+        96,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        38,
+        17,
+        10,
+        14,
+        0,
+        76,
+        87,
+        11,
+        33
+       ],
+       "exact": true
+      },
+      {
+       "block": 6,
+       "declared_samples": 9812,
+       "payload": 2418,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        386,
+        386,
+        242,
+        290,
+        194,
+        242,
+        146
+       ],
+       "bitrates": [
+        80,
+        96,
+        128,
+        128,
+        80,
+        96,
+        64,
+        80,
+        48
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        23,
+        4,
+        16,
+        36,
+        26,
+        12,
+        35,
+        0,
+        26
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 63,
+     "mpeg_bytes": 18504,
+     "frames_x1152": 72576,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "82b58da044a9ef893b05311057c0045b8f1cf02c1c4046c4863073554f59b700",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 72576,
+       "channels": 1,
+       "pcm_sha256": "23a5c80f312edea1b7fe352b1e670e946aa86e9a29ef8ade91898fae325b942a"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 72576,
+       "channels": 1,
+       "pcm_sha256": "0f7534b902ae1ce0ea41a9fc9fa5d6b98a8e1e6e161b135ea95d373ceddf4adf"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 72576,
+     "declared_minus_decoded": -556,
+     "embedded_pcm_best_lag_in_decoded": 584,
+     "embedded_pcm_corr": 0.2855,
+     "embedded_pcm_peak": 4844,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 1.293,
+      "B_embedded_then_decoded_from_0": 0.961,
+      "decoded_frame_boundary_jumps_median": 0.359,
+      "decoded_first_1152_rms": 97.0,
+      "decoded_1152_2304_rms": 2372.2,
+      "embedded_rms": 1649.8,
+      "embedded_first8": [
+       -690,
+       -2172,
+       -2065,
+       -922,
+       395,
+       1476,
+       1350,
+       359
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 5616,
+     "off": 455510912,
+     "sns_sha256": "bae7ea44b6c8c3b39f468f5e57d7a1ba9e0d1e3712e12b4f5045ef5b5a7cdb0b",
+     "num_samples": 60740,
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      8900
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4774,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        242,
+        386,
+        290,
+        242,
+        290,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        80,
+        80,
+        128,
+        96,
+        80,
+        96,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        3,
+        3,
+        8,
+        25,
+        5,
+        10,
+        39,
+        23
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2610,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        338,
+        290,
+        290,
+        338,
+        338,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        80,
+        112,
+        96,
+        96,
+        112,
+        112,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        21,
+        21,
+        25,
+        8,
+        9,
+        35,
+        0,
+        23,
+        1
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 3666,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        482,
+        290,
+        482,
+        482,
+        482,
+        194,
+        482,
+        386
+       ],
+       "bitrates": [
+        128,
+        160,
+        96,
+        160,
+        160,
+        160,
+        64,
+        160,
+        128
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        24,
+        29,
+        43,
+        11,
+        13,
+        5,
+        61,
+        7,
+        83
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2994,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        338,
+        290,
+        386,
+        242,
+        386,
+        290,
+        482,
+        290,
+        290
+       ],
+       "bitrates": [
+        112,
+        96,
+        128,
+        80,
+        128,
+        96,
+        160,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        3,
+        23,
+        19,
+        41,
+        14,
+        27,
+        33,
+        35,
+        39
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 3258,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        386,
+        338,
+        482,
+        482,
+        482,
+        170,
+        386
+       ],
+       "bitrates": [
+        96,
+        80,
+        128,
+        112,
+        160,
+        160,
+        160,
+        56,
+        128
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        34,
+        35,
+        22,
+        14,
+        40,
+        38,
+        55,
+        93,
+        5
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 8900,
+       "payload": 2728,
+       "frames": 8,
+       "error": null,
+       "sizes": [
+        482,
+        482,
+        386,
+        482,
+        242,
+        242,
+        242,
+        170
+       ],
+       "bitrates": [
+        160,
+        160,
+        128,
+        160,
+        80,
+        80,
+        80,
+        56
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        30,
+        63,
+        83,
+        4,
+        29,
+        0,
+        8,
+        8
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 53,
+     "mpeg_bytes": 17616,
+     "frames_x1152": 61056,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "2fca2c6d90bc10f25e9716d53fc1767bd0334ee8d148dde94f0c0bf180041278",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 61056,
+       "channels": 1,
+       "pcm_sha256": "fb2389b0a5b4b11ac1a5f003f600bf0f4c161035eef29128f1144059ccdabc85"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 61056,
+       "channels": 1,
+       "pcm_sha256": "f099b875aa6432a608cd9fb23766021d3d07ca6ea7184b07531daba9153e330b"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 61056,
+     "declared_minus_decoded": -316,
+     "embedded_pcm_best_lag_in_decoded": 2276,
+     "embedded_pcm_corr": 0.2748,
+     "embedded_pcm_peak": 4174,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.116,
+      "B_embedded_then_decoded_from_0": 0.284,
+      "decoded_frame_boundary_jumps_median": 0.4,
+      "decoded_first_1152_rms": 96.4,
+      "decoded_1152_2304_rms": 152.4,
+      "embedded_rms": 1236.6,
+      "embedded_first8": [
+       936,
+       -517,
+       -1539,
+       -423,
+       1726,
+       2957,
+       1986,
+       -636
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 5645,
+     "off": 456007680,
+     "sns_sha256": "8a235cff07c7c668e1b00fcf0e0d06a508a884d3e3f9b76a3a5eb9541fc90dfa",
+     "num_samples": 65719,
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      3511
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4774,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        242,
+        290,
+        290,
+        290,
+        242,
+        290,
+        242,
+        338
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        96,
+        96,
+        80,
+        96,
+        80,
+        112
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        4,
+        1,
+        28,
+        45,
+        44,
+        10,
+        43,
+        19
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 3042,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        290,
+        242,
+        290,
+        482,
+        482,
+        482
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        96,
+        80,
+        96,
+        160,
+        160,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        43,
+        7,
+        41,
+        19,
+        39,
+        4,
+        15,
+        38,
+        49
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 3234,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        482,
+        482,
+        482,
+        482,
+        290,
+        290,
+        242
+       ],
+       "bitrates": [
+        80,
+        80,
+        160,
+        160,
+        160,
+        160,
+        96,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        72,
+        34,
+        15,
+        39,
+        33,
+        50,
+        50,
+        28,
+        47
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2850,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        482,
+        194,
+        290,
+        242,
+        242,
+        386,
+        482
+       ],
+       "bitrates": [
+        96,
+        80,
+        160,
+        64,
+        96,
+        80,
+        80,
+        128,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        19,
+        47,
+        44,
+        87,
+        7,
+        41,
+        33,
+        29,
+        36
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2706,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        290,
+        242,
+        242,
+        290,
+        482,
+        338,
+        338
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        80,
+        80,
+        96,
+        160,
+        112,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        68,
+        17,
+        7,
+        41,
+        20,
+        18,
+        44,
+        88,
+        6
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 10368,
+       "payload": 3186,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        242,
+        386,
+        290,
+        290,
+        242,
+        386,
+        482,
+        482
+       ],
+       "bitrates": [
+        128,
+        80,
+        128,
+        96,
+        96,
+        80,
+        128,
+        160,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        37,
+        10,
+        15,
+        14,
+        21,
+        41,
+        38,
+        4,
+        33
+       ],
+       "exact": true
+      },
+      {
+       "block": 6,
+       "declared_samples": 3511,
+       "payload": 1016,
+       "frames": 4,
+       "error": null,
+       "sizes": [
+        386,
+        290,
+        242,
+        98
+       ],
+       "bitrates": [
+        128,
+        96,
+        80,
+        32
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        73,
+        5,
+        41,
+        21
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 58,
+     "mpeg_bytes": 18384,
+     "frames_x1152": 66816,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "407f01e3d5309f519d9b812b97a7e7f4a9cee087b7eff547e74b630aa54b438b",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "e94e2cef2c0dc75911008af9ac8c2870939543569873e9eda6721719d8059cef"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 66816,
+       "channels": 1,
+       "pcm_sha256": "280e6b351737711844264c78a4c939529c276a601d62fdf3d6715b0d64ed7d02"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 66816,
+     "declared_minus_decoded": -1097,
+     "embedded_pcm_best_lag_in_decoded": 871,
+     "embedded_pcm_corr": 0.2335,
+     "embedded_pcm_peak": 4539,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 1.515,
+      "B_embedded_then_decoded_from_0": 0.313,
+      "decoded_frame_boundary_jumps_median": 0.576,
+      "decoded_first_1152_rms": 204.0,
+      "decoded_1152_2304_rms": 820.3,
+      "embedded_rms": 1400.9,
+      "embedded_first8": [
+       -2065,
+       -1924,
+       -995,
+       -294,
+       -15,
+       152,
+       483,
+       965
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 5671,
+     "off": 456470368,
+     "sns_sha256": "4762d55c43e10c309d46c649b6729597089a69052829d2e8119ef27b4b0bcddc",
+     "num_samples": 85703,
+     "blocks": 9,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      2759
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4966,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        242,
+        338,
+        338,
+        290,
+        290,
+        242,
+        242,
+        386
+       ],
+       "bitrates": [
+        96,
+        80,
+        112,
+        112,
+        96,
+        96,
+        80,
+        80,
+        128
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        47,
+        20,
+        12,
+        39,
+        38,
+        40,
+        42,
+        5
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2370,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        290,
+        290,
+        290,
+        242,
+        242,
+        242,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        96,
+        96,
+        96,
+        80,
+        80,
+        80,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        3,
+        3,
+        32,
+        27,
+        36,
+        27,
+        7,
+        17,
+        7
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        242,
+        290,
+        290,
+        242,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        96,
+        80,
+        80,
+        96,
+        96,
+        80,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        1,
+        37,
+        37,
+        17,
+        37,
+        45,
+        10,
+        1,
+        2
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2754,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        386,
+        290,
+        290,
+        242,
+        242,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        160,
+        128,
+        96,
+        96,
+        80,
+        80,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        9,
+        67,
+        11,
+        3,
+        40,
+        33,
+        14,
+        40,
+        6
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2514,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        290,
+        242,
+        242,
+        338,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        80,
+        96,
+        96,
+        80,
+        80,
+        112,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        38,
+        20,
+        16,
+        40,
+        44,
+        17,
+        33,
+        34,
+        35
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 10368,
+       "payload": 2418,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        242,
+        290,
+        290,
+        242,
+        290,
+        290,
+        242
+       ],
+       "bitrates": [
+        96,
+        80,
+        80,
+        96,
+        96,
+        80,
+        96,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        13,
+        14,
+        7,
+        5,
+        13,
+        41,
+        12,
+        9,
+        15
+       ],
+       "exact": true
+      },
+      {
+       "block": 6,
+       "declared_samples": 10368,
+       "payload": 2994,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        386,
+        242,
+        290,
+        386,
+        290,
+        386,
+        482
+       ],
+       "bitrates": [
+        96,
+        80,
+        128,
+        80,
+        96,
+        128,
+        96,
+        128,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        3,
+        22,
+        20,
+        30,
+        8,
+        17,
+        21,
+        41,
+        17
+       ],
+       "exact": true
+      },
+      {
+       "block": 7,
+       "declared_samples": 10368,
+       "payload": 3618,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        338,
+        482,
+        386,
+        482,
+        482,
+        482,
+        386,
+        338,
+        242
+       ],
+       "bitrates": [
+        112,
+        160,
+        128,
+        160,
+        160,
+        160,
+        128,
+        112,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        15,
+        39,
+        53,
+        2,
+        21,
+        38,
+        80,
+        30,
+        5
+       ],
+       "exact": true
+      },
+      {
+       "block": 8,
+       "declared_samples": 2759,
+       "payload": 630,
+       "frames": 3,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        98
+       ],
+       "bitrates": [
+        80,
+        96,
+        32
+       ],
+       "flags": [
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        3,
+        0,
+        40
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 75,
+     "mpeg_bytes": 22272,
+     "frames_x1152": 86400,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "3d8a39d676469858e64540ea35d69dbcd0d43e7d90a5bbc4be808b665d0aa1df",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 86400,
+       "channels": 1,
+       "pcm_sha256": "415f3c5dedc9e71ea96b41731490ccd305baacdf125fc9d0fdc60510db977be9"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 86400,
+       "channels": 1,
+       "pcm_sha256": "67538d8016e9f55a050babb6b9b024b550883a41ea01e542a70baebea7bca245"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 86400,
+     "declared_minus_decoded": -697,
+     "embedded_pcm_best_lag_in_decoded": 888,
+     "embedded_pcm_corr": 0.2453,
+     "embedded_pcm_peak": 5385,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.777,
+      "B_embedded_then_decoded_from_0": 0.867,
+      "decoded_frame_boundary_jumps_median": 0.477,
+      "decoded_first_1152_rms": 191.8,
+      "decoded_1152_2304_rms": 924.4,
+      "embedded_rms": 1559.7,
+      "embedded_first8": [
+       263,
+       844,
+       1787,
+       739,
+       -2202,
+       -4207,
+       -2413,
+       1151
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 5698,
+     "off": 456913760,
+     "sns_sha256": "75c901d42dca13c8a2546bdfcf8e11b6bd24fe233eb25aec5c819b2b1127f03d",
+     "num_samples": 59060,
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      7220
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4726,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        242,
+        290,
+        242,
+        290,
+        290,
+        242,
+        242,
+        290
+       ],
+       "bitrates": [
+        96,
+        80,
+        96,
+        80,
+        96,
+        96,
+        80,
+        80,
+        96
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        26,
+        9,
+        38,
+        12,
+        38,
+        43,
+        20,
+        10
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2754,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        242,
+        290,
+        242,
+        290,
+        242,
+        386,
+        386,
+        290
+       ],
+       "bitrates": [
+        128,
+        80,
+        96,
+        80,
+        96,
+        80,
+        128,
+        128,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        17,
+        32,
+        1,
+        24,
+        10,
+        39,
+        3,
+        12,
+        12
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2682,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        170,
+        290,
+        482,
+        242,
+        242,
+        242,
+        290,
+        242
+       ],
+       "bitrates": [
+        160,
+        56,
+        96,
+        160,
+        80,
+        80,
+        80,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        17,
+        89,
+        4,
+        44,
+        73,
+        45,
+        28,
+        17,
+        42
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2754,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        338,
+        242,
+        242,
+        290,
+        290,
+        242,
+        386,
+        482
+       ],
+       "bitrates": [
+        80,
+        112,
+        80,
+        80,
+        96,
+        96,
+        80,
+        128,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        28,
+        14,
+        37,
+        24,
+        18,
+        39,
+        41,
+        2,
+        7
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 3810,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        482,
+        386,
+        338,
+        482,
+        386,
+        386,
+        386,
+        482
+       ],
+       "bitrates": [
+        160,
+        160,
+        128,
+        112,
+        160,
+        128,
+        128,
+        128,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        11,
+        12,
+        46,
+        40,
+        25,
+        63,
+        21,
+        25,
+        42
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 7220,
+       "payload": 1694,
+       "frames": 7,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        242,
+        242,
+        242,
+        386,
+        98
+       ],
+       "bitrates": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        128,
+        32
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        69,
+        43,
+        39,
+        29,
+        31,
+        28,
+        14
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 52,
+     "mpeg_bytes": 16008,
+     "frames_x1152": 59904,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "9807e28f7b59d35b2bf4679600f81c89cee799790e1cffb18d979e7c325c61d6",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "546254f94e1743d2f93b1401e80d87a9ded97bf1ffa8d45114a6b8c7345b050c"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "ff644901f09271b269812fb34c91c2c2e32c24b7642773ada867e4c0f9593516"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 59904,
+     "declared_minus_decoded": -844,
+     "embedded_pcm_best_lag_in_decoded": 1294,
+     "embedded_pcm_corr": 0.2373,
+     "embedded_pcm_peak": 4643,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.297,
+      "B_embedded_then_decoded_from_0": 1.125,
+      "decoded_frame_boundary_jumps_median": 0.597,
+      "decoded_first_1152_rms": 261.0,
+      "decoded_1152_2304_rms": 1088.3,
+      "embedded_rms": 1435.0,
+      "embedded_first8": [
+       208,
+       724,
+       1131,
+       704,
+       298,
+       90,
+       -47,
+       282
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 35147,
+     "off": 457322368,
+     "sns_sha256": "b69ef55acba0f790e3e53a9e4de334a0d210499fe3afe8099e8aacd4922a768b",
+     "num_samples": 56832,
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      4992
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4726,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        290,
+        290,
+        242,
+        290,
+        338,
+        242,
+        242,
+        242
+       ],
+       "bitrates": [
+        80,
+        96,
+        96,
+        80,
+        96,
+        112,
+        80,
+        80,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        8,
+        26,
+        46,
+        19,
+        46,
+        44,
+        43,
+        38
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2418,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        290,
+        242,
+        290,
+        242,
+        242,
+        290,
+        290
+       ],
+       "bitrates": [
+        96,
+        80,
+        96,
+        80,
+        96,
+        80,
+        80,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        13,
+        36,
+        17,
+        40,
+        28,
+        42,
+        28,
+        8,
+        21
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2370,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        338,
+        242,
+        290,
+        290,
+        290,
+        242,
+        242,
+        242,
+        194
+       ],
+       "bitrates": [
+        112,
+        80,
+        96,
+        96,
+        96,
+        80,
+        80,
+        80,
+        64
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        2,
+        41,
+        1,
+        28,
+        30,
+        45,
+        5,
+        6,
+        30
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        290,
+        242,
+        290,
+        242,
+        242,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        128,
+        96,
+        80,
+        96,
+        80,
+        80,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        6,
+        9,
+        35,
+        20,
+        24,
+        14,
+        5,
+        32,
+        38
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2274,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        290,
+        242,
+        242,
+        242,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        80,
+        80,
+        80,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        29,
+        8,
+        4,
+        19,
+        10,
+        5,
+        32,
+        37,
+        28
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 4992,
+       "payload": 1066,
+       "frames": 5,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        242,
+        242,
+        98
+       ],
+       "bitrates": [
+        80,
+        80,
+        80,
+        80,
+        32
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        27,
+        28,
+        33,
+        36,
+        46
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 50,
+     "mpeg_bytes": 12912,
+     "frames_x1152": 57600,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "5a80f8b0ef9bf0aa305e45bcbac1da95d9aae542a18a1f79576bdd1ba7dd43e3",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "1e7472b7eb571ee3fef936dcd8266cc66b320831d235d4936b8612f4c810b710"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "c1c9cfd408b525eefe5c099baf7dff6550a3728cefbea99ea89f191cfb8d88f1"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 57600,
+     "declared_minus_decoded": -768,
+     "embedded_pcm_best_lag_in_decoded": 3063,
+     "embedded_pcm_corr": 0.2622,
+     "embedded_pcm_peak": 5656,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 2.416,
+      "B_embedded_then_decoded_from_0": 2.885,
+      "decoded_frame_boundary_jumps_median": 0.515,
+      "decoded_first_1152_rms": 346.1,
+      "decoded_1152_2304_rms": 1305.7,
+      "embedded_rms": 1751.4,
+      "embedded_first8": [
+       963,
+       600,
+       -290,
+       -2048,
+       -2195,
+       -571,
+       564,
+       424
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    }
+   ]
+  },
+  "nhl16": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA01909\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples_inxp_and_cb.sbr",
+   "records": 92,
+   "summary": {
+    "vectors": 8,
+    "grammar_tiles_every_block": 8,
+    "nine_frames_per_full_block": 8,
+    "flag_only_on_first_frame": 8,
+    "pcm_1152_on_first_frame": 8,
+    "block_first_frame_main_data_begin_0": 0,
+    "reservoir_used_within_blocks": 8,
+    "decode_mp3_ok": 8,
+    "decode_mp3float_ok": 8,
+    "decoders_agree_exactly": 0,
+    "declared_samples_matched": 0
+   },
+   "vectors": [
+    {
+     "sid": 3347,
+     "off": 619400480,
+     "sns_sha256": "f89b46c3894017958e49a67d1aafc4c93d1d3d6cbd2216111e3463d007d32a2f",
+     "num_samples": 80212,
+     "blocks": 8,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      7636
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4822,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        290,
+        242,
+        290,
+        290,
+        290,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        96,
+        96,
+        80,
+        96,
+        96,
+        96,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        40,
+        41,
+        10,
+        25,
+        42,
+        17,
+        43,
+        13
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 3042,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        386,
+        386,
+        242,
+        242,
+        242,
+        338,
+        482,
+        242
+       ],
+       "bitrates": [
+        160,
+        128,
+        128,
+        80,
+        80,
+        80,
+        112,
+        160,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        25,
+        71,
+        0,
+        12,
+        10,
+        14,
+        15,
+        42,
+        57
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2370,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        194,
+        290,
+        242,
+        242,
+        242,
+        194,
+        242,
+        242
+       ],
+       "bitrates": [
+        160,
+        64,
+        96,
+        80,
+        80,
+        80,
+        64,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        4,
+        62,
+        10,
+        45,
+        40,
+        36,
+        41,
+        4,
+        14
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 3330,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        338,
+        290,
+        290,
+        338,
+        290,
+        338,
+        578,
+        482
+       ],
+       "bitrates": [
+        128,
+        112,
+        96,
+        96,
+        112,
+        96,
+        112,
+        192,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        2,
+        12,
+        46,
+        0,
+        5,
+        46,
+        31,
+        3,
+        43
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        290,
+        242,
+        242,
+        242,
+        242,
+        242,
+        242,
+        242
+       ],
+       "bitrates": [
+        160,
+        96,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        50,
+        46,
+        40,
+        27,
+        29,
+        28,
+        28,
+        35,
+        41
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 10368,
+       "payload": 2610,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        290,
+        194,
+        482,
+        338,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        96,
+        64,
+        160,
+        112,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        24,
+        24,
+        37,
+        4,
+        47,
+        12,
+        2,
+        33,
+        6
+       ],
+       "exact": true
+      },
+      {
+       "block": 6,
+       "declared_samples": 10368,
+       "payload": 2778,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        482,
+        170,
+        386,
+        290,
+        338,
+        386,
+        242
+       ],
+       "bitrates": [
+        80,
+        80,
+        160,
+        56,
+        128,
+        96,
+        112,
+        128,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        37,
+        25,
+        0,
+        91,
+        8,
+        11,
+        36,
+        0,
+        7
+       ],
+       "exact": true
+      },
+      {
+       "block": 7,
+       "declared_samples": 7636,
+       "payload": 2318,
+       "frames": 7,
+       "error": null,
+       "sizes": [
+        242,
+        338,
+        482,
+        482,
+        242,
+        338,
+        194
+       ],
+       "bitrates": [
+        80,
+        112,
+        160,
+        160,
+        80,
+        112,
+        64
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        5,
+        19,
+        17,
+        19,
+        80,
+        5,
+        33
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 70,
+     "mpeg_bytes": 21288,
+     "frames_x1152": 80640,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "e13bf81b33009815c53ca4f302556b56558d06f67d2c702b4a2f88bf6f869bec",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 80640,
+       "channels": 1,
+       "pcm_sha256": "a576800ee58fe9eb6b76433662e55d8c4fadd59132619715098d124b9a641c33"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 80640,
+       "channels": 1,
+       "pcm_sha256": "14090b5699770c493f997ea40375872cc30f444b37d410784158f3c231ff2e3c"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 80640,
+     "declared_minus_decoded": -428,
+     "embedded_pcm_best_lag_in_decoded": 505,
+     "embedded_pcm_corr": 0.5056,
+     "embedded_pcm_peak": 10724,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 2.514,
+      "B_embedded_then_decoded_from_0": 1.634,
+      "decoded_frame_boundary_jumps_median": 0.433,
+      "decoded_first_1152_rms": 1070.3,
+      "decoded_1152_2304_rms": 3770.0,
+      "embedded_rms": 1163.2,
+      "embedded_first8": [
+       -1229,
+       -754,
+       -303,
+       -291,
+       -127,
+       14,
+       34,
+       78
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 3363,
+     "off": 619609120,
+     "sns_sha256": "09971b246dc3618f0bfb9ee2316bac04eae8052d7dbf8928cd833073eece4c63",
+     "num_samples": 74354,
+     "blocks": 7,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      12146
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4630,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        242,
+        242,
+        290,
+        242,
+        290,
+        242,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        80,
+        80,
+        96,
+        80,
+        96,
+        80,
+        80,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        17,
+        8,
+        5,
+        36,
+        17,
+        42,
+        41,
+        37
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2370,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        290,
+        290,
+        290,
+        242,
+        242,
+        290,
+        242
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        96,
+        96,
+        80,
+        80,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        28,
+        9,
+        6,
+        34,
+        35,
+        40,
+        20,
+        10,
+        33
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 3330,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        386,
+        482,
+        386,
+        290,
+        386,
+        386,
+        290,
+        482
+       ],
+       "bitrates": [
+        80,
+        128,
+        160,
+        128,
+        96,
+        128,
+        128,
+        96,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        30,
+        40,
+        1,
+        18,
+        6,
+        39,
+        40,
+        20,
+        38
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 3042,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        242,
+        242,
+        290,
+        242,
+        482,
+        194,
+        386,
+        482
+       ],
+       "bitrates": [
+        160,
+        80,
+        80,
+        96,
+        80,
+        160,
+        64,
+        128,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        53,
+        54,
+        27,
+        10,
+        38,
+        5,
+        89,
+        7,
+        11
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2370,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        242,
+        242,
+        242,
+        242,
+        242,
+        386
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        128
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        42,
+        2,
+        37,
+        23,
+        23,
+        29,
+        34,
+        46,
+        42
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 10368,
+       "payload": 3234,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        290,
+        386,
+        290,
+        242,
+        290,
+        482,
+        482,
+        482
+       ],
+       "bitrates": [
+        96,
+        96,
+        128,
+        96,
+        80,
+        96,
+        160,
+        160,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        10,
+        13,
+        36,
+        28,
+        37,
+        14,
+        21,
+        25,
+        45
+       ],
+       "exact": true
+      },
+      {
+       "block": 6,
+       "declared_samples": 12146,
+       "payload": 4534,
+       "frames": 11,
+       "error": null,
+       "sizes": [
+        482,
+        482,
+        578,
+        482,
+        482,
+        338,
+        338,
+        290,
+        290,
+        290,
+        482
+       ],
+       "bitrates": [
+        160,
+        160,
+        192,
+        160,
+        160,
+        112,
+        112,
+        96,
+        96,
+        96,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        20,
+        11,
+        3,
+        73,
+        55,
+        82,
+        39,
+        9,
+        34,
+        35,
+        31
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 65,
+     "mpeg_bytes": 21072,
+     "frames_x1152": 74880,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "cc48e7db30200aecc452ad3aec2a2c52d048fe2c85f6ed501565b205406fd0d2",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 74880,
+       "channels": 1,
+       "pcm_sha256": "c10514b67010d22d0b06ada7a2b72956ff00f1094a73c0f4a8cb978044e09b12"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 74880,
+       "channels": 1,
+       "pcm_sha256": "72b3db71a128ef78aab7f543024281f0087f243fce9733c601cb8a4106797225"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 74880,
+     "declared_minus_decoded": -526,
+     "embedded_pcm_best_lag_in_decoded": 943,
+     "embedded_pcm_corr": 0.7736,
+     "embedded_pcm_peak": 19825,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.089,
+      "B_embedded_then_decoded_from_0": 9.095,
+      "decoded_frame_boundary_jumps_median": 0.364,
+      "decoded_first_1152_rms": 1592.3,
+      "decoded_1152_2304_rms": 7391.4,
+      "embedded_rms": 4588.2,
+      "embedded_first8": [
+       923,
+       319,
+       93,
+       13,
+       71,
+       192,
+       177,
+       168
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 3376,
+     "off": 619715456,
+     "sns_sha256": "ebc8b13cd2eeecb0d8f91b06cafff95a740f6b1988a65300f00a203759ec3473",
+     "num_samples": 56907,
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      5067
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5398,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        482,
+        290,
+        482,
+        290,
+        242,
+        290,
+        482,
+        242
+       ],
+       "bitrates": [
+        96,
+        160,
+        96,
+        160,
+        96,
+        80,
+        96,
+        160,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        28,
+        39,
+        19,
+        12,
+        17,
+        5,
+        30,
+        60
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2706,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        338,
+        386,
+        482,
+        242,
+        290,
+        242,
+        242,
+        242
+       ],
+       "bitrates": [
+        80,
+        112,
+        128,
+        160,
+        80,
+        96,
+        80,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        36,
+        43,
+        18,
+        6,
+        38,
+        8,
+        46,
+        34,
+        35
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2706,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        386,
+        290,
+        242,
+        290,
+        482,
+        242,
+        290,
+        242
+       ],
+       "bitrates": [
+        80,
+        128,
+        96,
+        80,
+        96,
+        160,
+        80,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        41,
+        15,
+        31,
+        34,
+        10,
+        18,
+        62,
+        24,
+        44
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2706,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        290,
+        338,
+        338,
+        338,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        80,
+        96,
+        96,
+        112,
+        112,
+        112,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        35,
+        14,
+        18,
+        4,
+        10,
+        0,
+        25,
+        44,
+        35
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 3570,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        386,
+        482,
+        482,
+        386,
+        482,
+        386,
+        242,
+        338,
+        386
+       ],
+       "bitrates": [
+        128,
+        160,
+        160,
+        128,
+        160,
+        128,
+        80,
+        112,
+        128
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        37,
+        47,
+        73,
+        86,
+        2,
+        28,
+        41,
+        46,
+        10
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 5067,
+       "payload": 1594,
+       "frames": 5,
+       "error": null,
+       "sizes": [
+        338,
+        242,
+        338,
+        482,
+        194
+       ],
+       "bitrates": [
+        112,
+        80,
+        112,
+        160,
+        64
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        7,
+        47,
+        26,
+        10,
+        49
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 50,
+     "mpeg_bytes": 16272,
+     "frames_x1152": 57600,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "6c439aba24839a3358a36fd0f930bfb5b12c4899b111f35a12329c681538139d",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "bfd36c11d5847f48775a5fa7b9441679e281972910f0ba9d3b8ff36d80eaf8d6"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "dd97e4c7d367be70d4d23f38b500bfb45553b397218aba992930c581e037e8f8"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 57600,
+     "declared_minus_decoded": -693,
+     "embedded_pcm_best_lag_in_decoded": 636,
+     "embedded_pcm_corr": 0.4001,
+     "embedded_pcm_peak": 18070,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 2.816,
+      "B_embedded_then_decoded_from_0": 9.059,
+      "decoded_frame_boundary_jumps_median": 0.402,
+      "decoded_first_1152_rms": 1497.1,
+      "decoded_1152_2304_rms": 5039.0,
+      "embedded_rms": 2770.5,
+      "embedded_first8": [
+       245,
+       226,
+       42,
+       -6,
+       -34,
+       -19,
+       -46,
+       -87
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 3389,
+     "off": 619916480,
+     "sns_sha256": "eaf44e8c02b9a863ae569828dfcfc644c30ba665c00bc35447a07d4964bc9018",
+     "num_samples": 41702,
+     "blocks": 4,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10598
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4534,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        290,
+        242,
+        194,
+        242,
+        242,
+        242,
+        290,
+        242
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        64,
+        80,
+        80,
+        80,
+        96,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        12,
+        45,
+        47,
+        2,
+        0,
+        15,
+        9,
+        29
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2514,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        242,
+        482,
+        242,
+        242,
+        290,
+        338,
+        194
+       ],
+       "bitrates": [
+        80,
+        80,
+        80,
+        160,
+        80,
+        80,
+        96,
+        112,
+        64
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        1,
+        6,
+        4,
+        2,
+        52,
+        19,
+        22,
+        25,
+        43
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2850,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        482,
+        386,
+        290,
+        290,
+        242,
+        242,
+        290,
+        290,
+        338
+       ],
+       "bitrates": [
+        160,
+        128,
+        96,
+        96,
+        80,
+        80,
+        96,
+        96,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        4,
+        32,
+        17,
+        5,
+        19,
+        8,
+        0,
+        13,
+        41
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10598,
+       "payload": 3140,
+       "frames": 10,
+       "error": null,
+       "sizes": [
+        578,
+        242,
+        242,
+        194,
+        242,
+        290,
+        482,
+        242,
+        338,
+        290
+       ],
+       "bitrates": [
+        192,
+        80,
+        80,
+        64,
+        80,
+        96,
+        160,
+        80,
+        112,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        1,
+        65,
+        33,
+        46,
+        4,
+        17,
+        23,
+        45,
+        24,
+        23
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 37,
+     "mpeg_bytes": 10656,
+     "frames_x1152": 42624,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "5a4b63b6e5a6d3c770673edea5d8e2ef8895183081b2376caf96570ddbb813e5",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 42624,
+       "channels": 1,
+       "pcm_sha256": "2d26641adf1254ae97ec8deda58b25f35413a3da9cdd0d4965a53ada9a68ad05"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 42624,
+       "channels": 1,
+       "pcm_sha256": "f6b64d0deb966ee4f34174c3b0dd01ccb588a72ac10411cb4073dd228116278b"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 42624,
+     "declared_minus_decoded": -922,
+     "embedded_pcm_best_lag_in_decoded": 2239,
+     "embedded_pcm_corr": 0.3358,
+     "embedded_pcm_peak": 11663,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 2.676,
+      "B_embedded_then_decoded_from_0": 5.404,
+      "decoded_frame_boundary_jumps_median": 0.16,
+      "decoded_first_1152_rms": 972.2,
+      "decoded_1152_2304_rms": 5409.0,
+      "embedded_rms": 1124.8,
+      "embedded_first8": [
+       -111,
+       43,
+       38,
+       14,
+       80,
+       69,
+       109,
+       120
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 3402,
+     "off": 620136096,
+     "sns_sha256": "721c6d9d667504d198832748ee2e0a5675b8719eb785b1135813edf0c077b831",
+     "num_samples": 59700,
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      7860
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5782,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        482,
+        482,
+        482,
+        386,
+        386,
+        482,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        160,
+        160,
+        160,
+        128,
+        128,
+        160,
+        80,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        41,
+        41,
+        37,
+        24,
+        19,
+        9,
+        28,
+        18
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        242,
+        242,
+        482,
+        242,
+        242,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        80,
+        80,
+        80,
+        160,
+        80,
+        80,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        7,
+        6,
+        13,
+        15,
+        20,
+        58,
+        39,
+        18,
+        4
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        290,
+        242,
+        290,
+        242,
+        386,
+        242
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        96,
+        80,
+        96,
+        80,
+        128,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        33,
+        21,
+        41,
+        17,
+        36,
+        13,
+        40,
+        16,
+        25
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2322,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        242,
+        242,
+        242,
+        290,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        80,
+        80,
+        80,
+        80,
+        96,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        3,
+        26,
+        3,
+        10,
+        10,
+        4,
+        6,
+        36,
+        23
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 3618,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        338,
+        482,
+        338,
+        482,
+        578,
+        386,
+        482
+       ],
+       "bitrates": [
+        80,
+        96,
+        112,
+        160,
+        112,
+        160,
+        192,
+        128,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        22,
+        3,
+        33,
+        17,
+        2,
+        42,
+        0,
+        81,
+        8
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 7860,
+       "payload": 2126,
+       "frames": 7,
+       "error": null,
+       "sizes": [
+        338,
+        242,
+        290,
+        242,
+        482,
+        194,
+        338
+       ],
+       "bitrates": [
+        112,
+        80,
+        96,
+        80,
+        160,
+        64,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        49,
+        16,
+        4,
+        40,
+        43,
+        83,
+        5
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 52,
+     "mpeg_bytes": 16368,
+     "frames_x1152": 59904,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "1363f0bfc891f15a47dc1b019e1df6f9042c609a7385ff17d48984fdc535c81a",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "15c83092a854bb87ff4f8ba703ef43dafd6621a6b534e5fb43ffdff0b5f0b1f5"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 59904,
+       "channels": 1,
+       "pcm_sha256": "5ddc80cdf8b32c60ac96295478ecd179743f26fc8dd6dd9b2215be058a0450eb"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 59904,
+     "declared_minus_decoded": -204,
+     "embedded_pcm_best_lag_in_decoded": 782,
+     "embedded_pcm_corr": 0.4983,
+     "embedded_pcm_peak": 17623,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.041,
+      "B_embedded_then_decoded_from_0": 4.696,
+      "decoded_frame_boundary_jumps_median": 0.288,
+      "decoded_first_1152_rms": 829.9,
+      "decoded_1152_2304_rms": 5951.9,
+      "embedded_rms": 2951.9,
+      "embedded_first8": [
+       -1043,
+       -553,
+       -128,
+       -121,
+       -186,
+       -254,
+       -363,
+       -379
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 3415,
+     "off": 620371360,
+     "sns_sha256": "4b8fee591587f657e6102825832dfc9a9b362c676f3753e2234c54e08e3135d6",
+     "num_samples": 57740,
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      5900
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5494,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        482,
+        482,
+        482,
+        482,
+        194,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        160,
+        160,
+        160,
+        160,
+        64,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        11,
+        15,
+        32,
+        15,
+        91,
+        9,
+        40,
+        30
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2610,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        338,
+        482,
+        242,
+        242,
+        290,
+        242,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        112,
+        160,
+        80,
+        80,
+        96,
+        80,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        22,
+        12,
+        8,
+        44,
+        20,
+        11,
+        35,
+        24,
+        13
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2514,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        242,
+        290,
+        242,
+        242,
+        386,
+        290,
+        290
+       ],
+       "bitrates": [
+        96,
+        80,
+        80,
+        96,
+        80,
+        80,
+        128,
+        96,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        15,
+        42,
+        8,
+        1,
+        21,
+        7,
+        0,
+        17,
+        26
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2418,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        290,
+        290,
+        290,
+        242,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        96,
+        96,
+        96,
+        80,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        32,
+        12,
+        17,
+        3,
+        34,
+        41,
+        44,
+        43,
+        28
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 2898,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        290,
+        242,
+        290,
+        482,
+        482,
+        338,
+        290
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        80,
+        96,
+        160,
+        160,
+        112,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        45,
+        25,
+        10,
+        47,
+        18,
+        26,
+        25,
+        55,
+        17
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 5900,
+       "payload": 1788,
+       "frames": 6,
+       "error": null,
+       "sizes": [
+        242,
+        242,
+        338,
+        290,
+        338,
+        338
+       ],
+       "bitrates": [
+        80,
+        80,
+        112,
+        96,
+        112,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        47,
+        24,
+        9,
+        2,
+        23,
+        34
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 51,
+     "mpeg_bytes": 15312,
+     "frames_x1152": 58752,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "a28b0df6a33a2eb48bb9d82d1be30f22883c99ead3cccd8b68a546455973f52d",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 58752,
+       "channels": 1,
+       "pcm_sha256": "c4b667551a39df34f70358cb2d824ed1a0bc452f448218b21b158680f5c020a0"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 58752,
+       "channels": 1,
+       "pcm_sha256": "d6d448514af4e8b90d55e5aeea00ada8f94e8fb8ccf42cb7964e3c76b89ec3f1"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 58752,
+     "declared_minus_decoded": -1012,
+     "embedded_pcm_best_lag_in_decoded": 812,
+     "embedded_pcm_corr": 0.6428,
+     "embedded_pcm_peak": 20465,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 1.849,
+      "B_embedded_then_decoded_from_0": 0.468,
+      "decoded_frame_boundary_jumps_median": 0.517,
+      "decoded_first_1152_rms": 722.7,
+      "decoded_1152_2304_rms": 5387.3,
+      "embedded_rms": 2619.1,
+      "embedded_first8": [
+       1632,
+       123,
+       377,
+       373,
+       120,
+       -25,
+       -20,
+       106
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 3428,
+     "off": 620601568,
+     "sns_sha256": "fba4a88b068075f867b7ea68d094a83986b25af08ba1c18b3319afc99c1b6621",
+     "num_samples": 56972,
+     "blocks": 6,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      10368,
+      5132
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5878,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        482,
+        482,
+        482,
+        290,
+        482,
+        386,
+        290,
+        386
+       ],
+       "bitrates": [
+        96,
+        160,
+        160,
+        160,
+        96,
+        160,
+        128,
+        96,
+        128
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        40,
+        64,
+        57,
+        32,
+        25,
+        17,
+        1,
+        37
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2514,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        338,
+        338,
+        242,
+        290,
+        290,
+        290,
+        194,
+        290,
+        242
+       ],
+       "bitrates": [
+        112,
+        112,
+        80,
+        96,
+        96,
+        96,
+        64,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        29,
+        44,
+        6,
+        13,
+        45,
+        43,
+        47,
+        2,
+        33
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        290,
+        242,
+        290,
+        290,
+        290,
+        290,
+        290,
+        242
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        96,
+        96,
+        96,
+        96,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        13,
+        7,
+        42,
+        13,
+        35,
+        43,
+        19,
+        27,
+        44
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2562,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        338,
+        290,
+        290,
+        290,
+        290,
+        290,
+        242,
+        290,
+        242
+       ],
+       "bitrates": [
+        112,
+        96,
+        96,
+        96,
+        96,
+        96,
+        80,
+        96,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        4,
+        21,
+        16,
+        3,
+        20,
+        26,
+        38,
+        3,
+        33
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 10368,
+       "payload": 3042,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        482,
+        338,
+        482,
+        482,
+        194,
+        290,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        160,
+        112,
+        160,
+        160,
+        64,
+        96,
+        80,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        8,
+        34,
+        4,
+        42,
+        30,
+        80,
+        9,
+        47,
+        32
+       ],
+       "exact": true
+      },
+      {
+       "block": 5,
+       "declared_samples": 5132,
+       "payload": 1642,
+       "frames": 5,
+       "error": null,
+       "sizes": [
+        290,
+        338,
+        338,
+        482,
+        194
+       ],
+       "bitrates": [
+        96,
+        112,
+        112,
+        160,
+        64
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        9,
+        41,
+        40,
+        13,
+        77
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 50,
+     "mpeg_bytes": 15696,
+     "frames_x1152": 57600,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "efcc40eb111896c9ce343bd09247dc3f10701ee0872c17ddd9cb121d4ffa6e5d",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "dcbaf362b116d961a3b3ada78d2524e3496f2ca48a82b57a306ffa6eb6a59055"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 57600,
+       "channels": 1,
+       "pcm_sha256": "ffa2b15fe104bd71b4084ce8d7f350eeb798465a1fabda182bf3429cbb08dcc6"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 57600,
+     "declared_minus_decoded": -628,
+     "embedded_pcm_best_lag_in_decoded": 714,
+     "embedded_pcm_corr": 0.4308,
+     "embedded_pcm_peak": 17554,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.004,
+      "B_embedded_then_decoded_from_0": 2.423,
+      "decoded_frame_boundary_jumps_median": 0.565,
+      "decoded_first_1152_rms": 390.2,
+      "decoded_1152_2304_rms": 4414.9,
+      "embedded_rms": 2687.3,
+      "embedded_first8": [
+       70,
+       -93,
+       68,
+       107,
+       172,
+       245,
+       269,
+       288
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 3441,
+     "off": 620838336,
+     "sns_sha256": "781655f5f2ce77f09e00768d56f96e0860be3ee0ff946e3173c44faa81a08244",
+     "num_samples": 54298,
+     "blocks": 5,
+     "block_samples": [
+      10368,
+      10368,
+      10368,
+      10368,
+      12826
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4726,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        290,
+        290,
+        290,
+        290,
+        242,
+        242,
+        242,
+        242
+       ],
+       "bitrates": [
+        96,
+        96,
+        96,
+        96,
+        96,
+        80,
+        80,
+        80,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        30,
+        13,
+        32,
+        25,
+        27,
+        14,
+        22,
+        32
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10368,
+       "payload": 2466,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        194,
+        290,
+        242,
+        242,
+        242,
+        338,
+        290,
+        290,
+        338
+       ],
+       "bitrates": [
+        64,
+        96,
+        80,
+        80,
+        80,
+        112,
+        96,
+        96,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        31,
+        1,
+        43,
+        38,
+        29,
+        11,
+        13,
+        41,
+        32
+       ],
+       "exact": true
+      },
+      {
+       "block": 2,
+       "declared_samples": 10368,
+       "payload": 2562,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        290,
+        290,
+        290,
+        290,
+        290,
+        290,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        33,
+        33,
+        22,
+        12,
+        10,
+        38,
+        11,
+        31,
+        9
+       ],
+       "exact": true
+      },
+      {
+       "block": 3,
+       "declared_samples": 10368,
+       "payload": 2802,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        242,
+        482,
+        290,
+        338,
+        290,
+        242,
+        242,
+        386,
+        290
+       ],
+       "bitrates": [
+        80,
+        160,
+        96,
+        112,
+        96,
+        80,
+        80,
+        128,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        36,
+        42,
+        17,
+        21,
+        45,
+        37,
+        12,
+        23,
+        21
+       ],
+       "exact": true
+      },
+      {
+       "block": 4,
+       "declared_samples": 12826,
+       "payload": 4560,
+       "frames": 12,
+       "error": null,
+       "sizes": [
+        482,
+        482,
+        482,
+        482,
+        578,
+        386,
+        242,
+        482,
+        242,
+        242,
+        290,
+        170
+       ],
+       "bitrates": [
+        160,
+        160,
+        160,
+        160,
+        192,
+        128,
+        80,
+        160,
+        80,
+        80,
+        96,
+        56
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        11,
+        30,
+        55,
+        46,
+        25,
+        77,
+        37,
+        8,
+        66,
+        18,
+        9,
+        1
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 48,
+     "mpeg_bytes": 14712,
+     "frames_x1152": 55296,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "02f2ad6bb4c9e6871a344ec574debf86fc5e1aa59603feac3260f0c8cb51282d",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 55296,
+       "channels": 1,
+       "pcm_sha256": "8af58204cfe6285ee5094ab035bfa4b2e26da80b4e4d8aa0cca817a48bf6e360"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 55296,
+       "channels": 1,
+       "pcm_sha256": "29e8780f4fec7fe0d109877658658ee245a56010f11ea3468d15bf22dcc619c2"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 55296,
+     "declared_minus_decoded": -998,
+     "embedded_pcm_best_lag_in_decoded": 1385,
+     "embedded_pcm_corr": 0.5686,
+     "embedded_pcm_peak": 19661,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.638,
+      "B_embedded_then_decoded_from_0": 0.916,
+      "decoded_frame_boundary_jumps_median": 0.281,
+      "decoded_first_1152_rms": 285.9,
+      "decoded_1152_2304_rms": 5776.4,
+      "embedded_rms": 2250.4,
+      "embedded_first8": [
+       -72,
+       -187,
+       -26,
+       -30,
+       -64,
+       -67,
+       -126,
+       -218
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    }
+   ]
+  },
+  "nhl17": {
+   "bank": "H:\\Emulators\\ShadPS4\\Games\\CUSA04326\\databigs\\Extracted\\nhl\\data\\kettle\\audio\\speech\\eng\\pbp_samples.sbr",
+   "records": 3863,
+   "summary": {
+    "vectors": 8,
+    "grammar_tiles_every_block": 8,
+    "nine_frames_per_full_block": 8,
+    "flag_only_on_first_frame": 8,
+    "pcm_1152_on_first_frame": 8,
+    "block_first_frame_main_data_begin_0": 0,
+    "reservoir_used_within_blocks": 8,
+    "decode_mp3_ok": 8,
+    "decode_mp3float_ok": 8,
+    "decoders_agree_exactly": 0,
+    "declared_samples_matched": 0
+   },
+   "vectors": [
+    {
+     "sid": 15360,
+     "off": 706393376,
+     "sns_sha256": "6f0876ac7aa3eb4e172586e4484fdffb9a47e9758400d28bb949c9378d71f334",
+     "num_samples": 19295,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      8927
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4822,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2598,
+        338,
+        290,
+        290,
+        242,
+        338,
+        242,
+        290,
+        194
+       ],
+       "bitrates": [
+        96,
+        112,
+        96,
+        96,
+        80,
+        112,
+        80,
+        96,
+        64
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        32,
+        6,
+        28,
+        41,
+        4,
+        40,
+        4,
+        40
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 8927,
+       "payload": 2368,
+       "frames": 8,
+       "error": null,
+       "sizes": [
+        386,
+        242,
+        290,
+        242,
+        242,
+        338,
+        290,
+        338
+       ],
+       "bitrates": [
+        128,
+        80,
+        96,
+        80,
+        80,
+        112,
+        96,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        5,
+        41,
+        20,
+        44,
+        26,
+        15,
+        2,
+        0
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 17,
+     "mpeg_bytes": 4848,
+     "frames_x1152": 19584,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "0ffc89fd447cd819a9bb99f3bcf090dad4f8eaa5bd7605612076bdff82a258a1",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "071431c250f937b3e04df64d2ddb02014aa7dfecae52bb6f76ce9fe1f13c48e3"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "6ca240f0d3d9b3dd7c6978b4a34af27623e5ece9e1e46bee6f44ec536649c0ca"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 19584,
+     "declared_minus_decoded": -289,
+     "embedded_pcm_best_lag_in_decoded": 3610,
+     "embedded_pcm_corr": 0.164,
+     "embedded_pcm_peak": 4452,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.233,
+      "B_embedded_then_decoded_from_0": 0.432,
+      "decoded_frame_boundary_jumps_median": 0.525,
+      "decoded_first_1152_rms": 52.2,
+      "decoded_1152_2304_rms": 1290.9,
+      "embedded_rms": 237.4,
+      "embedded_first8": [
+       278,
+       4452,
+       1021,
+       1006,
+       453,
+       201,
+       98,
+       86
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 15935,
+     "off": 708257088,
+     "sns_sha256": "1c3078e0dd0711849a32c3cf676f78203bc902cd4ba28a34cb5dfb72e6a87059",
+     "num_samples": 21311,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      10943
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4870,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        290,
+        242,
+        242,
+        290,
+        290,
+        338,
+        290,
+        338
+       ],
+       "bitrates": [
+        80,
+        96,
+        80,
+        80,
+        96,
+        96,
+        112,
+        96,
+        112
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        35,
+        27,
+        25,
+        5,
+        16,
+        18,
+        36,
+        13
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10943,
+       "payload": 3188,
+       "frames": 10,
+       "error": null,
+       "sizes": [
+        242,
+        386,
+        290,
+        290,
+        290,
+        242,
+        242,
+        482,
+        482,
+        242
+       ],
+       "bitrates": [
+        80,
+        128,
+        96,
+        96,
+        96,
+        80,
+        80,
+        160,
+        160,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        19,
+        13,
+        38,
+        15,
+        33,
+        46,
+        10,
+        4,
+        54,
+        70
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 19,
+     "mpeg_bytes": 5712,
+     "frames_x1152": 21888,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "e2826fe3e1b245e3ca7b0d5369f2dbbcd90aab6bc7128fa9e6d3a290d731cdfc",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "b2d4c3523ed4b892ec5c8c1f1ed64475a28dcf30bf62bdb6eb361ac7878d700f"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "d96ee13b2d88640b3fc21dfb45f5483e16893fc0adcdbfbd7d94fdd7192d4e9e"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 21888,
+     "declared_minus_decoded": -577,
+     "embedded_pcm_best_lag_in_decoded": 3598,
+     "embedded_pcm_corr": 0.4175,
+     "embedded_pcm_peak": 749,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.037,
+      "B_embedded_then_decoded_from_0": 0.057,
+      "decoded_frame_boundary_jumps_median": 0.503,
+      "decoded_first_1152_rms": 24.7,
+      "decoded_1152_2304_rms": 1988.1,
+      "embedded_rms": 136.3,
+      "embedded_first8": [
+       649,
+       -73,
+       310,
+       42,
+       29,
+       66,
+       72,
+       103
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 16498,
+     "off": 709693056,
+     "sns_sha256": "ec9c4f32345bee4d736d37f8276d2c3e9a8b639344a7d3af8c2e5da53d8c3380",
+     "num_samples": 18506,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      8138
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4966,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2454,
+        338,
+        482,
+        242,
+        290,
+        242,
+        242,
+        386,
+        290
+       ],
+       "bitrates": [
+        48,
+        112,
+        160,
+        80,
+        96,
+        80,
+        80,
+        128,
+        96
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        5,
+        7,
+        65,
+        28,
+        46,
+        32,
+        32,
+        30
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 8138,
+       "payload": 2896,
+       "frames": 8,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        290,
+        290,
+        242,
+        482,
+        578,
+        482
+       ],
+       "bitrates": [
+        96,
+        80,
+        96,
+        96,
+        80,
+        160,
+        192,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        39,
+        17,
+        1,
+        10,
+        24,
+        14,
+        60,
+        23
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 17,
+     "mpeg_bytes": 5520,
+     "frames_x1152": 19584,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "3f8f5362a627088f307101d44cd6b3f14d6c7e2e9a24854fbf12b855f740bd78",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "dc411f507d0164e8c9c92aef7f8562e76f855c9476ba03bec38de7ef53974b65"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "e44c9d5bede67dc895302af9edd9b450bba75a8e144e59327c5ae6da5dc6227e"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 19584,
+     "declared_minus_decoded": -1078,
+     "embedded_pcm_best_lag_in_decoded": 856,
+     "embedded_pcm_corr": 0.4206,
+     "embedded_pcm_peak": 4820,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.036,
+      "B_embedded_then_decoded_from_0": 0.055,
+      "decoded_frame_boundary_jumps_median": 0.388,
+      "decoded_first_1152_rms": 50.5,
+      "decoded_1152_2304_rms": 695.0,
+      "embedded_rms": 252.7,
+      "embedded_first8": [
+       4820,
+       4225,
+       1227,
+       118,
+       -272,
+       -292,
+       -192,
+       -82
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 17056,
+     "off": 710710944,
+     "sns_sha256": "2442791ac7d4128ae6c4e4b87118896ff26dbf607d933db9ff0e5028b174b335",
+     "num_samples": 13600,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      3232
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5206,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        290,
+        290,
+        482,
+        338,
+        386,
+        338,
+        290,
+        242
+       ],
+       "bitrates": [
+        80,
+        96,
+        96,
+        160,
+        112,
+        128,
+        112,
+        96,
+        80
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        11,
+        33,
+        43,
+        86,
+        6,
+        8,
+        44,
+        21
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 3232,
+       "payload": 1062,
+       "frames": 3,
+       "error": null,
+       "sizes": [
+        290,
+        482,
+        290
+       ],
+       "bitrates": [
+        96,
+        160,
+        96
+       ],
+       "flags": [
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        18,
+        10,
+        38
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 12,
+     "mpeg_bytes": 3936,
+     "frames_x1152": 13824,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "cf5dd8ce62efcb15858d05b764c179b8ef9d613bdf45f75d8ddf178fa5a7dfd6",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "b6d17d8cecb94d8f97077edc68e87a8cb8654842bdfdb14af0eaa4a1cada2849"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "47c83fe333aec7afc79c8e02ff22c384a192fb75f62a9226b4788c9cd2212a5f"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 13824,
+     "declared_minus_decoded": -224,
+     "embedded_pcm_best_lag_in_decoded": 919,
+     "embedded_pcm_corr": 0.4123,
+     "embedded_pcm_peak": 9803,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.009,
+      "B_embedded_then_decoded_from_0": 1.493,
+      "decoded_frame_boundary_jumps_median": 0.653,
+      "decoded_first_1152_rms": 365.9,
+      "decoded_1152_2304_rms": 6906.3,
+      "embedded_rms": 2220.2,
+      "embedded_first8": [
+       -816,
+       -749,
+       213,
+       450,
+       505,
+       421,
+       309,
+       274
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 64397,
+     "off": 712657376,
+     "sns_sha256": "21f987c36eca41436294e23d43eafbb4be5c07b678f8a1195d5081764a4d0169",
+     "num_samples": 13211,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      2843
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4726,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        290,
+        290,
+        290,
+        290,
+        290,
+        290,
+        242,
+        194
+       ],
+       "bitrates": [
+        80,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        80,
+        64
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        4,
+        16,
+        17,
+        22,
+        25,
+        1,
+        32,
+        43
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 2843,
+       "payload": 1206,
+       "frames": 3,
+       "error": null,
+       "sizes": [
+        482,
+        482,
+        242
+       ],
+       "bitrates": [
+        160,
+        160,
+        80
+       ],
+       "flags": [
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        12,
+        70,
+        44
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 12,
+     "mpeg_bytes": 3600,
+     "frames_x1152": 13824,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "9edb82582a45a9f2d713f17d2f7ed6db9f34db16e881cb495530b4c4f0485717",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "017cdf5590d1138be34610d166790453b248db5a8e6b07d94a7222962d890f44"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 13824,
+       "channels": 1,
+       "pcm_sha256": "274cce521a1e001086a2029d694e1401f11498e6e441b47c04d6a63e932a4148"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 13824,
+     "declared_minus_decoded": -613,
+     "embedded_pcm_best_lag_in_decoded": 270,
+     "embedded_pcm_corr": 0.5966,
+     "embedded_pcm_peak": 7756,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.669,
+      "B_embedded_then_decoded_from_0": 0.663,
+      "decoded_frame_boundary_jumps_median": 1.081,
+      "decoded_first_1152_rms": 614.6,
+      "decoded_1152_2304_rms": 1534.5,
+      "embedded_rms": 1844.4,
+      "embedded_first8": [
+       -3702,
+       -4315,
+       -3770,
+       -2628,
+       -1259,
+       -25,
+       845,
+       1312
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 69157,
+     "off": 714578592,
+     "sns_sha256": "3adb0744e2c2ee36308897ea5224ebb7385b6f5bb8d9238627a41989fef7c58a",
+     "num_samples": 15401,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      5033
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4918,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        290,
+        338,
+        290,
+        290,
+        290,
+        290,
+        290,
+        290
+       ],
+       "bitrates": [
+        80,
+        96,
+        112,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        47,
+        7,
+        28,
+        23,
+        9,
+        4,
+        25,
+        11
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 5033,
+       "payload": 1882,
+       "frames": 5,
+       "error": null,
+       "sizes": [
+        338,
+        242,
+        482,
+        482,
+        338
+       ],
+       "bitrates": [
+        112,
+        80,
+        160,
+        160,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        18,
+        29,
+        5,
+        71,
+        61
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 14,
+     "mpeg_bytes": 4464,
+     "frames_x1152": 16128,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "23c22a0ef4714d08403ff5033e9347edee21c9e4565fd4fd0504dc41de55f5d8",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 16128,
+       "channels": 1,
+       "pcm_sha256": "c6eeff1cccf2fd65700181da96b6a2dcabdb6cacab512794003bb79cce94652b"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 16128,
+       "channels": 1,
+       "pcm_sha256": "c30931cda7b8ad113b79896b82f0d2ef7de80e4c44e2fcff386b9a574499205d"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 16128,
+     "declared_minus_decoded": -727,
+     "embedded_pcm_best_lag_in_decoded": 979,
+     "embedded_pcm_corr": 0.6341,
+     "embedded_pcm_peak": 1347,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.024,
+      "B_embedded_then_decoded_from_0": 0.637,
+      "decoded_frame_boundary_jumps_median": 0.699,
+      "decoded_first_1152_rms": 226.7,
+      "decoded_1152_2304_rms": 2597.7,
+      "embedded_rms": 559.9,
+      "embedded_first8": [
+       -55,
+       468,
+       983,
+       1234,
+       1302,
+       1274,
+       1196,
+       1073
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 85639,
+     "off": 719447168,
+     "sns_sha256": "64d6a51c14ab2addb52ffb39856fb804926df42e1454d5abd2166fd66ac30b84",
+     "num_samples": 20959,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      10591
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 5398,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        482,
+        482,
+        386,
+        290,
+        242,
+        338,
+        338,
+        290
+       ],
+       "bitrates": [
+        80,
+        160,
+        160,
+        128,
+        96,
+        80,
+        112,
+        112,
+        96
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        26,
+        56,
+        34,
+        45,
+        15,
+        33,
+        19,
+        43
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 10591,
+       "payload": 3956,
+       "frames": 10,
+       "error": null,
+       "sizes": [
+        242,
+        338,
+        482,
+        242,
+        338,
+        386,
+        482,
+        482,
+        482,
+        482
+       ],
+       "bitrates": [
+        80,
+        112,
+        160,
+        80,
+        112,
+        128,
+        160,
+        160,
+        160,
+        160
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        20,
+        12,
+        7,
+        80,
+        3,
+        11,
+        37,
+        22,
+        27,
+        33
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 19,
+     "mpeg_bytes": 7008,
+     "frames_x1152": 21888,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "1f7e7e93fa1a6bf541d3ea573be441ec3d0f5b938fbd713c52d6a8ae759d934b",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "95874bb4a1ebd586cc5a489482db3d4221027a7de3a3936997f97be18dde4a7d"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 21888,
+       "channels": 1,
+       "pcm_sha256": "015383d4a330cd808df8091c6c0c5edf61323a562b741eff1ff5b6ab04265ba0"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 21888,
+     "declared_minus_decoded": -929,
+     "embedded_pcm_best_lag_in_decoded": 1270,
+     "embedded_pcm_corr": 0.4044,
+     "embedded_pcm_peak": 3548,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.018,
+      "B_embedded_then_decoded_from_0": 0.518,
+      "decoded_frame_boundary_jumps_median": 0.348,
+      "decoded_first_1152_rms": 200.2,
+      "decoded_1152_2304_rms": 1142.6,
+      "embedded_rms": 997.7,
+      "embedded_first8": [
+       3257,
+       2036,
+       -1664,
+       -2852,
+       -2745,
+       -1705,
+       -316,
+       825
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    {
+     "sid": 86622,
+     "off": 721498112,
+     "sns_sha256": "7ae563423c63acb5a9187e00d82dfa1bf01da19478ea652a6c7f12662665984f",
+     "num_samples": 19373,
+     "blocks": 2,
+     "block_samples": [
+      10368,
+      9005
+     ],
+     "blocks_parsed": [
+      {
+       "block": 0,
+       "declared_samples": 10368,
+       "payload": 4774,
+       "frames": 9,
+       "error": null,
+       "sizes": [
+        2550,
+        242,
+        290,
+        290,
+        290,
+        290,
+        290,
+        242,
+        290
+       ],
+       "bitrates": [
+        80,
+        80,
+        96,
+        96,
+        96,
+        96,
+        96,
+        80,
+        96
+       ],
+       "flags": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        1152,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        0,
+        31,
+        9,
+        28,
+        10,
+        6,
+        20,
+        42,
+        1
+       ],
+       "exact": true
+      },
+      {
+       "block": 1,
+       "declared_samples": 9005,
+       "payload": 2464,
+       "frames": 8,
+       "error": null,
+       "sizes": [
+        290,
+        242,
+        290,
+        290,
+        290,
+        482,
+        242,
+        338
+       ],
+       "bitrates": [
+        96,
+        80,
+        96,
+        96,
+        96,
+        160,
+        80,
+        112
+       ],
+       "flags": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+       ],
+       "pcm_samples": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "main_data_begin": [
+        4,
+        28,
+        1,
+        3,
+        16,
+        14,
+        63,
+        12
+       ],
+       "exact": true
+      }
+     ],
+     "total_frames": 17,
+     "mpeg_bytes": 4896,
+     "frames_x1152": 19584,
+     "embedded_pcm_samples": 1152,
+     "embedded_pcm_sha256": "11eb636ecc207318c099b09fbb98e12be4403979690bf5cad1d2a998e9bfd3b7",
+     "decode": {
+      "mp3": {
+       "codec": "mp3",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "849368b92b5ddd2204f6cbde95f61184cc527403f56e6203682290b9a8b0a59b"
+      },
+      "mp3float": {
+       "codec": "mp3float",
+       "rc": 0,
+       "stderr": "",
+       "rate": 48000,
+       "frames": 19584,
+       "channels": 1,
+       "pcm_sha256": "4943d3355ca7ef05b5775cfaedff59ad1b0742af1d65a22cafe734a92f41f8da"
+      }
+     },
+     "decoder_max_abs_diff": 1,
+     "decoder_len_diff": 0,
+     "decoded_frames": 19584,
+     "declared_minus_decoded": -211,
+     "embedded_pcm_best_lag_in_decoded": 2421,
+     "embedded_pcm_corr": 0.2335,
+     "embedded_pcm_peak": 2318,
+     "junction": {
+      "A_embedded_then_decoded_from_1152": 0.045,
+      "B_embedded_then_decoded_from_0": 1.688,
+      "decoded_frame_boundary_jumps_median": 0.625,
+      "decoded_first_1152_rms": 174.1,
+      "decoded_1152_2304_rms": 1274.9,
+      "embedded_rms": 541.0,
+      "embedded_first8": [
+       1401,
+       -201,
+       -1397,
+       -1889,
+       -1647,
+       -942,
+       -161,
+       378
+      ],
+      "decoded_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     }
+    }
+   ]
+  }
+ }
+}

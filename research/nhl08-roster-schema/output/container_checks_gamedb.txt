@@ -1,0 +1,98 @@
+$ python research/nhl08-roster-schema/scripts/container_checks.py anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng.db anchors/xbox360/nhl08/databases/nhlng-meta.xml
+file anchors/xbox360/nhl08/databases/nhlng.db
+size 1556560 (0x17c050)
+magic 'DB'  checksum_a stored 0000004f computed(crc32/ieee [0x1C..EOF]) 1df4efaa MISMATCH  version word 1463560775  word@0x18 1095387982
+embedded TDB headers: ['@0x0 size 1556560 tables 79']
+bytes between container header and TDB: 0 (zero: 0, nonzero: 0)
+inner TDB @0x0: version 8 big_endian True db_size 1556560 (0x17c050) word@0x0C 0x0 tables 79
+inner CRCs: file header ok; prior_crc ok 79/79; table header_crc ok 79/79; EOF crc stored d89a92c6 computed d89a92c6 ok
+data_alloc_type distribution: {2: 79}
+(word@+0x10, word@+0x18, index_count, u16@+0x1E, word@+0x20) distribution: {(0, 65535, 0, 0, 0): 79}
+records: sum(current) 40866  sum(max) 40866  tables with cur>0: 33  tables with max>cur: 0  max==cur everywhere: True
+record_len_bits == record_len_bytes*8-1 for every table: True
+tail after inner TDB: 0 bytes (0x17c050..0x17c050), all zero: True
+table blocks contiguous in directory order: yes ; last block ends at 0x17c04c, db_size end 0x17c050 (EOF crc occupies the last 4 bytes: True)
+
+save  role    parent parent name                     recB capacity  capacity source                 bytes
+AJKN  UNDECLARED
+Vzjq  UNDECLARED
+Roup  UNDECLARED
+NDEo  UNDECLARED
+gtua  UNDECLARED
+lSMf  UNDECLARED
+OEtS  UNDECLARED
+EClp  UNDECLARED
+WdaS  UNDECLARED
+QEoV  UNDECLARED
+yuHm  UNDECLARED
+lVMf  UNDECLARED
+JLWf  UNDECLARED
+cPbu  UNDECLARED
+caBZ  UNDECLARED
+ulGe  UNDECLARED
+FKif  UNDECLARED
+yvSd  UNDECLARED
+ajmx  UNDECLARED
+FJTs  UNDECLARED
+ttOk  UNDECLARED
+oYeE  UNDECLARED
+PwCR  UNDECLARED
+xZCi  UNDECLARED
+PSFv  UNDECLARED
+IALy  UNDECLARED
+FekM  UNDECLARED
+SsSL  UNDECLARED
+kKzq  UNDECLARED
+LwGR  UNDECLARED
+sDbJ  UNDECLARED
+uGze  UNDECLARED
+kGzd  UNDECLARED
+kPYO  UNDECLARED
+xLuM  UNDECLARED
+kPCA  UNDECLARED
+lqNn  UNDECLARED
+ZXww  UNDECLARED
+vHJZ  UNDECLARED
+MMxP  UNDECLARED
+NFkQ  UNDECLARED
+TKKI  UNDECLARED
+juMS  UNDECLARED
+CtBM  UNDECLARED
+xxMJ  UNDECLARED
+sziH  UNDECLARED
+ulvZ  UNDECLARED
+XrSd  UNDECLARED
+AebM  UNDECLARED
+dDxH  UNDECLARED
+rgQY  UNDECLARED
+Icui  UNDECLARED
+yvnq  UNDECLARED
+wiLv  UNDECLARED
+CwnF  UNDECLARED
+WRGI  UNDECLARED
+HUMb  UNDECLARED
+Ewsk  UNDECLARED
+TlmR  UNDECLARED
+sbGR  UNDECLARED
+wFSR  UNDECLARED
+QfUJ  UNDECLARED
+ubnj  UNDECLARED
+wcLl  UNDECLARED
+ihmS  UNDECLARED
+Urkm  UNDECLARED
+pDCn  UNDECLARED
+OqAO  UNDECLARED
+FfSU  UNDECLARED
+ySst  UNDECLARED
+nAUy  UNDECLARED
+gBrU  UNDECLARED
+bwVx  UNDECLARED
+iZyc  UNDECLARED
+LScw  UNDECLARED
+wBzc  UNDECLARED
+sozv  UNDECLARED
+vbHh  UNDECLARED
+puAP  UNDECLARED
+sum(capacity x rec_bytes) = 0 ; zero tail = 0 ; difference = 0 ; schema(db_size) + capacity = 1556560 ; file - TDB base = 1556560
+undeclared save tables: ['AJKN', 'Vzjq', 'Roup', 'NDEo', 'gtua', 'lSMf', 'OEtS', 'EClp', 'WdaS', 'QEoV', 'yuHm', 'lVMf', 'JLWf', 'cPbu', 'caBZ', 'ulGe', 'FKif', 'yvSd', 'ajmx', 'FJTs', 'ttOk', 'oYeE', 'PwCR', 'xZCi', 'PSFv', 'IALy', 'FekM', 'SsSL', 'kKzq', 'LwGR', 'sDbJ', 'uGze', 'kGzd', 'kPYO', 'xLuM', 'kPCA', 'lqNn', 'ZXww', 'vHJZ', 'MMxP', 'NFkQ', 'TKKI', 'juMS', 'CtBM', 'xxMJ', 'sziH', 'ulvZ', 'XrSd', 'AebM', 'dDxH', 'rgQY', 'Icui', 'yvnq', 'wiLv', 'CwnF', 'WRGI', 'HUMb', 'Ewsk', 'TlmR', 'sbGR', 'wFSR', 'QfUJ', 'ubnj', 'wcLl', 'ihmS', 'Urkm', 'pDCn', 'OqAO', 'FfSU', 'ySst', 'nAUy', 'gBrU', 'bwVx', 'iZyc', 'LScw', 'wBzc', 'sozv', 'vbHh', 'puAP']
+

@@ -8,14 +8,23 @@ use tdb_edit::EditError;
 use tdb_relations::RosterModel;
 
 fn anchor(rel: &str) -> Vec<u8> {
-    std::fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../anchors").join(rel)).unwrap()
+    std::fs::read(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../anchors")
+            .join(rel),
+    )
+    .unwrap()
 }
 
 /// Patch one fixed-bit `eGlu` cell in raw bytes and fix CRCs — a dirty-fixture helper.
 fn patch_eglu(bytes: &[u8], record: u32, field: &str, value: u64) -> Vec<u8> {
     let db = TdbFile::parse(bytes).unwrap();
     let eglu = db.table_canonical("eGlu").unwrap();
-    let f = eglu.fields.iter().find(|f| f.id.canonical(db.endian) == field).unwrap();
+    let f = eglu
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == field)
+        .unwrap();
     let mut buf = bytes.to_vec();
     assert!(db.set_u64(&mut buf, eglu, record, f, value));
     db.recompute_crcs(&mut buf);
@@ -61,7 +70,11 @@ fn pre_existing_violation_does_not_block_unrelated_edit() {
     let mut tx = EditTransaction::begin(&dirty).unwrap();
     let db = TdbFile::parse(&dirty).unwrap();
     let ubpc = db.table_canonical("ubPc").unwrap();
-    let vjla = ubpc.fields.iter().find(|f| f.id.canonical(db.endian) == "vjla").unwrap();
+    let vjla = ubpc
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == "vjla")
+        .unwrap();
     let cur = db.read_u64(ubpc, 0, vjla).unwrap();
     let outcome = tx.set_cell_int("ubPc", 0, "vjla", cur);
     assert!(
@@ -81,7 +94,13 @@ fn edit_that_introduces_a_violation_is_rejected() {
     let mut tx = EditTransaction::begin(&bytes).unwrap();
     let res = tx.set_cell_int("eGlu", second, "mCcl", captaincy::CAPTAIN);
     assert!(
-        matches!(res, Err(EditError::AuditFailed { predicate: "single_captain", .. })),
+        matches!(
+            res,
+            Err(EditError::AuditFailed {
+                predicate: "single_captain",
+                ..
+            })
+        ),
         "introducing a second captain must be rejected, got {res:?}"
     );
 }
@@ -123,7 +142,10 @@ fn set_captaincy_demotes_prior_and_commits_clean() {
         .unwrap();
     assert_eq!(outcome.edits, 2, "1 promotion + 1 auto-demotion");
     assert!(
-        outcome.repairs.iter().any(|r| r.contains("demoted prior captain")),
+        outcome
+            .repairs
+            .iter()
+            .any(|r| r.contains("demoted prior captain")),
         "expected an auto-demotion repair, got {:?}",
         outcome.repairs
     );
@@ -142,7 +164,11 @@ fn set_captaincy_demotes_prior_and_commits_clean() {
         .iter()
         .find(|s| s.team_id == team && s.player_id == Some(old_captain))
         .unwrap();
-    assert_ne!(old_slot.captaincy, Some(captaincy::CAPTAIN), "old captain demoted");
+    assert_ne!(
+        old_slot.captaincy,
+        Some(captaincy::CAPTAIN),
+        "old captain demoted"
+    );
     drop(model);
 
     // Commit: CRC-valid and still audit-clean.
@@ -150,7 +176,10 @@ fn set_captaincy_demotes_prior_and_commits_clean() {
     let db = TdbFile::parse(&out).unwrap();
     assert!(db.header_crc_ok(), "committed db header CRC must be valid");
     assert!(db.size_ok());
-    assert!(single_captain(&db).is_empty(), "committed db has no multi-captain team");
+    assert!(
+        single_captain(&db).is_empty(),
+        "committed db has no multi-captain team"
+    );
 }
 
 /// An operation that cannot resolve its target rolls the working bytes back untouched.
@@ -191,7 +220,9 @@ fn alternate_role_makes_no_repairs() {
     let (team, player) = (slot.team_id, slot.player_id.unwrap());
     drop(model);
 
-    let outcome = tx.set_captaincy(team, player, captaincy::ALTERNATE).unwrap();
+    let outcome = tx
+        .set_captaincy(team, player, captaincy::ALTERNATE)
+        .unwrap();
     assert_eq!(outcome.edits, 1);
     assert!(outcome.repairs.is_empty());
 }

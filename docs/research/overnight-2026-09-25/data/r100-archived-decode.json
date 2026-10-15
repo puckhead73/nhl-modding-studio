@@ -1,0 +1,931 @@
+{
+ "note": "R100 - representative DIAGNOSTIC decode of archive-backed `.ast` streams (task 11; separate from the R98 structural result by\ndesign): PS3 NHL 09 / 10 / 12 / 13 through the R92 EALayer3 route (R77 rebuild -> ffmpeg mp3float) on member bytes, and X360 NHL 09\nthrough two readings - (i) the R92 XMA route on the raw packets (the ffmpeg xma2 decoder reads the packet header word that R98b showed\nto be a constant on NHL 09 - expected to fail or miscount; reported as measured) and (ii) a DIAGNOSTIC CONSTRUCTION in memory: each\n0x800 packet's header word rewritten to the XMA2 layout with the frame count obtained by the R98b frame walk (offset bits kept,\nmetadata 1, skip 0), then the R92 RIFF XMA2 wrap. Reading (ii) is a transformation of the shipped bytes and is labelled as such;\na count match under it says the walk's frame counts are consistent with the decoder, nothing about the console.\nDecoder acceptance only; nothing listened to; no WAV kept; nothing written outside the session scratch.\nUsage: python r100_archived_decode.py <out.json> --scratch DIR\n",
+ "ffmpeg": null,
+ "vectors": [
+  {
+   "tree": "ps3-nhl09",
+   "bank": "playercalls",
+   "source": [
+    "data0.big",
+    "data0.big"
+   ],
+   "record": 342,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 81768
+   },
+   "loop": 0,
+   "num_samples": 81768,
+   "blocks": 86,
+   "samples_sum": 81768,
+   "first_delta": 1152,
+   "last_trim": 1223,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 146,
+     "mp3_frames": 146,
+     "rebuild_note": "bit reservoir used, max main_data_begin 255",
+     "decoded_samples": 84096,
+     "rms": 6350.29594202682,
+     "peak": 31564,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 0.1
+  },
+  {
+   "tree": "ps3-nhl09",
+   "bank": "sfx",
+   "source": [
+    "audioboot.big",
+    "data0.big"
+   ],
+   "record": 132,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 1,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 3704400
+   },
+   "loop": 0,
+   "num_samples": 3704400,
+   "blocks": 3207,
+   "samples_sum": 3704400,
+   "first_delta": 1152,
+   "last_trim": 1631,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 6436,
+     "mp3_frames": 3218,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3707136,
+     "rms": 10136.97549445162,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 4.9
+  },
+  {
+   "tree": "ps3-nhl09",
+   "bank": "crowds",
+   "cc": 3,
+   "loop": false,
+   "no_such_entry": true
+  },
+  {
+   "tree": "ps3-nhl09",
+   "bank": "crowds",
+   "source": [
+    "audioboot.big",
+    "data0.big"
+   ],
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 1,
+    "num_samples": 4974069
+   },
+   "loop": 1,
+   "num_samples": 4974069,
+   "blocks": 1,
+   "samples_sum": 29,
+   "first_delta": 3456,
+   "last_trim": 3456,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    },
+    {
+     "sub_stream": 1,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "seconds": 0.1
+  },
+  {
+   "tree": "ps3-nhl10",
+   "bank": "playercalls",
+   "source": [
+    "audio.big",
+    "loose"
+   ],
+   "record": 382,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 49382
+   },
+   "loop": 0,
+   "num_samples": 49382,
+   "blocks": 51,
+   "samples_sum": 49382,
+   "first_delta": 1152,
+   "last_trim": 1353,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 90,
+     "mp3_frames": 90,
+     "rebuild_note": "bit reservoir used, max main_data_begin 255",
+     "decoded_samples": 51840,
+     "rms": 5878.691805091963,
+     "peak": 32720,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 0.1
+  },
+  {
+   "tree": "ps3-nhl10",
+   "bank": "sfx",
+   "source": [
+    "audioboot2.big",
+    "audio.big"
+   ],
+   "record": 449,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 1,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 3704400
+   },
+   "loop": 0,
+   "num_samples": 3704400,
+   "blocks": 3207,
+   "samples_sum": 3704400,
+   "first_delta": 1152,
+   "last_trim": 1631,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 6436,
+     "mp3_frames": 3218,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3707136,
+     "rms": 10136.97549445162,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 5.2
+  },
+  {
+   "tree": "ps3-nhl10",
+   "bank": "crowds",
+   "source": [
+    "audioboot2.big",
+    "loose"
+   ],
+   "record": 144,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 48000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 1270528
+   },
+   "loop": 0,
+   "num_samples": 1270528,
+   "blocks": 1102,
+   "samples_sum": 1270528,
+   "first_delta": 1152,
+   "last_trim": 1327,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 2210,
+     "mp3_frames": 1105,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 1272960,
+     "rms": 4619.770872627077,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    },
+    {
+     "sub_stream": 1,
+     "granules": 2210,
+     "mp3_frames": 1105,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 1272960,
+     "rms": 4628.595554475957,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": false,
+   "seconds": 3.5
+  },
+  {
+   "tree": "ps3-nhl10",
+   "bank": "crowds",
+   "source": [
+    "audioboot2.big",
+    "loose"
+   ],
+   "record": 121,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 48000,
+    "type": "stream",
+    "loop": 1,
+    "num_samples": 751008
+   },
+   "loop": 1,
+   "num_samples": 751008,
+   "blocks": 1,
+   "samples_sum": 32,
+   "first_delta": 3456,
+   "last_trim": 3456,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    },
+    {
+     "sub_stream": 1,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "seconds": 0.1
+  },
+  {
+   "tree": "ps3-nhl12",
+   "bank": "playercalls",
+   "source": [
+    "nocache.big",
+    "nocache.big"
+   ],
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 33207
+   },
+   "loop": 0,
+   "num_samples": 33207,
+   "blocks": 34,
+   "samples_sum": 33207,
+   "first_delta": 1152,
+   "last_trim": 1400,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 62,
+     "mp3_frames": 62,
+     "rebuild_note": "bit reservoir used, max main_data_begin 255",
+     "decoded_samples": 35712,
+     "rms": 5028.231127686704,
+     "peak": 31046,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 0.1
+  },
+  {
+   "tree": "ps3-nhl12",
+   "bank": "sfx",
+   "source": [
+    "audioboot2.big",
+    "nocache.big"
+   ],
+   "record": 92,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 1,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 133749
+   },
+   "loop": 0,
+   "num_samples": 133749,
+   "blocks": 114,
+   "samples_sum": 133749,
+   "first_delta": 1152,
+   "last_trim": 2234,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 238,
+     "mp3_frames": 119,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 137088,
+     "rms": 7241.4536929143715,
+     "peak": 27322,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 0.2
+  },
+  {
+   "tree": "ps3-nhl12",
+   "bank": "crowds",
+   "source": [
+    "nocache.big",
+    "nocache.big"
+   ],
+   "record": 6,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 48000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 1270528
+   },
+   "loop": 0,
+   "num_samples": 1270528,
+   "blocks": 1102,
+   "samples_sum": 1270528,
+   "first_delta": 1152,
+   "last_trim": 1327,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 2210,
+     "mp3_frames": 1105,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 1272960,
+     "rms": 4619.770872627077,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    },
+    {
+     "sub_stream": 1,
+     "granules": 2210,
+     "mp3_frames": 1105,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 1272960,
+     "rms": 4628.595554475957,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": false,
+   "seconds": 3.5
+  },
+  {
+   "tree": "ps3-nhl12",
+   "bank": "crowds_winterclassic",
+   "source": [
+    "nocache.big",
+    "nocache.big"
+   ],
+   "record": 9,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 1,
+    "num_samples": 4909713
+   },
+   "loop": 1,
+   "num_samples": 4909713,
+   "blocks": 1,
+   "samples_sum": 29,
+   "first_delta": 3456,
+   "last_trim": 3456,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    },
+    {
+     "sub_stream": 1,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "seconds": 0.1
+  },
+  {
+   "tree": "ps3-nhl13",
+   "bank": "playercalls",
+   "source": [
+    "nocache.big",
+    "cacheaudio.big"
+   ],
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 33207
+   },
+   "loop": 0,
+   "num_samples": 33207,
+   "blocks": 34,
+   "samples_sum": 33207,
+   "first_delta": 1152,
+   "last_trim": 1400,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 62,
+     "mp3_frames": 62,
+     "rebuild_note": "bit reservoir used, max main_data_begin 255",
+     "decoded_samples": 35712,
+     "rms": 5028.231127686704,
+     "peak": 31046,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 0.1
+  },
+  {
+   "tree": "ps3-nhl13",
+   "bank": "sfx",
+   "source": [
+    "audioboot2.big",
+    "cacheaudio.big"
+   ],
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 1,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 1260672
+   },
+   "loop": 0,
+   "num_samples": 1260672,
+   "blocks": 1091,
+   "samples_sum": 1260672,
+   "first_delta": 1152,
+   "last_trim": 1967,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 2194,
+     "mp3_frames": 1097,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 1263744,
+     "rms": 1979.1920095692287,
+     "peak": 23903,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": true,
+   "seconds": 1.2
+  },
+  {
+   "tree": "ps3-nhl13",
+   "bank": "crowds",
+   "source": [
+    "nocache.big",
+    "cacheaudio.big"
+   ],
+   "record": 18,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 48000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 228096
+   },
+   "loop": 0,
+   "num_samples": 228096,
+   "blocks": 197,
+   "samples_sum": 228096,
+   "first_delta": 1152,
+   "last_trim": 1199,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 400,
+     "mp3_frames": 200,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 230400,
+     "rms": 5747.408534039924,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    },
+    {
+     "sub_stream": 1,
+     "granules": 400,
+     "mp3_frames": 200,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 230400,
+     "rms": 3813.094770609643,
+     "peak": 32767,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "D3_identity": false,
+   "seconds": 0.5
+  },
+  {
+   "tree": "ps3-nhl13",
+   "bank": "crowds",
+   "source": [
+    "nocache.big",
+    "cacheaudio.big"
+   ],
+   "record": 113,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 1,
+    "num_samples": 4874986
+   },
+   "loop": 1,
+   "num_samples": 4874986,
+   "blocks": 1,
+   "samples_sum": 29,
+   "first_delta": 3456,
+   "last_trim": 3456,
+   "refused": null,
+   "eal3": [
+    {
+     "sub_stream": 0,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    },
+    {
+     "sub_stream": 1,
+     "granules": 6,
+     "mp3_frames": 3,
+     "rebuild_note": "bit reservoir used, max main_data_begin 511",
+     "decoded_samples": 3456,
+     "rms": 0.0,
+     "peak": 0,
+     "error": null,
+     "ffmpeg_rc": 0,
+     "D1_decoded_eq_granules_x576": true
+    }
+   ],
+   "seconds": 0.1
+  },
+  {
+   "tree": "x360-nhl09",
+   "bank": "playercalls",
+   "source": [
+    "data0.big",
+    "data0.big"
+   ],
+   "record": 254,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 49382
+   },
+   "loop": 0,
+   "num_samples": 49382,
+   "blocks": 10,
+   "samples_sum": 49382,
+   "first_delta": -3712,
+   "last_trim": -2662,
+   "refused": null,
+   "xma_raw_header": {
+    "packets": 10,
+    "xma_frames": 20,
+    "channels": 1,
+    "decoded_samples": 49382,
+    "decoded_channels": 1,
+    "rms": 6047.993539659014,
+    "peak": 32160,
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_eq_samples_sum": true
+   },
+   "xma_synth_header": {
+    "packets": 10,
+    "walked_frames": 98,
+    "header_rewrites": {
+     "2->10": 9,
+     "2->8": 1
+    },
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "label": "DIAGNOSTIC CONSTRUCTION - packet headers synthesised; not the shipped bytes",
+    "decoded_samples": 49382,
+    "decoded_channels": 1,
+    "rms": 6047.993539659014,
+    "peak": 32160,
+    "decoded_eq_samples_sum": true,
+    "walked_x512_minus_samples_sum": 794
+   },
+   "seconds": 0.1
+  },
+  {
+   "tree": "x360-nhl09",
+   "bank": "crowds",
+   "source": [
+    "audioboot.big",
+    "data0.big"
+   ],
+   "record": 41,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 1,
+    "sample_rate": 36000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 450000
+   },
+   "loop": 0,
+   "num_samples": 450000,
+   "blocks": 88,
+   "samples_sum": 450000,
+   "first_delta": -3712,
+   "last_trim": -3920,
+   "refused": null,
+   "xma_raw_header": {
+    "packets": 88,
+    "xma_frames": 176,
+    "channels": 2,
+    "decoded_samples": 450000,
+    "decoded_channels": 2,
+    "rms": 9080.87640845481,
+    "peak": 32767,
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_eq_samples_sum": true
+   },
+   "xma_synth_header": {
+    "packets": 88,
+    "walked_frames": 880,
+    "header_rewrites": {
+     "2->10": 88
+    },
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "label": "DIAGNOSTIC CONSTRUCTION - packet headers synthesised; not the shipped bytes",
+    "decoded_samples": 450000,
+    "decoded_channels": 2,
+    "rms": 9080.87640845481,
+    "peak": 32767,
+    "decoded_eq_samples_sum": true,
+    "walked_x512_minus_samples_sum": 560
+   },
+   "seconds": 0.1
+  },
+  {
+   "tree": "x360-nhl09",
+   "bank": "sfx",
+   "cc": 3,
+   "loop": false,
+   "no_such_entry": true
+  },
+  {
+   "tree": "x360-nhl09",
+   "bank": "colors1",
+   "source": [
+    "data0.big",
+    "data0.big"
+   ],
+   "record": 69,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 0,
+    "sample_rate": 24000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 69662
+   },
+   "loop": 0,
+   "num_samples": 69662,
+   "blocks": 14,
+   "samples_sum": 69662,
+   "first_delta": -3712,
+   "last_trim": -2462,
+   "refused": null,
+   "xma_raw_header": {
+    "packets": 14,
+    "xma_frames": 28,
+    "channels": 1,
+    "decoded_samples": 69662,
+    "decoded_channels": 1,
+    "rms": 3220.6218738533084,
+    "peak": 17898,
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_eq_samples_sum": true
+   },
+   "xma_synth_header": {
+    "packets": 14,
+    "walked_frames": 137,
+    "header_rewrites": {
+     "2->10": 13,
+     "2->7": 1
+    },
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "label": "DIAGNOSTIC CONSTRUCTION - packet headers synthesised; not the shipped bytes",
+    "decoded_samples": 69662,
+    "decoded_channels": 1,
+    "rms": 3220.6218738533084,
+    "peak": 17898,
+    "decoded_eq_samples_sum": true,
+    "walked_x512_minus_samples_sum": 482
+   },
+   "seconds": 0.1
+  }
+ ],
+ "inputs": {
+  "ps3-nhl09/data0.big:playercalls.abk": "6f2d34176e6d61dd969e0b84cbc1d0203c4b6190b803c50b232ce4e7b9d5b895",
+  "ps3-nhl09/data0.big:playercalls.ast": "ca4ba3d036f607e1af30a4e1dcb826f0470e358d099d97f60ad8ac879d5072a4",
+  "ps3-nhl09/audioboot.big:sfx.abk": "c4d4399a9449b3e9fb19684da72fc654a1246cada5146df992d2a44c49153534",
+  "ps3-nhl09/data0.big:sfx.ast": "abc6f48c287723f8c2d273611abce079d3c58da2809bfa891949c09db24d6e16",
+  "ps3-nhl09/audioboot.big:crowds.abk": "8ce36ded325647142f610bdb48fe755f8fee0e646d958eddcc289fff43dbace9",
+  "ps3-nhl09/data0.big:crowds.ast": "db5b244074cff9072a9e4a90ef5516d1dba8b37cbcf734677bb898657406fe51",
+  "ps3-nhl10/audio.big:playercalls.abk": "1c7990772c072c0f770fa071fd86a058bcd1a5465a27c9dd7c7f69a679ca56b8",
+  "ps3-nhl10/loose:playercalls.ast": "82efd072a41bb0235aad1464e747c271a9f4c33a83809dfe966081996c28df8a",
+  "ps3-nhl10/audioboot2.big:sfx.abk": "153aa6b5a8d5ac8b3cbaec1158c7437aaf587c3baff8c002972ef255e529f8b2",
+  "ps3-nhl10/audio.big:sfx.ast": "28669e919cbb71fad16dc5dd775c36a17f8b6583a57be124116deefb9841f364",
+  "ps3-nhl10/audioboot2.big:crowds.abk": "36067aec3dd09bacbdaafc0ab05db9f5c9368da1a5fa3c6c9113c9441e72c787",
+  "ps3-nhl10/loose:crowds.ast": "c47cbcaf089fe0071aae474eca2926f79fa8b4111be979688efc4a82aa5d15b5",
+  "ps3-nhl12/nocache.big:playercalls.abk": "317dc321afe5170272212f4949960a7ddfd42f6e17cda32e4b3eb192ad86d24c",
+  "ps3-nhl12/nocache.big:playercalls.ast": "baa988740d00cf0f9913ac8e1d693f954c5b530cdc2cf09ebaaa3fbbd73ace7d",
+  "ps3-nhl12/audioboot2.big:sfx.abk": "5695730e280e4180a11e5e1c76bb5e2f314f08eb9152b3a59a9611f57090a683",
+  "ps3-nhl12/nocache.big:sfx.ast": "1b158dfd7041e87bd7686c7db78420d7bd2caa73814ca3873f3b31f0026e662b",
+  "ps3-nhl12/nocache.big:crowds.abk": "f043e31e1ca83fde4dde53ac8086503dbdf6bd17e5d921c04e7859aa04d037a3",
+  "ps3-nhl12/nocache.big:crowds.ast": "b69f5f2dc1a81d1ea710979c55d956a0d76f21a03c569717a1ace04da1c07523",
+  "ps3-nhl12/nocache.big:crowds_winterclassic.abk": "636e7a446a97ff95db26da2af3337571507692be1ed0adf88de7efb4b1aa0c4c",
+  "ps3-nhl12/nocache.big:crowds_winterclassic.ast": "a42fd0d1444e9a69bcd26f3236719b37b194ce06a394858618db1b20de3c8427",
+  "ps3-nhl13/nocache.big:playercalls.abk": "317dc321afe5170272212f4949960a7ddfd42f6e17cda32e4b3eb192ad86d24c",
+  "ps3-nhl13/cacheaudio.big:playercalls.ast": "baa988740d00cf0f9913ac8e1d693f954c5b530cdc2cf09ebaaa3fbbd73ace7d",
+  "ps3-nhl13/audioboot2.big:sfx.abk": "48ee737a7743fc2eb5f0b5d77d91b7c24d17780c921fa3dd7a589670f751816e",
+  "ps3-nhl13/cacheaudio.big:sfx.ast": "2f850a1e16aac10adefd63761ac1628d6f0eec634ef3c08b828f6d26951ae8e1",
+  "ps3-nhl13/nocache.big:crowds.abk": "255908da6190855484dd206643db178220f175495550c380006552767fc6c735",
+  "ps3-nhl13/cacheaudio.big:crowds.ast": "3a3a4982515e1f5f75622357e27f8f1909d1b2954d673bdb9e9f6a2bbdb8bf91",
+  "x360-nhl09/data0.big:playercalls.abk": "52fd321b60d0911d75379f9efadb5b58a08f5b42474263a80a2a9b47a6bae31b",
+  "x360-nhl09/data0.big:playercalls.ast": "372543ad6151d12818ff78cd67d3bf44c20436ad11a815fe609cfdb8de56014d",
+  "x360-nhl09/audioboot.big:crowds.abk": "f5e8ba1afb24e756cd3cbcab76dc18339dd482455efa62d0fea0f64ece966dd5",
+  "x360-nhl09/data0.big:crowds.ast": "a963728b686eb5d2cc18e2bff307c2747b1f0e8ba8038f452f43a4baab079ef0",
+  "x360-nhl09/data0.big:colors1.abk": "a01c11f9bc2884841cb3550e1ea70884eef39790f45deddd86eebc691f0e840d",
+  "x360-nhl09/data0.big:colors1.ast": "16178401f2e56527cf27276d3bb840df2d86bda2d4bf8c2ad3d022dd90d1e585"
+ }
+}

@@ -4,6 +4,12 @@
 > staging TSV semantics (see [staging-tsv-verification.md](staging-tsv-verification.md)) and extends to
 > **all seven games**, including **nhl14** (which had no staging TSV). Machine-readable:
 > [`data/drift-matrix.csv`](data/drift-matrix.csv).
+>
+> **Superseded field-wise by Phase 0:** this doc is table-level (field-set membership + counts). The
+> [`data/schema-diff.csv`](data/schema-diff.csv) artifact ([qa-ledger.md](qa-ledger.md)) carries the
+> full **field-level** diff across the whole catalog — added/removed/**resized**/**retyped**/renamed
+> fields, plus NHL 07 (gen6) and the PS4 line — including the bit-depth/encoding changes noted below as
+> living in the per-field schema snapshots.
 
 Categories (field-set membership only): `IDENTICAL` · `SUBSET (#missing,0)` · `SUPERSET (0,#extra)` ·
 `RESHUFFLED (#missing,#extra)` · `<GAME>-ONLY` · `LEGACY-ONLY`.

@@ -1,0 +1,20 @@
+{
+  "candidate": "NHL Modding Studio rc-20260927-r43",
+  "built": "2026-09-27T12:56:39-06:00 .. 12:58:48-06:00",
+  "command": "npm run build -- --no-bundle (repo root; tauri build; existing target\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 861,
+  "dirty_manifest_sha256": "f1465c8ab16472a8fabeefeb8f402d42012af28a740ace640c08f06a11cf66c6",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "0ee1c38c3cb3fdcfbdedd6976ac66b1cca1a27ce26c07645046149b4dd498b80",
+  "exe_bytes": 49758720,
+  "defs_tree_sha256": "2f763a6e57a18ea319f3f3ec84a222545b8b265b410ebfc833ff7ac7d50f0cd8",
+  "frontend_dist_tree_sha256": "5f2dc1bace6b710d8efeffbefee10d9c8c23d456f33a1ddb7ba00c2d420bc107",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "developer receipts through 42 (incl. 40 goalie gear file positions, 41 schedule preservation, 42 team goalie mask paints)",
+  "tree_sha_definition": "SHA-256 of '<relpath>\t<sha256>\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

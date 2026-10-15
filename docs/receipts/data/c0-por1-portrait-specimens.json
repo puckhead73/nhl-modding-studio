@@ -1,0 +1,242 @@
+{
+  "package": "C0-POR1, corrected by C0-POR1-R1",
+  "schema": "por1-specimen-manifest/2",
+  "generated": "2026-09-08",
+  "author_role": "developer",
+  "reviewer": "Codex (architect)",
+
+  "revision_note": "Revision 2 (C0-POR1-R1). Revision 1 carried provenance labels it had not earned ('vanilla', 'modified'), two wrong totals, and several over-scoped interpretations. This revision replaces them. Counts are NO LONGER restated here: they are generated into c0-por1-census.json by por1_census.py, so there is one source for them rather than two that can diverge. This file carries provenance, qualitative findings and their scope limits.",
+
+  "companion_files": {
+    "docs/receipts/data/c0-por1-census.json": "Generated. Exact reconciled counts by root, folder, extension, subfolder, group and observed structural tuple.",
+    "docs/receipts/data/c0-por1-specimen-hashes.json": "Generated. Exact specimen paths, SHA-256 digests and the full PS3/Xbox 360 comparison output.",
+    "docs/receipts/data/c0-por1-tools/": "The inspection parsers, census and specimen tools, with a README giving invocation and hashes.",
+    "docs/receipts/c0-por1-portrait-measurements.md": "The original measurement record, with an appended corrections log.",
+    "docs/receipts/c0-por1-r1-evidence-scope.md": "The correction record. Governs wherever the two differ."
+  },
+
+  "preservation": {
+    "method": "SHA-256 computed at first read of each named specimen and recomputed after all inspection completed.",
+    "scope": "22 named specimens only. This says NOTHING about the other 47 520 inventoried files, which were opened read-only but were not hashed before and after. No claim of whole-corpus preservation is made.",
+    "specimens_reverified": 22,
+    "mismatches": 0,
+    "sources_written": 0,
+    "access_mode": "every open was read-binary; no write, repack, replace, install or runtime launch occurred at any source location"
+  },
+
+  "vocabulary": {
+    "note": "Revision 1 used 'vanilla' and 'modified'. Neither was established, so both are withdrawn. Groups are named by what was actually observed.",
+    "current": "a file whose extension is .big or .gnf",
+    "backup-labelled": "a file whose extension is .bak. The label is the filename's; nothing here establishes who wrote it, when, or that its content is original.",
+    "other": "a file that is neither, i.e. the one .options build artefact",
+    "base-level-only header": "a texture header whose mip count is 0 and whose payload is exactly one level",
+    "mip-chain header": "a texture header declaring more than one level",
+    "withdrawn": "Neither a .bak sibling nor mipMapCount = 0 establishes that a file is EA-authored or unmodified."
+  },
+
+  "evidence_levels": {
+    "specimen-observation": "measured on named specimens only",
+    "inspected-corpus-invariant": "holds for every file inspected in that root, across ALL groups. A property that holds only within a group defined by that property is not an invariant - it is circular.",
+    "target-requirement": "what the shipped title requires. NOTHING in this package reaches this level: no load test, no acceptance test and no shipping-manifest check was performed on any target."
+  },
+
+  "locations": [
+    {
+      "location_id": "ps3-nhllegacy",
+      "user_supplied_root": "H:\\Emulators\\RPCS3\\dev_hdd0\\game\\BLUS31540\\USRDIR\\fe\\ion\\artassets",
+      "folders_inventoried": ["playerheads", "playerheadssmall"],
+      "path_verified": true,
+      "tree_kind": "observed installed copy",
+      "tree_kind_evidence": "RPCS3 dev_hdd0/game install; the portraits are loose files in the title's own directory layout. The only archives at USRDIR root are options.viv and patch.big.",
+      "tree_kind_limits": [
+        "NOT established to be a pristine shipping layout. No shipping manifest was checked.",
+        "patch.big is present at USRDIR root and was NEVER OPENED. It could shadow or supersede loose files; nothing here rules that out.",
+        "The copy carries third-party writes: 206 backup-labelled files and 206 current files with mip-chain headers where the remainder have base-level-only headers."
+      ],
+      "identity": {
+        "source": "PARAM.SFO at H:\\Emulators\\RPCS3\\dev_hdd0\\game\\BLUS31540\\PARAM.SFO",
+        "TITLE": "NHL Legacy",
+        "TITLE_ID": "BLUS31540",
+        "APP_VER": "01.01",
+        "VERSION": "01.00",
+        "CATEGORY": "GD",
+        "PS3_SYSTEM_VER": "04.7000",
+        "corroboration": "crates/studio-domain/src/discovery.rs:48 records BLUS31540 as the NHL Legacy PS3 title id",
+        "build_identification": "INCOMPLETE. A title id plus an SFO version field is not a build. No patch level, disc revision or executable build string was established."
+      }
+    },
+    {
+      "location_id": "x360-nhllegacy",
+      "user_supplied_root": "H:\\Emulators\\games\\XBOX\\NHL Legacy - Vanilla\\_compiled\\fe\\ion\\artassets",
+      "folders_inventoried": ["playerheads", "playerheadssmall"],
+      "path_verified": true,
+      "tree_kind": "derived tree (extraction or rebuild)",
+      "tree_kind_evidence": "The title root holds the shipping archives (boot.big, cache.big, nocache.big, cacherender.big, data0.big, ...) beside a sibling 'Extracted BIG Files' directory. '_compiled' is therefore a derived loose tree, not the shipping on-disc layout.",
+      "tree_kind_limits": [
+        "Not attributable to the shipped title. Nothing in this package establishes that these bytes are the shipping archive members, unmodified.",
+        "Revision 1 argued authenticity from decoded-pixel agreement with the PS3 copy. THAT ARGUMENT IS WITHDRAWN - see cross_target_observation below."
+      ],
+      "identity": {
+        "source": "default.xex XEX2 EXECUTION_INFO header",
+        "title_id": "454109EC",
+        "media_id": "3CF2A23F",
+        "version": "00000004",
+        "base_version": "00000004",
+        "disc": "1/1",
+        "executable_name": "nhlzf.exe",
+        "corroboration": "crates/studio-domain/src/discovery.rs:48 records 454109EC as the NHL Legacy Xbox 360 title id",
+        "folder_label": "The directory is named 'NHL Legacy - Vanilla'. That is user-supplied text, is not evidence of anything, and in particular does not establish that the tree is vanilla.",
+        "build_identification": "INCOMPLETE. No build or date string was extracted."
+      }
+    },
+    {
+      "location_id": "ps4-nhl21",
+      "user_supplied_root": "H:\\Emulators\\ShadPS4\\Games\\CUSA18182\\databigs\\Extracted\\nhl\\ui\\kettle_assets\\playerportraits",
+      "folders_inventoried": ["playerportraits"],
+      "path_verified": true,
+      "tree_kind": "extracted tree",
+      "tree_kind_evidence": "The supplied path is literally databigs/Extracted/...; the title root carries databigs/, sce_sys/ and eboot.bin.",
+      "tree_kind_limits": [
+        "The outer .big packaging was NOT examined. An extracted tree does not establish it.",
+        "Files here are stored decompressed, so the shipping payload codec is not observable at all."
+      ],
+      "identity": {
+        "source": "sce_sys/param.sfo",
+        "TITLE": "NHL 21",
+        "TITLE_ID": "CUSA18182",
+        "CONTENT_ID": "EP0006-CUSA18182_00-NHLICEHOCKEY2021",
+        "APP_VER": "01.00",
+        "VERSION": "01.01",
+        "CATEGORY": "gd",
+        "PUBTOOLINFO_c_date": "20200901",
+        "PUBTOOLINFO_sdk_ver": "07508000",
+        "region_hint": "EP0006 is a SCEE / European publish label",
+        "measured_not_inferred": "The title was read from this copy's own param.sfo. Nothing about this target was inferred from the two NHL Legacy copies.",
+        "build_identification": "INCOMPLETE. c_date and sdk_ver are recorded; not cross-checked against any other NHL 21 copy."
+      }
+    }
+  ],
+
+  "folder_spelling_discrepancy": {
+    "requested": ["playerhead", "playerheadsmall"],
+    "actual": ["playerheads", "playerheadssmall"],
+    "note": "Neither requested spelling exists. The difference is a missing plural 's', not a backslash-escape artefact - the supplied paths contained no backslash before an underscore. The three supplied roots verified exactly as written. The real directory names are used throughout and no other directory was substituted."
+  },
+
+  "build_toolchain_artifact": {
+    "location_id": "x360-nhllegacy",
+    "relative_path": "playerheadssmall/p0_4000/p1112_glump.options",
+    "bytes": 488,
+    "sha256": "7bae76522045c78bd4a0a370ff190ee94d83675bec78d7dc25c75f8430a15bf0",
+    "significance": "A leftover EA packaging command line that describes the archive layout from EA's own toolchain rather than by inference from bytes. It is a NON-PIXEL corroboration, and it is unrelated to the withdrawn decoded-pixel authenticity argument.",
+    "observed_flags": ["-big", "-o32", "-b0", "-v0", "-failoverlap4096", "-pack1", "-paths0", "-packthresh1024", "-pad4", "-align64"],
+    "declared_member_order": ["0", "p1112_geometry\\177", "p1112_textures\\sg1", "p1112_textures\\176", "sg2", "1"],
+    "source_build_path": "C:\\p4\\nhl\\eacgfx\\build\\runtime\\xenon\\fe\\ion\\artAssets\\playerHeadsSmall\\p0_4000\\p1112.big",
+    "corroborates": ["the 6-member order", "the 64-byte member alignment", "that sg1/sg2 are group markers under a textures group"],
+    "does_not_establish": "anything about install behaviour on a retail console, or that this tree is unmodified. It is a build artefact, not a shipped asset.",
+    "excluded_from_archive_counts": true
+  },
+
+  "structural_variants": {
+    "revision_1_claim": "'Two structural variants, one per platform generation.' That was scoped to the BIGF member shape alone and read as though it covered the whole format. Withdrawn as stated.",
+    "what_is_actually_uniform": {
+      "gen7_member_shape": "All 37 120 Gen7 archives accepted by the inspection parser carry exactly 6 members in the name pattern ['0', '<num>', 'sg1', '<num>', 'sg2', '1'], with exactly 1 texture payload each. Zero exceptions in either group.",
+      "note": "Member names were normalised: the two numeric member names are per-archive APT resource ids and vary. Not normalising them fragments the tuple into thousands of pseudo-variants, which is an artefact of the id and not a structural difference."
+    },
+    "what_still_varies_and_is_a_real_variant": [
+      "dimensions - three co-existing sizes on the Gen7 targets",
+      "mip count - base-level-only versus mip-chain headers, on the PS3 copy only",
+      "colour format - the PS4 num_format field is 0 on 10 246 files and 9 on 175",
+      "PS4 dst_sel_x - 7 on the majority, 0 on the same 175 files"
+    ],
+    "distinct_observed_structural_tuples": "15 across the five folders (13 Gen7, 2 PS4), enumerated with exact counts in c0-por1-census.json. This is the honest variant count once dimensions, mips, colour format and group are included."
+  },
+
+  "counts": {
+    "see": "docs/receipts/data/c0-por1-census.json",
+    "corrections_to_revision_1": [
+      "Revision 1 said 36 930 Gen7 archives. The correct figure is 37 120 archives accepted by the inspection parser (18 663 PS3 including backup-labelled files, 18 457 Xbox 360).",
+      "Revision 1 said 47 351 files inventoried. The correct figure is 47 542.",
+      "Revision 1 used 18 561 for the PS3 archive count in the profile; the correct figures are 18 663 files inventoried and 18 457 current .big files."
+    ],
+    "count_kinds": {
+      "files_inventoried": "every file present in the five folders, including backup-labelled files and the one .options artefact: 47 542",
+      "archives_or_texture_files_accepted": "files accepted by the inspection parser: 47 541 (the .options file is the single exclusion)",
+      "texture_payloads": "47 541 - exactly one per accepted file, in every folder"
+    },
+    "accepted_means": "The inspection parser found the fields it looks for at the offsets it expects. It is NOT semantic validation, and it does not establish that a file is well-formed for the game."
+  },
+
+  "path_and_id_observations": {
+    "template": "fe/ion/artassets/<folder>/<bucket>/p<id>.big",
+    "case": "lower",
+    "filename_conformance": "all 37 120 Gen7 archives match p<digits>.big (or .big.bak); all 10 421 PS4 files match p<digits>.gnf; zero non-conforming names",
+    "observed_bucket_membership": {
+      "p0_4000": "ids 1-3999",
+      "p4001_8000": "ids 4001-7998",
+      "p8001_12000": "ids 8003-12401",
+      "silhouettes": "ids 60000-60003"
+    },
+    "withdrawn_claim": "Revision 1 stated that the id-to-bucket rule 'is NOT the literal folder-name ranges' and presented that as a finding. No candidate bucket function was ever formulated or tested, so only the membership above is known. That p8001_12000 contains ids above 12000 is an observation about membership, not an identified rule.",
+    "identity_caveat": "The numeric id is observed in the filename only. Its binding to any database field (ubPc.lOnr is used for this elsewhere in the application) was not examined."
+  },
+
+  "cross_target_observation": {
+    "what_was_run": "For a seeded (seed=7) sample of 25 ids per folder from the p0_4000 bucket only, the PS3 and Xbox 360 DXT5 block streams were compared after undoing the Xbox 360 8-in-16 byte swap and 2D tiling. Full output in c0-por1-specimen-hashes.json.",
+    "result": "50 compared; 49 identical; 1 differing. The differing file, playerheadssmall/p127.big, is a PS3 current file that has a backup-labelled sibling; that sibling's block stream does match the Xbox 360 file.",
+    "shared_stages": ["parse_bigf", "refpack_decode", "decode_dxt5"],
+    "stages_actually_exercised": ["parse_xpr2", "swap16", "xbox360_tiled_offset (transcribed from crates/tdb-rx2/src/texlib.rs)"],
+    "what_this_establishes": "That for these 50 specimens, the Xbox 360-specific stages produce the same block stream the PS3 file holds directly. Because the BIGF, RefPack and DXT5 stages are the SAME CODE on both sides, a fault common to both would cancel out and would not be detected.",
+    "what_this_does_NOT_establish": [
+      "that the Xbox 360 tree is authentic, unmodified, or the set the game ships - revision 1 used it that way and that use is WITHDRAWN",
+      "that PS3 and Xbox 360 portraits are equivalent target-wide; this is 50 ids in one bucket of one title",
+      "any target-scoped format constraint on either platform"
+    ]
+  },
+
+  "alpha_observation": {
+    "scope": "SPECIMEN OBSERVATION ONLY - three PS3 specimens: playerheads/p0_4000/p1008.big, playerheads/p0_4000/p1.big, playerheadssmall/p0_4000/p1008.big.",
+    "method": "Decoded with the C0-POR1 DXT5 decoder (por1_formats.decode_dxt5), then tested whether any colour channel exceeds alpha on semi-transparent texels.",
+    "result": "It does, by up to 253/255, which is inconsistent with premultiplied content on those specimens.",
+    "withdrawn_claim": "Revision 1 recorded target-wide 'straight' alpha. Three files decoded by one decoder do not support a target-wide constraint, and the profile's raster block no longer carries one."
+  },
+
+  "ps4_header_observations": {
+    "nature": "All values below are INTERPRETATIONS of GNM T# descriptor bitfields, using the layout documented in crates/tdb-rx2/src/gnf.rs. No PS4 pixel data was decoded in this package.",
+    "uniform_across_all_10421": {
+      "width": 512,
+      "height": 340,
+      "data_format": 41,
+      "tiling_index": 13,
+      "last_level": 0,
+      "version": 2,
+      "contents_size": 248,
+      "file_bytes": 180480
+    },
+    "not_uniform": {
+      "num_format": {"0": 10246, "9": 175},
+      "dst_sel_x": {"7": 10246, "0": 175}
+    },
+    "codec": "data_format 41 (0x29) maps to BC7 in the GCN IMG_DATA_FORMAT table. That is a documented table lookup, not a decode.",
+    "padding_arithmetic": "180480 - 256 = 180224 = 128 x 88 blocks x 16 bytes, which is consistent with a 512x352 padded surface carrying 340 logical rows.",
+    "withdrawn_claims": [
+      "Revision 1 said the 384 all-zero blocks 'independently confirm' the 340 logical height. They are CONSISTENT with 3 padding block rows but have other explanations - a blank image region encodes identically - so they are not independent confirmation. The height is read from the descriptor.",
+      "Revision 1 argued the surface must be tiled because a linear surface would carry no padding. Linear surfaces can be pitch-padded, so the padding does not imply tiling. The only evidence for the tiling mode is the tiling_index field."
+    ]
+  },
+
+  "specimens": {
+    "see": "docs/receipts/data/c0-por1-specimen-hashes.json",
+    "note": "22 named specimens with exact relative paths, byte sizes, SHA-256 digests and group labels, generated by por1_specimens.py. Digests are unchanged from revision 1; only the group labels were corrected."
+  },
+
+  "coverage_limits": [
+    "Container and texture headers were parsed for every file in the five folders, so the count and header-field distributions are census results rather than extrapolations. Pixel-level decoding was NOT: it covers a handful of PS3 and Xbox 360 specimens plus the 50-id block-stream comparison, and no PS4 file at all.",
+    "Only NHL Legacy (PS3, Xbox 360) and NHL 21 (PS4) were examined. Nothing transfers to any other title or platform.",
+    "The Xbox 360 and PS4 corpora are derived trees, so nothing here establishes shipping discovery, install or outer-archive packaging for those targets - and nothing measured on them is attributable to the shipped title.",
+    "The PS3 corpus is an observed installed copy carrying third-party writes, and patch.big was never opened.",
+    "Colour space was not measured on the Gen7 targets and is not uniform on PS4.",
+    "This package exercised code written for it, not this repository's parsers, with one exception (the transcribed Xbox 360 tiling formula). It is therefore NOT a qualification of tdb-rx2, tdb-archive-big or tdb-archive-codec.",
+    "No portrait was written, repacked, replaced or installed, and no support level or game-acceptance is claimed or implied by any entry in this file."
+  ]
+}

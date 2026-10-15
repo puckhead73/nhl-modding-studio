@@ -1,0 +1,987 @@
+ M CLAUDE.md
+ M Cargo.lock
+ M Cargo.toml
+ M README.md
+ M app/package-lock.json
+ M app/package.json
+ M app/src/AppShell.tsx
+ M app/src/bindings/FieldCellDto.ts
+ M app/src/bindings/FieldViewDto.ts
+ M app/src/bindings/ImportTextureSummaryDto.ts
+ M app/src/bindings/InstallStoreItemPlanDto.ts
+ M app/src/bindings/InstallStoreItemRequestDto.ts
+ M app/src/bindings/PlayerAttributesDto.ts
+ M app/src/bindings/ProjectSummaryDto.ts
+ M app/src/bindings/TeamViewDto.ts
+ M app/src/bindings/TexturePreviewDto.ts
+ M app/src/components/AttributesTab.tsx
+ M app/src/components/CareerStatsTab.tsx
+ M app/src/components/ComputedRatings.tsx
+ M app/src/components/DetailTabs.tsx
+ M app/src/components/EditableField.tsx
+ M app/src/components/EntityList.tsx
+ M app/src/components/FieldProfile.tsx
+ M app/src/components/FieldRow.tsx
+ M app/src/components/KitMeshViewer.tsx
+ M app/src/components/LinesTab.tsx
+ M app/src/components/NameplateEditor.tsx
+ M app/src/components/PlayerEquipmentTab.tsx
+ M app/src/components/PlayerHeader.tsx
+ M app/src/components/TeamHeader.tsx
+ M app/src/components/TextureReplace.tsx
+ M app/src/components/UniformsTab.tsx
+ M app/src/lib/breadcrumbs.tsx
+ M app/src/lib/client.ts
+ M app/src/lib/project.tsx
+ M app/src/lib/teamPresentation.ts
+ M app/src/nav.ts
+ M app/src/pages/ArenaDetail.tsx
+ M app/src/pages/Formulas.tsx
+ M app/src/pages/HistoricalPlayerDetail.tsx
+ M app/src/pages/HistoricalTeamDetail.tsx
+ M app/src/pages/HockeyShop.tsx
+ M app/src/pages/OpenProject.tsx
+ M app/src/pages/PendingEdits.tsx
+ M app/src/pages/PlayerAssetDetail.tsx
+ M app/src/pages/PlayerAssets.tsx
+ M app/src/pages/PlayerDetail.tsx
+ M app/src/pages/Settings.tsx
+ M app/src/pages/TeamDetail.tsx
+ M app/src/routes.tsx
+ M crates/studio-api/Cargo.toml
+ M crates/studio-api/src/bin/edit_qa.rs
+ M crates/studio-api/src/commands.rs
+ M crates/studio-api/src/convert.rs
+ M crates/studio-api/src/dto.rs
+ M crates/studio-api/src/error.rs
+ M crates/studio-api/src/hockey_shop.rs
+ M crates/studio-api/src/lib.rs
+ M crates/studio-api/src/registry.rs
+ M crates/studio-api/tests/registry.rs
+ M crates/studio-api/tests/roster_builder.rs
+ M crates/studio-domain/Cargo.toml
+ M crates/studio-domain/src/assets.rs
+ M crates/studio-domain/src/attributes.rs
+ M crates/studio-domain/src/audit.rs
+ M crates/studio-domain/src/capabilities.rs
+ M crates/studio-domain/src/capacity.rs
+ M crates/studio-domain/src/content_header.rs
+ M crates/studio-domain/src/discovery.rs
+ M crates/studio-domain/src/equipment_piece.rs
+ M crates/studio-domain/src/equipment_slots.rs
+ M crates/studio-domain/src/equipment_texture.rs
+ M crates/studio-domain/src/error.rs
+ M crates/studio-domain/src/extract.rs
+ M crates/studio-domain/src/field_profile.rs
+ M crates/studio-domain/src/formula.rs
+ M crates/studio-domain/src/head_catalog.rs
+ M crates/studio-domain/src/head_census.rs
+ M crates/studio-domain/src/head_preview.rs
+ M crates/studio-domain/src/head_submesh.rs
+ M crates/studio-domain/src/import.rs
+ M crates/studio-domain/src/kit_preview.rs
+ M crates/studio-domain/src/lib.rs
+ M crates/studio-domain/src/orphan_heads.rs
+ M crates/studio-domain/src/profile.rs
+ M crates/studio-domain/src/project.rs
+ M crates/studio-domain/src/session.rs
+ M crates/studio-domain/src/surfaces.rs
+ M crates/studio-domain/src/team_tabs.rs
+ M crates/studio-domain/src/view.rs
+ M crates/studio-domain/src/workspace.rs
+ M crates/studio-domain/tests/birthdate_encoding.rs
+ M crates/studio-domain/tests/capabilities.rs
+ M crates/studio-domain/tests/capacity.rs
+ M crates/studio-domain/tests/capacity_boundary_insert.rs
+ M crates/studio-domain/tests/capacity_projection.rs
+ M crates/studio-domain/tests/content_header.rs
+ M crates/studio-domain/tests/ea_match_key.rs
+ M crates/studio-domain/tests/ea_slug_index.rs
+ M crates/studio-domain/tests/field_profile.rs
+ M crates/studio-domain/tests/formula_real.rs
+ M crates/studio-domain/tests/import_batch.rs
+ M crates/studio-domain/tests/import_change_set.rs
+ M crates/studio-domain/tests/import_corpus_e2e.rs
+ M crates/studio-domain/tests/import_history_cost.rs
+ M crates/studio-domain/tests/import_lower.rs
+ M crates/studio-domain/tests/import_preview.rs
+ M crates/studio-domain/tests/nhl07_encodings.rs
+ M crates/studio-domain/tests/nhl07_saves.rs
+ M crates/studio-domain/tests/nhl10_meta_smoke.rs
+ M crates/studio-domain/tests/ratings_scale.rs
+ M crates/studio-domain/tests/ratings_write_codec.rs
+ M crates/studio-domain/tests/read_matrix.rs
+ M crates/studio-domain/tests/roster_builder_e2e.rs
+ M crates/studio-domain/tests/session.rs
+ M crates/studio-domain/tests/surfaces.rs
+ M crates/studio-domain/tests/view.rs
+ M crates/studio-domain/tests/workspace.rs
+ M crates/tdb-archive-big/Cargo.toml
+ M crates/tdb-archive-big/examples/big_ls.rs
+ M crates/tdb-archive-big/examples/eb_extract.rs
+ M crates/tdb-archive-big/examples/eb_layout.rs
+ M crates/tdb-archive-big/src/eb.rs
+ M crates/tdb-archive-big/src/lib.rs
+ M crates/tdb-archive-codec/Cargo.toml
+ M crates/tdb-archive-codec/src/dds.rs
+ M crates/tdb-archive-codec/src/lib.rs
+ M crates/tdb-archive-codec/src/lzx.rs
+ M crates/tdb-archive-codec/src/refpack.rs
+ M crates/tdb-canonical/Cargo.toml
+ M crates/tdb-core/Cargo.toml
+ M crates/tdb-core/src/dev_key.rs
+ M crates/tdb-core/src/lib.rs
+ M crates/tdb-core/tests/alloc.rs
+ M crates/tdb-core/tests/write.rs
+ M crates/tdb-defs/Cargo.toml
+ M crates/tdb-defs/src/lib.rs
+ M crates/tdb-domain-validation/Cargo.toml
+ M crates/tdb-domain-validation/src/lib.rs
+ M crates/tdb-domain-validation/tests/audit.rs
+ M crates/tdb-edit/Cargo.toml
+ M crates/tdb-edit/src/lib.rs
+ M crates/tdb-edit/src/txn.rs
+ M crates/tdb-edit/tests/block_repair.rs
+ M crates/tdb-edit/tests/cluster_ops.rs
+ M crates/tdb-edit/tests/field_ops.rs
+ M crates/tdb-edit/tests/txn.rs
+ M crates/tdb-enums/Cargo.toml
+ M crates/tdb-enums/src/lib.rs
+ M crates/tdb-enums/tests/enums.rs
+ M crates/tdb-fhm-build/Cargo.toml
+ M crates/tdb-fhm-build/src/bin/convert.rs
+ M crates/tdb-fhm-build/src/main.rs
+ M crates/tdb-fhm-store/Cargo.toml
+ M crates/tdb-fhm-store/src/lib.rs
+ M crates/tdb-fhm/Cargo.toml
+ M crates/tdb-fhm/src/fixups.rs
+ M crates/tdb-formula/Cargo.toml
+ M crates/tdb-formula/src/catalog.rs
+ M crates/tdb-formula/src/compute.rs
+ M crates/tdb-formula/src/prebuilt.rs
+ M crates/tdb-formula/src/profile.rs
+ M crates/tdb-instance-registry/Cargo.toml
+ M crates/tdb-instance-registry/src/lib.rs
+ M crates/tdb-qa/Cargo.toml
+ M crates/tdb-relations/Cargo.toml
+ M crates/tdb-relations/src/entity.rs
+ M crates/tdb-relations/src/lib.rs
+ M crates/tdb-relations/tests/entity.rs
+ M crates/tdb-relations/tests/relations.rs
+ M crates/tdb-rx2/Cargo.toml
+ M crates/tdb-rx2/src/bc45.rs
+ M crates/tdb-rx2/src/bc7.rs
+ M crates/tdb-rx2/src/container.rs
+ M crates/tdb-rx2/src/gnf.rs
+ M crates/tdb-rx2/src/lib.rs
+ M crates/tdb-rx2/src/mcd.rs
+ M crates/tdb-rx2/src/obj.rs
+ M crates/tdb-rx2/src/pack.rs
+ M crates/tdb-rx2/src/playermesh.rs
+ M crates/tdb-rx2/src/skeleton.rs
+ M crates/tdb-rx2/src/texlib.rs
+ M crates/tdb-rx2/src/xpr.rs
+ M crates/tdb-savedata/Cargo.toml
+ M crates/tdb-savedata/src/header.rs
+ M crates/tdb-savedata/src/lib.rs
+ M crates/tdb-savedata/src/ps4.rs
+ M crates/tdb-savedata/tests/container.rs
+ M defs/adapters/nhl19-ps4.toml
+ M defs/adapters/nhl20-ps4.toml
+ D defs/enums/conference.toml
+ D defs/enums/division.toml
+ M defs/enums/glove-model.toml
+ M defs/enums/helmet-model.toml
+ M defs/enums/jersey-tuck.toml
+ D defs/enums/league.toml
+ M defs/enums/nationality.toml
+ M defs/enums/pant-length.toml
+ M defs/enums/player-style.toml
+ M defs/enums/skate-model.toml
+ M defs/enums/sock-tuck.toml
+ M defs/enums/stick-model.toml
+ M defs/enums/stick-tape-color.toml
+ M defs/enums/visor-style.toml
+ M defs/enums/visor-tint.toml
+ M docs/00-vision.md
+ M docs/01-scope-and-compatibility.md
+ M docs/03-tdb-format.md
+ M docs/04-source-database.md
+ M docs/05-save-data.md
+ M docs/DESIGN.md
+ M docs/EDIT-MODEL.md
+ M docs/MESH_IMPORT_EXCLUSIVE_PATH.md
+ M docs/ROADMAP.md
+ M docs/audits/README.md
+ M docs/audits/anchors-manifest.md
+ M docs/audits/data/assets/nhllegacy/xbox360/capability.csv
+ M docs/audits/data/mutation-matrix.csv
+ M docs/formats/ps4-eb-big.md
+ M docs/glossary.md
+ M docs/plans/full-game-qa-editability.md
+ M docs/plans/phase-6-asset-tools.md
+ M docs/plans/phase-6.1-portraits-logos-spikes.md
+ M package-lock.json
+ M package.json
+ M src-tauri/Cargo.toml
+ M src-tauri/src/lib.rs
+?? --print
+?? BigStudio.zip_pass_123.zip
+?? Nhl19BigStudio-Tester.zip
+?? Nhl19BigStudio-Tester/
+?? RPSGL.rar
+?? RPSGL.rar_pass_123.zip
+?? RPSGL.rar_pass_123/
+?? RPSGL.zip_pass_123.zip
+?? RPSGL2.zip_pass_123.zip
+?? RPSGL2.zip_pass_123/
+?? RPSGL_Studio_1_9.exe
+?? app/src/assets/ui/tabs/
+?? app/src/bindings/AboutDto.ts
+?? app/src/bindings/AboutLicenceFileDto.ts
+?? app/src/bindings/ArchiveMemberSpecDto.ts
+?? app/src/bindings/ArenaAssetsDto.ts
+?? app/src/bindings/ArenaAssignmentPreviewDto.ts
+?? app/src/bindings/ArenaVenueDto.ts
+?? app/src/bindings/ArtIdSwapDto.ts
+?? app/src/bindings/AssetFamilyDto.ts
+?? app/src/bindings/AssetFileDto.ts
+?? app/src/bindings/AssetMemberApplyDto.ts
+?? app/src/bindings/AssetMemberPlanDto.ts
+?? app/src/bindings/AssetMemberPreviewDto.ts
+?? app/src/bindings/BoundInputDto.ts
+?? app/src/bindings/CellWriteDto.ts
+?? app/src/bindings/CloneJerseyResultDto.ts
+?? app/src/bindings/CloneKitTexturesSummaryDto.ts
+?? app/src/bindings/ClonedKitFileDto.ts
+?? app/src/bindings/CloseProjectDto.ts
+?? app/src/bindings/CompetitionGroupDto.ts
+?? app/src/bindings/ComponentGroupDto.ts
+?? app/src/bindings/ContainmentSummaryDto.ts
+?? app/src/bindings/ContextCatalogueDto.ts
+?? app/src/bindings/ContextItemDto.ts
+?? app/src/bindings/ContextRecordDto.ts
+?? app/src/bindings/CopiedTargetApplyDto.ts
+?? app/src/bindings/CopiedTargetArtifactDto.ts
+?? app/src/bindings/CopiedTargetRecoveryDto.ts
+?? app/src/bindings/CopiedTargetRestoreDto.ts
+?? app/src/bindings/CopiedTargetReviewDto.ts
+?? app/src/bindings/CopiedTargetRootDto.ts
+?? app/src/bindings/CopiedTargetStatusDto.ts
+?? app/src/bindings/CopiedTargetTransactionDto.ts
+?? app/src/bindings/DependencyCountDto.ts
+?? app/src/bindings/DestinationOutcomeDto.ts
+?? app/src/bindings/DictionaryGrowthEditDto.ts
+?? app/src/bindings/DictionaryGrowthInsertDto.ts
+?? app/src/bindings/DictionaryGrowthOpDto.ts
+?? app/src/bindings/DictionaryGrowthOptionsDto.ts
+?? app/src/bindings/DictionaryGrowthPreviewDto.ts
+?? app/src/bindings/DictionaryRefDto.ts
+?? app/src/bindings/DictionaryRepointPreviewDto.ts
+?? app/src/bindings/DictionaryRetextPreviewDto.ts
+?? app/src/bindings/DictionaryRowDto.ts
+?? app/src/bindings/DictionaryStampDto.ts
+?? app/src/bindings/EquipmentFileCheckDto.ts
+?? app/src/bindings/FileIdentityDto.ts
+?? app/src/bindings/Gen7BankListingDto.ts
+?? app/src/bindings/Gen7SampleRowDto.ts
+?? app/src/bindings/Gen7SfxBankListDto.ts
+?? app/src/bindings/Gen7SfxBankSummaryDto.ts
+?? app/src/bindings/Gen7SfxBankTreeDto.ts
+?? app/src/bindings/Gen7SfxEntryDto.ts
+?? app/src/bindings/Gen7SfxPickerDto.ts
+?? app/src/bindings/Gen7SfxPreviewDto.ts
+?? app/src/bindings/Gen7SpeechPreviewDto.ts
+?? app/src/bindings/IsoApplyDto.ts
+?? app/src/bindings/IsoAttemptedDto.ts
+?? app/src/bindings/IsoInspectDto.ts
+?? app/src/bindings/IsoLocatedDto.ts
+?? app/src/bindings/IsoPlanDto.ts
+?? app/src/bindings/IsoPlannedFileDto.ts
+?? app/src/bindings/IsoProbedArchiveDto.ts
+?? app/src/bindings/IsoRecordDto.ts
+?? app/src/bindings/IsoRestoreDto.ts
+?? app/src/bindings/IsoRestoreItemDto.ts
+?? app/src/bindings/IsoStagedDto.ts
+?? app/src/bindings/IsoStagedFileDto.ts
+?? app/src/bindings/IsoStatusDto.ts
+?? app/src/bindings/JerseyThumbnailDto.ts
+?? app/src/bindings/KitComponentDto.ts
+?? app/src/bindings/KitDirectoryDto.ts
+?? app/src/bindings/KitDto.ts
+?? app/src/bindings/LeagueCatalogDto.ts
+?? app/src/bindings/LeagueGroupsDto.ts
+?? app/src/bindings/LeagueImageryDto.ts
+?? app/src/bindings/LeagueImageryFamilyDto.ts
+?? app/src/bindings/LeagueImageryMemberDto.ts
+?? app/src/bindings/LeagueLogoDto.ts
+?? app/src/bindings/LeagueLogoVariantDto.ts
+?? app/src/bindings/LeagueStructureDto.ts
+?? app/src/bindings/LeagueSummaryDto.ts
+?? app/src/bindings/LeagueViewDto.ts
+?? app/src/bindings/LegendsComputeSummaryDto.ts
+?? app/src/bindings/LegendsMemberDto.ts
+?? app/src/bindings/LegendsStatusDto.ts
+?? app/src/bindings/LegendsTeamSummaryDto.ts
+?? app/src/bindings/MembershipChoiceDto.ts
+?? app/src/bindings/MembershipOptionsDto.ts
+?? app/src/bindings/MembershipResultDto.ts
+?? app/src/bindings/MembershipStateDto.ts
+?? app/src/bindings/NameCallTableDto.ts
+?? app/src/bindings/PbpNameEntryDto.ts
+?? app/src/bindings/PendingCellDto.ts
+?? app/src/bindings/PendingDictionaryDto.ts
+?? app/src/bindings/PendingFileDto.ts
+?? app/src/bindings/PendingHandleDto.ts
+?? app/src/bindings/PendingIntegrityDto.ts
+?? app/src/bindings/PendingReviewDto.ts
+?? app/src/bindings/PendingSettingsCsvDto.ts
+?? app/src/bindings/PendingTableDto.ts
+?? app/src/bindings/PlayerContainmentDto.ts
+?? app/src/bindings/PlayerContainmentViewDto.ts
+?? app/src/bindings/PlayerManifestSummaryDto.ts
+?? app/src/bindings/PlayerNameCallsDto.ts
+?? app/src/bindings/PlayerReassignPlanDto.ts
+?? app/src/bindings/ProjectBaselineDto.ts
+?? app/src/bindings/Ps4GoalieMaskPairDto.ts
+?? app/src/bindings/Ps4SkaterGearDto.ts
+?? app/src/bindings/Ps4SkaterGearItemDto.ts
+?? app/src/bindings/Ps4SpeechBankDto.ts
+?? app/src/bindings/Ps4SpeechBanksDto.ts
+?? app/src/bindings/Ps4SpeechCodecCountDto.ts
+?? app/src/bindings/Ps4SpeechPreviewDto.ts
+?? app/src/bindings/Ps4SpeechSampleDto.ts
+?? app/src/bindings/Ps4SpeechSamplesDto.ts
+?? app/src/bindings/Ps4TexpackRefDto.ts
+?? app/src/bindings/Ps4VenueCandidateDto.ts
+?? app/src/bindings/Ps4VenueListingDto.ts
+?? app/src/bindings/QualificationItemDto.ts
+?? app/src/bindings/ReservationDto.ts
+?? app/src/bindings/ScheduleApplyResultDto.ts
+?? app/src/bindings/ScheduleChangePlanDto.ts
+?? app/src/bindings/ScheduleExportDto.ts
+?? app/src/bindings/ScheduleGameEditDto.ts
+?? app/src/bindings/ScheduleGenerationConfigDto.ts
+?? app/src/bindings/ScheduleGenerationOptionsDto.ts
+?? app/src/bindings/ScheduleGenerationPlanDto.ts
+?? app/src/bindings/ScheduleGroupsDto.ts
+?? app/src/bindings/ScheduleImportPlanDto.ts
+?? app/src/bindings/ScheduleKeyResolutionDto.ts
+?? app/src/bindings/ScheduleOddHostDto.ts
+?? app/src/bindings/ScheduleParticipantDto.ts
+?? app/src/bindings/ScheduleSlotDto.ts
+?? app/src/bindings/ScheduleSlotEntryDto.ts
+?? app/src/bindings/ScheduleSlotGamesDto.ts
+?? app/src/bindings/ScheduleStockGroupsDto.ts
+?? app/src/bindings/ScheduleTableDto.ts
+?? app/src/bindings/ScheduleTeamMappingDto.ts
+?? app/src/bindings/ScheduleValidationDto.ts
+?? app/src/bindings/ScheduleViewDto.ts
+?? app/src/bindings/ScheduledGameDto.ts
+?? app/src/bindings/SettingChoiceDto.ts
+?? app/src/bindings/SettingContextDefaultDto.ts
+?? app/src/bindings/SettingContextDto.ts
+?? app/src/bindings/SettingGroupDto.ts
+?? app/src/bindings/SettingRowDto.ts
+?? app/src/bindings/SettingsCatalogueDto.ts
+?? app/src/bindings/SettingsCatalogueResultDto.ts
+?? app/src/bindings/SettingsCsvMemberDto.ts
+?? app/src/bindings/SettingsEditApplyDto.ts
+?? app/src/bindings/SettingsEditPlanDto.ts
+?? app/src/bindings/SettingsEditPreviewDto.ts
+?? app/src/bindings/SettingsMemberDto.ts
+?? app/src/bindings/SettingsSourceDto.ts
+?? app/src/bindings/SettingsTableDto.ts
+?? app/src/bindings/SongCatalogueDto.ts
+?? app/src/bindings/SongGenreCountDto.ts
+?? app/src/bindings/SongRowDto.ts
+?? app/src/bindings/SpareKitDto.ts
+?? app/src/bindings/SpeechBodyDto.ts
+?? app/src/bindings/SpeechCatalogueDto.ts
+?? app/src/bindings/SpeechEventDto.ts
+?? app/src/bindings/SpeechPhraseDto.ts
+?? app/src/bindings/SpeechSentenceDto.ts
+?? app/src/bindings/SpeechSourceFileDto.ts
+?? app/src/bindings/SpeechStatsDto.ts
+?? app/src/bindings/StagingLeftoverDto.ts
+?? app/src/bindings/StoredDefaultDto.ts
+?? app/src/bindings/SupersededDestinationDto.ts
+?? app/src/bindings/TeamGoalieMasksDto.ts
+?? app/src/bindings/TeamIdentityDependenciesDto.ts
+?? app/src/bindings/TeamKitsDto.ts
+?? app/src/bindings/TeamLogoSetDto.ts
+?? app/src/bindings/TeamMaskPaintDto.ts
+?? app/src/bindings/TeamNameCallsDto.ts
+?? app/src/bindings/TeamTextDto.ts
+?? app/src/bindings/TeamTextKeyDto.ts
+?? app/src/bindings/TextureReplacePlanDto.ts
+?? app/src/bindings/VenueArtDto.ts
+?? app/src/bindings/VenueFieldDto.ts
+?? app/src/bindings/VenueMaterialDto.ts
+?? app/src/bindings/VenuePackageDto.ts
+?? app/src/bindings/VenueRasterDto.ts
+?? app/src/bindings/VenueRasterPreviewDto.ts
+?? app/src/bindings/VenueSlotDto.ts
+?? app/src/components/ArchiveMemberReplace.test.tsx
+?? app/src/components/ArchiveMemberReplace.tsx
+?? app/src/components/ArenaAssetsCard.test.tsx
+?? app/src/components/ArenaAssetsCard.tsx
+?? app/src/components/ArenaSelect.test.tsx
+?? app/src/components/ArenaVenueArtCard.test.tsx
+?? app/src/components/ArenaVenueArtCard.tsx
+?? app/src/components/ArenaVenueCard.test.tsx
+?? app/src/components/ArenaVenueCard.tsx
+?? app/src/components/AttributesTab.test.tsx
+?? app/src/components/CloseProject.test.tsx
+?? app/src/components/CloseProjectButton.tsx
+?? app/src/components/ColorField.test.tsx
+?? app/src/components/ColorField.tsx
+?? app/src/components/ContextCatalogueCard.test.tsx
+?? app/src/components/ContextCatalogueCard.tsx
+?? app/src/components/CopiedTargetPanel.test.tsx
+?? app/src/components/CopiedTargetPanel.tsx
+?? app/src/components/DictionaryRenamePanel.test.tsx
+?? app/src/components/DictionaryRenamePanel.tsx
+?? app/src/components/DiscImagePanel.test.tsx
+?? app/src/components/DiscImagePanel.tsx
+?? app/src/components/EditableField.test.tsx
+?? app/src/components/EquipmentFilesCard.test.tsx
+?? app/src/components/EquipmentFilesCard.tsx
+?? app/src/components/FieldProfile.test.tsx
+?? app/src/components/FieldRow.test.tsx
+?? app/src/components/Gen7BankCard.test.tsx
+?? app/src/components/Gen7BankCard.tsx
+?? app/src/components/Gen7SfxBankCard.test.tsx
+?? app/src/components/Gen7SfxBankCard.tsx
+?? app/src/components/Gen7SpeechPreview.test.tsx
+?? app/src/components/Gen7SpeechPreview.tsx
+?? app/src/components/HistoricalPlayerHeader.tsx
+?? app/src/components/HistoricalTeamHeader.tsx
+?? app/src/components/HistoricalTeamViews.tsx
+?? app/src/components/IsoOpenPanel.test.tsx
+?? app/src/components/IsoOpenPanel.tsx
+?? app/src/components/LeagueImageryCard.test.tsx
+?? app/src/components/LeagueImageryCard.tsx
+?? app/src/components/LeagueLogoCard.tsx
+?? app/src/components/LeagueMembershipCard.test.tsx
+?? app/src/components/LeagueMembershipCard.tsx
+?? app/src/components/LeagueScheduleCard.test.tsx
+?? app/src/components/LeagueScheduleCard.tsx
+?? app/src/components/LegendsPendingBanner.tsx
+?? app/src/components/LegendsTeamHeader.tsx
+?? app/src/components/LinesTab.archetype.test.tsx
+?? app/src/components/LingeringProjectNotice.tsx
+?? app/src/components/PlayerContainmentCard.test.tsx
+?? app/src/components/PlayerContainmentCard.tsx
+?? app/src/components/PlayerNameCallsCard.test.tsx
+?? app/src/components/PlayerNameCallsCard.tsx
+?? app/src/components/Ps4GoalieMaskPairCard.test.tsx
+?? app/src/components/Ps4GoalieMaskPairCard.tsx
+?? app/src/components/Ps4SkaterGearCard.test.tsx
+?? app/src/components/Ps4SkaterGearCard.tsx
+?? app/src/components/Ps4SpeechBankCard.test.tsx
+?? app/src/components/Ps4SpeechBankCard.tsx
+?? app/src/components/SongCatalogueCard.test.tsx
+?? app/src/components/SongCatalogueCard.tsx
+?? app/src/components/SpeechCatalogueCard.test.tsx
+?? app/src/components/SpeechCatalogueCard.tsx
+?? app/src/components/StoredDefaultEditor.test.tsx
+?? app/src/components/StoredDefaultEditor.tsx
+?? app/src/components/TeamGoalieMasksCard.test.tsx
+?? app/src/components/TeamGoalieMasksCard.tsx
+?? app/src/components/TeamIdentityCard.test.tsx
+?? app/src/components/TeamIdentityCard.tsx
+?? app/src/components/TeamKitsCard.replace.test.tsx
+?? app/src/components/TeamKitsCard.test.tsx
+?? app/src/components/TeamKitsCard.tsx
+?? app/src/components/TeamLogoCard.test.tsx
+?? app/src/components/TeamLogoCard.tsx
+?? app/src/components/TeamNameCallsCard.test.tsx
+?? app/src/components/TeamNameCallsCard.tsx
+?? app/src/components/TeamTextCard.tsx
+?? app/src/components/TextureReplace.test.tsx
+?? app/src/lib/closeProject.ts
+?? app/src/lib/legendsKey.ts
+?? app/src/lib/project.test.tsx
+?? app/src/lib/sidebarCollapse.tsx
+?? app/src/pages/About.test.tsx
+?? app/src/pages/About.tsx
+?? app/src/pages/GameSettings.test.tsx
+?? app/src/pages/GameSettings.tsx
+?? app/src/pages/LeagueDetail.tsx
+?? app/src/pages/LeagueImagery.tsx
+?? app/src/pages/Leagues.tsx
+?? app/src/pages/LegendsPicks.tsx
+?? app/src/pages/LegendsTeamDetail.tsx
+?? app/src/pages/SpeechCatalogue.tsx
+?? corpus/
+?? crates/blender-job/
+?? crates/studio-api/src/about.rs
+?? crates/studio-api/src/bin/competition_groups.rs
+?? crates/studio-api/src/bin/export_bindings.rs
+?? crates/studio-api/src/bindings.rs
+?? crates/studio-api/src/registry/
+?? crates/studio-api/tests/about_notices.rs
+?? crates/studio-api/tests/archive_member_preview.rs
+?? crates/studio-api/tests/arena_assets.rs
+?? crates/studio-api/tests/arena_venue.rs
+?? crates/studio-api/tests/asset_member_route.rs
+?? crates/studio-api/tests/big4_asset_member_route.rs
+?? crates/studio-api/tests/command_execution_context.rs
+?? crates/studio-api/tests/copied_target.rs
+?? crates/studio-api/tests/copied_target_contention.rs
+?? crates/studio-api/tests/dictionary_growth.rs
+?? crates/studio-api/tests/dictionary_rename.rs
+?? crates/studio-api/tests/equipment_files.rs
+?? crates/studio-api/tests/gen7_asset_member_route.rs
+?? crates/studio-api/tests/gnf_real_resize.rs
+?? crates/studio-api/tests/hockey_shop_title_spec.rs
+?? crates/studio-api/tests/iso_route.rs
+?? crates/studio-api/tests/league_copied_target.rs
+?? crates/studio-api/tests/league_offline_campaign.rs
+?? crates/studio-api/tests/league_private_sources.rs
+?? crates/studio-api/tests/leagues.rs
+?? crates/studio-api/tests/loose_texture_route.rs
+?? crates/studio-api/tests/membership.rs
+?? crates/studio-api/tests/player_containment.rs
+?? crates/studio-api/tests/player_identity.rs
+?? crates/studio-api/tests/player_ratings.rs
+?? crates/studio-api/tests/player_sticks.rs
+?? crates/studio-api/tests/ps3_kit_member_route.rs
+?? crates/studio-api/tests/ps4_goalie_mask_pair.rs
+?? crates/studio-api/tests/release_archive_layout.rs
+?? crates/studio-api/tests/roster_full_refusal.rs
+?? crates/studio-api/tests/schedule_edit.rs
+?? crates/studio-api/tests/settings_csv_route.rs
+?? crates/studio-api/tests/song_catalogue.rs
+?? crates/studio-api/tests/speech_catalogue.rs
+?? crates/studio-api/tests/team_kits.rs
+?? crates/studio-api/tests/team_reid.rs
+?? crates/studio-api/tests/team_relationships.rs
+?? crates/studio-api/tests/texture_review_binding.rs
+?? crates/studio-domain/examples/
+?? crates/studio-domain/src/archive_index.rs
+?? crates/studio-domain/src/arena_assets.rs
+?? crates/studio-domain/src/arena_venue.rs
+?? crates/studio-domain/src/asset_member_edit.rs
+?? crates/studio-domain/src/competition_groups.rs
+?? crates/studio-domain/src/copied_target.rs
+?? crates/studio-domain/src/dictionary_edit.rs
+?? crates/studio-domain/src/encoding.rs
+?? crates/studio-domain/src/equipment_components.rs
+?? crates/studio-domain/src/font_glyphs.rs
+?? crates/studio-domain/src/gen7_horn_sources.rs
+?? crates/studio-domain/src/gen7_sfx_banks.rs
+?? crates/studio-domain/src/gen7_speech_preview.rs
+?? crates/studio-domain/src/goalhorn_catalogue.rs
+?? crates/studio-domain/src/in_place_save.rs
+?? crates/studio-domain/src/iso_patch.rs
+?? crates/studio-domain/src/iso_staging.rs
+?? crates/studio-domain/src/kit_files.rs
+?? crates/studio-domain/src/league_imagery.rs
+?? crates/studio-domain/src/league_logos.rs
+?? crates/studio-domain/src/leagues.rs
+?? crates/studio-domain/src/legends.rs
+?? crates/studio-domain/src/membership.rs
+?? crates/studio-domain/src/pending.rs
+?? crates/studio-domain/src/player_containment.rs
+?? crates/studio-domain/src/player_manifest.rs
+?? crates/studio-domain/src/player_reassign.rs
+?? crates/studio-domain/src/ps4_cz_names.rs
+?? crates/studio-domain/src/ps4_goalie_masks.rs
+?? crates/studio-domain/src/ps4_skater_gear.rs
+?? crates/studio-domain/src/ps4_speech_bank.rs
+?? crates/studio-domain/src/ps4_vault.rs
+?? crates/studio-domain/src/referential.rs
+?? crates/studio-domain/src/schedule_edit.rs
+?? crates/studio-domain/src/schedule_stock.rs
+?? crates/studio-domain/src/schedules.rs
+?? crates/studio-domain/src/settings_catalogue.rs
+?? crates/studio-domain/src/settings_csv_edit.rs
+?? crates/studio-domain/src/settings_edit.rs
+?? crates/studio-domain/src/song_catalogue.rs
+?? crates/studio-domain/src/speech_catalogue.rs
+?? crates/studio-domain/src/team_goalie_masks.rs
+?? crates/studio-domain/src/team_logos.rs
+?? crates/studio-domain/src/team_reid.rs
+?? crates/studio-domain/src/team_text.rs
+?? crates/studio-domain/src/text_keys.rs
+?? crates/studio-domain/src/txn.rs
+?? crates/studio-domain/src/venue_art.rs
+?? crates/studio-domain/src/xiso_source.rs
+?? crates/studio-domain/tests/arena_asset_join.rs
+?? crates/studio-domain/tests/asset_member_undo.rs
+?? crates/studio-domain/tests/contract_scale_probe.rs
+?? crates/studio-domain/tests/copied_target.rs
+?? crates/studio-domain/tests/easpeex_preview.rs
+?? crates/studio-domain/tests/eaxma_speech_preview.rs
+?? crates/studio-domain/tests/encoding_contract.rs
+?? crates/studio-domain/tests/equipment_component_census.rs
+?? crates/studio-domain/tests/equipment_gloves_helmets.rs
+?? crates/studio-domain/tests/equipment_goalie_gear.rs
+?? crates/studio-domain/tests/equipment_scope.rs
+?? crates/studio-domain/tests/gen7_horn_sources.rs
+?? crates/studio-domain/tests/gen7_music_r82.rs
+?? crates/studio-domain/tests/gen7_sfx_banks.rs
+?? crates/studio-domain/tests/gen7_speech_preview.rs
+?? crates/studio-domain/tests/gen7_xma_ram_residuals.rs
+?? crates/studio-domain/tests/goalie_consistency.rs
+?? crates/studio-domain/tests/goalie_gear_file_positions.rs
+?? crates/studio-domain/tests/goalie_overall_consistency_input.rs
+?? crates/studio-domain/tests/group_names_r133.rs
+?? crates/studio-domain/tests/identity_ranges_nhl20_21.rs
+?? crates/studio-domain/tests/import_lower_sweep.rs
+?? crates/studio-domain/tests/in_place_save.rs
+?? crates/studio-domain/tests/kit_selector_join.rs
+?? crates/studio-domain/tests/league_imagery.rs
+?? crates/studio-domain/tests/league_logo_packages.rs
+?? crates/studio-domain/tests/league_logos.rs
+?? crates/studio-domain/tests/leagues.rs
+?? crates/studio-domain/tests/membership.rs
+?? crates/studio-domain/tests/nationality_labels.rs
+?? crates/studio-domain/tests/overall_formula.rs
+?? crates/studio-domain/tests/pending.rs
+?? crates/studio-domain/tests/player_containment_join.rs
+?? crates/studio-domain/tests/player_reassign.rs
+?? crates/studio-domain/tests/player_text_columns.rs
+?? crates/studio-domain/tests/ps4_goalie_mask_pairs.rs
+?? crates/studio-domain/tests/ps4_groups.rs
+?? crates/studio-domain/tests/ps4_skater_gear.rs
+?? crates/studio-domain/tests/ps4_speech_bank.rs
+?? crates/studio-domain/tests/rating_scale_probe.rs
+?? crates/studio-domain/tests/referential.rs
+?? crates/studio-domain/tests/roster_overall_column.rs
+?? crates/studio-domain/tests/schedule_edit.rs
+?? crates/studio-domain/tests/schedule_grouped.rs
+?? crates/studio-domain/tests/schedule_preservation.rs
+?? crates/studio-domain/tests/schedule_stock_r113.rs
+?? crates/studio-domain/tests/schedules.rs
+?? crates/studio-domain/tests/settings_catalogue.rs
+?? crates/studio-domain/tests/settings_csv_edit.rs
+?? crates/studio-domain/tests/settings_edit.rs
+?? crates/studio-domain/tests/style_label_scoping.rs
+?? crates/studio-domain/tests/team_goalie_masks.rs
+?? crates/studio-domain/tests/team_logo_dimension_sweep.rs
+?? crates/studio-domain/tests/team_logos.rs
+?? crates/studio-domain/tests/tournament_labels.rs
+?? crates/studio-domain/tests/txn_coordination.rs
+?? crates/studio-domain/tests/venue_art.rs
+?? crates/studio-domain/tests/weight_base.rs
+?? crates/studio-domain/tests/x360_nhl09_xma_banks.rs
+?? crates/studio-domain/tests/x360_old_logo_resize.rs
+?? crates/studio-domain/tests/zz_diag.rs
+?? crates/tdb-archive-big/examples/eb_find.rs
+?? crates/tdb-archive-big/examples/eb_verify_append.rs
+?? crates/tdb-archive-big/examples/s2a_stage_demo.rs
+?? crates/tdb-archive-big/src/big4.rs
+?? crates/tdb-archive-big/src/replan.rs
+?? crates/tdb-archive-big/src/stage.rs
+?? crates/tdb-archive-big/src/stage/
+?? crates/tdb-archive-big/tests/
+?? crates/tdb-archive-codec/src/fixtures.rs
+?? crates/tdb-archive-codec/tests/
+?? crates/tdb-core/examples/
+?? crates/tdb-defs/tests/settings_sites.rs
+?? crates/tdb-fhm-store/src/legends.rs
+?? crates/tdb-headmesh/
+?? crates/tdb-loc/
+?? crates/tdb-rx2/examples/
+?? crates/tdb-rx2/src/fixtures.rs
+?? crates/tdb-rx2/src/mcd_write.rs
+?? crates/tdb-rx2/src/texlib_ps3.rs
+?? crates/tdb-rx2/src/venue.rs
+?? crates/tdb-rx2/tests/
+?? crates/tdb-snd/
+?? crates/tdb-speech/
+?? crates/tdb-speex/
+?? crates/tdb-txn/
+?? crates/tdb-xiso/
+?? defs/appearance/bone-overrides.toml
+?? defs/appearance/cc5-bone-map.toml
+?? defs/appearance/facial-hair-donors.toml
+?? defs/appearance/facial-regions.toml
+?? defs/appearance/head-ids.toml
+?? defs/appearance/head-uv-classes.toml
+?? defs/appearance/headmesh-matrix.toml
+?? defs/appearance/legacy-bone-names.toml
+?? defs/appearance/morph-donors.toml
+?? defs/appearance/nhl24-facemesh-overrides.toml
+?? defs/appearance/rig-audit-scoring.toml
+?? defs/arena/
+?? defs/enums/nationality-nhl07.toml
+?? defs/enums/nationality-nhl08-09.toml
+?? defs/enums/nationality-nhl10.toml
+?? defs/enums/nationality-nhl11-12.toml
+?? defs/fonts/
+?? defs/league_imagery.toml
+?? defs/leagues/
+?? defs/ps4/
+?? defs/relationships/team-league.toml
+?? defs/schedules/
+?? defs/settings/
+?? docs/CC5_TO_NHL19_HEAD_TRANSFER.md
+?? docs/MESH_UV_TEMPLATE_TRANSFER.md
+?? docs/NHL19_HEAD_IMPORT_PLAYBOOK.md
+?? docs/STATE-OF-THE-REPO.md
+?? docs/audits/headmesh-uv-compat.md
+?? docs/audits/legacy-head-donor-census.md
+?? docs/audits/nhl21-ps4-head-asset-binding.md
+?? docs/audits/nhl24-legacy-patha-roundtrip.md
+?? docs/plans/agent-2-converter-next-package-2026-09-16.md
+?? docs/plans/agent-2-h22-acceptance-and-h23-lifecycle-2026-09-16.md
+?? docs/plans/agent-2-h22-review-and-correction-2026-09-16.md
+?? docs/plans/agent-2-h22a-review-and-snapshot-correction-2026-09-16.md
+?? docs/plans/agent-2-h23-acceptance-and-h24-build-baseline-2026-09-17.md
+?? docs/plans/agent-2-h23-review-and-correction-2026-09-17.md
+?? docs/plans/agent-2-h23a-review-and-cleanup-correction-2026-09-17.md
+?? docs/plans/agent-2-h24-acceptance-and-h25-export-profile-2026-09-17.md
+?? docs/plans/agent-2-h24-review-and-build-identity-correction-2026-09-17.md
+?? docs/plans/agent-2-h25-review-and-h25a-corrections-2026-09-17.md
+?? docs/plans/beta-20261001-scope-decisions.md
+?? docs/plans/builder-knowledge-gap-register.md
+?? docs/plans/codex-primary-architect-handoff-2026-09-26.md
+?? docs/plans/completion-design-questions.md
+?? docs/plans/coordinator-developer-working-agreement.md
+?? docs/plans/development-20260926-after-receipt27.md
+?? docs/plans/development-20260927-after-receipt40.md
+?? docs/plans/development-20260927-overnight-after-receipt31.md
+?? docs/plans/development-20260928-after-receipt45.md
+?? docs/plans/entity-editing-parity-roadmap.md
+?? docs/plans/league-identity-parity-matrix.md
+?? docs/plans/league-identity-runtime-qualification.md
+?? docs/plans/league-overnight-execution-2026-09-17.md
+?? docs/plans/nhl19-mogilny-head-import.md
+?? docs/plans/nhl21-legends-development-roadmap.md
+?? docs/plans/nhl21-legends-development-roadmap.superseded-2026-09-17.md
+?? docs/plans/overnight-development-2026-09-19.md
+?? docs/plans/overnight-development-2026-09-24-leagues-teams.md
+?? docs/plans/overnight-research-2026-09-19.md
+?? docs/plans/overnight-research-2026-09-24-leagues-teams.md
+?? docs/plans/overnight-two-agent-campaign-2026-09-18.md
+?? docs/plans/parallel-completion-plan-2026-09-16.md
+?? docs/plans/project-completion-roadmap.md
+?? docs/plans/projects-builds-foundation-roadmap.md
+?? docs/plans/projects-builds-foundation-roadmap.superseded-2026-09-17.md
+?? docs/plans/qa-evidence-contract.md
+?? docs/plans/research-20260926-after-receipt3.md
+?? docs/plans/research-20260928-fresh-overnight-after-receipt4.md
+?? docs/plans/studio-initial-briefing-and-dispatch-2026-09-17.md
+?? docs/plans/user-verification-2026-09-27-results.md
+?? docs/plans/user-verification-2026-09-27-tracker.md
+?? docs/plans/user-verification-2026-09-27.md
+?? docs/receipts/c0-as1-asset-profile-constraints.md
+?? docs/receipts/c0-as1-r1-override-policy.md
+?? docs/receipts/c0-as2-r1-build-mapping-overrides.md
+?? docs/receipts/c0-as2-r2-exact-approval-binding.md
+?? docs/receipts/c0-as3-r1-source-backed-variants.md
+?? docs/receipts/c0-as3-r2-observation-authority.md
+?? docs/receipts/c0-as3-scoped-asset-variants.md
+?? docs/receipts/c0-as4-composite-resolution.md
+?? docs/receipts/c0-as5-shared-legacy-asset-profiles.md
+?? docs/receipts/c0-as6-asset-family-coverage.md
+?? docs/receipts/c0-as7-asset-evidence-measurements.md
+?? docs/receipts/c0-bulk1-01-contract.md
+?? docs/receipts/c0-bulk1-02-evidence-core.md
+?? docs/receipts/c0-bulk1-03-publication.md
+?? docs/receipts/c0-bulk1-04-migration.md
+?? docs/receipts/c0-bulk1-05-fixtures-runtime.md
+?? docs/receipts/c0-bulk1-06-canonical-contracts.md
+?? docs/receipts/c0-bulk1-07-closure.md
+?? docs/receipts/c0-bulk1-r1-publication-safety.md
+?? docs/receipts/c0-bulk1-r2-boundary-enforcement.md
+?? docs/receipts/c0-can-commit1.md
+?? docs/receipts/c0-can-commit2.md
+?? docs/receipts/c0-can-eol1-test-portability.md
+?? docs/receipts/c0-can1-adapter-constraints.md
+?? docs/receipts/c0-can1-r1-evidence-strength.md
+?? docs/receipts/c0-can1-r2-target-specific-derivations.md
+?? docs/receipts/c0-close-emit-development-transition.md
+?? docs/receipts/c0-close1-remaining-work.md
+?? docs/receipts/c0-commit-evid1.md
+?? docs/receipts/c0-commit-reg1.md
+?? docs/receipts/c0-commit-reg1b.md
+?? docs/receipts/c0-emit1-observation-integration.md
+?? docs/receipts/c0-emit1-r1-freshness-coverage.md
+?? docs/receipts/c0-emit1-r2-fixture-freshness.md
+?? docs/receipts/c0-emit1-r3-attribution-path-guards.md
+?? docs/receipts/c0-evid-probe1.md
+?? docs/receipts/c0-evid-repair1-r1-explicit-integration-coverage.md
+?? docs/receipts/c0-evid-repair1.md
+?? docs/receipts/c0-lock1-baseline-lockfile-repair.md
+?? docs/receipts/c0-mig-id1-r1-isolated-verification.md
+?? docs/receipts/c0-mig-id1.md
+?? docs/receipts/c0-mig-review1.md
+?? docs/receipts/c0-next1-evidence-activation.md
+?? docs/receipts/c0-por1-portrait-measurements.md
+?? docs/receipts/c0-por1-r1-evidence-scope.md
+?? docs/receipts/c0-reg1a-legacy-xbox360-adapter.md
+?? docs/receipts/c0-reg1a-r1-legacy-evidence-correction.md
+?? docs/receipts/c0-reg1a-r2-representation.md
+?? docs/receipts/c0-reg1b-nhl15-ps3-adapter.md
+?? docs/receipts/c0-reg2-database-asset-registry.md
+?? docs/receipts/c0-reg3-database-asset-design.md
+?? docs/receipts/c0-reg4-ps4-database-adapters.md
+?? docs/receipts/c0-reg4-r1-attribution-and-verification.md
+?? docs/receipts/c0-reg5-early-generation-adapters.md
+?? docs/receipts/c0-s2-int1-emitter-integration.md
+?? docs/receipts/c0-s2-int1-r1-execution-truth.md
+?? docs/receipts/c0-s2-int1-r2-integrity-gates.md
+?? docs/receipts/c0-s2-int1-r3-dedup-integrity.md
+?? docs/receipts/c0-s2-int1-r4-evidence-discovery.md
+?? docs/receipts/c0-s2-int1-r5-file-read-integrity.md
+?? docs/receipts/c0-slice1-commit-boundary-analysis.md
+?? docs/receipts/c0-slice2-canonical-probe.md
+?? docs/receipts/data/c0-por1-census.json
+?? docs/receipts/data/c0-por1-portrait-specimens.json
+?? docs/receipts/data/c0-por1-specimen-hashes.json
+?? docs/receipts/data/c0-por1-tools/
+?? docs/receipts/l11a-league-identity-assessment.md
+?? docs/receipts/league-desktop-smoke.md
+?? docs/receipts/league-l11-q1-r1.md
+?? docs/receipts/league-l11-q1.md
+?? docs/receipts/league-nhl21-e0.md
+?? docs/receipts/league-nhl21-e1-prep-r1.md
+?? docs/receipts/league-nhl21-e1-prep-r2.md
+?? docs/receipts/league-nhl21-e1-prep.md
+?? docs/receipts/league-nhl21-e1.md
+?? docs/receipts/league-overnight-2026-09-17.md
+?? docs/receipts/league-overnight-checkpoint.md
+?? docs/receipts/league-parity-batch.md
+?? docs/receipts/league-parity-completion.md
+?? docs/receipts/league-r1-correction.md
+?? docs/receipts/league-r2-correction.md
+?? docs/receipts/league-resp-1.md
+?? docs/receipts/league-smoke-r1-close-flow.md
+?? docs/receipts/overnight-development-2026-09-18/
+?? docs/receipts/overnight-development-2026-09-19/
+?? docs/receipts/overnight-development-2026-09-20/
+?? docs/receipts/overnight-development-2026-09-21/
+?? docs/receipts/overnight-development-2026-09-22/
+?? docs/receipts/overnight-development-2026-09-23/
+?? docs/receipts/overnight-development-2026-09-24/
+?? docs/receipts/s1-chunkzip-multichunk-codec.md
+?? docs/receipts/s2a-archive-planner-staged-output.md
+?? docs/receipts/s2b-copied-target-transaction.md
+?? docs/receipts/s2c-copied-target-workspace-api.md
+?? docs/release/
+?? docs/research/
+?? docs/validation/2026-09-10-n19-anchored-projection-test.md
+?? docs/validation/2026-09-10-n19-coordinated-fit-progress.md
+?? docs/validation/2026-09-10-n19-h0-review-h1-dispatch.md
+?? docs/validation/2026-09-10-n19-h1-deployment-experiment-spec.md
+?? docs/validation/2026-09-10-n19-h1-review-h2a-dispatch.md
+?? docs/validation/2026-09-10-n19-h2a-review-h2b-dispatch.md
+?? docs/validation/2026-09-10-n19-h2b-review-h2c-dispatch.md
+?? docs/validation/2026-09-10-n19-meshdatatransfer-comparison.md
+?? docs/validation/2026-09-10-n19-mogilny-game-test-package.md
+?? docs/validation/2026-09-10-n19-mogilny-mesh-only-test.md
+?? docs/validation/2026-09-10-n19-mogilny-scalp-2k.md
+?? docs/validation/2026-09-10-n19-mogilny-texture-only.md
+?? docs/validation/2026-09-10-n19-mogilny-uv-template-fit.md
+?? docs/validation/2026-09-11-head-import-reference-manifest.json
+?? docs/validation/2026-09-11-n19-demitra-cc5-success.md
+?? docs/validation/2026-09-11-n19-demitra-diffuse-2k.md
+?? docs/validation/2026-09-11-n19-turgeon-cc5.md
+?? docs/validation/c0-03-guidance-reconciliation.md
+?? docs/validation/c0-04a-evidence-contract.md
+?? docs/validation/c0-05-fixture-runtime-register.md
+?? docs/validation/c0-06-canonical-project-and-adapters.md
+?? docs/validation/c0-fx1-explicit-fixture-tests.md
+?? docs/validation/development-20260923-r4-review.md
+?? docs/validation/development-20260924-disclosure-venue-review.md
+?? docs/validation/development-20260925-misrouted-prompt-audit.md
+?? docs/validation/development-20260926-decoder-recommendation.md
+?? docs/validation/development-20260926-packages20-22-review.md
+?? docs/validation/development-20260926-packages23-26-review.md
+?? docs/validation/development-20260926-receipt27-review.md
+?? docs/validation/development-20260926-receipt27-reviewed-sources.json
+?? docs/validation/development-20260928-receipt45-evidence.json
+?? docs/validation/development-20260928-receipt45-review.md
+?? docs/validation/evidence/
+?? docs/validation/league-identity-offline-campaign.md
+?? docs/validation/league-l11-q1-r1-review-and-e0-dispatch.md
+?? docs/validation/league-l11-q1-review-and-r1-dispatch.md
+?? docs/validation/league-nhl21-e0-review-and-e1-prep-dispatch.md
+?? docs/validation/league-nhl21-e1-prep-r1-review-and-r2-dispatch.md
+?? docs/validation/league-nhl21-e1-prep-r2-review-and-e1-dispatch.md
+?? docs/validation/league-nhl21-e1-prep-review-and-r1-dispatch.md
+?? docs/validation/league-overnight-review-and-r1-dispatch.md
+?? docs/validation/league-parity-batch-2026-09-18.md
+?? docs/validation/league-parity-batch-review-and-completion-dispatch.md
+?? docs/validation/league-parity-completion-2026-09-18.md
+?? docs/validation/league-parity-completion-review-and-r1-dispatch.md
+?? docs/validation/league-r1-review-and-r2-dispatch.md
+?? docs/validation/league-r2-acceptance-and-desktop-smoke-dispatch.md
+?? docs/validation/league-resp-1-review-and-qualification-dispatch.md
+?? docs/validation/league-smoke-r1-review-and-responsive-dispatch.md
+?? docs/validation/league-smoke-review-and-r1-dispatch.md
+?? docs/validation/loc-w3-r3-acceptance-and-p1b-research-dispatch.md
+?? docs/validation/loc-w3-revision2-review.md
+?? docs/validation/overnight-2026-09-18-review-and-r2-dispatch.md
+?? docs/validation/overnight-dev-20260920-r1-corrections.md
+?? docs/validation/overnight-dev-20260920-r2-corrections.md
+?? docs/validation/overnight-dev-20260920-r2-dispatch.md
+?? docs/validation/overnight-dev-20260920-r3-dispatch.md
+?? docs/validation/overnight-dev-r1-corrections-2026-09-19.md
+?? docs/validation/overnight-dev-r2-review-and-r3-dispatch.md
+?? docs/validation/overnight-dev-r3-acceptance-and-p1a-dispatch.md
+?? docs/validation/overnight-development-2026-09-19-review-r1.md
+?? docs/validation/overnight-development-2026-09-20-review-r1.md
+?? docs/validation/overnight-development-2026-09-21-review-r1.md
+?? docs/validation/overnight-development-20260921-r1-followup.md
+?? docs/validation/overnight-development-20260922-receipts10-17-review.md
+?? docs/validation/overnight-development-20260922-review.md
+?? docs/validation/overnight-research-2026-09-19-review.md
+?? docs/validation/overnight-research-2026-09-21-review-r1.md
+?? docs/validation/overnight-research-review-and-next-dispatch.md
+?? docs/validation/p1a-r1-review-and-r2-dispatch.md
+?? docs/validation/p1a-r2-acceptance-and-p1c-dispatch.md
+?? docs/validation/p1a-review-and-r1-dispatch.md
+?? docs/validation/p1a-schedule-workflow-2026-09-18.md
+?? docs/validation/p1b-r1-review-and-r2-dispatch.md
+?? docs/validation/p1b-r2-acceptance-and-settings-research-dispatch.md
+?? docs/validation/p1b-review-and-r1-research-dispatch.md
+?? docs/validation/p1bs-csv-review-and-overnight-addendum.md
+?? docs/validation/p1bs-r1-acceptance-and-csv-parity-dispatch.md
+?? docs/validation/p1bs-review-and-contract-correction-dispatch.md
+?? docs/validation/p1c-ps4-competition-groups-2026-09-18.md
+?? docs/validation/p1c-r1-review-and-r2-dispatch.md
+?? docs/validation/p1c-r2-acceptance-2026-09-19.md
+?? docs/validation/p1c-review-and-r1-dispatch.md
+?? docs/validation/phase-1-coverage-matrix-2026-09-18.md
+?? docs/validation/phase-2-coverage-matrix-2026-09-20.md
+?? docs/validation/phase-3-coverage-matrix-2026-09-22.md
+?? docs/validation/phase-4-coverage-matrix-2026-09-22.md
+?? docs/validation/research-20260921-pm-delivery-review.md
+?? docs/validation/research-20260922-delivery-review.md
+?? docs/validation/research-20260922-pm-review.md
+?? docs/validation/research-20260924-campaign-review.md
+?? docs/validation/research-20260925-misrouted-prompt-audit.md
+?? docs/validation/research-20260925-r97-r101-review.md
+?? docs/validation/research-20260926-r102-r106-review.md
+?? docs/validation/research-20260926-r107-r112-review.md
+?? docs/validation/research-20260926-r113-r118-review.md
+?? docs/validation/research-20260926-r119-r121-evidence.json
+?? docs/validation/research-20260926-r119-r121-review.md
+?? docs/validation/research-followup-review-and-growth-contract-dispatch.md
+?? docs/validation/research-r1-acceptance-and-phase1-followup.md
+?? docs/validation/research-r19-r20-review-2026-09-20.md
+?? docs/validation/research-r22-r23-review-2026-09-21.md
+?? docs/validation/research-r75-r78-review-20260923.md
+?? docs/validation/s1-review-and-s2a-dispatch.md
+?? docs/validation/s2a-r1-review-and-s2b-dispatch.md
+?? docs/validation/s2a-review-and-correction-dispatch.md
+?? docs/validation/s2b-r1-review-and-r2-dispatch.md
+?? docs/validation/s2b-r2-review-and-s2c-dispatch.md
+?? docs/validation/s2b-review-and-correction-dispatch.md
+?? docs/validation/s2c-r1-review-and-r2-dispatch.md
+?? docs/validation/s2c-r2-review-and-r3-dispatch.md
+?? docs/validation/s2c-r3-review-and-r4-dispatch.md
+?? docs/validation/s2c-r4-review-and-l11a-dispatch.md
+?? docs/validation/s2c-review-and-correction-dispatch.md
+?? docs/validation/xbox360-mip-layout-audit-2026-09-22.md
+?? eb-big-format.md
+?? ice.zip
+?? local/
+?? scripts/
+?? tools/

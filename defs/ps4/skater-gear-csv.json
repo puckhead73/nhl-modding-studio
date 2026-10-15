@@ -1,0 +1,196 @@
+{
+ "about": "PS4 NHL 17-21 skater-gear Creation Zone CSV identities (research R136, 28 Sep 2026): the inxp_00.big member each family's rows come from, with the SHA-256 of its unwrapped bytes. Studio reads a title's rows only when the member hashes to this value for the open project's title (receipt 52); NHL 15 / 16 ship no rows. Named enums (vault class . attribute enum) per family are the R136 matches.",
+ "from": "docs/research/overnight-2026-09-28/data/r136-ps4-skater-gear-catalogue.json",
+ "from_sha256": "f0121173887ee90f14df5a3965eb8e2f0b04984e8bd086fe5ddcf5fdd9b589fe",
+ "titles": {
+  "nhl15": {
+   "helmet": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterhelmettexturepack.HelmetBrand"
+   },
+   "gloves": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterglovestexturepack.GloveBrand"
+   },
+   "skates": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterskates.SkateBrand"
+   },
+   "stick": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skatersticktexturepack.StickBrand"
+   },
+   "visor": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterhelmet.HelmetVisorType"
+   }
+  },
+  "nhl16": {
+   "helmet": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterhelmettexturepack.HelmetBrand"
+   },
+   "gloves": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterglovestexturepack.GloveBrand"
+   },
+   "skates": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterskates.SkateBrand"
+   },
+   "stick": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skatersticktexturepack.StickBrand"
+   },
+   "visor": {
+    "member": null,
+    "sha256": null,
+    "named_enum": "ge_nhl_skaterhelmet.HelmetVisorType"
+   }
+  },
+  "nhl17": {
+   "helmet": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+    "sha256": "1753f9d95664928edd473a2267fdcdabde5a68a044ce3fea06ba9587d8b6d7fa",
+    "named_enum": "ge_nhl_skaterhelmettexturepack.HelmetBrand"
+   },
+   "gloves": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+    "sha256": "2de3b243f364d321388bd67524c1a5d4ac98635f20216ec278d4dedc1e3e8ac4",
+    "named_enum": "ge_nhl_skaterglovestexturepack.GloveBrand"
+   },
+   "skates": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+    "sha256": "6a9ffef9a63e09cf204d898836f4c7788d88734491ab18e55098db8e58f69117",
+    "named_enum": "ge_nhl_skaterskates.SkateBrand"
+   },
+   "stick": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+    "sha256": "4486f7f18a7f185b417bedbc2df463e4d06b05101038bc79a71662e51b77a8b7",
+    "named_enum": "ge_nhl_skatersticktexturepack.StickBrand"
+   },
+   "visor": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+    "sha256": "5824ecae7e78077629a017497d92dde25741a37fbd98ea22be904632c29b1828",
+    "named_enum": "ge_nhl_skaterhelmet.HelmetVisorType"
+   }
+  },
+  "nhl18": {
+   "helmet": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+    "sha256": "6f998e285a28051aa0b576a3f1d3de37d196c57d60bc170bcc3a3a1cb477ad19",
+    "named_enum": "ge_nhl_skaterhelmettexturepack.HelmetBrand"
+   },
+   "gloves": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+    "sha256": "b2fcd5102318c7e4faf32679d212b04b75d8ecb194addf1c5ccf26e775511724",
+    "named_enum": "ge_nhl_skaterglovestexturepack.GloveBrand"
+   },
+   "skates": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+    "sha256": "2ec9022492f4bc4bbbc13c6bb60a62b9d6e2d9a22f1821c6bd96a71352f7cd39",
+    "named_enum": "ge_nhl_skaterskates.SkateBrand"
+   },
+   "stick": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+    "sha256": "eea88509210e6d4ae7bcc73e64e5e86a1d47165a0f86e5b821a241cbb3a6af0f",
+    "named_enum": "ge_nhl_skatersticktexturepack.StickBrand"
+   },
+   "visor": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+    "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c",
+    "named_enum": "ge_nhl_skaterhelmet.HelmetVisorType"
+   }
+  },
+  "nhl19": {
+   "helmet": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+    "sha256": "70c989e1f26b9c4d36f14f205ad9c3f634eb444c0847a4e6529f6cea1db2f3ba",
+    "named_enum": "ge_nhl_skaterhelmettexturepack.HelmetBrand"
+   },
+   "gloves": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+    "sha256": "c81e780c34c2b89bdb92d58f46107b763fef35882b7859bd251ac465598bd059",
+    "named_enum": "ge_nhl_skaterglovestexturepack.GloveBrand"
+   },
+   "skates": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+    "sha256": "461f524244bc2eef4868cb3f7ae61fe8cab0ced0f110de1b5be07f3ef97bd3f7",
+    "named_enum": "ge_nhl_skaterskates.SkateBrand"
+   },
+   "stick": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+    "sha256": "e1316d7a1d75e27c22c12386be672788b22071bc6d9507b9e31492216b0f1ba9",
+    "named_enum": "ge_nhl_skatersticktexturepack.StickBrand"
+   },
+   "visor": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+    "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c",
+    "named_enum": "ge_nhl_skaterhelmet.HelmetVisorType"
+   }
+  },
+  "nhl21": {
+   "helmet": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+    "sha256": "962e41d42b33ee92ead4699e26cf682a98cc35fc868851d6b3f65cdd387c817b",
+    "named_enum": "ge_nhl_skaterhelmettexturepack.HelmetBrand"
+   },
+   "gloves": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+    "sha256": "0ce956add23b145cad373517c300f0ae4cc3bc8cf597d0298043170b3600e48b",
+    "named_enum": "ge_nhl_skaterglovestexturepack.GloveBrand"
+   },
+   "skates": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+    "sha256": "bb86b4fa3bbc7543f207d11ddf22ae3bd3e3b04dab048d878f71ae1c178a8b9c",
+    "named_enum": "ge_nhl_skaterskates.SkateBrand"
+   },
+   "stick": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+    "sha256": "d96d764a0b8c1812dd59975b1049bbea9fdc51587dcc138d117dac0382379913",
+    "named_enum": "ge_nhl_skatersticktexturepack.StickBrand"
+   },
+   "visor": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+    "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c",
+    "named_enum": "ge_nhl_skaterhelmet.HelmetVisorType"
+   }
+  },
+  "nhl20": {
+   "helmet": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterhelmetstyle.csv",
+    "sha256": "bfb440e9aada6733c8e0919525bca1d548b0478c8cbd7388d12e58559ed6f78c",
+    "named_enum": "ge_nhl_skaterhelmettexturepack.HelmetBrand"
+   },
+   "gloves": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skaterglovestyle.csv",
+    "sha256": "aa99c4fb51a813a2e53c584c972d5d3e264d9bb4ae4075c7fa4df31141b18b51",
+    "named_enum": "ge_nhl_skaterglovestexturepack.GloveBrand"
+   },
+   "skates": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatedisplayinfo.csv",
+    "sha256": "db71fe45afd1d349147792760a1165cedc05d62aceb6c0e463d0814b09dbc6fe",
+    "named_enum": "ge_nhl_skaterskates.SkateBrand"
+   },
+   "stick": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/stickdisplayinfo.csv",
+    "sha256": "176886d9a8d02a95d3f567e7c7c97451e8c2ee659bebf9af1bbaff97694c3a27",
+    "named_enum": "ge_nhl_skatersticktexturepack.StickBrand"
+   },
+   "visor": {
+    "member": "nhl/data/common/gamemodes/creation_zone_csv/skatervisortypes.csv",
+    "sha256": "91374a2d10734f6d24bbd6561187c0dc513f415ea77c0816059948b541942f7c",
+    "named_enum": "ge_nhl_skaterhelmet.HelmetVisorType"
+   }
+  }
+ }
+}

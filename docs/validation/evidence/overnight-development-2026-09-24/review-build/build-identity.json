@@ -1,0 +1,11 @@
+{
+  "exe_sha256": "4dc5c540769b86858dd3be28255fdbe5e2282b3a146d20a51f4ca0b48455c502",
+  "exe_equals_target_release": true,
+  "exe_bytes": 49183232,
+  "defs_files": 121,
+  "defs_tree_sha256": "200f04d97f9122b760587e4f40f73c81c8057be432fc62e06f99a84d7dd94a00",
+  "defs_equal_live_repo_at_copy": true,
+  "frontend_dist_files": 55,
+  "frontend_dist_tree_sha256": "ae467dcfe11ba810af6274e64064d4c42b10a97e195c4a52c335ba530249e8a1",
+  "source_inventory_rows": 157
+}

@@ -79,6 +79,9 @@ pub struct PlayerSeasonRow {
     pub league_abbr: Option<String>,
     pub height: Option<i64>,
     pub weight: Option<i64>,
+    /// The number the player wore that season on that team (lowest, if they wore several). Carried so
+    /// the Roster Builder can pre-fill the jersey on import. `None` when the corpus has no number.
+    pub jersey: Option<i64>,
     /// Position grades G/LD/RD/LW/C/RW from that season's ratings (for a compact per-season row).
     pub ability: Option<f64>,
     pub potential: Option<f64>,

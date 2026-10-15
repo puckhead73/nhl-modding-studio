@@ -30,7 +30,9 @@ pub mod ps4;
 pub use extract::extract_db;
 pub use header::{ContainerVersion, SaveHeader, SaveType};
 pub use pack::repack_db;
-pub use ps4::{extract_roster as ps4_extract_roster, is_ps4_save, repack_roster as ps4_repack_roster};
+pub use ps4::{
+    extract_roster as ps4_extract_roster, is_ps4_save, repack_roster as ps4_repack_roster,
+};
 
 /// Errors from the save-container codec.
 #[derive(Debug)]
@@ -62,7 +64,10 @@ impl std::fmt::Display for SaveError {
             SaveError::NotTdb => write!(f, "no recognisable inner TDB / container body"),
             SaveError::UnsupportedVersion(v) => write!(f, "unsupported container version word {v}"),
             SaveError::UnsupportedV1Write => {
-                write!(f, "v1 (NHL10/11) containers are read-only (tag_1c un-reversed)")
+                write!(
+                    f,
+                    "v1 (NHL10/11) containers are read-only (tag_1c un-reversed)"
+                )
             }
             SaveError::Inflate(e) => write!(f, "zlib inflate failed: {e}"),
             SaveError::Deflate(e) => write!(f, "zlib deflate failed: {e}"),

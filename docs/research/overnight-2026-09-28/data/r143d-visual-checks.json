@@ -1,0 +1,257 @@
+{
+ "note": "R143d / R143e visual discriminator, 28 Sep 2026 (research inspection of scratch sheets; sheets deleted). Per sampled id N: create-player thumbnail N beside the render tint mask (`_0_tm`, the recolour regions carrying the pad / blocker design) of N-1, N, N+1. 'match' = the thumbnail's design (shape, lettering) is the tint mask's; judged by research, not a pixel metric. Probes: r143d_thumbnail_tint_sheet.py (e1fb6c50...), r143e_sheet_patterns.py (763988f2...), decoders r143c_thumbnail_content_match.py (596928a9...).",
+ "checks": [
+  {
+   "title": "x360-legacy",
+   "family": "pads",
+   "render": "rendering/goaliepad/goaliepad_<N>_0_tm.rx2",
+   "match_N": [
+    11,
+    12,
+    31,
+    44,
+    45,
+    46
+   ],
+   "plausible_N": [
+    20
+   ],
+   "undetermined_plain_design": [
+    40,
+    60,
+    77
+   ],
+   "match_N_minus_1_or_plus_1": []
+  },
+  {
+   "title": "x360-legacy",
+   "family": "blocker",
+   "render": "rendering/blocker/blocker_0_<N>_0_tm.rx2",
+   "match_N": [
+    11,
+    12,
+    31,
+    44
+   ],
+   "match_N_minus_1_or_plus_1": []
+  },
+  {
+   "title": "x360-nhl12",
+   "family": "pads",
+   "render": "rendering/goaliepad/fegoaliepad_0_<N>_0_tm.rx2",
+   "match_N": [
+    11,
+    12,
+    31,
+    44
+   ],
+   "match_N_minus_1_or_plus_1": []
+  },
+  {
+   "title": "x360-legacy",
+   "family": "trapper",
+   "render": "rendering/trapper/trapper_0_<N>_0_tm.rx2",
+   "plausible_N": [
+    31,
+    44
+   ],
+   "undetermined": [
+    11,
+    12
+   ],
+   "match_N_minus_1_or_plus_1": [],
+   "added": "13:39 (package 4 continuation)"
+  },
+  {
+   "title": "x360-nhl10",
+   "family": "pads",
+   "render": "rendering/goaliepad/texlib_<N>.rx2",
+   "result": "not discriminable by this method: the thumbnail package holds a stored RW4 member the research decoder did not render, and the largest texlib texture is a grey detail map without the design"
+  }
+ ],
+ "failed_method": {
+  "probe": "r143c colour-histogram intersection, thumbnail vs `_0_dm`",
+  "result": "x360-legacy pads: top-1 == N 2 / 67, median rank 34 (chance)",
+  "reason": "`_dm` is a grey detail map and `_tm` a recolour mask; colours are applied at runtime, so colour histograms cannot match. Kept as a recorded negative, not evidence against the join."
+ },
+ "fallback_nhl14_after_receipt6": {
+  "added": "28 Sep (after-receipt-6 package 3 fallback)",
+  "checks": [
+   {
+    "title": "x360-nhl14",
+    "family": "gloves",
+    "render": "rendering/glove/glove_<N>_0_tm.rx2",
+    "ids": [
+     20,
+     24,
+     29,
+     40,
+     48,
+     55
+    ],
+    "judgement": {
+     "match_N": [
+      40
+     ],
+     "plausible_N": [
+      55
+     ],
+     "undetermined": [
+      20,
+      24,
+      29
+     ],
+     "possible_N_minus_1": [
+      48
+     ],
+     "note": "gloves48 cuff lettering (11K-style) resembles tint mask 47, not 48: a counter-signal; gloves are NOT supported as a picture join"
+    },
+    "sources": [
+     {
+      "id": 20,
+      "thumbnail_sha256": "67a7e3ad63fb12784f6708fed90b66870902ada9777a510b5c246843a48e908e",
+      "tint_masks": {
+       "19": null,
+       "20": "601c103cc658adf1e13506a0fe9910aba2b9da72bf5ed86000868fb2833bca8f",
+       "21": "2c5fa10874e6913b395aea80d83e06f98a92388ea315b0dd8c04b9efd78e9f86"
+      }
+     },
+     {
+      "id": 24,
+      "thumbnail_sha256": "8f445b319c05da17b630874d8cbf9ab6713b63ca09660db330561ae9b3f447f7",
+      "tint_masks": {
+       "23": "3f034bf8e67a76492bb687df21db8d379f3450c88b2cb0c56e25b2982745127c",
+       "24": "a76cc40a004fa7722136887bec516e75083b6720cd2ffb4bbe314abbfbfe029f",
+       "25": "380859c048089c69c5f7b1c71bd7a98cb987a1310f9fb1a70db22ec6ee4c6927"
+      }
+     },
+     {
+      "id": 29,
+      "thumbnail_sha256": "fe457cd7de1d4e3290beeb8a128774c0ef7e5da183b56ac41afbae9f7f4bf2c6",
+      "tint_masks": {
+       "28": "490c01ab2c473fb705f0b462cc3ed518af6d593c6ea37236d012bdef7e48603e",
+       "29": "bdae9561c9d86a47da9486905e9a5277d7a00fe60a717170e1e84edd5f25c691",
+       "30": "00b0b162be00875bf39457823a3290a266e4b0c71dffde2482284b3af1ff2cc3"
+      }
+     },
+     {
+      "id": 40,
+      "thumbnail_sha256": "a5bfe1c4eff58d332ffca16e4292ba00a4ca65f8ac374ce8e70e56a3458ae5f5",
+      "tint_masks": {
+       "39": "0d386360b023e4faa3cf2cb86128febb9d3d340c2379760ca25054f5c0a33ee5",
+       "40": "dc723c40aef79b40698bcc1fc87618cb65a31c09f05168090e03004f52fd0651",
+       "41": "8a657c9d0a4203910d1303e6a7fe3bfe6953fb1784dad93a8af519d371c6f6bc"
+      }
+     },
+     {
+      "id": 48,
+      "thumbnail_sha256": "f1683b18fbb0cbfbd97ef342b647e7c0645303b86ef34155611423d8f4db6e47",
+      "tint_masks": {
+       "47": "fde1115ef889071287c5e0a724b012da2b8a8f0ffd31113dae1bcacddf765744",
+       "48": "9af56ea8dc69cd2d32d517891918e9f251e092d695709833c35f093b10ef89e9",
+       "49": "3e823ec094489bd043c99dc6ec6bb61a71fdb53aa8db4e9f96197ea31facefa7"
+      }
+     },
+     {
+      "id": 55,
+      "thumbnail_sha256": "d5f8cbd4f4bff2608f84cba5b3fb2b701589ddab8bf5663eb2b805037ebec034",
+      "tint_masks": {
+       "54": "edc131078b7316370c370cffd0614372a8568910dbc8c26588891552b0d73b9e",
+       "55": "d485991dcde16065dbf4c2628f9a271d79d524da71cc45211ef25426682f9806",
+       "56": "16e268267269264e43f2ab0b207dc916692273ff41690b016fbb870221c69f04"
+      }
+     }
+    ],
+    "retained_sheet": "nhl14-gloves.png + nhl14-gloves-48-enlarged.png"
+   },
+   {
+    "title": "x360-nhl14",
+    "family": "trapper",
+    "render": "rendering/trapper/trapper_0_<N>_0_tm.rx2",
+    "ids": [
+     12,
+     24,
+     33,
+     44,
+     55,
+     65
+    ],
+    "judgement": {
+     "plausible_N": [
+      12,
+      44
+     ],
+     "undetermined": [
+      24,
+      33,
+      55,
+      65
+     ],
+     "note": "trapper tint masks discriminate weakly (net-dominated)"
+    },
+    "sources": [
+     {
+      "id": 12,
+      "thumbnail_sha256": "37fddac14e71e2d62dbb7b7a37150a0d1561dd5e3f83e02fc2c1d1f8fd221273",
+      "tint_masks": {
+       "11": "2c2e3c52eca4c7658bf05b82370804475a3aac671806a9abe3fc3a92c238c839",
+       "12": "fe2b6a985e68a6f391f6048616e852519e02c5ccd63c768e0e593704d1357540",
+       "13": null
+      }
+     },
+     {
+      "id": 24,
+      "thumbnail_sha256": "b25a185ec56d1a7cc3aded57d6357871cb34daf7b4c92009aa07c368ec97907d",
+      "tint_masks": {
+       "23": "c32ea766e4a6a690245e24c4562ee32ddd4d10ba4154e1bbc22aa60a7e569a61",
+       "24": "5c9c334942082b94065f7364efeb7e6ebe53eeea7c006131f2d9d39dc8b37bcd",
+       "25": "374e7cf14cd3689f87d870da11d9b2365d5cc08ff517b8cf145c3ec0ec4a7590"
+      }
+     },
+     {
+      "id": 33,
+      "thumbnail_sha256": "904a4b641dc5c07542262c0e5342da1e743148143a964d8c73cedb5830ddac9a",
+      "tint_masks": {
+       "32": "680688ad0cd82f439b85f8ebc75a30a96e51e3985de977d36ebdf08f45168908",
+       "33": "f12e201abc0b3d376c860ec83816dcebae7ef79157b93125e15d2a706ddf3c8b",
+       "34": "d85aa303e2f1240dc255a9c80f5f5a20225f0233228f4e2600db6847525081fa"
+      }
+     },
+     {
+      "id": 44,
+      "thumbnail_sha256": "ecb04359918b62268f4777e3b6ee7a7d507ddf1cdd9b716e7c99fe0e1370e0d0",
+      "tint_masks": {
+       "43": "653dd88c3ca5a17244419ad637f6ba87ea088a0b101d9590a91b227a37ec75c4",
+       "44": "bd63c7af1501c25f1827e00ef5d0c6a49a47263ed1dffe0a53c50be5af53a829",
+       "45": "803d940a2c8ed627a4195c86d60e199806875b278f39047d642bd65272d97e3d"
+      }
+     },
+     {
+      "id": 55,
+      "thumbnail_sha256": "82a8849a89a5c680ad22039bc5d741045cb179e245fc460926e7f4e7a4b246b8",
+      "tint_masks": {
+       "54": "5815a741c745af5a96f3b3875e6aa09df42937ef07b20fea4a9e34180971ab82",
+       "55": "a598819eff4104ecab15508e0cc495ae88dff393c37d1885a0b12633ec45f24a",
+       "56": "1f0f284bc77732422d3762cad121fe0526a3eb8cb81af2e353d5276246956a84"
+      }
+     },
+     {
+      "id": 65,
+      "thumbnail_sha256": "95e610eb76b02e415205493399ade67033bd262df4f86dc6cb3a9fe2ab30ea36",
+      "tint_masks": {
+       "64": "d428651ddd1713bc56e9d2d4f93d3f5a1a943c41be064ea9dceac66964c7bdf2",
+       "65": "5f5c8dce5c96f5193e24f602224d642efb8c2da5731636fd6ecca5d9935ad598",
+       "66": "0f4a8e734bf02c14fdf44de7fce57da1fb243384fb7b1b4523e99d2084d8a993"
+      }
+     }
+    ],
+    "retained_sheet": "deleted (no distinction)"
+   }
+  ],
+  "retained_in": "H:\\TEMP\\nhlms-research-c38-visual-2026-09-28",
+  "retained_sheet_sha256": {
+   "nhl14-gloves.png": "1ce12cde929744f9c5bfffae3df57878304a5c878cd1f62fa1745ad0ba4e2c1f",
+   "nhl14-gloves-48-enlarged.png": "b20f2b7dbe431ff6474f559ea694ce63d7f8e51ad588bb0c5aa04a88d7f0300d"
+  }
+ }
+}

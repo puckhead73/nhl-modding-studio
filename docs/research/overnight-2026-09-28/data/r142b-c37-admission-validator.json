@@ -1,0 +1,389 @@
+{
+ "note": "R142b - corrected C37 writer-admission validator for PS3 board-ad rasters (after-receipt-6 prompt, first package; answers the receipt-6\nreview findings 1-3). Research probe, NOT a Studio writer. Separates:\n  discover(b)  format discovery (census reader): every board material -> descriptor -> format name incl. DXT5, no admission;\n  admit(b)     writer admission: the R142 checks plus\n               - overlap: the selected data span is refused if it intersects ANY other non-empty data span (full pairwise test:\n                 enclosing, non-adjacent, equal-start, duplicate); spans that only touch at a boundary are allowed; empty spans ignored;\n               - formats: 83f1 (DXT1) and 83f2 (DXT3) only; 83f3 (DXT5) is discovered but refused;\n               - width, height and level count must be > 0 (no normalisation to 1); width / height <= 8192 and\n                 level count <= 1 + floor(log2(max(w, h))) (bounded arithmetic; a declared partial chain is kept as declared);\n               - format words u16 @34 and @38 must be equal.\nVectors: the 14 R142 vectors (same builder) + focused new vectors (the review's enclosing construction and siblings, DXT3 pass, DXT5\nrefusal, zero width / height / levels, excess levels, format-word mismatch, touching and empty spans allowed, partial chain kept).\nCensus replay (--census): the admission validator over every PS3 venue package (read-only; archive members unwrapped in memory) compared\nwith R142's edge counts, to show the new checks keep the measured legitimate inputs.\nUsage: python r142b_c37_admission_validator.py <out.json> [--census]",
+ "probe_sha256": "9709b0f7ba032e908bafeb3777706f594ea06da462e502f0e237d55293527863",
+ "r142_sha256": "d7ee2d488bfa3c6abc27f5765d926449c3289354ece9a88dcac8d158b6d13616",
+ "vectors": [
+  {
+   "set": "R142",
+   "case": "baseline",
+   "expected": "edge",
+   "result": "edge",
+   "reason": null,
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "short block (240 B)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "short parameter block (240 B): slot word at +256 lies outside it",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "predecessor not 0xEF0001",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "predecessor type 0xef0002 (not 0xEF0001)",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "block past header region",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "parameter block outside the header region",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "slot word out of range",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "slot word 99 out of range (7 chunks)",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "slot names a material (foreign type)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "slot names chunk 2 of type 0xef0005 (not a 0x20003 descriptor)",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "descriptor shorter than 0x38",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: size 32 / extent outside the header region",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "format 6007 (texel)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: format 6007 (unknown) not admitted for writing (DXT1 / DXT3 only)",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "entry word out of range",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: entry word 50 out of range",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "entry word names a non-data chunk",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: entry 1 of type 0xef0001 (not a 0x10030 data entry)",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "entry past file end",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4 extends past the file",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "entry size = 6 x chain (cube)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4: 240 B != declared plain chain 40 B (= 6 x chain: cube map)",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "entry owned by two descriptors",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4 owned by 2 descriptors",
+   "pass": true
+  },
+  {
+   "set": "R142",
+   "case": "entry overlaps another data entry",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4 [0x400, 0x428) intersects data entry [6]",
+   "pass": true
+  },
+  {
+   "set": "new",
+   "case": "review: enclosing span, selected inside it beyond a contained span",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4 [0x480, 0x4a8) intersects data entry [6]",
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "2c435ade156201fb"
+  },
+  {
+   "set": "new",
+   "case": "equal start, different size",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4 [0x400, 0x428) intersects data entry [6]",
+   "pass": true,
+   "r142_result": "refuse",
+   "discovered_format": "DXT1",
+   "input_sha256": "2808003ec5445dec"
+  },
+  {
+   "set": "new",
+   "case": "duplicate span (equal start and size)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4 [0x400, 0x428) intersects data entry [6]",
+   "pass": true,
+   "r142_result": "refuse",
+   "discovered_format": "DXT1",
+   "input_sha256": "2250c2423d2a1c85"
+  },
+  {
+   "set": "new",
+   "case": "partial overlap on the right",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: data entry 4 [0x400, 0x428) intersects data entry [6]",
+   "pass": true,
+   "r142_result": "refuse",
+   "discovered_format": "DXT1",
+   "input_sha256": "0a2750e46f23dc01"
+  },
+  {
+   "set": "new",
+   "case": "boundary-touching disjoint span",
+   "expected": "edge",
+   "result": "edge",
+   "reason": null,
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "4f6f3d1a99a0b552"
+  },
+  {
+   "set": "new",
+   "case": "empty data span inside the selected span",
+   "expected": "edge",
+   "result": "edge",
+   "reason": null,
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "a96886fbf1a0693a"
+  },
+  {
+   "set": "new",
+   "case": "DXT3 8 x 8, 2 levels (80 B)",
+   "expected": "edge",
+   "result": "edge",
+   "reason": null,
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT3",
+   "input_sha256": "dea8e675311bd360"
+  },
+  {
+   "set": "new",
+   "case": "DXT5 8 x 8, 2 levels (80 B): discovered, not admitted",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: format 83f3 (DXT5) not admitted for writing (DXT1 / DXT3 only)",
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT5",
+   "input_sha256": "48aecc01e1b1a5d9"
+  },
+  {
+   "set": "new",
+   "case": "zero width (review: a_size 24)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: zero dimension (0 x 8)",
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "c4073eaea2a84275"
+  },
+  {
+   "set": "new",
+   "case": "zero height",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: zero dimension (8 x 0)",
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "66e625fc537b9576"
+  },
+  {
+   "set": "new",
+   "case": "zero level count (review: a_size 32)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: zero level count",
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "1a0a3498bf8c7443"
+  },
+  {
+   "set": "new",
+   "case": "level count 5 > 4 possible for 8 x 8",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: level count 5 exceeds 4 possible for 8 x 8",
+   "pass": true,
+   "r142_result": "refuse",
+   "discovered_format": "DXT1",
+   "input_sha256": "353912ab615e4b54"
+  },
+  {
+   "set": "new",
+   "case": "format words differ (83f1 / 83f2)",
+   "expected": "refuse",
+   "result": "refuse",
+   "reason": "descriptor 3: format words differ (83f1 / 83f2)",
+   "pass": true,
+   "r142_result": "refuse",
+   "discovered_format": "DXT1",
+   "input_sha256": "1f4a0137ac98808b"
+  },
+  {
+   "set": "new",
+   "case": "declared partial chain: 8 x 8 with 2 of 4 levels (baseline)",
+   "expected": "edge",
+   "result": "edge",
+   "reason": null,
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "49801f663ba3af4e"
+  },
+  {
+   "set": "new",
+   "case": "declared single level 8 x 8 (32 B)",
+   "expected": "edge",
+   "result": "edge",
+   "reason": null,
+   "pass": true,
+   "r142_result": "edge",
+   "discovered_format": "DXT1",
+   "input_sha256": "ae8ee3db52b7d38b"
+  }
+ ],
+ "vectors_passed": "29/29",
+ "census": {
+  "ps3-nhl14": {
+   "edges": 243,
+   "r142_edges": 243,
+   "refusals": {},
+   "formats": {
+    "DXT1": 242,
+    "discovered DXT1": 242,
+    "DXT3": 1,
+    "discovered DXT3": 1
+   },
+   "levels_per_edge": {
+    "9": 1,
+    "10": 134,
+    "11": 108
+   },
+   "edge_set_changes": []
+  },
+  "ps3-nhl15": {
+   "edges": 243,
+   "r142_edges": 243,
+   "refusals": {},
+   "formats": {
+    "DXT1": 242,
+    "discovered DXT1": 242,
+    "DXT3": 1,
+    "discovered DXT3": 1
+   },
+   "levels_per_edge": {
+    "9": 1,
+    "10": 134,
+    "11": 108
+   },
+   "edge_set_changes": []
+  },
+  "ps3-legacy": {
+   "edges": 243,
+   "r142_edges": 243,
+   "refusals": {},
+   "formats": {
+    "DXT1": 242,
+    "discovered DXT1": 242,
+    "DXT3": 1,
+    "discovered DXT3": 1
+   },
+   "levels_per_edge": {
+    "9": 1,
+    "10": 134,
+    "11": 108
+   },
+   "edge_set_changes": []
+  },
+  "ps3-nhl11": {
+   "edges": 136,
+   "r142_edges": 136,
+   "refusals": {
+    "slot word N out of range (N chunks)": 1
+   },
+   "formats": {
+    "DXT1": 136,
+    "discovered DXT1": 136
+   },
+   "levels_per_edge": {
+    "3": 1,
+    "8": 2,
+    "10": 56,
+    "11": 77
+   },
+   "edge_set_changes": []
+  },
+  "ps3-nhl12": {
+   "edges": 226,
+   "r142_edges": 226,
+   "refusals": {},
+   "formats": {
+    "DXT1": 225,
+    "discovered DXT1": 225,
+    "DXT3": 1,
+    "discovered DXT3": 1
+   },
+   "levels_per_edge": {
+    "10": 118,
+    "11": 108
+   },
+   "edge_set_changes": []
+  },
+  "ps3-nhl13": {
+   "edges": 232,
+   "r142_edges": 232,
+   "refusals": {},
+   "formats": {
+    "DXT1": 231,
+    "discovered DXT1": 231,
+    "DXT3": 1,
+    "discovered DXT3": 1
+   },
+   "levels_per_edge": {
+    "9": 1,
+    "10": 128,
+    "11": 103
+   },
+   "edge_set_changes": []
+  }
+ }
+}

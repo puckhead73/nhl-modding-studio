@@ -1,0 +1,8706 @@
+{
+ "note": "R72 - gen7 EALayer3 v1 (SNS codec 0x05; PS3 09-Legacy pbp/ann, X360 15/Legacy pbp): open the block payloads as bounded structures on\ntheir OWN vectors, without assuming the PS4 0x0b sized-frame grammar (coordinator review 2026-09-22 F2 / next task). Read-only.\n\nPer bank (default 8 samples: first, last, evenly spaced distinct offsets), per sample: SNR words, the SNS block chain (declared samples,\npayload bytes), then on every data-block payload:\n\n  T1 size-prefix readings   u8@0, u16be@0, u16le@0, u16be@1, u16le@1, u24be@0, u24be@1, each as 'size includes prefix' / 'size excludes\n                            prefix' and masked (& 0x7fff / & 0x0fff): does the chain of sizes tile the payload exactly? Count per reading.\n                            (This is the PS4 0x0b test; it is expected to FAIL here and the failure is recorded exactly.)\n  T2 leading bytes          histogram of the first 1 / 2 / 4 bytes of the first block and of later blocks; whether byte 0 is constant;\n                            whether byte 1 is constant within a sample-rate class and differs between 24 000 and 44 100 Hz banks.\n  T3 samples per block      declared samples per block: histogram, gcd, whether every block is a multiple of 576 (one Layer III granule)\n                            and 1 152 (one MPEG-1 frame); payload bytes per declared sample.\n  T4 granule side-info grammar   MPEG Layer III mono side info per granule has a FIXED bit length (59 bits MPEG-1, 63 bits MPEG-2,\n                            independent of window switching). Hypothesis family: block = [h header bits] then, per granule g of\n                            G = samples / 576: [e extra bits][side info][main data of part2_3_length bits] (interleaved), or\n                            [e + side info] x G then all main data (side-first). For every h in 0..64, e in 0..40, both layouts and both\n                            side-info lengths, count the blocks whose granule chain tiles the payload to within byte padding, with\n                            plausibility (big_values <= 288, 90 <= global_gain <= 240). The best reading, its tiling count and its\n                            plausibility are published; if none tiles, that is the recorded failure.\n                            A bit reservoir (main_data_begin > 0) would break per-granule tiling: the side-first layout also tests\n                            'sum of part2_3_length == main data bits' without per-granule tiling.\n\nUsage: python r72_gen7_ealayer3_structure.py <out.json> [--trees x360-nhl15,ps3-nhl13] [--banks pbp_eng,ann_eng] [--per-bank 8]\n",
+ "trees": {
+  "x360-nhl15": {
+   "pbp_eng": {
+    "sbr": {
+     "source": "loose",
+     "size": 684592,
+     "sha256": "5951d9474cb5b4d2825a693a4f1f29557f659cce4b293324e87682c64f2861c2"
+    },
+    "sbs": {
+     "loose": 731829012,
+     "archive_member": {
+      "archive": "nocache.big",
+      "entry": 2,
+      "offset": 523802144,
+      "size": 731829012
+     }
+    },
+    "vectors": [
+     {
+      "off": 16,
+      "sns_sha256": "1d72faddc98b5e7cb8b986fad92abd351b3475d7722b30f4d5584ceb87d6332c",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 80418
+      },
+      "blocks": 9,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       6643
+      ],
+      "payload_bytes": [
+       2897,
+       1902,
+       1907,
+       1711,
+       2174,
+       2134,
+       2008,
+       2191,
+       1422
+      ],
+      "sum_declared": 80418,
+      "num_samples": 80418,
+      "bytes_per_sample": 0.2281,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "00cc722b45f02b9d",
+       "00cc1d69facb467a",
+       "00cc1869fec6907a",
+       "00cc1201868b5062"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       150,
+       0,
+       0,
+       2
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 2,
+        "b": 4,
+        "main_bits": 22837
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 22,
+        "b": 17,
+        "main_bits": 22355
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 25,
+        "b": 49,
+        "main_bits": 21800
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 46,
+        "b": 5,
+        "main_bits": 22167
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 11,
+        "b": 54,
+        "main_bits": 21892
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 21,
+        "b": 18,
+        "main_bits": 22355
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 42,
+        "b": 53,
+        "main_bits": 21410
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 45,
+        "b": 6,
+        "main_bits": 22167
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 20,
+        "b": 19,
+        "main_bits": 22355
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 3,
+        "a": 19,
+        "b": 20,
+        "main_bits": 22355
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 4,
+        "a": 18,
+        "b": 21,
+        "main_bits": 22355
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 4,
+        "a": 21,
+        "b": 30,
+        "main_bits": 22101
+       }
+      ]
+     },
+     {
+      "off": 92946848,
+      "sns_sha256": "f7880ab408bcfa74f02f589c22815a6617110e5106b6c0042743ca9083df824e",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 165527
+      },
+      "blocks": 18,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       8808
+      ],
+      "payload_bytes": [
+       3095,
+       2072,
+       2145,
+       2235,
+       2130,
+       1854,
+       2132,
+       2138,
+       2118,
+       1614,
+       1612,
+       1620,
+       1671,
+       1743,
+       2173,
+       2073,
+       1991,
+       1572
+      ],
+      "sum_declared": 165527,
+      "num_samples": 165527,
+      "bytes_per_sample": 0.2174,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc6af346282b7b",
+       "00cc232b1ec34f40",
+       "00cc2142bab9d849",
+       "00cc2472eeba9879"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       73,
+       0,
+       1,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 10,
+        "b": 35,
+        "main_bits": 23844
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 40,
+        "b": 62,
+        "main_bits": 22932
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 45,
+        "b": 54,
+        "main_bits": 22920
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 9,
+        "b": 36,
+        "main_bits": 23844
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 39,
+        "b": 63,
+        "main_bits": 22932
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 8,
+        "b": 37,
+        "main_bits": 23844
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 13,
+        "b": 59,
+        "main_bits": 23375
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 38,
+        "b": 64,
+        "main_bits": 22932
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 48,
+        "b": 15,
+        "main_bits": 23557
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 7,
+        "b": 38,
+        "main_bits": 23844
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 29,
+        "b": 55,
+        "main_bits": 23157
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 3,
+        "a": 37,
+        "b": 65,
+        "main_bits": 22932
+       }
+      ]
+     },
+     {
+      "off": 216648912,
+      "sns_sha256": "72ad79536a1f69b071fc330294b4524a71d2f2d049665b72a41399cf27bdf2fb",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 30982
+      },
+      "blocks": 4,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       3287
+      ],
+      "payload_bytes": [
+       2887,
+       2224,
+       1918,
+       889
+      ],
+      "sum_declared": 30982,
+      "num_samples": 30982,
+      "bytes_per_sample": 0.2556,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc71d345f02b5a",
+       "00cc243abeb5d979",
+       "00cc1c02c6df78c6",
+       "00cc1a0adebb4640"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       83,
+       0,
+       0,
+       820
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 2,
+        "b": 21,
+        "main_bits": 22530
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 2,
+        "b": 40,
+        "main_bits": 22232
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 6,
+        "b": 51,
+        "main_bits": 21935
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 14,
+        "b": 47,
+        "main_bits": 21869
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 32,
+        "b": 50,
+        "main_bits": 21533
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 1,
+        "b": 22,
+        "main_bits": 22530
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 44,
+        "b": 37,
+        "main_bits": 21552
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 0,
+        "b": 23,
+        "main_bits": 22530
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 47,
+        "b": 0,
+        "main_bits": 22146
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 46,
+        "b": 1,
+        "main_bits": 22146
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 45,
+        "b": 2,
+        "main_bits": 22146
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 5,
+        "a": 44,
+        "b": 3,
+        "main_bits": 22146
+       }
+      ]
+     },
+     {
+      "off": 289532192,
+      "sns_sha256": "3de79ccacd1ac7d5af42d1625d2f12c6ce04ec488ba666049ce0a6523aee5a60",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 122296
+      },
+      "blocks": 13,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       11657
+      ],
+      "payload_bytes": [
+       2846,
+       1944,
+       1780,
+       2065,
+       2038,
+       2000,
+       2196,
+       2100,
+       2139,
+       2131,
+       1865,
+       1903,
+       3516
+      ],
+      "sum_declared": 122296,
+      "num_samples": 122296,
+      "bytes_per_sample": 0.2332,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc694b45e82b5c",
+       "00cc17728ad68c31",
+       "00cc1b92c2b8d839",
+       "00cc18d2bedb457a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       85,
+       0,
+       0,
+       8
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 10,
+        "b": 6,
+        "main_bits": 22320
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 21,
+        "b": 22,
+        "main_bits": 21882
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 26,
+        "b": 36,
+        "main_bits": 21578
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 20,
+        "b": 23,
+        "main_bits": 21882
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 25,
+        "b": 37,
+        "main_bits": 21578
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 47,
+        "b": 29,
+        "main_bits": 21295
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 19,
+        "b": 24,
+        "main_bits": 21882
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 24,
+        "b": 38,
+        "main_bits": 21578
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 8,
+        "b": 3,
+        "main_bits": 22346
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 8,
+        "b": 4,
+        "main_bits": 22346
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 18,
+        "b": 25,
+        "main_bits": 21882
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 23,
+        "b": 39,
+        "main_bits": 21578
+       }
+      ]
+     },
+     {
+      "off": 348231488,
+      "sns_sha256": "9d1185c67098811774f500749fd419eace639e1c4234a185c1a94f6f0d194870",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 28380
+      },
+      "blocks": 3,
+      "declared_samples": [
+       9263,
+       9216,
+       9901
+      ],
+      "payload_bytes": [
+       2963,
+       2128,
+       2416
+      ],
+      "sum_declared": 28380,
+      "num_samples": 28380,
+      "bytes_per_sample": 0.2645,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc6b0346001cd6",
+       "00cc204a62bf4f32",
+       "00cc212aeeb4d848"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       94,
+       1,
+       3
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 36,
+        "b": 48,
+        "main_bits": 22166
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 35,
+        "b": 49,
+        "main_bits": 22166
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 34,
+        "b": 50,
+        "main_bits": 22166
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 4,
+        "a": 16,
+        "b": 19,
+        "main_bits": 22941
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 5,
+        "a": 15,
+        "b": 20,
+        "main_bits": 22941
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 6,
+        "a": 14,
+        "b": 21,
+        "main_bits": 22941
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 7,
+        "a": 13,
+        "b": 22,
+        "main_bits": 22941
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 8,
+        "a": 12,
+        "b": 23,
+        "main_bits": 22941
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 9,
+        "a": 11,
+        "b": 10,
+        "main_bits": 23097
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 9,
+        "a": 11,
+        "b": 24,
+        "main_bits": 22941
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 10,
+        "a": 10,
+        "b": 25,
+        "main_bits": 22941
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 10,
+        "a": 11,
+        "b": 10,
+        "main_bits": 23108
+       }
+      ]
+     },
+     {
+      "off": 416216592,
+      "sns_sha256": "78c52f4349d78fdb61b5dedc1ffb33068a0b90a676cc27ce2a3601c45f13dd57",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 50122
+      },
+      "blocks": 6,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       3995
+      ],
+      "payload_bytes": [
+       3060,
+       1936,
+       1903,
+       2193,
+       1742,
+       1038
+      ],
+      "sum_declared": 50122,
+      "num_samples": 50122,
+      "bytes_per_sample": 0.2369,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc730b46242b9c",
+       "00cc1c2ad6c4cf31",
+       "00cc1c32c6bdcf38",
+       "00cc1dcaf2dfc619"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       168,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 40,
+        "b": 39,
+        "main_bits": 23021
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 0,
+        "b": 21,
+        "main_bits": 23882
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 39,
+        "b": 40,
+        "main_bits": 23021
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 17,
+        "b": 15,
+        "main_bits": 23767
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 18,
+        "b": 0,
+        "main_bits": 23995
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 30,
+        "b": 44,
+        "main_bits": 23095
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 38,
+        "b": 41,
+        "main_bits": 23021
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 39,
+        "b": 0,
+        "main_bits": 23662
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 3,
+        "a": 16,
+        "b": 16,
+        "main_bits": 23767
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 17,
+        "b": 1,
+        "main_bits": 23995
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 3,
+        "a": 29,
+        "b": 45,
+        "main_bits": 23095
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 37,
+        "b": 42,
+        "main_bits": 23021
+       }
+      ]
+     },
+     {
+      "off": 576888528,
+      "sns_sha256": "125996d4bebd0cef8ab0f795dde7d1551f1fca4df03ef8b342ae317336b7f359",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 404986
+      },
+      "blocks": 44,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       8651
+      ],
+      "payload_bytes": [
+       3111,
+       2155,
+       2172,
+       2007,
+       2175,
+       2162,
+       2129,
+       2234,
+       1965,
+       2171,
+       2017,
+       1972,
+       2125,
+       1766,
+       2118,
+       2164,
+       2271,
+       2028,
+       2184,
+       2198,
+       1978,
+       2264,
+       2060,
+       2044,
+       2162,
+       2094,
+       2060,
+       2011,
+       1979,
+       1848,
+       2024,
+       2110,
+       2106,
+       2372,
+       2111,
+       1960,
+       2139,
+       2313,
+       1666,
+       1572,
+       2235,
+       2347,
+       1897,
+       1741
+      ],
+      "sum_declared": 404986,
+      "num_samples": 404986,
+      "bytes_per_sample": 0.2277,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc6a53463429fb",
+       "00cc177a66af4f48",
+       "00cc1df2cec69861",
+       "00cc1da2eaaf6b13"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       221,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 10,
+        "b": 47,
+        "main_bits": 23784
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 15,
+        "b": 25,
+        "main_bits": 24007
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 32,
+        "b": 73,
+        "main_bits": 23013
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 41,
+        "b": 0,
+        "main_bits": 24035
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 13,
+        "b": 37,
+        "main_bits": 23838
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 31,
+        "b": 74,
+        "main_bits": 23013
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 40,
+        "b": 1,
+        "main_bits": 24035
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 30,
+        "b": 75,
+        "main_bits": 23013
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 39,
+        "b": 2,
+        "main_bits": 24035
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 29,
+        "b": 76,
+        "main_bits": 23013
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 38,
+        "b": 3,
+        "main_bits": 24035
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 4,
+        "a": 32,
+        "b": 4,
+        "main_bits": 24068
+       }
+      ]
+     },
+     {
+      "off": 731484912,
+      "sns_sha256": "dd4281d8baa83be10245e5781fc535fdf4e4819c823ba07cf6c32e60fe60cd86",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 1561433
+      },
+      "blocks": 170,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       2730
+      ],
+      "payload_bytes": [
+       2777,
+       2123,
+       2184,
+       2060,
+       2127,
+       1983,
+       2142,
+       2069,
+       2034,
+       2001,
+       1982,
+       2090,
+       1623,
+       1895,
+       2181,
+       2055,
+       2091,
+       2193,
+       2306,
+       2216,
+       2098,
+       2043,
+       2006,
+       2052,
+       1899,
+       1981,
+       2275,
+       2082,
+       2051,
+       2066,
+       2048,
+       1850,
+       2127,
+       1886,
+       2101,
+       2096,
+       2086,
+       1794,
+       2067,
+       1939,
+       2113,
+       2009,
+       1869,
+       2283,
+       2100,
+       2005,
+       2090,
+       2104,
+       2105,
+       1687,
+       2197,
+       2040,
+       2061,
+       2006,
+       2052,
+       2047,
+       1906,
+       2080,
+       1924,
+       2213,
+       2045,
+       2246,
+       1964,
+       1549,
+       1500,
+       1684,
+       2287,
+       2144,
+       2197,
+       2112,
+       1885,
+       1896,
+       2006,
+       2037,
+       2259,
+       1965,
+       2180,
+       1775,
+       1542,
+       1982,
+       2035,
+       2062,
+       2090,
+       1848,
+       1918,
+       1899,
+       2076,
+       2011,
+       2053,
+       2062,
+       2130,
+       2097,
+       2110,
+       2016,
+       2112,
+       1963,
+       2009,
+       2141,
+       1890,
+       2174,
+       1982,
+       2075,
+       2087,
+       2108,
+       2088,
+       1927,
+       2212,
+       2096,
+       2088,
+       2123,
+       2141,
+       1997,
+       1665,
+       1807,
+       2088,
+       2019,
+       2177,
+       2059,
+       2116,
+       2216,
+       1948,
+       2328,
+       2231,
+       2234,
+       2026,
+       2343,
+       2269,
+       1594,
+       1492,
+       1543,
+       2046,
+       1982,
+       2117,
+       2052,
+       2120,
+       2074,
+       1927,
+       2078,
+       2009,
+       1793,
+       1954,
+       1908,
+       2046,
+       2020,
+       1940,
+       1907,
+       2064,
+       2272,
+       2065,
+       1940,
+       1885,
+       2031,
+       1777,
+       1914,
+       2055,
+       2082,
+       2070,
+       2198,
+       2045,
+       2097,
+       1773,
+       2127,
+       2023,
+       2095,
+       1638,
+       1888,
+       1961,
+       1912,
+       1766,
+       471
+      ],
+      "sum_declared": 1561433,
+      "num_samples": 1561433,
+      "bytes_per_sample": 0.2195,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 4,
+       "u8@0+excl&7fff": 4,
+       "u8@0+excl&fff": 4
+      },
+      "first_bytes": [
+       "00cc6f4b45dc2bbb",
+       "00cc23526ab6987a",
+       "00cc32b312c771f8",
+       "00cc1db2b6be9879"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       64,
+       0,
+       2,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 10,
+        "b": 23,
+        "main_bits": 21439
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 23,
+        "b": 71,
+        "main_bits": 20518
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 27,
+        "b": 78,
+        "main_bits": 20343
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 36,
+        "b": 64,
+        "main_bits": 20422
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 22,
+        "b": 72,
+        "main_bits": 20518
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 26,
+        "b": 79,
+        "main_bits": 20343
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 35,
+        "b": 65,
+        "main_bits": 20422
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 21,
+        "b": 73,
+        "main_bits": 20518
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 34,
+        "b": 66,
+        "main_bits": 20422
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 4,
+        "b": 46,
+        "main_bits": 21214
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 4,
+        "a": 2,
+        "b": 24,
+        "main_bits": 21555
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 4,
+        "a": 2,
+        "b": 25,
+        "main_bits": 21555
+       }
+      ]
+     }
+    ],
+    "aggregate": {
+     "size_readings_tiling_all_blocks": {},
+     "first_bytes_block0": {
+      "00cc722b": 1,
+      "00cc6af3": 1,
+      "00cc71d3": 1,
+      "00cc694b": 1,
+      "00cc6b03": 1,
+      "00cc730b": 1,
+      "00cc6a53": 1,
+      "00cc6f4b": 1
+     },
+     "first_bytes_later": {
+      "00cc1f1a": 3,
+      "00cc1e7a": 3,
+      "00cc1d42": 2,
+      "00cc1e12": 2,
+      "00cc200b": 2,
+      "00cc1662": 2,
+      "00cc1b92": 2,
+      "00cc16e2": 2,
+      "00cc212a": 2,
+      "00cc1c32": 2,
+      "00cc177a": 2,
+      "00cc1df2": 2,
+      "00cc20b2": 2,
+      "00cc187a": 2,
+      "00cc1efa": 2,
+      "00cc1c52": 2
+     },
+     "byte0_block0": {
+      "0": 8
+     },
+     "byte1_block0": {
+      "204": 8
+     },
+     "byte0_later": {
+      "0": 259
+     },
+     "byte1_later": {
+      "204": 259
+     },
+     "samples_per_block": {
+      "9216": 250,
+      "9263": 8,
+      "6643": 1,
+      "8808": 1,
+      "3287": 1,
+      "11657": 1,
+      "9901": 1,
+      "3995": 1,
+      "8651": 1,
+      "10368": 1,
+      "2730": 1
+     },
+     "granule_readings_tiling_all_blocks": {},
+     "granule_readings_plausible_all_blocks": {}
+    }
+   }
+  },
+  "x360-legacy": {
+   "pbp_eng": {
+    "sbr": {
+     "source": "loose",
+     "size": 916492,
+     "sha256": "a4660efd4d1fa0e1bd01e073e5337dfdd7480fd5c3d3829be6d9b678cd90db6c"
+    },
+    "sbs": {
+     "loose": 789000896,
+     "archive_member": {
+      "archive": "nocache.big",
+      "entry": 2,
+      "offset": 427207408,
+      "size": 789000896
+     }
+    },
+    "vectors": [
+     {
+      "off": 16,
+      "sns_sha256": "c7bdee569c56881bc14a08ee82276e9e73042c68bd8b62dfd42bb13cb730957e",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 80418
+      },
+      "blocks": 9,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       6643
+      ],
+      "payload_bytes": [
+       2407,
+       1502,
+       1564,
+       1156,
+       1580,
+       1687,
+       1755,
+       1705,
+       1554
+      ],
+      "sum_declared": 80418,
+      "num_samples": 80418,
+      "bytes_per_sample": 0.1854,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc71fb01f42bbd",
+       "00cc17a29eee8611",
+       "00cc198a72b9d95a",
+       "00cc0ab0c29b4d48"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       23,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 33,
+        "b": 45,
+        "main_bits": 17813
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 32,
+        "b": 46,
+        "main_bits": 17813
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 31,
+        "b": 47,
+        "main_bits": 17813
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 30,
+        "b": 48,
+        "main_bits": 17813
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 8,
+        "a": 13,
+        "b": 46,
+        "main_bits": 18105
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 9,
+        "a": 12,
+        "b": 47,
+        "main_bits": 18105
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 10,
+        "a": 11,
+        "b": 48,
+        "main_bits": 18105
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 11,
+        "a": 10,
+        "b": 49,
+        "main_bits": 18105
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 12,
+        "a": 9,
+        "b": 50,
+        "main_bits": 18105
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 12,
+        "a": 21,
+        "b": 64,
+        "main_bits": 17644
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 13,
+        "a": 8,
+        "b": 51,
+        "main_bits": 18105
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 14,
+        "a": 7,
+        "b": 52,
+        "main_bits": 18105
+       }
+      ]
+     },
+     {
+      "off": 112786816,
+      "sns_sha256": "215c70ebfb1d714cdfe4adff357f797faef56a374bed2c7260718ffdf07c2084",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 119005
+      },
+      "blocks": 13,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       8366
+      ],
+      "payload_bytes": [
+       2520,
+       1846,
+       1758,
+       1558,
+       1826,
+       1772,
+       1904,
+       1860,
+       1777,
+       1651,
+       1652,
+       1683,
+       2222
+      ],
+      "sum_declared": 119005,
+      "num_samples": 119005,
+      "bytes_per_sample": 0.2019,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "00cc692302302b5b",
+       "00cc1892bee3c319",
+       "00cc1922beebc828",
+       "00cc158a6aebc959"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       47,
+       0,
+       3,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 15,
+        "b": 27,
+        "main_bits": 19292
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 39,
+        "b": 35,
+        "main_bits": 18726
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 39,
+        "b": 36,
+        "main_bits": 18726
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 47,
+        "b": 19,
+        "main_bits": 18907
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 14,
+        "b": 28,
+        "main_bits": 19292
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 46,
+        "b": 20,
+        "main_bits": 18907
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 12,
+        "b": 59,
+        "main_bits": 18764
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 13,
+        "b": 29,
+        "main_bits": 19292
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 45,
+        "b": 21,
+        "main_bits": 18907
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 12,
+        "b": 30,
+        "main_bits": 19292
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 44,
+        "b": 22,
+        "main_bits": 18907
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 11,
+        "b": 31,
+        "main_bits": 19292
+       }
+      ]
+     },
+     {
+      "off": 210745344,
+      "sns_sha256": "43380c3f06511c728abe91be4e830ef047b2262d9da2b4ddc28b603f7330a7ba",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 174248
+      },
+      "blocks": 19,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       8313
+      ],
+      "payload_bytes": [
+       2403,
+       1747,
+       1756,
+       1667,
+       1788,
+       1682,
+       1600,
+       1762,
+       1615,
+       1795,
+       1642,
+       1847,
+       1772,
+       1698,
+       1580,
+       1518,
+       1846,
+       1867,
+       1793
+      ],
+      "sum_declared": 174248,
+      "num_samples": 174248,
+      "bytes_per_sample": 0.1916,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc6a12f6002b5c",
+       "00cc188a56eb4c28",
+       "00cc15e292efcc28",
+       "00cc16e2a6db4179"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       10,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 0,
+        "b": 64,
+        "main_bits": 17938
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 22,
+        "a": 7,
+        "b": 27,
+        "main_bits": 18400
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 22,
+        "a": 25,
+        "b": 41,
+        "main_bits": 17889
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 22,
+        "a": 25,
+        "b": 42,
+        "main_bits": 17889
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 22,
+        "a": 25,
+        "b": 43,
+        "main_bits": 17889
+       },
+       {
+        "layout": "interleaved_bytealigned:G17",
+        "h": 12,
+        "a": 7,
+        "b": 27,
+        "main_bits": 18349
+       },
+       {
+        "layout": "side_first:G17",
+        "h": 19,
+        "a": 4,
+        "b": 0,
+        "main_bits": 18930
+       },
+       {
+        "layout": "side_first:G17",
+        "h": 20,
+        "a": 3,
+        "b": 1,
+        "main_bits": 18930
+       },
+       {
+        "layout": "side_first:G17",
+        "h": 21,
+        "a": 2,
+        "b": 2,
+        "main_bits": 18930
+       },
+       {
+        "layout": "side_first:G17",
+        "h": 22,
+        "a": 1,
+        "b": 3,
+        "main_bits": 18930
+       }
+      ]
+     },
+     {
+      "off": 309185472,
+      "sns_sha256": "26562ba2fb93abdd88e16c13f453e44c6cc2b9ace4350d0da7f849d9ccfc7b94",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 32089
+      },
+      "blocks": 4,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       4394
+      ],
+      "payload_bytes": [
+       2596,
+       1663,
+       1713,
+       930
+      ],
+      "sum_declared": 32089,
+      "num_samples": 32089,
+      "bytes_per_sample": 0.2151,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc72f2f20c2b9b",
+       "00cc19a2aedb4928",
+       "00cc171216e74f30",
+       "00cc159a12da8838"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       24,
+       0,
+       0,
+       214
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 10,
+        "a": 19,
+        "b": 47,
+        "main_bits": 19444
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 12,
+        "a": 27,
+        "b": 70,
+        "main_bits": 18967
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 14,
+        "a": 7,
+        "b": 19,
+        "main_bits": 20084
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 15,
+        "a": 14,
+        "b": 19,
+        "main_bits": 20026
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 16,
+        "a": 13,
+        "b": 20,
+        "main_bits": 20026
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 16,
+        "a": 43,
+        "b": 33,
+        "main_bits": 19292
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 17,
+        "a": 12,
+        "b": 21,
+        "main_bits": 20026
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 18,
+        "a": 11,
+        "b": 22,
+        "main_bits": 20026
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 19,
+        "a": 10,
+        "b": 23,
+        "main_bits": 20026
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 20,
+        "a": 9,
+        "b": 24,
+        "main_bits": 20026
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 20,
+        "a": 17,
+        "b": 32,
+        "main_bits": 19711
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 20,
+        "a": 44,
+        "b": 31,
+        "main_bits": 19316
+       }
+      ]
+     },
+     {
+      "off": 401728928,
+      "sns_sha256": "8b4d3f8852534ccbcfa01ed1c851b2466260e29ef6759348b87b33fab6c5f317",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 129997
+      },
+      "blocks": 14,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       8990
+      ],
+      "payload_bytes": [
+       2518,
+       1673,
+       1697,
+       1646,
+       1637,
+       1471,
+       1326,
+       1809,
+       1724,
+       1972,
+       1779,
+       2275,
+       1699,
+       1775
+      ],
+      "sum_declared": 129997,
+      "num_samples": 129997,
+      "bytes_per_sample": 0.1923,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc723301d02bdc",
+       "00cc172a82f7c319",
+       "00cc235a5f9bf311",
+       "00cc16daa6c9d831"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       13,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 44,
+        "b": 78,
+        "main_bits": 17938
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 10,
+        "a": 34,
+        "b": 33,
+        "main_bits": 18820
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 14,
+        "a": 34,
+        "b": 32,
+        "main_bits": 18821
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 14,
+        "a": 34,
+        "b": 33,
+        "main_bits": 18821
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 32,
+        "a": 2,
+        "b": 34,
+        "main_bits": 19288
+       },
+       {
+        "layout": "interleaved_bytealigned:G17",
+        "h": 9,
+        "a": 42,
+        "b": 20,
+        "main_bits": 18793
+       },
+       {
+        "layout": "interleaved_bytealigned:G17",
+        "h": 22,
+        "a": 42,
+        "b": 21,
+        "main_bits": 18772
+       },
+       {
+        "layout": "interleaved_bytealigned:G17",
+        "h": 23,
+        "a": 42,
+        "b": 21,
+        "main_bits": 18772
+       },
+       {
+        "layout": "interleaved_bytealigned:G17",
+        "h": 24,
+        "a": 42,
+        "b": 21,
+        "main_bits": 18772
+       },
+       {
+        "layout": "interleaved_bytealigned:G17",
+        "h": 25,
+        "a": 42,
+        "b": 21,
+        "main_bits": 18773
+       },
+       {
+        "layout": "interleaved_bytealigned:G17",
+        "h": 26,
+        "a": 42,
+        "b": 21,
+        "main_bits": 18775
+       },
+       {
+        "layout": "interleaved:G17",
+        "h": 31,
+        "a": 34,
+        "b": 23,
+        "main_bits": 18933
+       }
+      ]
+     },
+     {
+      "off": 597150320,
+      "sns_sha256": "067453e297a07ef3e4fa6438d2f600e8e71e57c80a6d976643f452b136598aeb",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 442675
+      },
+      "blocks": 48,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9476
+      ],
+      "payload_bytes": [
+       2339,
+       1688,
+       1696,
+       1825,
+       1637,
+       1837,
+       1334,
+       3839,
+       8257,
+       8150,
+       2216,
+       1690,
+       1684,
+       1614,
+       1656,
+       1496,
+       1309,
+       1035,
+       4230,
+       1761,
+       1700,
+       1606,
+       1545,
+       1785,
+       1836,
+       1881,
+       1825,
+       2516,
+       3599,
+       8032,
+       8245,
+       7276,
+       1831,
+       1728,
+       1648,
+       1849,
+       1809,
+       1343,
+       1482,
+       1978,
+       1541,
+       1766,
+       1685,
+       1644,
+       1884,
+       1925,
+       1592,
+       3679
+      ],
+      "sum_declared": 442675,
+      "num_samples": 442675,
+      "bytes_per_sample": 0.2768,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 2,
+       "u8@0+excl&7fff": 2,
+       "u8@0+excl&fff": 2
+      },
+      "first_bytes": [
+       "00cc6b4b01d41ede",
+       "00cc19e2a2cf5962",
+       "00cc15aa42c34930",
+       "00cc194ad6efc318"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       87,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 3,
+        "b": 16,
+        "main_bits": 18214
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 8,
+        "b": 77,
+        "main_bits": 17154
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 32,
+        "b": 25,
+        "main_bits": 17608
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 44,
+        "b": 22,
+        "main_bits": 17458
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 2,
+        "b": 17,
+        "main_bits": 18214
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 7,
+        "b": 78,
+        "main_bits": 17154
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 43,
+        "b": 23,
+        "main_bits": 17458
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 1,
+        "b": 18,
+        "main_bits": 18214
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 6,
+        "b": 79,
+        "main_bits": 17154
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 42,
+        "b": 24,
+        "main_bits": 17458
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 5,
+        "b": 80,
+        "main_bits": 17154
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 41,
+        "b": 25,
+        "main_bits": 17458
+       }
+      ]
+     },
+     {
+      "off": 747607952,
+      "sns_sha256": "a7250ea6173b164c1f0811cefd1b29dad82de4c45bce66f3246bd54d2e6e1ff6",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 49598
+      },
+      "blocks": 6,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       3471
+      ],
+      "payload_bytes": [
+       2487,
+       1639,
+       1740,
+       1688,
+       1774,
+       1055
+      ],
+      "sum_declared": 49598,
+      "num_samples": 49598,
+      "bytes_per_sample": 0.2093,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc686b06242b7a",
+       "00cc166a1eefcb19",
+       "00cc17e21ed34f40",
+       "00cc19e286e74f31"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       39,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 5,
+        "b": 52,
+        "main_bits": 18789
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 43,
+        "b": 48,
+        "main_bits": 18246
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 4,
+        "b": 53,
+        "main_bits": 18789
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 18,
+        "b": 53,
+        "main_bits": 18507
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 42,
+        "b": 49,
+        "main_bits": 18246
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 3,
+        "b": 54,
+        "main_bits": 18789
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 41,
+        "b": 50,
+        "main_bits": 18246
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 2,
+        "b": 55,
+        "main_bits": 18789
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 5,
+        "a": 17,
+        "b": 64,
+        "main_bits": 18340
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 6,
+        "a": 15,
+        "b": 56,
+        "main_bits": 18501
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 6,
+        "a": 15,
+        "b": 57,
+        "main_bits": 18501
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 14,
+        "a": 41,
+        "b": 8,
+        "main_bits": 18899
+       }
+      ]
+     },
+     {
+      "off": 788954656,
+      "sns_sha256": "2492aa2517c79975d2891b58d223490526d4bb77a33c8094cffee0bc65d5f242",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 221528
+      },
+      "blocks": 24,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9513
+      ],
+      "payload_bytes": [
+       2337,
+       1828,
+       1712,
+       1777,
+       1750,
+       1527,
+       1591,
+       1747,
+       1747,
+       1649,
+       1765,
+       1746,
+       1721,
+       1614,
+       5448,
+       1526,
+       1739,
+       1778,
+       1899,
+       1884,
+       1605,
+       1575,
+       1755,
+       2309
+      ],
+      "sum_declared": 221528,
+      "num_samples": 221528,
+      "bytes_per_sample": 0.2078,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc6f6305d81dde",
+       "00cc19629ed3cb29",
+       "00cc1892bee74b28",
+       "00cc184276dbcf2a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       17,
+       0,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 12,
+        "a": 35,
+        "b": 23,
+        "main_bits": 17511
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 16,
+        "a": 32,
+        "b": 3,
+        "main_bits": 17881
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 19,
+        "a": 5,
+        "b": 63,
+        "main_bits": 17350
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 24,
+        "a": 10,
+        "b": 10,
+        "main_bits": 18153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 25,
+        "a": 9,
+        "b": 11,
+        "main_bits": 18153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 26,
+        "a": 8,
+        "b": 12,
+        "main_bits": 18153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 27,
+        "a": 7,
+        "b": 13,
+        "main_bits": 18153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 28,
+        "a": 6,
+        "b": 14,
+        "main_bits": 18153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 29,
+        "a": 5,
+        "b": 15,
+        "main_bits": 18153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 30,
+        "a": 4,
+        "b": 0,
+        "main_bits": 18406
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 30,
+        "a": 4,
+        "b": 16,
+        "main_bits": 18153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 31,
+        "a": 3,
+        "b": 1,
+        "main_bits": 18406
+       }
+      ]
+     }
+    ],
+    "aggregate": {
+     "size_readings_tiling_all_blocks": {},
+     "first_bytes_block0": {
+      "00cc71fb": 1,
+      "00cc6923": 1,
+      "00cc6a12": 1,
+      "00cc72f2": 1,
+      "00cc7233": 1,
+      "00cc6b4b": 1,
+      "00cc686b": 1,
+      "00cc6f63": 1
+     },
+     "first_bytes_later": {
+      "00cc1892": 3,
+      "00cc164a": 2,
+      "00cc16e2": 2,
+      "00cc15e2": 2,
+      "00cc17f2": 2,
+      "00cc194a": 2,
+      "00cc16fa": 2,
+      "00cc19e2": 2,
+      "00cc1aa2": 2,
+      "00cc17a2": 1,
+      "00cc198a": 1,
+      "00cc0ab0": 1,
+      "00cc170a": 1,
+      "00cc1812": 1,
+      "00cc1c92": 1,
+      "00cc1ad2": 1
+     },
+     "byte0_block0": {
+      "0": 8
+     },
+     "byte1_block0": {
+      "204": 8
+     },
+     "byte0_later": {
+      "0": 129
+     },
+     "byte1_later": {
+      "204": 129
+     },
+     "samples_per_block": {
+      "9216": 120,
+      "9263": 8,
+      "6643": 1,
+      "8366": 1,
+      "8313": 1,
+      "4394": 1,
+      "10368": 1,
+      "8990": 1,
+      "9476": 1,
+      "3471": 1,
+      "9513": 1
+     },
+     "granule_readings_tiling_all_blocks": {},
+     "granule_readings_plausible_all_blocks": {}
+    }
+   }
+  },
+  "ps3-nhl15": {
+   "pbp_eng": {
+    "sbr": {
+     "source": "loose",
+     "size": 684592,
+     "sha256": "ee90d0fc2e8f69dcc15332746a61d64b675b9479504546ce9716127944fbc6dc"
+    },
+    "sbs": {
+     "loose": 1153780608,
+     "archive_member": null
+    },
+    "vectors": [
+     {
+      "off": 16,
+      "sns_sha256": "ddde87ddf62cba2bd20e2af38b39614a6e55658877f4155034ad9e70f52c6db9",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 80418
+      },
+      "blocks": 9,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       6643
+      ],
+      "payload_bytes": [
+       3377,
+       2883,
+       2775,
+       2806,
+       2869,
+       2888,
+       3975,
+       2844,
+       1821
+      ],
+      "sum_declared": 80418,
+      "num_samples": 80418,
+      "bytes_per_sample": 0.3263,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "00cc1ce226836866",
+       "00cc2aab32bb5879",
+       "00cc2abb069cda79",
+       "00cc25033a7bd830"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       249,
+       20,
+       24,
+       13
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 11,
+        "b": 41,
+        "main_bits": 25988
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 12,
+        "b": 58,
+        "main_bits": 25698
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 19,
+        "b": 27,
+        "main_bits": 26086
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 29,
+        "b": 10,
+        "main_bits": 26197
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 43,
+        "b": 72,
+        "main_bits": 24922
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 10,
+        "b": 42,
+        "main_bits": 25988
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 11,
+        "b": 59,
+        "main_bits": 25698
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 13,
+        "b": 71,
+        "main_bits": 25440
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 13,
+        "b": 74,
+        "main_bits": 25371
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 18,
+        "b": 28,
+        "main_bits": 26086
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 28,
+        "b": 11,
+        "main_bits": 26197
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 8,
+        "b": 21,
+        "main_bits": 26315
+       }
+      ]
+     },
+     {
+      "off": 141401712,
+      "sns_sha256": "1eecec69c4a58e2bb6dcfe277e2e32fbacc1bab5d2226c40501932db0cf2a699",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 165527
+      },
+      "blocks": 18,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       7656
+      ],
+      "payload_bytes": [
+       3634,
+       3935,
+       2939,
+       3227,
+       2883,
+       2891,
+       2877,
+       3207,
+       3848,
+       2596,
+       2648,
+       2396,
+       2493,
+       3088,
+       3562,
+       2871,
+       3396,
+       2196
+      ],
+      "sum_declared": 165527,
+      "num_samples": 165527,
+      "bytes_per_sample": 0.3304,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc17aa26bb6823",
+       "00cc299b46bb4f61",
+       "00cc2a2abeae9979",
+       "00cc30b32aa4da83"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       304,
+       235,
+       17,
+       93
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 10,
+        "b": 35,
+        "main_bits": 28153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 13,
+        "b": 74,
+        "main_bits": 27484
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 29,
+        "b": 46,
+        "main_bits": 27627
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 35,
+        "b": 8,
+        "main_bits": 28192
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 35,
+        "b": 25,
+        "main_bits": 27863
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 9,
+        "b": 36,
+        "main_bits": 28153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 12,
+        "b": 75,
+        "main_bits": 27484
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 31,
+        "b": 38,
+        "main_bits": 27727
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 37,
+        "b": 27,
+        "main_bits": 27805
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 8,
+        "b": 37,
+        "main_bits": 28153
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 11,
+        "b": 76,
+        "main_bits": 27484
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 7,
+        "b": 38,
+        "main_bits": 28153
+       }
+      ]
+     },
+     {
+      "off": 339670416,
+      "sns_sha256": "cedd84048bf8477d51396a8d07da0aa0bb208aead2f6ece5f0fd436f657d1ac0",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 30982
+      },
+      "blocks": 3,
+      "declared_samples": [
+       9263,
+       9216,
+       12503
+      ],
+      "payload_bytes": [
+       4116,
+       3037,
+       4430
+      ],
+      "sum_declared": 30982,
+      "num_samples": 30982,
+      "bytes_per_sample": 0.3739,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc2a1256482929",
+       "00cc2cab26a9da61",
+       "00cc4353427c3b5a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       325,
+       60,
+       364
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 18,
+        "b": 37,
+        "main_bits": 31853
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 35,
+        "b": 16,
+        "main_bits": 31861
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 3,
+        "b": 34,
+        "main_bits": 32136
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 4,
+        "b": 25,
+        "main_bits": 32207
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 4,
+        "b": 57,
+        "main_bits": 31701
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 8,
+        "b": 7,
+        "main_bits": 32425
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 17,
+        "b": 38,
+        "main_bits": 31853
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 40,
+        "b": 51,
+        "main_bits": 31217
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 40,
+        "b": 52,
+        "main_bits": 31200
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 2,
+        "b": 35,
+        "main_bits": 32136
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 16,
+        "b": 39,
+        "main_bits": 31853
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 40,
+        "b": 2,
+        "main_bits": 32005
+       }
+      ]
+     },
+     {
+      "off": 453313216,
+      "sns_sha256": "e199e8494a7ce8699803fd50a1394660326457ad12368b9ce578eef59a8d5de9",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 122296
+      },
+      "blocks": 13,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       11657
+      ],
+      "payload_bytes": [
+       4627,
+       2941,
+       2909,
+       2946,
+       3039,
+       2817,
+       3353,
+       3315,
+       3303,
+       3402,
+       3031,
+       2783,
+       3951
+      ],
+      "sum_declared": 122296,
+      "num_samples": 122296,
+      "bytes_per_sample": 0.3468,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc1871927be823",
+       "00cc2e1b1e98da63",
+       "00cc28c2faaa9a6b",
+       "00cc22bacacf583a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       271,
+       11,
+       41,
+       45
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 9,
+        "b": 36,
+        "main_bits": 36100
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 25,
+        "b": 24,
+        "main_bits": 36033
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 36,
+        "b": 22,
+        "main_bits": 35851
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 43,
+        "b": 29,
+        "main_bits": 35613
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 8,
+        "b": 37,
+        "main_bits": 36100
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 24,
+        "b": 25,
+        "main_bits": 36033
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 32,
+        "b": 13,
+        "main_bits": 36036
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 7,
+        "b": 38,
+        "main_bits": 36100
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 23,
+        "b": 26,
+        "main_bits": 36033
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 40,
+        "b": 10,
+        "main_bits": 35969
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 3,
+        "a": 6,
+        "b": 39,
+        "main_bits": 36100
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 22,
+        "b": 27,
+        "main_bits": 36033
+       }
+      ]
+     },
+     {
+      "off": 545750256,
+      "sns_sha256": "73d4adad2679ae30f4a9d1ed68f0231b0cccc8bf0eb96c033f6c1cac882ccd61",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 28380
+      },
+      "blocks": 3,
+      "declared_samples": [
+       9263,
+       9216,
+       9901
+      ],
+      "payload_bytes": [
+       3835,
+       3272,
+       3931
+      ],
+      "sum_declared": 28380,
+      "num_samples": 28380,
+      "bytes_per_sample": 0.3889,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc19f8029f4000",
+       "00cc2feb0aa1d87b",
+       "00cc2f6336a6ab2f"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       310,
+       103,
+       821
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 2,
+        "b": 64,
+        "main_bits": 29369
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 2,
+        "b": 68,
+        "main_bits": 29309
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 29,
+        "b": 18,
+        "main_bits": 29732
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 29,
+        "b": 58,
+        "main_bits": 29095
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 17,
+        "b": 4,
+        "main_bits": 30100
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 25,
+        "b": 8,
+        "main_bits": 29909
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 28,
+        "b": 19,
+        "main_bits": 29732
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 28,
+        "b": 59,
+        "main_bits": 29095
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 47,
+        "b": 4,
+        "main_bits": 29613
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 25,
+        "b": 19,
+        "main_bits": 29775
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 27,
+        "b": 20,
+        "main_bits": 29732
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 3,
+        "a": 24,
+        "b": 20,
+        "main_bits": 29775
+       }
+      ]
+     },
+     {
+      "off": 653807728,
+      "sns_sha256": "65bc977634a57992155a7bba64c983fab521b91d7e95c633812f214f7f5595b0",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 50122
+      },
+      "blocks": 6,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       3995
+      ],
+      "payload_bytes": [
+       4210,
+       3020,
+       3260,
+       3666,
+       2751,
+       1560
+      ],
+      "sum_declared": 50122,
+      "num_samples": 50122,
+      "bytes_per_sample": 0.3684,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "00cc1ada12b368c6",
+       "00cc3c4b1af4f379",
+       "00cc24eaceb5d87a",
+       "00cc4133228219c3"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       333,
+       112,
+       73,
+       214
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 20,
+        "b": 39,
+        "main_bits": 32473
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 20,
+        "b": 40,
+        "main_bits": 32473
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 20,
+        "b": 64,
+        "main_bits": 32097
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 28,
+        "b": 63,
+        "main_bits": 31974
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 30,
+        "b": 52,
+        "main_bits": 32129
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 31,
+        "b": 6,
+        "main_bits": 32895
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 47,
+        "b": 52,
+        "main_bits": 31900
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 7,
+        "b": 5,
+        "main_bits": 33234
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 9,
+        "b": 2,
+        "main_bits": 33254
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 10,
+        "b": 42,
+        "main_bits": 32595
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 10,
+        "b": 43,
+        "main_bits": 32595
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 21,
+        "b": 54,
+        "main_bits": 32230
+       }
+      ]
+     },
+     {
+      "off": 915579792,
+      "sns_sha256": "5b6f2a2669eb5e7833e314c65b0e52a06a07641697cc8b04bab7ed893abc027b",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 404986
+      },
+      "blocks": 44,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       6347
+      ],
+      "payload_bytes": [
+       4170,
+       3540,
+       3759,
+       3742,
+       3136,
+       3173,
+       2981,
+       3603,
+       3627,
+       3898,
+       3920,
+       3026,
+       3739,
+       2958,
+       3427,
+       3643,
+       3646,
+       3539,
+       3824,
+       3277,
+       3664,
+       3261,
+       3668,
+       3224,
+       3381,
+       3616,
+       3695,
+       3388,
+       3242,
+       2893,
+       3200,
+       3275,
+       3675,
+       3873,
+       3252,
+       3172,
+       3863,
+       3995,
+       2814,
+       3013,
+       3703,
+       3624,
+       3736,
+       2212
+      ],
+      "sum_declared": 404986,
+      "num_samples": 404986,
+      "bytes_per_sample": 0.3755,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc188222cbe863",
+       "00cc31b32e84fb58",
+       "00cc2efb46b2bb2f",
+       "00cc32ab2e976b3a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       413,
+       134,
+       238,
+       128
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 13,
+        "b": 25,
+        "main_bits": 32560
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 15,
+        "b": 76,
+        "main_bits": 31653
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 15,
+        "b": 77,
+        "main_bits": 31653
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 34,
+        "b": 14,
+        "main_bits": 32397
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 36,
+        "b": 13,
+        "main_bits": 32344
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 37,
+        "b": 37,
+        "main_bits": 31977
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 3,
+        "b": 60,
+        "main_bits": 32098
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 33,
+        "b": 15,
+        "main_bits": 32397
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 36,
+        "b": 38,
+        "main_bits": 31977
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 4,
+        "b": 60,
+        "main_bits": 32087
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 10,
+        "b": 10,
+        "main_bits": 32789
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 17,
+        "b": 37,
+        "main_bits": 32231
+       }
+      ]
+     },
+     {
+      "off": 1153234096,
+      "sns_sha256": "57f7d747313e44e783047464659f288fb0bcd9c58bcf393ba1b7c4d4756c11ed",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 1561433
+      },
+      "blocks": 169,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       5034
+      ],
+      "payload_bytes": [
+       3573,
+       2863,
+       3440,
+       3476,
+       3288,
+       3277,
+       3802,
+       3049,
+       3605,
+       2847,
+       3392,
+       3606,
+       2588,
+       3108,
+       3327,
+       3061,
+       3124,
+       3272,
+       3535,
+       3128,
+       3750,
+       3306,
+       2888,
+       3140,
+       3136,
+       3351,
+       3381,
+       3183,
+       2914,
+       3328,
+       2783,
+       2872,
+       3085,
+       3327,
+       3420,
+       3601,
+       3312,
+       2967,
+       2719,
+       2962,
+       3033,
+       3428,
+       2964,
+       3768,
+       2822,
+       3157,
+       3659,
+       3084,
+       3396,
+       2948,
+       3200,
+       2990,
+       3405,
+       3583,
+       3456,
+       3566,
+       3261,
+       3122,
+       3251,
+       3828,
+       3748,
+       3303,
+       3013,
+       2428,
+       2482,
+       3348,
+       3473,
+       3290,
+       3478,
+       3262,
+       3181,
+       3348,
+       2942,
+       3980,
+       3568,
+       3684,
+       3316,
+       2603,
+       2843,
+       3155,
+       3089,
+       3252,
+       2775,
+       2917,
+       3206,
+       3523,
+       2823,
+       3211,
+       3044,
+       3584,
+       3461,
+       3700,
+       3043,
+       3231,
+       3381,
+       2934,
+       3424,
+       3204,
+       3089,
+       4005,
+       2652,
+       3146,
+       3336,
+       3459,
+       3309,
+       3621,
+       3110,
+       3351,
+       3094,
+       3639,
+       3426,
+       3077,
+       2963,
+       3167,
+       3703,
+       3658,
+       3004,
+       2804,
+       4189,
+       3178,
+       3386,
+       3948,
+       3314,
+       3735,
+       3757,
+       3526,
+       3421,
+       2488,
+       2449,
+       2970,
+       2937,
+       3443,
+       3031,
+       3480,
+       3382,
+       3448,
+       3341,
+       3483,
+       3226,
+       2974,
+       3207,
+       3053,
+       3094,
+       3400,
+       2987,
+       3817,
+       3346,
+       3163,
+       2870,
+       2687,
+       3088,
+       3402,
+       2926,
+       3349,
+       3422,
+       3523,
+       3533,
+       3012,
+       2835,
+       3478,
+       3080,
+       2909,
+       2741,
+       2649,
+       2996,
+       3044,
+       3042,
+       3319,
+       1497
+      ],
+      "sum_declared": 1561433,
+      "num_samples": 1561433,
+      "bytes_per_sample": 0.3491,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1,
+       "u16be@1+incl&fff": 1,
+       "u24be@0+incl&fff": 1
+      },
+      "first_bytes": [
+       "00cc16887a836863",
+       "00cc2ef31ea0d87a",
+       "00cc44cb1eab733a",
+       "00cc25cab6b75978"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       317,
+       21,
+       188,
+       137
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 13,
+        "b": 37,
+        "main_bits": 27592
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 19,
+        "b": 52,
+        "main_bits": 27253
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 22,
+        "b": 51,
+        "main_bits": 27173
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 23,
+        "b": 31,
+        "main_bits": 27473
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 24,
+        "b": 68,
+        "main_bits": 26914
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 41,
+        "b": 19,
+        "main_bits": 27391
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 41,
+        "b": 57,
+        "main_bits": 26823
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 45,
+        "b": 56,
+        "main_bits": 26776
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 47,
+        "b": 77,
+        "main_bits": 26365
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 9,
+        "b": 40,
+        "main_bits": 27538
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 18,
+        "b": 53,
+        "main_bits": 27253
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 23,
+        "b": 69,
+        "main_bits": 26914
+       }
+      ]
+     }
+    ],
+    "aggregate": {
+     "size_readings_tiling_all_blocks": {},
+     "first_bytes_block0": {
+      "00cc1ce2": 1,
+      "00cc17aa": 1,
+      "00cc2a12": 1,
+      "00cc1871": 1,
+      "00cc19f8": 1,
+      "00cc1ada": 1,
+      "00cc1882": 1,
+      "00cc1688": 1
+     },
+     "first_bytes_later": {
+      "00cc29b3": 3,
+      "00cc30d3": 3,
+      "00cc320b": 3,
+      "00cc27d3": 2,
+      "00cc25a2": 2,
+      "00cc258b": 2,
+      "00cc24db": 2,
+      "00cc28b3": 2,
+      "00cc2efb": 2,
+      "00cc22e3": 2,
+      "00cc2c3b": 2,
+      "00cc2e82": 2,
+      "00cc2682": 2,
+      "00cc2fdb": 2,
+      "00cc29bb": 2,
+      "00cc2413": 2
+     },
+     "byte0_block0": {
+      "0": 8
+     },
+     "byte1_block0": {
+      "204": 8
+     },
+     "byte0_later": {
+      "0": 257
+     },
+     "byte1_later": {
+      "204": 257
+     },
+     "samples_per_block": {
+      "9216": 239,
+      "10368": 10,
+      "9263": 8,
+      "6643": 1,
+      "7656": 1,
+      "12503": 1,
+      "11657": 1,
+      "9901": 1,
+      "3995": 1,
+      "6347": 1,
+      "5034": 1
+     },
+     "granule_readings_tiling_all_blocks": {},
+     "granule_readings_plausible_all_blocks": {}
+    }
+   }
+  },
+  "ps3-legacy": {
+   "pbp_eng": {
+    "sbr": {
+     "source": "loose",
+     "size": 916492,
+     "sha256": "40f1d0dd46946b24dde7b0364951fd3922745e1a2a8a25f1aaf605b1ba7252b7"
+    },
+    "sbs": {
+     "loose": 1095933360,
+     "archive_member": null
+    },
+    "vectors": [
+     {
+      "off": 16,
+      "sns_sha256": "5a5d5e1a69eef1b32214cf5f03391b4eccf55c26119bd712bad15573eee5ead4",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 80418
+      },
+      "blocks": 9,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       6643
+      ],
+      "payload_bytes": [
+       2716,
+       2366,
+       2123,
+       2289,
+       2279,
+       2527,
+       2268,
+       2257,
+       1481
+      ],
+      "sum_declared": 80418,
+      "num_samples": 80418,
+      "bytes_per_sample": 0.2525,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc0fd0be9b6823",
+       "00cc229332d3cf48",
+       "00cc210302b69962",
+       "00cc1da29e8fcf40"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       258,
+       1,
+       0,
+       0
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 2,
+        "b": 17,
+        "main_bits": 21232
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 21,
+        "b": 60,
+        "main_bits": 20239
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 27,
+        "b": 17,
+        "main_bits": 20830
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 36,
+        "b": 58,
+        "main_bits": 20028
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 37,
+        "b": 7,
+        "main_bits": 20832
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 37,
+        "b": 50,
+        "main_bits": 20140
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 42,
+        "b": 4,
+        "main_bits": 20797
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 20,
+        "b": 61,
+        "main_bits": 20239
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 26,
+        "b": 18,
+        "main_bits": 20830
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 35,
+        "b": 59,
+        "main_bits": 20028
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 36,
+        "b": 51,
+        "main_bits": 20140
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 41,
+        "b": 5,
+        "main_bits": 20797
+       }
+      ]
+     },
+     {
+      "off": 157122256,
+      "sns_sha256": "b5d5d0a014267d9f40ad5a31602863dd025f33d1c693d57004d8e4e351b1e9d1",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 119005
+      },
+      "blocks": 13,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       8366
+      ],
+      "payload_bytes": [
+       3433,
+       2382,
+       2261,
+       2533,
+       2335,
+       2340,
+       2690,
+       2432,
+       2263,
+       2362,
+       2728,
+       2383,
+       2134
+      ],
+      "sum_declared": 119005,
+      "num_samples": 119005,
+      "bytes_per_sample": 0.2712,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc128802c76800",
+       "00cc2192fedfcc4a",
+       "00cc1e3316e3c828",
+       "00cc244b1abe987a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       225,
+       2,
+       0,
+       2
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 4,
+        "b": 28,
+        "main_bits": 26727
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 20,
+        "b": 58,
+        "main_bits": 26017
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 23,
+        "b": 13,
+        "main_bits": 26689
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 25,
+        "b": 67,
+        "main_bits": 25742
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 44,
+        "b": 29,
+        "main_bits": 26104
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 48,
+        "b": 18,
+        "main_bits": 26168
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 1,
+        "a": 2,
+        "b": 34,
+        "main_bits": 26656
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 19,
+        "b": 59,
+        "main_bits": 26017
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 22,
+        "b": 14,
+        "main_bits": 26689
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 18,
+        "b": 60,
+        "main_bits": 26017
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 21,
+        "b": 15,
+        "main_bits": 26689
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 13,
+        "b": 78,
+        "main_bits": 25773
+       }
+      ]
+     },
+     {
+      "off": 298920352,
+      "sns_sha256": "14442b050501824239259222d81b3d902a7c79ef0deb1bb2eff1643989c21e64",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 174248
+      },
+      "blocks": 19,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       8313
+      ],
+      "payload_bytes": [
+       2874,
+       2304,
+       2394,
+       2838,
+       2329,
+       2340,
+       2398,
+       2489,
+       2518,
+       2452,
+       2425,
+       2346,
+       2321,
+       2434,
+       2339,
+       2429,
+       2948,
+       2728,
+       2336
+      ],
+      "sum_declared": 174248,
+      "num_samples": 174248,
+      "bytes_per_sample": 0.2711,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc13d9bea36823",
+       "00cc216b2edb4f49",
+       "00cc1dfadecbcf3a",
+       "00cc263b46b9d979"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       52,
+       0,
+       1,
+       11
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 43,
+        "b": 54,
+        "main_bits": 21247
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 42,
+        "b": 55,
+        "main_bits": 21247
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 4,
+        "a": 41,
+        "b": 78,
+        "main_bits": 20830
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 7,
+        "a": 7,
+        "b": 41,
+        "main_bits": 21963
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 7,
+        "a": 7,
+        "b": 42,
+        "main_bits": 21963
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 7,
+        "a": 41,
+        "b": 78,
+        "main_bits": 20816
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 7,
+        "a": 41,
+        "b": 79,
+        "main_bits": 20816
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 10,
+        "a": 7,
+        "b": 42,
+        "main_bits": 21950
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 10,
+        "a": 31,
+        "b": 30,
+        "main_bits": 21807
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 11,
+        "a": 28,
+        "b": 2,
+        "main_bits": 22263
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 11,
+        "a": 30,
+        "b": 31,
+        "main_bits": 21807
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 12,
+        "a": 29,
+        "b": 32,
+        "main_bits": 21807
+       }
+      ]
+     },
+     {
+      "off": 440050688,
+      "sns_sha256": "3a4f0d3eef6bbb685bfe907fa16b874a8308df4f9527ae9fd2bcc3ad272669e4",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 32089
+      },
+      "blocks": 4,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       4394
+      ],
+      "payload_bytes": [
+       3015,
+       2400,
+       2404,
+       1350
+      ],
+      "sum_declared": 32089,
+      "num_samples": 32089,
+      "bytes_per_sample": 0.2857,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc192806b3e820",
+       "00cc22baf6c34f29",
+       "00cc216b26ca8f49",
+       "00cc271aeea4d832"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       238,
+       7,
+       16,
+       747
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 25,
+        "b": 32,
+        "main_bits": 23014
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 31,
+        "b": 5,
+        "main_bits": 23346
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 45,
+        "b": 49,
+        "main_bits": 22367
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 24,
+        "b": 33,
+        "main_bits": 23014
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 30,
+        "b": 6,
+        "main_bits": 23346
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 9,
+        "b": 48,
+        "main_bits": 22969
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 2,
+        "a": 23,
+        "b": 34,
+        "main_bits": 23014
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 29,
+        "b": 7,
+        "main_bits": 23346
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 45,
+        "b": 58,
+        "main_bits": 22223
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 18,
+        "b": 11,
+        "main_bits": 23401
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 27,
+        "b": 71,
+        "main_bits": 22304
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 28,
+        "b": 8,
+        "main_bits": 23346
+       }
+      ]
+     },
+     {
+      "off": 572010544,
+      "sns_sha256": "05c90c73002af7b96b3abdc25c6c949c303c630c2d2c4bc380161c18cc3062f2",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 129997
+      },
+      "blocks": 14,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10142
+      ],
+      "payload_bytes": [
+       3220,
+       2471,
+       2624,
+       2814,
+       2658,
+       2604,
+       2442,
+       2233,
+       2455,
+       2366,
+       2761,
+       2676,
+       2609,
+       2618
+      ],
+      "sum_declared": 129997,
+      "num_samples": 129997,
+      "bytes_per_sample": 0.2812,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "00cc0ec0428fe860",
+       "00cc1f42badfc91a",
+       "00cc301b1aeeb333",
+       "00cc27a2f6a4da62"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       215,
+       10,
+       16,
+       13
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 1,
+        "b": 24,
+        "main_bits": 25101
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 1,
+        "b": 25,
+        "main_bits": 25101
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 10,
+        "b": 20,
+        "main_bits": 25081
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 28,
+        "b": 43,
+        "main_bits": 24352
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 28,
+        "b": 78,
+        "main_bits": 23869
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 0,
+        "a": 30,
+        "b": 6,
+        "main_bits": 24991
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 30,
+        "b": 27,
+        "main_bits": 24588
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 0,
+        "a": 30,
+        "b": 28,
+        "main_bits": 24588
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 32,
+        "b": 35,
+        "main_bits": 24492
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 35,
+        "b": 12,
+        "main_bits": 24809
+       },
+       {
+        "layout": "interleaved:G16",
+        "h": 1,
+        "a": 9,
+        "b": 21,
+        "main_bits": 25081
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 27,
+        "b": 79,
+        "main_bits": 23869
+       }
+      ]
+     },
+     {
+      "off": 847213584,
+      "sns_sha256": "a51a63c3e86525bce8610a9a35152b739b9a56b542ffae07a643b0be30477dba",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 442675
+      },
+      "blocks": 48,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9476
+      ],
+      "payload_bytes": [
+       2715,
+       2552,
+       2459,
+       2297,
+       2337,
+       2628,
+       2511,
+       3095,
+       7095,
+       6240,
+       2302,
+       2347,
+       2351,
+       2898,
+       2616,
+       2608,
+       2471,
+       2146,
+       2389,
+       2362,
+       2261,
+       2563,
+       2278,
+       2410,
+       2596,
+       2595,
+       2593,
+       2759,
+       3381,
+       7930,
+       6987,
+       5672,
+       2631,
+       2338,
+       2396,
+       2473,
+       2561,
+       2364,
+       2688,
+       2717,
+       2576,
+       2518,
+       2966,
+       2838,
+       2801,
+       2438,
+       2568,
+       3786
+      ],
+      "sum_declared": 442675,
+      "num_samples": 442675,
+      "bytes_per_sample": 0.3278,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "00cc0eb8168fc110",
+       "00cc214b1ebb5a40",
+       "00cc207b46a5cf32",
+       "00cc1e3b26c34619"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       69,
+       4,
+       8,
+       1
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 17,
+        "b": 46,
+        "main_bits": 20512
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 2,
+        "b": 27,
+        "main_bits": 21007
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 16,
+        "b": 47,
+        "main_bits": 20512
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 15,
+        "b": 48,
+        "main_bits": 20512
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 40,
+        "b": 22,
+        "main_bits": 20482
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 3,
+        "a": 40,
+        "b": 23,
+        "main_bits": 20482
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 14,
+        "b": 49,
+        "main_bits": 20512
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 5,
+        "a": 13,
+        "b": 50,
+        "main_bits": 20512
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 6,
+        "a": 12,
+        "b": 51,
+        "main_bits": 20512
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 7,
+        "a": 11,
+        "b": 52,
+        "main_bits": 20512
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 8,
+        "a": 10,
+        "b": 36,
+        "main_bits": 20734
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 8,
+        "a": 10,
+        "b": 53,
+        "main_bits": 20512
+       }
+      ]
+     },
+     {
+      "off": 1045335344,
+      "sns_sha256": "1315f6e703a5b18b81505f7612671a2a5293d9e19d4ff2947a9d177a4df27e20",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 49598
+      },
+      "blocks": 6,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       3471
+      ],
+      "payload_bytes": [
+       2620,
+       2074,
+       2345,
+       2097,
+       2174,
+       1659
+      ],
+      "sum_declared": 49598,
+      "num_samples": 49598,
+      "bytes_per_sample": 0.2615,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc187806bf6820",
+       "00cc204afed34f62",
+       "00cc1df2a6c75840",
+       "00cc22b286ca9862"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       94,
+       2,
+       0,
+       9
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 3,
+        "b": 28,
+        "main_bits": 20272
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 29,
+        "b": 23,
+        "main_bits": 19929
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 15,
+        "b": 29,
+        "main_bits": 20056
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 28,
+        "b": 24,
+        "main_bits": 19929
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 14,
+        "b": 30,
+        "main_bits": 20056
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 27,
+        "b": 25,
+        "main_bits": 19929
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 13,
+        "b": 31,
+        "main_bits": 20056
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 26,
+        "b": 26,
+        "main_bits": 19929
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 26,
+        "b": 70,
+        "main_bits": 19222
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 12,
+        "b": 32,
+        "main_bits": 20056
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 25,
+        "b": 27,
+        "main_bits": 19929
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 25,
+        "b": 71,
+        "main_bits": 19222
+       }
+      ]
+     },
+     {
+      "off": 1095874720,
+      "sns_sha256": "d0f54f9626c097b905e53150a05e1e3611b4c3aae2524eb3de8d46e5938d085d",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 44100,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 221528
+      },
+      "blocks": 24,
+      "declared_samples": [
+       9263,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       9216,
+       10368,
+       9216,
+       9216,
+       9216,
+       9216,
+       8361
+      ],
+      "payload_bytes": [
+       2848,
+       2439,
+       2171,
+       2321,
+       2409,
+       2321,
+       2334,
+       2161,
+       2288,
+       2147,
+       2281,
+       2189,
+       2228,
+       2213,
+       4260,
+       2522,
+       2216,
+       2377,
+       2740,
+       2300,
+       2481,
+       2223,
+       2283,
+       2677
+      ],
+      "sum_declared": 221528,
+      "num_samples": 221528,
+      "bytes_per_sample": 0.2638,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "00cc1758067b4200",
+       "00cc207302bb4f41",
+       "00cc1e92fedfcf12",
+       "00cc202afecb527a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       99,
+       4,
+       0,
+       1
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G16",
+        "h": 0,
+        "a": 35,
+        "b": 61,
+        "main_bits": 21056
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 1,
+        "a": 5,
+        "b": 36,
+        "main_bits": 21928
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 4,
+        "b": 37,
+        "main_bits": 21928
+       },
+       {
+        "layout": "interleaved_bytealigned:G16",
+        "h": 2,
+        "a": 9,
+        "b": 58,
+        "main_bits": 21473
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 2,
+        "a": 11,
+        "b": 7,
+        "main_bits": 22295
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 3,
+        "b": 38,
+        "main_bits": 21928
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 3,
+        "a": 10,
+        "b": 8,
+        "main_bits": 22295
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 2,
+        "b": 39,
+        "main_bits": 21928
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 4,
+        "a": 9,
+        "b": 9,
+        "main_bits": 22295
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 5,
+        "a": 1,
+        "b": 40,
+        "main_bits": 21928
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 5,
+        "a": 8,
+        "b": 10,
+        "main_bits": 22295
+       },
+       {
+        "layout": "side_first:G16",
+        "h": 6,
+        "a": 0,
+        "b": 41,
+        "main_bits": 21928
+       }
+      ]
+     }
+    ],
+    "aggregate": {
+     "size_readings_tiling_all_blocks": {},
+     "first_bytes_block0": {
+      "00cc0fd0": 1,
+      "00cc1288": 1,
+      "00cc13d9": 1,
+      "00cc1928": 1,
+      "00cc0ec0": 1,
+      "00cc0eb8": 1,
+      "00cc1878": 1,
+      "00cc1758": 1
+     },
+     "first_bytes_later": {
+      "00cc2073": 3,
+      "00cc1da2": 2,
+      "00cc1f42": 2,
+      "00cc216b": 2,
+      "00cc263b": 2,
+      "00cc24f2": 2,
+      "00cc223b": 2,
+      "00cc233a": 2,
+      "00cc1b1a": 2,
+      "00cc2293": 1,
+      "00cc2103": 1,
+      "00cc2223": 1,
+      "00cc203a": 1,
+      "00cc205b": 1,
+      "00cc2192": 1,
+      "00cc1e33": 1
+     },
+     "byte0_block0": {
+      "0": 8
+     },
+     "byte1_block0": {
+      "204": 8
+     },
+     "byte0_later": {
+      "0": 129
+     },
+     "byte1_later": {
+      "204": 129
+     },
+     "samples_per_block": {
+      "9216": 120,
+      "9263": 8,
+      "6643": 1,
+      "8366": 1,
+      "8313": 1,
+      "4394": 1,
+      "10142": 1,
+      "9476": 1,
+      "3471": 1,
+      "10368": 1,
+      "8361": 1
+     },
+     "granule_readings_tiling_all_blocks": {},
+     "granule_readings_plausible_all_blocks": {}
+    }
+   }
+  },
+  "ps3-nhl13": {
+   "pbp_eng": {
+    "sbr": {
+     "source": "audioboot.big:audio/speech/pbp_eng_samples.sbr",
+     "stored": 708824,
+     "codec": "chunkzip",
+     "size": 1351452,
+     "sha256": "1fe8a5fc72c3b9e52ae67d8564b77652058812f84f5a6cbcd31c6a135a365d86"
+    },
+    "sbs": {
+     "loose": 2094403520,
+     "archive_member": null
+    },
+    "vectors": [
+     {
+      "off": 16,
+      "sns_sha256": "72837049ab72998978e539a7962edf7fbe386954b3d168115fd4952f03f6560b",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 140130
+      },
+      "blocks": 27,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5299
+      ],
+      "payload_bytes": [
+       3086,
+       2372,
+       2071,
+       2686,
+       2036,
+       2298,
+       2210,
+       2476,
+       2414,
+       2351,
+       2503,
+       1936,
+       1787,
+       2359,
+       1958,
+       2178,
+       2194,
+       2244,
+       2124,
+       2275,
+       2416,
+       2075,
+       2026,
+       2492,
+       1816,
+       2798,
+       3060
+      ],
+      "sum_declared": 140130,
+      "num_samples": 140130,
+      "bytes_per_sample": 0.4442,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1bc802523f40",
+       "009c428c3a800f5b",
+       "009c351bfabc3ec3",
+       "009c30fc26c5fe79"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       245,
+       362,
+       317,
+       217
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 8,
+        "b": 70,
+        "main_bits": 23848
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 43,
+        "b": 32,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 11,
+        "b": 61,
+        "main_bits": 23900
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 23,
+        "b": 14,
+        "main_bits": 24195
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 23,
+        "b": 15,
+        "main_bits": 24195
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 42,
+        "b": 33,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 18,
+        "b": 64,
+        "main_bits": 23802
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 2,
+        "a": 41,
+        "b": 34,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 3,
+        "a": 24,
+        "b": 30,
+        "main_bits": 24084
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 3,
+        "a": 40,
+        "b": 35,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 4,
+        "a": 7,
+        "b": 13,
+        "main_bits": 24389
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 4,
+        "a": 23,
+        "b": 31,
+        "main_bits": 24084
+       }
+      ]
+     },
+     {
+      "off": 286154384,
+      "sns_sha256": "c83cdc7957531f1f5ae24fab3e5c2d3ab619a2dbb06e8b86aca68fd9b50e40ec",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 19740
+      },
+      "blocks": 4,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       4141
+      ],
+      "payload_bytes": [
+       3540,
+       2044,
+       2408,
+       1562
+      ],
+      "sum_declared": 19740,
+      "num_samples": 19740,
+      "bytes_per_sample": 0.484,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1a6836525f43",
+       "009c34043ae65fcc",
+       "009c350c3ac5fe83",
+       "009c47bc3a8c17da"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       41,
+       254,
+       334,
+       1215
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 10,
+        "a": 41,
+        "b": 41,
+        "main_bits": 27457
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 11,
+        "a": 40,
+        "b": 42,
+        "main_bits": 27457
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 11,
+        "a": 43,
+        "b": 9,
+        "main_bits": 27684
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 11,
+        "a": 43,
+        "b": 10,
+        "main_bits": 27684
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 12,
+        "a": 39,
+        "b": 43,
+        "main_bits": 27457
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 13,
+        "a": 38,
+        "b": 44,
+        "main_bits": 27457
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 14,
+        "a": 37,
+        "b": 45,
+        "main_bits": 27457
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 14,
+        "a": 43,
+        "b": 12,
+        "main_bits": 27667
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 14,
+        "a": 43,
+        "b": 13,
+        "main_bits": 27667
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 15,
+        "a": 36,
+        "b": 46,
+        "main_bits": 27457
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 16,
+        "a": 35,
+        "b": 47,
+        "main_bits": 27457
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 17,
+        "a": 34,
+        "b": 48,
+        "main_bits": 27457
+       }
+      ]
+     },
+     {
+      "off": 564443952,
+      "sns_sha256": "a2ac3b4958384bd14855fc4e27b61cd46eba3d585f57bc6af3bc7a977b08cab5",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 98955
+      },
+      "blocks": 19,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5596
+      ],
+      "payload_bytes": [
+       2724,
+       2203,
+       2467,
+       2538,
+       2278,
+       2275,
+       2113,
+       2247,
+       1926,
+       2329,
+       2473,
+       1937,
+       2325,
+       2415,
+       2458,
+       2357,
+       2697,
+       1991,
+       2363
+      ],
+      "sum_declared": 98955,
+      "num_samples": 98955,
+      "bytes_per_sample": 0.4458,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1daabacf1f43",
+       "009c3ebc3ab01f59",
+       "009c2ca42eba36cb",
+       "009c53dc3afc779c"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       681,
+       337,
+       362,
+       227
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 6,
+        "b": 62,
+        "main_bits": 21067
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 30,
+        "b": 29,
+        "main_bits": 21148
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 35,
+        "b": 8,
+        "main_bits": 21294
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 38,
+        "b": 53,
+        "main_bits": 20834
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 39,
+        "b": 0,
+        "main_bits": 21333
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 39,
+        "b": 4,
+        "main_bits": 21297
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 40,
+        "b": 54,
+        "main_bits": 20811
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 43,
+        "b": 46,
+        "main_bits": 20876
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 5,
+        "b": 63,
+        "main_bits": 21067
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 8,
+        "b": 16,
+        "main_bits": 21460
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 28,
+        "b": 15,
+        "main_bits": 21267
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 29,
+        "b": 30,
+        "main_bits": 21148
+       }
+      ]
+     },
+     {
+      "off": 817341888,
+      "sns_sha256": "7ce9ab270c3edd5ca6fd23f5251918ee02a739925e446b8f2cfb186b613fa9bf",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 17892
+      },
+      "blocks": 4,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       2293
+      ],
+      "payload_bytes": [
+       3073,
+       2109,
+       2267,
+       987
+      ],
+      "sum_declared": 17892,
+      "num_samples": 17892,
+      "bytes_per_sample": 0.4715,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1bb00281bf40",
+       "009c40e43ab21759",
+       "009c2f3c16c15ec2",
+       "009c2e3c2a91be7a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       195,
+       264,
+       349,
+       1193
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 13,
+        "b": 14,
+        "main_bits": 24214
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 22,
+        "b": 65,
+        "main_bits": 23662
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 22,
+        "b": 66,
+        "main_bits": 23662
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 38,
+        "b": 25,
+        "main_bits": 23859
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 38,
+        "b": 26,
+        "main_bits": 23859
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 38,
+        "b": 27,
+        "main_bits": 23859
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 4,
+        "a": 3,
+        "b": 3,
+        "main_bits": 24383
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 4,
+        "a": 3,
+        "b": 4,
+        "main_bits": 24383
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 4,
+        "a": 3,
+        "b": 5,
+        "main_bits": 24383
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 6,
+        "a": 44,
+        "b": 79,
+        "main_bits": 23356
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 7,
+        "a": 43,
+        "b": 80,
+        "main_bits": 23356
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 8,
+        "a": 46,
+        "b": 77,
+        "main_bits": 23331
+       }
+      ]
+     },
+     {
+      "off": 1143100992,
+      "sns_sha256": "fc7414efaaed8bbce26a28f01aa234ef2fed5f8550e33b4c448223353096f547",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 115638
+      },
+      "blocks": 22,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       6727
+      ],
+      "payload_bytes": [
+       2571,
+       2122,
+       1994,
+       2382,
+       2376,
+       1960,
+       2300,
+       2350,
+       2372,
+       2607,
+       2078,
+       2174,
+       1862,
+       2164,
+       2207,
+       1925,
+       1972,
+       1958,
+       1882,
+       2131,
+       1891,
+       2806
+      ],
+      "sum_declared": 115638,
+      "num_samples": 115638,
+      "bytes_per_sample": 0.4158,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "009c1c41d2df1d41",
+       "009c377c3ab65f59",
+       "009c305c3ace3e7a",
+       "009c357432c21e7a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       470,
+       237,
+       215,
+       440
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 13,
+        "b": 37,
+        "main_bits": 20003
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 15,
+        "b": 33,
+        "main_bits": 19988
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 15,
+        "b": 34,
+        "main_bits": 19988
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 18,
+        "b": 12,
+        "main_bits": 20186
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 19,
+        "b": 80,
+        "main_bits": 19535
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 20,
+        "b": 29,
+        "main_bits": 20016
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 31,
+        "b": 63,
+        "main_bits": 19610
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 43,
+        "b": 55,
+        "main_bits": 19571
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 48,
+        "b": 38,
+        "main_bits": 19664
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 12,
+        "b": 38,
+        "main_bits": 20003
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 17,
+        "b": 13,
+        "main_bits": 20186
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 19,
+        "b": 30,
+        "main_bits": 20016
+       }
+      ]
+     },
+     {
+      "off": 1480165664,
+      "sns_sha256": "bcb556e340d393ac5454018132ff9b145bf62734c61cda9740145012fb8bfb28",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 47702
+      },
+      "blocks": 9,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       6183
+      ],
+      "payload_bytes": [
+       2866,
+       1866,
+       2054,
+       2009,
+       2013,
+       2316,
+       2128,
+       2071,
+       2198
+      ],
+      "sum_declared": 47702,
+      "num_samples": 47702,
+      "bytes_per_sample": 0.4092,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1ff28269bf41",
+       "009c33cc2ae31fcc",
+       "009c360c029dfec3",
+       "009c2edc2ac21ec3"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       434,
+       256,
+       279,
+       238
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 30,
+        "b": 59,
+        "main_bits": 22013
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 41,
+        "b": 18,
+        "main_bits": 22284
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 21,
+        "b": 54,
+        "main_bits": 22109
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 21,
+        "b": 55,
+        "main_bits": 22109
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 29,
+        "b": 60,
+        "main_bits": 22013
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 40,
+        "b": 19,
+        "main_bits": 22284
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 46,
+        "b": 40,
+        "main_bits": 22004
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 12,
+        "b": 80,
+        "main_bits": 21958
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 2,
+        "a": 28,
+        "b": 61,
+        "main_bits": 22013
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 29,
+        "b": 37,
+        "main_bits": 22176
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 29,
+        "b": 38,
+        "main_bits": 22176
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 29,
+        "b": 39,
+        "main_bits": 22176
+       }
+      ]
+     },
+     {
+      "off": 1786710848,
+      "sns_sha256": "25a48312f69a9d1ca26eceb879d4f6fa458b8ac7d70e3fe4961965198e8950f7",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 96277
+      },
+      "blocks": 19,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       2918
+      ],
+      "payload_bytes": [
+       3053,
+       2068,
+       2529,
+       2070,
+       2140,
+       2017,
+       1999,
+       2361,
+       2376,
+       2320,
+       2136,
+       2253,
+       2515,
+       1888,
+       2111,
+       2451,
+       2133,
+       2276,
+       1592
+      ],
+      "sum_declared": 96277,
+      "num_samples": 96277,
+      "bytes_per_sample": 0.4392,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1981da85b741",
+       "009c35b432bcf6c0",
+       "009c318c2ad25f4c",
+       "009c2d5432c1fe7b"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       277,
+       377,
+       311,
+       341
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 0,
+        "b": 26,
+        "main_bits": 24076
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 8,
+        "b": 65,
+        "main_bits": 23657
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 19,
+        "b": 18,
+        "main_bits": 23979
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 19,
+        "b": 76,
+        "main_bits": 23459
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 27,
+        "b": 31,
+        "main_bits": 23787
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 35,
+        "b": 14,
+        "main_bits": 23873
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 39,
+        "b": 38,
+        "main_bits": 23620
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 7,
+        "b": 66,
+        "main_bits": 23657
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 18,
+        "b": 19,
+        "main_bits": 23979
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 18,
+        "b": 77,
+        "main_bits": 23459
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 19,
+        "b": 73,
+        "main_bits": 23480
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 26,
+        "b": 32,
+        "main_bits": 23787
+       }
+      ]
+     },
+     {
+      "off": 2094398096,
+      "sns_sha256": "b7d92fc045fc3aab40f18caf2784e74d0a6140821920f782d42a1879b378badf",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 11317
+      },
+      "blocks": 2,
+      "declared_samples": [
+       5231,
+       6086
+      ],
+      "payload_bytes": [
+       2861,
+       2531
+      ],
+      "sum_declared": 11317,
+      "num_samples": 11317,
+      "bytes_per_sample": 0.4765,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1f7892881f49",
+       "009c3b6c3ace5e4b"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       327,
+       1271
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 12,
+        "b": 46,
+        "main_bits": 22257
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 13,
+        "b": 12,
+        "main_bits": 22549
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 18,
+        "b": 52,
+        "main_bits": 22113
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 22,
+        "b": 60,
+        "main_bits": 22042
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 44,
+        "b": 16,
+        "main_bits": 22193
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 44,
+        "b": 17,
+        "main_bits": 22193
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 10,
+        "b": 33,
+        "main_bits": 22385
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 11,
+        "b": 47,
+        "main_bits": 22257
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 12,
+        "b": 13,
+        "main_bits": 22549
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 20,
+        "b": 11,
+        "main_bits": 22466
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 2,
+        "a": 9,
+        "b": 34,
+        "main_bits": 22385
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 2,
+        "a": 11,
+        "b": 14,
+        "main_bits": 22549
+       }
+      ]
+     }
+    ],
+    "aggregate": {
+     "size_readings_tiling_all_blocks": {},
+     "first_bytes_block0": {
+      "009c1bc8": 1,
+      "009c1a68": 1,
+      "009c1daa": 1,
+      "009c1bb0": 1,
+      "009c1c41": 1,
+      "009c1ff2": 1,
+      "009c1981": 1,
+      "009c1f78": 1
+     },
+     "first_bytes_later": {
+      "009c30fc": 2,
+      "009c318c": 2,
+      "009c2bcc": 2,
+      "009c428c": 1,
+      "009c351b": 1,
+      "009c322c": 1,
+      "009c3213": 1,
+      "009c429c": 1,
+      "009c6c3c": 1,
+      "009c376b": 1,
+      "009c45ac": 1,
+      "009c31bb": 1,
+      "009c3f64": 1,
+      "009c32fc": 1,
+      "009c2fd3": 1,
+      "009c3214": 1
+     },
+     "byte0_block0": {
+      "0": 8
+     },
+     "byte1_block0": {
+      "156": 8
+     },
+     "byte0_later": {
+      "0": 98
+     },
+     "byte1_later": {
+      "156": 98
+     },
+     "samples_per_block": {
+      "5184": 90,
+      "5231": 8,
+      "5299": 1,
+      "4141": 1,
+      "5596": 1,
+      "2293": 1,
+      "6727": 1,
+      "6183": 1,
+      "2918": 1,
+      "6086": 1
+     },
+     "granule_readings_tiling_all_blocks": {},
+     "granule_readings_plausible_all_blocks": {}
+    }
+   }
+  },
+  "ps3-nhl11": {
+   "pbp_eng": {
+    "sbr": {
+     "source": "loose",
+     "size": 1018392,
+     "sha256": "480e97dea9df6556a0caf098d66d8faea76688f978053414f2ebb42c3f79c40e"
+    },
+    "sbs": {
+     "loose": 1698580436,
+     "archive_member": {
+      "archive": "audiostream.big",
+      "entry": 2,
+      "offset": 580171152,
+      "size": 1698580436
+     }
+    },
+    "vectors": [
+     {
+      "off": 16,
+      "sns_sha256": "72837049ab72998978e539a7962edf7fbe386954b3d168115fd4952f03f6560b",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 140130
+      },
+      "blocks": 27,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5299
+      ],
+      "payload_bytes": [
+       3086,
+       2372,
+       2071,
+       2686,
+       2036,
+       2298,
+       2210,
+       2476,
+       2414,
+       2351,
+       2503,
+       1936,
+       1787,
+       2359,
+       1958,
+       2178,
+       2194,
+       2244,
+       2124,
+       2275,
+       2416,
+       2075,
+       2026,
+       2492,
+       1816,
+       2798,
+       3060
+      ],
+      "sum_declared": 140130,
+      "num_samples": 140130,
+      "bytes_per_sample": 0.4442,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1bc802523f40",
+       "009c428c3a800f5b",
+       "009c351bfabc3ec3",
+       "009c30fc26c5fe79"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       245,
+       362,
+       317,
+       217
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 8,
+        "b": 70,
+        "main_bits": 23848
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 43,
+        "b": 32,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 11,
+        "b": 61,
+        "main_bits": 23900
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 23,
+        "b": 14,
+        "main_bits": 24195
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 23,
+        "b": 15,
+        "main_bits": 24195
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 42,
+        "b": 33,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 18,
+        "b": 64,
+        "main_bits": 23802
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 2,
+        "a": 41,
+        "b": 34,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 3,
+        "a": 24,
+        "b": 30,
+        "main_bits": 24084
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 3,
+        "a": 40,
+        "b": 35,
+        "main_bits": 23901
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 4,
+        "a": 7,
+        "b": 13,
+        "main_bits": 24389
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 4,
+        "a": 23,
+        "b": 31,
+        "main_bits": 24084
+       }
+      ]
+     },
+     {
+      "off": 277885456,
+      "sns_sha256": "b04db1fb38033bc1939c5fb9ee524a38529863a3f706dd29203ca4a281c8bf86",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 23948
+      },
+      "blocks": 5,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       3165
+      ],
+      "payload_bytes": [
+       2985,
+       2143,
+       2292,
+       1839,
+       1456
+      ],
+      "sum_declared": 23948,
+      "num_samples": 23948,
+      "bytes_per_sample": 0.4474,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1bf34a4a3f41",
+       "009c52c43a825d8f",
+       "009c356c32b9feca",
+       "009c2ddc0adf1e4a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       293,
+       410,
+       320,
+       200
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 7,
+        "b": 57,
+        "main_bits": 23162
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 7,
+        "b": 58,
+        "main_bits": 23162
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 21,
+        "b": 21,
+        "main_bits": 23360
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 4,
+        "a": 45,
+        "b": 0,
+        "main_bits": 23359
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 5,
+        "a": 5,
+        "b": 39,
+        "main_bits": 23327
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 5,
+        "a": 5,
+        "b": 40,
+        "main_bits": 23327
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 5,
+        "a": 5,
+        "b": 41,
+        "main_bits": 23327
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 5,
+        "a": 13,
+        "b": 34,
+        "main_bits": 23317
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 5,
+        "a": 44,
+        "b": 1,
+        "main_bits": 23359
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 6,
+        "a": 2,
+        "b": 30,
+        "main_bits": 23447
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 6,
+        "a": 21,
+        "b": 21,
+        "main_bits": 23366
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 6,
+        "a": 43,
+        "b": 2,
+        "main_bits": 23359
+       }
+      ]
+     },
+     {
+      "off": 440978832,
+      "sns_sha256": "a4de51f61b3b7d339ad7d193f57220e7e72b9e395accce42095b31de43f82661",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 31966
+      },
+      "blocks": 6,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5999
+      ],
+      "payload_bytes": [
+       2654,
+       2090,
+       2388,
+       2208,
+       2190,
+       2155
+      ],
+      "sum_declared": 31966,
+      "num_samples": 31966,
+      "bytes_per_sample": 0.4281,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {
+       "u8@0+excl&ffffffff": 1,
+       "u8@0+excl&7fff": 1,
+       "u8@0+excl&fff": 1
+      },
+      "first_bytes": [
+       "009c18ebf6657f43",
+       "009c2c6c2ac63ec2",
+       "009c2f7412741ed3",
+       "009c35d402bab6c9"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       528,
+       279,
+       348,
+       452
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 3,
+        "b": 66,
+        "main_bits": 20503
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 11,
+        "b": 53,
+        "main_bits": 20541
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 21,
+        "b": 12,
+        "main_bits": 20823
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 28,
+        "b": 69,
+        "main_bits": 20209
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 28,
+        "b": 70,
+        "main_bits": 20209
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 28,
+        "b": 71,
+        "main_bits": 20209
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 35,
+        "b": 57,
+        "main_bits": 20289
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 35,
+        "b": 60,
+        "main_bits": 20264
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 39,
+        "b": 76,
+        "main_bits": 20085
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 40,
+        "b": 75,
+        "main_bits": 20084
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 10,
+        "b": 54,
+        "main_bits": 20541
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 20,
+        "b": 13,
+        "main_bits": 20823
+       }
+      ]
+     },
+     {
+      "off": 703947456,
+      "sns_sha256": "c7516b415833e57d6ccca69a080d1623dcbc5a1aa743155e2b0cb72e1d3b2730",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 104886
+      },
+      "blocks": 20,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       6343
+      ],
+      "payload_bytes": [
+       2836,
+       1928,
+       1862,
+       1901,
+       1957,
+       2100,
+       2054,
+       1958,
+       2393,
+       1940,
+       2081,
+       2414,
+       2191,
+       2113,
+       2240,
+       1993,
+       2085,
+       2000,
+       2095,
+       3070
+      ],
+      "sum_declared": 104886,
+      "num_samples": 104886,
+      "bytes_per_sample": 0.412,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1bf9e2e2ff41",
+       "009c35ac3ab1f6d3",
+       "009c31ebeabd56c3",
+       "009c2e543ac19e7a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       452,
+       197,
+       185,
+       173
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 33,
+        "b": 10,
+        "main_bits": 22186
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 12,
+        "b": 34,
+        "main_bits": 22124
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 12,
+        "b": 35,
+        "main_bits": 22124
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 17,
+        "b": 28,
+        "main_bits": 22132
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 27,
+        "b": 46,
+        "main_bits": 21898
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 29,
+        "b": 38,
+        "main_bits": 21969
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 32,
+        "b": 11,
+        "main_bits": 22186
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 36,
+        "b": 77,
+        "main_bits": 21525
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 39,
+        "b": 24,
+        "main_bits": 22005
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 1,
+        "b": 56,
+        "main_bits": 22031
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 2,
+        "a": 28,
+        "b": 39,
+        "main_bits": 21969
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 2,
+        "a": 31,
+        "b": 12,
+        "main_bits": 22186
+       }
+      ]
+     },
+     {
+      "off": 882530496,
+      "sns_sha256": "4bfa7203200afabc7bd9f2f298c17074b969a29cf1db9c8a079762ca0eba1e31",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 157780
+      },
+      "blocks": 31,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       2213
+      ],
+      "payload_bytes": [
+       3144,
+       2100,
+       1846,
+       1770,
+       1925,
+       2442,
+       2032,
+       2224,
+       1915,
+       2092,
+       1986,
+       1977,
+       2339,
+       1990,
+       2482,
+       1863,
+       1861,
+       2377,
+       2309,
+       2141,
+       2383,
+       2139,
+       2139,
+       2091,
+       2104,
+       2245,
+       2275,
+       2153,
+       2012,
+       1894,
+       1103
+      ],
+      "sum_declared": 157780,
+      "num_samples": 157780,
+      "bytes_per_sample": 0.4142,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1db98ad31d41",
+       "009c415c3ae4378f",
+       "009c32bc1ad2567b",
+       "009c2c843ad25e7b"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       110,
+       243,
+       186,
+       96
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 41,
+        "b": 3,
+        "main_bits": 24641
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 40,
+        "b": 4,
+        "main_bits": 24641
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 2,
+        "a": 39,
+        "b": 5,
+        "main_bits": 24641
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 3,
+        "a": 38,
+        "b": 6,
+        "main_bits": 24641
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 4,
+        "a": 37,
+        "b": 7,
+        "main_bits": 24641
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 5,
+        "a": 6,
+        "b": 46,
+        "main_bits": 24535
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 5,
+        "a": 6,
+        "b": 47,
+        "main_bits": 24535
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 5,
+        "a": 36,
+        "b": 8,
+        "main_bits": 24641
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 5,
+        "a": 48,
+        "b": 29,
+        "main_bits": 24343
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 6,
+        "a": 18,
+        "b": 76,
+        "main_bits": 24185
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 6,
+        "a": 35,
+        "b": 9,
+        "main_bits": 24641
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 6,
+        "a": 47,
+        "b": 30,
+        "main_bits": 24343
+       }
+      ]
+     },
+     {
+      "off": 1129944480,
+      "sns_sha256": "6fd15091473cd1f63a2d34790544ab2b4474e7fe7239b380a5476c12cf0e16c2",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 141089
+      },
+      "blocks": 27,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       6258
+      ],
+      "payload_bytes": [
+       2739,
+       2618,
+       2091,
+       2344,
+       2018,
+       2092,
+       1950,
+       2069,
+       2737,
+       2494,
+       2071,
+       2310,
+       2018,
+       1828,
+       2080,
+       1852,
+       2538,
+       2478,
+       2379,
+       2431,
+       1958,
+       1975,
+       2027,
+       2236,
+       1880,
+       2552,
+       2652
+      ],
+      "sum_declared": 141089,
+      "num_samples": 141089,
+      "bytes_per_sample": 0.4282,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c1bd99ac71f41",
+       "009c38243aa8e6ca",
+       "009c34fc12d1bfcf",
+       "009c529beae41f9a"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       403,
+       265,
+       279,
+       291
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 16,
+        "b": 28,
+        "main_bits": 21407
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 25,
+        "b": 32,
+        "main_bits": 21291
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 27,
+        "b": 40,
+        "main_bits": 21198
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 35,
+        "b": 69,
+        "main_bits": 20868
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 36,
+        "b": 70,
+        "main_bits": 20849
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 40,
+        "b": 28,
+        "main_bits": 21146
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 40,
+        "b": 29,
+        "main_bits": 21146
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 40,
+        "b": 30,
+        "main_bits": 21146
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 40,
+        "b": 31,
+        "main_bits": 21146
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 40,
+        "b": 32,
+        "main_bits": 21146
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 48,
+        "b": 7,
+        "main_bits": 21304
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 15,
+        "b": 29,
+        "main_bits": 21407
+       }
+      ]
+     },
+     {
+      "off": 1466344992,
+      "sns_sha256": "3d9b42a6a7d054267e9ef6b9b54674d7d81a24f69b7426a44aa784de304f2314",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 137670
+      },
+      "blocks": 27,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       2839
+      ],
+      "payload_bytes": [
+       2972,
+       2082,
+       2229,
+       2306,
+       2242,
+       2379,
+       2035,
+       1924,
+       2165,
+       2163,
+       2057,
+       1865,
+       1864,
+       1894,
+       2023,
+       1856,
+       1866,
+       1861,
+       2051,
+       2050,
+       2165,
+       2307,
+       2843,
+       2328,
+       1940,
+       1954,
+       1206
+      ],
+      "sum_declared": 137670,
+      "num_samples": 137670,
+      "bytes_per_sample": 0.4113,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c21e07264d749",
+       "009c32a422ca36c3",
+       "009c6c4c3a8b1f9a",
+       "009c48e43ae99f98"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       144,
+       270,
+       372,
+       436
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 18,
+        "b": 52,
+        "main_bits": 23034
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 26,
+        "b": 66,
+        "main_bits": 22810
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 29,
+        "b": 48,
+        "main_bits": 22943
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 32,
+        "b": 79,
+        "main_bits": 22668
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 15,
+        "b": 52,
+        "main_bits": 23026
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 1,
+        "a": 15,
+        "b": 53,
+        "main_bits": 23026
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 17,
+        "b": 53,
+        "main_bits": 23034
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 1,
+        "a": 31,
+        "b": 80,
+        "main_bits": 22668
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 2,
+        "a": 16,
+        "b": 54,
+        "main_bits": 23034
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 3,
+        "a": 15,
+        "b": 55,
+        "main_bits": 23034
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 3,
+        "a": 29,
+        "b": 50,
+        "main_bits": 22947
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 4,
+        "a": 14,
+        "b": 56,
+        "main_bits": 23034
+       }
+      ]
+     },
+     {
+      "off": 1698507520,
+      "sns_sha256": "2b8812013df1f129e611862d2fa9d69d01dc8d3076491e8eb032390e35a3d658",
+      "snr": {
+       "version": 1,
+       "codec": "ealayer3-v1",
+       "codec_code": 5,
+       "channel_config": 0,
+       "sample_rate": 24000,
+       "type": "stream",
+       "loop": 0,
+       "num_samples": 173419
+      },
+      "blocks": 34,
+      "declared_samples": [
+       5231,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       5184,
+       2300
+      ],
+      "payload_bytes": [
+       2870,
+       1886,
+       2310,
+       2454,
+       2170,
+       2289,
+       1973,
+       2114,
+       2014,
+       2617,
+       2125,
+       2074,
+       2151,
+       2175,
+       1908,
+       2051,
+       1813,
+       2009,
+       1819,
+       2356,
+       2032,
+       2633,
+       2137,
+       2176,
+       1948,
+       1838,
+       2053,
+       2622,
+       2376,
+       2447,
+       2118,
+       1835,
+       2332,
+       902
+      ],
+      "sum_declared": 173419,
+      "num_samples": 173419,
+      "bytes_per_sample": 0.4188,
+      "size_readings_tiling_every_block": [],
+      "size_readings_tiling_any_block": {},
+      "first_bytes": [
+       "009c246302747758",
+       "009c39dc3ac2fec3",
+       "009c3f6c3a9006d9",
+       "009c5b1c3af5bf9c"
+      ],
+      "samples_gcd": 1,
+      "all_blocks_multiple_of_576": false,
+      "all_but_last_multiple_of_1152": false,
+      "granule_readings_tiling_every_block": [],
+      "granule_readings_per_block_counts": [
+       390,
+       211,
+       313,
+       244
+      ],
+      "granule_block0_readings": [
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 8,
+        "b": 7,
+        "main_bits": 22681
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 8,
+        "b": 8,
+        "main_bits": 22681
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 13,
+        "b": 66,
+        "main_bits": 22107
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 13,
+        "b": 67,
+        "main_bits": 22107
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 0,
+        "a": 13,
+        "b": 68,
+        "main_bits": 22107
+       },
+       {
+        "layout": "interleaved:G9",
+        "h": 0,
+        "a": 43,
+        "b": 61,
+        "main_bits": 21916
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 0,
+        "a": 45,
+        "b": 3,
+        "main_bits": 22418
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 1,
+        "a": 44,
+        "b": 4,
+        "main_bits": 22418
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 2,
+        "a": 9,
+        "b": 57,
+        "main_bits": 22225
+       },
+       {
+        "layout": "side_first:G9",
+        "h": 2,
+        "a": 43,
+        "b": 5,
+        "main_bits": 22418
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 4,
+        "a": 48,
+        "b": 17,
+        "main_bits": 22232
+       },
+       {
+        "layout": "interleaved_bytealigned:G9",
+        "h": 4,
+        "a": 48,
+        "b": 18,
+        "main_bits": 22232
+       }
+      ]
+     }
+    ],
+    "aggregate": {
+     "size_readings_tiling_all_blocks": {},
+     "first_bytes_block0": {
+      "009c1bc8": 1,
+      "009c1bf3": 1,
+      "009c18eb": 1,
+      "009c1bf9": 1,
+      "009c1db9": 1,
+      "009c1bd9": 1,
+      "009c21e0": 1,
+      "009c2463": 1
+     },
+     "first_bytes_later": {
+      "009c30fc": 2,
+      "009c34fc": 2,
+      "009c338c": 2,
+      "009c344c": 2,
+      "009c3074": 2,
+      "009c358c": 2,
+      "009c35a4": 2,
+      "009c4184": 2,
+      "009c2fc4": 2,
+      "009c30ac": 2,
+      "009c3354": 2,
+      "009c37d4": 2,
+      "009c428c": 1,
+      "009c351b": 1,
+      "009c322c": 1,
+      "009c318c": 1
+     },
+     "byte0_block0": {
+      "0": 8
+     },
+     "byte1_block0": {
+      "156": 8
+     },
+     "byte0_later": {
+      "0": 169
+     },
+     "byte1_later": {
+      "156": 169
+     },
+     "samples_per_block": {
+      "5184": 161,
+      "5231": 8,
+      "5299": 1,
+      "3165": 1,
+      "5999": 1,
+      "6343": 1,
+      "2213": 1,
+      "6258": 1,
+      "2839": 1,
+      "2300": 1
+     },
+     "granule_readings_tiling_all_blocks": {},
+     "granule_readings_plausible_all_blocks": {}
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,70 @@
+[
+  {
+    "route": "database/players",
+    "overflow": false
+  },
+  {
+    "route": "database/arenas",
+    "overflow": false
+  },
+  {
+    "route": "database/game-settings",
+    "overflow": false
+  },
+  {
+    "route": "database/transactions",
+    "overflow": false
+  },
+  {
+    "route": "database/pending",
+    "overflow": false
+  },
+  {
+    "route": "historical/players",
+    "overflow": false
+  },
+  {
+    "route": "legends",
+    "overflow": false
+  },
+  {
+    "route": "shop",
+    "overflow": false
+  },
+  {
+    "route": "assets/players",
+    "overflow": false
+  },
+  {
+    "route": "assets/export",
+    "overflow": false
+  },
+  {
+    "route": "assets/appearance",
+    "overflow": false
+  },
+  {
+    "route": "assets/outfits",
+    "overflow": false
+  },
+  {
+    "route": "assets/files",
+    "overflow": false
+  },
+  {
+    "route": "settings/general",
+    "overflow": false
+  },
+  {
+    "route": "settings/paths",
+    "overflow": false
+  },
+  {
+    "route": "settings/dashboard",
+    "overflow": false
+  },
+  {
+    "route": "settings/about",
+    "overflow": false
+  }
+]

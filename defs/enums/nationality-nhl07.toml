@@ -1,0 +1,133 @@
+# Title-scoped nationality labels: NHL 07 (gen6 schema; developer receipt 28, 26 Sep 2026).
+#
+# NHL 07 has its own country table. Studio already displays it through `attributes::GEN6_COUNTRIES`
+# (every code confirmed in game by the user or fixed by a well-known player's documented nationality or
+# birthplace); this file is the same table for the registry, so the label lookup used by the import
+# resolves NHL 07's codes instead of NHL Legacy's (before this file an imported Czech player would have
+# been written 82, which NHL 07 labels Germany). Code 78 (Belgium) is inferred in that table and is left
+# out here, so the import never writes it; the display keeps the existing table unchanged.
+#
+# Research note (R120, 26 Sep 2026): NHL 07 has no national-team rosters, so R120b has no NHL 07 row;
+# the 13 national-team codes it measured on NHL 08 / 09 are identical to the codes below.
+
+name = "Nationality"
+confidence = "Confirmed"
+notes = """
+NHL 07 gen6 country codes; mirror of studio-domain attributes::GEN6_COUNTRIES without the inferred 78.
+"""
+
+[source]
+kind = "operator-research"
+description = "NHL 07 roster, confirmed in game by the user or by documented players (the NHL 07 country table)"
+
+[scope]
+games = ["nhl07"]
+
+[[bindings]]
+field_name = "Nationality"
+field_raw_id = "Lelh"
+table_raw_id = "ubPc"
+
+[[entries]]
+raw = 0
+label = "Canada"
+
+[[entries]]
+raw = 14
+label = "United States"
+
+[[entries]]
+raw = 66
+label = "Denmark"
+
+[[entries]]
+raw = 67
+label = "Finland"
+
+[[entries]]
+raw = 68
+label = "Norway"
+
+[[entries]]
+raw = 69
+label = "Sweden"
+
+[[entries]]
+raw = 70
+label = "Belarus"
+
+[[entries]]
+raw = 72
+label = "Kazakhstan"
+
+[[entries]]
+raw = 73
+label = "Latvia"
+
+[[entries]]
+raw = 74
+label = "Lithuania"
+
+[[entries]]
+raw = 75
+label = "Russia"
+
+[[entries]]
+raw = 76
+label = "Ukraine"
+
+[[entries]]
+raw = 77
+label = "Austria"
+
+[[entries]]
+raw = 79
+label = "Czech Republic"
+
+[[entries]]
+raw = 80
+label = "Great Britain"
+
+[[entries]]
+raw = 81
+label = "France"
+
+[[entries]]
+raw = 82
+label = "Germany"
+
+[[entries]]
+raw = 84
+label = "Italy"
+
+[[entries]]
+raw = 85
+label = "Northern Ireland"
+
+[[entries]]
+raw = 86
+label = "Poland"
+
+[[entries]]
+raw = 88
+label = "Slovakia"
+
+[[entries]]
+raw = 89
+label = "Switzerland"
+
+[[entries]]
+raw = 92
+label = "Brazil"
+
+[[entries]]
+raw = 96
+label = "Japan"
+
+[[entries]]
+raw = 100
+label = "South Africa"
+
+[[entries]]
+raw = 101
+label = "South Korea"

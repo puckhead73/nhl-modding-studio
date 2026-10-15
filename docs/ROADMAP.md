@@ -1,5 +1,19 @@
 # ROADMAP — NHL Modding Studio
 
+> **Completion planning update (2026-09-05):** Use the
+> [project completion roadmap](plans/project-completion-roadmap.md) for the current execution sequence
+> and the [full-game QA plan](plans/full-game-qa-editability.md) for verification procedures.
+> [Design questions](plans/completion-design-questions.md) records pending scope decisions.
+> The original phases below are retained as history: their NHL10–21 scope and descriptions of PS4
+> and title expansion as unstarted are stale. Current catalog scope is NHL07–21 plus Legacy and
+> Recompiled on the actual catalog platforms (**17 catalog entries, 27 shipping targets**;
+> NHL 07 PS3 is research-only and there is no Xbox One target); implemented/read-proven does not
+> mean game-verified. Sequence new work from the completion roadmap's C0–C10 milestones, not from
+> the phase numbers below. Work shipped since — notably the **Legends team builder** — has no phase
+> slot here by design; it is carried as its own workstream in the completion roadmap section 2.
+> Current scope and evidence levels: [01-scope-and-compatibility.md](01-scope-and-compatibility.md)
+> and [STATE-OF-THE-REPO.md](STATE-OF-THE-REPO.md).
+
 > **Canonical phased plan.** Derived from the prior app's design brief
 > ([rebuild-design.md](rebuild-design.md), kept as the reference source) and extended for the agreed
 > release-candidate scope. Architecture lives in [DESIGN.md](DESIGN.md).

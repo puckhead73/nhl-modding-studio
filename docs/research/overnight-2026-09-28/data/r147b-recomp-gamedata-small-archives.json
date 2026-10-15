@@ -1,0 +1,123 @@
+{
+ "note": "R147b - names only: the two Recompiled gamedata archives receipt 67 reports as unlistable (gamedata/gps.big BIG4 without .bh;\ngamedata/anim/faceposer.big EB 0x00200400). gps.big read as a classic inline-directory BIG4 (BE u32 total size? / count / header\nlength, then rows of BE u32 offset, BE u32 size, NUL-terminated name) with every row bounds-checked; faceposer.big via the research\neb_list (paths, path shape classes, offset/size bounds against the file length). Also: is any member path under rendering/ or fe/.\nUsage: python r147b_gamedata_small_archives.py <out.json>",
+ "gps": {
+  "bytes": 2487,
+  "magic": "BIG4",
+  "size_word_le": 2487,
+  "size_word_be": 3070820352,
+  "count_be": 15,
+  "header_len_be": 206,
+  "rows": [
+   {
+    "name": "ALL",
+    "offset": 208,
+    "size": 82,
+    "in_bounds": true
+   },
+   {
+    "name": "DL1",
+    "offset": 304,
+    "size": 75,
+    "in_bounds": true
+   },
+   {
+    "name": "DL2",
+    "offset": 384,
+    "size": 75,
+    "in_bounds": true
+   },
+   {
+    "name": "DL3",
+    "offset": 464,
+    "size": 75,
+    "in_bounds": true
+   },
+   {
+    "name": "DL4",
+    "offset": 544,
+    "size": 75,
+    "in_bounds": true
+   },
+   {
+    "name": "GOL",
+    "offset": 624,
+    "size": 75,
+    "in_bounds": true
+   },
+   {
+    "name": "GS1",
+    "offset": 704,
+    "size": 1142,
+    "in_bounds": true
+   },
+   {
+    "name": "GS2",
+    "offset": 1856,
+    "size": 76,
+    "in_bounds": true
+   },
+   {
+    "name": "GS3",
+    "offset": 1936,
+    "size": 76,
+    "in_bounds": true
+   },
+   {
+    "name": "GS4",
+    "offset": 2016,
+    "size": 76,
+    "in_bounds": true
+   },
+   {
+    "name": "H2H",
+    "offset": 2096,
+    "size": 71,
+    "in_bounds": true
+   },
+   {
+    "name": "HUT",
+    "offset": 2176,
+    "size": 71,
+    "in_bounds": true
+   },
+   {
+    "name": "OTP",
+    "offset": 2256,
+    "size": 71,
+    "in_bounds": true
+   },
+   {
+    "name": "PRE",
+    "offset": 2336,
+    "size": 74,
+    "in_bounds": true
+   },
+   {
+    "name": "V1.00",
+    "offset": 2416,
+    "size": 71,
+    "in_bounds": true
+   }
+  ],
+  "rows_parsed": true,
+  "all_in_bounds": true,
+  "directory_end": 198
+ },
+ "faceposer": {
+  "bytes": 8050064,
+  "members": 904,
+  "all_in_bounds": false,
+  "shapes": {
+   "gamedata/faceposer/faceposer_N.cba": 904
+  },
+  "first": [
+   "gamedata/faceposer/faceposer_10.cba",
+   "gamedata/faceposer/faceposer_1000.cba",
+   "gamedata/faceposer/faceposer_10043.cba",
+   "gamedata/faceposer/faceposer_1005.cba",
+   "gamedata/faceposer/faceposer_1009.cba"
+  ],
+  "under_rendering_or_fe": 0,
+  "distinct_paths": 904
+ }
+}

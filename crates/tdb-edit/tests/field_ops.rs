@@ -9,10 +9,17 @@ use tdb_enums::EnumRegistry;
 use tdb_relations::{RelationRegistry, RosterModel};
 
 fn anchor(rel: &str) -> Vec<u8> {
-    std::fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../anchors").join(rel)).unwrap()
+    std::fs::read(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../anchors")
+            .join(rel),
+    )
+    .unwrap()
 }
 fn defs(sub: &str) -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../defs").join(sub)
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../defs")
+        .join(sub)
 }
 const DB: &str = "ps3/nhllegacy/databases/nhlng.db";
 
@@ -21,7 +28,11 @@ fn assert_write_clean(db_bytes: &[u8]) {
     let relations = RelationRegistry::from_dir(defs("relationships")).unwrap();
     let enums = EnumRegistry::from_dir(defs("enums")).unwrap();
     let report = validate_invariants(&db, &relations, &enums);
-    assert!(report.is_clean(), "audit not clean: {:?}", report.errors().take(5).collect::<Vec<_>>());
+    assert!(
+        report.is_clean(),
+        "audit not clean: {:?}",
+        report.errors().take(5).collect::<Vec<_>>()
+    );
 }
 
 /// Roster slots are laid out as contiguous, gap-free, non-overlapping per-team blocks (see
@@ -52,7 +63,12 @@ fn assert_blocks_coherent(db_bytes: &[u8]) {
         assert!(
             w[1].0 > w[0].1,
             "team blocks overlap: team {} [{}..={}] vs team {} [{}..={}]",
-            w[0].2, w[0].0, w[0].1, w[1].2, w[1].0, w[1].1
+            w[0].2,
+            w[0].0,
+            w[0].1,
+            w[1].2,
+            w[1].0,
+            w[1].1
         );
     }
 }
@@ -67,7 +83,12 @@ fn move_relocates_into_free_slot_and_preserves_blocks() {
 
     let model = tx.model().unwrap();
     // Destination = a team that actually has a free (unoccupied) slot to relocate into.
-    let to_team = model.slots.iter().find(|s| s.player_id.is_none()).unwrap().team_id;
+    let to_team = model
+        .slots
+        .iter()
+        .find(|s| s.player_id.is_none())
+        .unwrap()
+        .team_id;
     // Members per player — pick a captain with exactly ONE membership so the move is unambiguous
     // (players can hold several memberships across teams; that case is move-by-from_team's job).
     let mut counts: std::collections::HashMap<u64, usize> = std::collections::HashMap::new();
@@ -90,17 +111,41 @@ fn move_relocates_into_free_slot_and_preserves_blocks() {
     drop(model);
 
     let outcome = tx.move_player(player, from_team, to_team).unwrap();
-    assert!(outcome.repairs.iter().any(|r| r.contains("cleared captaincy")));
+    assert!(outcome
+        .repairs
+        .iter()
+        .any(|r| r.contains("cleared captaincy")));
 
     let model = tx.model().unwrap();
-    let slot = model.slots.iter().find(|s| s.player_id == Some(player)).unwrap();
+    let slot = model
+        .slots
+        .iter()
+        .find(|s| s.player_id == Some(player))
+        .unwrap();
     assert_eq!(slot.team_id, to_team, "player now on the destination team");
-    assert_ne!(slot.record, source_record, "player relocated to a different (destination-block) slot");
-    assert_ne!(slot.captaincy, Some(captaincy::CAPTAIN), "captaincy cleared on move");
-    assert!(model.team_roster(to_team).iter().any(|s| s.player_id == Some(player)));
-    assert!(!model.team_roster(from_team).iter().any(|s| s.player_id == Some(player)));
+    assert_ne!(
+        slot.record, source_record,
+        "player relocated to a different (destination-block) slot"
+    );
+    assert_ne!(
+        slot.captaincy,
+        Some(captaincy::CAPTAIN),
+        "captaincy cleared on move"
+    );
+    assert!(model
+        .team_roster(to_team)
+        .iter()
+        .any(|s| s.player_id == Some(player)));
+    assert!(!model
+        .team_roster(from_team)
+        .iter()
+        .any(|s| s.player_id == Some(player)));
     // The source slot is now vacant but still belongs to the source team (no team retag).
-    let src = model.slots.iter().find(|s| s.record == source_record).unwrap();
+    let src = model
+        .slots
+        .iter()
+        .find(|s| s.record == source_record)
+        .unwrap();
     assert_eq!(src.team_id, from_team, "source slot keeps its team");
     assert!(src.player_id.is_none(), "source slot vacated");
     drop(model);
@@ -118,7 +163,12 @@ fn move_into_full_team_is_rejected() {
     let mut tx = EditTransaction::begin(&bytes).unwrap();
 
     let model = tx.model().unwrap();
-    let free_team = model.slots.iter().find(|s| s.player_id.is_none()).unwrap().team_id;
+    let free_team = model
+        .slots
+        .iter()
+        .find(|s| s.player_id.is_none())
+        .unwrap()
+        .team_id;
     // A full destination team (every slot occupied) that is not the player's own team.
     let full_team = model
         .teams
@@ -153,7 +203,14 @@ fn set_jersey_validates_uniqueness_and_range() {
         .teams
         .iter()
         .map(|t| t.team_id)
-        .find(|&t| model.team_roster(t).iter().filter(|s| s.player_id.is_some()).count() >= 2)
+        .find(|&t| {
+            model
+                .team_roster(t)
+                .iter()
+                .filter(|s| s.player_id.is_some())
+                .count()
+                >= 2
+        })
         .unwrap();
     let roster: Vec<u64> = model
         .team_roster(team)
@@ -172,7 +229,11 @@ fn set_jersey_validates_uniqueness_and_range() {
     // Assign a free number to A.
     tx.set_jersey_number(team, a, free).unwrap();
     let model = tx.model().unwrap();
-    let a_slot = model.slots.iter().find(|s| s.team_id == team && s.player_id == Some(a)).unwrap();
+    let a_slot = model
+        .slots
+        .iter()
+        .find(|s| s.team_id == team && s.player_id == Some(a))
+        .unwrap();
     assert_eq!(a_slot.jersey, Some(free));
     drop(model);
 
@@ -184,7 +245,10 @@ fn set_jersey_validates_uniqueness_and_range() {
     // Out-of-range (sVRt is 7-bit → max 127) is rejected.
     assert!(matches!(
         tx.set_jersey_number(team, b, 9999),
-        Err(EditError::InvalidValue { what: "jersey number", .. })
+        Err(EditError::InvalidValue {
+            what: "jersey number",
+            ..
+        })
     ));
 
     let out = tx.commit().unwrap();
@@ -209,7 +273,11 @@ fn set_dressed_writes_slot_flag() {
 
     tx.set_dressed(team, player, target).unwrap();
     let model = tx.model().unwrap();
-    let slot = model.slots.iter().find(|s| s.team_id == team && s.player_id == Some(player)).unwrap();
+    let slot = model
+        .slots
+        .iter()
+        .find(|s| s.team_id == team && s.player_id == Some(player))
+        .unwrap();
     assert_eq!(slot.dressed, Some(target));
     drop(model);
 
@@ -222,7 +290,13 @@ fn set_dressed_writes_slot_flag() {
 fn move_rejects_bad_args() {
     let bytes = anchor(DB);
     let mut tx = EditTransaction::begin(&bytes).unwrap();
-    let player = tx.model().unwrap().slots.iter().find_map(|s| s.player_id).unwrap();
+    let player = tx
+        .model()
+        .unwrap()
+        .slots
+        .iter()
+        .find_map(|s| s.player_id)
+        .unwrap();
     assert!(matches!(
         tx.move_player(player, 0, 0xFFFF_FFFF),
         Err(EditError::InvalidValue { .. })
@@ -260,11 +334,27 @@ fn trade_swaps_occupants_in_place() {
     let slot_a = model.slots.iter().find(|s| s.record == a_rec).unwrap();
     let slot_b = model.slots.iter().find(|s| s.record == b_rec).unwrap();
     assert_eq!(slot_a.team_id, a_team, "a's slot keeps its team");
-    assert_eq!(slot_a.player_id, Some(b_player), "b_player now sits in a's old slot");
+    assert_eq!(
+        slot_a.player_id,
+        Some(b_player),
+        "b_player now sits in a's old slot"
+    );
     assert_eq!(slot_b.team_id, b_team, "b's slot keeps its team");
-    assert_eq!(slot_b.player_id, Some(a_player), "a_player now sits in b's old slot");
-    assert_ne!(slot_a.captaincy, Some(captaincy::CAPTAIN), "captaincy cleared on arrival");
-    assert_ne!(slot_b.captaincy, Some(captaincy::CAPTAIN), "captaincy cleared on arrival");
+    assert_eq!(
+        slot_b.player_id,
+        Some(a_player),
+        "a_player now sits in b's old slot"
+    );
+    assert_ne!(
+        slot_a.captaincy,
+        Some(captaincy::CAPTAIN),
+        "captaincy cleared on arrival"
+    );
+    assert_ne!(
+        slot_b.captaincy,
+        Some(captaincy::CAPTAIN),
+        "captaincy cleared on arrival"
+    );
     drop(model);
 
     let out = tx.commit().unwrap();
@@ -316,7 +406,10 @@ fn trade_reassigns_a_colliding_jersey_on_arrival() {
     tx.set_jersey_number(a_team, a_player, clash).unwrap();
     let outcome = tx.trade_slots(a_team, a_player, b_team, b_player).unwrap();
     assert!(
-        outcome.repairs.iter().any(|r| r.contains(&format!("#{clash}"))),
+        outcome
+            .repairs
+            .iter()
+            .any(|r| r.contains(&format!("#{clash}"))),
         "expected a jersey-collision repair, got {:?}",
         outcome.repairs
     );
@@ -328,17 +421,20 @@ fn trade_reassigns_a_colliding_jersey_on_arrival() {
         .find(|s| s.team_id == b_team && s.player_id == Some(a_player))
         .unwrap();
     let assigned = arrived.jersey.expect("arrived slot has a jersey");
-    assert_ne!(assigned, 0, "the colliding jersey was reassigned, not cleared");
-    assert_ne!(assigned, clash, "the reassigned number differs from the clashing one");
+    assert_ne!(
+        assigned, 0,
+        "the colliding jersey was reassigned, not cleared"
+    );
+    assert_ne!(
+        assigned, clash,
+        "the reassigned number differs from the clashing one"
+    );
     // Unique within the destination team (the staying player keeps #clash).
     assert!(
-        !model
-            .slots
-            .iter()
-            .any(|s| s.team_id == b_team
-                && s.record != arrived.record
-                && s.index_key.is_some()
-                && s.jersey == Some(assigned)),
+        !model.slots.iter().any(|s| s.team_id == b_team
+            && s.record != arrived.record
+            && s.index_key.is_some()
+            && s.jersey == Some(assigned)),
         "the reassigned number is unique on the destination team"
     );
     drop(model);
@@ -389,23 +485,43 @@ fn release_then_sign_round_trips_a_player() {
             *counts.entry(p).or_default() += 1;
         }
     }
-    let s = model.slots.iter().find(|s| s.player_id.is_some_and(|p| counts[&p] == 1)).unwrap();
+    let s = model
+        .slots
+        .iter()
+        .find(|s| s.player_id.is_some_and(|p| counts[&p] == 1))
+        .unwrap();
     let (team, player, rec) = (s.team_id, s.player_id.unwrap(), s.record);
     drop(model);
 
     tx.release_to_fa(team, player).unwrap();
     let model = tx.model().unwrap();
-    assert!(!model.slots.iter().any(|s| s.player_id == Some(player)), "off-roster after release");
+    assert!(
+        !model.slots.iter().any(|s| s.player_id == Some(player)),
+        "off-roster after release"
+    );
     let vacated = model.slots.iter().find(|s| s.record == rec).unwrap();
-    assert_eq!(vacated.team_id, team, "vacated slot keeps its team (still in the block)");
+    assert_eq!(
+        vacated.team_id, team,
+        "vacated slot keeps its team (still in the block)"
+    );
     assert!(vacated.player_id.is_none(), "vacated slot is empty");
-    assert!(model.player(player).is_some(), "the free agent keeps their bio/identity");
+    assert!(
+        model.player(player).is_some(),
+        "the free agent keeps their bio/identity"
+    );
     drop(model);
 
     tx.sign_from_fa(player, team).unwrap();
     let model = tx.model().unwrap();
-    let signed = model.slots.iter().find(|s| s.player_id == Some(player)).unwrap();
-    assert_eq!(signed.team_id, team, "player is back on the team after signing");
+    let signed = model
+        .slots
+        .iter()
+        .find(|s| s.player_id == Some(player))
+        .unwrap();
+    assert_eq!(
+        signed.team_id, team,
+        "player is back on the team after signing"
+    );
     drop(model);
 
     let out = tx.commit().unwrap();
@@ -430,7 +546,12 @@ fn sign_into_full_team_is_rejected() {
         .map(|p| p.player_id)
         .find(|p| !rostered.contains(p))
         .expect("the anchor carries off-roster players (Spike S1)");
-    let free_team = model.slots.iter().find(|s| s.player_id.is_none()).unwrap().team_id;
+    let free_team = model
+        .slots
+        .iter()
+        .find(|s| s.player_id.is_none())
+        .unwrap()
+        .team_id;
     let full_team = model
         .teams
         .iter()
@@ -456,10 +577,24 @@ fn fa_ops_reject_bad_args() {
     let mut tx = EditTransaction::begin(&bytes).unwrap();
     let model = tx.model().unwrap();
     let player = model.slots.iter().find_map(|s| s.player_id).unwrap();
-    let player_teams: HashSet<u64> =
-        model.slots.iter().filter(|s| s.player_id == Some(player)).map(|s| s.team_id).collect();
-    let other_team = model.teams.iter().map(|t| t.team_id).find(|t| !player_teams.contains(t)).unwrap();
-    let free_team = model.slots.iter().find(|s| s.player_id.is_none()).unwrap().team_id;
+    let player_teams: HashSet<u64> = model
+        .slots
+        .iter()
+        .filter(|s| s.player_id == Some(player))
+        .map(|s| s.team_id)
+        .collect();
+    let other_team = model
+        .teams
+        .iter()
+        .map(|t| t.team_id)
+        .find(|t| !player_teams.contains(t))
+        .unwrap();
+    let free_team = model
+        .slots
+        .iter()
+        .find(|s| s.player_id.is_none())
+        .unwrap()
+        .team_id;
     drop(model);
 
     // release: unknown team, and a player not on the named team.
@@ -495,7 +630,11 @@ fn add_then_remove_extra_membership_round_trips() {
             *counts.entry(p).or_default() += 1;
         }
     }
-    let s = model.slots.iter().find(|s| s.player_id.is_some_and(|p| counts[&p] == 1)).unwrap();
+    let s = model
+        .slots
+        .iter()
+        .find(|s| s.player_id.is_some_and(|p| counts[&p] == 1))
+        .unwrap();
     let (home_team, player, home_rec) = (s.team_id, s.player_id.unwrap(), s.record);
     let extra_team = model
         .slots
@@ -508,13 +647,21 @@ fn add_then_remove_extra_membership_round_trips() {
     tx.add_membership(player, extra_team).unwrap();
     let model = tx.model().unwrap();
     let home = model.slots.iter().find(|s| s.record == home_rec).unwrap();
-    assert_eq!(home.player_id, Some(player), "original membership untouched by the add");
+    assert_eq!(
+        home.player_id,
+        Some(player),
+        "original membership untouched by the add"
+    );
     let extra = model
         .slots
         .iter()
         .find(|s| s.team_id == extra_team && s.player_id == Some(player))
         .expect("player holds a slot on the extra team");
-    assert_eq!(extra.captaincy, Some(captaincy::NONE), "extra membership arrives captainless");
+    assert_eq!(
+        extra.captaincy,
+        Some(captaincy::NONE),
+        "extra membership arrives captainless"
+    );
     drop(model);
 
     // One membership per team: adding the same team again is rejected.
@@ -526,11 +673,18 @@ fn add_then_remove_extra_membership_round_trips() {
     tx.remove_membership(extra_team, player).unwrap();
     let model = tx.model().unwrap();
     assert!(
-        !model.slots.iter().any(|s| s.team_id == extra_team && s.player_id == Some(player)),
+        !model
+            .slots
+            .iter()
+            .any(|s| s.team_id == extra_team && s.player_id == Some(player)),
         "extra membership vacated"
     );
     let home = model.slots.iter().find(|s| s.record == home_rec).unwrap();
-    assert_eq!(home.player_id, Some(player), "original membership survives the remove");
+    assert_eq!(
+        home.player_id,
+        Some(player),
+        "original membership survives the remove"
+    );
     drop(model);
     // Removing a membership the player doesn't hold is a structured error.
     assert!(matches!(
@@ -546,14 +700,23 @@ fn add_then_remove_extra_membership_round_trips() {
 
 /// Total rows in the retired-number table (`wcSL`).
 fn retired_count(db_bytes: &[u8]) -> usize {
-    TdbFile::parse(db_bytes).unwrap().table_canonical("wcSL").unwrap().current_records as usize
+    TdbFile::parse(db_bytes)
+        .unwrap()
+        .table_canonical("wcSL")
+        .unwrap()
+        .current_records as usize
 }
 
 /// Whether `(team, number)` is present in the retired-number table.
 fn is_retired(db_bytes: &[u8], team: u64, number: u64) -> bool {
     let db = TdbFile::parse(db_bytes).unwrap();
     let t = db.table_canonical("wcSL").unwrap();
-    let f = |n: &str| t.fields.iter().find(|f| f.id.canonical(db.endian) == n).unwrap();
+    let f = |n: &str| {
+        t.fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == n)
+            .unwrap()
+    };
     let (tf, nf) = (f("dXSB"), f("JFiY"));
     (0..t.current_records as u32)
         .any(|i| db.read_u64(t, i, tf) == Some(team) && db.read_u64(t, i, nf) == Some(number))
@@ -564,7 +727,10 @@ fn is_retired(db_bytes: &[u8], team: u64, number: u64) -> bool {
 #[test]
 fn retire_then_unretire_round_trips() {
     let base = anchor(DB);
-    let team = RosterModel::build(&TdbFile::parse(&base).unwrap()).unwrap().teams[0].team_id;
+    let team = RosterModel::build(&TdbFile::parse(&base).unwrap())
+        .unwrap()
+        .teams[0]
+        .team_id;
     let number = (1u64..=99).find(|&n| !is_retired(&base, team, n)).unwrap();
     let base_count = retired_count(&base);
 
@@ -581,8 +747,15 @@ fn retire_then_unretire_round_trips() {
     let o2 = tx2.unretire_jersey(team, number).unwrap();
     assert_eq!(o2.edits, 1, "un-retire removes the row");
     let out2 = tx2.commit().unwrap();
-    assert!(!is_retired(&out2, team, number), "number is no longer retired");
-    assert_eq!(retired_count(&out2), base_count, "row count back to baseline");
+    assert!(
+        !is_retired(&out2, team, number),
+        "number is no longer retired"
+    );
+    assert_eq!(
+        retired_count(&out2),
+        base_count,
+        "row count back to baseline"
+    );
     assert_write_clean(&out2);
 }
 
@@ -597,7 +770,12 @@ fn trade_draft_pick_moves_owner_and_keeps_provenance() {
 
     // A pick currently owned by team A (Uwdb stores the team 1-indexed).
     let qhav = db.table_canonical("qHav").unwrap();
-    let f = |id: &str| qhav.fields.iter().find(|f| f.id.canonical(db.endian) == id).unwrap();
+    let f = |id: &str| {
+        qhav.fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == id)
+            .unwrap()
+    };
     let (owner_f, orig_f) = (f("Uwdb"), f("GFcg"));
     let record = (0..qhav.current_records as u32)
         .find(|&i| db.read_u64(qhav, i, owner_f) == Some(team_a + 1))
@@ -610,7 +788,13 @@ fn trade_draft_pick_moves_owner_and_keeps_provenance() {
     let out = tx.commit().unwrap();
     let out_db = TdbFile::parse(&out).unwrap();
     let out_t = out_db.table_canonical("qHav").unwrap();
-    let of = |id: &str| out_t.fields.iter().find(|f| f.id.canonical(out_db.endian) == id).unwrap();
+    let of = |id: &str| {
+        out_t
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(out_db.endian) == id)
+            .unwrap()
+    };
     assert_eq!(
         out_db.read_u64(out_t, record, of("Uwdb")),
         Some(team_b + 1),
@@ -627,11 +811,17 @@ fn trade_draft_pick_moves_owner_and_keeps_provenance() {
     let mut tx2 = EditTransaction::begin(&base).unwrap();
     assert!(matches!(
         tx2.trade_draft_pick(record, 0xFFFF_FFFF),
-        Err(EditError::InvalidValue { what: "to_team (no such team)", .. })
+        Err(EditError::InvalidValue {
+            what: "to_team (no such team)",
+            ..
+        })
     ));
     assert!(matches!(
         tx2.trade_draft_pick(0xFFFF_FFFF, team_b),
-        Err(EditError::InvalidValue { what: "draft-pick record (out of range)", .. })
+        Err(EditError::InvalidValue {
+            what: "draft-pick record (out of range)",
+            ..
+        })
     ));
 }
 
@@ -640,7 +830,10 @@ fn trade_draft_pick_moves_owner_and_keeps_provenance() {
 #[test]
 fn retire_is_idempotent_and_validates() {
     let base = anchor(DB);
-    let team = RosterModel::build(&TdbFile::parse(&base).unwrap()).unwrap().teams[0].team_id;
+    let team = RosterModel::build(&TdbFile::parse(&base).unwrap())
+        .unwrap()
+        .teams[0]
+        .team_id;
     let number = (1u64..=99).find(|&n| !is_retired(&base, team, n)).unwrap();
     let mut tx = EditTransaction::begin(&base).unwrap();
 
@@ -649,18 +842,29 @@ fn retire_is_idempotent_and_validates() {
     assert_eq!(again.edits, 0, "already retired → no-op");
 
     // A number never retired for the team → un-retire is a no-op.
-    let free = (1u64..=99).find(|&n| n != number && !is_retired(&base, team, n)).unwrap();
+    let free = (1u64..=99)
+        .find(|&n| n != number && !is_retired(&base, team, n))
+        .unwrap();
     let noop = tx.unretire_jersey(team, free).unwrap();
-    assert_eq!(noop.edits, 0, "un-retiring a never-retired number is a no-op");
+    assert_eq!(
+        noop.edits, 0,
+        "un-retiring a never-retired number is a no-op"
+    );
 
     // Bad args: unknown team, out-of-range number (JFiY is 7-bit → max 127).
     assert!(matches!(
         tx.retire_jersey(0xFFFF_FFFF, 10),
-        Err(EditError::InvalidValue { what: "team (no such team)", .. })
+        Err(EditError::InvalidValue {
+            what: "team (no such team)",
+            ..
+        })
     ));
     assert!(matches!(
         tx.retire_jersey(team, 9999),
-        Err(EditError::InvalidValue { what: "retired jersey number", .. })
+        Err(EditError::InvalidValue {
+            what: "retired jersey number",
+            ..
+        })
     ));
 }
 
@@ -692,7 +896,11 @@ fn edit_override_allows_edits_on_a_structurally_corrupt_db() {
         .unwrap();
     let (t_team, t_player) = (target.team_id, target.player_id.unwrap());
     let eglu = db.table_canonical("eGlu").unwrap();
-    let dxsb = eglu.fields.iter().find(|f| f.id.canonical(db.endian) == "dXSB").unwrap();
+    let dxsb = eglu
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == "dXSB")
+        .unwrap();
     drop(model);
     let mut buf = bytes.clone();
     assert!(db.set_u64(&mut buf, eglu, victim, dxsb, foreign));
@@ -708,14 +916,23 @@ fn edit_override_allows_edits_on_a_structurally_corrupt_db() {
         allowed_by_default.is_ok(),
         "the delta gate must allow an unrelated edit on a pre-existing-corrupt DB, got {allowed_by_default:?}"
     );
-    assert!(TdbFile::parse(&tx.commit().unwrap()).is_ok(), "committed bytes still parse");
+    assert!(
+        TdbFile::parse(&tx.commit().unwrap()).is_ok(),
+        "committed bytes still parse"
+    );
 
     // Override: also commits (unsupported, acknowledged) — the explicit escape hatch still works.
     let mut tx = EditTransaction::begin(&buf).unwrap();
     tx.set_allow_pre_existing_violations(true);
     let allowed = tx.set_captaincy(t_team, t_player, captaincy::CAPTAIN);
-    assert!(allowed.is_ok(), "override should let the edit through, got {allowed:?}");
-    assert!(TdbFile::parse(&tx.commit().unwrap()).is_ok(), "committed bytes still parse");
+    assert!(
+        allowed.is_ok(),
+        "override should let the edit through, got {allowed:?}"
+    );
+    assert!(
+        TdbFile::parse(&tx.commit().unwrap()).is_ok(),
+        "committed bytes still parse"
+    );
 }
 
 /// The on-load auto-correct reassigns duplicate jersey numbers: force two occupied slots on one team
@@ -732,7 +949,10 @@ fn autocorrect_reassigns_duplicate_jerseys() {
     let mut by_team: HashMap<u64, Vec<(u32, Option<u64>)>> = HashMap::new();
     for s in &model.slots {
         if s.index_key.is_some() {
-            by_team.entry(s.team_id).or_default().push((s.record, s.jersey));
+            by_team
+                .entry(s.team_id)
+                .or_default()
+                .push((s.record, s.jersey));
         }
     }
     let (_, slots) = by_team.iter().find(|(_, v)| v.len() >= 2).unwrap();
@@ -743,7 +963,11 @@ fn autocorrect_reassigns_duplicate_jerseys() {
     let (keep_rec, fix_rec) = (recs[0], recs[1]);
 
     let eglu = db.table_canonical("eGlu").unwrap();
-    let svrt = eglu.fields.iter().find(|f| f.id.canonical(db.endian) == "sVRt").unwrap();
+    let svrt = eglu
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == "sVRt")
+        .unwrap();
     drop(model);
     let mut buf = bytes.clone();
     assert!(db.set_u64(&mut buf, eglu, keep_rec, svrt, free));
@@ -753,8 +977,15 @@ fn autocorrect_reassigns_duplicate_jerseys() {
 
     let mut tx = EditTransaction::begin(&buf).unwrap();
     let (_, corrections) = tx.autocorrect_duplicate_jerseys().unwrap();
-    assert_eq!(corrections.len(), 1, "exactly one duplicate to fix, got {corrections:?}");
-    assert_eq!(corrections[0].record, fix_rec, "the later slot is renumbered; the first keeps it");
+    assert_eq!(
+        corrections.len(),
+        1,
+        "exactly one duplicate to fix, got {corrections:?}"
+    );
+    assert_eq!(
+        corrections[0].record, fix_rec,
+        "the later slot is renumbered; the first keeps it"
+    );
     assert_eq!(corrections[0].old, free);
     assert_ne!(corrections[0].new, free);
 
@@ -762,6 +993,20 @@ fn autocorrect_reassigns_duplicate_jerseys() {
     assert_write_clean(&out);
     let db2 = TdbFile::parse(&out).unwrap();
     let m2 = RosterModel::build(&db2).unwrap();
-    assert_eq!(m2.slots.iter().find(|s| s.record == keep_rec).unwrap().jersey, Some(free));
-    assert_ne!(m2.slots.iter().find(|s| s.record == fix_rec).unwrap().jersey, Some(free));
+    assert_eq!(
+        m2.slots
+            .iter()
+            .find(|s| s.record == keep_rec)
+            .unwrap()
+            .jersey,
+        Some(free)
+    );
+    assert_ne!(
+        m2.slots
+            .iter()
+            .find(|s| s.record == fix_rec)
+            .unwrap()
+            .jersey,
+        Some(free)
+    );
 }

@@ -1,0 +1,922 @@
+{
+ "note": "R30 \u2014 round trip of the chunklzx *store* encoder (`chunklzx_store.py`, LZX uncompressed blocks) through the research decoder that was\nvalidated byte-for-byte on 50 shipped members (2026-09-18 handoff 40): for every vector's loose plaintext on the X: trees, encode -> decode\n-> compare; plus synthetic edge cases (empty-ish, 1 byte, odd lengths, exact frame / chunk multiples, > 2 chunks) and the size ratio against\nthe shipped compressed member. Read-only on sources; nothing written outside the output JSON.\nUsage: python r30_chunklzx_store_roundtrip.py <out.json>\n",
+ "decoder_identity": {
+  "chunklzx.py": "32b946066d275f43ec59ac082b748baf8559c5017565b4a0a61c577ec5d3f4f4",
+  "xex_image.py": "59bebd1dde7ccaeec225d292a49d2b0d3dfb70831777a127dc6ee7aae344a552",
+  "eb_list.py": "feb25edea28ce6f7ebcf6f880d4baafbd2c93aa4bee1dee0f319c9be839b655b",
+  "chunklzx_vectors.py": "3b24d8ac5bf1016fe30207f8eae8f9c272687d35647270e332e2a20070ad308e"
+ },
+ "encoder_sha256": "054a9e8cd6984dca3594a96bda711fdaf205d1cc532cbaf9e805d0f343b383f3",
+ "vectors": [
+  {
+   "title": "nhl11",
+   "member": "attribdb/renddb.bin",
+   "plain_len": 243552,
+   "shipped_stored_size": 21346,
+   "store_encoded_size": 243752,
+   "ratio_vs_shipped": 11.419,
+   "overhead_bytes": 200,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl11",
+   "member": "attribdb/feattribdb.vlt",
+   "plain_len": 23360,
+   "shipped_stored_size": 11372,
+   "store_encoded_size": 23434,
+   "ratio_vs_shipped": 2.061,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl11",
+   "member": "attribdb/crowds.vlt",
+   "plain_len": 357008,
+   "shipped_stored_size": 59136,
+   "store_encoded_size": 357278,
+   "ratio_vs_shipped": 6.042,
+   "overhead_bytes": 270,
+   "roundtrip_equal": true,
+   "chunks": 2,
+   "seconds": 0.002
+  },
+  {
+   "title": "nhl11",
+   "member": "attribdb/crowds.bin",
+   "plain_len": 43360,
+   "shipped_stored_size": 5378,
+   "store_encoded_size": 43452,
+   "ratio_vs_shipped": 8.08,
+   "overhead_bytes": 92,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl11",
+   "member": "attribdb/audioevents.vlt",
+   "plain_len": 2784,
+   "shipped_stored_size": 1898,
+   "store_encoded_size": 2858,
+   "ratio_vs_shipped": 1.506,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl11",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 7308,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 27.489,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl11",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 960,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 209.256,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl11",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 4136,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 48.57,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl12",
+   "member": "attribdb/renddb.bin",
+   "plain_len": 351600,
+   "shipped_stored_size": 25514,
+   "store_encoded_size": 351870,
+   "ratio_vs_shipped": 13.791,
+   "overhead_bytes": 270,
+   "roundtrip_equal": true,
+   "chunks": 2,
+   "seconds": 0.002
+  },
+  {
+   "title": "nhl12",
+   "member": "attribdb/feattribdb.vlt",
+   "plain_len": 23376,
+   "shipped_stored_size": 11302,
+   "store_encoded_size": 23450,
+   "ratio_vs_shipped": 2.075,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl12",
+   "member": "attribdb/crowds.vlt",
+   "plain_len": 357024,
+   "shipped_stored_size": 59134,
+   "store_encoded_size": 357294,
+   "ratio_vs_shipped": 6.042,
+   "overhead_bytes": 270,
+   "roundtrip_equal": true,
+   "chunks": 2,
+   "seconds": 0.002
+  },
+  {
+   "title": "nhl12",
+   "member": "attribdb/crowds.bin",
+   "plain_len": 43376,
+   "shipped_stored_size": 5392,
+   "store_encoded_size": 43468,
+   "ratio_vs_shipped": 8.062,
+   "overhead_bytes": 92,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl12",
+   "member": "attribdb/audioevents.vlt",
+   "plain_len": 3696,
+   "shipped_stored_size": 2182,
+   "store_encoded_size": 3770,
+   "ratio_vs_shipped": 1.728,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl12",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 7290,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 27.556,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl12",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 958,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 209.693,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl12",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 4188,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 47.967,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl13",
+   "member": "attribdb/renddb.bin",
+   "plain_len": 93664,
+   "shipped_stored_size": 23434,
+   "store_encoded_size": 93774,
+   "ratio_vs_shipped": 4.002,
+   "overhead_bytes": 110,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl13",
+   "member": "attribdb/feattribdb.vlt",
+   "plain_len": 22336,
+   "shipped_stored_size": 10870,
+   "store_encoded_size": 22410,
+   "ratio_vs_shipped": 2.062,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl13",
+   "member": "attribdb/crowds.vlt",
+   "plain_len": 357504,
+   "shipped_stored_size": 59270,
+   "store_encoded_size": 357774,
+   "ratio_vs_shipped": 6.036,
+   "overhead_bytes": 270,
+   "roundtrip_equal": true,
+   "chunks": 2,
+   "seconds": 0.002
+  },
+  {
+   "title": "nhl13",
+   "member": "attribdb/crowds.bin",
+   "plain_len": 43376,
+   "shipped_stored_size": 5394,
+   "store_encoded_size": 43468,
+   "ratio_vs_shipped": 8.059,
+   "overhead_bytes": 92,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl13",
+   "member": "attribdb/audioevents.vlt",
+   "plain_len": 4064,
+   "shipped_stored_size": 2242,
+   "store_encoded_size": 4138,
+   "ratio_vs_shipped": 1.846,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl13",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 8886,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 22.607,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl13",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 960,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 209.256,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl13",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 5050,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 39.779,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl14",
+   "member": "attribdb/renddb.bin",
+   "plain_len": 103792,
+   "shipped_stored_size": 24048,
+   "store_encoded_size": 103920,
+   "ratio_vs_shipped": 4.321,
+   "overhead_bytes": 128,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl14",
+   "member": "attribdb/feattribdb.vlt",
+   "plain_len": 22336,
+   "shipped_stored_size": 10870,
+   "store_encoded_size": 22410,
+   "ratio_vs_shipped": 2.062,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl14",
+   "member": "attribdb/crowds.vlt",
+   "plain_len": 361152,
+   "shipped_stored_size": 60768,
+   "store_encoded_size": 361440,
+   "ratio_vs_shipped": 5.948,
+   "overhead_bytes": 288,
+   "roundtrip_equal": true,
+   "chunks": 2,
+   "seconds": 0.002
+  },
+  {
+   "title": "nhl14",
+   "member": "attribdb/crowds.bin",
+   "plain_len": 43664,
+   "shipped_stored_size": 5440,
+   "store_encoded_size": 43756,
+   "ratio_vs_shipped": 8.043,
+   "overhead_bytes": 92,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl14",
+   "member": "attribdb/audioevents.vlt",
+   "plain_len": 4064,
+   "shipped_stored_size": 2242,
+   "store_encoded_size": 4138,
+   "ratio_vs_shipped": 1.846,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl14",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 8890,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 22.597,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl14",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 960,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 209.256,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl14",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 5050,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 39.779,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl15",
+   "member": "attribdb/renddb.bin",
+   "plain_len": 103792,
+   "shipped_stored_size": 24050,
+   "store_encoded_size": 103920,
+   "ratio_vs_shipped": 4.321,
+   "overhead_bytes": 128,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl15",
+   "member": "attribdb/feattribdb.vlt",
+   "plain_len": 22336,
+   "shipped_stored_size": 10868,
+   "store_encoded_size": 22410,
+   "ratio_vs_shipped": 2.062,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl15",
+   "member": "attribdb/crowds.vlt",
+   "plain_len": 361152,
+   "shipped_stored_size": 60768,
+   "store_encoded_size": 361440,
+   "ratio_vs_shipped": 5.948,
+   "overhead_bytes": 288,
+   "roundtrip_equal": true,
+   "chunks": 2,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl15",
+   "member": "attribdb/crowds.bin",
+   "plain_len": 43664,
+   "shipped_stored_size": 5440,
+   "store_encoded_size": 43756,
+   "ratio_vs_shipped": 8.043,
+   "overhead_bytes": 92,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl15",
+   "member": "attribdb/audioevents.vlt",
+   "plain_len": 4080,
+   "shipped_stored_size": 2254,
+   "store_encoded_size": 4154,
+   "ratio_vs_shipped": 1.843,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhl15",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 8890,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 22.597,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl15",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 960,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 209.256,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.002
+  },
+  {
+   "title": "nhl15",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 5050,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 39.779,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhl15",
+   "member": "rendering/logo/texlib_27_1_6.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 5908,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 34.002,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhllegacy",
+   "member": "attribdb/renddb.bin",
+   "plain_len": 103792,
+   "shipped_stored_size": 24050,
+   "store_encoded_size": 103920,
+   "ratio_vs_shipped": 4.321,
+   "overhead_bytes": 128,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhllegacy",
+   "member": "attribdb/feattribdb.vlt",
+   "plain_len": 22336,
+   "shipped_stored_size": 10868,
+   "store_encoded_size": 22410,
+   "ratio_vs_shipped": 2.062,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhllegacy",
+   "member": "attribdb/crowds.vlt",
+   "plain_len": 361152,
+   "shipped_stored_size": 60768,
+   "store_encoded_size": 361440,
+   "ratio_vs_shipped": 5.948,
+   "overhead_bytes": 288,
+   "roundtrip_equal": true,
+   "chunks": 2,
+   "seconds": 0.002
+  },
+  {
+   "title": "nhllegacy",
+   "member": "attribdb/crowds.bin",
+   "plain_len": 43664,
+   "shipped_stored_size": 5440,
+   "store_encoded_size": 43756,
+   "ratio_vs_shipped": 8.043,
+   "overhead_bytes": 92,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhllegacy",
+   "member": "attribdb/audioevents.vlt",
+   "plain_len": 4080,
+   "shipped_stored_size": 2254,
+   "store_encoded_size": 4154,
+   "ratio_vs_shipped": 1.843,
+   "overhead_bytes": 74,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhllegacy",
+   "member": "rendering/logo/texlib_0_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 8886,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 22.607,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.0
+  },
+  {
+   "title": "nhllegacy",
+   "member": "rendering/logo/texlib_27_0_3.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 960,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 209.256,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhllegacy",
+   "member": "rendering/logo/texlib_27_0_0.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 5050,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 39.779,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  },
+  {
+   "title": "nhllegacy",
+   "member": "rendering/logo/texlib_27_1_6.rx2",
+   "plain_len": 200704,
+   "shipped_stored_size": 5902,
+   "store_encoded_size": 200886,
+   "ratio_vs_shipped": 34.037,
+   "overhead_bytes": 182,
+   "roundtrip_equal": true,
+   "chunks": 1,
+   "seconds": 0.001
+  }
+ ],
+ "synthetic": [
+  {
+   "len": 1,
+   "encoded": 75,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 27,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 1,
+     "last_frame_csize": 17,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 2,
+   "encoded": 76,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 28,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 2,
+     "last_frame_csize": 18,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 3,
+   "encoded": 77,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 29,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 3,
+     "last_frame_csize": 19,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 15,
+   "encoded": 89,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 41,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 15,
+     "last_frame_csize": 31,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 16,
+   "encoded": 90,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 42,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 16,
+     "last_frame_csize": 32,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 17,
+   "encoded": 91,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 43,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 17,
+     "last_frame_csize": 33,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 32767,
+   "encoded": 32841,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 32793,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 32767,
+     "last_frame_csize": 32783,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 32768,
+   "encoded": 32842,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 32794,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 32769,
+   "encoded": 32861,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 32813,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 1,
+     "last_frame_csize": 17,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 65535,
+   "encoded": 65627,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 65579,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 32767,
+     "last_frame_csize": 32783,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 65536,
+   "encoded": 65628,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 65580,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 262143,
+   "encoded": 262343,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 262295,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32767,
+     "last_frame_csize": 32783,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 262144,
+   "encoded": 262344,
+   "chunks": 1,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 262296,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 262145,
+   "encoded": 262379,
+   "chunks": 2,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 262296,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "zsize": 27,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 1,
+     "last_frame_csize": 17,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 294913,
+   "encoded": 295165,
+   "chunks": 2,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 262296,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "zsize": 32813,
+     "subframes": 2,
+     "full_frames": 1,
+     "last_frame_usize": 1,
+     "last_frame_csize": 17,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 786437,
+   "encoded": 786991,
+   "chunks": 4,
+   "roundtrip_equal": true,
+   "per_chunk": [
+    {
+     "zsize": 262296,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "zsize": 262296,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "zsize": 262296,
+     "subframes": 8,
+     "full_frames": 7,
+     "last_frame_usize": 32768,
+     "last_frame_csize": 32784,
+     "trailer_hex": "0000000000"
+    },
+    {
+     "zsize": 31,
+     "subframes": 1,
+     "full_frames": 0,
+     "last_frame_usize": 5,
+     "last_frame_csize": 21,
+     "trailer_hex": "0000000000"
+    }
+   ]
+  },
+  {
+   "len": 0,
+   "encoded": 53,
+   "decoded": 0,
+   "note": "encoder emits one chunk with a 0-byte last frame; the decoder contract refuses fullsize 0"
+  }
+ ],
+ "summary": {
+  "vectors": 50,
+  "roundtrip_equal": 50,
+  "synthetic_equal": 16,
+  "synthetic": 16
+ }
+}

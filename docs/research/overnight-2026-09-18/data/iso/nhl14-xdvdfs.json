@@ -1,0 +1,159 @@
+{
+ "iso": "X:/Games/Emulation/Roms/XBOX360/NHL 14/NHL 14 (USA, Europe) (En,Fr,De,Sv,Fi,Ru,Cs).iso",
+ "layout": "xgd2",
+ "base": 265879552,
+ "root_sector": 1783935,
+ "root_size": 2048,
+ "entries": [
+  {
+   "path": "$SystemUpdate",
+   "sector": 1778130,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "$SystemUpdate/su20076000_00000000",
+   "sector": 1767890,
+   "size": 11726848,
+   "attr": 128
+  },
+  {
+   "path": "$SystemUpdate/system.manifest",
+   "sector": 1773616,
+   "size": 30980,
+   "attr": 0
+  },
+  {
+   "path": "audioboot.big",
+   "sector": 1761610,
+   "size": 1739536,
+   "attr": 128
+  },
+  {
+   "path": "audioboot2.big",
+   "sector": 1744054,
+   "size": 5635728,
+   "attr": 128
+  },
+  {
+   "path": "boot.big",
+   "sector": 1762460,
+   "size": 11117888,
+   "attr": 128
+  },
+  {
+   "path": "cache.big",
+   "sector": 1886830,
+   "size": 328811712,
+   "attr": 128
+  },
+  {
+   "path": "cacheaudio.big",
+   "sector": 1847901,
+   "size": 79725376,
+   "attr": 128
+  },
+  {
+   "path": "cacheboot.big",
+   "sector": 1746806,
+   "size": 30316880,
+   "attr": 128
+  },
+  {
+   "path": "cachemovie.big",
+   "sector": 1842487,
+   "size": 11086736,
+   "attr": 128
+  },
+  {
+   "path": "cacheoverlay.big",
+   "sector": 1840783,
+   "size": 3487968,
+   "attr": 128
+  },
+  {
+   "path": "cacherender.big",
+   "sector": 1113035,
+   "size": 1282754880,
+   "attr": 128
+  },
+  {
+   "path": "data0.big",
+   "sector": 1826414,
+   "size": 29427040,
+   "attr": 128
+  },
+  {
+   "path": "default.xex",
+   "sector": 1778839,
+   "size": 10436608,
+   "attr": 128
+  },
+  {
+   "path": "gamedata",
+   "sector": 1783936,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/aidata.big",
+   "sector": 1783937,
+   "size": 1504,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/anim",
+   "sector": 1822761,
+   "size": 2048,
+   "attr": 144
+  },
+  {
+   "path": "gamedata/anim/faceposer.big",
+   "sector": 1822762,
+   "size": 7477584,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/gps.big",
+   "sector": 1783938,
+   "size": 2487,
+   "attr": 128
+  },
+  {
+   "path": "gamedata/nis.big",
+   "sector": 1783940,
+   "size": 79504208,
+   "attr": 128
+  },
+  {
+   "path": "nocache.big",
+   "sector": 2047383,
+   "size": 2810910624,
+   "attr": 128
+  },
+  {
+   "path": "nocacherender.big",
+   "sector": 111384,
+   "size": 2051380352,
+   "attr": 128
+  },
+  {
+   "path": "nxeart",
+   "sector": 1778131,
+   "size": 1449984,
+   "attr": 128
+  },
+  {
+   "path": "options.viv",
+   "sector": 1767889,
+   "size": 284,
+   "attr": 128
+  },
+  {
+   "path": "renderboot.big",
+   "sector": 1739381,
+   "size": 9569056,
+   "attr": 128
+  }
+ ]
+}

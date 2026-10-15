@@ -6,11 +6,17 @@ use std::fmt;
 #[derive(Debug)]
 pub enum DomainError {
     /// Filesystem error reading/writing a project file (path included for context).
-    Io { path: String, source: std::io::Error },
+    Io {
+        path: String,
+        source: std::io::Error,
+    },
     /// The bytes were neither a parseable TDB nor a recognised save container.
     NotADatabase,
     /// The on-disk byte order contradicts the declared platform (e.g. `Ps4` but big-endian).
-    EndianMismatch { platform: &'static str, endian: tdb_core::Endian },
+    EndianMismatch {
+        platform: &'static str,
+        endian: tdb_core::Endian,
+    },
     /// The inner TDB failed to parse.
     Tdb(tdb_core::TdbError),
     /// The metadata XML failed to parse.
@@ -19,6 +25,8 @@ pub enum DomainError {
     Enums(tdb_enums::EnumError),
     /// A relationship def failed to load.
     Relations(tdb_relations::RelationError),
+    /// A league vocabulary (`defs/leagues`) failed to load.
+    Leagues(crate::leagues::LeagueError),
     /// A save-container codec error (extract/repack).
     Save(tdb_savedata::SaveError),
     /// An edit operation failed (validation, audit rollback, allocation, …).
@@ -30,6 +38,8 @@ pub enum DomainError {
     Extract(String),
     /// A read against the FHM historical corpus failed (query error / schema mismatch).
     Corpus(tdb_fhm_store::FhmError),
+    /// A transaction artifact did not validate against the producer report or the disk (S2-B).
+    Validation(String),
 }
 
 impl fmt::Display for DomainError {
@@ -47,9 +57,11 @@ impl fmt::Display for DomainError {
             DomainError::Meta(e) => write!(f, "{e}"),
             DomainError::Enums(e) => write!(f, "{e}"),
             DomainError::Relations(e) => write!(f, "{e}"),
+            DomainError::Leagues(e) => write!(f, "{e}"),
             DomainError::Save(e) => write!(f, "{e}"),
             DomainError::Edit(e) => write!(f, "{e}"),
             DomainError::Sync(msg) => write!(f, "{msg}"),
+            DomainError::Validation(msg) => write!(f, "artifact validation failed: {msg}"),
             DomainError::Extract(msg) => write!(f, "{msg}"),
             DomainError::Corpus(e) => write!(f, "{e}"),
         }
@@ -64,6 +76,7 @@ impl std::error::Error for DomainError {
             DomainError::Meta(e) => Some(e),
             DomainError::Enums(e) => Some(e),
             DomainError::Relations(e) => Some(e),
+            DomainError::Leagues(e) => Some(e),
             DomainError::Save(e) => Some(e),
             DomainError::Edit(e) => Some(e),
             _ => None,
@@ -85,6 +98,7 @@ from_impl!(Tdb, tdb_core::TdbError);
 from_impl!(Meta, tdb_defs::MetaError);
 from_impl!(Enums, tdb_enums::EnumError);
 from_impl!(Relations, tdb_relations::RelationError);
+from_impl!(Leagues, crate::leagues::LeagueError);
 from_impl!(Save, tdb_savedata::SaveError);
 from_impl!(Edit, tdb_edit::EditError);
 from_impl!(Corpus, tdb_fhm_store::FhmError);

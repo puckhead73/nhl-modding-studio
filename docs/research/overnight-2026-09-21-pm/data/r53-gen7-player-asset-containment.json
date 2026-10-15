@@ -1,0 +1,1893 @@
+{
+ "note": "R53 \u2014 gen7 Players (Phase 3.x): per title, does every roster player's portrait id and head id resolve to a shipped file?\nRead-only over the Xbox 360 loose trees (`fe/ion/artassets/playerheads/p<lo>_<hi>/p<artid>.big`, `silhouettes/p<id>.big`,\n`rendering/player/player_<headid>.rx2`, `head_<headid>.rx2` on NHL 09 / 10) and the PS3 trees where loose (`.rpsgl`), joined to each title's anchor\n`exhibitionplayerbiotable` (`artid` = portrait id, `headid` = head model id, `hasportrait` flag where present).\n\nPer title: bucket directories and file counts; players by class \u2014 bespoke head (`headid == artid`), pool head (`headid` \u2265 60000 or \u2260 artid),\n`hasportrait` flag vs actual `p<artid>.big` presence; head file presence per class; residuals listed in full (ids without files, files\nwithout a DB row). No runtime claim; `hasportrait` semantics is tested, not assumed.\nUsage: python r53_gen7_player_asset_containment.py <out.json> [--titles nhl09,legacy]\n",
+ "titles": {
+  "nhl09": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)",
+   "anchor": "xbox360/nhl09",
+   "players": 3968,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "1286.big": "file",
+    "h0.big": "file",
+    "h1.big": "file",
+    "p0_4000": 2428,
+    "p4001_8000": 396,
+    "p8001_12000": 96,
+    "portrait.big": "file",
+    "pportrait.big": "file",
+    "silhouettes": 4
+   },
+   "portrait_files": 2920,
+   "silhouettes": 4,
+   "head_files": 480,
+   "head_files_min_max": [
+    6,
+    20450
+   ],
+   "counts": {
+    "players_other": 3712,
+    "portrait_present_other": 2455,
+    "portrait_present": 2706,
+    "flag1_portrait1": 2705,
+    "head_present_other": 3712,
+    "silhouette_for_head": 0,
+    "players_bespoke": 256,
+    "portrait_present_bespoke": 251,
+    "head_present_bespoke": 251,
+    "flag0_portrait0": 1262,
+    "flag0_portrait1": 1
+   },
+   "portrait_files_unused_by_roster": 214,
+   "head_files_unused_by_roster": 129,
+   "artid_min_max": [
+    0,
+    8331
+   ],
+   "headid_min_max": [
+    6,
+    10099
+   ],
+   "residuals": {
+    "head_missing_bespoke": [
+     [
+      null,
+      3886,
+      3886,
+      "Nedved"
+     ],
+     [
+      null,
+      3034,
+      3034,
+      "Andersson"
+     ],
+     [
+      null,
+      3373,
+      3373,
+      "H\u00e4ller"
+     ],
+     [
+      null,
+      3802,
+      3802,
+      "Marha"
+     ],
+     [
+      null,
+      3074,
+      3074,
+      "B\u00e4umle"
+     ]
+    ],
+    "portrait_missing_bespoke": [
+     [
+      null,
+      1072,
+      "Zherdev"
+     ],
+     [
+      null,
+      3034,
+      "Andersson"
+     ],
+     [
+      null,
+      3373,
+      "H\u00e4ller"
+     ],
+     [
+      null,
+      3802,
+      "Marha"
+     ],
+     [
+      null,
+      3074,
+      "B\u00e4umle"
+     ]
+    ],
+    "flag_vs_file": [
+     [
+      null,
+      2596,
+      0,
+      true,
+      "J\u00e4rvenp\u00e4\u00e4"
+     ]
+    ]
+   }
+  },
+  "nhl10": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10",
+   "anchor": "xbox360/nhl10",
+   "players": 3933,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "1286.big": "file",
+    "h0.big": "file",
+    "h1.big": "file",
+    "p0_4000": 2638,
+    "p4001_8000": 885,
+    "p8001_12000": 114,
+    "portrait.big": "file",
+    "pportrait.big": "file",
+    "silhouettes": 4
+   },
+   "portrait_files": 3637,
+   "silhouettes": 4,
+   "head_files": 742,
+   "head_files_min_max": [
+    6,
+    30052
+   ],
+   "counts": {
+    "players_other": 3663,
+    "portrait_present_other": 2689,
+    "portrait_present": 2958,
+    "flag1_portrait1": 2954,
+    "head_present_other": 3663,
+    "silhouette_for_head": 0,
+    "players_bespoke": 270,
+    "portrait_present_bespoke": 269,
+    "head_present_bespoke": 270,
+    "flag0_portrait0": 975,
+    "flag0_portrait1": 4
+   },
+   "portrait_files_unused_by_roster": 679,
+   "head_files_unused_by_roster": 372,
+   "artid_min_max": [
+    0,
+    8331
+   ],
+   "headid_min_max": [
+    6,
+    10099
+   ],
+   "residuals": {
+    "flag_vs_file": [
+     [
+      null,
+      402,
+      0,
+      true,
+      "Jackman"
+     ],
+     [
+      null,
+      3542,
+      0,
+      true,
+      "K\u00e5berg"
+     ],
+     [
+      null,
+      1475,
+      0,
+      true,
+      "Akerman"
+     ],
+     [
+      null,
+      1085,
+      0,
+      true,
+      "Gregorian"
+     ]
+    ],
+    "portrait_missing_bespoke": [
+     [
+      null,
+      4447,
+      "Schenn"
+     ]
+    ]
+   }
+  },
+  "nhl11": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11",
+   "anchor": "xbox360/nhl11",
+   "players": 5310,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 2930,
+    "p4001_8000": 2341,
+    "p8001_12000": 126,
+    "silhouettes": 4
+   },
+   "portrait_files": 5397,
+   "silhouettes": 4,
+   "head_files": 821,
+   "head_files_min_max": [
+    6,
+    30052
+   ],
+   "counts": {
+    "players_other": 5055,
+    "portrait_present_other": 4015,
+    "portrait_present": 4270,
+    "flag1_portrait1": 4269,
+    "head_present_other": 5055,
+    "silhouette_for_head": 0,
+    "players_bespoke": 255,
+    "portrait_present_bespoke": 255,
+    "head_present_bespoke": 255,
+    "flag0_portrait0": 1040,
+    "flag0_portrait1": 1
+   },
+   "portrait_files_unused_by_roster": 1130,
+   "head_files_unused_by_roster": 397,
+   "artid_min_max": [
+    0,
+    8331
+   ],
+   "headid_min_max": [
+    6,
+    10181
+   ],
+   "residuals": {
+    "flag_vs_file": [
+     [
+      null,
+      7197,
+      0,
+      true,
+      "Bonino"
+     ]
+    ]
+   }
+  },
+  "nhl12": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12",
+   "anchor": "xbox360/nhl12",
+   "players": 5395,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 2977,
+    "p4001_8000": 2948,
+    "p8001_12000": 233,
+    "silhouettes": 4
+   },
+   "portrait_files": 6158,
+   "silhouettes": 4,
+   "head_files": 795,
+   "head_files_min_max": [
+    6,
+    30101
+   ],
+   "counts": {
+    "players_other": 5142,
+    "portrait_present_other": 4175,
+    "portrait_present": 4428,
+    "flag1_portrait1": 4427,
+    "head_present_other": 5142,
+    "silhouette_for_head": 0,
+    "players_bespoke": 253,
+    "portrait_present_bespoke": 253,
+    "head_present_bespoke": 253,
+    "flag0_portrait0": 967,
+    "flag0_portrait1": 1
+   },
+   "portrait_files_unused_by_roster": 1730,
+   "head_files_unused_by_roster": 363,
+   "artid_min_max": [
+    0,
+    8699
+   ],
+   "headid_min_max": [
+    6,
+    30100
+   ],
+   "residuals": {
+    "flag_vs_file": [
+     [
+      null,
+      5745,
+      0,
+      true,
+      "Dub\u00e9"
+     ]
+    ]
+   }
+  },
+  "nhl13": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13",
+   "anchor": "xbox360/nhl13",
+   "players": 5412,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 2994,
+    "p4001_8000": 3054,
+    "p8001_12000": 775,
+    "silhouettes": 4
+   },
+   "portrait_files": 6823,
+   "silhouettes": 4,
+   "head_files": 817,
+   "head_files_min_max": [
+    6,
+    30102
+   ],
+   "counts": {
+    "players_other": 5144,
+    "portrait_present_other": 4124,
+    "portrait_present": 4391,
+    "flag1_portrait1": 4298,
+    "head_present_other": 5144,
+    "silhouette_for_head": 0,
+    "players_bespoke": 268,
+    "portrait_present_bespoke": 267,
+    "head_present_bespoke": 268,
+    "flag0_portrait0": 1021,
+    "flag0_portrait1": 93
+   },
+   "portrait_files_unused_by_roster": 2433,
+   "head_files_unused_by_roster": 375,
+   "artid_min_max": [
+    0,
+    9646
+   ],
+   "headid_min_max": [
+    6,
+    10181
+   ],
+   "residuals": {
+    "flag_vs_file": [
+     [
+      null,
+      3450,
+      0,
+      true,
+      "Hovi"
+     ],
+     [
+      null,
+      3070,
+      0,
+      true,
+      "Bartek"
+     ],
+     [
+      null,
+      1626,
+      0,
+      true,
+      "Duda"
+     ],
+     [
+      null,
+      2563,
+      0,
+      true,
+      "Richter"
+     ],
+     [
+      null,
+      2686,
+      0,
+      true,
+      "Volke"
+     ],
+     [
+      null,
+      2693,
+      0,
+      true,
+      "Pojkar"
+     ],
+     [
+      null,
+      2701,
+      0,
+      true,
+      "Hovorka"
+     ],
+     [
+      null,
+      2733,
+      0,
+      true,
+      "Mikul\u00edk"
+     ],
+     [
+      null,
+      2783,
+      0,
+      true,
+      "Szturc"
+     ],
+     [
+      null,
+      2797,
+      0,
+      true,
+      "Koutsk\u00fd"
+     ],
+     [
+      null,
+      2849,
+      0,
+      true,
+      "Stransky"
+     ],
+     [
+      null,
+      4601,
+      0,
+      true,
+      "Zavorka"
+     ],
+     [
+      null,
+      4635,
+      0,
+      true,
+      "Novak"
+     ],
+     [
+      null,
+      4929,
+      0,
+      true,
+      "Philipp"
+     ],
+     [
+      null,
+      4941,
+      0,
+      true,
+      "Mikeska"
+     ],
+     [
+      null,
+      5927,
+      0,
+      true,
+      "Vostrak"
+     ],
+     [
+      null,
+      5942,
+      0,
+      true,
+      "Svoboda"
+     ],
+     [
+      null,
+      7276,
+      0,
+      true,
+      "Kasik"
+     ],
+     [
+      null,
+      7277,
+      0,
+      true,
+      "Valent"
+     ],
+     [
+      null,
+      7283,
+      0,
+      true,
+      "Bojer"
+     ],
+     [
+      null,
+      7284,
+      0,
+      true,
+      "Gerhat"
+     ],
+     [
+      null,
+      7285,
+      0,
+      true,
+      "Majdan"
+     ],
+     [
+      null,
+      7286,
+      0,
+      true,
+      "Drtina"
+     ],
+     [
+      null,
+      7287,
+      0,
+      true,
+      "Buchtele"
+     ],
+     [
+      null,
+      7288,
+      0,
+      true,
+      "Kousal"
+     ],
+     [
+      null,
+      7291,
+      0,
+      true,
+      "Kames"
+     ],
+     [
+      null,
+      7295,
+      0,
+      true,
+      "Dlouhy"
+     ],
+     [
+      null,
+      7296,
+      0,
+      true,
+      "Kempny"
+     ],
+     [
+      null,
+      7299,
+      0,
+      true,
+      "Cerveny"
+     ],
+     [
+      null,
+      7301,
+      0,
+      true,
+      "Hamerlik"
+     ],
+     [
+      null,
+      7303,
+      0,
+      true,
+      "Herman"
+     ],
+     [
+      null,
+      7304,
+      0,
+      true,
+      "Jerabek"
+     ],
+     [
+      null,
+      7306,
+      0,
+      true,
+      "Lev"
+     ],
+     [
+      null,
+      7308,
+      0,
+      true,
+      "Pitule"
+     ],
+     [
+      null,
+      7310,
+      0,
+      true,
+      "Havel"
+     ],
+     [
+      null,
+      7312,
+      0,
+      true,
+      "Slipcenko"
+     ],
+     [
+      null,
+      7313,
+      0,
+      true,
+      "Roth"
+     ],
+     [
+      null,
+      7314,
+      0,
+      true,
+      "Rehak"
+     ],
+     [
+      null,
+      7315,
+      0,
+      true,
+      "Sedivy"
+     ],
+     [
+      null,
+      7317,
+      0,
+      true,
+      "Finsterle"
+     ],
+     [
+      null,
+      7320,
+      0,
+      true,
+      "Melka"
+     ],
+     [
+      null,
+      8651,
+      0,
+      true,
+      "Barta"
+     ],
+     [
+      null,
+      8652,
+      0,
+      true,
+      "Pavlu"
+     ],
+     [
+      null,
+      8653,
+      0,
+      true,
+      "Urban"
+     ],
+     [
+      null,
+      8654,
+      0,
+      true,
+      "Hay"
+     ],
+     [
+      null,
+      8656,
+      0,
+      true,
+      "Chaloupka"
+     ],
+     [
+      null,
+      8658,
+      0,
+      true,
+      "Mikus"
+     ],
+     [
+      null,
+      8659,
+      0,
+      true,
+      "Kousalik"
+     ],
+     [
+      null,
+      8661,
+      0,
+      true,
+      "Nahodil"
+     ],
+     [
+      null,
+      8662,
+      0,
+      true,
+      "Klima"
+     ],
+     [
+      null,
+      8663,
+      0,
+      true,
+      "Vachovec"
+     ],
+     [
+      null,
+      8665,
+      0,
+      true,
+      "Rohan"
+     ],
+     [
+      null,
+      8668,
+      0,
+      true,
+      "Svoboda"
+     ],
+     [
+      null,
+      8669,
+      0,
+      true,
+      "Kolarz"
+     ],
+     [
+      null,
+      8670,
+      0,
+      true,
+      "Sulc"
+     ],
+     [
+      null,
+      8673,
+      0,
+      true,
+      "Orsava"
+     ],
+     [
+      null,
+      8674,
+      0,
+      true,
+      "McGregor"
+     ],
+     [
+      null,
+      8675,
+      0,
+      true,
+      "St.Pierre"
+     ],
+     [
+      null,
+      8676,
+      0,
+      true,
+      "Johnson"
+     ],
+     [
+      null,
+      8677,
+      0,
+      true,
+      "Petruska"
+     ]
+    ],
+    "portrait_missing_bespoke": [
+     [
+      null,
+      9207,
+      "Grigorenko"
+     ]
+    ]
+   }
+  },
+  "nhl14": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14",
+   "anchor": "xbox360/nhl14",
+   "players": 5374,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 3020,
+    "p4001_8000": 3131,
+    "p8001_12000": 1527,
+    "silhouettes": 4
+   },
+   "portrait_files": 7678,
+   "silhouettes": 4,
+   "head_files": 841,
+   "head_files_min_max": [
+    6,
+    60168
+   ],
+   "counts": {
+    "players_other": 5112,
+    "portrait_present_other": 4280,
+    "portrait_present": 4542,
+    "flag1_portrait1": 4542,
+    "head_present_other": 5112,
+    "silhouette_for_head": 0,
+    "players_bespoke": 262,
+    "portrait_present_bespoke": 262,
+    "head_present_bespoke": 262,
+    "flag0_portrait0": 832
+   },
+   "portrait_files_unused_by_roster": 3138,
+   "head_files_unused_by_roster": 400,
+   "artid_min_max": [
+    0,
+    10395
+   ],
+   "headid_min_max": [
+    6,
+    59999
+   ],
+   "residuals": {}
+  },
+  "nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15",
+   "anchor": "xbox360/nhl15",
+   "players": 5534,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 3012,
+    "p4001_8000": 3142,
+    "p8001_12000": 2208,
+    "silhouettes": 4
+   },
+   "portrait_files": 8362,
+   "silhouettes": 4,
+   "head_files": 861,
+   "head_files_min_max": [
+    6,
+    60182
+   ],
+   "counts": {
+    "players_pool": 5275,
+    "portrait_present_pool": 4099,
+    "portrait_present": 4358,
+    "flag1_portrait1": 4358,
+    "head_present_pool": 5275,
+    "silhouette_for_head": 459,
+    "players_bespoke": 259,
+    "portrait_present_bespoke": 259,
+    "head_present_bespoke": 259,
+    "flag0_portrait0": 1176
+   },
+   "portrait_files_unused_by_roster": 4004,
+   "head_files_unused_by_roster": 421,
+   "artid_min_max": [
+    0,
+    11685
+   ],
+   "headid_min_max": [
+    10,
+    60182
+   ],
+   "residuals": {}
+  },
+  "legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "anchor": "xbox360/nhllegacy",
+   "players": 5632,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 3023,
+    "p4001_8000": 3173,
+    "p8001_12000": 3028,
+    "silhouettes": 4
+   },
+   "portrait_files": 9224,
+   "silhouettes": 4,
+   "head_files": 904,
+   "head_files_min_max": [
+    6,
+    60210
+   ],
+   "counts": {
+    "players_pool": 5385,
+    "portrait_present_pool": 4256,
+    "portrait_present": 4503,
+    "flag1_portrait1": 4376,
+    "head_present_pool": 5385,
+    "silhouette_for_head": 466,
+    "players_bespoke": 246,
+    "portrait_present_bespoke": 246,
+    "head_present_bespoke": 246,
+    "flag0_portrait0": 1127,
+    "flag0_portrait1": 127,
+    "flag1_portrait0": 2,
+    "players_other": 1,
+    "portrait_present_other": 1,
+    "head_present_other": 1
+   },
+   "portrait_files_unused_by_roster": 4724,
+   "head_files_unused_by_roster": 457,
+   "artid_min_max": [
+    0,
+    12814
+   ],
+   "headid_min_max": [
+    20,
+    60210
+   ],
+   "residuals": {
+    "flag_vs_file": [
+     [
+      null,
+      163,
+      0,
+      true,
+      "Cibak"
+     ],
+     [
+      null,
+      1126,
+      1,
+      false,
+      "Nagy"
+     ],
+     [
+      null,
+      1133,
+      0,
+      true,
+      "Slater"
+     ],
+     [
+      null,
+      1269,
+      1,
+      false,
+      "Colella"
+     ],
+     [
+      null,
+      1437,
+      0,
+      true,
+      "Kristan"
+     ],
+     [
+      null,
+      1875,
+      0,
+      true,
+      "Hendricks"
+     ],
+     [
+      null,
+      2004,
+      0,
+      true,
+      "Redlihs"
+     ],
+     [
+      null,
+      2697,
+      0,
+      true,
+      "Zeman"
+     ],
+     [
+      null,
+      2948,
+      0,
+      true,
+      "Hrna"
+     ],
+     [
+      null,
+      7294,
+      0,
+      true,
+      "Houdek"
+     ],
+     [
+      null,
+      7297,
+      0,
+      true,
+      "Vyrubalik"
+     ],
+     [
+      null,
+      7300,
+      0,
+      true,
+      "Hrubec"
+     ],
+     [
+      null,
+      7302,
+      0,
+      true,
+      "Ostrizek"
+     ],
+     [
+      null,
+      7316,
+      0,
+      true,
+      "Vosvrda"
+     ],
+     [
+      null,
+      7318,
+      0,
+      true,
+      "Sturala"
+     ],
+     [
+      null,
+      7879,
+      0,
+      true,
+      "Cingel"
+     ],
+     [
+      null,
+      9480,
+      0,
+      true,
+      "Ulrych"
+     ],
+     [
+      null,
+      9489,
+      0,
+      true,
+      "Rohan"
+     ],
+     [
+      null,
+      9491,
+      0,
+      true,
+      "Puhony"
+     ],
+     [
+      null,
+      9492,
+      0,
+      true,
+      "Zdrahal"
+     ],
+     [
+      null,
+      9497,
+      0,
+      true,
+      "Kovacik"
+     ],
+     [
+      null,
+      9499,
+      0,
+      true,
+      "Nemec"
+     ],
+     [
+      null,
+      9500,
+      0,
+      true,
+      "Burian"
+     ],
+     [
+      null,
+      9512,
+      0,
+      true,
+      "Forman"
+     ],
+     [
+      null,
+      9515,
+      0,
+      true,
+      "Pribyl"
+     ],
+     [
+      null,
+      9522,
+      0,
+      true,
+      "Jurcik"
+     ],
+     [
+      null,
+      9524,
+      0,
+      true,
+      "Barton"
+     ],
+     [
+      null,
+      9525,
+      0,
+      true,
+      "Kolouch"
+     ],
+     [
+      null,
+      9585,
+      0,
+      true,
+      "Pulpan"
+     ],
+     [
+      null,
+      9645,
+      0,
+      true,
+      "Marosz"
+     ],
+     [
+      null,
+      11408,
+      0,
+      true,
+      "Simek"
+     ],
+     [
+      null,
+      11409,
+      0,
+      true,
+      "Vitasek"
+     ],
+     [
+      null,
+      11423,
+      0,
+      true,
+      "Habal"
+     ],
+     [
+      null,
+      11425,
+      0,
+      true,
+      "Dvorak"
+     ],
+     [
+      null,
+      11426,
+      0,
+      true,
+      "Kubka"
+     ],
+     [
+      null,
+      11428,
+      0,
+      true,
+      "Tomecek"
+     ],
+     [
+      null,
+      11431,
+      0,
+      true,
+      "Koblasa"
+     ],
+     [
+      null,
+      11432,
+      0,
+      true,
+      "Kverka"
+     ],
+     [
+      null,
+      11433,
+      0,
+      true,
+      "Tomecek"
+     ],
+     [
+      null,
+      11445,
+      0,
+      true,
+      "Ciliak"
+     ],
+     [
+      null,
+      11447,
+      0,
+      true,
+      "Dlapa"
+     ],
+     [
+      null,
+      11449,
+      0,
+      true,
+      "Dujsik"
+     ],
+     [
+      null,
+      11451,
+      0,
+      true,
+      "Docekal"
+     ],
+     [
+      null,
+      11452,
+      0,
+      true,
+      "Hruska"
+     ],
+     [
+      null,
+      11454,
+      0,
+      true,
+      "Mr\u00e1zek"
+     ],
+     [
+      null,
+      11455,
+      0,
+      true,
+      "Prochazka"
+     ],
+     [
+      null,
+      11457,
+      0,
+      true,
+      "Raska"
+     ],
+     [
+      null,
+      11458,
+      0,
+      true,
+      "Vondracek"
+     ],
+     [
+      null,
+      11460,
+      0,
+      true,
+      "Zohorna"
+     ],
+     [
+      null,
+      11461,
+      0,
+      true,
+      "Horak"
+     ],
+     [
+      null,
+      11465,
+      0,
+      true,
+      "Pavlik"
+     ],
+     [
+      null,
+      11466,
+      0,
+      true,
+      "Pisarik"
+     ],
+     [
+      null,
+      11467,
+      0,
+      true,
+      "Vejmelka"
+     ],
+     [
+      null,
+      11470,
+      0,
+      true,
+      "Korim"
+     ],
+     [
+      null,
+      11472,
+      0,
+      true,
+      "Lenc"
+     ],
+     [
+      null,
+      11473,
+      0,
+      true,
+      "Moucka"
+     ],
+     [
+      null,
+      11474,
+      0,
+      true,
+      "Musil"
+     ],
+     [
+      null,
+      11475,
+      0,
+      true,
+      "Poulicek"
+     ],
+     [
+      null,
+      11478,
+      0,
+      true,
+      "Spacek"
+     ],
+     [
+      null,
+      11479,
+      0,
+      true,
+      "Tybor"
+     ]
+    ]
+   }
+  },
+  "ps3-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR",
+   "anchor": "ps3/nhl15",
+   "players": 5534,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 3012,
+    "p4001_8000": 3142,
+    "p8001_12000": 2208,
+    "silhouettes": 4
+   },
+   "portrait_files": 8362,
+   "silhouettes": 4,
+   "head_files": 861,
+   "head_files_min_max": [
+    6,
+    60182
+   ],
+   "counts": {
+    "players_pool": 5275,
+    "portrait_present_pool": 4099,
+    "portrait_present": 4358,
+    "flag1_portrait1": 4358,
+    "head_present_pool": 5275,
+    "silhouette_for_head": 459,
+    "players_bespoke": 259,
+    "portrait_present_bespoke": 259,
+    "head_present_bespoke": 259,
+    "flag0_portrait0": 1176
+   },
+   "portrait_files_unused_by_roster": 4004,
+   "head_files_unused_by_roster": 421,
+   "artid_min_max": [
+    0,
+    11685
+   ],
+   "headid_min_max": [
+    10,
+    60182
+   ],
+   "residuals": {}
+  },
+  "ps3-legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR",
+   "anchor": "ps3/nhllegacy",
+   "players": 5632,
+   "columns_present": [
+    "artid",
+    "headid",
+    "hasportrait"
+   ],
+   "portrait_buckets": {
+    "p0_4000": 3023,
+    "p4001_8000": 3173,
+    "p8001_12000": 3028,
+    "silhouettes": 4
+   },
+   "portrait_files": 9224,
+   "silhouettes": 4,
+   "head_files": 904,
+   "head_files_min_max": [
+    6,
+    60210
+   ],
+   "counts": {
+    "players_pool": 5385,
+    "portrait_present_pool": 4256,
+    "portrait_present": 4503,
+    "flag1_portrait1": 4376,
+    "head_present_pool": 5385,
+    "silhouette_for_head": 466,
+    "players_bespoke": 246,
+    "portrait_present_bespoke": 246,
+    "head_present_bespoke": 246,
+    "flag0_portrait0": 1127,
+    "flag0_portrait1": 127,
+    "flag1_portrait0": 2,
+    "players_other": 1,
+    "portrait_present_other": 1,
+    "head_present_other": 1
+   },
+   "portrait_files_unused_by_roster": 4724,
+   "head_files_unused_by_roster": 457,
+   "artid_min_max": [
+    0,
+    12814
+   ],
+   "headid_min_max": [
+    20,
+    60210
+   ],
+   "residuals": {
+    "flag_vs_file": [
+     [
+      null,
+      163,
+      0,
+      true,
+      "Cibak"
+     ],
+     [
+      null,
+      1126,
+      1,
+      false,
+      "Nagy"
+     ],
+     [
+      null,
+      1133,
+      0,
+      true,
+      "Slater"
+     ],
+     [
+      null,
+      1269,
+      1,
+      false,
+      "Colella"
+     ],
+     [
+      null,
+      1437,
+      0,
+      true,
+      "Kristan"
+     ],
+     [
+      null,
+      1875,
+      0,
+      true,
+      "Hendricks"
+     ],
+     [
+      null,
+      2004,
+      0,
+      true,
+      "Redlihs"
+     ],
+     [
+      null,
+      2697,
+      0,
+      true,
+      "Zeman"
+     ],
+     [
+      null,
+      2948,
+      0,
+      true,
+      "Hrna"
+     ],
+     [
+      null,
+      7294,
+      0,
+      true,
+      "Houdek"
+     ],
+     [
+      null,
+      7297,
+      0,
+      true,
+      "Vyrubalik"
+     ],
+     [
+      null,
+      7300,
+      0,
+      true,
+      "Hrubec"
+     ],
+     [
+      null,
+      7302,
+      0,
+      true,
+      "Ostrizek"
+     ],
+     [
+      null,
+      7316,
+      0,
+      true,
+      "Vosvrda"
+     ],
+     [
+      null,
+      7318,
+      0,
+      true,
+      "Sturala"
+     ],
+     [
+      null,
+      7879,
+      0,
+      true,
+      "Cingel"
+     ],
+     [
+      null,
+      9480,
+      0,
+      true,
+      "Ulrych"
+     ],
+     [
+      null,
+      9489,
+      0,
+      true,
+      "Rohan"
+     ],
+     [
+      null,
+      9491,
+      0,
+      true,
+      "Puhony"
+     ],
+     [
+      null,
+      9492,
+      0,
+      true,
+      "Zdrahal"
+     ],
+     [
+      null,
+      9497,
+      0,
+      true,
+      "Kovacik"
+     ],
+     [
+      null,
+      9499,
+      0,
+      true,
+      "Nemec"
+     ],
+     [
+      null,
+      9500,
+      0,
+      true,
+      "Burian"
+     ],
+     [
+      null,
+      9512,
+      0,
+      true,
+      "Forman"
+     ],
+     [
+      null,
+      9515,
+      0,
+      true,
+      "Pribyl"
+     ],
+     [
+      null,
+      9522,
+      0,
+      true,
+      "Jurcik"
+     ],
+     [
+      null,
+      9524,
+      0,
+      true,
+      "Barton"
+     ],
+     [
+      null,
+      9525,
+      0,
+      true,
+      "Kolouch"
+     ],
+     [
+      null,
+      9585,
+      0,
+      true,
+      "Pulpan"
+     ],
+     [
+      null,
+      9645,
+      0,
+      true,
+      "Marosz"
+     ],
+     [
+      null,
+      11408,
+      0,
+      true,
+      "Simek"
+     ],
+     [
+      null,
+      11409,
+      0,
+      true,
+      "Vitasek"
+     ],
+     [
+      null,
+      11423,
+      0,
+      true,
+      "Habal"
+     ],
+     [
+      null,
+      11425,
+      0,
+      true,
+      "Dvorak"
+     ],
+     [
+      null,
+      11426,
+      0,
+      true,
+      "Kubka"
+     ],
+     [
+      null,
+      11428,
+      0,
+      true,
+      "Tomecek"
+     ],
+     [
+      null,
+      11431,
+      0,
+      true,
+      "Koblasa"
+     ],
+     [
+      null,
+      11432,
+      0,
+      true,
+      "Kverka"
+     ],
+     [
+      null,
+      11433,
+      0,
+      true,
+      "Tomecek"
+     ],
+     [
+      null,
+      11445,
+      0,
+      true,
+      "Ciliak"
+     ],
+     [
+      null,
+      11447,
+      0,
+      true,
+      "Dlapa"
+     ],
+     [
+      null,
+      11449,
+      0,
+      true,
+      "Dujsik"
+     ],
+     [
+      null,
+      11451,
+      0,
+      true,
+      "Docekal"
+     ],
+     [
+      null,
+      11452,
+      0,
+      true,
+      "Hruska"
+     ],
+     [
+      null,
+      11454,
+      0,
+      true,
+      "Mr\u00e1zek"
+     ],
+     [
+      null,
+      11455,
+      0,
+      true,
+      "Prochazka"
+     ],
+     [
+      null,
+      11457,
+      0,
+      true,
+      "Raska"
+     ],
+     [
+      null,
+      11458,
+      0,
+      true,
+      "Vondracek"
+     ],
+     [
+      null,
+      11460,
+      0,
+      true,
+      "Zohorna"
+     ],
+     [
+      null,
+      11461,
+      0,
+      true,
+      "Horak"
+     ],
+     [
+      null,
+      11465,
+      0,
+      true,
+      "Pavlik"
+     ],
+     [
+      null,
+      11466,
+      0,
+      true,
+      "Pisarik"
+     ],
+     [
+      null,
+      11467,
+      0,
+      true,
+      "Vejmelka"
+     ],
+     [
+      null,
+      11470,
+      0,
+      true,
+      "Korim"
+     ],
+     [
+      null,
+      11472,
+      0,
+      true,
+      "Lenc"
+     ],
+     [
+      null,
+      11473,
+      0,
+      true,
+      "Moucka"
+     ],
+     [
+      null,
+      11474,
+      0,
+      true,
+      "Musil"
+     ],
+     [
+      null,
+      11475,
+      0,
+      true,
+      "Poulicek"
+     ],
+     [
+      null,
+      11478,
+      0,
+      true,
+      "Spacek"
+     ],
+     [
+      null,
+      11479,
+      0,
+      true,
+      "Tybor"
+     ]
+    ]
+   }
+  }
+ }
+}

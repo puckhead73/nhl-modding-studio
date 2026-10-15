@@ -1,5 +1,12 @@
 # THE EXCLUSIVE PATH — importing an arbitrary head MESH into NHL Legacy
 
+**Scope update, 2026-09-10:** For NHL heads sharing an anatomical UV template,
+start with [shared-UV template transfer](MESH_UV_TEMPLATE_TRANSFER.md), following
+the successful Mogilny-to-NHL19 game test. The shrinkwrap and frozen-eye rules
+below describe the historical arbitrary-head/FaceBuilder fallback without verified
+UV correspondence. They are not blanket constraints on shared-template conversion.
+Both methods retain the destination's native UVs and topology.
+
 **This is the only validated way to import an arbitrary head mesh (FaceBuilder /
 sculpt / scan — a mesh with NO Legacy rigging) into NHL Legacy. Use this path
 exactly. Other approaches (transferring the target's UVs, flipping V, rigid

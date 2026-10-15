@@ -147,6 +147,11 @@ const TABLE_HEADER: usize = 0x28;
 const DESCRIPTOR: usize = 0x10;
 
 impl<'a> TdbFile<'a> {
+    /// The bytes this file was parsed from (the whole inner TDB image).
+    pub fn bytes(&self) -> &'a [u8] {
+        self.bytes
+    }
+
     /// Parse a TDB v6 file from `bytes`.
     pub fn parse(bytes: &'a [u8]) -> Result<Self, TdbError> {
         if bytes.len() < FILE_HEADER {
@@ -754,7 +759,12 @@ impl TdbFile<'_> {
             None
         };
         buf[tail..tail + reclen].fill(0); // clear the vacated tail slot
-        write_u16(&mut buf, t.block_offset + 0x16, (cur - 1) as u16, self.endian);
+        write_u16(
+            &mut buf,
+            t.block_offset + 0x16,
+            (cur - 1) as u16,
+            self.endian,
+        );
         self.recompute_crcs(&mut buf);
         Ok((buf, moved))
     }
@@ -847,7 +857,11 @@ impl TdbFile<'_> {
     /// blocks — down by one index while every block stays contiguous and the table still tiles. No far
     /// tail row is dropped into the hole, so no `dXSB`-style block corruption. Indices past `index`
     /// shift down by one; a caller holding raw indices must re-resolve.
-    pub fn remove_record_ordered(&self, table_raw: &str, index: u32) -> Result<Vec<u8>, AllocError> {
+    pub fn remove_record_ordered(
+        &self,
+        table_raw: &str,
+        index: u32,
+    ) -> Result<Vec<u8>, AllocError> {
         let t = self.table(table_raw).ok_or(AllocError::UnknownTable)?;
         let cur = t.current_records as u32;
         if index >= cur {

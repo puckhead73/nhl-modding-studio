@@ -28,8 +28,8 @@ The **read / decode / export** side is substantially built in `crates/studio-dom
   `gnf.rs`; XPR2 in `xpr.rs`.
 
 **⇒ The real 6.1 gaps are (a) the ENCODE/REPLACE (import) direction per target, (b) a searchable
-portrait/logo index, (c) the fuzzy matcher, (d) the per-game logo icon generator.** The spikes below
-scope exactly those.
+portrait/logo index and match-review workflow that reuses the established universal slug, and (c)
+the per-game logo icon generator.** The spikes below scope exactly those.
 
 ---
 
@@ -71,31 +71,27 @@ flip to import-supported (proven-first).
 
 ---
 
-## Spike P-S2 — Portrait slug grammar + match key ⟵ gates the fuzzy matcher + `portrait_search`
+## Spike P-S2 — Portrait source index + match review ⟵ gates `portrait_search`
 
-**Question.** What identifying fields can we reliably parse out of portrait/logo **source filenames /
-slugs**, so the matcher can rank by **last name + DOB first**, then any-fragment, then manual browse —
-resolved to real subject names (human-readable rule)?
+**Settled input contract.** Player-specific source assets use
+`lastname_firstname_dd_mm_yyyy`. `tdb-core::dev_key` owns the implemented normalization and validation;
+this spike must not re-derive or generalize it.
 
-**Grounding.** Slug/normalisation machinery already exists and must be **reused, not reinvented**:
-`tdb_fhm::slug::{person_slug, normalize_name, normalize_dob}` (the corpus/EA match key from Phase 5.1)
-and `assets::ps4_name_slug(first, last)` ([assets.rs:537](../../crates/studio-domain/src/assets.rs#L537))
-for PS4's name-slug head/portrait convention. In-game portraits are keyed by **numeric `lOnr`**, not by
-name — so name/DOB slugs live on the **incoming source files** a user is importing (community packs,
-scraped sets), which is exactly where the fuzzy match is needed.
+**Grounding.** The EA and historical sides already derive the bridge key, Player Assets exports it,
+and the headmesh library recognizes it. PS4's native `first_last` asset name remains a separate target
+adapter concern. In-game portraits are keyed by numeric `lOnr`, so the new work maps an incoming
+universal slug to that resolved player identity.
 
-**Method.** Over representative source portrait sets the user provides in-repo, catalogue the slug
-conventions actually seen: field order, separators, which of {last, first, DOB, team, jersey,
-disambiguator} appear, and how often each is present/absent. Measure the ambiguity rate of
-`normalize_name(last, first)` **alone** (name-only collisions) vs name+DOB — mirroring Phase 5.1 Spike
-S2's method so both matchers fold identically.
+**Method.** Index representative source portrait sets using `is_well_formed_player_slug`; resolve exact
+keys through the existing EA/canonical identity bridge; measure missing, malformed, duplicate and
+unresolved cases; design the explicit review queue for those cases.
 
 **Output (in `docs/audits/portrait-slug-grammar.md`).**
-- A **slug-field parser** spec (the fields extractable per source convention) + coverage stats.
-- The **ranked match key**: last+DOB (high-confidence head) → any-fragment → manual browse; with a
-  documented tie-break/ambiguity policy (ambiguity is a UI state — review-all-matches — not a failure).
-- Confirmation the parser **reuses** `tdb_fhm::slug` folding so a subject matched in Roster Builder and
-  in the portrait matcher resolve identically.
+- A searchable source-asset index keyed by the implemented universal slug.
+- Coverage for exact, missing, malformed, duplicate and unresolved keys.
+- An ambiguity/manual-resolution workflow with persistent mappings to canonical player identities.
+- Integration tests proving portrait import and existing Player Assets/headmesh exports resolve the
+  same player key.
 
 **Gates.** `portrait_search`, the match-list ranking UX (high→low, "review all slug matches", manual
 browse), and the subject-name resolution shown in the UI.

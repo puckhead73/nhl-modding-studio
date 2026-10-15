@@ -2,8 +2,12 @@ import { type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
-import { useProject } from "../lib/project";
+import { useIsSaveEditor, useProject } from "../lib/project";
 import { EditableField } from "../components/EditableField";
+import { ArenaVenueCard } from "../components/ArenaVenueCard";
+import { Nhl07ArenaEditor } from "../components/Nhl07ArenaEditor";
+import { ArenaAssetsCard } from "../components/ArenaAssetsCard";
+import { ArenaVenueArtCard } from "../components/ArenaVenueArtCard";
 import { FieldRow } from "../components/FieldRow";
 import { Pill, Spinner } from "../components/primitives";
 import { useCrumbLabel } from "../lib/breadcrumbs";
@@ -20,6 +24,7 @@ import type { FieldViewDto } from "../bindings/FieldViewDto";
 export function ArenaDetail() {
   const { id } = useParams<{ id: string }>();
   const { project } = useProject();
+  const saveEditor = useIsSaveEditor();
   const projectId = project!.project_id;
   const arenaId = Number(id);
 
@@ -34,6 +39,7 @@ export function ArenaDetail() {
   if (view.isError) return <p className="text-rose-400">{String(view.error)}</p>;
   const arena = view.data;
   if (!arena) return <p className="text-sm text-slate-400">Select an arena.</p>;
+  if (project!.game_id === "nhl07") return <Nhl07ArenaEditor projectId={projectId} arena={arena} />;
 
   const byName = (name: string): FieldViewDto | undefined =>
     arena.all_fields.find((f) => f.name === name);
@@ -41,6 +47,16 @@ export function ArenaDetail() {
   const city = byName("cityname")?.display.trim();
   const capacity = byName("maxattendance")?.decoded;
   const iceType = byName("arenatype")?.enum_label;
+
+  // Every metadata name the curated sections below surface as an editable cell — the Misc drawer
+  // at the bottom carries only what ISN'T in this list, so nothing appears twice on the page.
+  const CURATED = new Set([
+    "arenaname", "cityname", "maxattendance", "arenatype",
+    "avgattendance", "stanchion", "centerline", "centericelogo", "arenaartid",
+    "powerring", "puck", "bouncemap", "index",
+    "goalhorn", "periodhorn", "chantaudioid", "cityaudioid", "arenaaudioid",
+  ]);
+  const misc = arena.all_fields.filter((f) => !CURATED.has(f.name));
 
   // An editable cell by metadata name; hidden when this title's schema lacks the field.
   const F = ({ name, label, tip }: { name: string; label: string; tip?: string }) => {
@@ -168,16 +184,27 @@ export function ArenaDetail() {
         )}
       </section>
 
-      <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
-        <summary className="cursor-pointer text-xs font-semibold text-slate-300">
-          All arena fields ({arena.all_fields.length}) — full editor
-        </summary>
-        <div className="mt-2 sm:grid sm:grid-cols-2 sm:gap-x-6">
-          {arena.all_fields.map((f) => (
-            <FieldRow key={f.studio_field} projectId={projectId} record={arena.record} field={f} />
-          ))}
-        </div>
-      </details>
+      {/* Phase 2.5 — the classified venue inventory (constants, colours, edit dispositions). The
+          Misc drawer below stays as the raw editable fallback for anything the inventory does not
+          reach; the card is the readable surface. */}
+      <ArenaVenueCard projectId={projectId} arenaId={arena.arena_id} />
+      {/* Phase 2.5 (22 Sep 2026): the arena's shipped assets, read-only. Game art: not in Save Editor. */}
+      {!saveEditor && <ArenaAssetsCard projectId={projectId} arenaId={arena.arena_id} />}
+      {/* Presentation 5.2 (receipt 49): the venue packages' board-ad / jumbotron / ring / glass art, read-only. */}
+      {!saveEditor && <ArenaVenueArtCard projectId={projectId} arenaId={arena.arena_id} />}
+
+      {misc.length > 0 && (
+        <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
+          <summary className="cursor-pointer text-xs font-semibold text-slate-300">
+            Misc fields ({misc.length}) — All fields not presented for editing above, only change if you know what you are doing.
+          </summary>
+          <div className="mt-2 sm:grid sm:grid-cols-2 sm:gap-x-6">
+            {misc.map((f) => (
+              <FieldRow key={f.studio_field} projectId={projectId} record={arena.record} field={f} />
+            ))}
+          </div>
+        </details>
+      )}
     </div>
   );
 }

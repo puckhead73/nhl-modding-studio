@@ -1,0 +1,8166 @@
+{
+ "note": "R124 - Players 3.4 portrait / head reassignment inputs (prompt research-20260926-after-receipt3, package 3). Read-only.\nGen7 (the R53 loose roots: X360 NHL 09 -> Legacy, PS3 NHL 15 / Legacy): directory listings of `rendering/player` (head meshes\n`player_<id>` / `head_<id>`, head texture libraries `texlib_<id>`) and `fe/ion/artassets/playerheads/*/p<id>.big` (portraits) joined to the\nanchor's `exhibitionplayerbiotable` (artid = lOnr, headid = pPaD, hasportrait). Per title:\n  * declared bit width of artid / headid vs the largest shipped file id (can every shipped target be stored?);\n  * head meshes with / without a same-id texture library, split by use (roster-referenced or not) and by pool floor (Studio's data-driven rule:\n    60 000 if any roster head id reaches it, else 10 000) - whether a target head carries its own textures or relies on something else;\n  * sharing: head ids and portrait ids referenced by more than one bio row (pool / non-pool), and rows whose head id equals another\n    row's portrait id;\n  * coverage of the DB head tables `stockplayerheads` / `stockplayerhelmetplacement` (keyed by headid) over mesh files and roster ids;\n  * every other column in the database whose name mentions art / head / hair / portrait / face, with how many of its values are bio\n    artid or headid values (candidate consumers a reassignment must consider; overlap is not proof of a join).\nPS4 (anchors + genuine NHL 20): the same column scan plus headid vs headtexture per row (the head binding is the vault attribute of 2026-09-20 handoff 08).\nUsage: python r124_head_portrait_reassignment_inputs.py <r53.json> <out.json>\n",
+ "gen7": {
+  "nhl09": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)",
+   "anchor": "xbox360-nhl09",
+   "db_sha256": "0f7c826b2b905c5cbbdd7706ce89efd8723ff86a7d734dc52878d9ecd18cd6cb",
+   "bio_rows": 3968,
+   "declared": {
+    "artid": {
+     "depth": 14,
+     "max_storable": 16383
+    },
+    "headid": {
+     "depth": 15,
+     "max_storable": 32767
+    }
+   },
+   "files": {
+    "head_meshes_player": 0,
+    "head_meshes_head_prefix": 480,
+    "texlibs": 0,
+    "portraits": 2920,
+    "max_head_id": 20450,
+    "max_portrait_id": 8331,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 10000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 115,
+    "non-pool / used / no texlib": 252,
+    "pool / unused / no texlib": 14,
+    "pool / used / no texlib": 99
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / no mesh": 5,
+    "non-pool / no texlib": 252,
+    "pool / no texlib": 3711
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 98,
+    "of_which_pool": 98,
+    "non_pool_shared_sample": [],
+    "portrait_ids_on_2plus_rows": 0,
+    "portrait_shared_sample": [],
+    "rows_head_equals_own_portrait": 256,
+    "rows_head_equals_another_rows_portrait_only": 0
+   },
+   "targets": {
+    "unused_head_meshes": 129,
+    "unused_head_meshes_with_texlib": 0,
+    "unused_portraits": 214,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 9,
+     "rows": 188,
+     "distinct_nonzero": 38,
+     "in_bio_artid": 27,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 244,
+     "distinct_nonzero": 9,
+     "in_bio_artid": 8,
+     "in_bio_headid": 4
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 3968,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 3968,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 3968,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 3968,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachartid",
+     "depth": 13,
+     "rows": 188,
+     "distinct_nonzero": 15,
+     "in_bio_artid": 12,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 188,
+     "distinct_nonzero": 157,
+     "in_bio_artid": 92,
+     "in_bio_headid": 25
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "p_faceoffs",
+     "depth": 6,
+     "rows": 3549,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 33,
+     "in_bio_headid": 7
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": null,
+    "stockplayerhelmetplacement": null
+   }
+  },
+  "nhl10": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10",
+   "anchor": "xbox360-nhl10",
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "bio_rows": 3933,
+   "declared": {
+    "artid": {
+     "depth": 14,
+     "max_storable": 16383
+    },
+    "headid": {
+     "depth": 15,
+     "max_storable": 32767
+    }
+   },
+   "files": {
+    "head_meshes_player": 742,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 0,
+    "portraits": 3637,
+    "max_head_id": 30052,
+    "max_portrait_id": 8331,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 10000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 121,
+    "non-pool / used / no texlib": 271,
+    "pool / unused / no texlib": 251,
+    "pool / used / no texlib": 99
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / no texlib": 272,
+    "pool / no texlib": 3661
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 99,
+    "of_which_pool": 98,
+    "non_pool_shared_sample": [
+     [
+      1005,
+      2
+     ]
+    ],
+    "portrait_ids_on_2plus_rows": 0,
+    "portrait_shared_sample": [],
+    "rows_head_equals_own_portrait": 270,
+    "rows_head_equals_another_rows_portrait_only": 1
+   },
+   "targets": {
+    "unused_head_meshes": 372,
+    "unused_head_meshes_with_texlib": 0,
+    "unused_portraits": 679,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 9,
+     "rows": 182,
+     "distinct_nonzero": 37,
+     "in_bio_artid": 23,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 15,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 178,
+     "distinct_nonzero": 9,
+     "in_bio_artid": 7,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 3933,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 3933,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 3933,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 3933,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 8,
+     "rows": 182,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 26,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 8,
+     "rows": 182,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 27,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 15,
+     "rows": 182,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 8,
+     "rows": 182,
+     "distinct_nonzero": 7,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 8,
+     "rows": 182,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 8,
+     "rows": 182,
+     "distinct_nonzero": 149,
+     "in_bio_artid": 110,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 182,
+     "distinct_nonzero": 152,
+     "in_bio_artid": 118,
+     "in_bio_headid": 23
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 8,
+     "rows": 182,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "p_faceoffs",
+     "depth": 6,
+     "rows": 3499,
+     "distinct_nonzero": 46,
+     "in_bio_artid": 26,
+     "in_bio_headid": 7
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": null,
+    "stockplayerhelmetplacement": null
+   }
+  },
+  "nhl11": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 11\\NHL 11",
+   "anchor": "xbox360-nhl11",
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "bio_rows": 5310,
+   "declared": {
+    "artid": {
+     "depth": 14,
+     "max_storable": 16383
+    },
+    "headid": {
+     "depth": 15,
+     "max_storable": 32767
+    }
+   },
+   "files": {
+    "head_meshes_player": 821,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 0,
+    "portraits": 5397,
+    "max_head_id": 30052,
+    "max_portrait_id": 9798,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 10000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 137,
+    "non-pool / used / no texlib": 256,
+    "pool / unused / no texlib": 260,
+    "pool / used / no texlib": 168
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / no texlib": 257,
+    "pool / no texlib": 5053
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 167,
+    "of_which_pool": 166,
+    "non_pool_shared_sample": [
+     [
+      1005,
+      2
+     ]
+    ],
+    "portrait_ids_on_2plus_rows": 2,
+    "portrait_shared_sample": [
+     [
+      5740,
+      2
+     ],
+     [
+      5746,
+      3
+     ]
+    ],
+    "rows_head_equals_own_portrait": 255,
+    "rows_head_equals_another_rows_portrait_only": 1
+   },
+   "targets": {
+    "unused_head_meshes": 397,
+    "unused_head_meshes_with_texlib": 0,
+    "unused_portraits": 1130,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 15,
+     "rows": 1008,
+     "distinct_nonzero": 673,
+     "in_bio_artid": 256,
+     "in_bio_headid": 392
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 9,
+     "rows": 242,
+     "distinct_nonzero": 40,
+     "in_bio_artid": 23,
+     "in_bio_headid": 8
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 15,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 198,
+     "distinct_nonzero": 13,
+     "in_bio_artid": 11,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 5310,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 5310,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5310,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 5310,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "fcc_store",
+     "field": "startdate",
+     "depth": 31,
+     "rows": 49,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 8,
+     "rows": 242,
+     "distinct_nonzero": 46,
+     "in_bio_artid": 25,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 8,
+     "rows": 242,
+     "distinct_nonzero": 66,
+     "in_bio_artid": 40,
+     "in_bio_headid": 8
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 8,
+     "rows": 242,
+     "distinct_nonzero": 50,
+     "in_bio_artid": 27,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 15,
+     "rows": 242,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 8,
+     "rows": 242,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 8,
+     "rows": 242,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 8,
+     "rows": 242,
+     "distinct_nonzero": 155,
+     "in_bio_artid": 94,
+     "in_bio_headid": 29
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 242,
+     "distinct_nonzero": 212,
+     "in_bio_artid": 143,
+     "in_bio_headid": 36
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 8,
+     "rows": 242,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 627,
+     "distinct_nonzero": 211,
+     "in_bio_artid": 143,
+     "in_bio_headid": 36
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "p_faceoffs",
+     "depth": 6,
+     "rows": 4760,
+     "distinct_nonzero": 54,
+     "in_bio_artid": 31,
+     "in_bio_headid": 8
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": null,
+    "stockplayerhelmetplacement": {
+     "rows": 1008,
+     "distinct_headid": 673,
+     "duplicate_headids": 334,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 659,
+     "mesh_files_without_row": 162,
+     "roster_ids_with_row": 392,
+     "roster_ids_without_row": [
+      127,
+      2089,
+      2279,
+      5904,
+      7201,
+      7202,
+      10104,
+      10106,
+      10107,
+      10108,
+      10109,
+      10111,
+      10112,
+      10113,
+      10114
+     ],
+     "roster_ids_without_row_count": 32,
+     "unused_files_with_row": 267,
+     "rows_without_mesh_file": 14
+    }
+   }
+  },
+  "nhl12": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12",
+   "anchor": "xbox360-nhl12",
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "bio_rows": 5395,
+   "declared": {
+    "artid": {
+     "depth": 14,
+     "max_storable": 16383
+    },
+    "headid": {
+     "depth": 15,
+     "max_storable": 32767
+    }
+   },
+   "files": {
+    "head_meshes_player": 795,
+    "head_meshes_head_prefix": 4,
+    "texlibs": 0,
+    "portraits": 6158,
+    "max_head_id": 30101,
+    "max_portrait_id": 9798,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 10000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 110,
+    "non-pool / used / no texlib": 255,
+    "pool / unused / no texlib": 253,
+    "pool / used / no texlib": 177
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / no texlib": 256,
+    "pool / no texlib": 5139
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 176,
+    "of_which_pool": 175,
+    "non_pool_shared_sample": [
+     [
+      1005,
+      2
+     ]
+    ],
+    "portrait_ids_on_2plus_rows": 0,
+    "portrait_shared_sample": [],
+    "rows_head_equals_own_portrait": 253,
+    "rows_head_equals_another_rows_portrait_only": 2
+   },
+   "targets": {
+    "unused_head_meshes": 363,
+    "unused_head_meshes_with_texlib": 0,
+    "unused_portraits": 1730,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 15,
+     "rows": 2420,
+     "distinct_nonzero": 701,
+     "in_bio_artid": 266,
+     "in_bio_headid": 397
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 243,
+     "distinct_nonzero": 46,
+     "in_bio_artid": 28,
+     "in_bio_headid": 8
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 15,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 218,
+     "distinct_nonzero": 11,
+     "in_bio_artid": 11,
+     "in_bio_headid": 4
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5395,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "fcc_store",
+     "field": "startdate",
+     "depth": 31,
+     "rows": 56,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 243,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 24,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 243,
+     "distinct_nonzero": 64,
+     "in_bio_artid": 36,
+     "in_bio_headid": 8
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 243,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 26,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 15,
+     "rows": 243,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 243,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 243,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 243,
+     "distinct_nonzero": 152,
+     "in_bio_artid": 83,
+     "in_bio_headid": 26
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 243,
+     "distinct_nonzero": 211,
+     "in_bio_artid": 136,
+     "in_bio_headid": 35
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 243,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 4,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 15,
+     "rows": 1032,
+     "distinct_nonzero": 1031,
+     "in_bio_artid": 615,
+     "in_bio_headid": 432
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 1032,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1032,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1032,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 676,
+     "distinct_nonzero": 210,
+     "in_bio_artid": 136,
+     "in_bio_headid": 35
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "p_faceoffs",
+     "depth": 6,
+     "rows": 4821,
+     "distinct_nonzero": 48,
+     "in_bio_artid": 26,
+     "in_bio_headid": 7
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": {
+     "rows": 1032,
+     "distinct_headid": 1032,
+     "duplicate_headids": 0,
+     "fields": [
+      "haircap",
+      "haircards_a",
+      "haircards_b",
+      "headid"
+     ],
+     "mesh_files_with_row": 613,
+     "mesh_files_without_row": 182,
+     "roster_ids_with_row": 432,
+     "roster_ids_without_row": [],
+     "roster_ids_without_row_count": 0,
+     "unused_files_with_row": 181,
+     "rows_without_mesh_file": 419
+    },
+    "stockplayerhelmetplacement": {
+     "rows": 2420,
+     "distinct_headid": 701,
+     "duplicate_headids": 692,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 653,
+     "mesh_files_without_row": 142,
+     "roster_ids_with_row": 397,
+     "roster_ids_without_row": [
+      127,
+      2089,
+      2279,
+      5904,
+      8344,
+      8585,
+      8586,
+      10103,
+      10104,
+      10105,
+      10106,
+      10107,
+      10108,
+      10109,
+      10111
+     ],
+     "roster_ids_without_row_count": 35,
+     "unused_files_with_row": 256,
+     "rows_without_mesh_file": 48
+    }
+   }
+  },
+  "nhl13": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 13\\NHL 13",
+   "anchor": "xbox360-nhl13",
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "bio_rows": 5412,
+   "declared": {
+    "artid": {
+     "depth": 14,
+     "max_storable": 16383
+    },
+    "headid": {
+     "depth": 15,
+     "max_storable": 32767
+    }
+   },
+   "files": {
+    "head_meshes_player": 817,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 598,
+    "portraits": 6823,
+    "max_head_id": 30102,
+    "max_portrait_id": 9802,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 10000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / texlib": 113,
+    "non-pool / used / texlib": 269,
+    "pool / unused / no texlib": 219,
+    "pool / unused / texlib": 43,
+    "pool / used / texlib": 173
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / texlib": 270,
+    "pool / texlib": 5142
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 171,
+    "of_which_pool": 170,
+    "non_pool_shared_sample": [
+     [
+      1005,
+      2
+     ]
+    ],
+    "portrait_ids_on_2plus_rows": 1,
+    "portrait_shared_sample": [
+     [
+      5736,
+      2
+     ]
+    ],
+    "rows_head_equals_own_portrait": 268,
+    "rows_head_equals_another_rows_portrait_only": 1
+   },
+   "targets": {
+    "unused_head_meshes": 375,
+    "unused_head_meshes_with_texlib": 156,
+    "unused_portraits": 2433,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 15,
+     "rows": 2541,
+     "distinct_nonzero": 742,
+     "in_bio_artid": 278,
+     "in_bio_headid": 408
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 174,
+     "distinct_nonzero": 50,
+     "in_bio_artid": 27,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 15,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 138,
+     "distinct_nonzero": 12,
+     "in_bio_artid": 8,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5412,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 248,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 22,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 248,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 33,
+     "in_bio_headid": 8
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 248,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 24,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 15,
+     "rows": 248,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 248,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 248,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 248,
+     "distinct_nonzero": 155,
+     "in_bio_artid": 71,
+     "in_bio_headid": 24
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 248,
+     "distinct_nonzero": 212,
+     "in_bio_artid": 121,
+     "in_bio_headid": 35
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 248,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 15,
+     "rows": 1082,
+     "distinct_nonzero": 1081,
+     "in_bio_artid": 582,
+     "in_bio_headid": 442
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircap",
+     "depth": 1,
+     "rows": 1082,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1082,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1082,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 684,
+     "distinct_nonzero": 211,
+     "in_bio_artid": 121,
+     "in_bio_headid": 35
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "p_faceoffs",
+     "depth": 6,
+     "rows": 4875,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 22,
+     "in_bio_headid": 6
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": {
+     "rows": 1082,
+     "distinct_headid": 1082,
+     "duplicate_headids": 0,
+     "fields": [
+      "haircap",
+      "haircards_a",
+      "haircards_b",
+      "headid"
+     ],
+     "mesh_files_with_row": 635,
+     "mesh_files_without_row": 182,
+     "roster_ids_with_row": 442,
+     "roster_ids_without_row": [],
+     "roster_ids_without_row_count": 0,
+     "unused_files_with_row": 193,
+     "rows_without_mesh_file": 447
+    },
+    "stockplayerhelmetplacement": {
+     "rows": 2541,
+     "distinct_headid": 742,
+     "duplicate_headids": 732,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 688,
+     "mesh_files_without_row": 129,
+     "roster_ids_with_row": 408,
+     "roster_ids_without_row": [
+      127,
+      346,
+      1199,
+      2089,
+      2279,
+      2305,
+      5904,
+      10103,
+      10104,
+      10106,
+      10107,
+      10108,
+      10109,
+      10111,
+      10112
+     ],
+     "roster_ids_without_row_count": 34,
+     "unused_files_with_row": 280,
+     "rows_without_mesh_file": 54
+    }
+   }
+  },
+  "nhl14": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 14\\NHL 14",
+   "anchor": "xbox360-nhl14",
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "bio_rows": 5374,
+   "declared": {
+    "artid": {
+     "depth": 14,
+     "max_storable": 16383
+    },
+    "headid": {
+     "depth": 16,
+     "max_storable": 65535
+    }
+   },
+   "files": {
+    "head_meshes_player": 841,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 622,
+    "portraits": 7678,
+    "max_head_id": 60168,
+    "max_portrait_id": 11036,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 10000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / texlib": 138,
+    "non-pool / used / texlib": 262,
+    "pool / unused / no texlib": 219,
+    "pool / unused / texlib": 43,
+    "pool / used / texlib": 179
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / texlib": 263,
+    "pool / texlib": 5111
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 172,
+    "of_which_pool": 171,
+    "non_pool_shared_sample": [
+     [
+      1005,
+      2
+     ]
+    ],
+    "portrait_ids_on_2plus_rows": 2,
+    "portrait_shared_sample": [
+     [
+      5736,
+      2
+     ],
+     [
+      5750,
+      2
+     ]
+    ],
+    "rows_head_equals_own_portrait": 262,
+    "rows_head_equals_another_rows_portrait_only": 5014
+   },
+   "targets": {
+    "unused_head_meshes": 400,
+    "unused_head_meshes_with_texlib": 181,
+    "unused_portraits": 3138,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 2603,
+     "distinct_nonzero": 764,
+     "in_bio_artid": 416,
+     "in_bio_headid": 407
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 177,
+     "distinct_nonzero": 52,
+     "in_bio_artid": 22,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 425,
+     "distinct_nonzero": 50,
+     "in_bio_artid": 32,
+     "in_bio_headid": 7
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5374,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 19,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 30,
+     "in_bio_headid": 8
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 19,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 246,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 155,
+     "in_bio_artid": 61,
+     "in_bio_headid": 21
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 246,
+     "distinct_nonzero": 212,
+     "in_bio_artid": 108,
+     "in_bio_headid": 34
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 761,
+     "distinct_nonzero": 761,
+     "in_bio_artid": 538,
+     "in_bio_headid": 439
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 761,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 761,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 704,
+     "distinct_nonzero": 211,
+     "in_bio_artid": 108,
+     "in_bio_headid": 34
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 6,
+     "rows": 4851,
+     "distinct_nonzero": 50,
+     "in_bio_artid": 18,
+     "in_bio_headid": 6
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": {
+     "rows": 761,
+     "distinct_headid": 761,
+     "duplicate_headids": 0,
+     "fields": [
+      "haircards_a",
+      "haircards_b",
+      "headid"
+     ],
+     "mesh_files_with_row": 605,
+     "mesh_files_without_row": 236,
+     "roster_ids_with_row": 439,
+     "roster_ids_without_row": [
+      740,
+      8488
+     ],
+     "roster_ids_without_row_count": 2,
+     "unused_files_with_row": 166,
+     "rows_without_mesh_file": 156
+    },
+    "stockplayerhelmetplacement": {
+     "rows": 2603,
+     "distinct_headid": 764,
+     "duplicate_headids": 753,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 710,
+     "mesh_files_without_row": 131,
+     "roster_ids_with_row": 407,
+     "roster_ids_without_row": [
+      127,
+      1199,
+      2089,
+      2279,
+      2305,
+      5904,
+      10103,
+      10104,
+      10105,
+      10106,
+      10107,
+      10108,
+      10109,
+      10111,
+      10112
+     ],
+     "roster_ids_without_row_count": 34,
+     "unused_files_with_row": 303,
+     "rows_without_mesh_file": 54
+    }
+   }
+  },
+  "nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15",
+   "anchor": "xbox360-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "bio_rows": 5534,
+   "declared": {
+    "artid": {
+     "depth": 16,
+     "max_storable": 65535
+    },
+    "headid": {
+     "depth": 16,
+     "max_storable": 65535
+    }
+   },
+   "files": {
+    "head_meshes_player": 861,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 642,
+    "portraits": 8362,
+    "max_head_id": 60182,
+    "max_portrait_id": 11384,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 60000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 219,
+    "non-pool / unused / texlib": 200,
+    "non-pool / used / texlib": 259,
+    "pool / unused / texlib": 2,
+    "pool / used / texlib": 181
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / texlib": 259,
+    "pool / texlib": 5275
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 178,
+    "of_which_pool": 178,
+    "non_pool_shared_sample": [],
+    "portrait_ids_on_2plus_rows": 0,
+    "portrait_shared_sample": [],
+    "rows_head_equals_own_portrait": 259,
+    "rows_head_equals_another_rows_portrait_only": 0
+   },
+   "targets": {
+    "unused_head_meshes": 421,
+    "unused_head_meshes_with_texlib": 202,
+    "unused_portraits": 4004,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 2660,
+     "distinct_nonzero": 785,
+     "in_bio_artid": 268,
+     "in_bio_headid": 403
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 178,
+     "distinct_nonzero": 51,
+     "in_bio_artid": 18,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 433,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 22,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5534,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 12,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 21,
+     "in_bio_headid": 4
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 12,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 246,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 157,
+     "in_bio_artid": 53,
+     "in_bio_headid": 16
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 246,
+     "distinct_nonzero": 212,
+     "in_bio_artid": 90,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1521,
+     "distinct_nonzero": 1521,
+     "in_bio_artid": 769,
+     "in_bio_headid": 436
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1521,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1521,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 659,
+     "distinct_nonzero": 211,
+     "in_bio_artid": 90,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 6,
+     "rows": 4978,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 12,
+     "in_bio_headid": 3
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": {
+     "rows": 1521,
+     "distinct_headid": 1521,
+     "duplicate_headids": 0,
+     "fields": [
+      "haircards_a",
+      "haircards_b",
+      "headid"
+     ],
+     "mesh_files_with_row": 670,
+     "mesh_files_without_row": 191,
+     "roster_ids_with_row": 436,
+     "roster_ids_without_row": [
+      60007,
+      60026,
+      60086,
+      60138
+     ],
+     "roster_ids_without_row_count": 4,
+     "unused_files_with_row": 234,
+     "rows_without_mesh_file": 851
+    },
+    "stockplayerhelmetplacement": {
+     "rows": 2660,
+     "distinct_headid": 785,
+     "duplicate_headids": 771,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 731,
+     "mesh_files_without_row": 130,
+     "roster_ids_with_row": 403,
+     "roster_ids_without_row": [
+      1199,
+      2089,
+      2279,
+      2305,
+      5904,
+      60100,
+      60101,
+      60102,
+      60103,
+      60104,
+      60105,
+      60106,
+      60107,
+      60108,
+      60109
+     ],
+     "roster_ids_without_row_count": 37,
+     "unused_files_with_row": 328,
+     "rows_without_mesh_file": 54
+    }
+   }
+  },
+  "legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+   "anchor": "xbox360-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "bio_rows": 5632,
+   "declared": {
+    "artid": {
+     "depth": 16,
+     "max_storable": 65535
+    },
+    "headid": {
+     "depth": 16,
+     "max_storable": 65535
+    }
+   },
+   "files": {
+    "head_meshes_player": 904,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 685,
+    "portraits": 9224,
+    "max_head_id": 60210,
+    "max_portrait_id": 12401,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 60000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 219,
+    "non-pool / unused / texlib": 228,
+    "non-pool / used / texlib": 246,
+    "pool / unused / texlib": 10,
+    "pool / used / texlib": 201
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / texlib": 247,
+    "pool / texlib": 5385
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 190,
+    "of_which_pool": 189,
+    "non_pool_shared_sample": [
+     [
+      7797,
+      2
+     ]
+    ],
+    "portrait_ids_on_2plus_rows": 3,
+    "portrait_shared_sample": [
+     [
+      2,
+      2
+     ],
+     [
+      7,
+      2
+     ],
+     [
+      12,
+      2
+     ]
+    ],
+    "rows_head_equals_own_portrait": 246,
+    "rows_head_equals_another_rows_portrait_only": 1
+   },
+   "targets": {
+    "unused_head_meshes": 457,
+    "unused_head_meshes_with_texlib": 238,
+    "unused_portraits": 4724,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 2173,
+     "distinct_nonzero": 802,
+     "in_bio_artid": 251,
+     "in_bio_headid": 438
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 187,
+     "distinct_nonzero": 51,
+     "in_bio_artid": 23,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 432,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 30,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5632,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 16,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 21,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 16,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 252,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 162,
+     "in_bio_artid": 49,
+     "in_bio_headid": 15
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 252,
+     "distinct_nonzero": 217,
+     "in_bio_artid": 80,
+     "in_bio_headid": 25
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1645,
+     "distinct_nonzero": 1645,
+     "in_bio_artid": 721,
+     "in_bio_headid": 447
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1645,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1645,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 703,
+     "distinct_nonzero": 216,
+     "in_bio_artid": 80,
+     "in_bio_headid": 25
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 6,
+     "rows": 5066,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 11,
+     "in_bio_headid": 2
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": {
+     "rows": 1645,
+     "distinct_headid": 1645,
+     "duplicate_headids": 0,
+     "fields": [
+      "haircards_a",
+      "haircards_b",
+      "headid"
+     ],
+     "mesh_files_with_row": 719,
+     "mesh_files_without_row": 185,
+     "roster_ids_with_row": 447,
+     "roster_ids_without_row": [],
+     "roster_ids_without_row_count": 0,
+     "unused_files_with_row": 272,
+     "rows_without_mesh_file": 926
+    },
+    "stockplayerhelmetplacement": {
+     "rows": 2173,
+     "distinct_headid": 802,
+     "duplicate_headids": 570,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 794,
+     "mesh_files_without_row": 110,
+     "roster_ids_with_row": 438,
+     "roster_ids_without_row": [
+      1199,
+      2089,
+      2279,
+      2305,
+      9857,
+      10753,
+      10845,
+      10848,
+      11145
+     ],
+     "roster_ids_without_row_count": 9,
+     "unused_files_with_row": 356,
+     "rows_without_mesh_file": 8
+    }
+   }
+  },
+  "ps3-nhl15": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR",
+   "anchor": "ps3-nhl15",
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "bio_rows": 5534,
+   "declared": {
+    "artid": {
+     "depth": 16,
+     "max_storable": 65535
+    },
+    "headid": {
+     "depth": 16,
+     "max_storable": 65535
+    }
+   },
+   "files": {
+    "head_meshes_player": 861,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 642,
+    "portraits": 8362,
+    "max_head_id": 60182,
+    "max_portrait_id": 11384,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 60000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 219,
+    "non-pool / unused / texlib": 200,
+    "non-pool / used / texlib": 259,
+    "pool / unused / texlib": 2,
+    "pool / used / texlib": 181
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / texlib": 259,
+    "pool / texlib": 5275
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 178,
+    "of_which_pool": 178,
+    "non_pool_shared_sample": [],
+    "portrait_ids_on_2plus_rows": 0,
+    "portrait_shared_sample": [],
+    "rows_head_equals_own_portrait": 259,
+    "rows_head_equals_another_rows_portrait_only": 0
+   },
+   "targets": {
+    "unused_head_meshes": 421,
+    "unused_head_meshes_with_texlib": 202,
+    "unused_portraits": 4004,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 2660,
+     "distinct_nonzero": 785,
+     "in_bio_artid": 268,
+     "in_bio_headid": 403
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 178,
+     "distinct_nonzero": 51,
+     "in_bio_artid": 18,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 433,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 22,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5534,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 12,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 21,
+     "in_bio_headid": 4
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 12,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 246,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 157,
+     "in_bio_artid": 53,
+     "in_bio_headid": 16
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 246,
+     "distinct_nonzero": 212,
+     "in_bio_artid": 90,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1521,
+     "distinct_nonzero": 1521,
+     "in_bio_artid": 769,
+     "in_bio_headid": 436
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1521,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1521,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 659,
+     "distinct_nonzero": 211,
+     "in_bio_artid": 90,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 6,
+     "rows": 4978,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 12,
+     "in_bio_headid": 3
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": {
+     "rows": 1521,
+     "distinct_headid": 1521,
+     "duplicate_headids": 0,
+     "fields": [
+      "haircards_a",
+      "haircards_b",
+      "headid"
+     ],
+     "mesh_files_with_row": 670,
+     "mesh_files_without_row": 191,
+     "roster_ids_with_row": 436,
+     "roster_ids_without_row": [
+      60007,
+      60026,
+      60086,
+      60138
+     ],
+     "roster_ids_without_row_count": 4,
+     "unused_files_with_row": 234,
+     "rows_without_mesh_file": 851
+    },
+    "stockplayerhelmetplacement": {
+     "rows": 2660,
+     "distinct_headid": 785,
+     "duplicate_headids": 771,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 731,
+     "mesh_files_without_row": 130,
+     "roster_ids_with_row": 403,
+     "roster_ids_without_row": [
+      1199,
+      2089,
+      2279,
+      2305,
+      5904,
+      60100,
+      60101,
+      60102,
+      60103,
+      60104,
+      60105,
+      60106,
+      60107,
+      60108,
+      60109
+     ],
+     "roster_ids_without_row_count": 37,
+     "unused_files_with_row": 328,
+     "rows_without_mesh_file": 54
+    }
+   }
+  },
+  "ps3-legacy": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR",
+   "anchor": "ps3-nhllegacy",
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "bio_rows": 5632,
+   "declared": {
+    "artid": {
+     "depth": 16,
+     "max_storable": 65535
+    },
+    "headid": {
+     "depth": 16,
+     "max_storable": 65535
+    }
+   },
+   "files": {
+    "head_meshes_player": 904,
+    "head_meshes_head_prefix": 0,
+    "texlibs": 685,
+    "portraits": 9224,
+    "max_head_id": 60210,
+    "max_portrait_id": 12401,
+    "texlib_without_mesh": [],
+    "texlib_without_mesh_count": 0
+   },
+   "pool_floor": 60000,
+   "head_files_by_class_use_texture": {
+    "non-pool / unused / no texlib": 219,
+    "non-pool / unused / texlib": 228,
+    "non-pool / used / texlib": 246,
+    "pool / unused / texlib": 10,
+    "pool / used / texlib": 201
+   },
+   "bio_rows_by_head_class_and_texture": {
+    "non-pool / texlib": 247,
+    "pool / texlib": 5385
+   },
+   "sharing": {
+    "head_ids_on_2plus_rows": 190,
+    "of_which_pool": 189,
+    "non_pool_shared_sample": [
+     [
+      7797,
+      2
+     ]
+    ],
+    "portrait_ids_on_2plus_rows": 3,
+    "portrait_shared_sample": [
+     [
+      2,
+      2
+     ],
+     [
+      7,
+      2
+     ],
+     [
+      12,
+      2
+     ]
+    ],
+    "rows_head_equals_own_portrait": 246,
+    "rows_head_equals_another_rows_portrait_only": 1
+   },
+   "targets": {
+    "unused_head_meshes": 457,
+    "unused_head_meshes_with_texlib": 238,
+    "unused_portraits": 4724,
+    "all_shipped_ids_storable": {
+     "artid": true,
+     "headid": true
+    }
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 2173,
+     "distinct_nonzero": 802,
+     "in_bio_artid": 251,
+     "in_bio_headid": 438
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 187,
+     "distinct_nonzero": 51,
+     "in_bio_artid": 23,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 432,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 30,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5632,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 16,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 21,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 16,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 252,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 162,
+     "in_bio_artid": 49,
+     "in_bio_headid": 15
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 252,
+     "distinct_nonzero": 217,
+     "in_bio_artid": 80,
+     "in_bio_headid": 25
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1645,
+     "distinct_nonzero": 1645,
+     "in_bio_artid": 721,
+     "in_bio_headid": 447
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1645,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1645,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 703,
+     "distinct_nonzero": 216,
+     "in_bio_artid": 80,
+     "in_bio_headid": 25
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 6,
+     "rows": 5066,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 11,
+     "in_bio_headid": 2
+    }
+   ],
+   "head_registries": {
+    "stockplayerheads": {
+     "rows": 1645,
+     "distinct_headid": 1645,
+     "duplicate_headids": 0,
+     "fields": [
+      "haircards_a",
+      "haircards_b",
+      "headid"
+     ],
+     "mesh_files_with_row": 719,
+     "mesh_files_without_row": 185,
+     "roster_ids_with_row": 447,
+     "roster_ids_without_row": [],
+     "roster_ids_without_row_count": 0,
+     "unused_files_with_row": 272,
+     "rows_without_mesh_file": 926
+    },
+    "stockplayerhelmetplacement": {
+     "rows": 2173,
+     "distinct_headid": 802,
+     "duplicate_headids": 570,
+     "fields": [
+      "headid",
+      "key",
+      "rotatex",
+      "rotatey",
+      "rotatez",
+      "scalex",
+      "scaley",
+      "scalez",
+      "transx",
+      "transy",
+      "transz",
+      "type"
+     ],
+     "mesh_files_with_row": 794,
+     "mesh_files_without_row": 110,
+     "roster_ids_with_row": 438,
+     "roster_ids_without_row": [
+      1199,
+      2089,
+      2279,
+      2305,
+      9857,
+      10753,
+      10845,
+      10848,
+      11145
+     ],
+     "roster_ids_without_row_count": 9,
+     "unused_files_with_row": 356,
+     "rows_without_mesh_file": 8
+    }
+   }
+  }
+ },
+ "ps4": {
+  "ps4-nhl15": {
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "bio_rows": 5555,
+   "declared": {
+    "artid": 16,
+    "headid": 16
+   },
+   "head_ids_on_2plus_rows": 178,
+   "of_which_pool": 178,
+   "portrait_ids_on_2plus_rows": 0,
+   "headid_vs_headtexture": null,
+   "headtexture_differs_sample": [],
+   "db_head_tables_present": {
+    "stockplayerheads": true,
+    "stockplayerhelmetplacement": true
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 2660,
+     "distinct_nonzero": 785,
+     "in_bio_artid": 267,
+     "in_bio_headid": 402
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 178,
+     "distinct_nonzero": 31,
+     "in_bio_artid": 11,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 4996,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 18,
+     "in_bio_headid": 4
+    },
+    {
+     "table": "stockleagues",
+     "field": "artid",
+     "depth": 5,
+     "rows": 20,
+     "distinct_nonzero": 12,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 246,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 14,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 14,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 23,
+     "in_bio_headid": 4
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 246,
+     "distinct_nonzero": 212,
+     "in_bio_artid": 92,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 157,
+     "in_bio_artid": 55,
+     "in_bio_headid": 16
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 246,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 433,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 23,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "customfacetable",
+     "field": "hairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhairstyle",
+     "depth": 4,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customfacetable",
+     "field": "facialhaircolor",
+     "depth": 3,
+     "rows": 180,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5555,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1521,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1521,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1521,
+     "distinct_nonzero": 1521,
+     "in_bio_artid": 767,
+     "in_bio_headid": 435
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 659,
+     "distinct_nonzero": 211,
+     "in_bio_artid": 92,
+     "in_bio_headid": 28
+    }
+   ]
+  },
+  "ps4-nhl16": {
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "bio_rows": 5632,
+   "declared": {
+    "artid": 16,
+    "headid": 16
+   },
+   "head_ids_on_2plus_rows": 190,
+   "of_which_pool": 189,
+   "portrait_ids_on_2plus_rows": 3,
+   "headid_vs_headtexture": null,
+   "headtexture_differs_sample": [],
+   "db_head_tables_present": {
+    "stockplayerheads": true,
+    "stockplayerhelmetplacement": true
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 8449,
+     "distinct_nonzero": 802,
+     "in_bio_artid": 251,
+     "in_bio_headid": 439
+    },
+    {
+     "table": "eashlskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 1,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 60,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 187,
+     "distinct_nonzero": 32,
+     "in_bio_artid": 17,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 5066,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 13,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "stockleagues",
+     "field": "artid",
+     "depth": 5,
+     "rows": 22,
+     "distinct_nonzero": 13,
+     "in_bio_artid": 11,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 252,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascothead",
+     "depth": 6,
+     "rows": 252,
+     "distinct_nonzero": 26,
+     "in_bio_artid": 12,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 16,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 16,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 65,
+     "in_bio_artid": 21,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 252,
+     "distinct_nonzero": 217,
+     "in_bio_artid": 80,
+     "in_bio_headid": 25
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 162,
+     "in_bio_artid": 49,
+     "in_bio_headid": 15
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 252,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 432,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 30,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "eashlplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 2,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "eashlplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 2,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "eashlplayerbiotable",
+     "field": "artid",
+     "depth": 16,
+     "rows": 2,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "eashlplayerbiotable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 2,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 5632,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 5632,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1645,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1645,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1645,
+     "distinct_nonzero": 1645,
+     "in_bio_artid": 721,
+     "in_bio_headid": 448
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircolor",
+     "depth": 3,
+     "rows": 1645,
+     "distinct_nonzero": 7,
+     "in_bio_artid": 7,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 703,
+     "distinct_nonzero": 216,
+     "in_bio_artid": 80,
+     "in_bio_headid": 25
+    }
+   ]
+  },
+  "ps4-nhl17": {
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "bio_rows": 6128,
+   "declared": {
+    "artid": 16,
+    "headid": 16,
+    "hairid": 11
+   },
+   "head_ids_on_2plus_rows": 192,
+   "of_which_pool": 191,
+   "portrait_ids_on_2plus_rows": 3,
+   "headid_vs_headtexture": {
+    "equal": 6128
+   },
+   "headtexture_differs_sample": [],
+   "db_head_tables_present": {
+    "stockplayerheads": true,
+    "stockplayerhelmetplacement": true
+   },
+   "other_columns": [
+    {
+     "table": "stockplayerhelmetplacement",
+     "field": "headid",
+     "depth": 16,
+     "rows": 9081,
+     "distinct_nonzero": 834,
+     "in_bio_artid": 259,
+     "in_bio_headid": 447
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 1208,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "artid",
+     "depth": 16,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1208,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 5,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 1006,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 150,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 150,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 256,
+     "distinct_nonzero": 38,
+     "in_bio_artid": 23,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "customteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 50,
+     "distinct_nonzero": 15,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascothead",
+     "depth": 6,
+     "rows": 50,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 50,
+     "distinct_nonzero": 50,
+     "in_bio_artid": 21,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 50,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 50,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 5527,
+     "distinct_nonzero": 50,
+     "in_bio_artid": 13,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "stockleagues",
+     "field": "artid",
+     "depth": 5,
+     "rows": 24,
+     "distinct_nonzero": 15,
+     "in_bio_artid": 14,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 256,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascothead",
+     "depth": 6,
+     "rows": 256,
+     "distinct_nonzero": 26,
+     "in_bio_artid": 16,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 20,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 20,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 66,
+     "in_bio_artid": 25,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 256,
+     "distinct_nonzero": 255,
+     "in_bio_artid": 87,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 186,
+     "in_bio_artid": 53,
+     "in_bio_headid": 15
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 256,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 430,
+     "distinct_nonzero": 44,
+     "in_bio_artid": 30,
+     "in_bio_headid": 5
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 6128,
+     "distinct_nonzero": 483,
+     "in_bio_artid": 283,
+     "in_bio_headid": 483
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 6128,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 6128,
+     "distinct_nonzero": 53,
+     "in_bio_artid": 18,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 6128,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 5,
+     "rows": 6128,
+     "distinct_nonzero": 10,
+     "in_bio_artid": 10,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 1662,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 1662,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1662,
+     "distinct_nonzero": 1662,
+     "in_bio_artid": 661,
+     "in_bio_headid": 447
+    },
+    {
+     "table": "stockplayerheads",
+     "field": "haircolor",
+     "depth": 5,
+     "rows": 1662,
+     "distinct_nonzero": 7,
+     "in_bio_artid": 7,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 813,
+     "distinct_nonzero": 254,
+     "in_bio_artid": 85,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 813,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    }
+   ]
+  },
+  "ps4-nhl18": {
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "bio_rows": 7236,
+   "declared": {
+    "artid": 16,
+    "headid": 16,
+    "hairid": 11
+   },
+   "head_ids_on_2plus_rows": 253,
+   "of_which_pool": 198,
+   "portrait_ids_on_2plus_rows": 140,
+   "headid_vs_headtexture": {
+    "equal": 7236
+   },
+   "headtexture_differs_sample": [],
+   "db_head_tables_present": {
+    "stockplayerheads": false,
+    "stockplayerhelmetplacement": false
+   },
+   "other_columns": [
+    {
+     "table": "customplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 1208,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "artid",
+     "depth": 16,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1208,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 5,
+     "rows": 1208,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 1006,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffswon",
+     "depth": 9,
+     "rows": 5325,
+     "distinct_nonzero": 188,
+     "in_bio_artid": 54,
+     "in_bio_headid": 8
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffstaken",
+     "depth": 10,
+     "rows": 5325,
+     "distinct_nonzero": 284,
+     "in_bio_artid": 86,
+     "in_bio_headid": 23
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 165,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 165,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 303,
+     "distinct_nonzero": 51,
+     "in_bio_artid": 28,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 55,
+     "distinct_nonzero": 15,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 55,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 55,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_b",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "haircards_a",
+     "depth": 1,
+     "rows": 25,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "characterstable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 25,
+     "distinct_nonzero": 25,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 6522,
+     "distinct_nonzero": 50,
+     "in_bio_artid": 18,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "stockleagues",
+     "field": "artid",
+     "depth": 5,
+     "rows": 26,
+     "distinct_nonzero": 18,
+     "in_bio_artid": 15,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 296,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 296,
+     "distinct_nonzero": 28,
+     "in_bio_artid": 18,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 21,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 296,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 21,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 66,
+     "in_bio_artid": 27,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 296,
+     "distinct_nonzero": 288,
+     "in_bio_artid": 95,
+     "in_bio_headid": 27
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 219,
+     "in_bio_artid": 63,
+     "in_bio_headid": 18
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 296,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 296,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 14,
+     "rows": 429,
+     "distinct_nonzero": 44,
+     "in_bio_artid": 28,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffswon",
+     "depth": 11,
+     "rows": 13189,
+     "distinct_nonzero": 678,
+     "in_bio_artid": 187,
+     "in_bio_headid": 50
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffstaken",
+     "depth": 11,
+     "rows": 13189,
+     "distinct_nonzero": 963,
+     "in_bio_artid": 277,
+     "in_bio_headid": 58
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 7236,
+     "distinct_nonzero": 491,
+     "in_bio_artid": 285,
+     "in_bio_headid": 491
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 7236,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 7236,
+     "distinct_nonzero": 27,
+     "in_bio_artid": 18,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 7236,
+     "distinct_nonzero": 53,
+     "in_bio_artid": 20,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 7236,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 5,
+     "rows": 7236,
+     "distinct_nonzero": 11,
+     "in_bio_artid": 11,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 1030,
+     "distinct_nonzero": 283,
+     "in_bio_artid": 91,
+     "in_bio_headid": 27
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 1030,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    }
+   ]
+  },
+  "ps4-nhl19-base": {
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "bio_rows": 7136,
+   "declared": {
+    "artid": 16,
+    "headid": 16,
+    "hairid": 11
+   },
+   "head_ids_on_2plus_rows": 200,
+   "of_which_pool": 200,
+   "portrait_ids_on_2plus_rows": 2,
+   "headid_vs_headtexture": {
+    "equal": 7136
+   },
+   "headtexture_differs_sample": [],
+   "db_head_tables_present": {
+    "stockplayerheads": false,
+    "stockplayerhelmetplacement": false
+   },
+   "other_columns": [
+    {
+     "table": "customplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "artid",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 5,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 1009,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffswon",
+     "depth": 9,
+     "rows": 7365,
+     "distinct_nonzero": 186,
+     "in_bio_artid": 55,
+     "in_bio_headid": 9
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffstaken",
+     "depth": 10,
+     "rows": 7365,
+     "distinct_nonzero": 290,
+     "in_bio_artid": 80,
+     "in_bio_headid": 19
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 165,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 165,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 426,
+     "distinct_nonzero": 55,
+     "in_bio_artid": 29,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "customteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 55,
+     "distinct_nonzero": 15,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 55,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 55,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgearstyle",
+     "depth": 3,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgearvariant",
+     "depth": 7,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgeartype",
+     "depth": 4,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "teamartid",
+     "depth": 10,
+     "rows": 209,
+     "distinct_nonzero": 31,
+     "in_bio_artid": 20,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgearstyle",
+     "depth": 3,
+     "rows": 209,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgearvariant",
+     "depth": 7,
+     "rows": 209,
+     "distinct_nonzero": 61,
+     "in_bio_artid": 26,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgeartype",
+     "depth": 4,
+     "rows": 209,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 6389,
+     "distinct_nonzero": 52,
+     "in_bio_artid": 15,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "stockleagues",
+     "field": "artid",
+     "depth": 5,
+     "rows": 29,
+     "distinct_nonzero": 21,
+     "in_bio_artid": 16,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "teamartid",
+     "depth": 10,
+     "rows": 552,
+     "distinct_nonzero": 31,
+     "in_bio_artid": 20,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearstyle",
+     "depth": 3,
+     "rows": 552,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearvariant",
+     "depth": 7,
+     "rows": 552,
+     "distinct_nonzero": 61,
+     "in_bio_artid": 26,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgeartype",
+     "depth": 4,
+     "rows": 552,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 419,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 419,
+     "distinct_nonzero": 29,
+     "in_bio_artid": 19,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 22,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 419,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 22,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 66,
+     "in_bio_artid": 25,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 419,
+     "distinct_nonzero": 306,
+     "in_bio_artid": 97,
+     "in_bio_headid": 25
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 220,
+     "in_bio_artid": 60,
+     "in_bio_headid": 16
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 419,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 419,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearstyle",
+     "depth": 3,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearvariant",
+     "depth": 7,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgeartype",
+     "depth": 4,
+     "rows": 3,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "rows": 427,
+     "distinct_nonzero": 47,
+     "in_bio_artid": 25,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffswon",
+     "depth": 11,
+     "rows": 16419,
+     "distinct_nonzero": 717,
+     "in_bio_artid": 200,
+     "in_bio_headid": 48
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffstaken",
+     "depth": 12,
+     "rows": 16419,
+     "distinct_nonzero": 1048,
+     "in_bio_artid": 283,
+     "in_bio_headid": 61
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 7136,
+     "distinct_nonzero": 535,
+     "in_bio_artid": 326,
+     "in_bio_headid": 535
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 7136,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 7136,
+     "distinct_nonzero": 28,
+     "in_bio_artid": 19,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 7136,
+     "distinct_nonzero": 57,
+     "in_bio_artid": 23,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 7136,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 5,
+     "rows": 7136,
+     "distinct_nonzero": 12,
+     "in_bio_artid": 12,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 1532,
+     "distinct_nonzero": 298,
+     "in_bio_artid": 92,
+     "in_bio_headid": 26
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 1532,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    }
+   ]
+  },
+  "ps4-nhl20-real": {
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "bio_rows": 7576,
+   "declared": {
+    "artid": 16,
+    "headid": 16,
+    "hairid": 11
+   },
+   "head_ids_on_2plus_rows": 202,
+   "of_which_pool": 202,
+   "portrait_ids_on_2plus_rows": 4,
+   "headid_vs_headtexture": {
+    "equal": 7576
+   },
+   "headtexture_differs_sample": [],
+   "db_head_tables_present": {
+    "stockplayerheads": false,
+    "stockplayerhelmetplacement": false
+   },
+   "other_columns": [
+    {
+     "table": "customplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "artid",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 4,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 1009,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffswon",
+     "depth": 9,
+     "rows": 7918,
+     "distinct_nonzero": 188,
+     "in_bio_artid": 60,
+     "in_bio_headid": 12
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffstaken",
+     "depth": 10,
+     "rows": 7918,
+     "distinct_nonzero": 292,
+     "in_bio_artid": 84,
+     "in_bio_headid": 19
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 165,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 165,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 428,
+     "distinct_nonzero": 59,
+     "in_bio_artid": 32,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "customteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 55,
+     "distinct_nonzero": 15,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 55,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 55,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamhistory",
+     "field": "yearstart",
+     "depth": 14,
+     "rows": 162,
+     "distinct_nonzero": 62,
+     "in_bio_artid": 10,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "teamartid",
+     "depth": 10,
+     "rows": 305,
+     "distinct_nonzero": 31,
+     "in_bio_artid": 21,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 305,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 5,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 305,
+     "distinct_nonzero": 61,
+     "in_bio_artid": 27,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 305,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 6803,
+     "distinct_nonzero": 55,
+     "in_bio_artid": 14,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "stockleagues",
+     "field": "artid",
+     "depth": 5,
+     "rows": 31,
+     "distinct_nonzero": 21,
+     "in_bio_artid": 17,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "teamartid",
+     "depth": 10,
+     "rows": 980,
+     "distinct_nonzero": 31,
+     "in_bio_artid": 21,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 980,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 5,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 980,
+     "distinct_nonzero": 61,
+     "in_bio_artid": 27,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 980,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualfacemaskvariant",
+     "depth": 8,
+     "rows": 980,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualfacemaskstyle",
+     "depth": 3,
+     "rows": 980,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualfacemasktype",
+     "depth": 3,
+     "rows": 980,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearorient",
+     "depth": 2,
+     "rows": 980,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 416,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 416,
+     "distinct_nonzero": 30,
+     "in_bio_artid": 19,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 23,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 416,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 23,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 66,
+     "in_bio_artid": 26,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 416,
+     "distinct_nonzero": 303,
+     "in_bio_artid": 100,
+     "in_bio_headid": 26
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 218,
+     "in_bio_artid": 65,
+     "in_bio_headid": 17
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 416,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 416,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 3,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualfacemaskvariant",
+     "depth": 8,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualfacemaskstyle",
+     "depth": 3,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualfacemasktype",
+     "depth": 3,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearorient",
+     "depth": 2,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "rows": 424,
+     "distinct_nonzero": 42,
+     "in_bio_artid": 26,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffswon",
+     "depth": 11,
+     "rows": 17823,
+     "distinct_nonzero": 724,
+     "in_bio_artid": 217,
+     "in_bio_headid": 54
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffstaken",
+     "depth": 12,
+     "rows": 17823,
+     "distinct_nonzero": 1070,
+     "in_bio_artid": 291,
+     "in_bio_headid": 68
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 7576,
+     "distinct_nonzero": 589,
+     "in_bio_artid": 380,
+     "in_bio_headid": 589
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 7576,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 7576,
+     "distinct_nonzero": 29,
+     "in_bio_artid": 19,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 7576,
+     "distinct_nonzero": 58,
+     "in_bio_artid": 23,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 7576,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 4,
+     "rows": 7576,
+     "distinct_nonzero": 12,
+     "in_bio_artid": 12,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 1652,
+     "distinct_nonzero": 297,
+     "in_bio_artid": 95,
+     "in_bio_headid": 27
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 1652,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    }
+   ]
+  },
+  "ps4-nhl21": {
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "bio_rows": 7247,
+   "declared": {
+    "artid": 16,
+    "headid": 16,
+    "hairid": 11
+   },
+   "head_ids_on_2plus_rows": 203,
+   "of_which_pool": 203,
+   "portrait_ids_on_2plus_rows": 3,
+   "headid_vs_headtexture": {
+    "equal": 7247
+   },
+   "headtexture_differs_sample": [],
+   "db_head_tables_present": {
+    "stockplayerheads": false,
+    "stockplayerhelmetplacement": false
+   },
+   "other_columns": [
+    {
+     "table": "customplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "artid",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "headid",
+     "depth": 16,
+     "rows": 1214,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 4,
+     "rows": 1214,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 1009,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffswon",
+     "depth": 9,
+     "rows": 7505,
+     "distinct_nonzero": 189,
+     "in_bio_artid": 60,
+     "in_bio_headid": 13
+    },
+    {
+     "table": "stockcareerplayoffplayerstats",
+     "field": "faceoffstaken",
+     "depth": 10,
+     "rows": 7505,
+     "distinct_nonzero": 292,
+     "in_bio_artid": 82,
+     "in_bio_headid": 21
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 165,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 165,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 450,
+     "distinct_nonzero": 61,
+     "in_bio_artid": 29,
+     "in_bio_headid": 6
+    },
+    {
+     "table": "customteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 55,
+     "distinct_nonzero": 15,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 55,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 55,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 55,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 55,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamhistory",
+     "field": "yearstart",
+     "depth": 14,
+     "rows": 163,
+     "distinct_nonzero": 63,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortgoalieextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customarena",
+     "field": "arenaartid",
+     "depth": 10,
+     "rows": 55,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "teamartid",
+     "depth": 10,
+     "rows": 381,
+     "distinct_nonzero": 31,
+     "in_bio_artid": 21,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 381,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 5,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 381,
+     "distinct_nonzero": 61,
+     "in_bio_artid": 27,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortgoalieextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 381,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionskaterai",
+     "field": "c_faceoffs",
+     "depth": 7,
+     "rows": 6498,
+     "distinct_nonzero": 56,
+     "in_bio_artid": 14,
+     "in_bio_headid": 4
+    },
+    {
+     "table": "stockleagues",
+     "field": "artid",
+     "depth": 5,
+     "rows": 31,
+     "distinct_nonzero": 21,
+     "in_bio_artid": 17,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "teamartid",
+     "depth": 10,
+     "rows": 1234,
+     "distinct_nonzero": 31,
+     "in_bio_artid": 21,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 1234,
+     "distinct_nonzero": 5,
+     "in_bio_artid": 5,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 1234,
+     "distinct_nonzero": 61,
+     "in_bio_artid": 27,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 1234,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualfacemaskvariant",
+     "depth": 8,
+     "rows": 1234,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 5,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualfacemaskstyle",
+     "depth": 3,
+     "rows": 1234,
+     "distinct_nonzero": 2,
+     "in_bio_artid": 2,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualfacemasktype",
+     "depth": 3,
+     "rows": 1234,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionresortskaterextras",
+     "field": "casualheadgearorient",
+     "depth": 2,
+     "rows": 1234,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "coachheadid",
+     "depth": 16,
+     "rows": 433,
+     "distinct_nonzero": 20,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone14",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone12",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone10",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone13",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascothead",
+     "depth": 10,
+     "rows": 433,
+     "distinct_nonzero": 30,
+     "in_bio_artid": 19,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask2_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 49,
+     "in_bio_artid": 22,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask4_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomhead",
+     "depth": 5,
+     "rows": 433,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 3,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone11",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask1_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 45,
+     "in_bio_artid": 22,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone15",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask8_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone4",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask6_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 66,
+     "in_bio_artid": 26,
+     "in_bio_headid": 3
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone5",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone6",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone2",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone1",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "artid",
+     "depth": 15,
+     "rows": 433,
+     "distinct_nonzero": 311,
+     "in_bio_artid": 99,
+     "in_bio_headid": 28
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask5_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone8",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask0_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 220,
+     "in_bio_artid": 62,
+     "in_bio_headid": 17
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone9",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask7_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone3",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "goaliemask3_starter",
+     "depth": 9,
+     "rows": 433,
+     "distinct_nonzero": 6,
+     "in_bio_artid": 6,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "field": "mascotcustomheadzone7",
+     "depth": 24,
+     "rows": 433,
+     "distinct_nonzero": 3,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearstyle",
+     "depth": 4,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearvariant",
+     "depth": 8,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgeartype",
+     "depth": 5,
+     "rows": 3,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualfacemaskvariant",
+     "depth": 8,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualfacemaskstyle",
+     "depth": 3,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualfacemasktype",
+     "depth": 3,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "customresortskaterextras",
+     "field": "casualheadgearorient",
+     "depth": 2,
+     "rows": 3,
+     "distinct_nonzero": 0,
+     "in_bio_artid": 0,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockawardstable",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 485,
+     "distinct_nonzero": 100,
+     "in_bio_artid": 40,
+     "in_bio_headid": 14
+    },
+    {
+     "table": "stockawardstable",
+     "field": "playerartid",
+     "depth": 16,
+     "rows": 485,
+     "distinct_nonzero": 37,
+     "in_bio_artid": 16,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffswon",
+     "depth": 11,
+     "rows": 18587,
+     "distinct_nonzero": 761,
+     "in_bio_artid": 211,
+     "in_bio_headid": 58
+    },
+    {
+     "table": "stockcareerseasonplayerstats",
+     "field": "faceoffstaken",
+     "depth": 12,
+     "rows": 18587,
+     "distinct_nonzero": 1112,
+     "in_bio_artid": 277,
+     "in_bio_headid": 74
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "headtexture",
+     "depth": 16,
+     "rows": 7247,
+     "distinct_nonzero": 604,
+     "in_bio_artid": 394,
+     "in_bio_headid": 604
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "playoffbeardstart",
+     "depth": 3,
+     "rows": 7247,
+     "distinct_nonzero": 4,
+     "in_bio_artid": 4,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "mascotheadid",
+     "depth": 10,
+     "rows": 7247,
+     "distinct_nonzero": 29,
+     "in_bio_artid": 19,
+     "in_bio_headid": 1
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hairid",
+     "depth": 11,
+     "rows": 7247,
+     "distinct_nonzero": 57,
+     "in_bio_artid": 22,
+     "in_bio_headid": 2
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "hasportrait",
+     "depth": 1,
+     "rows": 7247,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "field": "haircolorcode",
+     "depth": 4,
+     "rows": 7247,
+     "distinct_nonzero": 13,
+     "in_bio_artid": 13,
+     "in_bio_headid": 0
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "teamartid",
+     "depth": 15,
+     "rows": 1792,
+     "distinct_nonzero": 298,
+     "in_bio_artid": 93,
+     "in_bio_headid": 29
+    },
+    {
+     "table": "stockteamjerseys",
+     "field": "yearstart",
+     "depth": 11,
+     "rows": 1792,
+     "distinct_nonzero": 1,
+     "in_bio_artid": 1,
+     "in_bio_headid": 0
+    }
+   ]
+  }
+ }
+}

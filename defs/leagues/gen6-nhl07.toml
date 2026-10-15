@@ -1,0 +1,113 @@
+# NHL 07 (gen6, Xbox 360 shipping target; the PS3 copy is research-only).
+# The exhibition team table is a thin index; the league code lives on the stock team table.
+name = "gen6-nhl07"
+description = "NHL 07 stock-team league codes"
+applies_to = ["nhl07"]
+
+[schema]
+league_table = "HqzU"
+league_field = "xMjj"
+league_width = 3
+required_tables = ["HqzU"]
+forbidden_tables = ["fsLK"]
+
+[source]
+kind = "anchor-measurement"
+description = "L1.1-A cross-tab of HqzU.xMjj against member-team abbreviations, NHL07NG.db 67a00bea...bad3"
+
+[[entries]]
+raw = 0
+label = "NHL"
+dictionary_key = "NHL"
+key_evidence = "hypothesis"
+confidence = "candidate"
+evidence = "32 rows: ANA, ATL, BOS, BUF, CGY, CAR, CHI, COL ..."
+
+[[entries]]
+raw = 1
+label = "National Teams"
+dictionary_key = "NATIONAL"
+key_evidence = "hypothesis"
+confidence = "candidate"
+evidence = "21 rows: AUS, BEL, CAN, CZE, DEN, FIN, FRA, GER ..."
+
+[[entries]]
+raw = 2
+label = "Elitserien (Sweden)"
+confidence = "candidate"
+evidence = "12 rows: BIF, DIF, FBK, VF, HV, LHC, LHF, MIF ..."
+
+[[entries]]
+raw = 3
+label = "SM-liiga (Finland)"
+confidence = "candidate"
+evidence = "13 rows: ASS, BLU, IFK, HPK, ILV, JOK, JYP, KAR ..."
+
+[[entries]]
+raw = 4
+label = "DEL (Germany)"
+confidence = "candidate"
+evidence = "14 rows: AUG, EBB, DEG, FRL, HHF, HAN, ING, IEC ..."
+# raw 5: one row (DAV) - unidentified, left raw.
+
+# NHL (league 0) conference / division labels for the stock table's local bits (`rasz` = the
+# 1-bit conference, `xgeX` = the 3-bit division), from research 2026-09-21 handoff 13 §1: conference
+# 0 = the Western clubs (divisions 3 CHI CBJ DET NSH STL, 4 CGY COL EDM MIN VAN, 5 ANA DAL LA PHX
+# SJ), conference 1 = the Eastern clubs (0 BOS BUF MTL OTT TOR, 1 NJ NYI NYR PHI PIT, 2 ATL CAR
+# FLA TB WSH); the All-Star rows carry 0 / 0. Names are the 2006-07 NHL structure inferred from the
+# membership (candidate; no dictionary key traced). Other leagues carry 0 / 0 and stay raw.
+[[groups]]
+field = "rasz"
+league_raw = 0
+raw = 0
+label = "Western"
+confidence = "candidate"
+
+[[groups]]
+field = "rasz"
+league_raw = 0
+raw = 1
+label = "Eastern"
+confidence = "candidate"
+
+[[groups]]
+field = "xgeX"
+league_raw = 0
+raw = 0
+label = "Northeast"
+confidence = "candidate"
+
+[[groups]]
+field = "xgeX"
+league_raw = 0
+raw = 1
+label = "Atlantic"
+confidence = "candidate"
+
+[[groups]]
+field = "xgeX"
+league_raw = 0
+raw = 2
+label = "Southeast"
+confidence = "candidate"
+
+[[groups]]
+field = "xgeX"
+league_raw = 0
+raw = 3
+label = "Central"
+confidence = "candidate"
+
+[[groups]]
+field = "xgeX"
+league_raw = 0
+raw = 4
+label = "Northwest"
+confidence = "candidate"
+
+[[groups]]
+field = "xgeX"
+league_raw = 0
+raw = 5
+label = "Pacific"
+confidence = "candidate"

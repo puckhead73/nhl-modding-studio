@@ -1,0 +1,70 @@
+$ python research/nhl08-roster-schema/scripts/crosstitle_compare.py
+== containers ==
+  nhl07 roster: file 1598888 bytes, TDB @0x1c db_size 10476 tables 31, tail 1588384; game DB tables 90
+  nhl08 roster: file 1238480 bytes, TDB @0x1c db_size 14780 tables 30, tail 1223672; game DB tables 79
+
+== meta vocabulary ==
+  nhl07: tables 90, insert ids 53, delete ids 52, update ids 41, difflistproperty ['ENABLED'], savegroups ['currentrosters', 'defaultbiosattributes', 'defaultrosters', 'dynasty', 'league', 'rosters', 'rosterupdate', 'settings']
+  nhl08: tables 79, insert ids 56, delete ids 50, update ids 55, difflistproperty ['ENABLED'], savegroups ['allloaded', 'currentrosters', 'defaultbiosattributes', 'defaultrosters', 'dynasty', 'league', 'rosters', 'rosterupdate', 'rosterupdatenogoalieequipment', 'settings']
+
+== NHL 07 report's inferred update parents vs the NHL 07 meta's declared updateshortname ==
+  CvSu -> cPbu (report) ; meta: DECLARED same
+  MVOx -> EhOn (report) ; meta: DECLARED same
+  HHLk -> MqdK (report) ; meta: DECLARED same
+  RosT -> yvSd (report) ; meta: DECLARED same
+  uyGF -> yuHm (report) ; meta: DECLARED same
+  vozd -> ulGe (report) ; meta: DECLARED same
+  mASv -> oYeE (report) ; meta: DECLARED same
+  Iblm -> bZvB (report) ; meta: DECLARED same
+  rcpY -> YzeG (report) ; meta: DECLARED same
+  zrsU -> oDHy (report) ; meta: DECLARED same
+  DZfz -> dDrd (report) ; meta: DECLARED same
+  YvhR -> Raym (report) ; meta: DECLARED same
+  agreement: 12/12
+
+== declared difflist ids for parents present in both metas ==
+  FekM  leaguecustomfacetable          / leaguecustomfacetable          07=('lWmS', 'rccd', None) 08=('lWmS', 'rccd', 'EZbT')
+  OEtS  exhibitionarena                / exhibitionarena                07=('CTnc', None, None) 08=(None, None, 'TUaR')
+  PSFv  leaguearena                    / leaguearena                    07=('eiHK', 'coVl', None) 08=('eiHK', 'coVl', 'TVyb')
+  Vzjq  customfacetable                / customfacetable                07=('igwM', 'giej', 'PPVt') 08=(None, None, 'PPVt')
+  cPbu  exhibitionplayerbiotable       / exhibitionplayerbiotable       07=(None, None, 'CvSu') 08=('PsvH', None, 'CvSu')
+  caBZ  exhibitionplayers              / exhibitionplayers              07=('LZbD', 'Frps', None) 08=('LZbD', 'Frps', 'qWeu')
+  kGzd  leaguefreeagents               / leaguefreeagents               07=('ioPQ', 'oiBf', None) 08=('ioPQ', 'oiBf', 'HnSp')
+  oYeE  exhibitionteamstrategies       / exhibitionteamstrategies       07=('znPC', 'JhBt', 'mASv') 08=(None, None, 'mASv')
+  ttOk  exhibitionteams                / exhibitionteams                07=('fyFF', 'dULq', None) 08=(None, None, 'SREo')
+  yuHm  exhibitiongoalieai             / exhibitiongoalieai             07=(None, None, 'uyGF') 08=('PxTk', None, 'uyGF')
+  yvSd  exhibitionskaterai             / exhibitionskaterai             07=(None, None, 'RosT') 08=('kbtS', None, 'RosT')
+  identical (ins,del,upd) triples: 33 ; differing: 11
+  parents only in NHL 07: ['customarenatable', 'customgoalieai', 'customplayerai', 'customplayerbiotable', 'customteamextracities', 'customteamtable', 'defaultfreeagents', 'defaultrostertable', 'defaultrosterversiontable', 'downloadgoalieai', 'downloadplayerbiotable', 'downloadskaterai', 'exhibitiondownloadgoalieai', 'exhibitiondownloadplayerbio', 'exhibitiondownloadskaterai', 'intldelschedule', 'intlelitserienschedule', 'intlsmliigaschedule', 'leaguecustomarenatable', 'leaguecustomteamtable', 'leaguegameplayerstats', 'leagueownertask', 'leaguerookiebiotable', 'leaguerookieplayerai', 'nhlschedulelongleap', 'nhlschedulelongnoleap', 'nhlschedulemedium', 'nhlschedulesmall', 'rosterversiontable', 'stockarenatable', 'stockcoachtable', 'stockgoalieai', 'stockplayerbiotable', 'stockskaterai', 'stockteamtable']
+  parents only in NHL 08: ['ahlschedule', 'custompalettetable', 'customteamequipmenttable', 'exhibitiondlc', 'exhibitiongoalieequipment', 'exhibitionskaterequipment', 'leaguecustompalettetable', 'leaguecustomteamequipmenttable', 'leaguegmdata', 'leaguegoalieequipment', 'leagueplayercareerplayoffsstats', 'leagueplayercareerseasonstats', 'leaguerookiegoalieequipment', 'leaguerookieplayerbiotable', 'leaguerookieskaterai', 'leaguerookieskaterequipment', 'leagueskaterequipment', 'leaguetransactiontable', 'nhlschedule', 'stockgoalieequipment', 'stockretirednumbertable', 'stockteamcolorstable', 'stockteamequipmenttable', 'stockteamjerseytable']
+
+== rosters-group parents: schema drift ==
+  rosters group: NHL 07 16 tables, NHL 08 17 tables; common 9
+  only NHL 07: ['customgoalieai', 'customplayerai', 'customplayerbiotable', 'exhibitiondownloadgoalieai', 'exhibitiondownloadplayerbio', 'exhibitiondownloadskaterai', 'rosterversiontable']
+  only NHL 08: ['customfacetable', 'custompalettetable', 'customteamequipmenttable', 'exhibitiongoalieequipment', 'exhibitionskaterequipment', 'stockgoalieequipment', 'stockteamcolorstable', 'stockteamequipmenttable']
+  OEtS  exhibitionarena              fields  3->33 recB   4->104 rows   93-> 138; only07=['arenaid', 'table'] only08=['arenaartid', 'arenaaudioid', 'arenaname', 'arenatype', 'avgattendance', 'boardad', 'boardadshown', 'boardtrim', 'chantaudioid', 'cityaudioid', 'cityname', 'crease', 'crowdtype', 'doorlogo', 'goalhorn', 'icead1', 'icead2', 'icead3', 'icelogo', 'icelogoshown', 'icequality', 'jumbotron', 'maxattendance', 'periodhorn', 'puck', 'redline', 'roof', 'seathigh', 'seatlow', 'seatmedium', 'step', 'walls'] depth-diff=['index:7->8'] update-flag-diff=[] key-diff=[] keys ['qEfv']->['qEfv']
+  QEoV  exhibitionfreeagents         fields  1-> 1 recB   4->  4 rows   74-> 156; only07=[] only08=[] depth-diff=[] update-flag-diff=[] key-diff=[] keys ['TWSX']->['TWSX']
+  yuHm  exhibitiongoalieai           fields 23->26 recB  16-> 20 rows  235-> 315; only07=['g_intensity', 'g_toughness'] only08=['g_aggression', 'g_durability', 'g_poise', 'g_puckplayfrequency', 'g_vision'] depth-diff=['g_consistency:2->6', 'g_positioning:2->6', 'g_floppiness:2->6'] update-flag-diff=[] key-diff=[] keys ['zIBw']->['zIBw']
+  cPbu  exhibitionplayerbiotable     fields 46->32 recB 508->184 rows 2250->2962; only07=['blocker', 'defaultaudioid', 'glovesortrapper', 'hascustomblocker', 'hascustommask', 'hascustompads', 'hascustomtrapper', 'helmetbrandorgoaliemask', 'helmetrankcode', 'jerseytuck', 'lefteyecolorcode', 'neckprotector', 'pantstypecode', 'righteyecolorcode', 'shoulderpadstypecode', 'skates', 'skatesocktuckcode', 'stick', 'sticktapestylecode', 'visorcolororgoaliepads', 'visortypecode'] only08=['active', 'eyecolorcode', 'haircap', 'haircards_a', 'haircards_b', 'proteam', 'statename'] depth-diff=['team:7->8', 'year:6->7', 'contractdollars:9->10', 'headid:14->15', 'yeardrafted:6->7', 'birthplace:1280->320', 'firstname:1280->320', 'lastname:1280->320'] update-flag-diff=['artid', 'headid'] key-diff=[] keys ['zIBw']->['zIBw']
+  caBZ  exhibitionplayers            fields  3-> 3 recB   4->  4 rows 2790->3257; only07=[] only08=[] depth-diff=['table:1->2'] update-flag-diff=['table', 'playerid'] key-diff=[] keys ['qEfv']->['qEfv']
+  ulGe  exhibitionrostertable        fields 70->71 recB  16-> 16 rows 2516->2525; only07=[] only08=['key'] depth-diff=['team:7->8'] update-flag-diff=['playerindex'] key-diff=['TWSX'] keys ['TWSX']->['XWot']
+  yvSd  exhibitionskaterai           fields 27->30 recB  20-> 24 rows 2015->2647; only07=['p_herorating', 'p_injury', 'p_penalty', 'p_prestige'] only08=['p_defawareness', 'p_deflections', 'p_discipline', 'p_durability', 'p_offawareness', 'p_poise', 'p_shotblocking'] depth-diff=[] update-flag-diff=[] key-diff=[] keys ['zIBw']->['zIBw']
+  ttOk  exhibitionteams              fields  4->31 recB   4->204 rows   93-> 138; only07=['teamid'] only08=['abbrname', 'active', 'ahlaffiliate', 'artabbr', 'artid', 'audioid', 'audioid2', 'coachartid', 'coachfirstname', 'coachlastname', 'conference', 'font', 'fullname', 'inaugural', 'itechvisorcolor', 'jerseybackaway', 'jerseybackhome', 'jerseystyle', 'league', 'logo', 'original', 'pantsstyle', 'rivalteam', 'shortname', 'smoke_b', 'smoke_g', 'smoke_r', 'sockstyle'] depth-diff=['index:7->8'] update-flag-diff=['division'] key-diff=[] keys ['qEfv']->['qEfv']
+  oYeE  exhibitionteamstrategies     fields 11->11 recB   8->  8 rows   93-> 138; only07=[] only08=[] depth-diff=['index:7->8'] update-flag-diff=[] key-diff=[] keys ['qEfv']->['qEfv']
+
+== save tables: ids shared by both roster saves ==
+  shared save ids: 11 of 07=31 / 08=30
+    AtUj 07:ulGe(delete) nf 1 recB 4 | 08:ulGe(delete) nf 1 recB 4
+    CvSu 07:cPbu(update) nf 43 recB 504 | 08:cPbu(update) nf 32 recB 184
+    Frps 07:caBZ(delete) nf 1 recB 4 | 08:caBZ(delete) nf 1 recB 4
+    LZbD 07:caBZ(insert) nf 3 recB 4 | 08:caBZ(insert) nf 3 recB 4
+    RosT 07:yvSd(update) nf 27 recB 20 | 08:yvSd(update) nf 30 recB 24
+    ibGM 07:ulGe(insert) nf 70 recB 16 | 08:ulGe(insert) nf 71 recB 16
+    mASv 07:oYeE(update) nf 11 recB 8 | 08:oYeE(update) nf 11 recB 8
+    mGOv 07:QEoV(delete) nf 1 recB 4 | 08:QEoV(delete) nf 1 recB 4
+    sAMA 07:QEoV(insert) nf 1 recB 4 | 08:QEoV(insert) nf 1 recB 4
+    uyGF 07:yuHm(update) nf 23 recB 16 | 08:yuHm(update) nf 26 recB 20
+    vozd 07:ulGe(update) nf 70 recB 16 | 08:ulGe(update) nf 71 recB 16
+  only NHL 07 save: ['CTnc=OEtS:insert', 'DZfz=dDrd:update', 'Exae=YzeG:delete', 'HHLk=MqdK:update', 'Iblm=bZvB:update', 'JhBt=oYeE:delete', 'KERl=oDHy:insert', 'KboR=YzeG:insert', 'MVOx=EhOn:update', 'YvhR=Raym:update', 'dULq=ttOk:delete', 'eUOR=MqdK:insert', 'fyFF=ttOk:insert', 'nGCg=bZvB:delete', 'oCMe=MqdK:delete', 'rcpY=YzeG:update', 'tMYP=bZvB:insert', 'wKzK=oDHy:delete', 'znPC=oYeE:insert', 'zrsU=oDHy:update']
+  only NHL 08 save: ['BlkH=ajmx:insert', 'JJDo=lVMf:update', 'KjDh=Roup:update', 'MSZu=ajmx:update', 'PPVt=Vzjq:update', 'PsvH=cPbu:insert', 'PxTk=yuHm:insert', 'SREo=ttOk:update', 'TUaR=OEtS:update', 'UHgc=vbHh:update', 'VDLc=nAUy:update', 'XGls=sozv:update', 'aGgS=nAUy:delete', 'gKeN=lVMf:insert', 'hTDj=NDEo:update', 'kbtS=yvSd:insert', 'qWeu=caBZ:update', 'sAud=nAUy:insert', 'yJYN=sozv:insert']
+

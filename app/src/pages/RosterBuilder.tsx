@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useHistoricalRatings } from "../lib/historicalRatings";
+import { byOverall, GROUP_LABELS, POSITION_GROUPS, ratingKey, suggestReplacements, type PositionGroup } from "../lib/rosterSuggestions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { useRosterCart, type CartItem } from "../lib/rosterCart";
 import { Button, Card, EmptyState, Pill } from "../components/primitives";
 import { POS_BADGE } from "../lib/position";
+import { teamLabel } from "../lib/team";
+import type { TeamSummaryDto } from "../bindings/TeamSummaryDto";
 import type { ImportItemDto } from "../bindings/ImportItemDto";
 import type { ChangeSetPreviewDto } from "../bindings/ChangeSetPreviewDto";
 import type { ImportResultDto as ImportResult } from "../bindings/ImportResultDto";
@@ -16,7 +20,7 @@ import type { FindingDto } from "../bindings/FindingDto";
 /// (per-item outcomes, capacity delta, audit, blockers, dedup), and Commit applies the whole cart as
 /// one undo entry. Requires an open project (AppShell) and an open corpus (CorpusGate).
 export function RosterBuilderPage() {
-  const { project } = useProject();
+  const { project, update } = useProject();
   const cart = useRosterCart();
   const qc = useQueryClient();
   const projectId = project?.project_id ?? null;
@@ -30,8 +34,26 @@ export function RosterBuilderPage() {
     enabled: projectId != null,
   });
 
-  // The cart lowers to the backend item shape; a row missing a target team can't be sent.
-  const ready = cart.items.length > 0 && cart.items.every((i) => i.targetTeamId != null);
+  const roster = useQuery({ queryKey: ["list_players", projectId],
+    queryFn: () => call("list_players", { projectId: projectId! }), enabled: projectId != null });
+  const estimates = useHistoricalRatings(cart.items);
+  const rating = (i: CartItem) => estimates.ratings.get(ratingKey(i.personId, i.seasonYear));
+  useEffect(() => {
+    if (!estimates.ready || !roster.isSuccess || roster.isFetching) return;
+    const patches = suggestReplacements(cart.items, roster.data, estimates.ratings);
+    if (patches.size) {
+      patches.forEach((patch, id) => cart.update(id, patch));
+      setPreview(null);
+    }
+  }, [cart, estimates, roster.data, roster.isSuccess, roster.isFetching]);
+  const invalidSelection = cart.items.some(i => {
+    if (i.matchEaPlayerId == null) return false;
+    const player = roster.data?.find(p => p.player_id === i.matchEaPlayerId);
+    return !player || player.is_goalie !== (rating(i)?.group === "goalie") ||
+      cart.items.some(other => other.id !== i.id && other.matchEaPlayerId === i.matchEaPlayerId);
+  });
+  const ready = estimates.ready && roster.isSuccess && !invalidSelection && cart.items.length > 0 &&
+    cart.items.every(i => i.targetTeamId != null && !i.assignmentPending);
   const toDto = (i: CartItem): ImportItemDto => ({
     person_id: i.personId,
     season_year: i.seasonYear,
@@ -50,7 +72,7 @@ export function RosterBuilderPage() {
 
   const doCommit = useMutation({
     mutationFn: () => call("import_commit", { projectId: projectId!, items: cart.items.map(toDto) }),
-    onSuccess: (r) => {
+    onSuccess: async (r) => {
       setResult(r);
       setPreview(null);
       cart.clear();
@@ -58,6 +80,7 @@ export function RosterBuilderPage() {
       qc.invalidateQueries({ queryKey: ["list_players", projectId] });
       qc.invalidateQueries({ queryKey: ["list_teams", projectId] });
       qc.invalidateQueries({ queryKey: ["project_summary", projectId] });
+      update(await call("project_summary", { projectId: projectId! }));
     },
   });
 
@@ -110,7 +133,7 @@ export function RosterBuilderPage() {
                 {doPreview.isPending ? "Previewing…" : "Preview"}
               </Button>
               <Button
-                disabled={!preview || preview.blocked > 0 || preview.capacity_blocked || doCommit.isPending}
+                disabled={!ready || !preview || preview.blocked > 0 || preview.capacity_blocked || doCommit.isPending}
                 onClick={() => doCommit.mutate()}
                 title={
                   preview && preview.blocked > 0
@@ -131,6 +154,7 @@ export function RosterBuilderPage() {
                 <tr className="text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                   <th className="px-2 py-1">Player</th>
                   <th className="px-2 py-1">Season</th>
+                  <th className="px-2 py-1">Est. OVR</th>
                   <th className="px-2 py-1">Target team</th>
                   <th className="px-2 py-1">Identity</th>
                   <th className="px-2 py-1">Jersey</th>
@@ -138,22 +162,30 @@ export function RosterBuilderPage() {
                 </tr>
               </thead>
               <tbody>
-                {cart.items.map((it) => (
+                {POSITION_GROUPS.map(group => <Fragment key={group}>
+                  <tr><th colSpan={7} className="px-2 pt-4 pb-2 text-left text-sky-300">{GROUP_LABELS[group]}</th></tr>
+                  {cart.items.filter(i => rating(i)?.group === group)
+                    .sort((a, b) => byOverall(rating(a)?.overall, rating(b)?.overall) || a.personName.localeCompare(b.personName)).map((it) => (
                   <CartRow
                     key={it.id}
                     item={it}
                     projectId={projectId}
                     teams={teams.data ?? []}
+                    group={group}
+                    overall={rating(it)?.overall ?? null}
+                    reserved={new Set(cart.items.filter(i => i.id !== it.id && i.matchEaPlayerId != null).map(i => i.matchEaPlayerId!))}
                     onChange={(patch) => editItem(it.id, patch)}
                     onRemove={() => removeItem(it.id)}
                   />
-                ))}
+                ))}</Fragment>)}
               </tbody>
             </table>
           </div>
-          {!ready && (
+          {cart.items.some(i => i.targetTeamId == null) && (
             <p className="mt-2 text-xs text-amber-400">Every row needs a target team before you can preview.</p>
           )}
+          {!estimates.ready && <p className="mt-2 text-xs text-slate-400">{estimates.error ? "Couldn't estimate ratings. Please retry loading this page." : "Estimating ratings…"}</p>}
+          {invalidSelection && <p className="mt-2 text-xs text-amber-400">Choose a unique, compatible replacement for each player. Skaters can only replace skaters; goalies can only replace goalies.</p>}
           {doPreview.isError && <p className="mt-2 text-xs text-rose-400">{String(doPreview.error)}</p>}
           {doCommit.isError && <p className="mt-2 text-xs text-rose-400">{String(doCommit.error)}</p>}
         </Card>
@@ -173,12 +205,18 @@ function CartRow({
   item,
   projectId,
   teams,
+  group,
+  overall,
+  reserved,
   onChange,
   onRemove,
 }: {
   item: CartItem;
   projectId: number;
-  teams: { team_id: number; name: string }[];
+  teams: TeamSummaryDto[];
+  group: PositionGroup;
+  overall: number | null;
+  reserved: Set<number>;
   onChange: (patch: Partial<CartItem>) => void;
   onRemove: () => void;
 }) {
@@ -192,21 +230,24 @@ function CartRow({
     queryFn: () => call("list_players", { projectId }),
   });
 
-  const targetTeamName = teams.find((t) => t.team_id === item.targetTeamId)?.name;
-  const matchIds = new Set((matches.data ?? []).map((c) => c.ea_player_id));
+  const targetTeam = teams.find((t) => t.team_id === item.targetTeamId);
+  const targetTeamName = targetTeam ? teamLabel(targetTeam) : undefined;
+  const compatible = (id: number) => roster.data?.some(p => p.player_id === id && p.is_goalie === (group === "goalie"));
+  const candidates = (matches.data ?? []).filter(c => compatible(c.ea_player_id));
+  const matchIds = new Set(candidates.map(c => c.ea_player_id));
   // Current occupants of the target team, minus anyone already offered as a same-person match.
   const occupants =
     item.targetTeamId == null
       ? []
       : (roster.data ?? [])
-          .filter((p) => p.team_id === item.targetTeamId && !matchIds.has(p.player_id))
-          .sort((a, b) => `${a.last_name}${a.first_name}`.localeCompare(`${b.last_name}${b.first_name}`));
+          .filter((p) => p.team_id === item.targetTeamId && !matchIds.has(p.player_id) && compatible(p.player_id))
+          .sort((a, b) => byOverall(a.overall, b.overall) || a.player_id - b.player_id);
 
   const selectCls =
     "rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 focus:border-sky-600 focus:outline-none";
 
   return (
-    <tr className="border-t border-slate-800/60 align-middle">
+    <tr className={"border-t border-slate-800/60 align-middle " + (item.noPositionSlot ? "bg-amber-950/40" : "")}>
       <td className="px-2 py-1.5">
         <div className="flex items-center gap-1.5">
           {item.position && (
@@ -221,21 +262,23 @@ function CartRow({
           )}
           <span className="text-slate-100">{item.personName}</span>
         </div>
+        {item.noPositionSlot && <p className="mt-1 text-xs text-amber-300">No existing slot available for this position. Select another destination.</p>}
       </td>
       <td className="px-2 py-1.5 tabular-nums text-slate-300">{item.seasonLabel}</td>
+      <td className="px-2 py-1.5 tabular-nums text-slate-300">{overall ?? "—"}</td>
       <td className="px-2 py-1.5">
         <select
           className={selectCls}
           value={item.targetTeamId ?? ""}
           onChange={(e) =>
             // Changing team invalidates a slot-fill chosen against the old team.
-            onChange({ targetTeamId: e.target.value ? Number(e.target.value) : null, matchEaPlayerId: null })
+            onChange({ targetTeamId: e.target.value ? Number(e.target.value) : null, matchEaPlayerId: null, assignmentPending: true, noPositionSlot: false })
           }
         >
           <option value="">Select team…</option>
           {teams.map((t) => (
             <option key={t.team_id} value={t.team_id}>
-              {t.name}
+              {teamLabel(t)}
             </option>
           ))}
         </select>
@@ -248,14 +291,14 @@ function CartRow({
             className={selectCls}
             value={item.matchEaPlayerId ?? ""}
             onChange={(e) =>
-              onChange({ matchEaPlayerId: e.target.value ? Number(e.target.value) : null })
+              onChange({ matchEaPlayerId: e.target.value ? Number(e.target.value) : null, assignmentPending: false, noPositionSlot: false })
             }
           >
             <option value="">Add as a new player</option>
-            {(matches.data ?? []).length > 0 && (
+            {candidates.length > 0 && (
               <optgroup label="Same person (suggested)">
-                {(matches.data ?? []).map((c) => (
-                  <option key={c.ea_player_id} value={c.ea_player_id}>
+                {candidates.map((c) => (
+                  <option key={c.ea_player_id} value={c.ea_player_id} disabled={reserved.has(c.ea_player_id)}>
                     Update {c.full_name}
                     {c.team_name ? ` (${c.team_name})` : ""}
                     {c.confidence === "name_only" ? " — name only" : ""}
@@ -266,10 +309,11 @@ function CartRow({
             {occupants.length > 0 && (
               <optgroup label={`Replace on ${targetTeamName ?? "team"}`}>
                 {occupants.map((p) => (
-                  <option key={p.player_id} value={p.player_id}>
+                  <option key={p.player_id} value={p.player_id} disabled={reserved.has(p.player_id)}>
                     {p.position_label ? `${p.position_label} · ` : ""}
                     {p.first_name} {p.last_name}
                     {p.jersey_number != null ? ` #${p.jersey_number}` : ""}
+                    {` · OVR ${p.overall ?? "—"}`}
                   </option>
                 ))}
               </optgroup>
@@ -316,9 +360,12 @@ function PreviewPanel({
   teams,
 }: {
   preview: ChangeSetPreviewDto;
-  teams: { team_id: number; name: string }[];
+  teams: TeamSummaryDto[];
 }) {
-  const teamName = (id: number) => teams.find((t) => t.team_id === id)?.name ?? `Team #${id}`;
+  const teamName = (id: number) => {
+    const t = teams.find((t) => t.team_id === id);
+    return t ? teamLabel(t) : `Team #${id}`;
+  };
   const net = preview.players_after - preview.players_before;
   return (
     <Card

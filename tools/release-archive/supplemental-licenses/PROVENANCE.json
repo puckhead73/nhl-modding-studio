@@ -1,0 +1,106 @@
+[
+  {
+    "package": "alloc-stdlib-0.2.4",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/dropbox/rust-alloc-no-stdlib/ae42d22078b98549e987d2f03d12df7b984fde47/LICENSE",
+    "sha256": "c0c56f26d9c051cac4d200c34c84e7ae9aaa853e01a982a1df08b09931e518ae",
+    "basis": "crate .cargo_vcs_info.json commit ae42d22078b98549e987d2f03d12df7b984fde47; repository root licence (the crate folder has none)",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "react-three-fiber-8.18.0",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/pmndrs/react-three-fiber/f81bfe8cb29373d2687433c6130e0ce1daf7222c/LICENSE",
+    "sha256": "ebd6a29bec64bdfcf8795388f2eceaf1479c14d343c0846de347ab8609d66139",
+    "basis": "npm registry gitHead f81bfe8cb29373d2687433c6130e0ce1daf7222c for @react-three/fiber 8.18.0 (= tag v8.18.0); tarball integrity equals app/package-lock.json",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "selectors-0.36.1",
+    "file": "MPL-2.0.txt",
+    "url": "https://www.mozilla.org/media/MPL/2.0/index.txt",
+    "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+    "basis": "crate declares MPL-2.0; its upstream (servo/stylo at the recorded commit 635e1a19d02960588a00e189bd4bd5bdb150ec3d) has no licence file, so the licence's authoritative text from mozilla.org is used. Source Code Form: crates.io selectors 0.36.1 (https://crates.io/crates/selectors/0.36.1) and https://github.com/servo/stylo/tree/635e1a19d02960588a00e189bd4bd5bdb150ec3d/selectors",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "ts-rs-10.1.0",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/Aleph-Alpha/ts-rs/0ba56be43af1e438053af2b422a82fcff252f7ef/LICENSE",
+    "sha256": "db7f7f8e7236a2d0b41b855b2501b7b913caebbcda6ce498637a304ad1706ce1",
+    "basis": "crate .cargo_vcs_info.json commit 0ba56be43af1e438053af2b422a82fcff252f7ef; repository root licence",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "unic-0.9.0",
+    "file": "COPYRIGHT.md",
+    "url": "https://raw.githubusercontent.com/open-i18n/rust-unic/5878605364af97a3358368a6eaef02104af2e016/COPYRIGHT.md",
+    "sha256": "f5c342c49f3ac804f3e8e7bb62a8040a44c50d47bb36902b1abd13f66a1adf8b",
+    "basis": "crate .cargo_vcs_info.json commit 5878605364af97a3358368a6eaef02104af2e016 (the same for unic-common, unic-char-property, unic-char-range, unic-ucd-version 0.9.0); repository root licences and copyright statement",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "unic-0.9.0",
+    "file": "LICENSE-APACHE",
+    "url": "https://raw.githubusercontent.com/open-i18n/rust-unic/5878605364af97a3358368a6eaef02104af2e016/LICENSE-APACHE",
+    "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "basis": "crate .cargo_vcs_info.json commit 5878605364af97a3358368a6eaef02104af2e016 (the same for unic-common, unic-char-property, unic-char-range, unic-ucd-version 0.9.0); repository root licences and copyright statement",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "unic-0.9.0",
+    "file": "LICENSE-MIT",
+    "url": "https://raw.githubusercontent.com/open-i18n/rust-unic/5878605364af97a3358368a6eaef02104af2e016/LICENSE-MIT",
+    "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "basis": "crate .cargo_vcs_info.json commit 5878605364af97a3358368a6eaef02104af2e016 (the same for unic-common, unic-char-property, unic-char-range, unic-ucd-version 0.9.0); repository root licences and copyright statement",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "unic-ucd-ident-0.9.0",
+    "file": "COPYRIGHT.md",
+    "url": "https://raw.githubusercontent.com/open-i18n/rust-unic/8a6ce83063d90b91ae2ce59eddb803edd393fca9/COPYRIGHT.md",
+    "sha256": "f5c342c49f3ac804f3e8e7bb62a8040a44c50d47bb36902b1abd13f66a1adf8b",
+    "basis": "crate .cargo_vcs_info.json commit 8a6ce83063d90b91ae2ce59eddb803edd393fca9 (published from another commit than the other unic 0.9.0 crates); repository root licences and copyright statement",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "unic-ucd-ident-0.9.0",
+    "file": "LICENSE-APACHE",
+    "url": "https://raw.githubusercontent.com/open-i18n/rust-unic/8a6ce83063d90b91ae2ce59eddb803edd393fca9/LICENSE-APACHE",
+    "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+    "basis": "crate .cargo_vcs_info.json commit 8a6ce83063d90b91ae2ce59eddb803edd393fca9 (published from another commit than the other unic 0.9.0 crates); repository root licences and copyright statement",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "unic-ucd-ident-0.9.0",
+    "file": "LICENSE-MIT",
+    "url": "https://raw.githubusercontent.com/open-i18n/rust-unic/8a6ce83063d90b91ae2ce59eddb803edd393fca9/LICENSE-MIT",
+    "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+    "basis": "crate .cargo_vcs_info.json commit 8a6ce83063d90b91ae2ce59eddb803edd393fca9 (published from another commit than the other unic 0.9.0 crates); repository root licences and copyright statement",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "webview2-com-0.38.2",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/wravery/webview2-rs/b74dc5e2b394044bea5191052868ce7a106c202c/LICENSE",
+    "sha256": "0dcf41516e608bbcb6cdc5229feb7b86fe4a643b85e7df251133c93408fdac73",
+    "basis": "crate .cargo_vcs_info.json commit b74dc5e2b394044bea5191052868ce7a106c202c (the same for webview2-com-sys 0.38.2); repository root licence",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "webview2-sdk-1.0.3650.58",
+    "file": "LICENSE.txt",
+    "url": "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.3650.58 (LICENSE.txt)",
+    "sha256": "0af8f1b807512aae39c2ac1aa4d0cae65cabecb6fd554b8439a5162a0d6eca55",
+    "basis": "NuGet Microsoft.Web.WebView2 1.0.3650.58 (package SHA-256 911a472128c82ac8baa0c486c23342cc9dd6e7dc50d754e676726642ca065c60), the SDK version webview2-rs pins at the webview2-com-sys 0.38.2 commit; its build/native/x64/WebView2LoaderStatic.lib is byte-identical to the WebView2LoaderStatic.lib the crate links into nhl-studio.exe (SHA-256 0659b741bde6348d4c4a6ec4ceb9af50e3d0048ed9cd3c8659bccbb61fde55ee)",
+    "retrieved": "2026-09-28"
+  },
+  {
+    "package": "webview2-sdk-1.0.3650.58",
+    "file": "NOTICE.txt",
+    "url": "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.3650.58 (NOTICE.txt)",
+    "sha256": "106423785c5b7eba0a8e61d1837f2132e9c828e20ad530f565d981c1df60dd90",
+    "basis": "NuGet Microsoft.Web.WebView2 1.0.3650.58 (package SHA-256 911a472128c82ac8baa0c486c23342cc9dd6e7dc50d754e676726642ca065c60), the SDK version webview2-rs pins at the webview2-com-sys 0.38.2 commit; its build/native/x64/WebView2LoaderStatic.lib is byte-identical to the WebView2LoaderStatic.lib the crate links into nhl-studio.exe (SHA-256 0659b741bde6348d4c4a6ec4ceb9af50e3d0048ed9cd3c8659bccbb61fde55ee)",
+    "retrieved": "2026-09-28"
+  }
+]

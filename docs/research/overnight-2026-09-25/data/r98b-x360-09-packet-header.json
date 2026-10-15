@@ -1,0 +1,1097 @@
+{
+ "note": "R98b - X360 NHL 09 `.ast` packet headers: why the R91 XMA2 packet reading gives negative first-block deltas (-3712), inexact middle\nblocks (942 / 946 streams) and an undetected `packet_frame_count_0` control on NHL 09 alone (R98). Discriminating test between two\npublic packet-header layouts (Microsoft XMA documentation as read by the ffmpeg / vgmstream readers; not vendored - the layouts are\nrestated here as bit positions only):\n  XMA2 packet header (32 bits): FrameCount 6 | FrameOffsetInBits 15 | PacketMetadata 3 | PacketSkipCount 8\n  XMA1 packet header (32 bits): SequenceNumber 4 | Unused 2 | FrameOffsetInBits 15 | PacketSkipCount 11\nBoth keep FrameOffsetInBits at bits 25..11. Under XMA1 the top 4 bits must count 0..15 cyclically along a stream's packets and bits\n27..26 must be 0; under XMA2 the top 6 bits are a frame count and bits 10..8 a metadata value (1 on every NHL 10-Legacy packet, R84 /\nR91). Independent of either header, the frames inside a packet can be walked: each XMA frame starts with a 15-bit length (in bits,\nincluding the field); walking from FrameOffsetInBits until a 0x7FFF terminator / packet end counts the frames STARTING in the packet;\n\u03a3 (frames x 512) per block is then compared with the block's samples word - the sample rule that R91 established on NHL 10-Legacy\nthrough the header count, re-derived here without trusting the header.\nInputs: X360 NHL 09 loose `audio/sfx/{crowds,playercalls,sfx}.abk/.ast` (byte-identical to the `data0.big` / `audioboot.big` members,\nR98 hashes) and X360 NHL 10 loose as the control (read-only). Usage: python r98b_x360_09_packet_header.py <out.json>\n",
+ "trees": {
+  "x360-nhl09": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 09\\NHL 09 (USA)\\audio\\sfx",
+   "banks": {
+    "crowds": {
+     "abk_sha256": "f5e8ba1afb24e756cd3cbcab76dc18339dd482455efa62d0fea0f64ece966dd5",
+     "ast_sha256": "a963728b686eb5d2cc18e2bff307c2747b1f0e8ba8038f452f43a4baab079ef0",
+     "streams": 21,
+     "packets": 4387,
+     "xma1_seq_increments": 0,
+     "xma1_unused_zero": 171,
+     "xma2_metadata_1": 0,
+     "xma2_frame_count_hist": {
+      "2": 4216,
+      "8": 171
+     },
+     "walk_stop": {
+      "packet end": 4387
+     },
+     "walk_vs_xma2_header_equal": 691,
+     "blocks_walk_x512_eq_samples": 2519,
+     "blocks_checked": 2571,
+     "sub_block_packets": {
+      "1": 755,
+      "2": 1816
+     },
+     "sub_blocks_disagree": 0,
+     "first_block_walk_delta": {
+      "384": 21
+     },
+     "terminal_block_walk_minus_samples": {
+      "114": 1,
+      "12": 1,
+      "165": 1,
+      "176": 1,
+      "188": 1,
+      "221": 1,
+      "32": 2,
+      "331": 1,
+      "364": 1,
+      "366": 1,
+      "384": 2,
+      "403": 1,
+      "427": 1,
+      "454": 1,
+      "487": 1,
+      "58": 1,
+      "71": 1,
+      "72": 1,
+      "80": 1
+     },
+     "examples": [
+      {
+       "stream": 41,
+       "block": 0,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        529,
+        1477,
+        1397,
+        1416
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 41,
+       "block": 1,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        1502,
+        1346,
+        1356,
+        1297
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 41,
+       "block": 2,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        1196,
+        1244,
+        1219,
+        1207
+       ],
+       "stop": "packet end"
+      }
+     ],
+     "middle_blocks": 2529
+    },
+    "playercalls": {
+     "abk_sha256": "52fd321b60d0911d75379f9efadb5b58a08f5b42474263a80a2a9b47a6bae31b",
+     "ast_sha256": "372543ad6151d12818ff78cd67d3bf44c20436ad11a815fe609cfdb8de56014d",
+     "streams": 51,
+     "packets": 253,
+     "xma1_seq_increments": 0,
+     "xma1_unused_zero": 1,
+     "xma2_metadata_1": 0,
+     "xma2_frame_count_hist": {
+      "2": 252,
+      "8": 1
+     },
+     "walk_stop": {
+      "packet end": 253
+     },
+     "walk_vs_xma2_header_equal": 7,
+     "blocks_walk_x512_eq_samples": 150,
+     "blocks_checked": 252,
+     "sub_block_packets": {
+      "1": 251,
+      "2": 1
+     },
+     "sub_blocks_disagree": 0,
+     "first_block_walk_delta": {
+      "384": 51
+     },
+     "terminal_block_walk_minus_samples": {
+      "0": 1,
+      "104": 1,
+      "128": 2,
+      "154": 1,
+      "167": 1,
+      "175": 1,
+      "180": 1,
+      "188": 1,
+      "190": 1,
+      "202": 2,
+      "212": 1,
+      "224": 2,
+      "242": 1,
+      "256": 2,
+      "26": 1,
+      "28": 1,
+      "288": 1,
+      "292": 1,
+      "298": 1,
+      "299": 1,
+      "300": 1,
+      "304": 1,
+      "32": 2,
+      "320": 1,
+      "322": 1,
+      "325": 1,
+      "34": 1,
+      "368": 1,
+      "384": 2,
+      "401": 1,
+      "41": 1,
+      "410": 1,
+      "416": 2,
+      "427": 1,
+      "445": 1,
+      "448": 1,
+      "480": 2,
+      "62": 1,
+      "64": 1,
+      "69": 1,
+      "72": 1,
+      "84": 1,
+      "96": 1
+     },
+     "examples": [
+      {
+       "stream": 254,
+       "block": 0,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        1087,
+        1552,
+        1503,
+        1279
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 254,
+       "block": 1,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        1099,
+        1065,
+        1262,
+        1079
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 254,
+       "block": 2,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        1465,
+        1567,
+        1354,
+        1532
+       ],
+       "stop": "packet end"
+      }
+     ],
+     "middle_blocks": 150
+    },
+    "sfx": {
+     "abk_sha256": "3275847f8e8b9b31471fdb9c0b9d6023d73f183e157fbab2f0c29b42680b9cc0",
+     "ast_sha256": "5e879935f03cad903408222fd536bb8b8cfb4c9c5c88e861c176b7c44254b624",
+     "streams": 33,
+     "packets": 28584,
+     "xma1_seq_increments": 0,
+     "xma1_unused_zero": 21,
+     "xma2_metadata_1": 0,
+     "xma2_frame_count_hist": {
+      "2": 28563,
+      "8": 21
+     },
+     "walk_stop": {
+      "packet end": 28584
+     },
+     "walk_vs_xma2_header_equal": 10840,
+     "blocks_walk_x512_eq_samples": 14829,
+     "blocks_checked": 14972,
+     "sub_block_packets": {
+      "1": 1360,
+      "2": 13612
+     },
+     "sub_blocks_disagree": 0,
+     "first_block_walk_delta": {
+      "384": 33
+     },
+     "terminal_block_walk_minus_samples": {
+      "112": 1,
+      "128": 12,
+      "240": 1,
+      "248": 1,
+      "308": 1,
+      "416": 1,
+      "456": 15,
+      "48": 1
+     },
+     "examples": [
+      {
+       "stream": 0,
+       "block": 0,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        589,
+        1314,
+        1200,
+        1302
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 0,
+       "block": 1,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        1325,
+        1347,
+        1236,
+        1156
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 0,
+       "block": 2,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        1301,
+        1322,
+        1245,
+        1294
+       ],
+       "stop": "packet end"
+      }
+     ],
+     "middle_blocks": 14906
+    },
+    "colors1": {
+     "abk_sha256": "a01c11f9bc2884841cb3550e1ea70884eef39790f45deddd86eebc691f0e840d",
+     "ast_sha256": "16178401f2e56527cf27276d3bb840df2d86bda2d4bf8c2ad3d022dd90d1e585",
+     "streams": 165,
+     "packets": 1989,
+     "xma1_seq_increments": 0,
+     "xma1_unused_zero": 6,
+     "xma2_metadata_1": 0,
+     "xma2_frame_count_hist": {
+      "2": 1983,
+      "8": 6
+     },
+     "walk_stop": {
+      "packet end": 1989
+     },
+     "walk_vs_xma2_header_equal": 27,
+     "blocks_walk_x512_eq_samples": 1640,
+     "blocks_checked": 1970,
+     "sub_block_packets": {
+      "1": 1951,
+      "2": 19
+     },
+     "sub_blocks_disagree": 0,
+     "first_block_walk_delta": {
+      "384": 165
+     },
+     "terminal_block_walk_minus_samples": {
+      "10": 1,
+      "103": 1,
+      "106": 1,
+      "112": 3,
+      "113": 1,
+      "115": 1,
+      "123": 1,
+      "132": 1,
+      "133": 2,
+      "134": 1,
+      "135": 1,
+      "136": 1,
+      "138": 1,
+      "139": 1,
+      "14": 2,
+      "147": 1,
+      "153": 2,
+      "16": 1,
+      "160": 2,
+      "165": 1,
+      "176": 2,
+      "179": 2,
+      "182": 1,
+      "184": 2,
+      "188": 1,
+      "190": 1,
+      "200": 1,
+      "202": 1,
+      "204": 1,
+      "206": 1,
+      "210": 1,
+      "211": 1,
+      "213": 1,
+      "217": 2,
+      "224": 2,
+      "227": 1,
+      "238": 1,
+      "240": 1,
+      "246": 1,
+      "248": 1,
+      "249": 1,
+      "25": 2,
+      "256": 7,
+      "264": 2,
+      "268": 1,
+      "272": 2,
+      "273": 1,
+      "276": 1,
+      "278": 2,
+      "28": 1,
+      "282": 1,
+      "283": 1,
+      "29": 1,
+      "292": 1,
+      "293": 1,
+      "298": 2,
+      "302": 1,
+      "305": 1,
+      "306": 1,
+      "309": 1,
+      "315": 1,
+      "318": 1,
+      "32": 2,
+      "323": 1,
+      "326": 1,
+      "329": 2,
+      "335": 1,
+      "336": 1,
+      "341": 1,
+      "342": 1,
+      "344": 1,
+      "345": 1,
+      "350": 1,
+      "355": 1,
+      "357": 1,
+      "360": 1,
+      "362": 1,
+      "369": 2,
+      "370": 2,
+      "378": 2,
+      "382": 1,
+      "383": 1,
+      "384": 2,
+      "386": 1,
+      "387": 1,
+      "389": 1,
+      "390": 1,
+      "40": 1,
+      "400": 4,
+      "402": 1,
+      "406": 1,
+      "41": 1,
+      "422": 1,
+      "423": 1,
+      "430": 1,
+      "44": 2,
+      "444": 1,
+      "448": 1,
+      "455": 1,
+      "462": 1,
+      "464": 2,
+      "470": 1,
+      "472": 2,
+      "480": 2,
+      "485": 1,
+      "486": 1,
+      "49": 1,
+      "493": 1,
+      "496": 2,
+      "497": 1,
+      "498": 1,
+      "501": 1,
+      "51": 1,
+      "510": 1,
+      "54": 1,
+      "6": 2,
+      "64": 1,
+      "69": 1,
+      "72": 1,
+      "74": 2,
+      "76": 1,
+      "80": 1,
+      "82": 1,
+      "85": 1,
+      "87": 1,
+      "97": 1,
+      "98": 1
+     },
+     "examples": [
+      {
+       "stream": 69,
+       "block": 0,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        960,
+        1363,
+        1175,
+        1076
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 69,
+       "block": 1,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        975,
+        961,
+        1008,
+        901
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 69,
+       "block": 2,
+       "w": "0x08000000",
+       "xma1": {
+        "seq": 0,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 0
+       },
+       "xma2": {
+        "frame_count": 2,
+        "offset_bits": 0,
+        "metadata": 0,
+        "skip8": 0
+       },
+       "walked_frames": 10,
+       "first_lengths": [
+        876,
+        918,
+        964,
+        932
+       ],
+       "stop": "packet end"
+      }
+     ],
+     "middle_blocks": 1640
+    }
+   }
+  },
+  "x360-nhl10": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx",
+   "banks": {
+    "crowds": {
+     "abk_sha256": "467cc3a08847ad804c5a80634f102ee73c13a22f4adf17df9e0df41c4983f73a",
+     "ast_sha256": "c0f28a60d9721160baa68d7e15151da78d1fd20caefe43941eecbe007c0c69a8",
+     "streams": 19,
+     "packets": 3649,
+     "xma1_seq_increments": 88,
+     "xma1_unused_zero": 222,
+     "xma2_metadata_1": 3649,
+     "xma2_frame_count_hist": {
+      "10": 98,
+      "11": 124,
+      "12": 153,
+      "13": 27,
+      "14": 5,
+      "15": 2,
+      "16": 1,
+      "18": 1,
+      "19": 1,
+      "2": 4,
+      "20": 1,
+      "24": 1,
+      "27": 1,
+      "3": 3,
+      "4": 1,
+      "5": 857,
+      "51": 1,
+      "6": 1975,
+      "63": 1,
+      "7": 273,
+      "8": 65,
+      "9": 54
+     },
+     "walk_stop": {
+      "packet end": 3649
+     },
+     "walk_vs_xma2_header_equal": 3649,
+     "blocks_walk_x512_eq_samples": 3341,
+     "blocks_checked": 3379,
+     "sub_block_packets": {
+      "1": 3649
+     },
+     "sub_blocks_disagree": 0,
+     "first_block_walk_delta": {
+      "384": 19
+     },
+     "terminal_block_walk_minus_samples": {
+      "0": 1,
+      "125": 1,
+      "128": 1,
+      "134": 1,
+      "161": 1,
+      "169": 1,
+      "194": 1,
+      "236": 1,
+      "277": 1,
+      "324": 1,
+      "384": 2,
+      "395": 1,
+      "424": 1,
+      "450": 1,
+      "470": 1,
+      "474": 1,
+      "506": 1,
+      "86": 1
+     },
+     "examples": [
+      {
+       "stream": 66,
+       "block": 0,
+       "w": "0x20000100",
+       "xma1": {
+        "seq": 2,
+        "unused": 0,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 8,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 8,
+       "first_lengths": [
+        74,
+        417,
+        1632,
+        2273
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 66,
+       "block": 1,
+       "w": "0x18000100",
+       "xma1": {
+        "seq": 1,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 6,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 6,
+       "first_lengths": [
+        2707,
+        2709,
+        2549,
+        2697
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 66,
+       "block": 2,
+       "w": "0x18000100",
+       "xma1": {
+        "seq": 1,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 6,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 6,
+       "first_lengths": [
+        2630,
+        2841,
+        2604,
+        2602
+       ],
+       "stop": "packet end"
+      }
+     ],
+     "middle_blocks": 3341
+    },
+    "playercalls": {
+     "abk_sha256": "ec012c58bb5b01d0c8701f84e71c128997e6936f79f139023d3fa0fdd00cb4a9",
+     "ast_sha256": "f81f87c0b18e28b693c272a9c0c96460ddc733d4d04fb1ac8285fb953ec921a8",
+     "streams": 51,
+     "packets": 193,
+     "xma1_seq_increments": 4,
+     "xma1_unused_zero": 39,
+     "xma2_metadata_1": 193,
+     "xma2_frame_count_hist": {
+      "1": 1,
+      "10": 7,
+      "11": 20,
+      "12": 26,
+      "13": 32,
+      "14": 36,
+      "15": 21,
+      "16": 8,
+      "17": 6,
+      "18": 2,
+      "2": 7,
+      "3": 4,
+      "4": 1,
+      "5": 1,
+      "6": 5,
+      "7": 4,
+      "8": 4,
+      "9": 8
+     },
+     "walk_stop": {
+      "packet end": 193
+     },
+     "walk_vs_xma2_header_equal": 193,
+     "blocks_walk_x512_eq_samples": 91,
+     "blocks_checked": 193,
+     "sub_block_packets": {
+      "1": 193
+     },
+     "sub_blocks_disagree": 0,
+     "first_block_walk_delta": {
+      "384": 51
+     },
+     "terminal_block_walk_minus_samples": {
+      "0": 1,
+      "104": 1,
+      "128": 2,
+      "154": 1,
+      "167": 1,
+      "175": 1,
+      "180": 1,
+      "188": 1,
+      "190": 1,
+      "202": 2,
+      "212": 1,
+      "224": 2,
+      "242": 1,
+      "256": 2,
+      "26": 1,
+      "28": 1,
+      "288": 1,
+      "292": 1,
+      "298": 1,
+      "299": 1,
+      "300": 1,
+      "304": 1,
+      "32": 2,
+      "320": 1,
+      "322": 1,
+      "325": 1,
+      "34": 1,
+      "368": 1,
+      "384": 2,
+      "401": 1,
+      "41": 1,
+      "410": 1,
+      "416": 2,
+      "427": 1,
+      "445": 1,
+      "448": 1,
+      "480": 2,
+      "62": 1,
+      "64": 1,
+      "69": 1,
+      "72": 1,
+      "84": 1,
+      "96": 1
+     },
+     "examples": [
+      {
+       "stream": 382,
+       "block": 0,
+       "w": "0x34000100",
+       "xma1": {
+        "seq": 3,
+        "unused": 1,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 13,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 13,
+       "first_lengths": [
+        1087,
+        1552,
+        1503,
+        1279
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 382,
+       "block": 1,
+       "w": "0x2c000100",
+       "xma1": {
+        "seq": 2,
+        "unused": 3,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 11,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 11,
+       "first_lengths": [
+        1079,
+        1202,
+        1153,
+        1389
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 382,
+       "block": 2,
+       "w": "0x34000100",
+       "xma1": {
+        "seq": 3,
+        "unused": 1,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 13,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 13,
+       "first_lengths": [
+        1371,
+        1185,
+        1181,
+        1230
+       ],
+       "stop": "packet end"
+      }
+     ],
+     "middle_blocks": 91
+    },
+    "sfx": {
+     "abk_sha256": "b0781a99c88f5800a7a3542ac696ab5f8c778d41a40cef98cf2596f1544088b8",
+     "ast_sha256": "b20480fbad15570da020c103d3736d1042e3c615fd0d5177f235e34261a9ab61",
+     "streams": 24,
+     "packets": 20716,
+     "xma1_seq_increments": 586,
+     "xma1_unused_zero": 1208,
+     "xma2_metadata_1": 20716,
+     "xma2_frame_count_hist": {
+      "1": 1,
+      "10": 8,
+      "11": 5,
+      "12": 7,
+      "13": 7,
+      "14": 4,
+      "15": 7,
+      "16": 3,
+      "17": 3,
+      "18": 9,
+      "19": 2,
+      "2": 2,
+      "20": 1,
+      "22": 1,
+      "23": 1,
+      "24": 1,
+      "25": 1,
+      "28": 1,
+      "3": 2,
+      "31": 1,
+      "32": 1,
+      "35": 2,
+      "36": 1,
+      "47": 3,
+      "49": 1,
+      "5": 459,
+      "53": 1,
+      "55": 1,
+      "56": 2,
+      "57": 1,
+      "6": 3461,
+      "62": 2,
+      "63": 11,
+      "7": 15499,
+      "8": 1191,
+      "9": 13
+     },
+     "walk_stop": {
+      "packet end": 20716
+     },
+     "walk_vs_xma2_header_equal": 20716,
+     "blocks_walk_x512_eq_samples": 20199,
+     "blocks_checked": 20247,
+     "sub_block_packets": {
+      "1": 20716
+     },
+     "sub_blocks_disagree": 0,
+     "first_block_walk_delta": {
+      "384": 24
+     },
+     "terminal_block_walk_minus_samples": {
+      "112": 1,
+      "128": 3,
+      "240": 1,
+      "248": 1,
+      "308": 1,
+      "416": 1,
+      "456": 15,
+      "48": 1
+     },
+     "examples": [
+      {
+       "stream": 183,
+       "block": 0,
+       "w": "0x18000100",
+       "xma1": {
+        "seq": 1,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 6,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 6,
+       "first_lengths": [
+        1278,
+        2902,
+        2604,
+        2727
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 183,
+       "block": 0,
+       "w": "0x18000100",
+       "xma1": {
+        "seq": 1,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 6,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 6,
+       "first_lengths": [
+        1342,
+        2845,
+        2731,
+        2707
+       ],
+       "stop": "packet end"
+      },
+      {
+       "stream": 183,
+       "block": 1,
+       "w": "0x18000100",
+       "xma1": {
+        "seq": 1,
+        "unused": 2,
+        "offset_bits": 0,
+        "skip11": 256
+       },
+       "xma2": {
+        "frame_count": 6,
+        "offset_bits": 0,
+        "metadata": 1,
+        "skip8": 0
+       },
+       "walked_frames": 6,
+       "first_lengths": [
+        2572,
+        2643,
+        2630,
+        2690
+       ],
+       "stop": "packet end"
+      }
+     ],
+     "middle_blocks": 20199
+    }
+   }
+  }
+ }
+}

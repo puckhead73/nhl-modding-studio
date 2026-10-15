@@ -4,21 +4,32 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/tdb-frostbite",
     "crates/tdb-core",
+    "crates/tdb-loc",
     "crates/tdb-defs",
+    "crates/tdb-canonical",
     "crates/tdb-enums",
     "crates/tdb-relations",
     "crates/tdb-domain-validation",
     "crates/tdb-savedata",
     "crates/tdb-archive-codec",
     "crates/tdb-archive-big",
+    "crates/tdb-speech",
+    "crates/tdb-snd",
+    "crates/tdb-speex",
+    "crates/tdb-xiso",
     "crates/tdb-rx2",
+    "crates/tdb-headmesh",
+    "crates/blender-job",
     "crates/tdb-edit",
     "crates/tdb-fhm",
     "crates/tdb-fhm-build",
     "crates/tdb-fhm-store",
     "crates/tdb-formula",
     "crates/tdb-instance-registry",
+    "crates/tdb-qa",
+    "crates/tdb-txn",
     "crates/studio-domain",
     "crates/studio-api",
     "src-tauri",
@@ -26,8 +37,29 @@ members = [
 
 [workspace.package]
 edition = "2021"
+# Studio-owned source code: the MIT License (decision Q46e, 7 Sep 2026). Vendored third-party code keeps its
+# own licence (tdb-speex: libspeex, BSD-3-Clause).
+license = "MIT"
 rust-version = "1.96"
 publish = false
+
+# Keep routine development/test builds small. Full symbols can be enabled for a
+# debugging session with CARGO_PROFILE_DEV_DEBUG=2 / CARGO_PROFILE_TEST_DEBUG=2.
+[profile.dev]
+debug = 0
+incremental = false
+
+# Full-disc verification hashes several GB. Keep SHA-256 optimized even in the
+# development app; unoptimized compression otherwise stalls onboarding for a minute.
+[profile.dev.package.sha2]
+opt-level = 3
+
+[profile.test.package.sha2]
+opt-level = 3
+
+[profile.test]
+debug = 0
+incremental = false
 
 [profile.release]
 opt-level = 3

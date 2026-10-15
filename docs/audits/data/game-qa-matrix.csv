@@ -1,0 +1,393 @@
+game,platform,generation,fixture,status,automated_test,manual_case,last_verified,evidence,blocker
+nhl07,xbox360,gen6,anchors/xbox360/nhl07/databases/NHL07NG.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl07.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl07,xbox360,gen6,anchors/xbox360/nhl07/databases/NHL07NG.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl07.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl07,xbox360,gen6,anchors/xbox360/nhl07/databases/NHL07NG.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl07,xbox360,gen6,anchors/xbox360/nhl07/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl07,xbox360,gen6,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl07,xbox360,gen6,anchors/xbox360/nhl07/,discovered,,,,studio-domain discovery install detection,
+nhl07,xbox360,gen6,anchors/xbox360/nhl07/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl07,xbox360,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,xbox360,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,xbox360,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,xbox360,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,xbox360,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,xbox360,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,xbox360,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,ps3,gen6,anchors/ps3/nhl07/databases/NHL07NG.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl07.json; surface-capabilities.csv; 27-anchor read matrix,research copy — not a supported catalog platform (compat matrix '—')
+nhl07,ps3,gen6,anchors/ps3/nhl07/databases/NHL07NG.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl07.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,research copy — not a supported catalog platform (compat matrix '—'); scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl07,ps3,gen6,anchors/ps3/nhl07/databases/NHL07NG.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),research copy — not a supported catalog platform (compat matrix '—'); loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl07,ps3,gen6,,missing-fixture,,,,no committed save fixture,research copy — not a supported catalog platform (compat matrix '—'); save is user-supplied; no anchor fixture
+nhl07,ps3,gen6,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,research copy — not a supported catalog platform (compat matrix '—')
+nhl07,ps3,gen6,anchors/ps3/nhl07/,discovered,,,,studio-domain discovery install detection,research copy — not a supported catalog platform (compat matrix '—')
+nhl07,ps3,gen6,anchors/ps3/nhl07/databases/nhl_eng_us.db,discovered,,,,localization DB present,research copy — not a supported catalog platform (compat matrix '—')
+nhl07,ps3,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,ps3,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,ps3,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,ps3,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,ps3,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,ps3,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl07,ps3,gen6,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,xbox360,gen7,anchors/xbox360/nhl08/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl08.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl08,xbox360,gen7,anchors/xbox360/nhl08/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl08.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl08,xbox360,gen7,anchors/xbox360/nhl08/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl08,xbox360,gen7,anchors/xbox360/nhl08/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl08,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl08,xbox360,gen7,anchors/xbox360/nhl08/,discovered,,,,studio-domain discovery install detection,
+nhl08,xbox360,gen7,anchors/xbox360/nhl08/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl08,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,xbox360,gen7,anchors/xbox360/nhl09/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl09.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl09,xbox360,gen7,anchors/xbox360/nhl09/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl09.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl09,xbox360,gen7,anchors/xbox360/nhl09/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl09,xbox360,gen7,anchors/xbox360/nhl09/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl09,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl09,xbox360,gen7,anchors/xbox360/nhl09/,discovered,,,,studio-domain discovery install detection,
+nhl09,xbox360,gen7,anchors/xbox360/nhl09/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl09,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,xbox360,gen7,anchors/xbox360/nhl10/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl10.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl10,xbox360,gen7,anchors/xbox360/nhl10/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl10.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl10,xbox360,gen7,anchors/xbox360/nhl10/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl10,xbox360,gen7,anchors/xbox360/nhl10/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",v1 container write experimental (tag_1c unreversed) — needs in-game validation
+nhl10,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl10,xbox360,gen7,anchors/xbox360/nhl10/,discovered,,,,studio-domain discovery install detection,
+nhl10,xbox360,gen7,anchors/xbox360/nhl10/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl10,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,xbox360,gen7,anchors/xbox360/nhl11/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl11.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl11,xbox360,gen7,anchors/xbox360/nhl11/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl11.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl11,xbox360,gen7,anchors/xbox360/nhl11/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl11,xbox360,gen7,anchors/xbox360/nhl11/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",v1 container write experimental (tag_1c unreversed) — needs in-game validation
+nhl11,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl11,xbox360,gen7,anchors/xbox360/nhl11/,discovered,,,,studio-domain discovery install detection,
+nhl11,xbox360,gen7,anchors/xbox360/nhl11/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl11,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,xbox360,gen7,anchors/xbox360/nhl12/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl12.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl12,xbox360,gen7,anchors/xbox360/nhl12/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl12.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl12,xbox360,gen7,anchors/xbox360/nhl12/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl12,xbox360,gen7,anchors/xbox360/nhl12/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl12,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl12,xbox360,gen7,anchors/xbox360/nhl12/,discovered,,,,studio-domain discovery install detection,
+nhl12,xbox360,gen7,anchors/xbox360/nhl12/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl12,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,xbox360,gen7,anchors/xbox360/nhl13/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl13.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl13,xbox360,gen7,anchors/xbox360/nhl13/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl13.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl13,xbox360,gen7,anchors/xbox360/nhl13/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl13,xbox360,gen7,anchors/xbox360/nhl13/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl13,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl13,xbox360,gen7,anchors/xbox360/nhl13/,discovered,,,,studio-domain discovery install detection,
+nhl13,xbox360,gen7,anchors/xbox360/nhl13/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl13,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,xbox360,gen7,anchors/xbox360/nhl14/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl14.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl14,xbox360,gen7,anchors/xbox360/nhl14/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl14.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl14,xbox360,gen7,anchors/xbox360/nhl14/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl14,xbox360,gen7,anchors/xbox360/nhl14/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl14,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl14,xbox360,gen7,anchors/xbox360/nhl14/,discovered,,,,studio-domain discovery install detection,
+nhl14,xbox360,gen7,anchors/xbox360/nhl14/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl14,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,xbox360,gen7,anchors/xbox360/nhl15/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhl15.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl15,xbox360,gen7,anchors/xbox360/nhl15/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhl15.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl15,xbox360,gen7,anchors/xbox360/nhl15/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl15,xbox360,gen7,anchors/xbox360/nhl15/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl15,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhl15,xbox360,gen7,anchors/xbox360/nhl15/,discovered,,,,studio-domain discovery install detection,
+nhl15,xbox360,gen7,anchors/xbox360/nhl15/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl15,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,xbox360,gen7,anchors/xbox360/nhllegacy/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/xbox360-nhllegacy.json; surface-capabilities.csv; 27-anchor read matrix,
+nhllegacy,xbox360,gen7,anchors/xbox360/nhllegacy/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/xbox360-nhllegacy.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhllegacy,xbox360,gen7,anchors/xbox360/nhllegacy/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhllegacy,xbox360,gen7,anchors/xbox360/nhllegacy/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhllegacy,xbox360,gen7,,blocked,,,,anchors expose inner save payloads; STFS outer package not implemented,Xbox STFS packaging not implemented
+nhllegacy,xbox360,gen7,anchors/xbox360/nhllegacy/,discovered,,,,studio-domain discovery install detection,
+nhllegacy,xbox360,gen7,anchors/xbox360/nhllegacy/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhllegacy,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,xbox360,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,ps3,gen7,anchors/ps3/nhl08/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl08.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl08,ps3,gen7,anchors/ps3/nhl08/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl08.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl08,ps3,gen7,anchors/ps3/nhl08/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl08,ps3,gen7,anchors/ps3/nhl08/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl08,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl08,ps3,gen7,anchors/ps3/nhl08/,discovered,,,,studio-domain discovery install detection,
+nhl08,ps3,gen7,anchors/ps3/nhl08/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl08,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl08,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,ps3,gen7,anchors/ps3/nhl09/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl09.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl09,ps3,gen7,anchors/ps3/nhl09/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl09.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl09,ps3,gen7,anchors/ps3/nhl09/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl09,ps3,gen7,anchors/ps3/nhl09/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl09,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl09,ps3,gen7,anchors/ps3/nhl09/,discovered,,,,studio-domain discovery install detection,
+nhl09,ps3,gen7,anchors/ps3/nhl09/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl09,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl09,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,ps3,gen7,anchors/ps3/nhl10/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl10.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl10,ps3,gen7,anchors/ps3/nhl10/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl10.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl10,ps3,gen7,anchors/ps3/nhl10/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl10,ps3,gen7,anchors/ps3/nhl10/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",v1 container write experimental (tag_1c unreversed) — needs in-game validation
+nhl10,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl10,ps3,gen7,anchors/ps3/nhl10/,discovered,,,,studio-domain discovery install detection,
+nhl10,ps3,gen7,anchors/ps3/nhl10/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl10,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl10,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,ps3,gen7,anchors/ps3/nhl11/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl11.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl11,ps3,gen7,anchors/ps3/nhl11/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl11.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl11,ps3,gen7,anchors/ps3/nhl11/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl11,ps3,gen7,anchors/ps3/nhl11/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",v1 container write experimental (tag_1c unreversed) — needs in-game validation
+nhl11,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl11,ps3,gen7,anchors/ps3/nhl11/,discovered,,,,studio-domain discovery install detection,
+nhl11,ps3,gen7,anchors/ps3/nhl11/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl11,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl11,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,ps3,gen7,anchors/ps3/nhl12/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl12.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl12,ps3,gen7,anchors/ps3/nhl12/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl12.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl12,ps3,gen7,anchors/ps3/nhl12/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl12,ps3,gen7,anchors/ps3/nhl12/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl12,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl12,ps3,gen7,anchors/ps3/nhl12/,discovered,,,,studio-domain discovery install detection,
+nhl12,ps3,gen7,anchors/ps3/nhl12/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl12,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl12,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,ps3,gen7,anchors/ps3/nhl13/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl13.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl13,ps3,gen7,anchors/ps3/nhl13/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl13.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl13,ps3,gen7,anchors/ps3/nhl13/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl13,ps3,gen7,anchors/ps3/nhl13/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl13,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl13,ps3,gen7,anchors/ps3/nhl13/,discovered,,,,studio-domain discovery install detection,
+nhl13,ps3,gen7,anchors/ps3/nhl13/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl13,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl13,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,ps3,gen7,anchors/ps3/nhl14/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl14.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl14,ps3,gen7,anchors/ps3/nhl14/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl14.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl14,ps3,gen7,anchors/ps3/nhl14/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl14,ps3,gen7,anchors/ps3/nhl14/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl14,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl14,ps3,gen7,anchors/ps3/nhl14/,discovered,,,,studio-domain discovery install detection,
+nhl14,ps3,gen7,anchors/ps3/nhl14/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl14,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl14,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps3,gen7,anchors/ps3/nhl15/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhl15.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl15,ps3,gen7,anchors/ps3/nhl15/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhl15.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl15,ps3,gen7,anchors/ps3/nhl15/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl15,ps3,gen7,anchors/ps3/nhl15/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhl15,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl15,ps3,gen7,anchors/ps3/nhl15/,discovered,,,,studio-domain discovery install detection,
+nhl15,ps3,gen7,anchors/ps3/nhl15/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhl15,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,ps3,gen7,anchors/ps3/nhllegacy/databases/nhlng.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps3-nhllegacy.json; surface-capabilities.csv; 27-anchor read matrix,
+nhllegacy,ps3,gen7,anchors/ps3/nhllegacy/databases/nhlng.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps3-nhllegacy.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhllegacy,ps3,gen7,anchors/ps3/nhllegacy/databases/nhlng.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhllegacy,ps3,gen7,anchors/ps3/nhllegacy/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",roster inner-container round-trip proven (Phase 4); non-roster/multi-part/v5-settings saves read-only; in-game acceptance is game-verified (manual)
+nhllegacy,ps3,gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhllegacy,ps3,gen7,anchors/ps3/nhllegacy/,discovered,,,,studio-domain discovery install detection,
+nhllegacy,ps3,gen7,anchors/ps3/nhllegacy/databases/nhl_eng_us.db,discovered,,,,localization DB present,
+nhllegacy,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhllegacy,ps3,gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps4,gen8,anchors/ps4/nhl15/databases/nhl_game.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps4-nhl15.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl15,ps4,gen8,anchors/ps4/nhl15/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps4-nhl15.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl15,ps4,gen8,anchors/ps4/nhl15/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl15,ps4,gen8,anchors/ps4/nhl15/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
+nhl15,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl15,ps4,gen8,anchors/ps4/nhl15/,discovered,,,,studio-domain discovery install detection,
+nhl15,ps4,gen8,anchors/ps4/nhl15/databases/eng_us.db,discovered,,,,localization DB present,
+nhl15,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl15,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl16,ps4,gen8,anchors/ps4/nhl16/databases/nhl_game.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps4-nhl16.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl16,ps4,gen8,anchors/ps4/nhl16/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps4-nhl16.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl16,ps4,gen8,anchors/ps4/nhl16/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl16,ps4,gen8,anchors/ps4/nhl16/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
+nhl16,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl16,ps4,gen8,anchors/ps4/nhl16/,discovered,,,,studio-domain discovery install detection,
+nhl16,ps4,gen8,anchors/ps4/nhl16/databases/eng_us.db,discovered,,,,localization DB present,
+nhl16,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl16,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl16,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl16,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl16,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl16,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl16,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl17,ps4,gen8,anchors/ps4/nhl17/databases/nhl_game.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps4-nhl17.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl17,ps4,gen8,anchors/ps4/nhl17/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps4-nhl17.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl17,ps4,gen8,anchors/ps4/nhl17/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl17,ps4,gen8,anchors/ps4/nhl17/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
+nhl17,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl17,ps4,gen8,anchors/ps4/nhl17/,discovered,,,,studio-domain discovery install detection,
+nhl17,ps4,gen8,anchors/ps4/nhl17/databases/eng_us.db,discovered,,,,localization DB present,
+nhl17,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl17,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl17,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl17,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl17,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl17,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl17,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl18,ps4,gen8,anchors/ps4/nhl18/databases/nhl_game.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps4-nhl18.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl18,ps4,gen8,anchors/ps4/nhl18/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps4-nhl18.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl18,ps4,gen8,anchors/ps4/nhl18/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl18,ps4,gen8,anchors/ps4/nhl18/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
+nhl18,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl18,ps4,gen8,anchors/ps4/nhl18/,discovered,,,,studio-domain discovery install detection,
+nhl18,ps4,gen8,anchors/ps4/nhl18/databases/eng_us.db,discovered,,,,localization DB present,
+nhl18,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl18,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl18,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl18,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl18,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl18,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl18,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl19,ps4,gen8,anchors/ps4/nhl19/databases/nhl_game.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps4-nhl19.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl19,ps4,gen8,anchors/ps4/nhl19/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps4-nhl19.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl19,ps4,gen8,anchors/ps4/nhl19/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl19,ps4,gen8,anchors/ps4/nhl19/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
+nhl19,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl19,ps4,gen8,anchors/ps4/nhl19/,discovered,,,,studio-domain discovery install detection,
+nhl19,ps4,gen8,,missing-fixture,,,,localization DB not shipped (meta may be present),no localization DB anchor
+nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl20,ps4,gen8,anchors/ps4/nhl20/databases/nhl_game.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps4-nhl20.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl20,ps4,gen8,anchors/ps4/nhl20/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps4-nhl20.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl20,ps4,gen8,anchors/ps4/nhl20/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl20,ps4,gen8,anchors/ps4/nhl20/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
+nhl20,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl20,ps4,gen8,anchors/ps4/nhl20/,discovered,,,,studio-domain discovery install detection,
+nhl20,ps4,gen8,anchors/ps4/nhl20/databases/eng_us.db,discovered,,,,localization DB present,
+nhl20,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl20,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl20,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl20,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl20,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl20,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl20,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl21,ps4,gen8,anchors/ps4/nhl21/databases/nhl_game.db,read-pass,studio_domain::read_matrix::read_matrix_over_all_anchors,,2026-08-01,schema/ps4-nhl21.json; surface-capabilities.csv; 27-anchor read matrix,
+nhl21,ps4,gen8,anchors/ps4/nhl21/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::operation_matrix::operation_matrix_over_all_anchors,,2026-08-02,schema/ps4-nhl21.json; mutation-matrix.csv; operation-matrix.csv; 27-anchor scalar mutation + relational operation matrices,scalar/string/enum/FK codecs (Phase 2) + structural roster operations (Phase 3) edit-roundtrip-proven; in-game acceptance is game-verified (manual)
+nhl21,ps4,gen8,anchors/ps4/nhl21/databases/nhl_game.db,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,loose-DB save is a byte-identical no-op round trip (Phase 2 mutation matrix + save-matrix.csv),loose-DB round trip proven; in-game acceptance is game-verified (manual)
+nhl21,ps4,gen8,anchors/ps4/nhl21/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
+nhl21,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+nhl21,ps4,gen8,anchors/ps4/nhl21/,discovered,,,,studio-domain discovery install detection,
+nhl21,ps4,gen8,,missing-fixture,,,,localization DB not shipped (meta may be present),no localization DB anchor
+nhl21,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl21,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl21,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl21,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl21,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl21,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+nhl21,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+legacyrecomp,recomp,recompiled-gen7,(shared: anchors/xbox360/nhllegacy/databases/nhlng.db),missing-fixture,,,,no independent DB anchor,shares Xbox-derived Legacy schema; no own anchor
+legacyrecomp,recomp,recompiled-gen7,(shared: anchors/xbox360/nhllegacy/databases/nhlng.db),missing-fixture,,,,no independent DB anchor (shares Xbox-derived Legacy schema),no own anchor
+legacyrecomp,recomp,recompiled-gen7,(shared: anchors/xbox360/nhllegacy/databases/nhlng.db),missing-fixture,,,,recomp save is user-supplied; no committed fixture,no recomp save fixture
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,recomp save is user-supplied; no committed fixture,no recomp save fixture
+legacyrecomp,recomp,recompiled-gen7,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
+legacyrecomp,recomp,recompiled-gen7,anchors/recomp/legacyrecomp/,discovered,,,,discovery.rs detect_recomp (Xbox-derived tree),
+legacyrecomp,recomp,recompiled-gen7,,not-applicable,,,,uses the Xbox-derived game tree's localization,
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
+legacyrecomp,recomp,recompiled-gen7,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture

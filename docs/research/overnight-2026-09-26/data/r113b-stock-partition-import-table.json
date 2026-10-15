@@ -1,0 +1,4549 @@
+{
+ "note": "R113b - compact stock-partition import table derived from the R113 JSON (no database read). One row per distinct source (by DB SHA-256;\nbyte-identical aliases listed) and per round-robin / stock-partition league table: model, quotas, member count, groups by team `index`\nand by club abbreviation, mapping fingerprint, games, stock validation result and whether all five controls were detected. Irregular\ntables are listed with their pair-count histogram and, where at most four pairs deviate, the nearest partition (diagnostic, not a model).\nUsage: python r113b_partition_import_table.py <r113.json> <out.json>\n",
+ "from": "r113-group-partitions.json",
+ "contracts": [
+  {
+   "source": "xbox360-nhl07",
+   "aliases": [
+    "ps3-nhl07"
+   ],
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "meta_sha256": "c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520",
+   "table": "intldelschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "c488013769c9c10aa7239fb2024de43db727f295aad99e6397f0a7659a883dc3",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl07",
+   "aliases": [
+    "ps3-nhl07"
+   ],
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "meta_sha256": "c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520",
+   "table": "intlelitserienschedule",
+   "league_id": 2,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     53,
+     58,
+     60,
+     63
+    ],
+    [
+     54,
+     55,
+     61,
+     62
+    ],
+    [
+     56,
+     57,
+     59,
+     64
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "BIF",
+     "LHC",
+     "MIF",
+     "SSK"
+    ],
+    [
+     "DIF",
+     "FBK",
+     "MOD",
+     "MOR"
+    ],
+    [
+     "VF",
+     "HV",
+     "LHF",
+     "TIK"
+    ]
+   ],
+   "mapping_fingerprint": "86ae3566d0b141f9ad58d099e16fb2bc0cf5d8097720beacf2bdefa51bb4eb98",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "aliases": [
+    "ps3-nhl10"
+   ],
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "meta_sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "1881c1881b41d18c880e882def85015394ee29ebfaa6cdd2059f06491c0fa02f",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "aliases": [
+    "ps3-nhl10"
+   ],
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "meta_sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 5,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 406,
+   "groups_by_index": [
+    [
+     73,
+     74,
+     75,
+     78,
+     81,
+     82,
+     86
+    ],
+    [
+     76,
+     77,
+     79,
+     80,
+     83,
+     84,
+     85
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "BLU",
+     "IFK",
+     "JOK",
+     "KAR",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "ILV",
+     "JYP",
+     "KAL",
+     "PEL",
+     "SAI",
+     "TAP"
+    ]
+   ],
+   "mapping_fingerprint": "1978921b3af568f8f8570915ab595eebf199bf876055ef95d04c83fba1599d78",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "aliases": [
+    "ps3-nhl10"
+   ],
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "meta_sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 420,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "d081339291a155386c0217f4bb9853bea94a0d0300652a8d4c44d1a225107115",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "aliases": [
+    "ps3-nhl10"
+   ],
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "meta_sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "fc261100ecc6b1469b0e32f8a272105f9a29075c8b61fcbef685876f1bdbbf2d",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl10",
+   "aliases": [
+    "ps3-nhl10"
+   ],
+   "db_sha256": "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+   "meta_sha256": "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     116,
+     123,
+     125,
+     127
+    ],
+    [
+     117,
+     118,
+     120,
+     121
+    ],
+    [
+     119,
+     122,
+     124,
+     126
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCL",
+     "SCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "BIEL",
+     "FRI",
+     "GEN"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "25aed7f2b25d7bd50f8c8aaf0bc03fccfe15e0c38bd88d6fd81513217915059b",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "aliases": [
+    "ps3-nhl11"
+   ],
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "meta_sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "7cb50027efcd72d6fbc847cd31e3dc9432c13bb79796f5443a5242b664b87e98",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "aliases": [
+    "ps3-nhl11"
+   ],
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "meta_sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 5,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 406,
+   "groups_by_index": [
+    [
+     74,
+     77,
+     78,
+     82,
+     83,
+     86,
+     87
+    ],
+    [
+     75,
+     76,
+     79,
+     80,
+     81,
+     84,
+     85
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "HPK",
+     "ILV",
+     "KAR",
+     "LUK",
+     "TAP",
+     "TPS"
+    ],
+    [
+     "BLU",
+     "IFK",
+     "JOK",
+     "JYP",
+     "KAL",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "5547479cdad91fd157c8636932340f2fedfd0773161c79978275ca4740e3fd13",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "aliases": [
+    "ps3-nhl11"
+   ],
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "meta_sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 420,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "845c13a5de28aaef31ef09237056f9e278ae139069181ba3fc7e83534a6238ba",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "aliases": [
+    "ps3-nhl11"
+   ],
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "meta_sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "4d8aa07c6132c9a144b0aac28f37ac3fddd401ddc06c5dced79556b7f62b9e1d",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl11",
+   "aliases": [
+    "ps3-nhl11"
+   ],
+   "db_sha256": "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+   "meta_sha256": "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     117,
+     124,
+     126,
+     128
+    ],
+    [
+     118,
+     119,
+     121,
+     122
+    ],
+    [
+     120,
+     123,
+     125,
+     127
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCL",
+     "SCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "BIEL",
+     "FRI",
+     "GEN"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "ed9cfc445842764b68320f855e12407ae4b9a2e7d40d163f99b08dee07473263",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "aliases": [
+    "ps3-nhl12"
+   ],
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "meta_sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "7e239e9df3a9af1775a50b7b177bb1f0190e7486745ce14183c220a9f65a0366",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "aliases": [
+    "ps3-nhl12"
+   ],
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "meta_sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 5,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 406,
+   "groups_by_index": [
+    [
+     74,
+     77,
+     78,
+     82,
+     83,
+     86,
+     87
+    ],
+    [
+     75,
+     76,
+     79,
+     80,
+     81,
+     84,
+     85
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "HPK",
+     "ILV",
+     "KAR",
+     "LUK",
+     "TAP",
+     "TPS"
+    ],
+    [
+     "BLU",
+     "IFK",
+     "JOK",
+     "JYP",
+     "KAL",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "5547479cdad91fd157c8636932340f2fedfd0773161c79978275ca4740e3fd13",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "aliases": [
+    "ps3-nhl12"
+   ],
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "meta_sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "a6ff6eaba8168c1621c1a701d7782abfaae1b2ea80db6ee0bfbb34882567cef8",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "aliases": [
+    "ps3-nhl12"
+   ],
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "meta_sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "61247dc8d6a9aa90485589311db52eb08e559d2ed6cf73291669f6b46498d0b2",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl12",
+   "aliases": [
+    "ps3-nhl12"
+   ],
+   "db_sha256": "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+   "meta_sha256": "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     116,
+     123,
+     125,
+     127
+    ],
+    [
+     117,
+     118,
+     120,
+     121
+    ],
+    [
+     119,
+     122,
+     124,
+     126
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCL",
+     "SCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "BIEL",
+     "FRI",
+     "GEN"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "25aed7f2b25d7bd50f8c8aaf0bc03fccfe15e0c38bd88d6fd81513217915059b",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "aliases": [
+    "ps3-nhl13"
+   ],
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "meta_sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "fe430c8b7a8541ec46626fad7d16be7f129b22b05cf6372537eadb1645c84396",
+   "clique_complete_all": true,
+   "stock_validation": [
+    "1 pairs with a directional home/away mismatch; first (rank, rank, home, away): [(6, 13, 3, 1)]"
+   ],
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "aliases": [
+    "ps3-nhl13"
+   ],
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "meta_sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 5,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 406,
+   "groups_by_index": [
+    [
+     74,
+     75,
+     76,
+     79,
+     82,
+     83,
+     87
+    ],
+    [
+     77,
+     78,
+     80,
+     81,
+     84,
+     85,
+     86
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "BLU",
+     "IFK",
+     "JOK",
+     "KAR",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "ILV",
+     "JYP",
+     "KAL",
+     "PEL",
+     "SAI",
+     "TAP"
+    ]
+   ],
+   "mapping_fingerprint": "5547479cdad91fd157c8636932340f2fedfd0773161c79978275ca4740e3fd13",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "aliases": [
+    "ps3-nhl13"
+   ],
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "meta_sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "a6ff6eaba8168c1621c1a701d7782abfaae1b2ea80db6ee0bfbb34882567cef8",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "aliases": [
+    "ps3-nhl13"
+   ],
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "meta_sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "83b136f0c03b780a5c47dd6e2fe73c405b8980bcd40ac195746b138c1f0d0476",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl13",
+   "aliases": [
+    "ps3-nhl13"
+   ],
+   "db_sha256": "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+   "meta_sha256": "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     116,
+     123,
+     125,
+     127
+    ],
+    [
+     117,
+     118,
+     120,
+     121
+    ],
+    [
+     119,
+     122,
+     124,
+     126
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCL",
+     "SCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "BIEL",
+     "FRI",
+     "GEN"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "25aed7f2b25d7bd50f8c8aaf0bc03fccfe15e0c38bd88d6fd81513217915059b",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "aliases": [
+    "ps3-nhl14"
+   ],
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "meta_sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "fe430c8b7a8541ec46626fad7d16be7f129b22b05cf6372537eadb1645c84396",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "aliases": [
+    "ps3-nhl14"
+   ],
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "meta_sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 5,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 406,
+   "groups_by_index": [
+    [
+     74,
+     75,
+     76,
+     79,
+     82,
+     83,
+     87
+    ],
+    [
+     77,
+     78,
+     80,
+     81,
+     84,
+     85,
+     86
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "BLU",
+     "IFK",
+     "JOK",
+     "KAR",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "ILV",
+     "JYP",
+     "KAL",
+     "PEL",
+     "SAI",
+     "TAP"
+    ]
+   ],
+   "mapping_fingerprint": "5547479cdad91fd157c8636932340f2fedfd0773161c79978275ca4740e3fd13",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "aliases": [
+    "ps3-nhl14"
+   ],
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "meta_sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "9c08f188c57ffdfbc957df52f54ae606ffcc2198863c86f855fa66e6b1362cd4",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "aliases": [
+    "ps3-nhl14"
+   ],
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "meta_sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "196424c57dc3c7aea37ba86bca25ba896ad85546067d4c792d0f1c968e07f997",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl14",
+   "aliases": [
+    "ps3-nhl14"
+   ],
+   "db_sha256": "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
+   "meta_sha256": "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     116,
+     123,
+     124,
+     127
+    ],
+    [
+     117,
+     118,
+     120,
+     121
+    ],
+    [
+     119,
+     122,
+     125,
+     126
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "LAU",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "BIEL",
+     "FRI",
+     "GEN"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "28ba4d65dbb9ac2e692f73704627083cc043d17d3bcb72d5d23b3453d2575eb1",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "aliases": [
+    "ps3-nhl15"
+   ],
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "meta_sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "36031f98604dfa1e5920012005b7aa838d95bb28beb5d5a6542d6205ea033310",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "aliases": [
+    "ps3-nhl15"
+   ],
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "meta_sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "ceff410a3cb8a72c2b1ebaf948be65bf7efce2634e09c5b8bf468c28e4e7bf8b",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "aliases": [
+    "ps3-nhl15"
+   ],
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "meta_sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "2bf2bf83d2c135772de8c45463f929a46bb01359555561f94863f3cbc74d36da",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhl15",
+   "aliases": [
+    "ps3-nhl15"
+   ],
+   "db_sha256": "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
+   "meta_sha256": "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     116,
+     117,
+     124,
+     126
+    ],
+    [
+     118,
+     120,
+     121,
+     123
+    ],
+    [
+     119,
+     122,
+     125,
+     127
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "BERN",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BIEL",
+     "FRI",
+     "GEN",
+     "LAU"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "d7fe6dea356837155dfeb71f94875c0fe54de2761787c5cf3a45b2b77939337a",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "aliases": [
+    "ps3-nhllegacy"
+   ],
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "meta_sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "4fa75271899986089e536917017289e5f2f62f045b2f28e3a172d1ee9448b7ce",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "aliases": [
+    "ps3-nhllegacy"
+   ],
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "meta_sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     76,
+     85,
+     89
+    ],
+    [
+     77,
+     78,
+     79
+    ],
+    [
+     80,
+     88,
+     90
+    ],
+    [
+     81,
+     82,
+     83
+    ],
+    [
+     84,
+     86,
+     87
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "BLU",
+     "HPK",
+     "IFK"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JYP",
+     "KAL",
+     "KAR"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "c775fa95fbcf099d7f5c3bf6cba4c2b3168f432a9ec1457ea3800a3443670086",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "aliases": [
+    "ps3-nhllegacy"
+   ],
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "meta_sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "cefa04f91492ac994d1a9b565e719f4fbd069a14ac96a4efcdd0f093d5559a8f",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "aliases": [
+    "ps3-nhllegacy"
+   ],
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "meta_sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "6ede3f75178b5ed5432271a8eb5a02e320a92fbbf247b6eb5a5482194d07a31f",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "aliases": [
+    "ps3-nhllegacy"
+   ],
+   "db_sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "meta_sha256": "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     119,
+     121,
+     127,
+     129
+    ],
+    [
+     120,
+     123,
+     124,
+     126
+    ],
+    [
+     122,
+     125,
+     128,
+     130
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "BIEL",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "FRI",
+     "GEN",
+     "LAU"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "SCL",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "492b9dac08c423d0536aef828e98e074fe438ea5a75f342b881f470696b52b85",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "aliases": [],
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "36031f98604dfa1e5920012005b7aa838d95bb28beb5d5a6542d6205ea033310",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "aliases": [],
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "ceff410a3cb8a72c2b1ebaf948be65bf7efce2634e09c5b8bf468c28e4e7bf8b",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "aliases": [],
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "2bf2bf83d2c135772de8c45463f929a46bb01359555561f94863f3cbc74d36da",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15",
+   "aliases": [],
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     116,
+     117,
+     124,
+     126
+    ],
+    [
+     118,
+     120,
+     121,
+     123
+    ],
+    [
+     119,
+     122,
+     125,
+     127
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "BERN",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BIEL",
+     "FRI",
+     "GEN",
+     "LAU"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "d7fe6dea356837155dfeb71f94875c0fe54de2761787c5cf3a45b2b77939337a",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "aliases": [],
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "meta_sha256": "6e497b08109bcabaca0a300447a712b4f80c0e99ca0b25355c742552bc38061a",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "4fa75271899986089e536917017289e5f2f62f045b2f28e3a172d1ee9448b7ce",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "aliases": [],
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "meta_sha256": "6e497b08109bcabaca0a300447a712b4f80c0e99ca0b25355c742552bc38061a",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     76,
+     85,
+     89
+    ],
+    [
+     77,
+     78,
+     79
+    ],
+    [
+     80,
+     88,
+     90
+    ],
+    [
+     81,
+     82,
+     83
+    ],
+    [
+     84,
+     86,
+     87
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "BLU",
+     "HPK",
+     "IFK"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JYP",
+     "KAL",
+     "KAR"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "c775fa95fbcf099d7f5c3bf6cba4c2b3168f432a9ec1457ea3800a3443670086",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "aliases": [],
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "meta_sha256": "6e497b08109bcabaca0a300447a712b4f80c0e99ca0b25355c742552bc38061a",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "cefa04f91492ac994d1a9b565e719f4fbd069a14ac96a4efcdd0f093d5559a8f",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "aliases": [],
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "meta_sha256": "6e497b08109bcabaca0a300447a712b4f80c0e99ca0b25355c742552bc38061a",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "6ede3f75178b5ed5432271a8eb5a02e320a92fbbf247b6eb5a5482194d07a31f",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl16",
+   "aliases": [],
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "meta_sha256": "6e497b08109bcabaca0a300447a712b4f80c0e99ca0b25355c742552bc38061a",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     119,
+     121,
+     127,
+     129
+    ],
+    [
+     120,
+     123,
+     124,
+     126
+    ],
+    [
+     122,
+     125,
+     128,
+     130
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "BIEL",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "FRI",
+     "GEN",
+     "LAU"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "SCL",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "492b9dac08c423d0536aef828e98e074fe438ea5a75f342b881f470696b52b85",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "aliases": [],
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "meta_sha256": "f4ddcd4b405e0724ec30d4ac4a2481b434b5c0780f680a9e4969b85b9b7a3a92",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "4fa75271899986089e536917017289e5f2f62f045b2f28e3a172d1ee9448b7ce",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "aliases": [],
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "meta_sha256": "f4ddcd4b405e0724ec30d4ac4a2481b434b5c0780f680a9e4969b85b9b7a3a92",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     76,
+     85,
+     89
+    ],
+    [
+     77,
+     78,
+     83
+    ],
+    [
+     79,
+     88,
+     90
+    ],
+    [
+     80,
+     81,
+     82
+    ],
+    [
+     84,
+     86,
+     87
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "IFK",
+     "KAR"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JUK",
+     "JYP",
+     "KAL"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "fd74a21158e78e962736be64fb9431a06d06917364d12310db1b115c7acb8538",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "aliases": [],
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "meta_sha256": "f4ddcd4b405e0724ec30d4ac4a2481b434b5c0780f680a9e4969b85b9b7a3a92",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "084b28ebc5992fd8304e251a04f83c32b04df89e1f1c5c55a55310fda5efee23",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "aliases": [],
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "meta_sha256": "f4ddcd4b405e0724ec30d4ac4a2481b434b5c0780f680a9e4969b85b9b7a3a92",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "3b2838040fd8dce06a01bf55fb638ea1f4efa466561d69cf49e0868822c205f3",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl17",
+   "aliases": [],
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "meta_sha256": "f4ddcd4b405e0724ec30d4ac4a2481b434b5c0780f680a9e4969b85b9b7a3a92",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     119,
+     122,
+     127,
+     129
+    ],
+    [
+     120,
+     125,
+     128,
+     130
+    ],
+    [
+     121,
+     123,
+     124,
+     126
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCD",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "KLOT",
+     "SCL",
+     "ZSC"
+    ],
+    [
+     "BIEL",
+     "FRI",
+     "GEN",
+     "LAU"
+    ]
+   ],
+   "mapping_fingerprint": "492b9dac08c423d0536aef828e98e074fe438ea5a75f342b881f470696b52b85",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "aliases": [],
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "meta_sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+   "table": "austrianschedule",
+   "league_id": 7,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 324,
+   "groups_by_index": [
+    [
+     252,
+     253,
+     254,
+     255,
+     256,
+     257
+    ],
+    [
+     258,
+     259,
+     260,
+     261,
+     262,
+     263
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "BOLZ",
+     "DORN",
+     "SZEK",
+     "GRAZ",
+     "INNS",
+     "KLAG"
+    ],
+    [
+     "LINZ",
+     "SALZ",
+     "VIEN",
+     "VILL",
+     "ZAGR",
+     "ZNOJ"
+    ]
+   ],
+   "mapping_fingerprint": "b3d12160bed5c92d64beb93d2e8830d044f9457fd591ac72986c40ce924cdb98",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "aliases": [],
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "meta_sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "597092698316bc389d6e447ae27baf6ae14086d6184b82043049285ad7ca7272",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "aliases": [],
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "meta_sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     79,
+     88,
+     92
+    ],
+    [
+     80,
+     81,
+     86
+    ],
+    [
+     82,
+     91,
+     93
+    ],
+    [
+     83,
+     84,
+     85
+    ],
+    [
+     87,
+     89,
+     90
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "IFK",
+     "KAR"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JUK",
+     "JYP",
+     "KAL"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "1b5ad0673884a733c785c71f0af93546d01560199c00f9a74ca0b9825cec1421",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "aliases": [],
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "meta_sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "0af134b06657d557b20ca61a1543afac81cbf674fb1be2f52a9a77641c30ec96",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "aliases": [],
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "meta_sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+   "table": "swedish2ndschedule",
+   "league_id": 8,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "e4bbe4cead5bc65e06ae322c229aa9b7d27474c6f9648f645ca6405984ef7dbb",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "aliases": [],
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "meta_sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "253620842e63980cdb463036bdf7f7bedfd85a3b78a4289d013240c12f9b7939",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl18",
+   "aliases": [],
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "meta_sha256": "b4d3c39c1c575d1a1e245e7ca17b9a260f798a879b52bf58151dbc02423686e2",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     122,
+     125,
+     130,
+     132
+    ],
+    [
+     123,
+     126,
+     129,
+     131
+    ],
+    [
+     124,
+     127,
+     128,
+     133
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCD",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "FRI",
+     "LAU",
+     "GEN"
+    ],
+    [
+     "BIEL",
+     "KLOT",
+     "SCL",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "b97415f9908296bcb24bf7681f9b8e1381ef230c012b13082fee9a49377eeaba",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "aliases": [
+    "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)"
+   ],
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "austrianschedule",
+   "league_id": 7,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 324,
+   "groups_by_index": [
+    [
+     253,
+     254,
+     255,
+     256,
+     257,
+     258
+    ],
+    [
+     259,
+     260,
+     261,
+     262,
+     263,
+     264
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "BOLZ",
+     "DORN",
+     "SZEK",
+     "GRAZ",
+     "INNS",
+     "KLAG"
+    ],
+    [
+     "LINZ",
+     "SALZ",
+     "VIEN",
+     "VILL",
+     "ZAGR",
+     "ZNOJ"
+    ]
+   ],
+   "mapping_fingerprint": "bb391fdbf0aea91a8ccf7211008b006df4c960289b417d2b572bcdbb4ac0b20a",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "aliases": [
+    "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)"
+   ],
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "4dd7c05ac89712809295db9694c14c8898c11665154e092eded36146987deb35",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "aliases": [
+    "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)"
+   ],
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     80,
+     89,
+     93
+    ],
+    [
+     81,
+     82,
+     87
+    ],
+    [
+     83,
+     92,
+     94
+    ],
+    [
+     84,
+     85,
+     86
+    ],
+    [
+     88,
+     90,
+     91
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "IFK",
+     "KAR"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JUK",
+     "JYP",
+     "KAL"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "e31c34c8b236fe23650a79cc629ac065b62a2e3d72689bb81122b1aca3fc6139",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "aliases": [
+    "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)"
+   ],
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "51bd7015f38b5c80331566829ac8dc05cc45b42857a719670c676655361026ca",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "aliases": [
+    "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)"
+   ],
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "swedish2ndschedule",
+   "league_id": 8,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "f8296ffa879450ca7589b427e4ade3bd95bfdcbf6247b492a7dad7d922de0903",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "aliases": [
+    "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)"
+   ],
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "2e9a45b91e157ee0a66f8dfb7643eb9dfd7dbc376328ca3c6b2e61d7c1f1177a",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "aliases": [
+    "ps4-nhl19-base (anchors/ps4/nhl20, mislabeled)"
+   ],
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     123,
+     126,
+     130,
+     133
+    ],
+    [
+     124,
+     128,
+     131,
+     134
+    ],
+    [
+     125,
+     127,
+     129,
+     132
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCD",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "SCL",
+     "RAP",
+     "ZSC"
+    ],
+    [
+     "BIEL",
+     "FRI",
+     "LAU",
+     "GEN"
+    ]
+   ],
+   "mapping_fingerprint": "3616bbdc34fe75adaf47dc3a975bbd9b746e98654a3717291e719a4a16c3ee47",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "aliases": [],
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "meta_sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+   "table": "austrianschedule",
+   "league_id": 7,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 11,
+   "games": 270,
+   "groups_by_index": [
+    [
+     253,
+     254,
+     255,
+     256,
+     257
+    ],
+    [
+     258,
+     259,
+     260,
+     261,
+     262,
+     263
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "BOLZ",
+     "DORN",
+     "SZEK",
+     "GRAZ",
+     "INNS"
+    ],
+    [
+     "KLAG",
+     "LINZ",
+     "SALZ",
+     "VIEN",
+     "VILL",
+     "BRAT"
+    ]
+   ],
+   "mapping_fingerprint": "897ecee2be4a92d53f63f852b93b337d48fe53ac069c0ca427601a58481fd4fd",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "aliases": [],
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "meta_sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "34b728fcfc864b36e759bc255bffda9b7a357c2b9b913a7e815dcf4e4e6e1372",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "aliases": [],
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "meta_sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     80,
+     89,
+     93
+    ],
+    [
+     81,
+     82,
+     87
+    ],
+    [
+     83,
+     92,
+     94
+    ],
+    [
+     84,
+     85,
+     86
+    ],
+    [
+     88,
+     90,
+     91
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "IFK",
+     "KAR"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JUK",
+     "JYP",
+     "KAL"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "e31c34c8b236fe23650a79cc629ac065b62a2e3d72689bb81122b1aca3fc6139",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "aliases": [],
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "meta_sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "51bd7015f38b5c80331566829ac8dc05cc45b42857a719670c676655361026ca",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "aliases": [],
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "meta_sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+   "table": "swedish2ndschedule",
+   "league_id": 8,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "7a4233030fa1b699e1d1a1eff75ae56ab4a0f5f3226495833274c6841fd4e752",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "aliases": [],
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "meta_sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "f63cfb5d1f99c8f57f2f343a28ddf249699614934a52e6db037cf1022c3a860c",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl21",
+   "aliases": [],
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "meta_sha256": "0b262e4abafdf5fa166eb7fb99c7c5419d521379de63f37aa97f6654e8a4991d",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     123,
+     126,
+     130,
+     131
+    ],
+    [
+     124,
+     127,
+     129,
+     132
+    ],
+    [
+     125,
+     128,
+     133,
+     134
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCD",
+     "HCL",
+     "RAP"
+    ],
+    [
+     "BERN",
+     "FRI",
+     "LAU",
+     "GEN"
+    ],
+    [
+     "BIEL",
+     "SCL",
+     "ZUG",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "3616bbdc34fe75adaf47dc3a975bbd9b746e98654a3717291e719a4a16c3ee47",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "aliases": [],
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "meta_sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+   "table": "austrianschedule",
+   "league_id": 7,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 11,
+   "games": 270,
+   "groups_by_index": [
+    [
+     253,
+     254,
+     255,
+     256,
+     257
+    ],
+    [
+     258,
+     259,
+     260,
+     261,
+     262,
+     263
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "BOLZ",
+     "DORN",
+     "SZEK",
+     "GRAZ",
+     "INNS"
+    ],
+    [
+     "KLAG",
+     "LINZ",
+     "SALZ",
+     "VIEN",
+     "VILL",
+     "ZNOJ"
+    ]
+   ],
+   "mapping_fingerprint": "d611f40c9b962b48463b23873b14643c61f9faa0f49135545aff03439b7f208b",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "aliases": [],
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "meta_sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "7b297cbd2bab2fe31ee90e14c1d785477ac905497618d072788087d65f20a4ef",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "aliases": [],
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "meta_sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     80,
+     89,
+     93
+    ],
+    [
+     81,
+     82,
+     87
+    ],
+    [
+     83,
+     92,
+     94
+    ],
+    [
+     84,
+     85,
+     86
+    ],
+    [
+     88,
+     90,
+     91
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "IFK",
+     "KAR"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JUK",
+     "JYP",
+     "KAL"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "e31c34c8b236fe23650a79cc629ac065b62a2e3d72689bb81122b1aca3fc6139",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "aliases": [],
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "meta_sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "51bd7015f38b5c80331566829ac8dc05cc45b42857a719670c676655361026ca",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "aliases": [],
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "meta_sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+   "table": "swedish2ndschedule",
+   "league_id": 8,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "4aa1f3defd98574c12470f515a749471af4ba75326b100cf8e25e923daf8fcc7",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "aliases": [],
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "meta_sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "f63cfb5d1f99c8f57f2f343a28ddf249699614934a52e6db037cf1022c3a860c",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "aliases": [],
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "meta_sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     123,
+     126,
+     130,
+     131
+    ],
+    [
+     124,
+     127,
+     129,
+     132
+    ],
+    [
+     125,
+     128,
+     133,
+     134
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCD",
+     "HCL",
+     "RAP"
+    ],
+    [
+     "BERN",
+     "FRI",
+     "LAU",
+     "GEN"
+    ],
+    [
+     "BIEL",
+     "SCL",
+     "ZUG",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "3616bbdc34fe75adaf47dc3a975bbd9b746e98654a3717291e719a4a16c3ee47",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "aliases": [],
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "austrianschedule",
+   "league_id": 7,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 324,
+   "groups_by_index": [
+    [
+     253,
+     254,
+     255,
+     256,
+     257,
+     258
+    ],
+    [
+     259,
+     260,
+     261,
+     262,
+     263,
+     264
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "BOLZ",
+     "DORN",
+     "SZEK",
+     "GRAZ",
+     "INNS",
+     "KLAG"
+    ],
+    [
+     "LINZ",
+     "SALZ",
+     "VIEN",
+     "VILL",
+     "ZAGR",
+     "ZNOJ"
+    ]
+   ],
+   "mapping_fingerprint": "bb391fdbf0aea91a8ccf7211008b006df4c960289b417d2b572bcdbb4ac0b20a",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "aliases": [],
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "4dd7c05ac89712809295db9694c14c8898c11665154e092eded36146987deb35",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "aliases": [],
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "finnishschedule",
+   "league_id": 3,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 15,
+   "games": 450,
+   "groups_by_index": [
+    [
+     80,
+     89,
+     93
+    ],
+    [
+     81,
+     82,
+     87
+    ],
+    [
+     83,
+     92,
+     94
+    ],
+    [
+     84,
+     85,
+     86
+    ],
+    [
+     88,
+     90,
+     91
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "ASS",
+     "LUK",
+     "TPS"
+    ],
+    [
+     "HPK",
+     "IFK",
+     "KAR"
+    ],
+    [
+     "ILV",
+     "TAP",
+     "VAA"
+    ],
+    [
+     "JUK",
+     "JYP",
+     "KAL"
+    ],
+    [
+     "KOU",
+     "PEL",
+     "SAI"
+    ]
+   ],
+   "mapping_fingerprint": "e31c34c8b236fe23650a79cc629ac065b62a2e3d72689bb81122b1aca3fc6139",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "aliases": [],
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "51bd7015f38b5c80331566829ac8dc05cc45b42857a719670c676655361026ca",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "aliases": [],
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "swedish2ndschedule",
+   "league_id": 8,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "f8296ffa879450ca7589b427e4ade3bd95bfdcbf6247b492a7dad7d922de0903",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "aliases": [],
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "2e9a45b91e157ee0a66f8dfb7643eb9dfd7dbc376328ca3c6b2e61d7c1f1177a",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "aliases": [],
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "meta_sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     123,
+     126,
+     130,
+     133
+    ],
+    [
+     124,
+     128,
+     131,
+     134
+    ],
+    [
+     125,
+     127,
+     129,
+     132
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "HCD",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BERN",
+     "SCL",
+     "RAP",
+     "ZSC"
+    ],
+    [
+     "BIEL",
+     "FRI",
+     "LAU",
+     "GEN"
+    ]
+   ],
+   "mapping_fingerprint": "3616bbdc34fe75adaf47dc3a975bbd9b746e98654a3717291e719a4a16c3ee47",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "aliases": [],
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "czechschedule",
+   "league_id": 5,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "36031f98604dfa1e5920012005b7aa838d95bb28beb5d5a6542d6205ea033310",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "aliases": [],
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "germanschedule",
+   "league_id": 4,
+   "model": "round_robin",
+   "quotas": {
+    "within": 4,
+    "across": 4
+   },
+   "n_members": 14,
+   "games": 364,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "ceff410a3cb8a72c2b1ebaf948be65bf7efce2634e09c5b8bf468c28e4e7bf8b",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "aliases": [],
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "swedishschedule",
+   "league_id": 2,
+   "model": "round_robin",
+   "quotas": {
+    "within": 5,
+    "across": 5
+   },
+   "n_members": 12,
+   "games": 330,
+   "groups_by_index": null,
+   "groups_by_abbr": null,
+   "mapping_fingerprint": "2bf2bf83d2c135772de8c45463f929a46bb01359555561f94863f3cbc74d36da",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "aliases": [],
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "meta_sha256": "d9cf1be40ffc8180c173e460bf3a120e6b719b0fcd70a939b8c232d07ac085c3",
+   "table": "swissschedule",
+   "league_id": 6,
+   "model": "stock_partition",
+   "quotas": {
+    "within": 6,
+    "across": 4
+   },
+   "n_members": 12,
+   "games": 300,
+   "groups_by_index": [
+    [
+     116,
+     117,
+     124,
+     126
+    ],
+    [
+     118,
+     120,
+     121,
+     123
+    ],
+    [
+     119,
+     122,
+     125,
+     127
+    ]
+   ],
+   "groups_by_abbr": [
+    [
+     "HCAP",
+     "BERN",
+     "HCL",
+     "ZUG"
+    ],
+    [
+     "BIEL",
+     "FRI",
+     "GEN",
+     "LAU"
+    ],
+    [
+     "HCD",
+     "KLOT",
+     "RAP",
+     "ZSC"
+    ]
+   ],
+   "mapping_fingerprint": "d7fe6dea356837155dfeb71f94875c0fe54de2761787c5cf3a45b2b77939337a",
+   "clique_complete_all": true,
+   "stock_validation": "conforms",
+   "controls_all_detected": true
+  }
+ ],
+ "irregular": [
+  {
+   "source": "xbox360-nhl07",
+   "table": "intlsmliigaschedule",
+   "n_members": 13,
+   "games": 364,
+   "pair_counts": {
+    "4": 56,
+    "6": 18,
+    "8": 4
+   },
+   "nearest_partition": {
+    "threshold": 6,
+    "groups": [
+     [
+      0,
+      6,
+      7,
+      8,
+      10
+     ],
+     [
+      1,
+      2,
+      5,
+      12
+     ],
+     [
+      3,
+      4,
+      9,
+      11
+     ]
+    ],
+    "within": 6,
+    "across": 4,
+    "deviating_pairs (rank, rank, count, modal)": [
+     [
+      1,
+      12,
+      8,
+      6
+     ],
+     [
+      2,
+      5,
+      8,
+      6
+     ],
+     [
+      3,
+      9,
+      8,
+      6
+     ],
+     [
+      4,
+      11,
+      8,
+      6
+     ]
+    ]
+   },
+   "nearest_partition_deviating_pairs": 4
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 103,
+    "4": 42,
+    "6": 27,
+    "8": 18
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 48,
+    "3": 28,
+    "4": 32,
+    "6": 28,
+    "8": 17
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 77
+  },
+  {
+   "source": "xbox360-nhl11",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 96,
+    "2": 15,
+    "3": 9,
+    "4": 58,
+    "5": 3,
+    "6": 15,
+    "8": 26,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 109
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 103,
+    "4": 42,
+    "6": 27,
+    "8": 18
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "qmjhlschedule",
+   "n_members": 17,
+   "games": 578,
+   "pair_counts": {
+    "1": 1,
+    "2": 29,
+    "3": 33,
+    "4": 26,
+    "5": 7,
+    "6": 14,
+    "7": 14,
+    "8": 9,
+    "9": 3
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 89
+  },
+  {
+   "source": "xbox360-nhl12",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 94,
+    "2": 19,
+    "3": 7,
+    "4": 59,
+    "5": 1,
+    "6": 16,
+    "8": 26,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 135
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 103,
+    "4": 42,
+    "6": 27,
+    "8": 18
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 48,
+    "3": 28,
+    "4": 32,
+    "6": 28,
+    "8": 17
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 77
+  },
+  {
+   "source": "xbox360-nhl13",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 95,
+    "2": 18,
+    "3": 6,
+    "4": 60,
+    "5": 1,
+    "6": 16,
+    "8": 24,
+    "9": 4,
+    "10": 5,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 134
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 43,
+    "6": 28,
+    "8": 17
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 32,
+    "6": 24,
+    "8": 7,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 49
+  },
+  {
+   "source": "xbox360-nhl14",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 96,
+    "2": 15,
+    "3": 9,
+    "4": 59,
+    "5": 1,
+    "6": 16,
+    "8": 26,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 133
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "finnishschedule",
+   "n_members": 14,
+   "games": 406,
+   "pair_counts": {
+    "3": 1,
+    "4": 48,
+    "5": 41,
+    "6": 1
+   },
+   "nearest_partition": {
+    "threshold": 5,
+    "groups": [
+     [
+      0,
+      1,
+      3,
+      7,
+      8,
+      12,
+      13
+     ],
+     [
+      2,
+      4,
+      5,
+      6,
+      9,
+      10,
+      11
+     ]
+    ],
+    "within": 5,
+    "across": 4,
+    "deviating_pairs (rank, rank, count, modal)": [
+     [
+      0,
+      3,
+      6,
+      5
+     ],
+     [
+      3,
+      9,
+      3,
+      4
+     ]
+    ]
+   },
+   "nearest_partition_deviating_pairs": 2
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 43,
+    "6": 28,
+    "8": 17
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 4,
+    "6": 26,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "xbox360-nhl15",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 95,
+    "2": 18,
+    "3": 6,
+    "4": 60,
+    "5": 1,
+    "6": 13,
+    "7": 6,
+    "8": 23,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 134
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 41,
+    "6": 32,
+    "8": 15
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 4,
+    "6": 26,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "xbox360-nhllegacy",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 94,
+    "2": 19,
+    "3": 7,
+    "4": 59,
+    "5": 1,
+    "6": 13,
+    "7": 6,
+    "8": 23,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 135
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "finnishschedule",
+   "n_members": 14,
+   "games": 406,
+   "pair_counts": {
+    "3": 1,
+    "4": 48,
+    "5": 41,
+    "6": 1
+   },
+   "nearest_partition": {
+    "threshold": 5,
+    "groups": [
+     [
+      0,
+      1,
+      3,
+      7,
+      8,
+      12,
+      13
+     ],
+     [
+      2,
+      4,
+      5,
+      6,
+      9,
+      10,
+      11
+     ]
+    ],
+    "within": 5,
+    "across": 4,
+    "deviating_pairs (rank, rank, count, modal)": [
+     [
+      0,
+      3,
+      6,
+      5
+     ],
+     [
+      3,
+      9,
+      3,
+      4
+     ]
+    ]
+   },
+   "nearest_partition_deviating_pairs": 2
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 43,
+    "6": 28,
+    "8": 17
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 4,
+    "6": 26,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "ps4-nhl15",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 95,
+    "2": 18,
+    "3": 6,
+    "4": 60,
+    "5": 1,
+    "6": 13,
+    "7": 6,
+    "8": 23,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 134
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 41,
+    "6": 32,
+    "8": 15
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 4,
+    "6": 26,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "ps4-nhl16",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 94,
+    "2": 19,
+    "3": 7,
+    "4": 59,
+    "5": 1,
+    "6": 13,
+    "7": 6,
+    "8": 23,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 135
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "echlschedule",
+   "n_members": 27,
+   "games": 972,
+   "pair_counts": {
+    "0": 148,
+    "1": 39,
+    "2": 45,
+    "3": 32,
+    "4": 12,
+    "5": 13,
+    "6": 8,
+    "7": 2,
+    "8": 6,
+    "9": 7,
+    "10": 12,
+    "11": 8,
+    "12": 4,
+    "13": 6,
+    "14": 8,
+    "15": 1
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 202
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 41,
+    "6": 32,
+    "8": 15
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 4,
+    "6": 26,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "ps4-nhl17",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 94,
+    "2": 20,
+    "3": 5,
+    "4": 60,
+    "5": 1,
+    "6": 13,
+    "7": 6,
+    "8": 23,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 135
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "echlschedule",
+   "n_members": 27,
+   "games": 972,
+   "pair_counts": {
+    "0": 164,
+    "1": 33,
+    "2": 40,
+    "3": 14,
+    "4": 9,
+    "5": 8,
+    "6": 23,
+    "7": 8,
+    "8": 10,
+    "9": 13,
+    "10": 6,
+    "11": 7,
+    "12": 5,
+    "13": 4,
+    "14": 4,
+    "15": 3
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 184
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 41,
+    "5": 1,
+    "6": 30,
+    "7": 3,
+    "8": 11,
+    "9": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 4,
+    "6": 26,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "ps4-nhl18",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 94,
+    "2": 19,
+    "3": 7,
+    "4": 59,
+    "5": 1,
+    "6": 13,
+    "7": 6,
+    "8": 23,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 135
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "echlschedule",
+   "n_members": 27,
+   "games": 972,
+   "pair_counts": {
+    "0": 184,
+    "1": 39,
+    "2": 18,
+    "3": 15,
+    "4": 9,
+    "5": 8,
+    "6": 9,
+    "7": 2,
+    "8": 17,
+    "9": 9,
+    "10": 7,
+    "11": 12,
+    "12": 9,
+    "13": 5,
+    "14": 6,
+    "15": 1,
+    "17": 1
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 166
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "1": 1,
+    "2": 100,
+    "3": 1,
+    "4": 41,
+    "6": 31,
+    "7": 2,
+    "8": 14
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 6,
+    "6": 22,
+    "7": 2,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "ps4-nhl19-base",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 748,
+   "pair_counts": {
+    "1": 119,
+    "4": 61,
+    "5": 1,
+    "6": 22,
+    "8": 15,
+    "9": 6,
+    "10": 5,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 90
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "echlschedule",
+   "n_members": 26,
+   "games": 936,
+   "pair_counts": {
+    "0": 159,
+    "1": 43,
+    "2": 30,
+    "3": 13,
+    "4": 4,
+    "5": 5,
+    "6": 2,
+    "7": 10,
+    "8": 9,
+    "9": 8,
+    "10": 6,
+    "11": 10,
+    "12": 6,
+    "13": 11,
+    "14": 4,
+    "16": 2,
+    "18": 3
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "1": 1,
+    "2": 100,
+    "3": 1,
+    "4": 40,
+    "5": 2,
+    "6": 30,
+    "7": 2,
+    "8": 14
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 26,
+    "5": 8,
+    "6": 23,
+    "7": 2,
+    "8": 4,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 55
+  },
+  {
+   "source": "ps4-nhl21",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 748,
+   "pair_counts": {
+    "1": 120,
+    "4": 59,
+    "5": 3,
+    "6": 19,
+    "7": 4,
+    "8": 10,
+    "9": 9,
+    "10": 5,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 52
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "echlschedule",
+   "n_members": 26,
+   "games": 936,
+   "pair_counts": {
+    "0": 159,
+    "1": 43,
+    "2": 30,
+    "3": 13,
+    "4": 4,
+    "5": 5,
+    "6": 2,
+    "7": 10,
+    "8": 9,
+    "9": 8,
+    "10": 6,
+    "11": 10,
+    "12": 6,
+    "13": 11,
+    "14": 4,
+    "16": 2,
+    "18": 3
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "1": 1,
+    "2": 100,
+    "3": 1,
+    "4": 40,
+    "5": 2,
+    "6": 30,
+    "7": 2,
+    "8": 14
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 26,
+    "5": 8,
+    "6": 23,
+    "7": 2,
+    "8": 4,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 55
+  },
+  {
+   "source": "ps4-nhl20-real",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 748,
+   "pair_counts": {
+    "1": 120,
+    "4": 59,
+    "5": 3,
+    "6": 19,
+    "7": 4,
+    "8": 10,
+    "9": 9,
+    "10": 5,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 52
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "echlschedule",
+   "n_members": 27,
+   "games": 972,
+   "pair_counts": {
+    "0": 184,
+    "1": 39,
+    "2": 18,
+    "3": 15,
+    "4": 9,
+    "5": 8,
+    "6": 9,
+    "7": 2,
+    "8": 17,
+    "9": 9,
+    "10": 7,
+    "11": 12,
+    "12": 9,
+    "13": 5,
+    "14": 6,
+    "15": 1,
+    "17": 1
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 166
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "1": 1,
+    "2": 100,
+    "3": 1,
+    "4": 41,
+    "6": 31,
+    "7": 2,
+    "8": 14
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 6,
+    "6": 22,
+    "7": 2,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "ps4-nhl19-patch56",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 748,
+   "pair_counts": {
+    "1": 119,
+    "4": 61,
+    "5": 1,
+    "6": 22,
+    "8": 15,
+    "9": 6,
+    "10": 5,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 90
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "finnishschedule",
+   "n_members": 14,
+   "games": 406,
+   "pair_counts": {
+    "3": 1,
+    "4": 48,
+    "5": 41,
+    "6": 1
+   },
+   "nearest_partition": {
+    "threshold": 5,
+    "groups": [
+     [
+      0,
+      1,
+      3,
+      7,
+      8,
+      12,
+      13
+     ],
+     [
+      2,
+      4,
+      5,
+      6,
+      9,
+      10,
+      11
+     ]
+    ],
+    "within": 5,
+    "across": 4,
+    "deviating_pairs (rank, rank, count, modal)": [
+     [
+      0,
+      3,
+      6,
+      5
+     ],
+     [
+      3,
+      9,
+      3,
+      4
+     ]
+    ]
+   },
+   "nearest_partition_deviating_pairs": 2
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "ohlschedule",
+   "n_members": 20,
+   "games": 680,
+   "pair_counts": {
+    "2": 102,
+    "4": 43,
+    "6": 28,
+    "8": 17
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": null
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "qmjhlschedule",
+   "n_members": 18,
+   "games": 612,
+   "pair_counts": {
+    "2": 72,
+    "3": 4,
+    "4": 28,
+    "5": 4,
+    "6": 26,
+    "8": 5,
+    "9": 12,
+    "10": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 53
+  },
+  {
+   "source": "ps4-nhl15-patch00",
+   "table": "whlschedule",
+   "n_members": 22,
+   "games": 792,
+   "pair_counts": {
+    "1": 95,
+    "2": 18,
+    "3": 6,
+    "4": 60,
+    "5": 1,
+    "6": 13,
+    "7": 6,
+    "8": 23,
+    "10": 7,
+    "12": 2
+   },
+   "nearest_partition": null,
+   "nearest_partition_deviating_pairs": 134
+  }
+ ]
+}

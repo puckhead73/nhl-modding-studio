@@ -1,0 +1,33 @@
+﻿{
+  "root": "\\\\?\\H:\\Emulators\\ShadPS4\\Games\\CUSA31046",
+  "layers": [
+    {
+      "name": "Data",
+      "head": 556685,
+      "base": null,
+      "superbundles": [
+        "Gen4b/contentlaunchsb",
+        "Gen4b/contentsb",
+        "Gen4b/globals",
+        "Gen4b/globalsfull",
+        "Gen4b/levels/game/game",
+        "Gen4b/movies",
+        "Gen4b/ui",
+        "Gen4b/worldssb"
+      ],
+      "initfs": "encrypted (opaque)",
+      "chunkmanifest": true
+    }
+  ],
+  "warnings": [
+    "Read-only catalogue: roster editing and deployment are not enabled. Data and Patch are shown separately."
+  ]
+}
+{"assets":199266,"bundles":10258,"empty":1,"first_bundle":"gen4b/content/character/crowd/head/female/average/crowd_head_female_average_1_bandana_item_crowd_brt","layer":"Data","superbundle":"Gen4b/contentlaunchsb","toc_chunks":14273}
+{"assets":416508,"bundles":35648,"empty":0,"first_bundle":"gen4b/content/character/skater/goalie/stick/casual/graphic/textures/goalie_stick_casual_graphic_37_goalie_stick_brt","layer":"Data","superbundle":"Gen4b/contentsb","toc_chunks":56949}
+{"assets":6809,"bundles":43,"empty":0,"first_bundle":"gen4b/crowds/crowdgrainbankdis.sbr","layer":"Data","superbundle":"Gen4b/globals","toc_chunks":22788}
+{"assets":147420,"bundles":800,"empty":0,"first_bundle":"gen4b/content/nis/nis_bap_pb04_var2_2_0/nis_bap_pb04_var2_2_0_scenecontent_sublevel","layer":"Data","superbundle":"Gen4b/globalsfull","toc_chunks":41461}
+{"assets":15100,"bundles":1,"empty":0,"first_bundle":"gen4b/levels/game/game","layer":"Data","superbundle":"Gen4b/levels/game/game","toc_chunks":4931}
+{"assets":1200,"bundles":339,"empty":0,"first_bundle":"gen4b/nhl/data/common/movie/transitions/threes_star_wipe_in/threes_star_wipe_in","layer":"Data","superbundle":"Gen4b/movies","toc_chunks":383}
+{"assets":291,"bundles":9,"empty":0,"first_bundle":"gen4b/globals/configs/fonts_config_languageformat_czech","layer":"Data","superbundle":"Gen4b/ui","toc_chunks":0}
+{"assets":304243,"bundles":5521,"empty":1,"first_bundle":"gen4b/content/worlds/stadiums/arena5_520/lighting_replay","layer":"Data","superbundle":"Gen4b/worldssb","toc_chunks":9545}

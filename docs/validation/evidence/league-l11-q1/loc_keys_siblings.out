@@ -1,0 +1,46 @@
+== nhl20
+rows 37734 allocated 37734 stride 16 endian_big false invalid_utf8 0 hash_mismatches 0 symbols 161 all_crc true
+AHL                        hash 36922f41 (absent)
+TXT_LEAGUE_EBEL            hash 60901593 "Erste Bank Eishockey Liga"
+Allsvenskan                hash 556d54f3 "HockeyAllsvenskan"
+CUSTOM_TEAMS               hash bc845078 (absent)
+TXT_LEAGUE_MASCOT          hash f98b2c46 (absent)
+TXT_LEAGUE_3ON3            hash 9e0e4310 (absent)
+TXT_LEAGUE_NHL_ALL_TIME    hash 36d82d1f (absent)
+TXT_LEAGUE_PROAM           hash 212bdb30 (absent)
+TXT_USA_LEAGUE             hash e2d326a4 (absent)
+TXT_RUSSIA_LEAGUE          hash b44b1053 (absent)
+TXT_ROW_LEAGUE             hash f02fb414 "Rest Of World"
+HUT                        hash d543e084 (absent)
+== nhl18
+rows 33396 allocated 33396 stride 16 endian_big false invalid_utf8 0 hash_mismatches 0 symbols 160 all_crc true
+AHL                        hash 36922f41 (absent)
+TXT_LEAGUE_EBEL            hash 60901593 "Erste Bank Eishockey Liga"
+Allsvenskan                hash 556d54f3 "HockeyAllsvenskan"
+CUSTOM_TEAMS               hash bc845078 (absent)
+TXT_LEAGUE_MASCOT          hash f98b2c46 (absent)
+TXT_LEAGUE_3ON3            hash 9e0e4310 (absent)
+TXT_LEAGUE_NHL_ALL_TIME    hash 36d82d1f (absent)
+TXT_LEAGUE_PROAM           hash 212bdb30 (absent)
+TXT_USA_LEAGUE             hash e2d326a4 (absent)
+TXT_RUSSIA_LEAGUE          hash b44b1053 (absent)
+TXT_ROW_LEAGUE             hash f02fb414 "Rest Of World"
+HUT                        hash d543e084 (absent)
+== nhl15
+rows 24251 allocated 24251 stride 16 endian_big false invalid_utf8 0 hash_mismatches 0 symbols 155 all_crc true
+Allsvenskan                hash 556d54f3 (absent)
+TXT_ROW_LEAGUE             hash f02fb414 "Rest Of World"
+TXT_LEGEND_TEAMS           hash e10f33bb "Legend Teams"
+TXT_LEAGUE_NORWAY          hash 838edd73 (absent)
+== nhl16
+rows 27468 allocated 27468 stride 16 endian_big false invalid_utf8 0 hash_mismatches 0 symbols 156 all_crc true
+Allsvenskan                hash 556d54f3 (absent)
+TXT_ROW_LEAGUE             hash f02fb414 "Rest Of World"
+TXT_LEGEND_TEAMS           hash e10f33bb "Legend Teams"
+TXT_LEAGUE_NORWAY          hash 838edd73 "Norway"
+== nhl17
+rows 30799 allocated 30799 stride 16 endian_big false invalid_utf8 0 hash_mismatches 0 symbols 159 all_crc true
+Allsvenskan                hash 556d54f3 (absent)
+TXT_ROW_LEAGUE             hash f02fb414 "Rest Of World"
+TXT_LEGEND_TEAMS           hash e10f33bb "Legend Teams"
+TXT_LEAGUE_NORWAY          hash 838edd73 "Norway"

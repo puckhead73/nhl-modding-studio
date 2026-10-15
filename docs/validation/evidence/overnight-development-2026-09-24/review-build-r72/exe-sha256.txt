@@ -1,0 +1,1 @@
+13c5786b937d1eb1d8387dc5ff997984ff2f83577e28dbf7c1a3cecb7f0200c4 *target/release/nhl-studio.exe

@@ -60,6 +60,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2a4385e2e34eb35d6b3efe798b9eb88096925d87726c0798709bf56d9ed84af3"
 
 [[package]]
+name = "arbitrary"
+version = "1.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3d036a3c4ab069c7b410a2ce876bd74808d2d0888a82667669f8e783a898bf1"
+dependencies = [
+ "derive_arbitrary",
+]
+
+[[package]]
 name = "async-broadcast"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -265,6 +274,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4388bee8683e3d04af747c73422af53102d2bd24d9eadb6cbc100baef4b43f8"
 dependencies = [
  "serde_core",
+]
+
+[[package]]
+name = "blender-job"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -710,6 +728,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "derive_arbitrary"
+version = "1.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e567bd82dcff979e4b03460c307b3cdc9e96fde3d73bed1496d2bc75d9dd62a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.118",
+]
+
+[[package]]
 name = "derive_more"
 version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1018,6 +1047,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "843fba2746e448b37e26a819579957415c8cef339bf08564fe8b7ddbd959573c"
 dependencies = [
  "crc32fast",
+ "libz-sys",
  "miniz_oxide",
 ]
 
@@ -1744,6 +1774,8 @@ dependencies = [
  "moxcms",
  "num-traits",
  "png 0.18.1",
+ "zune-core",
+ "zune-jpeg",
 ]
 
 [[package]]
@@ -2002,6 +2034,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "libz-sys"
+version = "1.1.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "85bc9657773828b90eeb625adff10eeac83cc21bbfd8e23a03eaa8a33c9e28d9"
+dependencies = [
+ "cc",
+ "pkg-config",
+ "vcpkg",
+]
+
+[[package]]
 name = "linux-raw-sys"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2153,13 +2196,23 @@ checksum = "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
 
 [[package]]
 name = "nhl-studio"
-version = "0.0.0"
+version = "0.2.0"
 dependencies = [
  "studio-api",
  "tauri",
  "tauri-build",
  "tauri-plugin-dialog",
  "tauri-plugin-opener",
+ "windows",
+]
+
+[[package]]
+name = "num-complex"
+version = "0.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "73f88a1307638156682bada9d7604135552957b7818057dcef22705b4d509495"
+dependencies = [
+ "num-traits",
 ]
 
 [[package]]
@@ -3338,16 +3391,27 @@ name = "studio-api"
 version = "0.0.0"
 dependencies = [
  "base64 0.22.1",
+ "image",
  "rusqlite",
  "serde",
  "serde_json",
+ "sha2",
  "studio-domain",
  "tauri",
+ "tdb-archive-big",
+ "tdb-archive-codec",
  "tdb-core",
+ "tdb-defs",
  "tdb-fhm",
+ "tdb-frostbite",
  "tdb-instance-registry",
+ "tdb-loc",
+ "tdb-rx2",
  "tdb-savedata",
+ "tdb-xiso",
+ "tempfile",
  "ts-rs",
+ "zip",
 ]
 
 [[package]]
@@ -3358,6 +3422,7 @@ dependencies = [
  "rusqlite",
  "serde",
  "serde_json",
+ "sha2",
  "tdb-archive-big",
  "tdb-archive-codec",
  "tdb-core",
@@ -3368,9 +3433,18 @@ dependencies = [
  "tdb-fhm",
  "tdb-fhm-store",
  "tdb-formula",
+ "tdb-loc",
+ "tdb-qa",
  "tdb-relations",
  "tdb-rx2",
  "tdb-savedata",
+ "tdb-snd",
+ "tdb-speech",
+ "tdb-txn",
+ "tdb-xiso",
+ "tempfile",
+ "toml 0.8.2",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3382,6 +3456,31 @@ dependencies = [
  "base64 0.21.7",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "symphonia-bundle-mp3"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "98ea5ffc8716bff677dfb3b01b420c7b758de901a72b8c330bf2040ab74b4add"
+dependencies = [
+ "lazy_static",
+ "log",
+ "symphonia-core",
+]
+
+[[package]]
+name = "symphonia-core"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "01c412864d599d4750d0c3d684d7e093ec05e5309681ef5252cc1096a437f6e0"
+dependencies = [
+ "bitflags 2.13.0",
+ "bytemuck",
+ "lazy_static",
+ "log",
+ "num-complex",
+ "smallvec",
 ]
 
 [[package]]
@@ -3792,6 +3891,8 @@ dependencies = [
 name = "tdb-archive-big"
 version = "0.0.0"
 dependencies = [
+ "serde_json",
+ "sha2",
  "tdb-archive-codec",
  "thiserror 1.0.69",
 ]
@@ -3801,8 +3902,22 @@ name = "tdb-archive-codec"
 version = "0.0.0"
 dependencies = [
  "flate2",
+ "serde_json",
+ "sha2",
  "texpresso",
  "thiserror 1.0.69",
+]
+
+[[package]]
+name = "tdb-canonical"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "sha2",
+ "tdb-core",
+ "tdb-qa",
+ "tdb-savedata",
+ "toml 0.8.2",
 ]
 
 [[package]]
@@ -3814,6 +3929,7 @@ name = "tdb-defs"
 version = "0.0.0"
 dependencies = [
  "roxmltree",
+ "sha2",
  "tdb-core",
 ]
 
@@ -3884,10 +4000,54 @@ dependencies = [
 ]
 
 [[package]]
+name = "tdb-frostbite"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "tempfile",
+]
+
+[[package]]
+name = "tdb-headmesh"
+version = "0.0.0"
+dependencies = [
+ "blender-job",
+ "image",
+ "serde",
+ "serde_json",
+ "tdb-archive-codec",
+ "tdb-rx2",
+ "thiserror 1.0.69",
+ "toml 0.8.2",
+]
+
+[[package]]
 name = "tdb-instance-registry"
 version = "0.0.0"
 dependencies = [
  "rusqlite",
+]
+
+[[package]]
+name = "tdb-loc"
+version = "0.0.0"
+dependencies = [
+ "serde_json",
+ "sha2",
+ "tdb-core",
+]
+
+[[package]]
+name = "tdb-qa"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2",
+ "tdb-core",
+ "tdb-defs",
+ "toml 0.8.2",
 ]
 
 [[package]]
@@ -3906,6 +4066,8 @@ version = "0.0.0"
 dependencies = [
  "serde",
  "serde_json",
+ "sha2",
+ "tdb-archive-codec",
  "texture2ddecoder",
  "thiserror 1.0.69",
 ]
@@ -3916,7 +4078,54 @@ version = "0.0.0"
 dependencies = [
  "flate2",
  "lz4_flex",
+ "tdb-archive-codec",
  "tdb-core",
+]
+
+[[package]]
+name = "tdb-snd"
+version = "0.0.0"
+dependencies = [
+ "serde_json",
+ "sha2",
+ "symphonia-bundle-mp3",
+ "symphonia-core",
+ "tdb-speex",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "tdb-speech"
+version = "0.0.0"
+dependencies = [
+ "serde_json",
+ "sha2",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "tdb-speex"
+version = "0.0.0"
+dependencies = [
+ "cc",
+]
+
+[[package]]
+name = "tdb-txn"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "tdb-xiso"
+version = "0.0.0"
+dependencies = [
+ "sha2",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -5406,10 +5615,54 @@ dependencies = [
 ]
 
 [[package]]
+name = "zip"
+version = "2.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fabe6324e908f85a1c52063ce7aa26b68dcb7eb6dbc83a2d148403c9bc3eba50"
+dependencies = [
+ "arbitrary",
+ "crc32fast",
+ "crossbeam-utils",
+ "displaydoc",
+ "flate2",
+ "indexmap 2.14.0",
+ "memchr",
+ "thiserror 2.0.18",
+ "zopfli",
+]
+
+[[package]]
 name = "zmij"
 version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa"
+
+[[package]]
+name = "zopfli"
+version = "0.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f05cd8797d63865425ff89b5c4a48804f35ba0ce8d125800027ad6017d2b5249"
+dependencies = [
+ "bumpalo",
+ "crc32fast",
+ "log",
+ "simd-adler32",
+]
+
+[[package]]
+name = "zune-core"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d56377fd46368984a170bc5aac5567e52ca5da874caa60bea39fcbca78fb658b"
+
+[[package]]
+name = "zune-jpeg"
+version = "0.5.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "27bc9d5b815bc103f142aa054f561d9187d191692ec7c2d1e2b4737f8dbd7296"
+dependencies = [
+ "zune-core",
+]
 
 [[package]]
 name = "zvariant"

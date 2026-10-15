@@ -21,17 +21,23 @@ fn anchor_str(rel: &str) -> String {
 #[test]
 fn registry_loads_all_defs() {
     let reg = EnumRegistry::from_dir(defs_dir()).unwrap();
-    assert_eq!(reg.len(), 33, "expected the 33 shipped enum defs");
+    // 30 → 34 (receipt 28): four title-scoped nationality files (NHL 07, 08 / 09, 10, 11 / 12) beside
+    // the Legacy-anchored table, which is now scoped to NHL 13 → 21 and Legacy.
+    assert_eq!(reg.len(), 34, "expected the 34 shipped enum defs");
 
     // Arena Type (StEO.dxQr) — the ice-surface flag.
     assert_eq!(reg.label("StEO", "dxQr", 0), Some("NHL Ice (200×85)"));
-    assert_eq!(reg.label("StEO", "dxQr", 1), Some("International Ice (200×100)"));
+    assert_eq!(
+        reg.label("StEO", "dxQr", 1),
+        Some("International Ice (200×100)")
+    );
 
-    // Team classification (kOtt): league fully anchored; conference/division NHL codes only.
-    assert_eq!(reg.label("kOtt", "xMjj", 0), Some("NHL"));
-    assert_eq!(reg.label("kOtt", "xMjj", 15), Some("EASHL"));
-    assert_eq!(reg.label("kOtt", "OwTu", 2), Some("Eastern"));
-    assert_eq!(reg.label("kOtt", "CGMK", 6), Some("Metropolitan"));
+    // Team classification (kOtt league / conference / division) is deliberately NOT a global
+    // enum: the codes change layout per title, so `studio-domain::leagues` resolves them from
+    // per-layout vocabularies (`defs/leagues`) or the PS4 `stockleagues` table.
+    assert!(reg.for_field("kOtt", "xMjj").is_none());
+    assert!(reg.for_field("kOtt", "OwTu").is_none());
+    assert!(reg.for_field("kOtt", "CGMK").is_none());
 
     // Career League (the four stock career tables' xMjj flag) resolves on every binding site.
     for t in ["tsSy", "OAqO", "USfF", "nCDp"] {
@@ -50,16 +56,22 @@ fn registry_loads_all_defs() {
     // field id but are distinct enums scoped by table — the registry must not collide them.
     // Spike S4 re-verified the skater mapping against the anchor and bound it to every skater `QgFs`
     // site incl. the roster table (eGlu, the S4 target) and the career-mode mirrors.
-    assert_eq!(reg.label("dSvy", "QgFs", 7), Some("Sniper"));
-    assert_eq!(reg.label("dSvy", "QgFs", 9), Some("Two-Way Forward"));
-    assert_eq!(reg.label("eGlu", "QgFs", 7), Some("Sniper"));
-    assert_eq!(reg.label("eGlu", "QgFs", 1), Some("Defensive Defenseman"));
-    assert_eq!(reg.label("mHuy", "QgFs", 2), Some("Butterfly"));
-    assert!(reg.for_field("dSvy", "QgFs").unwrap().name != reg.for_field("mHuy", "QgFs").unwrap().name);
+    // Scoped to NHL 11 → 21 and Legacy since 27 Sep 2026 (research R122: NHL 07–10 number skater
+    // styles differently), so it resolves only for a title inside that scope.
+    let legacy = reg.scoped(Some("nhllegacy"), "xbox");
+    assert_eq!(legacy.label("dSvy", "QgFs", 7), Some("Sniper"));
+    assert_eq!(legacy.label("dSvy", "QgFs", 9), Some("Two-Way Forward"));
+    assert_eq!(legacy.label("eGlu", "QgFs", 7), Some("Sniper"));
+    assert_eq!(legacy.label("eGlu", "QgFs", 1), Some("Defensive Defenseman"));
+    assert_eq!(reg.scoped(Some("nhl10"), "xbox").label("eGlu", "QgFs", 4), None, "NHL 10: no Legacy label");
+    assert_eq!(legacy.label("mHuy", "QgFs", 2), Some("Butterfly"));
+    assert!(
+        legacy.for_field("dSvy", "QgFs").unwrap().name != legacy.for_field("mHuy", "QgFs").unwrap().name
+    );
     // Same enum instance backs the roster table and the skater-AI table.
     assert_eq!(
-        reg.for_field("eGlu", "QgFs").unwrap().name,
-        reg.for_field("dSvy", "QgFs").unwrap().name
+        legacy.for_field("eGlu", "QgFs").unwrap().name,
+        legacy.for_field("dSvy", "QgFs").unwrap().name
     );
 
     // Player Type (ZBac.RREB) — the S4-follow-up resolution: RREB is the player source
@@ -90,7 +102,8 @@ fn registry_loads_all_defs() {
 #[test]
 fn enum_fields_resolve_against_anchor_meta() {
     let reg = EnumRegistry::from_dir(defs_dir()).unwrap();
-    let meta = FieldMetaIndex::from_xml(&anchor_str("ps3/nhllegacy/databases/nhlng-meta.xml")).unwrap();
+    let meta =
+        FieldMetaIndex::from_xml(&anchor_str("ps3/nhllegacy/databases/nhlng-meta.xml")).unwrap();
 
     let mut matched = 0;
     for def in reg.defs() {
@@ -99,7 +112,9 @@ fn enum_fields_resolve_against_anchor_meta() {
             let (t, f) = (reverse_id(&b.table_raw_id), reverse_id(&b.field_raw_id));
             // Not every enum's table lives in nhlng.db (equipment/appearance tables differ); skip
             // the ones this anchor doesn't carry rather than failing on them.
-            let Some(fm) = meta.field(&t, &f) else { continue };
+            let Some(fm) = meta.field(&t, &f) else {
+                continue;
+            };
             let cap = if fm.bit_depth >= 63 {
                 i64::MAX
             } else {

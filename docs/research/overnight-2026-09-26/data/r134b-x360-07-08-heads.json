@@ -1,0 +1,158 @@
+{
+ "note": "R134b - Xbox 360 NHL 07 / 08 player portrait and head families (the last titles R53 / R124 / R134 did not census): member names of every\nBIG4 / EB archive of the title plus loose `rendering/player` and `fe/ion/artassets/playerheads`, classified by name pattern (digits -> '#'),\njoined to the anchor bio table's artid / headid where the columns exist (NHL 07's gen6 bio table is thinner; missing columns recorded).\nTests the PS3 NHL 08 observation (R134: `head_<id>` meshes plus composite `head_<a>_<b>_<c>_<d>_cm` / hair parts). Listing only.\nUsage: python r134b_x360_07_08_heads.py <out.json>\n",
+ "titles": {
+  "x360-nhl07": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)",
+   "db_sha256": "67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3",
+   "bio_rows": 2250,
+   "bio_columns_present": [
+    "artid",
+    "headid"
+   ],
+   "rendering_player_patterns": {
+    "eyes_#_#_cm.rx#": 888,
+    "head_#_#_#_#_am.rx#": 882,
+    "head_#_#_#_#_cm.rx#": 882,
+    "head_#.rx#": 876,
+    "eyel_#_am.rx#": 844,
+    "eyer_#_am.rx#": 844,
+    "hair_#_#_#_#.rx#": 174,
+    "eyes_#_cm.rx#": 14,
+    "commonhead_#.rx#": 4,
+    "head_#_am.rx#": 4,
+    "head_#_#_#_#_nm.rx#": 4,
+    "head_#_#_#_#_sm.rx#": 4,
+    "commonhair_#.rx#": 2,
+    "eyel_cam.rx#": 2,
+    "eyelashes_cm.rx#": 2,
+    "eyer_cam.rx#": 2,
+    "eyes_ism.rx#": 2,
+    "eyes_nm.rx#": 2,
+    "eyes_sm.rx#": 2,
+    "hair_cam.rx#": 2
+   },
+   "portraits": 1243,
+   "head_meshes": 438,
+   "composite_head_textures": 441,
+   "composite_position_value_counts": [
+    441,
+    1,
+    1,
+    1
+   ],
+   "roster_head_ids": 1349,
+   "roster_heads_with_mesh": 398,
+   "roster_rows_with_mesh": 1299,
+   "roster_rows_without_mesh": 951,
+   "heads_without_mesh_range": [
+    226,
+    10500
+   ],
+   "composite_first_position_in_roster_head_ids": 399,
+   "roster_art_ids": 2250,
+   "roster_art_ids_with_portrait": 957
+  },
+  "x360-nhl08": {
+   "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)",
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "bio_rows": 2962,
+   "bio_columns_present": [
+    "artid",
+    "headid"
+   ],
+   "rendering_player_patterns": {
+    "head_#.rx#": 442,
+    "head_#_#_#_#_cm.rx#": 433,
+    "hair_#_#_#_#.rx#": 332,
+    "hair_#_cm.rx#": 242,
+    "eyel_#_am.rx#": 20,
+    "eyer_#_am.rx#": 20,
+    "eyes_#_cm.rx#": 7,
+    "eyes_#_#_cm.rx#": 7,
+    "commonhead_#.rx#": 2,
+    "head_#_#_#_#_am.rx#": 2,
+    "commonhair_#.rx#": 1,
+    "eyel_cam.rx#": 1,
+    "eyelashes_cm.rx#": 1,
+    "eyer_cam.rx#": 1,
+    "eyes_ism.rx#": 1,
+    "eyes_nm.rx#": 1,
+    "eyes_rm.rx#": 1,
+    "eyes_sm.rx#": 1,
+    "hair_#_#_aa.rx#": 1,
+    "hair_#_#_ab.rx#": 1
+   },
+   "portraits": 3493,
+   "head_meshes": 442,
+   "composite_head_textures": 433,
+   "composite_position_value_counts": [
+    433,
+    1,
+    1,
+    1
+   ],
+   "roster_head_ids": 598,
+   "roster_heads_with_mesh": 262,
+   "roster_rows_with_mesh": 2626,
+   "roster_rows_without_mesh": 336,
+   "heads_without_mesh_range": [
+    3000,
+    4429
+   ],
+   "composite_first_position_in_roster_head_ids": 262,
+   "roster_art_ids": 2782,
+   "roster_art_ids_with_portrait": 2782
+  },
+  "ps3-nhl08": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 08\\PS3_GAME\\USRDIR",
+   "db_sha256": "587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9",
+   "bio_rows": 2962,
+   "bio_columns_present": [
+    "artid",
+    "headid"
+   ],
+   "rendering_player_patterns": {
+    "head_#.rpsgl": 442,
+    "head_#_#_#_#_cm.rpsgl": 433,
+    "hair_#_#_#_#.rpsgl": 332,
+    "hair_#_cm.rpsgl": 242,
+    "eyes_#_cm.rpsgl": 7,
+    "eyes_#_#_cm.rpsgl": 7,
+    "commonhead_#.rpsgl": 2,
+    "head_#_#_#_#_am.rpsgl": 2,
+    "commonhair_#.rpsgl": 1,
+    "eyel_cam.rpsgl": 1,
+    "eyelashes_cm.rpsgl": 1,
+    "eyer_cam.rpsgl": 1,
+    "eyes_ism.rpsgl": 1,
+    "eyes_nm.rpsgl": 1,
+    "eyes_rm.rpsgl": 1,
+    "eyes_sm.rpsgl": 1,
+    "hair_#_#_aa.rpsgl": 1,
+    "hair_#_#_ab.rpsgl": 1,
+    "hair_cam.rpsgl": 1,
+    "hair_csm.rpsgl": 1
+   },
+   "portraits": 3493,
+   "head_meshes": 442,
+   "composite_head_textures": 433,
+   "composite_position_value_counts": [
+    433,
+    1,
+    1,
+    1
+   ],
+   "roster_head_ids": 598,
+   "roster_heads_with_mesh": 262,
+   "roster_rows_with_mesh": 2626,
+   "roster_rows_without_mesh": 336,
+   "heads_without_mesh_range": [
+    3000,
+    4429
+   ],
+   "composite_first_position_in_roster_head_ids": 262,
+   "roster_art_ids": 2782,
+   "roster_art_ids_with_portrait": 2782
+  }
+ }
+}

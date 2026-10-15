@@ -1,0 +1,612 @@
+{
+ "note": "R122d - full skater-style transition matrices on the R120 matching (K1 = name + calendar birth date, unique on both sides; same code\npath as R121, deterministic), for the pairs around the style-vocabulary changes: NHL 08->09 and 13->14 (controls), 09->10 and 10->11\n(the two +1 shifts). Also the per-title label SET from each title's own dictionary (LanguageStrings keys for the style names), which fixes\nhow many labels exist per title but not which code carries which label. Output = counts only; any code->label table built from it is an\ninference (continuity), not a mapping contract.\nUsage: python r122d_style_transition_matrix.py <out.json>\n",
+ "dictionaries": {
+  "xbox360-nhl08": {
+   "sha256": "308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4",
+   "style_keys": [
+    [
+     "dangler",
+     "Dangler"
+    ],
+    [
+     "defensivedefenseman",
+     "Defensive Defenseman"
+    ],
+    [
+     "grinder",
+     "Grinder"
+    ],
+    [
+     "offensivedefenseman",
+     "Offensive Defenseman"
+    ],
+    [
+     "playmaker",
+     "Playmaker"
+    ],
+    [
+     "powerforward",
+     "Power Forward"
+    ],
+    [
+     "sniper",
+     "Sniper"
+    ]
+   ]
+  },
+  "xbox360-nhl09": {
+   "sha256": "d9e0463b1b6b49d744273803785469ae9781b21c838cbb226526d66028b8727e",
+   "style_keys": [
+    [
+     "dangler",
+     "Dangler"
+    ],
+    [
+     "defensivedefenseman",
+     "Defensive Defenseman"
+    ],
+    [
+     "grinder",
+     "Grinder"
+    ],
+    [
+     "offensivedefenseman",
+     "Offensive Defenseman"
+    ],
+    [
+     "playmaker",
+     "Playmaker"
+    ],
+    [
+     "powerforward",
+     "Power Forward"
+    ],
+    [
+     "sniper",
+     "Sniper"
+    ]
+   ]
+  },
+  "xbox360-nhl10": {
+   "sha256": "f1a9a1dd9e8f2851053750fabb6f3b42aa53f3cf45e021449652fdea1c042671",
+   "style_keys": [
+    [
+     "dangler",
+     "DANGLER"
+    ],
+    [
+     "defensivedefenseman",
+     "DEFENSIVE DEFENSEMAN"
+    ],
+    [
+     "enforcer",
+     "TOUGH GUY"
+    ],
+    [
+     "enforcerdefenseman",
+     "TOUGH GUY"
+    ],
+    [
+     "grinder",
+     "GRINDER"
+    ],
+    [
+     "offensivedefenseman",
+     "OFFENSIVE DEFENSEMAN"
+    ],
+    [
+     "playmaker",
+     "PLAYMAKER"
+    ],
+    [
+     "powerforward",
+     "POWER FORWARD"
+    ],
+    [
+     "sniper",
+     "SNIPER"
+    ]
+   ]
+  },
+  "xbox360-nhl11": {
+   "sha256": "82520ab36988b7e384830c74c208cf7a7d8f80be34fd435242a5a067feedc22b",
+   "style_keys": [
+    [
+     "dangler",
+     "DANGLER"
+    ],
+    [
+     "defensivedefenseman",
+     "DEFENSIVE DEFENSEMAN"
+    ],
+    [
+     "enforcer",
+     "TOUGH GUY"
+    ],
+    [
+     "enforcerdefenseman",
+     "TOUGH GUY"
+    ],
+    [
+     "grinder",
+     "GRINDER"
+    ],
+    [
+     "offensivedefenseman",
+     "OFFENSIVE DEFENSEMAN"
+    ],
+    [
+     "playmaker",
+     "PLAYMAKER"
+    ],
+    [
+     "powerforward",
+     "POWER FORWARD"
+    ],
+    [
+     "sniper",
+     "SNIPER"
+    ],
+    [
+     "twowaydefenseman",
+     "2 WAY DEFENDER"
+    ],
+    [
+     "twowayforward",
+     "2 WAY FORWARD"
+    ]
+   ]
+  },
+  "xbox360-nhl13": {
+   "sha256": "b93fa83f8b4fb760eb48e3a274e1f95a7aaf19d868ba63be59218c41063486e5",
+   "style_keys": [
+    [
+     "dangler",
+     "Dangler"
+    ],
+    [
+     "defensivedefenseman",
+     "Defensive Defenseman"
+    ],
+    [
+     "enforcer",
+     "Tough Guy"
+    ],
+    [
+     "enforcerdefenseman",
+     "Tough Guy"
+    ],
+    [
+     "grinder",
+     "Grinder"
+    ],
+    [
+     "offensivedefenseman",
+     "Offensive Defenseman"
+    ],
+    [
+     "playmaker",
+     "Playmaker"
+    ],
+    [
+     "powerforward",
+     "Power Forward"
+    ],
+    [
+     "sniper",
+     "Sniper"
+    ],
+    [
+     "twowaydefenseman",
+     "2 Way Defender"
+    ],
+    [
+     "twowayforward",
+     "2 Way Forward"
+    ]
+   ]
+  },
+  "xbox360-nhl14": {
+   "sha256": "e5aff8285169e2ab0790f63f6def65c892f7cd42553bc71b622f42296c48ac74",
+   "style_keys": [
+    [
+     "dangler",
+     "Dangler"
+    ],
+    [
+     "defensivedefenseman",
+     "Defensive Defenseman"
+    ],
+    [
+     "enforcer",
+     "Enforcer"
+    ],
+    [
+     "enforcerdefenseman",
+     "Enforcer"
+    ],
+    [
+     "grinder",
+     "Grinder"
+    ],
+    [
+     "offensivedefenseman",
+     "Offensive Defenseman"
+    ],
+    [
+     "playmaker",
+     "Playmaker"
+    ],
+    [
+     "powerforward",
+     "Power Forward"
+    ],
+    [
+     "sniper",
+     "Sniper"
+    ],
+    [
+     "twowaydefenseman",
+     "2 Way Defender"
+    ],
+    [
+     "twowayforward",
+     "2 Way Forward"
+    ]
+   ]
+  }
+ },
+ "pairs": [
+  {
+   "pair": [
+    "xbox360-nhl08",
+    "xbox360-nhl09"
+   ],
+   "n": 2020,
+   "from_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "to_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "matrix": {
+    "1": {
+     "1": 567,
+     "2": 35,
+     "3": 4,
+     "5": 1
+    },
+    "2": {
+     "1": 6,
+     "2": 101
+    },
+    "3": {
+     "1": 9,
+     "2": 1,
+     "3": 721,
+     "4": 29,
+     "5": 35,
+     "6": 24,
+     "7": 5
+    },
+    "4": {
+     "1": 2,
+     "3": 9,
+     "4": 154,
+     "5": 14,
+     "6": 13,
+     "7": 6
+    },
+    "5": {
+     "1": 1,
+     "3": 6,
+     "4": 11,
+     "5": 116,
+     "6": 13,
+     "7": 2
+    },
+    "6": {
+     "2": 1,
+     "3": 4,
+     "4": 2,
+     "5": 3,
+     "6": 92
+    },
+    "7": {
+     "4": 3,
+     "5": 1,
+     "7": 29
+    }
+   }
+  },
+  {
+   "pair": [
+    "xbox360-nhl09",
+    "xbox360-nhl10"
+   ],
+   "n": 2531,
+   "from_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "to_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "matrix": {
+    "1": {
+     "1": 692,
+     "2": 34,
+     "3": 16,
+     "4": 6,
+     "7": 2,
+     "9": 3
+    },
+    "2": {
+     "1": 2,
+     "2": 167,
+     "3": 1,
+     "7": 1
+    },
+    "3": {
+     "1": 5,
+     "4": 781,
+     "5": 30,
+     "6": 23,
+     "7": 9,
+     "8": 7,
+     "9": 58
+    },
+    "4": {
+     "4": 7,
+     "5": 240,
+     "6": 2,
+     "7": 4,
+     "8": 3
+    },
+    "5": {
+     "4": 4,
+     "5": 5,
+     "6": 212,
+     "7": 2,
+     "8": 1
+    },
+    "6": {
+     "4": 6,
+     "5": 1,
+     "6": 2,
+     "7": 157,
+     "9": 2
+    },
+    "7": {
+     "6": 2,
+     "8": 44
+    }
+   }
+  },
+  {
+   "pair": [
+    "xbox360-nhl10",
+    "xbox360-nhl11"
+   ],
+   "n": 2735,
+   "from_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "to_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "matrix": {
+    "1": {
+     "1": 498,
+     "2": 77,
+     "3": 26,
+     "4": 160,
+     "5": 3,
+     "6": 1,
+     "8": 1,
+     "9": 1
+    },
+    "2": {
+     "1": 19,
+     "2": 112,
+     "3": 1,
+     "4": 66
+    },
+    "3": {
+     "1": 8,
+     "3": 10,
+     "4": 1,
+     "10": 1
+    },
+    "4": {
+     "2": 2,
+     "5": 401,
+     "6": 87,
+     "7": 56,
+     "8": 85,
+     "9": 210,
+     "10": 19
+    },
+    "5": {
+     "2": 1,
+     "5": 20,
+     "6": 199,
+     "7": 43,
+     "8": 20,
+     "9": 59,
+     "10": 1
+    },
+    "6": {
+     "5": 14,
+     "6": 39,
+     "7": 113,
+     "8": 18,
+     "9": 58,
+     "10": 7
+    },
+    "7": {
+     "4": 1,
+     "5": 11,
+     "6": 17,
+     "7": 11,
+     "8": 86,
+     "9": 44,
+     "10": 4
+    },
+    "8": {
+     "5": 1,
+     "6": 15,
+     "7": 28,
+     "9": 5,
+     "10": 1
+    },
+    "9": {
+     "5": 21,
+     "8": 1,
+     "10": 52
+    }
+   }
+  },
+  {
+   "pair": [
+    "xbox360-nhl13",
+    "xbox360-nhl14"
+   ],
+   "n": 3858,
+   "from_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "to_codes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "matrix": {
+    "1": {
+     "1": 637,
+     "2": 1,
+     "4": 21,
+     "5": 3
+    },
+    "2": {
+     "1": 1,
+     "2": 220,
+     "4": 15,
+     "6": 1
+    },
+    "3": {
+     "3": 43,
+     "5": 1
+    },
+    "4": {
+     "1": 34,
+     "2": 9,
+     "4": 398,
+     "5": 1,
+     "7": 1,
+     "8": 1,
+     "9": 2
+    },
+    "5": {
+     "1": 1,
+     "5": 443,
+     "7": 1,
+     "8": 9,
+     "9": 17,
+     "10": 1
+    },
+    "6": {
+     "1": 1,
+     "6": 489,
+     "7": 10,
+     "8": 3,
+     "9": 19
+    },
+    "7": {
+     "6": 6,
+     "7": 351,
+     "8": 5,
+     "9": 19
+    },
+    "8": {
+     "1": 2,
+     "5": 15,
+     "6": 2,
+     "7": 3,
+     "8": 255,
+     "9": 13
+    },
+    "9": {
+     "4": 2,
+     "5": 9,
+     "6": 16,
+     "7": 17,
+     "8": 9,
+     "9": 704
+    },
+    "10": {
+     "5": 1,
+     "10": 46
+    }
+   }
+  }
+ ]
+}

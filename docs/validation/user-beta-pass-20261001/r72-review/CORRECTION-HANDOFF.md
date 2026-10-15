@@ -1,0 +1,14 @@
+# Development handoff — finish roster-only package installation
+
+The r72 coordinator rerun passed all 20 existing probe/correction tests. The five original defects are verified fixed. One explicit part of the earlier R2 handoff is still missing: roster-only package installation without a game installation, using bundled verified metadata.
+
+Read `docs/validation/user-beta-pass-20261001/r72-review/REVIEW.md`. Reproduce `r72_coordinator_probe.rs.txt` as a temporary/permanent integration test before changes. It currently builds a valid roster-only Legacy Xbox package, then fails preflight with an empty game root; giving the save directory as root fails on missing metadata. All writes use owned copies.
+
+Make this bounded correction in the existing development session:
+
+1. Derive required inputs from the inspected package before path validation. Allow roster-only installation from the chosen native save/save folder, without a game installation or main DB. Resolve the exact title/platform metadata from the shipped baseline/resource service, independent of the checkout; do not infer a different title or require manual metadata copying.
+2. Update the API/command/UI together. The Review installation button must allow this input combination; discovery/selection must handle save-only input independently across supported platforms, including PS4 title/profile levels. Preserve explicit multi-save selection and stale-choice refusal. Mixed/main/asset/dictionary packages still require their actual dependencies.
+3. Prove package build → independent owned recipient preflight → exact intended roster-only changes → exact restore, with no main DB/game installation. Cover packaged-resource lookup outside the checkout, wrong/missing schema, malformed or wrong-title save, multi-save/stale selection, changed target, and mixed-package dependency refusals. Retain the existing 20 passing regression/correction tests. Add an actual UI submission test with an empty game root and an explicit save.
+4. Correct receipt/matrix wording: deployment/header/restore paths changed and need focused reruns; schema-1 packages with cells require rebuilding, rather than claiming all old packages are universally refused. Do not alter historical user results. Preserve the explicit unresolved portability blockers; no cross-game/year conversion or unverified mappings.
+
+Preserve r67–r72 ZIPs/extracted trees and all original games/saves/anchors. No commits, pushes, publication, app/game launch or original deployment. Keep unrelated development frozen. Run affected checks and standard packaging gates, produce the next unused internal candidate with hashes/source stability/preservation evidence, then freeze for review. Deliver the exact new test results and remaining blockers. This handoff is prepared for the user to give the development session; no cross-session message was sent.

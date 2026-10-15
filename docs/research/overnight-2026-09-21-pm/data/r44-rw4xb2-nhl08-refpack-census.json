@@ -1,0 +1,1029 @@
+{
+ "note": "R44 \u2014 NHL 08 Xbox 360 loose `rendering/**/*.rx2` are RefPack-wrapped (`10 FB`) `RW4xb2` containers, not \"another container\": unwrap each\nin memory (the 2026-09-18 `refpack.py` research decompressor) and run the r42 descriptor census (DW8 join rules A / B / C, DW12 mip-address\nrule, tile-aligned pitch, DW13, slot sizes, shipped maxima) on the plaintext. Read-only; nothing is written to X:.\nUsage: python r44_rw4xb2_nhl08_refpack_census.py <out.json> [--max N] [--root <rendering dir>]\n",
+ "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 08\\NHL 08 (USA)\\rendering",
+ "rx2_files": 8940,
+ "seconds": 513,
+ "wrapping": {
+  "refpack": 8937,
+  "plain": 3
+ },
+ "counts": {
+  "files": 7594,
+  "descriptors": 14066,
+  "A_dw8_eq_2x_ordinal": 12558,
+  "B_dw8_eq_paired_data_entry_index": 14066,
+  "C_dw8_indexes_a_data_entry": 14066,
+  "C_and_slot_holds_chain": 14066,
+  "data_entry_is_prev": 14046,
+  "data_entry_is_next": 20,
+  "DW12_normal_tested": 13430,
+  "DW12_normal_ok": 13429,
+  "pitch_tested": 14066,
+  "pitch_eq_tile_aligned_w_32": 14066,
+  "pitch_eq_ceil_w_32": 13755,
+  "dw13_byte2_eq_mips": 14066,
+  "files_without_textures": 1236,
+  "DW12_single_mip_zero_tested": 463,
+  "DW12_single_mip_zero_ok": 463,
+  "DW12_tiny_tested": 168,
+  "DW12_tiny_ok": 168,
+  "DW12_cube_6x_tested": 5,
+  "DW12_cube_6x_ok": 5
+ },
+ "entry_class_at_dw8_index": {
+  "data": 14046,
+  "data07": 20
+ },
+ "dw0_values": {
+  "0x3": 14066
+ },
+ "errors": {
+  "refpack: IndexError('bytearray index out of range')": 110
+ },
+ "shipped_maxima": {
+  "w": 2048,
+  "h": 2048,
+  "pitch32": 64,
+  "mips": 12,
+  "dw8_hi": 106,
+  "dw12_hi": 256,
+  "slot_bytes": 1441792,
+  "file_count": 1141,
+  "plain_len": 14914752,
+  "packed_len": 6291299
+ },
+ "formats": {
+  "DXT1": 8557,
+  "DXN": 2022,
+  "DXT3": 939,
+  "DXT5": 1997,
+  "8_8_8_8": 551
+ },
+ "slot_size_by_shape": [
+  {
+   "shape": [
+    512,
+    512,
+    "DXT1",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "196608": 2527
+   }
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "DXT1",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "720896": 2170
+   }
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "DXT5",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "65536": 1459
+   }
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "DXT1",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "65536": 1047
+   }
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "DXN",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "1441792": 971
+   }
+  },
+  {
+   "shape": [
+    512,
+    256,
+    "DXT1",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "106496": 826
+   }
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "DXN",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "393216": 761
+   }
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "8_8_8_8",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "360448": 540
+   }
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "DXT5",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "1441792": 495
+   }
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "DXT1",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "32768": 390
+   }
+  },
+  {
+   "shape": [
+    256,
+    512,
+    "DXT1",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "106496": 350
+   }
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "DXT3",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "131072": 323
+   }
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "DXT1",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "131072": 282
+   }
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "DXN",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "131072": 219
+   }
+  },
+  {
+   "shape": [
+    1024,
+    512,
+    "DXT1",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "368640": 151
+   }
+  },
+  {
+   "shape": [
+    1024,
+    1024,
+    "DXT3",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "1441792": 148
+   }
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "DXT3",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "262144": 146
+   }
+  },
+  {
+   "shape": [
+    2048,
+    1024,
+    "DXT1",
+    12,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "1417216": 144
+   }
+  },
+  {
+   "shape": [
+    32,
+    32,
+    "DXT1",
+    6,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "16384": 108
+   }
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "DXT3",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "393216": 96
+   }
+  },
+  {
+   "shape": [
+    1024,
+    2048,
+    "DXT1",
+    12,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "1417216": 93
+   }
+  },
+  {
+   "shape": [
+    4,
+    4,
+    "DXT1",
+    3,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "8192": 60
+   }
+  },
+  {
+   "shape": [
+    512,
+    1024,
+    "DXT1",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "368640": 52
+   }
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "DXT1",
+    7,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "24576": 50
+   }
+  },
+  {
+   "shape": [
+    128,
+    64,
+    "DXT1",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "24576": 49
+   }
+  },
+  {
+   "shape": [
+    512,
+    1024,
+    "DXT3",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "737280": 43
+   }
+  },
+  {
+   "shape": [
+    256,
+    1024,
+    "DXT1",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "196608": 39
+   }
+  },
+  {
+   "shape": [
+    1024,
+    256,
+    "DXT1",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "196608": 39
+   }
+  },
+  {
+   "shape": [
+    64,
+    256,
+    "DXT1",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "32768": 37
+   }
+  },
+  {
+   "shape": [
+    512,
+    128,
+    "DXT3",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "131072": 36
+   }
+  },
+  {
+   "shape": [
+    512,
+    1024,
+    "DXN",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "737280": 36
+   }
+  },
+  {
+   "shape": [
+    512,
+    2048,
+    "DXT1",
+    12,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "720896": 36
+   }
+  },
+  {
+   "shape": [
+    32,
+    64,
+    "DXT1",
+    7,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "16384": 36
+   }
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "DXT5",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "131072": 33
+   }
+  },
+  {
+   "shape": [
+    256,
+    512,
+    "DXT3",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "212992": 31
+   }
+  },
+  {
+   "shape": [
+    1024,
+    64,
+    "DXT3",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "229376": 29
+   }
+  },
+  {
+   "shape": [
+    128,
+    32,
+    "DXT3",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "32768": 29
+   }
+  },
+  {
+   "shape": [
+    128,
+    64,
+    "DXT3",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "49152": 28
+   }
+  },
+  {
+   "shape": [
+    1024,
+    128,
+    "DXT1",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "122880": 15
+   }
+  },
+  {
+   "shape": [
+    256,
+    32,
+    "DXN",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "49152": 15
+   }
+  },
+  {
+   "shape": [
+    256,
+    32,
+    "DXT1",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "24576": 15
+   }
+  },
+  {
+   "shape": [
+    256,
+    256,
+    "DXT1",
+    1,
+    3,
+    0
+   ],
+   "slot_bytes": {
+    "196608": 11
+   }
+  },
+  {
+   "shape": [
+    256,
+    64,
+    "DXT1",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "32768": 10
+   }
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "DXT3",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "65536": 9
+   }
+  },
+  {
+   "shape": [
+    64,
+    160,
+    "DXT3",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "32768": 8
+   }
+  },
+  {
+   "shape": [
+    512,
+    256,
+    "DXT3",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "212992": 8
+   }
+  },
+  {
+   "shape": [
+    256,
+    128,
+    "DXN",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "81920": 7
+   }
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "DXN",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "65536": 5
+   }
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "DXT5",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "16384": 5
+   }
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "8_8_8_8",
+    8,
+    3,
+    1
+   ],
+   "slot_bytes": {
+    "540672": 5
+   }
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "8_8_8_8",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "1400832": 5
+   }
+  },
+  {
+   "shape": [
+    512,
+    256,
+    "DXN",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "212992": 4
+   }
+  },
+  {
+   "shape": [
+    8,
+    8,
+    "DXT1",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "8192": 4
+   }
+  },
+  {
+   "shape": [
+    256,
+    128,
+    "DXT1",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "40960": 3
+   }
+  },
+  {
+   "shape": [
+    32,
+    32,
+    "DXT5",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "16384": 2
+   }
+  },
+  {
+   "shape": [
+    128,
+    32,
+    "DXT1",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "8192": 2
+   }
+  },
+  {
+   "shape": [
+    512,
+    512,
+    "DXT5",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "393216": 2
+   }
+  },
+  {
+   "shape": [
+    64,
+    64,
+    "DXN",
+    7,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "49152": 2
+   }
+  },
+  {
+   "shape": [
+    1024,
+    64,
+    "DXT1",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "114688": 2
+   }
+  },
+  {
+   "shape": [
+    512,
+    64,
+    "DXT3",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "114688": 2
+   }
+  },
+  {
+   "shape": [
+    128,
+    256,
+    "DXT1",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "40960": 2
+   }
+  },
+  {
+   "shape": [
+    128,
+    64,
+    "DXN",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "49152": 2
+   }
+  },
+  {
+   "shape": [
+    64,
+    32,
+    "DXT1",
+    7,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "16384": 2
+   }
+  },
+  {
+   "shape": [
+    512,
+    128,
+    "DXT1",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "65536": 1
+   }
+  },
+  {
+   "shape": [
+    1280,
+    720,
+    "DXT1",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "491520": 1
+   }
+  },
+  {
+   "shape": [
+    640,
+    480,
+    "DXT1",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "163840": 1
+   }
+  },
+  {
+   "shape": [
+    128,
+    128,
+    "DXT1",
+    1,
+    1,
+    0
+   ],
+   "slot_bytes": {
+    "8192": 1
+   }
+  },
+  {
+   "shape": [
+    16,
+    256,
+    "DXT3",
+    9,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "32768": 1
+   }
+  },
+  {
+   "shape": [
+    1024,
+    512,
+    "DXT3",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "737280": 1
+   }
+  },
+  {
+   "shape": [
+    256,
+    512,
+    "DXT5",
+    10,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "212992": 1
+   }
+  },
+  {
+   "shape": [
+    64,
+    128,
+    "DXT1",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "24576": 1
+   }
+  },
+  {
+   "shape": [
+    128,
+    64,
+    "8_8_8_8",
+    8,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "45056": 1
+   }
+  },
+  {
+   "shape": [
+    256,
+    1024,
+    "DXT3",
+    11,
+    1,
+    1
+   ],
+   "slot_bytes": {
+    "393216": 1
+   }
+  }
+ ],
+ "residuals": {
+  "dw12": [
+   {
+    "file": "rendering/ice/texlib.rx2",
+    "k": 3,
+    "w": 16,
+    "h": 256,
+    "fmt": "DXT3",
+    "mips": 9,
+    "dim": 1,
+    "packed": 1,
+    "dw12_hi": 0,
+    "expected": 8
+   }
+  ]
+ }
+}

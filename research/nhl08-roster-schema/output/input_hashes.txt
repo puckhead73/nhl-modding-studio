@@ -1,0 +1,8 @@
+587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9     1556560  anchors/xbox360/nhl08/databases/nhlng.db
+d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1      243270  anchors/xbox360/nhl08/databases/nhlng-meta.xml
+b7a378359db02bc4eb5feec12d2c75e2fa6892386cf288dcf5a77980fe035755     1238480  anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658
+e0c93382c4ae685bf1ab367b5d212427001af1f132fd4932a289049be4e79a25     2461712  anchors/xbox360/nhl08/savefiles/DYNASTY1 20260718064632/DYNASTY1 20260718064632
+3c4d2b19bb2941e1f5d15ff86fe0fa5f6897ba70c86013e3b90349830013c2b4        6965  anchors/xbox360/nhl08/game-files.json
+67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3     4189776  anchors/xbox360/nhl07/databases/NHL07NG.db
+c9c833dc2bb57d62ac79313da4ec3658d442dbcae90407799246572e33d98520      269813  anchors/xbox360/nhl07/databases/NHL07NG-meta.xml
+40a06d5344d4ca7460cffeb8ec0cb1626bdefb1a28ba337f17c6f9ddacd2223d     1598888  anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1

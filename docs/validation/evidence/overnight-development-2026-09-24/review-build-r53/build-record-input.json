@@ -1,0 +1,20 @@
+{
+  "candidate": "NHL Modding Studio rc-20260928-r53",
+  "built": "2026-09-28T06:23:45-06:00 .. 06:26:03-06:00",
+  "command": "CARGO_INCREMENTAL=0 npm run build -- --no-bundle (repo root; tauri build; existing target\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 944,
+  "dirty_manifest_sha256": "c92029ad64bc16d93050729709b452cd081b428a0ab6cd4eb6d14b52e0ebfbf1",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "139656966a5ff8cb58bb69e086432328c4f247b7ccba71ac90a145360894212f",
+  "exe_bytes": 50418176,
+  "defs_tree_sha256": "4a8382c450625367ae8c703dcf2bea1557ab586e973b5a68c14bf70e654a905e",
+  "frontend_dist_tree_sha256": "a8e47efad241a59d1e22d33d76c6d2e9f71c86814a957f0cbd7769272e051415",
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "ffmpeg_source_sha256": "7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3",
+  "included_receipts": "developer receipts through 53 (r48 + 49 venue-art gallery, 50 XMA in-bank residuals, 51 PS4 goalie mask pairs, 52 PS4 skater gear catalogue, 53 NHL 11/13/14 .ast XMA streams)",
+  "tree_sha_definition": "SHA-256 of '<relpath>\t<sha256>\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "launched": false,
+  "published": false
+}

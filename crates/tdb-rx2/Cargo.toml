@@ -5,9 +5,18 @@ version = "0.0.0"
 edition.workspace = true
 rust-version.workspace = true
 publish.workspace = true
+license.workspace = true
 
 [dependencies]
 thiserror = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 texture2ddecoder = "0.1.2"
+# Donor-profile fingerprinting for the bounded .mcd editor (see mcd_write).
+sha2 = "0.10"
+
+[dev-dependencies]
+# NHL 08 wraps every loose `.rx2` in a RefPack stream (research 2026-09-21 pm handoff R42 §3); the
+# 07/08 descriptor census unwraps it to reach the container. No cycle: `tdb-archive-codec` does not
+# depend on `tdb-rx2`.
+tdb-archive-codec = { path = "../tdb-archive-codec" }

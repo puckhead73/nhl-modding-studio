@@ -1,0 +1,2197 @@
+{
+ "note": "R111 (P5) - (a) provenance correction for R13's \"NHL 20\" schedule row: R13 measured `anchors/ps4/nhl20` (= NHL 19 base copy,\n`265e4a68\u2026`). Re-run R13's `analyse` UNCHANGED on the witnessed real NHL 20 database (`local/runs/league-parity-batch/sources/nhl20-ps4/`,\nSHA-256 checked = `1e200478\u2026`, the CUSA15439 install copy R88 verified) and, for comparison, on the NHL 19 base anchor under its true label.\n(b) Swiss tables (R13 \"not re-analysed\"): every table whose name contains `schedule` is listed per DB with row counts; for tables whose\nstem names a league (e.g. `swissschedule`), R13's pair-class analysis is applied with that league's members (league id found by the\ntable stem among `stockleagues` names / abbreviations, else reported unresolved - never guessed).\nRead-only. Usage: python r111_schedule_provenance_and_swiss.py <out.json>\n",
+ "sources": [
+  {
+   "label": "ps4-nhl20-real (CUSA15439 install copy)",
+   "db": "local\\runs\\league-parity-batch\\sources\\nhl20-ps4\\nhl_game.db",
+   "sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "hash_expected_prefix": "1e200478",
+   "hash_ok": true,
+   "r13": {
+    "label": "ps4-nhl20-real (CUSA15439 install copy)",
+    "db": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\league-parity-batch\\sources\\nhl20-ps4\\nhl_game.db",
+    "group_fields": {
+     "conference": "conferencegroup",
+     "division": "divisiongroup"
+    },
+    "tables": {
+     "nhlschedule": {
+      "rows": 1271,
+      "games": 1271,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "82": 31
+      },
+      "pairs": 465,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 94,
+        "5": 11
+       },
+       "other-conference": {
+        "2": 240
+       },
+       "same-conference-other-division": {
+        "3": 120
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 334,
+       "1": 131
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 8,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "nhl32schedule": {
+      "rows": 1312,
+      "games": 1312,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 32
+      },
+      "pairs": 496,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-conference-other-division": {
+        "2": 47,
+        "3": 81
+       },
+       "same-division": {
+        "2": 38,
+        "3": 75
+       },
+       "other-conference": {
+        "2": 91,
+        "3": 164
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 176,
+       "1": 320
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 9,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "nhlfutureschedule": {
+      "rows": 1271,
+      "games": 1271,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "82": 31
+      },
+      "pairs": 465,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 94,
+        "5": 11
+       },
+       "same-conference-other-division": {
+        "3": 120
+       },
+       "other-conference": {
+        "2": 240
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 334,
+       "1": 131
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 8,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "ahlschedule": {
+      "rows": 1150,
+      "games": 1150,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "68": 7,
+       "76": 24
+      },
+      "pairs": 190,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 11,
+        "6": 19,
+        "8": 42,
+        "10": 7,
+        "12": 25,
+        "14": 1
+       },
+       "same-conference-other-division": {
+        "2": 32,
+        "4": 32,
+        "6": 2,
+        "8": 1
+       },
+       "other-conference": {
+        "2": 6,
+        "4": 12
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 190
+      },
+      "division_sizes": {
+       "18": 7,
+       "16": 8,
+       "15": 8,
+       "17": 8
+      },
+      "single_rule_fits": false
+     },
+     "ahl32schedule": {
+      "rows": 1312,
+      "games": 1312,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 32
+      },
+      "pairs": 496,
+      "unresolved_pairs": 31,
+      "games_per_pair_by_relationship": {
+       "other-conference": {
+        "2": 91,
+        "3": 149
+       },
+       "same-conference-other-division": {
+        "2": 35,
+        "3": 85
+       },
+       "same-division": {
+        "2": 39,
+        "3": 66
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 176,
+       "1": 320
+      },
+      "division_sizes": {
+       "18": 7,
+       "16": 8,
+       "15": 8,
+       "17": 8
+      },
+      "single_rule_fits": false
+     }
+    }
+   },
+   "schedule_tables": {
+    "qmjhlschedule": 612,
+    "championsschedule": 125,
+    "ohlschedule": 680,
+    "ahlscheduledebug": 466,
+    "nhl32schedule": 1312,
+    "leaguetempscheduletable": 0,
+    "whlschedule": 748,
+    "swedishschedule": 364,
+    "worldjuniorschedule": 0,
+    "ohlscheduledebug": 120,
+    "echlscheduledebug": 162,
+    "ahl32schedule": 1312,
+    "austrianschedule": 270,
+    "ahlschedule": 1150,
+    "swedish2ndschedule": 364,
+    "favoriteteamschedule": 1271,
+    "qmjhlscheduledebug": 108,
+    "nhlfutureschedule": 1271,
+    "nhlscheduledebug": 466,
+    "czechschedule": 364,
+    "whlscheduledebug": 132,
+    "spenglerschedule": 11,
+    "echlschedule": 936,
+    "swissschedule": 300,
+    "worldchampschedule": 0,
+    "nhlschedule": 1271,
+    "germanschedule": 364,
+    "leaguescheduletable": 0,
+    "finnishschedule": 450
+   },
+   "stockleagues": [
+    {
+     "orderid": 0,
+     "leagueid": 0,
+     "artid": 0,
+     "name": "NHL",
+     "renderid": 0
+    },
+    {
+     "orderid": 1,
+     "leagueid": 1,
+     "artid": 1,
+     "name": "AHL",
+     "renderid": 1
+    },
+    {
+     "orderid": 3,
+     "leagueid": 2,
+     "artid": 2,
+     "name": "elitserien",
+     "renderid": 2
+    },
+    {
+     "orderid": 4,
+     "leagueid": 3,
+     "artid": 3,
+     "name": "SMLIIGA",
+     "renderid": 3
+    },
+    {
+     "orderid": 5,
+     "leagueid": 4,
+     "artid": 6,
+     "name": "TXT_LEAGUE_DEL",
+     "renderid": 4
+    },
+    {
+     "orderid": 6,
+     "leagueid": 5,
+     "artid": 7,
+     "name": "TXT_LEAGUE_O2_EXTRALIGA",
+     "renderid": 5
+    },
+    {
+     "orderid": 7,
+     "leagueid": 6,
+     "artid": 10,
+     "name": "TXT_LEAGUE_SWISS_LEAGUE",
+     "renderid": 6
+    },
+    {
+     "orderid": 8,
+     "leagueid": 7,
+     "artid": 18,
+     "name": "TXT_LEAGUE_EBEL",
+     "renderid": 23
+    },
+    {
+     "orderid": 11,
+     "leagueid": 8,
+     "artid": 19,
+     "name": "Allsvenskan",
+     "renderid": 22
+    },
+    {
+     "orderid": 9,
+     "leagueid": 9,
+     "artid": 20,
+     "name": "TXT_CHAMPIONS_LEAGUE",
+     "renderid": 21
+    },
+    {
+     "orderid": 12,
+     "leagueid": 10,
+     "artid": 4,
+     "name": "TXT_INTERNATIONAL",
+     "renderid": 7
+    },
+    {
+     "orderid": 13,
+     "leagueid": 11,
+     "artid": 12,
+     "name": "OHL",
+     "renderid": 8
+    },
+    {
+     "orderid": 14,
+     "leagueid": 12,
+     "artid": 13,
+     "name": "QMJHL",
+     "renderid": 9
+    },
+    {
+     "orderid": 15,
+     "leagueid": 13,
+     "artid": 11,
+     "name": "WHL",
+     "renderid": 10
+    },
+    {
+     "orderid": 16,
+     "leagueid": 14,
+     "artid": 14,
+     "name": "PROSPECT_TEAMS",
+     "renderid": 11
+    },
+    {
+     "orderid": 2,
+     "leagueid": 15,
+     "artid": 17,
+     "name": "TXT_ECHL",
+     "renderid": 16
+    },
+    {
+     "orderid": 21,
+     "leagueid": 16,
+     "artid": 5,
+     "name": "CUSTOM_TEAMS",
+     "renderid": 13
+    },
+    {
+     "orderid": 22,
+     "leagueid": 17,
+     "artid": 5,
+     "name": "TXT_EASHL",
+     "renderid": 30
+    },
+    {
+     "orderid": 19,
+     "leagueid": 18,
+     "artid": 0,
+     "name": "TXT_LEAGUE_MASCOT",
+     "renderid": 0
+    },
+    {
+     "orderid": 20,
+     "leagueid": 19,
+     "artid": 22,
+     "name": "TXT_LEAGUE_3ON3",
+     "renderid": 0
+    },
+    {
+     "orderid": 10,
+     "leagueid": 20,
+     "artid": 21,
+     "name": "TXT_SPENGLER_CUP",
+     "renderid": 24
+    },
+    {
+     "orderid": 17,
+     "leagueid": 21,
+     "artid": 25,
+     "name": "TXT_LEAGUE_NHL_ALUMNI",
+     "renderid": 0
+    },
+    {
+     "orderid": 18,
+     "leagueid": 22,
+     "artid": 25,
+     "name": "TXT_LEAGUE_NHL_ALUMNI",
+     "renderid": 0
+    },
+    {
+     "orderid": 23,
+     "leagueid": 23,
+     "artid": 5,
+     "name": "TXT_LEAGUE_PROAM",
+     "renderid": 13
+    },
+    {
+     "orderid": 24,
+     "leagueid": 24,
+     "artid": 5,
+     "name": "CUSTOM_TEAMS",
+     "renderid": 13
+    },
+    {
+     "orderid": 25,
+     "leagueid": 25,
+     "artid": 5,
+     "name": "CUSTOM_TEAMS",
+     "renderid": 13
+    },
+    {
+     "orderid": 26,
+     "leagueid": 26,
+     "artid": 14,
+     "name": "CHL",
+     "renderid": 11
+    },
+    {
+     "orderid": 27,
+     "leagueid": 27,
+     "artid": 23,
+     "name": "TXT_USA_LEAGUE",
+     "renderid": 17
+    },
+    {
+     "orderid": 28,
+     "leagueid": 28,
+     "artid": 24,
+     "name": "TXT_RUSSIA_LEAGUE",
+     "renderid": 18
+    },
+    {
+     "orderid": 29,
+     "leagueid": 29,
+     "artid": 5,
+     "name": "TXT_ROW_LEAGUE",
+     "renderid": 7
+    },
+    {
+     "orderid": 30,
+     "leagueid": 30,
+     "artid": 5,
+     "name": "HUT",
+     "renderid": 20
+    }
+   ],
+   "other_league_tables": {
+    "qmjhlschedule": {
+     "rows": 612,
+     "league_id": 12,
+     "games": 612,
+     "teams_with_games": 18,
+     "games_per_team": {
+      "68": 18
+     },
+     "pairs": 153,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-division": {
+       "5": 2,
+       "6": 23,
+       "7": 2,
+       "8": 4,
+       "9": 12,
+       "10": 2
+      },
+      "same-conference-other-division": {
+       "2": 72,
+       "3": 4,
+       "4": 26,
+       "5": 6
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 127,
+      "1": 26
+     },
+     "division_sizes": {
+      "34": 6,
+      "33": 6,
+      "35": 6
+     },
+     "single_rule_fits": false
+    },
+    "championsschedule": {
+     "rows": 125,
+     "league": "unresolved (no unique stockleagues match for stem 'champions')"
+    },
+    "ohlschedule": {
+     "rows": 680,
+     "league_id": 11,
+     "games": 680,
+     "teams_with_games": 20,
+     "games_per_team": {
+      "68": 20
+     },
+     "pairs": 190,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-division": {
+       "5": 1,
+       "6": 23,
+       "7": 2,
+       "8": 14
+      },
+      "other-conference": {
+       "1": 1,
+       "2": 93,
+       "3": 1,
+       "4": 2,
+       "6": 3
+      },
+      "same-conference-other-division": {
+       "2": 7,
+       "4": 38,
+       "5": 1,
+       "6": 4
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 184,
+      "1": 6
+     },
+     "division_sizes": {
+      "28": 5,
+      "30": 5,
+      "31": 5,
+      "29": 5
+     },
+     "single_rule_fits": false
+    },
+    "ahlscheduledebug": {
+     "rows": 466,
+     "league": "unresolved (no unique stockleagues match for stem 'ahldebug')"
+    },
+    "whlschedule": {
+     "rows": 748,
+     "league_id": 13,
+     "games": 748,
+     "teams_with_games": 22,
+     "games_per_team": {
+      "68": 22
+     },
+     "pairs": 231,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-conference-other-division": {
+       "4": 51,
+       "5": 3,
+       "6": 4,
+       "7": 1,
+       "8": 1,
+       "10": 1
+      },
+      "same-division": {
+       "4": 8,
+       "6": 15,
+       "7": 3,
+       "8": 9,
+       "9": 9,
+       "10": 4,
+       "12": 2
+      },
+      "other-conference": {
+       "1": 120
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 95,
+      "1": 136
+     },
+     "division_sizes": {
+      "41": 6,
+      "40": 6,
+      "42": 5,
+      "39": 5
+     },
+     "single_rule_fits": false
+    },
+    "swedishschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'swedish')"
+    },
+    "ohlscheduledebug": {
+     "rows": 120,
+     "league": "unresolved (no unique stockleagues match for stem 'ohldebug')"
+    },
+    "echlscheduledebug": {
+     "rows": 162,
+     "league": "unresolved (no unique stockleagues match for stem 'echldebug')"
+    },
+    "austrianschedule": {
+     "rows": 270,
+     "league": "unresolved (no unique stockleagues match for stem 'austrian')"
+    },
+    "swedish2ndschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'swedish2nd')"
+    },
+    "favoriteteamschedule": {
+     "rows": 1271,
+     "league": "unresolved (no unique stockleagues match for stem 'favoriteteam')"
+    },
+    "qmjhlscheduledebug": {
+     "rows": 108,
+     "league": "unresolved (no unique stockleagues match for stem 'qmjhldebug')"
+    },
+    "nhlscheduledebug": {
+     "rows": 466,
+     "league": "unresolved (no unique stockleagues match for stem 'nhldebug')"
+    },
+    "czechschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'czech')"
+    },
+    "whlscheduledebug": {
+     "rows": 132,
+     "league": "unresolved (no unique stockleagues match for stem 'whldebug')"
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "league": "unresolved (no unique stockleagues match for stem 'spengler')"
+    },
+    "echlschedule": {
+     "rows": 936,
+     "league": "unresolved (no unique stockleagues match for stem 'echl')"
+    },
+    "swissschedule": {
+     "rows": 300,
+     "league": "unresolved (no unique stockleagues match for stem 'swiss')"
+    },
+    "germanschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'german')"
+    },
+    "finnishschedule": {
+     "rows": 450,
+     "league": "unresolved (no unique stockleagues match for stem 'finnish')"
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl19-base (anchors/ps4/nhl20 = mislabeled copy)",
+   "db": "anchors\\ps4\\nhl20\\databases\\nhl_game.db",
+   "sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "hash_expected_prefix": "265e4a68",
+   "hash_ok": true,
+   "r13": {
+    "label": "ps4-nhl19-base (anchors/ps4/nhl20 = mislabeled copy)",
+    "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl20\\databases\\nhl_game.db",
+    "group_fields": {
+     "conference": "conferencegroup",
+     "division": "divisiongroup"
+    },
+    "tables": {
+     "nhlschedule": {
+      "rows": 1271,
+      "games": 1271,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "82": 31
+      },
+      "pairs": 465,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 94,
+        "5": 11
+       },
+       "same-conference-other-division": {
+        "3": 120
+       },
+       "other-conference": {
+        "2": 240
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 334,
+       "1": 131
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 8,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "nhl32schedule": {
+      "rows": 1312,
+      "games": 1312,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 32
+      },
+      "pairs": 496,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-conference-other-division": {
+        "2": 47,
+        "3": 81
+       },
+       "same-division": {
+        "2": 38,
+        "3": 75
+       },
+       "other-conference": {
+        "2": 91,
+        "3": 164
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 176,
+       "1": 320
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 9,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "nhlfutureschedule": {
+      "rows": 1271,
+      "games": 1271,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "82": 31
+      },
+      "pairs": 465,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 94,
+        "5": 11
+       },
+       "same-conference-other-division": {
+        "3": 120
+       },
+       "other-conference": {
+        "2": 240
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 334,
+       "1": 131
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 8,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "ahlschedule": {
+      "rows": 1150,
+      "games": 1150,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "76": 24,
+       "68": 7
+      },
+      "pairs": 206,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "other-conference": {
+        "2": 6,
+        "4": 8
+       },
+       "same-division": {
+        "4": 10,
+        "6": 22,
+        "8": 40,
+        "10": 17,
+        "12": 14,
+        "14": 2
+       },
+       "same-conference-other-division": {
+        "2": 50,
+        "4": 37
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 206
+      },
+      "division_sizes": {
+       "18": 7,
+       "16": 8,
+       "15": 8,
+       "17": 8
+      },
+      "single_rule_fits": false
+     },
+     "ahl32schedule": {
+      "rows": 1312,
+      "games": 1312,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 32
+      },
+      "pairs": 496,
+      "unresolved_pairs": 31,
+      "games_per_pair_by_relationship": {
+       "other-conference": {
+        "2": 91,
+        "3": 149
+       },
+       "same-conference-other-division": {
+        "2": 35,
+        "3": 85
+       },
+       "same-division": {
+        "2": 39,
+        "3": 66
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 176,
+       "1": 320
+      },
+      "division_sizes": {
+       "18": 7,
+       "16": 8,
+       "15": 8,
+       "17": 8
+      },
+      "single_rule_fits": false
+     }
+    }
+   },
+   "schedule_tables": {
+    "qmjhlschedule": 612,
+    "championsschedule": 125,
+    "ohlschedule": 680,
+    "ahlscheduledebug": 466,
+    "nhl32schedule": 1312,
+    "leaguetempscheduletable": 0,
+    "whlschedule": 748,
+    "swedishschedule": 364,
+    "ohlscheduledebug": 120,
+    "echlscheduledebug": 162,
+    "ahl32schedule": 1312,
+    "austrianschedule": 324,
+    "ahlschedule": 1150,
+    "swedish2ndschedule": 364,
+    "favoriteteamschedule": 1271,
+    "qmjhlscheduledebug": 108,
+    "nhlfutureschedule": 1271,
+    "nhlscheduledebug": 466,
+    "czechschedule": 364,
+    "whlscheduledebug": 132,
+    "spenglerschedule": 11,
+    "echlschedule": 972,
+    "swissschedule": 300,
+    "nhlschedule": 1271,
+    "germanschedule": 364,
+    "leaguescheduletable": 0,
+    "finnishschedule": 450
+   },
+   "stockleagues": [
+    {
+     "orderid": 0,
+     "leagueid": 0,
+     "artid": 0,
+     "name": "NHL",
+     "renderid": 0
+    },
+    {
+     "orderid": 1,
+     "leagueid": 1,
+     "artid": 1,
+     "name": "AHL",
+     "renderid": 1
+    },
+    {
+     "orderid": 3,
+     "leagueid": 2,
+     "artid": 2,
+     "name": "elitserien",
+     "renderid": 2
+    },
+    {
+     "orderid": 4,
+     "leagueid": 3,
+     "artid": 3,
+     "name": "SMLIIGA",
+     "renderid": 3
+    },
+    {
+     "orderid": 5,
+     "leagueid": 4,
+     "artid": 6,
+     "name": "TXT_LEAGUE_DEL",
+     "renderid": 4
+    },
+    {
+     "orderid": 6,
+     "leagueid": 5,
+     "artid": 7,
+     "name": "TXT_LEAGUE_O2_EXTRALIGA",
+     "renderid": 5
+    },
+    {
+     "orderid": 7,
+     "leagueid": 6,
+     "artid": 10,
+     "name": "TXT_LEAGUE_SWISS_LEAGUE",
+     "renderid": 6
+    },
+    {
+     "orderid": 8,
+     "leagueid": 7,
+     "artid": 18,
+     "name": "TXT_LEAGUE_EBEL",
+     "renderid": 23
+    },
+    {
+     "orderid": 11,
+     "leagueid": 8,
+     "artid": 19,
+     "name": "Allsvenskan",
+     "renderid": 22
+    },
+    {
+     "orderid": 9,
+     "leagueid": 9,
+     "artid": 20,
+     "name": "TXT_CHAMPIONS_LEAGUE",
+     "renderid": 21
+    },
+    {
+     "orderid": 12,
+     "leagueid": 10,
+     "artid": 4,
+     "name": "TXT_INTERNATIONAL",
+     "renderid": 7
+    },
+    {
+     "orderid": 13,
+     "leagueid": 11,
+     "artid": 12,
+     "name": "OHL",
+     "renderid": 8
+    },
+    {
+     "orderid": 14,
+     "leagueid": 12,
+     "artid": 13,
+     "name": "QMJHL",
+     "renderid": 9
+    },
+    {
+     "orderid": 15,
+     "leagueid": 13,
+     "artid": 11,
+     "name": "WHL",
+     "renderid": 10
+    },
+    {
+     "orderid": 16,
+     "leagueid": 14,
+     "artid": 14,
+     "name": "PROSPECT_TEAMS",
+     "renderid": 11
+    },
+    {
+     "orderid": 2,
+     "leagueid": 15,
+     "artid": 17,
+     "name": "TXT_ECHL",
+     "renderid": 16
+    },
+    {
+     "orderid": 21,
+     "leagueid": 16,
+     "artid": 5,
+     "name": "CUSTOM_TEAMS",
+     "renderid": 13
+    },
+    {
+     "orderid": 22,
+     "leagueid": 17,
+     "artid": 5,
+     "name": "TXT_EASHL",
+     "renderid": 30
+    },
+    {
+     "orderid": 19,
+     "leagueid": 18,
+     "artid": 0,
+     "name": "TXT_LEAGUE_MASCOT",
+     "renderid": 0
+    },
+    {
+     "orderid": 20,
+     "leagueid": 19,
+     "artid": 22,
+     "name": "TXT_LEAGUE_3ON3",
+     "renderid": 0
+    },
+    {
+     "orderid": 10,
+     "leagueid": 20,
+     "artid": 21,
+     "name": "TXT_SPENGLER_CUP",
+     "renderid": 24
+    },
+    {
+     "orderid": 17,
+     "leagueid": 21,
+     "artid": 25,
+     "name": "TXT_LEAGUE_NHL_ALUMNI",
+     "renderid": 0
+    },
+    {
+     "orderid": 18,
+     "leagueid": 22,
+     "artid": 25,
+     "name": "TXT_LEAGUE_NHL_ALUMNI",
+     "renderid": 0
+    },
+    {
+     "orderid": 23,
+     "leagueid": 23,
+     "artid": 5,
+     "name": "TXT_LEAGUE_PROAM",
+     "renderid": 13
+    },
+    {
+     "orderid": 24,
+     "leagueid": 24,
+     "artid": 14,
+     "name": "CHL",
+     "renderid": 11
+    },
+    {
+     "orderid": 25,
+     "leagueid": 25,
+     "artid": 23,
+     "name": "UnitedStates",
+     "renderid": 17
+    },
+    {
+     "orderid": 26,
+     "leagueid": 26,
+     "artid": 24,
+     "name": "Russia",
+     "renderid": 18
+    },
+    {
+     "orderid": 27,
+     "leagueid": 27,
+     "artid": 5,
+     "name": "TXT_ROW_LEAGUE",
+     "renderid": 7
+    },
+    {
+     "orderid": 28,
+     "leagueid": 28,
+     "artid": 5,
+     "name": "HUT",
+     "renderid": 20
+    }
+   ],
+   "other_league_tables": {
+    "qmjhlschedule": {
+     "rows": 612,
+     "league_id": 12,
+     "games": 612,
+     "teams_with_games": 18,
+     "games_per_team": {
+      "68": 18
+     },
+     "pairs": 153,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-division": {
+       "5": 2,
+       "6": 22,
+       "7": 2,
+       "8": 5,
+       "9": 12,
+       "10": 2
+      },
+      "same-conference-other-division": {
+       "2": 72,
+       "3": 4,
+       "4": 28,
+       "5": 4
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 129,
+      "1": 24
+     },
+     "division_sizes": {
+      "34": 6,
+      "33": 6,
+      "35": 6
+     },
+     "single_rule_fits": false
+    },
+    "championsschedule": {
+     "rows": 125,
+     "league": "unresolved (no unique stockleagues match for stem 'champions')"
+    },
+    "ohlschedule": {
+     "rows": 680,
+     "league_id": 11,
+     "games": 680,
+     "teams_with_games": 20,
+     "games_per_team": {
+      "68": 20
+     },
+     "pairs": 190,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-division": {
+       "6": 24,
+       "7": 2,
+       "8": 14
+      },
+      "same-conference-other-division": {
+       "2": 7,
+       "4": 39,
+       "6": 4
+      },
+      "other-conference": {
+       "1": 1,
+       "2": 93,
+       "3": 1,
+       "4": 2,
+       "6": 3
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 185,
+      "1": 4,
+      "2": 1
+     },
+     "division_sizes": {
+      "28": 5,
+      "30": 5,
+      "31": 5,
+      "29": 5
+     },
+     "single_rule_fits": false
+    },
+    "ahlscheduledebug": {
+     "rows": 466,
+     "league": "unresolved (no unique stockleagues match for stem 'ahldebug')"
+    },
+    "whlschedule": {
+     "rows": 748,
+     "league_id": 13,
+     "games": 748,
+     "teams_with_games": 22,
+     "games_per_team": {
+      "68": 22
+     },
+     "pairs": 231,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-division": {
+       "6": 22,
+       "8": 15,
+       "9": 6,
+       "10": 5,
+       "12": 2
+      },
+      "same-conference-other-division": {
+       "4": 61
+      },
+      "other-conference": {
+       "1": 119,
+       "5": 1
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 105,
+      "1": 126
+     },
+     "division_sizes": {
+      "41": 6,
+      "40": 6,
+      "42": 5,
+      "39": 5
+     },
+     "single_rule_fits": false
+    },
+    "swedishschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'swedish')"
+    },
+    "ohlscheduledebug": {
+     "rows": 120,
+     "league": "unresolved (no unique stockleagues match for stem 'ohldebug')"
+    },
+    "echlscheduledebug": {
+     "rows": 162,
+     "league": "unresolved (no unique stockleagues match for stem 'echldebug')"
+    },
+    "austrianschedule": {
+     "rows": 324,
+     "league": "unresolved (no unique stockleagues match for stem 'austrian')"
+    },
+    "swedish2ndschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'swedish2nd')"
+    },
+    "favoriteteamschedule": {
+     "rows": 1271,
+     "league": "unresolved (no unique stockleagues match for stem 'favoriteteam')"
+    },
+    "qmjhlscheduledebug": {
+     "rows": 108,
+     "league": "unresolved (no unique stockleagues match for stem 'qmjhldebug')"
+    },
+    "nhlscheduledebug": {
+     "rows": 466,
+     "league": "unresolved (no unique stockleagues match for stem 'nhldebug')"
+    },
+    "czechschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'czech')"
+    },
+    "whlscheduledebug": {
+     "rows": 132,
+     "league": "unresolved (no unique stockleagues match for stem 'whldebug')"
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "league": "unresolved (no unique stockleagues match for stem 'spengler')"
+    },
+    "echlschedule": {
+     "rows": 972,
+     "league": "unresolved (no unique stockleagues match for stem 'echl')"
+    },
+    "swissschedule": {
+     "rows": 300,
+     "league": "unresolved (no unique stockleagues match for stem 'swiss')"
+    },
+    "germanschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'german')"
+    },
+    "finnishschedule": {
+     "rows": 450,
+     "league": "unresolved (no unique stockleagues match for stem 'finnish')"
+    }
+   }
+  },
+  {
+   "label": "ps4-nhl21",
+   "db": "anchors\\ps4\\nhl21\\databases\\nhl_game.db",
+   "sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "hash_expected_prefix": null,
+   "hash_ok": true,
+   "r13": {
+    "label": "ps4-nhl21",
+    "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps4\\nhl21\\databases\\nhl_game.db",
+    "group_fields": {
+     "conference": "conferencegroup",
+     "division": "divisiongroup"
+    },
+    "tables": {
+     "nhlschedule": {
+      "rows": 1271,
+      "games": 1271,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "82": 31
+      },
+      "pairs": 465,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 94,
+        "5": 11
+       },
+       "same-conference-other-division": {
+        "3": 120
+       },
+       "other-conference": {
+        "2": 240
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 334,
+       "1": 131
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 8,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "nhl32schedule": {
+      "rows": 1312,
+      "games": 1312,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 32
+      },
+      "pairs": 496,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-conference-other-division": {
+        "2": 47,
+        "3": 81
+       },
+       "same-division": {
+        "2": 38,
+        "3": 75
+       },
+       "other-conference": {
+        "2": 91,
+        "3": 164
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 176,
+       "1": 320
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 9,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "nhlfutureschedule": {
+      "rows": 1271,
+      "games": 1271,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "82": 31
+      },
+      "pairs": 465,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 94,
+        "5": 11
+       },
+       "same-conference-other-division": {
+        "3": 120
+       },
+       "other-conference": {
+        "2": 240
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 334,
+       "1": 131
+      },
+      "division_sizes": {
+       "8": 8,
+       "9": 7,
+       "10": 8,
+       "11": 8
+      },
+      "single_rule_fits": false
+     },
+     "ahlschedule": {
+      "rows": 1150,
+      "games": 1150,
+      "teams_with_games": 31,
+      "games_per_team": {
+       "68": 7,
+       "76": 24
+      },
+      "pairs": 190,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 13,
+        "6": 19,
+        "8": 36,
+        "10": 7,
+        "12": 24,
+        "14": 1
+       },
+       "same-conference-other-division": {
+        "2": 32,
+        "4": 30,
+        "6": 2,
+        "8": 7,
+        "12": 1
+       },
+       "other-conference": {
+        "2": 6,
+        "4": 12
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 190
+      },
+      "division_sizes": {
+       "18": 8,
+       "16": 8,
+       "15": 8,
+       "17": 7
+      },
+      "single_rule_fits": false
+     },
+     "ahl32schedule": {
+      "rows": 1312,
+      "games": 1312,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 32
+      },
+      "pairs": 496,
+      "unresolved_pairs": 31,
+      "games_per_pair_by_relationship": {
+       "other-conference": {
+        "2": 91,
+        "3": 149
+       },
+       "same-conference-other-division": {
+        "2": 37,
+        "3": 83
+       },
+       "same-division": {
+        "2": 37,
+        "3": 68
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 176,
+       "1": 320
+      },
+      "division_sizes": {
+       "18": 8,
+       "16": 8,
+       "15": 8,
+       "17": 7
+      },
+      "single_rule_fits": false
+     }
+    }
+   },
+   "schedule_tables": {
+    "qmjhlschedule": 612,
+    "championsschedule": 125,
+    "ohlschedule": 680,
+    "ahlscheduledebug": 465,
+    "nhl32schedule": 1312,
+    "leaguetempscheduletable": 0,
+    "whlschedule": 748,
+    "swedishschedule": 364,
+    "worldjuniorschedule": 0,
+    "ohlscheduledebug": 120,
+    "echlscheduledebug": 162,
+    "ahl32schedule": 1312,
+    "austrianschedule": 270,
+    "ahlschedule": 1150,
+    "swedish2ndschedule": 364,
+    "favoriteteamschedule": 1271,
+    "qmjhlscheduledebug": 108,
+    "nhlfutureschedule": 1271,
+    "nhlscheduledebug": 465,
+    "czechschedule": 364,
+    "whlscheduledebug": 132,
+    "spenglerschedule": 11,
+    "echlschedule": 936,
+    "swissschedule": 300,
+    "worldchampschedule": 0,
+    "nhlschedule": 1271,
+    "germanschedule": 364,
+    "leaguescheduletable": 0,
+    "finnishschedule": 450
+   },
+   "stockleagues": [
+    {
+     "orderid": 0,
+     "secondarycolor": 15066597,
+     "leagueid": 0,
+     "artid": 0,
+     "primarycolor": 1513239,
+     "name": "NHL",
+     "renderid": 0
+    },
+    {
+     "orderid": 1,
+     "secondarycolor": 19089,
+     "leagueid": 1,
+     "artid": 1,
+     "primarycolor": 15679042,
+     "name": "AHL",
+     "renderid": 1
+    },
+    {
+     "orderid": 3,
+     "secondarycolor": 15066597,
+     "leagueid": 2,
+     "artid": 2,
+     "primarycolor": 28871,
+     "name": "elitserien",
+     "renderid": 2
+    },
+    {
+     "orderid": 4,
+     "secondarycolor": 15066597,
+     "leagueid": 3,
+     "artid": 3,
+     "primarycolor": 2171169,
+     "name": "SMLIIGA",
+     "renderid": 3
+    },
+    {
+     "orderid": 5,
+     "secondarycolor": 15066597,
+     "leagueid": 4,
+     "artid": 6,
+     "primarycolor": 13762604,
+     "name": "TXT_LEAGUE_DEL",
+     "renderid": 4
+    },
+    {
+     "orderid": 6,
+     "secondarycolor": 13663,
+     "leagueid": 5,
+     "artid": 7,
+     "primarycolor": 15539236,
+     "name": "TXT_LEAGUE_O2_EXTRALIGA",
+     "renderid": 5
+    },
+    {
+     "orderid": 7,
+     "secondarycolor": 15066597,
+     "leagueid": 6,
+     "artid": 10,
+     "primarycolor": 7470,
+     "name": "TXT_LEAGUE_SWISS_LEAGUE",
+     "renderid": 6
+    },
+    {
+     "orderid": 8,
+     "secondarycolor": 14878227,
+     "leagueid": 7,
+     "artid": 18,
+     "primarycolor": 1333897,
+     "name": "TXT_LEAGUE_EBEL",
+     "renderid": 23
+    },
+    {
+     "orderid": 11,
+     "secondarycolor": 1513239,
+     "leagueid": 8,
+     "artid": 19,
+     "primarycolor": 13919282,
+     "name": "Allsvenskan",
+     "renderid": 22
+    },
+    {
+     "orderid": 9,
+     "secondarycolor": 15066597,
+     "leagueid": 9,
+     "artid": 20,
+     "primarycolor": 15219533,
+     "name": "TXT_CHAMPIONS_LEAGUE",
+     "renderid": 21
+    },
+    {
+     "orderid": 12,
+     "secondarycolor": 1513239,
+     "leagueid": 10,
+     "artid": 4,
+     "primarycolor": 32210,
+     "name": "TXT_INTERNATIONAL",
+     "renderid": 7
+    },
+    {
+     "orderid": 13,
+     "secondarycolor": 15066597,
+     "leagueid": 11,
+     "artid": 12,
+     "primarycolor": 31424,
+     "name": "OHL",
+     "renderid": 8
+    },
+    {
+     "orderid": 14,
+     "secondarycolor": 15066597,
+     "leagueid": 12,
+     "artid": 13,
+     "primarycolor": 23470,
+     "name": "QMJHL",
+     "renderid": 9
+    },
+    {
+     "orderid": 15,
+     "secondarycolor": 1513239,
+     "leagueid": 13,
+     "artid": 11,
+     "primarycolor": 14629181,
+     "name": "WHL",
+     "renderid": 10
+    },
+    {
+     "orderid": 16,
+     "secondarycolor": 15539236,
+     "leagueid": 14,
+     "artid": 14,
+     "primarycolor": 5386129,
+     "name": "PROSPECT_TEAMS",
+     "renderid": 11
+    },
+    {
+     "orderid": 2,
+     "secondarycolor": 18309,
+     "leagueid": 15,
+     "artid": 17,
+     "primarycolor": 14825535,
+     "name": "TXT_ECHL",
+     "renderid": 16
+    },
+    {
+     "orderid": 21,
+     "secondarycolor": 1785712,
+     "leagueid": 16,
+     "artid": 5,
+     "primarycolor": 11148834,
+     "name": "CUSTOM_TEAMS",
+     "renderid": 13
+    },
+    {
+     "orderid": 22,
+     "secondarycolor": 11148834,
+     "leagueid": 17,
+     "artid": 5,
+     "primarycolor": 1785712,
+     "name": "TXT_EASHL",
+     "renderid": 30
+    },
+    {
+     "orderid": 19,
+     "secondarycolor": 15066597,
+     "leagueid": 18,
+     "artid": 0,
+     "primarycolor": 1513239,
+     "name": "TXT_LEAGUE_MASCOT",
+     "renderid": 0
+    },
+    {
+     "orderid": 20,
+     "secondarycolor": 11148834,
+     "leagueid": 19,
+     "artid": 22,
+     "primarycolor": 1785712,
+     "name": "TXT_LEAGUE_3ON3",
+     "renderid": 0
+    },
+    {
+     "orderid": 10,
+     "secondarycolor": 15066597,
+     "leagueid": 20,
+     "artid": 21,
+     "primarycolor": 931429,
+     "name": "TXT_SPENGLER_CUP",
+     "renderid": 24
+    },
+    {
+     "orderid": 17,
+     "secondarycolor": 15066597,
+     "leagueid": 21,
+     "artid": 25,
+     "primarycolor": 1513239,
+     "name": "TXT_LEAGUE_NHL_ALUMNI",
+     "renderid": 0
+    },
+    {
+     "orderid": 18,
+     "secondarycolor": 15066597,
+     "leagueid": 22,
+     "artid": 25,
+     "primarycolor": 1513239,
+     "name": "TXT_LEAGUE_NHL_ALL_TIME",
+     "renderid": 0
+    },
+    {
+     "orderid": 23,
+     "secondarycolor": 11148834,
+     "leagueid": 23,
+     "artid": 5,
+     "primarycolor": 1785712,
+     "name": "TXT_LEAGUE_PROAM",
+     "renderid": 13
+    },
+    {
+     "orderid": 24,
+     "secondarycolor": 15066597,
+     "leagueid": 24,
+     "artid": 5,
+     "primarycolor": 1513239,
+     "name": "CUSTOM_TEAMS",
+     "renderid": 13
+    },
+    {
+     "orderid": 25,
+     "secondarycolor": 15066597,
+     "leagueid": 25,
+     "artid": 5,
+     "primarycolor": 1513239,
+     "name": "CUSTOM_TEAMS",
+     "renderid": 13
+    },
+    {
+     "orderid": 26,
+     "secondarycolor": 15539236,
+     "leagueid": 26,
+     "artid": 14,
+     "primarycolor": 5386129,
+     "name": "CHL",
+     "renderid": 11
+    },
+    {
+     "orderid": 27,
+     "secondarycolor": 15679042,
+     "leagueid": 27,
+     "artid": 23,
+     "primarycolor": 19089,
+     "name": "TXT_USA_LEAGUE",
+     "renderid": 17
+    },
+    {
+     "orderid": 28,
+     "secondarycolor": 252,
+     "leagueid": 28,
+     "artid": 24,
+     "primarycolor": 14745600,
+     "name": "TXT_RUSSIA_LEAGUE",
+     "renderid": 18
+    },
+    {
+     "orderid": 29,
+     "secondarycolor": 1785712,
+     "leagueid": 29,
+     "artid": 5,
+     "primarycolor": 11148834,
+     "name": "TXT_ROW_LEAGUE",
+     "renderid": 7
+    },
+    {
+     "orderid": 30,
+     "secondarycolor": 11148834,
+     "leagueid": 30,
+     "artid": 5,
+     "primarycolor": 1785712,
+     "name": "HUT",
+     "renderid": 20
+    }
+   ],
+   "other_league_tables": {
+    "qmjhlschedule": {
+     "rows": 612,
+     "league_id": 12,
+     "games": 612,
+     "teams_with_games": 18,
+     "games_per_team": {
+      "68": 18
+     },
+     "pairs": 153,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-division": {
+       "5": 2,
+       "6": 23,
+       "7": 2,
+       "8": 4,
+       "9": 12,
+       "10": 2
+      },
+      "same-conference-other-division": {
+       "2": 72,
+       "3": 4,
+       "4": 26,
+       "5": 6
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 127,
+      "1": 26
+     },
+     "division_sizes": {
+      "34": 6,
+      "33": 6,
+      "35": 6
+     },
+     "single_rule_fits": false
+    },
+    "championsschedule": {
+     "rows": 125,
+     "league": "unresolved (no unique stockleagues match for stem 'champions')"
+    },
+    "ohlschedule": {
+     "rows": 680,
+     "league_id": 11,
+     "games": 680,
+     "teams_with_games": 20,
+     "games_per_team": {
+      "68": 20
+     },
+     "pairs": 190,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-division": {
+       "5": 1,
+       "6": 23,
+       "7": 2,
+       "8": 14
+      },
+      "other-conference": {
+       "1": 1,
+       "2": 93,
+       "3": 1,
+       "4": 2,
+       "6": 3
+      },
+      "same-conference-other-division": {
+       "2": 7,
+       "4": 38,
+       "5": 1,
+       "6": 4
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 184,
+      "1": 6
+     },
+     "division_sizes": {
+      "28": 5,
+      "30": 5,
+      "31": 5,
+      "29": 5
+     },
+     "single_rule_fits": false
+    },
+    "ahlscheduledebug": {
+     "rows": 465,
+     "league": "unresolved (no unique stockleagues match for stem 'ahldebug')"
+    },
+    "whlschedule": {
+     "rows": 748,
+     "league_id": 13,
+     "games": 748,
+     "teams_with_games": 22,
+     "games_per_team": {
+      "68": 22
+     },
+     "pairs": 231,
+     "unresolved_pairs": 0,
+     "games_per_pair_by_relationship": {
+      "same-conference-other-division": {
+       "4": 51,
+       "5": 3,
+       "6": 4,
+       "7": 1,
+       "8": 1,
+       "10": 1
+      },
+      "same-division": {
+       "4": 8,
+       "6": 15,
+       "7": 3,
+       "8": 9,
+       "9": 9,
+       "10": 4,
+       "12": 2
+      },
+      "other-conference": {
+       "1": 120
+      }
+     },
+     "home_away_imbalance_per_pair": {
+      "0": 95,
+      "1": 136
+     },
+     "division_sizes": {
+      "41": 6,
+      "40": 6,
+      "42": 5,
+      "39": 5
+     },
+     "single_rule_fits": false
+    },
+    "swedishschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'swedish')"
+    },
+    "ohlscheduledebug": {
+     "rows": 120,
+     "league": "unresolved (no unique stockleagues match for stem 'ohldebug')"
+    },
+    "echlscheduledebug": {
+     "rows": 162,
+     "league": "unresolved (no unique stockleagues match for stem 'echldebug')"
+    },
+    "austrianschedule": {
+     "rows": 270,
+     "league": "unresolved (no unique stockleagues match for stem 'austrian')"
+    },
+    "swedish2ndschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'swedish2nd')"
+    },
+    "favoriteteamschedule": {
+     "rows": 1271,
+     "league": "unresolved (no unique stockleagues match for stem 'favoriteteam')"
+    },
+    "qmjhlscheduledebug": {
+     "rows": 108,
+     "league": "unresolved (no unique stockleagues match for stem 'qmjhldebug')"
+    },
+    "nhlscheduledebug": {
+     "rows": 465,
+     "league": "unresolved (no unique stockleagues match for stem 'nhldebug')"
+    },
+    "czechschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'czech')"
+    },
+    "whlscheduledebug": {
+     "rows": 132,
+     "league": "unresolved (no unique stockleagues match for stem 'whldebug')"
+    },
+    "spenglerschedule": {
+     "rows": 11,
+     "league": "unresolved (no unique stockleagues match for stem 'spengler')"
+    },
+    "echlschedule": {
+     "rows": 936,
+     "league": "unresolved (no unique stockleagues match for stem 'echl')"
+    },
+    "swissschedule": {
+     "rows": 300,
+     "league": "unresolved (no unique stockleagues match for stem 'swiss')"
+    },
+    "germanschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'german')"
+    },
+    "finnishschedule": {
+     "rows": 450,
+     "league": "unresolved (no unique stockleagues match for stem 'finnish')"
+    }
+   }
+  },
+  {
+   "label": "xbox360-nhllegacy",
+   "db": "anchors\\xbox360\\nhllegacy\\databases\\nhlng.db",
+   "sha256": "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
+   "hash_expected_prefix": null,
+   "hash_ok": true,
+   "r13": {
+    "label": "xbox360-nhllegacy",
+    "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\xbox360\\nhllegacy\\databases\\nhlng.db",
+    "group_fields": {
+     "conference": "conferencegroup",
+     "division": "divisiongroup"
+    },
+    "tables": {
+     "nhlschedule": {
+      "rows": 1231,
+      "games": 1231,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 30,
+       "1": 2
+      },
+      "pairs": 436,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 48,
+        "5": 50
+       },
+       "other-conference": {
+        "1": 1,
+        "2": 224
+       },
+       "same-conference-other-division": {
+        "3": 112,
+        "4": 1
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 273,
+       "1": 163
+      },
+      "division_sizes": {
+       "3": 7,
+       "4": 7,
+       "5": 8,
+       "6": 8,
+       "2": 1,
+       "1": 1
+      },
+      "single_rule_fits": false
+     },
+     "nhlfutureschedule": {
+      "rows": 1231,
+      "games": 1231,
+      "teams_with_games": 32,
+      "games_per_team": {
+       "82": 30,
+       "1": 2
+      },
+      "pairs": 436,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "same-division": {
+        "4": 46,
+        "5": 52
+       },
+       "same-conference-other-division": {
+        "2": 1,
+        "3": 112
+       },
+       "other-conference": {
+        "1": 1,
+        "2": 224
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 271,
+       "1": 165
+      },
+      "division_sizes": {
+       "3": 7,
+       "4": 7,
+       "5": 8,
+       "6": 8,
+       "2": 1,
+       "1": 1
+      },
+      "single_rule_fits": false
+     },
+     "ahlschedule": {
+      "rows": 1120,
+      "games": 1120,
+      "teams_with_games": 30,
+      "games_per_team": {
+       "76": 25,
+       "68": 5
+      },
+      "pairs": 222,
+      "unresolved_pairs": 0,
+      "games_per_pair_by_relationship": {
+       "other-conference": {
+        "1": 2,
+        "2": 29,
+        "3": 7,
+        "4": 37,
+        "5": 5,
+        "6": 2,
+        "7": 5,
+        "8": 14,
+        "9": 1,
+        "10": 5,
+        "11": 1,
+        "12": 8,
+        "13": 1
+       },
+       "same-conference-other-division": {
+        "1": 3,
+        "2": 14,
+        "3": 1,
+        "4": 22,
+        "6": 1,
+        "7": 3,
+        "8": 5,
+        "9": 3,
+        "10": 2,
+        "12": 3
+       },
+       "same-division": {
+        "1": 2,
+        "2": 10,
+        "3": 2,
+        "4": 15,
+        "5": 1,
+        "6": 3,
+        "7": 1,
+        "8": 5,
+        "9": 1,
+        "10": 3,
+        "11": 1,
+        "12": 4
+       }
+      },
+      "home_away_imbalance_per_pair": {
+       "0": 178,
+       "1": 39,
+       "2": 4,
+       "3": 1
+      },
+      "division_sizes": {
+       "11": 7,
+       "13": 7,
+       "10": 8,
+       "12": 8
+      },
+      "single_rule_fits": false
+     }
+    }
+   },
+   "schedule_tables": {
+    "qmjhlschedule": 612,
+    "ohlschedule": 680,
+    "ahlscheduledebug": 175,
+    "leaguetempscheduletable": 0,
+    "whlschedule": 792,
+    "swedishschedule": 364,
+    "ohlscheduledebug": 120,
+    "ahlschedule": 1120,
+    "favoriteteamschedule": 1231,
+    "qmjhlscheduledebug": 108,
+    "nhlfutureschedule": 1231,
+    "nhlscheduledebug": 181,
+    "czechschedule": 364,
+    "whlscheduledebug": 132,
+    "swissschedule": 300,
+    "nhlschedule": 1231,
+    "germanschedule": 364,
+    "leaguescheduletable": 0,
+    "finnishschedule": 450
+   },
+   "stockleagues": [],
+   "other_league_tables": {
+    "qmjhlschedule": {
+     "rows": 612,
+     "league": "unresolved (no unique stockleagues match for stem 'qmjhl')"
+    },
+    "ohlschedule": {
+     "rows": 680,
+     "league": "unresolved (no unique stockleagues match for stem 'ohl')"
+    },
+    "ahlscheduledebug": {
+     "rows": 175,
+     "league": "unresolved (no unique stockleagues match for stem 'ahldebug')"
+    },
+    "whlschedule": {
+     "rows": 792,
+     "league": "unresolved (no unique stockleagues match for stem 'whl')"
+    },
+    "swedishschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'swedish')"
+    },
+    "ohlscheduledebug": {
+     "rows": 120,
+     "league": "unresolved (no unique stockleagues match for stem 'ohldebug')"
+    },
+    "favoriteteamschedule": {
+     "rows": 1231,
+     "league": "unresolved (no unique stockleagues match for stem 'favoriteteam')"
+    },
+    "qmjhlscheduledebug": {
+     "rows": 108,
+     "league": "unresolved (no unique stockleagues match for stem 'qmjhldebug')"
+    },
+    "nhlscheduledebug": {
+     "rows": 181,
+     "league": "unresolved (no unique stockleagues match for stem 'nhldebug')"
+    },
+    "czechschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'czech')"
+    },
+    "whlscheduledebug": {
+     "rows": 132,
+     "league": "unresolved (no unique stockleagues match for stem 'whldebug')"
+    },
+    "swissschedule": {
+     "rows": 300,
+     "league": "unresolved (no unique stockleagues match for stem 'swiss')"
+    },
+    "germanschedule": {
+     "rows": 364,
+     "league": "unresolved (no unique stockleagues match for stem 'german')"
+    },
+    "finnishschedule": {
+     "rows": 450,
+     "league": "unresolved (no unique stockleagues match for stem 'finnish')"
+    }
+   }
+  }
+ ]
+}

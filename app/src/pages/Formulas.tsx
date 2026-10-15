@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { Button, Spinner } from "../components/primitives";
 import { ComputedRatings } from "../components/ComputedRatings";
@@ -27,6 +27,28 @@ export function FormulasPage() {
   const [pos, setPos] = useState<Pos>("forward");
   const [saveName, setSaveName] = useState("");
   const [status, setStatus] = useState<string | null>(null);
+  // After saving a profile the user is asked whether to run the (expensive) Legends precompute now.
+  // Declining parks the debt in `ea_formula_state.json`, where the app-level banner picks it up.
+  const [askCalc, setAskCalc] = useState<string | null>(null);
+
+  // Which profile the app is working under, and whether its Legends ratings are current.
+  const legends = useQuery({
+    queryKey: ["legends_status"],
+    queryFn: () => call("legends_status", {}),
+    retry: false,
+  });
+  const activeProfile = legends.data?.active_profile ?? "";
+
+  const runCalc = useMutation({
+    mutationFn: () => call("compute_legends_ratings", {}),
+    onSuccess: async (r) => {
+      setAskCalc(null);
+      setStatus(`Legends ratings rebuilt — ${r.rated.toLocaleString()} players in ${(r.elapsed_ms / 1000).toFixed(1)}s.`);
+      await qc.invalidateQueries({ queryKey: ["legends_status"] });
+      await qc.invalidateQueries({ queryKey: ["legends_teams"] });
+    },
+    onError: (e) => setStatus(`Legends calculation failed: ${e}`),
+  });
 
   // Seed the editor from the persisted active formula once it arrives. If that read fails (e.g. a
   // corrupt `ea_formulas.json`), fall back to the packaged default so the page still loads.
@@ -70,18 +92,32 @@ export function FormulasPage() {
     setComponents(ea, [...current, [key, 1.0]]);
   };
 
+  // Switching profiles switches what Legends ranks on, so the backend re-checks whether the newly
+  // active profile has current ratings and re-raises the pending banner if it doesn't.
   const load = async (name: string) => {
     const next = name ? await call("load_formula_profile", { name }) : await call("formula_default", {});
     commit(next);
     setSaveName(name);
+    if (name) await call("set_active_profile", { name });
+    await qc.invalidateQueries({ queryKey: ["legends_status"] });
     setStatus(name ? `Loaded "${name}".` : "Reset to built-in default.");
   };
   const save = async () => {
     const name = saveName.trim();
     if (!name) return;
     await call("save_formula_profile", { name, profile });
+    await call("set_active_profile", { name });
     await qc.invalidateQueries({ queryKey: ["formula_profiles"] });
+    await qc.invalidateQueries({ queryKey: ["legends_status"] });
     setStatus(`Saved "${name}".`);
+    // New weightings mean new Legends ratings — offer to rebuild them straight away.
+    setAskCalc(name);
+  };
+  const declineCalc = async () => {
+    await call("set_legends_pending", { pending: true, dismissed: false });
+    await qc.invalidateQueries({ queryKey: ["legends_status"] });
+    setAskCalc(null);
+    setStatus("Saved. Legends ratings still need calculating — the banner will keep reminding you.");
   };
   const del = async (name: string) => {
     await call("delete_formula_profile", { name });
@@ -114,8 +150,9 @@ export function FormulasPage() {
 
         {/* Profile load/save row */}
         <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
+          <span className="text-[11px] uppercase tracking-wide text-slate-500">Profile</span>
           <select
-            defaultValue=""
+            value={activeProfile}
             onChange={(e) => load(e.target.value)}
             className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100"
           >
@@ -140,8 +177,50 @@ export function FormulasPage() {
               Delete
             </Button>
           )}
+          {legends.data && (
+            <span
+              className={
+                "text-[11px] " +
+                (legends.data.computed ? "text-emerald-400/80" : "text-amber-400/90")
+              }
+              title={
+                legends.data.computed
+                  ? `Legends ratings computed ${legends.data.computed_at ?? ""}`
+                  : "The Legends builder can't rank players under this profile until you calculate."
+              }
+            >
+              {legends.data.computed
+                ? `Legends: ${legends.data.player_count.toLocaleString()} rated`
+                : legends.data.stale
+                  ? "Legends: stale — recalculate"
+                  : "Legends: not calculated"}
+            </span>
+          )}
           {status && <span className="text-xs text-slate-500">{status}</span>}
         </div>
+
+        {/* Post-save prompt: rebuild the Legends ratings now, or park the debt for the banner. */}
+        {askCalc && (
+          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border border-amber-800/70 bg-amber-950/30 px-3 py-2 text-xs text-amber-100">
+            <span>
+              Calculate Legends ratings for <strong>{askCalc}</strong> now? It reads every player's
+              every season, so it takes a while — but the Legends builder can't rank anyone until
+              it's done.
+            </span>
+            <div className="ml-auto flex items-center gap-2">
+              <Button
+                onClick={() => runCalc.mutate()}
+                disabled={runCalc.isPending}
+                className="!bg-amber-600 hover:!bg-amber-500"
+              >
+                {runCalc.isPending ? "Calculating…" : "Calculate now"}
+              </Button>
+              <Button variant="ghost" onClick={declineCalc} disabled={runCalc.isPending}>
+                Later
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Position tabs */}
         <div className="mb-2 flex gap-1 border-b border-slate-800">
@@ -363,11 +442,16 @@ function AttrRow({
   );
 }
 
-/** Live preview: pick a historical player + season, compute with the working profile. */
+/// The season-dropdown sentinel for the Legends composite (a real season is a numeric year).
+const LEGENDS = "legends";
+
+/// Live preview: one card per player, each computed with the working profile, so a weight edit can
+/// be judged against several players at once rather than one at a time. Searching adds to the stack
+/// instead of replacing it; each card carries its own season / Legends selection, because the
+/// interesting comparison is often one player's peak against another's single season.
 function PreviewPane({ profile }: { profile: FormulaProfileDto }) {
   const [search, setSearch] = useState("");
-  const [personId, setPersonId] = useState<number | null>(null);
-  const [year, setYear] = useState<number | null>(null);
+  const [personIds, setPersonIds] = useState<number[]>([]);
 
   const results = useQuery({
     queryKey: ["formula_preview_search", search],
@@ -375,90 +459,176 @@ function PreviewPane({ profile }: { profile: FormulaProfileDto }) {
     enabled: search.trim().length > 1,
     placeholderData: keepPreviousData,
   });
+
+  const add = (personId: number) => {
+    // Adding the same player twice would only duplicate a card, so it's a no-op.
+    setPersonIds((ids) => (ids.includes(personId) ? ids : [...ids, personId]));
+    setSearch("");
+  };
+  const remove = (personId: number) => setPersonIds((ids) => ids.filter((id) => id !== personId));
+
+  return (
+    <div className="flex h-full flex-col rounded-lg border border-slate-800 bg-slate-900/40 p-3">
+      <div className="mb-2 flex items-baseline gap-2">
+        <h3 className="text-sm font-semibold text-slate-100">Live preview</h3>
+        {personIds.length > 1 && (
+          <span className="text-[11px] text-slate-500">comparing {personIds.length}</span>
+        )}
+        {personIds.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setPersonIds([])}
+            className="ml-auto text-[11px] text-slate-500 hover:text-slate-300"
+          >
+            Clear all
+          </button>
+        )}
+      </div>
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder={personIds.length ? "Add another player…" : "Search a player to preview…"}
+        className="mb-2 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 placeholder-slate-600"
+      />
+      {search.trim().length > 1 && (
+        <div className="mb-2 max-h-40 overflow-y-auto rounded-md border border-slate-800">
+          {(results.data ?? []).map((r) => {
+            const already = personIds.includes(r.person_id);
+            return (
+              <button
+                key={r.person_id}
+                type="button"
+                disabled={already}
+                onClick={() => add(r.person_id)}
+                className="block w-full px-2 py-1 text-left text-xs text-slate-200 hover:bg-slate-800/60 disabled:cursor-default disabled:text-slate-600 disabled:hover:bg-transparent"
+              >
+                {r.last_name}, {r.first_name}{" "}
+                <span className="text-slate-500">
+                  {r.position ?? ""} · {r.first_year}–{r.active ? "Present" : r.last_year}
+                </span>
+                {already && <span className="ml-1 text-[10px] text-slate-600">(added)</span>}
+              </button>
+            );
+          })}
+        </div>
+      )}
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
+        {personIds.length === 0 ? (
+          <p className="text-xs text-slate-500">
+            Pick a player to see live computed ratings. Add more to compare them.
+          </p>
+        ) : (
+          personIds.map((id) => (
+            <PreviewCard key={id} personId={id} profile={profile} onRemove={() => remove(id)} />
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+/// One player's preview card. Each card owns its own season selection and queries, so changing one
+/// player's season never recomputes another's.
+function PreviewCard({
+  personId,
+  profile,
+  onRemove,
+}: {
+  personId: number;
+  profile: FormulaProfileDto;
+  onRemove: () => void;
+}) {
+  const [sel, setSel] = useState<string>("");
+  const year = /^\d+$/.test(sel) ? Number(sel) : null;
+  const isLegends = sel === LEGENDS;
+
   const person = useQuery({
     queryKey: ["formula_preview_person", personId],
-    queryFn: () => call("historical_player", { personId: personId! }),
-    enabled: personId != null,
+    queryFn: () => call("historical_player", { personId }),
   });
   // Default to the person's newest season.
   useEffect(() => {
     if (person.data && person.data.seasons.length > 0) {
-      setYear((y) => y ?? person.data!.seasons[0].season_year);
+      setSel((s) => s || String(person.data!.seasons[0].season_year));
     }
   }, [person.data]);
 
   const ratings = useQuery({
     queryKey: ["formula_preview_ratings", personId, year, profile],
-    queryFn: () => call("compute_ratings", { personId: personId!, seasonYear: year!, profile }),
-    enabled: personId != null && year != null,
+    queryFn: () => call("compute_ratings", { personId, seasonYear: year!, profile }),
+    enabled: year != null,
+    placeholderData: keepPreviousData,
+  });
+  // The Legends composite for the working profile — each attribute's three best seasons averaged,
+  // with Overall re-derived from those composites. Computed live, never read from the rating cache,
+  // so it tracks the weights being edited rather than the last saved profile.
+  const legendsPreview = useQuery({
+    queryKey: ["formula_preview_legends", personId, profile],
+    queryFn: () => call("compute_legends_preview", { personId, profile }),
+    enabled: isLegends,
     placeholderData: keepPreviousData,
   });
 
+  const view = isLegends ? legendsPreview : ratings;
+  const fullName = person.data
+    ? `${person.data.first_name} ${person.data.last_name}`.trim()
+    : `Player #${personId}`;
+  const seasonLabel = person.data?.seasons.find((s) => s.season_year === year)?.season_label ?? null;
+
+  const removeButton = (
+    <button
+      type="button"
+      onClick={onRemove}
+      title="Remove from the comparison"
+      className="rounded-full px-1 text-slate-500 hover:bg-slate-800 hover:text-rose-400"
+    >
+      ✕
+    </button>
+  );
+
   return (
-    <div className="flex h-full flex-col rounded-lg border border-slate-800 bg-slate-900/40 p-3">
-      <h3 className="mb-2 text-sm font-semibold text-slate-100">Live preview</h3>
-      <input
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search a player to preview…"
-        className="mb-2 rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 placeholder-slate-600"
-      />
-      {search.trim().length > 1 && personId == null && (
-        <div className="mb-2 max-h-40 overflow-y-auto rounded-md border border-slate-800">
-          {(results.data ?? []).map((r) => (
-            <button
-              key={r.person_id}
-              type="button"
-              onClick={() => {
-                setPersonId(r.person_id);
-                setYear(null);
-              }}
-              className="block w-full px-2 py-1 text-left text-xs text-slate-200 hover:bg-slate-800/60"
-            >
-              {r.last_name}, {r.first_name}{" "}
-              <span className="text-slate-500">
-                {r.position ?? ""} · {r.first_year}–{r.active ? "Present" : r.last_year}
-              </span>
-            </button>
+    <div className="space-y-2">
+      <select
+        value={sel}
+        onChange={(e) => setSel(e.target.value)}
+        className="w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100"
+      >
+        <optgroup label="Composite">
+          <option value={LEGENDS}>Legends</option>
+        </optgroup>
+        <optgroup label="Seasons">
+          {(person.data?.seasons ?? []).map((s) => (
+            <option key={s.season_year} value={s.season_year}>
+              {s.season_label}
+            </option>
           ))}
+        </optgroup>
+      </select>
+      {view.isLoading ? (
+        <Spinner label="Computing…" />
+      ) : view.data ? (
+        <ComputedRatings
+          data={view.data}
+          compact
+          name={fullName}
+          meta={isLegends ? "Legends" : seasonLabel}
+          actions={removeButton}
+        />
+      ) : (
+        <div className="flex items-center gap-2 rounded-md border border-slate-800 bg-slate-900/50 px-3 py-2">
+          <span className="min-w-0 flex-1 truncate text-xs text-slate-400">
+            <span className="font-semibold text-slate-200">{fullName}</span> —{" "}
+            {isLegends ? "no Legends composite (no rated seasons)." : "no ratings for this season."}
+          </span>
+          {removeButton}
         </div>
       )}
-      {personId != null && (
-        <div className="mb-2 flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              setPersonId(null);
-              setYear(null);
-            }}
-            className="text-xs text-sky-400 hover:underline"
-          >
-            ← change
-          </button>
-          <select
-            value={year ?? ""}
-            onChange={(e) => setYear(Number(e.target.value))}
-            className="rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100"
-          >
-            {(person.data?.seasons ?? []).map((s) => (
-              <option key={s.season_year} value={s.season_year}>
-                {s.season_label}
-              </option>
-            ))}
-          </select>
-        </div>
+      {isLegends && view.data && (
+        <p className="text-[11px] text-slate-500">
+          Each attribute is the mean of its three best seasons; Overall is the EA formula run over
+          those composites. This is the rating Puck's Picks ranks on.
+        </p>
       )}
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        {personId == null ? (
-          <p className="text-xs text-slate-500">Pick a player to see live computed ratings.</p>
-        ) : ratings.isLoading ? (
-          <Spinner label="Computing…" />
-        ) : ratings.data ? (
-          <ComputedRatings data={ratings.data} compact />
-        ) : (
-          <p className="text-xs text-slate-500">No ratings for this player-season.</p>
-        )}
-      </div>
     </div>
   );
 }

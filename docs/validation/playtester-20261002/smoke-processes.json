@@ -1,0 +1,51 @@
+[
+  {
+    "ProcessId": 278068,
+    "ParentProcessId": 291248,
+    "Name": "nhl-studio.exe",
+    "ExecutablePath": "E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\nhl-studio.exe",
+    "CommandLine": "\"E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\nhl-studio.exe\""
+  },
+  {
+    "ProcessId": 282524,
+    "ParentProcessId": 278068,
+    "Name": "msedgewebview2.exe",
+    "ExecutablePath": "E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe",
+    "CommandLine": "\"E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe\" --embedded-browser-webview=1 --webview-exe-name=nhl-studio.exe --webview-exe-version=0.0.0 --user-data-dir=\"E:\\Repositories\\nhl-modding-studio\\target\\playtester-smoke-profile\\EBWebView\" --noerrdialogs --embedded-browser-webview-dpi-awareness=2 --autoplay-policy=no-user-gesture-required --disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --lang=en-US --mojo-named-platform-channel-pipe=278068.279648.12431538734740545508 /pfhostedapp:88925ff22e81fffc944f402c382d18e529577e44"
+  },
+  {
+    "ProcessId": 279300,
+    "ParentProcessId": 282524,
+    "Name": "msedgewebview2.exe",
+    "ExecutablePath": "E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe",
+    "CommandLine": "\"E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe\" --type=crashpad-handler --user-data-dir=E:\\Repositories\\nhl-modding-studio\\target\\playtester-smoke-profile\\EBWebView /prefetch:4 /pfhostedapp:88925ff22e81fffc944f402c382d18e529577e44 --monitor-self-annotation=ptype=crashpad-handler --database=E:\\Repositories\\nhl-modding-studio\\target\\playtester-smoke-profile\\EBWebView\\Crashpad --annotation=IsOfficialBuild=1 --annotation=channel= --annotation=chromium-version=154.0.8037.93 \"--annotation=exe=E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe\" --annotation=plat=Win64 \"--annotation=prod=Edge WebView2\" --annotation=ver=154.0.4258.53 --initial-client-data=0x194,0x198,0x19c,0x170,0x1a4,0x7ffaf70383e0,0x7ffaf70383f0,0x7ffaf7038400"
+  },
+  {
+    "ProcessId": 293208,
+    "ParentProcessId": 282524,
+    "Name": "msedgewebview2.exe",
+    "ExecutablePath": "E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe",
+    "CommandLine": "\"E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe\" --type=gpu-process --gpu-recent-crash-count=0 --noerrdialogs --user-data-dir=\"E:\\Repositories\\nhl-modding-studio\\target\\playtester-smoke-profile\\EBWebView\" --webview-exe-name=nhl-studio.exe --webview-exe-version=0.0.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAA= --startup-read-main-dll --metrics-shmem-handle=1812,i,8801244915938752785,18035890198145225240,262144 --field-trial-handle=1880,i,6734321936368801357,4209360290363917325,262144 --enable-features=SingleAxisScrollContainers --disable-features=msPdfOOUI,msSmartScreenProtection,msWebOOUI --variations-seed-version --pseudonymization-salt-handle=1916,i,3339384048428360925,7248139984101086326,4 --trace-process-track-uuid=3190708988185955192 --mojo-platform-channel-handle=1904 /prefetch:2 /pfhostedapp:88925ff22e81fffc944f402c382d18e529577e44"
+  },
+  {
+    "ProcessId": 293056,
+    "ParentProcessId": 282524,
+    "Name": "msedgewebview2.exe",
+    "ExecutablePath": "E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe",
+    "CommandLine": "\"E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --noerrdialogs --user-data-dir=\"E:\\Repositories\\nhl-modding-studio\\target\\playtester-smoke-profile\\EBWebView\" --webview-exe-name=nhl-studio.exe --webview-exe-version=0.0.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --startup-read-main-dll --metrics-shmem-handle=2252,i,3134307825303346608,98822910964380931,524288 --field-trial-handle=1880,i,6734321936368801357,4209360290363917325,262144 --enable-features=SingleAxisScrollContainers --disable-features=msPdfOOUI,msSmartScreenProtection,msWebOOUI --variations-seed-version --pseudonymization-salt-handle=1916,i,3339384048428360925,7248139984101086326,4 --trace-process-track-uuid=3190708989122997041 --mojo-platform-channel-handle=2260 /prefetch:11 /pfhostedapp:88925ff22e81fffc944f402c382d18e529577e44"
+  },
+  {
+    "ProcessId": 293168,
+    "ParentProcessId": 282524,
+    "Name": "msedgewebview2.exe",
+    "ExecutablePath": "E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe",
+    "CommandLine": "\"E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe\" --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --noerrdialogs --user-data-dir=\"E:\\Repositories\\nhl-modding-studio\\target\\playtester-smoke-profile\\EBWebView\" --webview-exe-name=nhl-studio.exe --webview-exe-version=0.0.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --startup-read-main-dll --metrics-shmem-handle=2628,i,17586725417090717015,14151107700570385510,524288 --field-trial-handle=1880,i,6734321936368801357,4209360290363917325,262144 --enable-features=SingleAxisScrollContainers --disable-features=msPdfOOUI,msSmartScreenProtection,msWebOOUI --variations-seed-version --pseudonymization-salt-handle=1916,i,3339384048428360925,7248139984101086326,4 --trace-process-track-uuid=3190708990060038890 --mojo-platform-channel-handle=2644 /prefetch:13 /pfhostedapp:88925ff22e81fffc944f402c382d18e529577e44"
+  },
+  {
+    "ProcessId": 290644,
+    "ParentProcessId": 282524,
+    "Name": "msedgewebview2.exe",
+    "ExecutablePath": "E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe",
+    "CommandLine": "\"E:\\Repositories\\nhl-modding-studio\\target\\internal-candidates\\nhlms-release-candidate-20261002-r76\\extracted\\NHL Modding Studio Playtest r76\\webview2\\msedgewebview2.exe\" --type=renderer --noerrdialogs --user-data-dir=\"E:\\Repositories\\nhl-modding-studio\\target\\playtester-smoke-profile\\EBWebView\" --webview-exe-name=nhl-studio.exe --webview-exe-version=0.0.0 --embedded-browser-webview=1 --embedded-browser-webview-dpi-awareness=2 --autoplay-policy=no-user-gesture-required --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --ssd-no-pressure-read-main-dll --launch-time-ticks=1170117415856 --metrics-shmem-handle=4032,i,8241756410160248572,8262239350555545510,1048576 --field-trial-handle=1880,i,6734321936368801357,4209360290363917325,262144 --enable-features=SingleAxisScrollContainers --disable-features=msPdfOOUI,msSmartScreenProtection,msWebOOUI --variations-seed-version --pseudonymization-salt-handle=1916,i,3339384048428360925,7248139984101086326,4 --trace-process-track-uuid=3190708990997080739 --mojo-platform-channel-handle=4040 /pfhostedapp:88925ff22e81fffc944f402c382d18e529577e44 /prefetch:1"
+  }
+]

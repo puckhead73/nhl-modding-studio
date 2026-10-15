@@ -1,0 +1,25 @@
+boot.big: 7365 files, 1533 dirs, 5 hits
+   [2015] nhl/ui/features/overlays/vvms/leagueleaders/leaguestandings.vvm (135 B)
+   [3730] nhl/data/common/gamemodes/service-defs/view/roster/leagues_and_teams.json (565 B)
+   [4420] nhl/ui/features/overlays/leaguestandings.nav (331 B)
+   [6044] nhl/ui/features/overlays/vvms/leagueleaders/leaguestandings.layout (851 B)
+   [6267] nhl/ui/features/overlays/vvms/leagueleaders/leaguestandings.dd (239 B)
+game_60.big: 10375 files, 2 dirs, 0 hits
+game_61.big: 21314 files, 629 dirs, 0 hits
+game_70.big: 242 files, 17 dirs, 0 hits
+game_80.big: 159 files, 6 dirs, 0 hits
+game_90.big: 92322 files, 92 dirs, 0 hits
+inxp_00.big: 2950 files, 152 dirs, 4 hits
+   [1156] nhl/data/kettle/loc/eng_us.db (3921060 B)
+   [1479] nhl/data/common/gamemodes/database/t3db/nhl_game-meta.xml (495259 B)
+   [2652] nhl/data/common/gamemodes/database/t3db/nhl_game.db (11209672 B)
+   [2888] nhl/data/kettle/loc/eng_us-meta.xml (962 B)
+inxp_10.big: 21181 files, 407 dirs, 0 hits
+inxp_30.big: 196 files, 4 dirs, 0 hits
+inxp_40.big: 174 files, 16 dirs, 0 hits
+inxp_50.big: 12336 files, 34 dirs, 0 hits
+overlays_20.big: 6 files, 2 dirs, 0 hits
+overlays_21.big: 257 files, 10 dirs, 0 hits
+overlays_22.big: 91 files, 1 dirs, 0 hits
+overlays_23.big: 90 files, 1 dirs, 0 hits
+overlays_24.big: 36 files, 3 dirs, 0 hits

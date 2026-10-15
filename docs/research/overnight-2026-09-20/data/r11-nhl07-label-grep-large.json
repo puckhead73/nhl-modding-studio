@@ -1,0 +1,320 @@
+{
+ "root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 07\\NHL 07 (USA)",
+ "threshold": "> 8 000 000 B (the R5 exclusion)",
+ "scanned": [
+  {
+   "archive": "data0.big",
+   "path": "gamedata/anim/anim.viv",
+   "size": 14126601,
+   "refpack": true,
+   "magic": "90fb0158",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_0_container_0.rx2",
+   "size": 14249430,
+   "refpack": true,
+   "magic": "90fb01c6",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_1_container_0.rx2",
+   "size": 14715986,
+   "refpack": true,
+   "magic": "90fb01c1",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_10_container_0.rx2",
+   "size": 14524476,
+   "refpack": true,
+   "magic": "90fb01cd",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_11_container_0.rx2",
+   "size": 13977336,
+   "refpack": true,
+   "magic": "90fb01bf",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_12_container_0.rx2",
+   "size": 13787462,
+   "refpack": true,
+   "magic": "90fb01a6",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_13_container_0.rx2",
+   "size": 14502883,
+   "refpack": true,
+   "magic": "90fb01cb",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_14_container_0.rx2",
+   "size": 14028839,
+   "refpack": true,
+   "magic": "90fb01c8",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_15_container_0.rx2",
+   "size": 14214645,
+   "refpack": true,
+   "magic": "90fb01c8",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_16_container_0.rx2",
+   "size": 14873397,
+   "refpack": true,
+   "magic": "90fb01d1",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_17_container_0.rx2",
+   "size": 14431328,
+   "refpack": true,
+   "magic": "90fb01cb",
+   "hits": 0
+  },
+  {
+   "archive": "data3.big",
+   "path": "rendering/stadium/stadium_18_container_0.rx2",
+   "size": 15313634,
+   "refpack": true,
+   "magic": "90fb01ed",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_19_container_0.rx2",
+   "size": 15173068,
+   "refpack": true,
+   "magic": "90fb01e4",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_2_container_0.rx2",
+   "size": 14368764,
+   "refpack": true,
+   "magic": "90fb01c4",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_20_container_0.rx2",
+   "size": 13625405,
+   "refpack": true,
+   "magic": "90fb01b9",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_21_container_0.rx2",
+   "size": 14648375,
+   "refpack": true,
+   "magic": "90fb01cb",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_22_container_0.rx2",
+   "size": 13668243,
+   "refpack": true,
+   "magic": "90fb01b8",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_23_container_0.rx2",
+   "size": 13608480,
+   "refpack": true,
+   "magic": "90fb01b1",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_24_container_0.rx2",
+   "size": 14794796,
+   "refpack": true,
+   "magic": "90fb01d7",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_25_container_0.rx2",
+   "size": 14377442,
+   "refpack": true,
+   "magic": "90fb01cb",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_26_container_0.rx2",
+   "size": 14067389,
+   "refpack": true,
+   "magic": "90fb01c3",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_27_container_0.rx2",
+   "size": 13413786,
+   "refpack": true,
+   "magic": "90fb01a1",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_28_container_0.rx2",
+   "size": 14949660,
+   "refpack": true,
+   "magic": "90fb01d4",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_29_container_0.rx2",
+   "size": 13788966,
+   "refpack": true,
+   "magic": "90fb01c2",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_3_container_0.rx2",
+   "size": 15151850,
+   "refpack": true,
+   "magic": "90fb01d6",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_4_container_0.rx2",
+   "size": 13691787,
+   "refpack": true,
+   "magic": "90fb01b6",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_5_container_0.rx2",
+   "size": 14579593,
+   "refpack": true,
+   "magic": "90fb01cc",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_6_container_0.rx2",
+   "size": 15125482,
+   "refpack": true,
+   "magic": "90fb01d7",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_7_container_0.rx2",
+   "size": 13847003,
+   "refpack": true,
+   "magic": "90fb01ba",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_8_container_0.rx2",
+   "size": 14702146,
+   "refpack": true,
+   "magic": "90fb01cc",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_9_container_0.rx2",
+   "size": 13649370,
+   "refpack": true,
+   "magic": "90fb01b5",
+   "hits": 0
+  },
+  {
+   "archive": "data4.big",
+   "path": "rendering/stadium/stadium_95_container_0.rx2",
+   "size": 13079433,
+   "refpack": true,
+   "magic": "90fb01a7",
+   "hits": 0
+  },
+  {
+   "archive": null,
+   "path": "fe\\ion\\game\\screens\\bootflow\\03_pressstartanimating.big",
+   "size": 15961824,
+   "refpack": false,
+   "magic": "42494746",
+   "hits": 0
+  },
+  {
+   "archive": null,
+   "path": "fe\\movies\\ntsc\\NHL07-Intro-ng-n.vp6",
+   "size": 42471856,
+   "refpack": false,
+   "magic": "4d566864",
+   "hits": 0
+  },
+  {
+   "archive": null,
+   "path": "fe\\movies\\ntsc\\preview1.vp6",
+   "size": 17081968,
+   "refpack": false,
+   "magic": "4d566864",
+   "hits": 0
+  },
+  {
+   "archive": null,
+   "path": "fe\\movies\\ntsc\\tutorial.vp6",
+   "size": 64530476,
+   "refpack": false,
+   "magic": "4d566864",
+   "hits": 0
+  },
+  {
+   "archive": null,
+   "path": "gamedata\\nis.big",
+   "size": 19857408,
+   "refpack": false,
+   "magic": "42494734",
+   "hits": 0
+  },
+  {
+   "archive": null,
+   "path": "gamedata\\nis.viv",
+   "size": 11862268,
+   "refpack": false,
+   "magic": "42494746",
+   "hits": 0
+  },
+  {
+   "archive": null,
+   "path": "gamedata\\anim\\anim.viv",
+   "size": 14126601,
+   "refpack": true,
+   "magic": "90fb0158",
+   "hits": 0
+  }
+ ],
+ "hits": [],
+ "hit_census": []
+}

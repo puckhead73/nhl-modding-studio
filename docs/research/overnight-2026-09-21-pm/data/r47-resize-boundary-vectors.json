@@ -1,0 +1,532 @@
+{
+ "note": "R47 \u2014 Compact resize boundary vectors for the three texture families, computed from the measured header rules (pure arithmetic, no I/O):\n\n  RW4xb2 (Xbox 360, Xenos fetch constant): DW7 pitch = roundup(w, 128) / 32 for BCn (roundup(w, 32) / 32 for 8_8_8_8) in bits 22\u201330 (9 bits);\n     DW9 = (h \u2212 1) << 13 | (w \u2212 1) (13 + 13 bits); DW11 bits 6\u20139 = mips \u2212 1 (4 bits); DW12 bits 12+ = tiled base bytes / 4096 (20 bits; 0 when\n     mips == 1; base padded to 32 \u00d7 32 elements); DW13 byte 2 = mips; DW8 preserved. (r42 / r44 census, handoff 02.)\n  GNF (PS4, GCN T#): word 2 = (w \u2212 1) | (h \u2212 1) << 14 (14 + 14 bits); word 3 bits 16\u201319 = last_level = levels \u2212 1 (4 bits); word 4 bits 13\u201326 =\n     pitch = roundup(w, 32) \u2212 1 (14 bits, block formats); d7 = \u03a3 levels of 8 \u00d7 8-block micro-tiles \u00d7 block bytes; streamSize = 0x100 + d7 (u32).\n     (r31 / r43 census, handoffs 15 / 03.)\n  RW4ps3 (PS3): word 12 = w << 16 | h (16 + 16 bits); word 13 = mips << 24 (8 bits); slot = \u03a3 levels max(block bytes, \u2308w/4\u2309\u2308h/4\u2309 \u00d7 block bytes)\n     (DXT) or w \u00d7 h \u00d7 4 (ARGB8), u32. (r33 census, 2026-09-21 handoff 11 \u00a71.)\nEach vector states the request, whether the family's fields can represent it (field bounds only), the expected header words when\nrepresentable, and the refusal reason otherwise. Shipped maxima and hardware / runtime limits are NOT applied here \u2014 they are listed\nseparately in the handoff. Usage: python r47_resize_boundary_vectors.py <out.json>\n",
+ "field_bounds": {
+  "RW4xb2": {
+   "width_height": "1..8192 (13-bit, stored \u2212 1)",
+   "mips": "1..16 (4-bit mip_max_level = mips \u2212 1); also \u2264 floor(log2(max(w, h))) + 1",
+   "pitch": "9-bit 32-texel units (\u2264 511 \u2192 16 352 texels; never binding under the 8 192 dimension bound)",
+   "mip_page": "20-bit 4 KiB pages (\u2264 4 GiB; never binding: 8 192\u00b2 DXT5 tiled base = 64 MiB = 16 384 pages)",
+   "container": "file-table entry bytes / offsets u32; data_size u32; slot offsets 4 KiB-aligned (entry int 3 = 0x1000 on every shipped slot)"
+  },
+  "GNF": {
+   "width_height": "1..16384 (14-bit, stored \u2212 1)",
+   "levels": "1..16 (4-bit last_level); also \u2264 floor(log2(max(w, h))) + 1 = 15 at 16 384, so 16 is never reachable for a 2D texture",
+   "pitch": "14-bit (stored roundup(w, 32) \u2212 1 \u2264 16 383 at w \u2264 16 384: never binding)",
+   "depth": "13-bit, 0 for 2D",
+   "sizes": "d7 / streamSize u32 (16 384\u00b2 BC7 15 levels = 358 MB; 16 384\u00b2 8_8_8_8 \u2248 1.43 GB: both fit)"
+  },
+  "RW4ps3": {
+   "width_height": "1..65535 (16-bit halves of word 12)",
+   "mips": "0..255 (byte 3 of word 13); also \u2264 floor(log2(max(w, h))) + 1",
+   "slot": "u32 linear chain; the u32 bound binds before the dimension field for ARGB8 above \u2248 28 377\u00b2 with mips and for DXT5 above \u2248 56 755\u00b2 with mips"
+  }
+ },
+ "vectors": {
+  "RW4xb2": [
+   {
+    "family": "RW4xb2",
+    "w": 128,
+    "h": 128,
+    "format": "DXT1",
+    "mips": 1,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 4,
+     "DW9": "0x000fe07f",
+     "DW11_mip_max_level": 0,
+     "DW11": "0x00000000",
+     "DW12_mip_page": 0,
+     "DW12_upper": "0x00000000",
+     "DW13_byte2": 1,
+     "tiled_base_bytes": 8192,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   },
+   {
+    "family": "RW4xb2",
+    "w": 128,
+    "h": 128,
+    "format": "DXT1",
+    "mips": 8,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 4,
+     "DW9": "0x000fe07f",
+     "DW11_mip_max_level": 7,
+     "DW11": "0x000001c0",
+     "DW12_mip_page": 2,
+     "DW12_upper": "0x00002000",
+     "DW13_byte2": 8,
+     "tiled_base_bytes": 8192,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   },
+   {
+    "family": "RW4xb2",
+    "w": 127,
+    "h": 128,
+    "format": "DXT1",
+    "mips": 1,
+    "representable": true,
+    "refuse": "below 128 texels (BCn): shipped DW12 is 0 / packed for such textures \u2014 refuse (measured exceptions)"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 160,
+    "h": 128,
+    "format": "DXT5",
+    "mips": 1,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 8,
+     "DW9": "0x000fe09f",
+     "DW11_mip_max_level": 0,
+     "DW11": "0x00000000",
+     "DW12_mip_page": 0,
+     "DW12_upper": "0x00000000",
+     "DW13_byte2": 1,
+     "tiled_base_bytes": 32768,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   },
+   {
+    "family": "RW4xb2",
+    "w": 2048,
+    "h": 4096,
+    "format": "DXT1",
+    "mips": 13,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 64,
+     "DW9": "0x01ffe7ff",
+     "DW11_mip_max_level": 12,
+     "DW11": "0x00000300",
+     "DW12_mip_page": 1024,
+     "DW12_upper": "0x00400000",
+     "DW13_byte2": 13,
+     "tiled_base_bytes": 4194304,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   },
+   {
+    "family": "RW4xb2",
+    "w": 8192,
+    "h": 8192,
+    "format": "DXT1",
+    "mips": 14,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 256,
+     "DW9": "0x03ffffff",
+     "DW11_mip_max_level": 13,
+     "DW11": "0x00000340",
+     "DW12_mip_page": 8192,
+     "DW12_upper": "0x02000000",
+     "DW13_byte2": 14,
+     "tiled_base_bytes": 33554432,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   },
+   {
+    "family": "RW4xb2",
+    "w": 8192,
+    "h": 8192,
+    "format": "DXT5",
+    "mips": 14,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 256,
+     "DW9": "0x03ffffff",
+     "DW11_mip_max_level": 13,
+     "DW11": "0x00000340",
+     "DW12_mip_page": 16384,
+     "DW12_upper": "0x04000000",
+     "DW13_byte2": 14,
+     "tiled_base_bytes": 67108864,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   },
+   {
+    "family": "RW4xb2",
+    "w": 8192,
+    "h": 8192,
+    "format": "DXT1",
+    "mips": 15,
+    "representable": false,
+    "refuse": "more levels (15) than the size halves to (14)"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 8193,
+    "h": 128,
+    "format": "DXT1",
+    "mips": 1,
+    "representable": false,
+    "refuse": "width / height outside the 13-bit DW9 field (1..8192)"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 128,
+    "h": 8193,
+    "format": "DXT1",
+    "mips": 1,
+    "representable": false,
+    "refuse": "width / height outside the 13-bit DW9 field (1..8192)"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 128,
+    "h": 128,
+    "format": "DXT1",
+    "mips": 0,
+    "representable": false,
+    "refuse": "mip count outside the 4-bit DW11 field (1..16)"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 128,
+    "h": 128,
+    "format": "DXT1",
+    "mips": 17,
+    "representable": false,
+    "refuse": "mip count outside the 4-bit DW11 field (1..16)"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 16,
+    "h": 256,
+    "format": "DXT1",
+    "mips": 9,
+    "representable": true,
+    "refuse": "below 128 texels (BCn): shipped DW12 is 0 / packed for such textures \u2014 refuse (measured exceptions)"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 32,
+    "h": 32,
+    "format": "8_8_8_8",
+    "mips": 1,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 1,
+     "DW9": "0x0003e01f",
+     "DW11_mip_max_level": 0,
+     "DW11": "0x00000000",
+     "DW12_mip_page": 0,
+     "DW12_upper": "0x00000000",
+     "DW13_byte2": 1,
+     "tiled_base_bytes": 4096,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   },
+   {
+    "family": "RW4xb2",
+    "w": 31,
+    "h": 32,
+    "format": "8_8_8_8",
+    "mips": 1,
+    "representable": true,
+    "refuse": "below 32 texels (8_8_8_8): base does not fill a tile \u2014 refuse"
+   },
+   {
+    "family": "RW4xb2",
+    "w": 8192,
+    "h": 8192,
+    "format": "8_8_8_8",
+    "mips": 14,
+    "representable": true,
+    "expected": {
+     "DW7_pitch32": 256,
+     "DW9": "0x03ffffff",
+     "DW11_mip_max_level": 13,
+     "DW11": "0x00000340",
+     "DW12_mip_page": 65536,
+     "DW12_upper": "0x10000000",
+     "DW13_byte2": 14,
+     "tiled_base_bytes": 268435456,
+     "DW8": "preserved from the shipped descriptor"
+    }
+   }
+  ],
+  "GNF": [
+   {
+    "family": "GNF",
+    "w": 4,
+    "h": 4,
+    "format": "BC1",
+    "levels": 1,
+    "representable": true,
+    "expected": {
+     "word2": "0x0000c003",
+     "last_level": 0,
+     "pitch_field": 31,
+     "d7_data_bytes": 512,
+     "streamSize": 768
+    }
+   },
+   {
+    "family": "GNF",
+    "w": 32,
+    "h": 32,
+    "format": "BC1",
+    "levels": 6,
+    "representable": true,
+    "expected": {
+     "word2": "0x0007c01f",
+     "last_level": 5,
+     "pitch_field": 31,
+     "d7_data_bytes": 3072,
+     "streamSize": 3328
+    }
+   },
+   {
+    "family": "GNF",
+    "w": 164,
+    "h": 164,
+    "format": "BC7",
+    "levels": 1,
+    "representable": true,
+    "expected": {
+     "word2": "0x0028c0a3",
+     "last_level": 0,
+     "pitch_field": 191,
+     "d7_data_bytes": 36864,
+     "streamSize": 37120
+    }
+   },
+   {
+    "family": "GNF",
+    "w": 4096,
+    "h": 4096,
+    "format": "BC1",
+    "levels": 13,
+    "representable": true,
+    "expected": {
+     "word2": "0x03ffcfff",
+     "last_level": 12,
+     "pitch_field": 4095,
+     "d7_data_bytes": 11187200,
+     "streamSize": 11187456
+    }
+   },
+   {
+    "family": "GNF",
+    "w": 16384,
+    "h": 16384,
+    "format": "BC1",
+    "levels": 15,
+    "representable": true,
+    "expected": {
+     "word2": "0x0fffffff",
+     "last_level": 14,
+     "pitch_field": 16383,
+     "d7_data_bytes": 178959360,
+     "streamSize": 178959616
+    }
+   },
+   {
+    "family": "GNF",
+    "w": 16384,
+    "h": 16384,
+    "format": "BC7",
+    "levels": 15,
+    "representable": true,
+    "expected": {
+     "word2": "0x0fffffff",
+     "last_level": 14,
+     "pitch_field": 16383,
+     "d7_data_bytes": 357918720,
+     "streamSize": 357918976
+    }
+   },
+   {
+    "family": "GNF",
+    "w": 16384,
+    "h": 16384,
+    "format": "BC1",
+    "levels": 16,
+    "representable": false,
+    "refuse": "more levels (16) than the size halves to (15)"
+   },
+   {
+    "family": "GNF",
+    "w": 16385,
+    "h": 4,
+    "format": "BC1",
+    "levels": 1,
+    "representable": false,
+    "refuse": "width / height outside the 14-bit T# field (1..16384)"
+   },
+   {
+    "family": "GNF",
+    "w": 4,
+    "h": 16385,
+    "format": "BC1",
+    "levels": 1,
+    "representable": false,
+    "refuse": "width / height outside the 14-bit T# field (1..16384)"
+   },
+   {
+    "family": "GNF",
+    "w": 16400,
+    "h": 4,
+    "format": "BC1",
+    "levels": 1,
+    "representable": false,
+    "refuse": "width / height outside the 14-bit T# field (1..16384)"
+   },
+   {
+    "family": "GNF",
+    "w": 64,
+    "h": 32,
+    "format": "BC1",
+    "levels": 0,
+    "representable": false,
+    "refuse": "levels outside the 4-bit last_level field (1..16)"
+   },
+   {
+    "family": "GNF",
+    "w": 64,
+    "h": 32,
+    "format": "BC1",
+    "levels": 17,
+    "representable": false,
+    "refuse": "levels outside the 4-bit last_level field (1..16)"
+   },
+   {
+    "family": "GNF",
+    "w": 16352,
+    "h": 16,
+    "format": "BC1",
+    "levels": 1,
+    "representable": true,
+    "expected": {
+     "word2": "0x0003ffdf",
+     "last_level": 0,
+     "pitch_field": 16351,
+     "d7_data_bytes": 261632,
+     "streamSize": 261888
+    }
+   },
+   {
+    "family": "GNF",
+    "w": 16353,
+    "h": 16,
+    "format": "BC1",
+    "levels": 1,
+    "representable": true,
+    "expected": {
+     "word2": "0x0003ffe0",
+     "last_level": 0,
+     "pitch_field": 16383,
+     "d7_data_bytes": 262144,
+     "streamSize": 262400
+    }
+   }
+  ],
+  "RW4ps3": [
+   {
+    "family": "RW4ps3",
+    "w": 4,
+    "h": 4,
+    "format": "DXT1",
+    "mips": 1,
+    "representable": true,
+    "expected": {
+     "word12": "0x00040004",
+     "word13": "0x01000000",
+     "slot_bytes": 8
+    }
+   },
+   {
+    "family": "RW4ps3",
+    "w": 2048,
+    "h": 2048,
+    "format": "DXT5",
+    "mips": 12,
+    "representable": true,
+    "expected": {
+     "word12": "0x08000800",
+     "word13": "0x0c000000",
+     "slot_bytes": 5592432
+    }
+   },
+   {
+    "family": "RW4ps3",
+    "w": 65535,
+    "h": 65535,
+    "format": "DXT1",
+    "mips": 16,
+    "representable": true,
+    "expected": {
+     "word12": "0xffffffff",
+     "word13": "0x10000000",
+     "slot_bytes": 2863311536
+    }
+   },
+   {
+    "family": "RW4ps3",
+    "w": 65535,
+    "h": 65535,
+    "format": "DXT5",
+    "mips": 1,
+    "representable": false,
+    "refuse": "linear slot length exceeds u32"
+   },
+   {
+    "family": "RW4ps3",
+    "w": 65535,
+    "h": 65535,
+    "format": "DXT5",
+    "mips": 2,
+    "representable": false,
+    "refuse": "linear slot length exceeds u32"
+   },
+   {
+    "family": "RW4ps3",
+    "w": 65535,
+    "h": 65535,
+    "format": "ARGB8",
+    "mips": 1,
+    "representable": false,
+    "refuse": "linear slot length exceeds u32"
+   },
+   {
+    "family": "RW4ps3",
+    "w": 65536,
+    "h": 4,
+    "format": "DXT1",
+    "mips": 1,
+    "representable": false,
+    "refuse": "width / height outside the 16-bit halves of word 12 (1..65535)"
+   },
+   {
+    "family": "RW4ps3",
+    "w": 32768,
+    "h": 32768,
+    "format": "ARGB8",
+    "mips": 1,
+    "representable": false,
+    "refuse": "linear slot length exceeds u32"
+   },
+   {
+    "family": "RW4ps3",
+    "w": 28377,
+    "h": 28377,
+    "format": "ARGB8",
+    "mips": 16,
+    "representable": false,
+    "refuse": "more levels (16) than the size halves to (15)"
+   },
+   {
+    "family": "RW4ps3",
+    "w": 128,
+    "h": 128,
+    "format": "DXT1",
+    "mips": 9,
+    "representable": false,
+    "refuse": "more levels (9) than the size halves to (8)"
+   }
+  ]
+ }
+}

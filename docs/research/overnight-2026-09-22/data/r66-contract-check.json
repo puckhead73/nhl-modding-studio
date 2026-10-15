@@ -1,0 +1,1303 @@
+{
+ "note": "R66 (analysis) - test a candidate per-level address contract against the level positions r66_rw4xb2_level_addresses.py FOUND\nfrom content. Nothing here reads game files; it reads only the r66 JSON.\n\nCandidate contract H1 (to be accepted only where the found positions agree):\n  * level k has texel dims (max(1, w >> k), max(1, h >> k)); block dims by the format's block size; a level's \"tile region\" is\n    align32(bw) x align32(bh) blocks x bytes-per-block, tiled with XGAddress2DTiledOffset over its own block grid;\n  * levels whose smaller texel dimension is > 16 are laid out one after another from offset 0 (base first), each in its own tile region;\n  * the first level whose smaller texel dimension is <= 16 opens the packed tail: one tile region at the running offset, and every\n    remaining level is placed inside it at block position (0, h_k / bs) when w_k > h_k, else (w_k / bs, 0) - i.e. the Xenos packed-mip\n    placement expressed in texels (an offset equal to the level's own size along the axis that keeps it inside the 32-texel tile).\nA found level counts as DECISIVE when its best score is below 0.5 x the 5th-percentile candidate score and below 0.35 x the median;\nonly decisive levels are used as evidence for or against H1. Undecided levels are listed, not counted.\nUsage: python r66_contract_check.py <r66.json> [<out.json>]\n",
+ "source": "docs/research/overnight-2026-09-22/data/r66-rw4xb2-level-addresses.json",
+ "titles": {
+  "nhl09": {
+   "records": 44,
+   "agree": {
+    "DXT1/own": 51,
+    "DXT1/packed": 11,
+    "DXT3/own": 31,
+    "DXT3/packed": 10,
+    "DXT5/own": 4,
+    "DXT5/packed": 1
+   },
+   "undecided": {
+    "DXN/own": 31,
+    "DXN/packed": 16,
+    "DXT1/own": 7,
+    "DXT1/packed": 22,
+    "DXT3/own": 5,
+    "DXT3/packed": 9
+   },
+   "disagree": [
+    {
+     "file": "\\barrier\\barrier_0_nm.rx2",
+     "shape": "512x256:DXN:m10",
+     "level": 4,
+     "blocks": [
+      8,
+      4
+     ],
+     "found": 49296,
+     "predicted": 200704,
+     "kind": "packed",
+     "score": 6.063,
+     "p05": 26.916,
+     "median": 43.818
+    },
+    {
+     "file": "\\barrier\\barrier_0_nm.rx2",
+     "shape": "512x256:DXN:m10",
+     "level": 5,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 53376,
+     "predicted": 197632,
+     "kind": "packed",
+     "score": 2.578,
+     "p05": 19.061,
+     "median": 44.959
+    },
+    {
+     "file": "\\blocker_common\\blocker_0_0_am.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 2720,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 20.283,
+     "p05": 45.555,
+     "median": 122.216
+    },
+    {
+     "file": "\\blocker_common\\blocker_0_100_am.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 2720,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 20.283,
+     "p05": 45.555,
+     "median": 122.216
+    },
+    {
+     "file": "\\body\\hand_cpm.rx2",
+     "shape": "256x256:DXT3:m9",
+     "level": 5,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 115200,
+     "predicted": 114944,
+     "kind": "packed",
+     "score": 1.361,
+     "p05": 6.257,
+     "median": 13.775
+    },
+    {
+     "file": "\\clipboard\\clipboard_0_0_am.rx2",
+     "shape": "64x64:DXT1:m7",
+     "level": 1,
+     "blocks": [
+      8,
+      8
+     ],
+     "found": 0,
+     "predicted": 8192,
+     "kind": "own",
+     "score": 0.0,
+     "p05": 63.75,
+     "median": 255.0
+    },
+    {
+     "file": "\\coachhead\\hair_1000_0_0_cm.rx2",
+     "shape": "512x512:DXT1:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 53376,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 1.321,
+     "p05": 5.156,
+     "median": 31.656
+    },
+    {
+     "file": "\\coachhead\\hair_1001_0_0_cm.rx2",
+     "shape": "512x512:DXT1:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 143488,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 1.446,
+     "p05": 7.201,
+     "median": 31.098
+    },
+    {
+     "file": "\\crowd\\crowd_team_108_0_0_cm.rx2",
+     "shape": "1024x2048:DXT1:m12",
+     "level": 7,
+     "blocks": [
+      2,
+      4
+     ],
+     "found": 446464,
+     "predicted": 1409056,
+     "kind": "packed",
+     "score": 1.833,
+     "p05": 6.819,
+     "median": 26.29
+    },
+    {
+     "file": "\\crowdmodel\\chair.rx2",
+     "shape": "512x512:DXT5:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 312832,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 1.366,
+     "p05": 12.327,
+     "median": 19.09
+    },
+    {
+     "file": "\\czfont\\czfont_1_tm.rx2",
+     "shape": "1024x1024:DXT3:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1410048,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 12.044,
+     "p05": 50.13,
+     "median": 76.784
+    },
+    {
+     "file": "\\czhead\\blackeye_1_3_cm.rx2",
+     "shape": "512x256:DXT3:m10",
+     "level": 5,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 3456,
+     "predicted": 197632,
+     "kind": "packed",
+     "score": 1.472,
+     "p05": 3.917,
+     "median": 6.445
+    },
+    {
+     "file": "\\czhead\\facialhair_0_0_cm.rx2",
+     "shape": "512x512:DXT3:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 57856,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 3.324,
+     "p05": 9.037,
+     "median": 14.673
+    },
+    {
+     "file": "\\czhead\\facialhair_0_1_cm.rx2",
+     "shape": "512x512:DXT3:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 365056,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 1.364,
+     "p05": 4.091,
+     "median": 8.442
+    },
+    {
+     "file": "\\fetrapper\\fetrapper_0_0_am.rx2",
+     "shape": "256x1024:DXT1:m11",
+     "level": 5,
+     "blocks": [
+      2,
+      8
+     ],
+     "found": 116352,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 22.638,
+     "p05": 47.363,
+     "median": 95.476
+    },
+    {
+     "file": "\\fetrapper\\fetrapper_0_10_am.rx2",
+     "shape": "256x1024:DXT1:m11",
+     "level": 5,
+     "blocks": [
+      2,
+      8
+     ],
+     "found": 116352,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 22.638,
+     "p05": 47.363,
+     "median": 95.476
+    }
+   ],
+   "packed_positions_found": {
+    "DXN 16x8 @+-143232": 1,
+    "DXN 32x16 @+-147312": 1,
+    "DXT1 16x16 @+256": 2,
+    "DXT1 16x64 @+256": 2,
+    "DXT1 16x8 @+512": 3,
+    "DXT1 32x16 @+1024": 3,
+    "DXT1 32x8 @+512": 1,
+    "DXT1 8x16 @+-962560": 1,
+    "DXT1 8x32 @+-72064": 2,
+    "DXT1 8x8 @+-135040": 1,
+    "DXT1 8x8 @+-44928": 1,
+    "DXT1 8x8 @+-21856": 2,
+    "DXT3 16x16 @+512": 3,
+    "DXT3 16x8 @+-193152": 1,
+    "DXT3 16x8 @+1024": 1,
+    "DXT3 32x16 @+4096": 4,
+    "DXT3 64x16 @+4096": 2,
+    "DXT3 8x8 @+-318976": 1,
+    "DXT3 8x8 @+-15360": 1,
+    "DXT3 8x8 @+-11776": 1,
+    "DXT3 8x8 @+512": 1,
+    "DXT5 16x16 @+512": 1,
+    "DXT5 8x8 @+-64000": 1
+   }
+  },
+  "nhl10": {
+   "records": 48,
+   "agree": {
+    "DXT1/own": 59,
+    "DXT1/packed": 21,
+    "DXT3/own": 31,
+    "DXT3/packed": 10,
+    "DXT5/own": 15,
+    "DXT5/packed": 6
+   },
+   "undecided": {
+    "DXN/own": 29,
+    "DXN/packed": 15,
+    "DXT1/own": 1,
+    "DXT1/packed": 9,
+    "DXT3/own": 7,
+    "DXT3/packed": 10,
+    "DXT5/own": 6,
+    "DXT5/packed": 3
+   },
+   "disagree": [
+    {
+     "file": "\\banner\\banner_0_0_cm.rx2",
+     "shape": "256x256:DXT1:m9",
+     "level": 5,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 32256,
+     "predicted": 57376,
+     "kind": "packed",
+     "score": 7.334,
+     "p05": 27.912,
+     "median": 78.074
+    },
+    {
+     "file": "\\banner\\banner_0_0_sm.rx2",
+     "shape": "64x64:DXT1:m7",
+     "level": 3,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 16672,
+     "predicted": 16416,
+     "kind": "packed",
+     "score": 3.026,
+     "p05": 20.011,
+     "median": 74.784
+    },
+    {
+     "file": "\\banner\\banner_0_1_cm.rx2",
+     "shape": "256x256:DXT1:m9",
+     "level": 5,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 58112,
+     "predicted": 57376,
+     "kind": "packed",
+     "score": 6.519,
+     "p05": 23.5,
+     "median": 79.082
+    },
+    {
+     "file": "\\banner\\banner_0_1_sm.rx2",
+     "shape": "64x64:DXT1:m7",
+     "level": 3,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 16640,
+     "predicted": 16416,
+     "kind": "packed",
+     "score": 9.798,
+     "p05": 22.094,
+     "median": 78.836
+    },
+    {
+     "file": "\\barrier\\barrier_0_nm.rx2",
+     "shape": "512x256:DXN:m10",
+     "level": 4,
+     "blocks": [
+      8,
+      4
+     ],
+     "found": 49296,
+     "predicted": 200704,
+     "kind": "packed",
+     "score": 6.063,
+     "p05": 26.916,
+     "median": 43.818
+    },
+    {
+     "file": "\\barrier\\barrier_0_nm.rx2",
+     "shape": "512x256:DXN:m10",
+     "level": 5,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 53376,
+     "predicted": 197632,
+     "kind": "packed",
+     "score": 2.578,
+     "p05": 19.061,
+     "median": 44.959
+    },
+    {
+     "file": "\\blocker_common\\blocker_0_0_26_am.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 2720,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 20.537,
+     "p05": 44.234,
+     "median": 123.069
+    },
+    {
+     "file": "\\blocker_common\\blocker_0_100_am.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 2720,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 20.537,
+     "p05": 44.234,
+     "median": 123.069
+    },
+    {
+     "file": "\\blocker_common\\blocker_0_100_nm.rx2",
+     "shape": "512x512:DXN:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 247808,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 6.732,
+     "p05": 29.984,
+     "median": 58.813
+    },
+    {
+     "file": "\\body\\hand_cpm.rx2",
+     "shape": "256x256:DXT3:m9",
+     "level": 5,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 115200,
+     "predicted": 114944,
+     "kind": "packed",
+     "score": 1.321,
+     "p05": 5.802,
+     "median": 14.165
+    },
+    {
+     "file": "\\crowd\\chair_cm.rx2",
+     "shape": "512x512:DXT5:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 312832,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 1.023,
+     "p05": 12.838,
+     "median": 19.602
+    },
+    {
+     "file": "\\crowd\\prop_team_0_cm.rx2",
+     "shape": "512x512:DXT1:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 142976,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 9.725,
+     "p05": 23.765,
+     "median": 42.537
+    },
+    {
+     "file": "\\crowd\\prop_team_10_cm.rx2",
+     "shape": "512x512:DXT1:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 142992,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 11.189,
+     "p05": 24.537,
+     "median": 43.836
+    },
+    {
+     "file": "\\czfont\\czfont_1_tm.rx2",
+     "shape": "1024x1024:DXT3:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1410304,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 12.713,
+     "p05": 50.229,
+     "median": 76.743
+    },
+    {
+     "file": "\\czhead\\blackeye_0_3_cm.rx2",
+     "shape": "512x256:DXT3:m10",
+     "level": 5,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 84992,
+     "predicted": 197632,
+     "kind": "packed",
+     "score": 2.484,
+     "p05": 5.652,
+     "median": 13.57
+    },
+    {
+     "file": "\\czhead\\eyebrow_0_0_cm.rx2",
+     "shape": "512x128:DXT3:m10",
+     "level": 4,
+     "blocks": [
+      8,
+      2
+     ],
+     "found": 119808,
+     "predicted": 115712,
+     "kind": "packed",
+     "score": 3.259,
+     "p05": 6.626,
+     "median": 12.624
+    },
+    {
+     "file": "\\czhead\\facialhair_0_0_cm.rx2",
+     "shape": "512x512:DXT3:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 57856,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 2.769,
+     "p05": 8.088,
+     "median": 12.924
+    },
+    {
+     "file": "\\czhead\\facialhair_0_1_cm.rx2",
+     "shape": "512x512:DXT3:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 320512,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 1.448,
+     "p05": 4.09,
+     "median": 5.88
+    },
+    {
+     "file": "\\czhead\\stitch_10_0_cm.rx2",
+     "shape": "128x64:DXT3:m8",
+     "level": 3,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 5376,
+     "predicted": 33792,
+     "kind": "packed",
+     "score": 1.258,
+     "p05": 2.878,
+     "median": 26.86
+    },
+    {
+     "file": "\\jersey\\texlib_0_0_0.rx2",
+     "shape": "1024x1024:DXT5:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1414144,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 6.348,
+     "p05": 38.58,
+     "median": 39.191
+    },
+    {
+     "file": "\\jersey\\texlib_0_0_1.rx2",
+     "shape": "1024x1024:DXT5:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1392896,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 2.949,
+     "p05": 16.982,
+     "median": 16.982
+    }
+   ],
+   "packed_positions_found": {
+    "DXN 16x8 @+-143232": 1,
+    "DXN 32x16 @+-147312": 1,
+    "DXN 8x8 @+-129024": 1,
+    "DXT1 16x16 @+256": 8,
+    "DXT1 16x8 @+512": 6,
+    "DXT1 32x16 @+1024": 5,
+    "DXT1 32x8 @+512": 1,
+    "DXT1 64x16 @+1024": 1,
+    "DXT1 8x8 @+-45440": 1,
+    "DXT1 8x8 @+-45424": 1,
+    "DXT1 8x8 @+-25088": 1,
+    "DXT1 8x8 @+-21856": 2,
+    "DXT1 8x8 @+256": 1,
+    "DXT1 8x8 @+288": 1,
+    "DXT1 8x8 @+768": 1,
+    "DXT3 16x16 @+512": 3,
+    "DXT3 16x8 @+-111616": 1,
+    "DXT3 16x8 @+-27392": 1,
+    "DXT3 16x8 @+1024": 1,
+    "DXT3 32x16 @+4096": 4,
+    "DXT3 32x8 @+5120": 1,
+    "DXT3 64x16 @+4096": 2,
+    "DXT3 8x8 @+-318976": 1,
+    "DXT3 8x8 @+-56320": 1,
+    "DXT3 8x8 @+-15104": 1,
+    "DXT3 8x8 @+512": 1,
+    "DXT5 16x16 @+512": 5,
+    "DXT5 8x8 @+-64000": 1,
+    "DXT5 8x8 @+-32512": 1,
+    "DXT5 8x8 @+-11264": 1,
+    "DXT5 8x8 @+256": 1
+   }
+  },
+  "nhl13": {
+   "records": 45,
+   "agree": {
+    "DXT1/own": 68,
+    "DXT1/packed": 12,
+    "DXT3/own": 28,
+    "DXT3/packed": 9,
+    "DXT5/own": 4,
+    "DXT5/packed": 1
+   },
+   "undecided": {
+    "DXN/own": 35,
+    "DXN/packed": 17,
+    "DXT1/own": 4,
+    "DXT1/packed": 26,
+    "DXT3/own": 1,
+    "DXT3/packed": 5
+   },
+   "disagree": [
+    {
+     "file": "\\banner\\banner_0_nm.rx2",
+     "shape": "256x512:DXN:m10",
+     "level": 4,
+     "blocks": [
+      4,
+      8
+     ],
+     "found": 2688,
+     "predicted": 197120,
+     "kind": "packed",
+     "score": 0.0,
+     "p05": 7.89,
+     "median": 38.89
+    },
+    {
+     "file": "\\banner\\banner_1_nm.rx2",
+     "shape": "256x512:DXN:m10",
+     "level": 4,
+     "blocks": [
+      4,
+      8
+     ],
+     "found": 124928,
+     "predicted": 197120,
+     "kind": "packed",
+     "score": 0.105,
+     "p05": 12.87,
+     "median": 38.382
+    },
+    {
+     "file": "\\banner\\header_0_10_cm.rx2",
+     "shape": "512x256:DXT3:m10",
+     "level": 5,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 201472,
+     "predicted": 197632,
+     "kind": "packed",
+     "score": 4.237,
+     "p05": 34.406,
+     "median": 50.729
+    },
+    {
+     "file": "\\banner\\poles_cm.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 25376,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 2.005,
+     "p05": 7.54,
+     "median": 119.097
+    },
+    {
+     "file": "\\banner\\poles_sm.rx2",
+     "shape": "64x64:DXT1:m7",
+     "level": 2,
+     "blocks": [
+      4,
+      4
+     ],
+     "found": 8704,
+     "predicted": 16640,
+     "kind": "packed",
+     "score": 0.0,
+     "p05": 0.084,
+     "median": 135.682
+    },
+    {
+     "file": "\\banner\\year_11_cm.rx2",
+     "shape": "256x64:DXT3:m9",
+     "level": 3,
+     "blocks": [
+      8,
+      2
+     ],
+     "found": 53504,
+     "predicted": 50176,
+     "kind": "packed",
+     "score": 9.885,
+     "p05": 41.868,
+     "median": 213.132
+    },
+    {
+     "file": "\\blocker\\blocker_0_11_nm.rx2",
+     "shape": "512x512:DXN:m10",
+     "level": 4,
+     "blocks": [
+      8,
+      8
+     ],
+     "found": 0,
+     "predicted": 360448,
+     "kind": "own",
+     "score": 7.734,
+     "p05": 20.83,
+     "median": 39.487
+    },
+    {
+     "file": "\\blocker\\blocker_0_12_nm.rx2",
+     "shape": "512x512:DXN:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 296960,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 0.0,
+     "p05": 16.914,
+     "median": 47.432
+    },
+    {
+     "file": "\\blocker\\blocker_0_am.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 25344,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 22.333,
+     "p05": 45.426,
+     "median": 130.484
+    },
+    {
+     "file": "\\blocker\\feblocker_0_11_0_dm.rx2",
+     "shape": "1024x1024:DXT3:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1325056,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 9.714,
+     "p05": 40.646,
+     "median": 58.764
+    },
+    {
+     "file": "\\blocker\\feblocker_0_11_0_tm.rx2",
+     "shape": "1024x1024:DXT1:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 678992,
+     "predicted": 712736,
+     "kind": "packed",
+     "score": 5.741,
+     "p05": 26.305,
+     "median": 39.501
+    },
+    {
+     "file": "\\blocker\\feblocker_0_11_1_tm.rx2",
+     "shape": "1024x1024:DXT1:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 705536,
+     "predicted": 712736,
+     "kind": "packed",
+     "score": 3.77,
+     "p05": 14.224,
+     "median": 14.224
+    },
+    {
+     "file": "\\blocker\\feblocker_0_12_0_dm.rx2",
+     "shape": "1024x1024:DXT3:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1135104,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 2.768,
+     "p05": 13.934,
+     "median": 15.379
+    },
+    {
+     "file": "\\coach\\coach_0_csm.rx2",
+     "shape": "512x512:DXT1:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1792,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 1.278,
+     "p05": 3.154,
+     "median": 5.881
+    },
+    {
+     "file": "\\crowd\\chair_cm.rx2",
+     "shape": "512x512:DXT5:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 312832,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 1.621,
+     "p05": 13.378,
+     "median": 20.453
+    },
+    {
+     "file": "\\crowd\\team_0_1_cm.rx2",
+     "shape": "2048x1024:DXT1:m12",
+     "level": 7,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 262656,
+     "predicted": 1409536,
+     "kind": "packed",
+     "score": 1.066,
+     "p05": 10.781,
+     "median": 33.364
+    },
+    {
+     "file": "\\effects\\powerring_0_1.rx2",
+     "shape": "256x1024:DXT1:m11",
+     "level": 5,
+     "blocks": [
+      2,
+      8
+     ],
+     "found": 182528,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 18.78,
+     "p05": 38.39,
+     "median": 58.305
+    }
+   ],
+   "packed_positions_found": {
+    "DXN 16x32 @+-193920": 1,
+    "DXN 16x32 @+-71680": 1,
+    "DXN 8x8 @+-79872": 1,
+    "DXT1 16x16 @+-7680": 1,
+    "DXT1 16x16 @+256": 3,
+    "DXT1 16x64 @+256": 2,
+    "DXT1 16x8 @+-1146368": 1,
+    "DXT1 16x8 @+512": 2,
+    "DXT1 32x16 @+1024": 3,
+    "DXT1 32x8 @+512": 1,
+    "DXT1 64x16 @+1024": 1,
+    "DXT1 8x32 @+-5888": 1,
+    "DXT1 8x8 @+-186624": 1,
+    "DXT1 8x8 @+-33712": 1,
+    "DXT1 8x8 @+-7168": 1,
+    "DXT1 8x8 @+768": 1,
+    "DXT1 8x8 @+800": 1,
+    "DXT3 16x16 @+512": 2,
+    "DXT3 16x8 @+1024": 1,
+    "DXT3 16x8 @+4864": 1,
+    "DXT3 32x16 @+4096": 2,
+    "DXT3 32x8 @+1024": 1,
+    "DXT3 32x8 @+4352": 1,
+    "DXT3 64x16 @+4096": 2,
+    "DXT3 8x8 @+-290304": 1,
+    "DXT3 8x8 @+-100352": 1,
+    "DXT3 8x8 @+256": 1,
+    "DXT5 16x16 @+512": 1,
+    "DXT5 8x8 @+-64000": 1
+   }
+  },
+  "legacy": {
+   "records": 41,
+   "agree": {
+    "DXT1/own": 64,
+    "DXT1/packed": 10,
+    "DXT3/own": 27,
+    "DXT3/packed": 9,
+    "DXT5/own": 4,
+    "DXT5/packed": 1
+   },
+   "undecided": {
+    "DXN/own": 27,
+    "DXN/packed": 13,
+    "DXT1/own": 4,
+    "DXT1/packed": 24,
+    "DXT3/own": 1,
+    "DXT3/packed": 4
+   },
+   "disagree": [
+    {
+     "file": "\\banner\\banner_0_nm.rx2",
+     "shape": "256x512:DXN:m10",
+     "level": 4,
+     "blocks": [
+      4,
+      8
+     ],
+     "found": 2688,
+     "predicted": 197120,
+     "kind": "packed",
+     "score": 0.0,
+     "p05": 7.89,
+     "median": 38.89
+    },
+    {
+     "file": "\\banner\\banner_1_nm.rx2",
+     "shape": "256x512:DXN:m10",
+     "level": 4,
+     "blocks": [
+      4,
+      8
+     ],
+     "found": 124928,
+     "predicted": 197120,
+     "kind": "packed",
+     "score": 0.105,
+     "p05": 12.87,
+     "median": 38.382
+    },
+    {
+     "file": "\\banner\\header_0_10_cm.rx2",
+     "shape": "512x256:DXT3:m10",
+     "level": 5,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 201472,
+     "predicted": 197632,
+     "kind": "packed",
+     "score": 4.237,
+     "p05": 34.406,
+     "median": 50.729
+    },
+    {
+     "file": "\\banner\\poles_cm.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 25376,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 2.005,
+     "p05": 7.54,
+     "median": 119.097
+    },
+    {
+     "file": "\\banner\\poles_sm.rx2",
+     "shape": "64x64:DXT1:m7",
+     "level": 2,
+     "blocks": [
+      4,
+      4
+     ],
+     "found": 8704,
+     "predicted": 16640,
+     "kind": "packed",
+     "score": 0.0,
+     "p05": 0.084,
+     "median": 135.682
+    },
+    {
+     "file": "\\banner\\year_11_cm.rx2",
+     "shape": "256x64:DXT3:m9",
+     "level": 3,
+     "blocks": [
+      8,
+      2
+     ],
+     "found": 53504,
+     "predicted": 50176,
+     "kind": "packed",
+     "score": 9.885,
+     "p05": 41.868,
+     "median": 213.132
+    },
+    {
+     "file": "\\blocker\\blocker_0_11_nm.rx2",
+     "shape": "512x512:DXN:m10",
+     "level": 4,
+     "blocks": [
+      8,
+      8
+     ],
+     "found": 0,
+     "predicted": 360448,
+     "kind": "own",
+     "score": 7.734,
+     "p05": 20.83,
+     "median": 39.487
+    },
+    {
+     "file": "\\blocker\\blocker_0_12_nm.rx2",
+     "shape": "512x512:DXN:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 296960,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 0.0,
+     "p05": 16.914,
+     "median": 47.432
+    },
+    {
+     "file": "\\blocker\\blocker_0_am.rx2",
+     "shape": "128x128:DXT1:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 2816,
+     "predicted": 24608,
+     "kind": "packed",
+     "score": 24.463,
+     "p05": 51.863,
+     "median": 97.244
+    },
+    {
+     "file": "\\blocker\\feblocker_0_11_0_dm.rx2",
+     "shape": "1024x1024:DXT3:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1325056,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 9.714,
+     "p05": 40.646,
+     "median": 58.764
+    },
+    {
+     "file": "\\blocker\\feblocker_0_11_0_tm.rx2",
+     "shape": "1024x1024:DXT1:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 678992,
+     "predicted": 712736,
+     "kind": "packed",
+     "score": 5.741,
+     "p05": 26.305,
+     "median": 39.501
+    },
+    {
+     "file": "\\blocker\\feblocker_0_11_1_tm.rx2",
+     "shape": "1024x1024:DXT1:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 705536,
+     "predicted": 712736,
+     "kind": "packed",
+     "score": 3.77,
+     "p05": 14.224,
+     "median": 14.224
+    },
+    {
+     "file": "\\blocker\\feblocker_0_12_0_dm.rx2",
+     "shape": "1024x1024:DXT3:m11",
+     "level": 7,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1135104,
+     "predicted": 1425664,
+     "kind": "packed",
+     "score": 2.768,
+     "p05": 13.934,
+     "median": 15.379
+    },
+    {
+     "file": "\\body\\hand_cpm.rx2",
+     "shape": "128x128:DXT3:m8",
+     "level": 4,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 50944,
+     "predicted": 49408,
+     "kind": "packed",
+     "score": 3.937,
+     "p05": 8.007,
+     "median": 69.037
+    },
+    {
+     "file": "\\coach\\coach_0_csm.rx2",
+     "shape": "512x512:DXT1:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 1792,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 1.278,
+     "p05": 3.154,
+     "median": 5.881
+    },
+    {
+     "file": "\\crowd\\chair_cm.rx2",
+     "shape": "512x512:DXT5:m10",
+     "level": 6,
+     "blocks": [
+      2,
+      2
+     ],
+     "found": 312832,
+     "predicted": 377088,
+     "kind": "packed",
+     "score": 1.621,
+     "p05": 13.378,
+     "median": 20.453
+    },
+    {
+     "file": "\\crowd\\team_0_1_cm.rx2",
+     "shape": "2048x1024:DXT1:m12",
+     "level": 7,
+     "blocks": [
+      4,
+      2
+     ],
+     "found": 262656,
+     "predicted": 1409536,
+     "kind": "packed",
+     "score": 1.066,
+     "p05": 10.781,
+     "median": 33.364
+    },
+    {
+     "file": "\\effects\\powerring_0_1.rx2",
+     "shape": "256x1024:DXT1:m11",
+     "level": 5,
+     "blocks": [
+      2,
+      8
+     ],
+     "found": 182528,
+     "predicted": 188448,
+     "kind": "packed",
+     "score": 18.78,
+     "p05": 38.39,
+     "median": 58.305
+    }
+   ],
+   "packed_positions_found": {
+    "DXN 16x32 @+-193920": 1,
+    "DXN 16x32 @+-71680": 1,
+    "DXN 8x8 @+-79872": 1,
+    "DXT1 16x16 @+-7680": 1,
+    "DXT1 16x16 @+256": 3,
+    "DXT1 16x64 @+256": 2,
+    "DXT1 16x8 @+-1146368": 1,
+    "DXT1 16x8 @+512": 1,
+    "DXT1 32x16 @+1024": 2,
+    "DXT1 32x8 @+512": 1,
+    "DXT1 64x16 @+1024": 1,
+    "DXT1 8x32 @+-5888": 1,
+    "DXT1 8x8 @+-186624": 1,
+    "DXT1 8x8 @+-33712": 1,
+    "DXT1 8x8 @+-21760": 1,
+    "DXT1 8x8 @+-7168": 1,
+    "DXT1 8x8 @+800": 1,
+    "DXT3 16x16 @+512": 2,
+    "DXT3 16x8 @+1024": 1,
+    "DXT3 16x8 @+4864": 1,
+    "DXT3 32x16 @+4096": 2,
+    "DXT3 32x8 @+1024": 1,
+    "DXT3 32x8 @+4352": 1,
+    "DXT3 64x16 @+4096": 2,
+    "DXT3 8x8 @+-290304": 1,
+    "DXT3 8x8 @+-100352": 1,
+    "DXT3 8x8 @+256": 1,
+    "DXT3 8x8 @+1792": 1,
+    "DXT5 16x16 @+512": 1,
+    "DXT5 8x8 @+-64000": 1
+   }
+  }
+ },
+ "grand": {
+  "agree DXT1 own": 242,
+  "agree DXT1 packed": 54,
+  "agree DXT3 own": 117,
+  "agree DXT3 packed": 38,
+  "agree DXT5 own": 27,
+  "agree DXT5 packed": 9,
+  "disagree own": 3,
+  "disagree packed": 69
+ }
+}

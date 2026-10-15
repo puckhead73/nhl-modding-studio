@@ -30,6 +30,11 @@ pub struct ProjectProfile {
     pub install_dir: String,
     pub db_paths: DbPaths,
     pub saves: Vec<SaveSlot>,
+    /// PS4: the matched game folder and the save-data location, chosen independently.
+    #[serde(default)]
+    pub game_dir: Option<String>,
+    #[serde(default)]
+    pub save_root: Option<String>,
     /// Whether the user has confirmed the game's big files are extracted.
     #[serde(default)]
     pub big_files_extracted: bool,
@@ -73,6 +78,8 @@ impl ProjectProfile {
             install_dir,
             db_paths: report.db_paths.clone(),
             saves: report.saves.clone(),
+            game_dir: report.game_dir.clone(),
+            save_root: report.save_root.clone(),
             big_files_extracted,
             big_files_acknowledged: true,
             settings: existing.map(|e| e.settings).unwrap_or_default(),
@@ -101,9 +108,16 @@ mod tests {
                 path: dir.join("SYS-DATA").to_string_lossy().into(),
                 container_version: "v4".into(),
                 writable: true,
+                profile: None,
+                title_id: None,
+                problem: None,
             }],
             minimum_met: true,
             extract_needed: false,
+            game_dir: None,
+            save_root: None,
+            game_candidates: Vec::new(),
+            problems: Vec::new(),
         }
     }
 
@@ -121,13 +135,19 @@ mod tests {
         let loaded = ProjectProfile::load(&dir).expect("sidecar loads");
         assert_eq!(loaded.game_id, "nhl14");
         assert_eq!(loaded.saves.len(), 1);
-        assert_eq!(loaded.settings.get("theme").map(String::as_str), Some("slate"));
+        assert_eq!(
+            loaded.settings.get("theme").map(String::as_str),
+            Some("slate")
+        );
 
         // Re-open with big files now extracted: settings must carry forward from the old sidecar.
         let reopened = ProjectProfile::from_report(&report_in(&dir), true).unwrap();
         assert!(reopened.big_files_extracted);
         assert!(reopened.big_files_acknowledged);
-        assert_eq!(reopened.settings.get("theme").map(String::as_str), Some("slate"));
+        assert_eq!(
+            reopened.settings.get("theme").map(String::as_str),
+            Some("slate")
+        );
 
         let _ = std::fs::remove_dir_all(&dir);
     }

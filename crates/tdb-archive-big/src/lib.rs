@@ -30,13 +30,17 @@
 //! Individual file payloads may be wrapped in `chunkzip` (zlib chunked
 //! container). [`Archive::read_entry`] transparently decompresses these via
 //! `tdb-archive-codec`; [`Archive::read_entry_raw`] returns the bytes as stored
-//! on disk. `chunklzx` (LZX) entries are not implemented — `read_entry` returns
-//! [`BigError::ChunkLzxUnsupported`] for them.
+//! on disk. `chunklzx` (LZX) entries decode through the promoted decoder (21 Sep 2026); a
+//! malformed one is [`BigError::ChunkLzxDecodeFailed`].
 
 #![forbid(unsafe_code)]
 #![warn(rust_2018_idioms)]
 
+pub mod big4;
 pub mod eb;
+pub mod loose;
+pub mod replan;
+pub mod stage;
 
 use std::collections::HashMap;
 
@@ -79,8 +83,12 @@ pub enum BigError {
     },
     #[error("entry `{0}` was not found in the archive")]
     EntryNotFound(String),
-    #[error("entry `{name}` is chunklzx-wrapped; LZX decompression is not yet implemented")]
-    ChunkLzxUnsupported { name: String },
+    #[error("chunklzx decompression of entry `{name}` failed: {source}")]
+    ChunkLzxDecodeFailed {
+        name: String,
+        #[source]
+        source: tdb_archive_codec::CodecError,
+    },
     #[error("chunkzip decompression of entry `{name}` failed: {source}")]
     ChunkZipDecodeFailed {
         name: String,
@@ -229,9 +237,13 @@ impl Archive {
         self.entries.iter()
     }
 
+    /// The archive bytes exactly as parsed (for span-preserving rewrites, see [`crate::replan`]).
+    pub fn bytes(&self) -> &[u8] {
+        &self.bytes
+    }
+
     /// Return the stored bytes for an entry, decompressing `chunkzip`-wrapped
-    /// payloads transparently. Returns [`BigError::ChunkLzxUnsupported`] for
-    /// chunklzx entries.
+    /// and `chunklzx`-wrapped payloads transparently.
     pub fn read_entry(&self, name: &str) -> Result<Vec<u8>, BigError> {
         let idx = *self
             .name_index
@@ -245,11 +257,12 @@ impl Archive {
     /// with [`Self::iter_entries`].
     pub fn read_entry_at(&self, idx: usize) -> Result<Vec<u8>, BigError> {
         let raw = self.read_entry_raw_at(idx)?;
-        // Auto-decompress chunkzip; pass through anything else; bail loudly on
-        // chunklzx.
+        // Auto-decompress chunkzip / chunklzx; pass through anything else; a decode failure is
+        // an error, never a silent pass-through of the wrapped bytes.
         if raw.len() >= 8 && &raw[..8] == tdb_archive_codec::MAGIC_CHUNKLZX {
-            return Err(BigError::ChunkLzxUnsupported {
+            return tdb_archive_codec::decompress_chunklzx(&raw).map_err(|source| BigError::ChunkLzxDecodeFailed {
                 name: self.entries[idx].name.clone(),
+                source,
             });
         }
         if raw.len() >= 8 && &raw[..8] == tdb_archive_codec::MAGIC_CHUNKZIP {

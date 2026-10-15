@@ -1,0 +1,33 @@
+# Confirmed relationship (PS4 titles only): each exhibition team's `league` code (kOtt.xMjj) is a
+# foreign key into the stock league table's `leagueid` (fsLK.aQrQ).
+#
+# Evidence: L1.1-A cross-tab on all seven PS4 anchors (NHL 15-21) — every populated team code
+# resolves to a stockleagues row whose name matches the real league at that cardinality (NHL 21:
+# 433 team rows over codes 0..23, 31 league rows 0..30). The table `fsLK` exists only on PS4, so the
+# audit skips this edge on every gen6/gen7 database (their league code is a vocabulary, not a
+# table reference) — no PS4 rule is imposed on older titles.
+#
+# The 5-bit field carries no null sentinel: 0 is the NHL row and 31 (all-ones) is simply a code
+# that no row backs, so `no_null_sentinels` keeps both in the audit. A team pointing at a code with
+# no row is a dangling reference (LEAGUE-R1 F2).
+
+name = "team-league"
+kind = "ForeignKey"
+cardinality = "ManyToOne"
+confidence = "Confirmed"
+notes = """
+Team league code -> stock league row, on titles that carry the stockleagues table (PS4 NHL 15-21).
+Every code is a real value (no null sentinel); a code without a row is dangling.
+"""
+
+[source]
+kind = "anchor-measurement"
+description = "L1.1-A league identity matrix section 1.3 (2026-09-17), all seven PS4 anchors"
+
+[[bindings]]
+source_table = "kOtt"
+source_field = "xMjj"
+target_table = "fsLK"
+target_field = "aQrQ"
+no_null_sentinels = true
+evidence_notes = "NHL 21 anchor 90ee1ec4...: 433 kOtt rows, codes 0..23 all present in fsLK (31 rows, ids 0..30); identical structure on NHL 15-20 PS4 anchors."

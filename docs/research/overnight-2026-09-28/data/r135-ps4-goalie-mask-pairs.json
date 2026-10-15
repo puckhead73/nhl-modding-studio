@@ -1,0 +1,3749 @@
+{
+ "note": "R135 - PS4 goalie mask (maskid, masktype) read / inspection contract inputs (research package 3, 28 Sep 2026). Read-only.\nPer distinct PS4 database source (anchors 15-19 / 21, genuine NHL 20 CUSA15439, NHL 19 patch 56, NHL 15 patch 00; the NHL 20 anchor is the\nNHL 19 base copy and is recorded only as an alias) and the title's vault (gccollections/gcschema: shipped only in boot.big; the Extracted\ncopies equal the boot.big members - R135a):\n  * catalogue: ge_nhl_goaliehelmettexturepack records -> (GoalieMaskTexture, GoalieHelmetBrand) with their typed ge_texture refs (FileRef of\n    the colour map and of the brand-shared maps); ge_nhl_goaliehelmet brand -> ge_gameobject name (geometry record); throat protector brands;\n  * every FileRef checked against the title's archive members (`nhl/data/kettle/<FileRef>.gnf`, any .big of the install);\n  * goalie rows (exhibitiongoalieequipment): pair class = unique | ambiguous (>1 record) | maskid under other brands only | maskid absent |\n    masktype not a catalogue brand (e.g. 99);\n  * team slots (exhibitionteams.goaliemask<k>_{starter,backup}): value -> brands that carry it (a slot has no brand of its own);\n  * Creation Zone: goaliemaskinfo.csv (assetid vs style*1000 + pattern; pattern/style in the catalogue), goaliemaskdisplayinfo.csv, and the\n    thumbnail members creationzone[_xl]/equipment/mask/mask<N>.gnf with N decomposed as brand*1000 + maskid (a NAME join, reported as such).\nTyped-attribute joins are data joins; which record the game draws, and whether it rejects a pair, is not observed.\nUsage: python r135_ps4_goalie_mask_pairs.py <out.json>\n",
+ "titles": {
+  "nhl15": {
+   "vault_sha256": {
+    "gccollections.vlt": "d1ec595c56b6d87692ac3c47919de739af41929847252669719f6584e5229c77",
+    "gccollections.bin": "0684ef978cbb8ae1e34ba8abb8c98f09187154544be44de5c647d2b96ec66bd2",
+    "gcschema.bin": "0223c45c73ef0fd16b19cd4f62c72bd16c55b3ee1d1bca9b026e3a10a1eb45d3",
+    "gcschema.vlt": "5ca05db63fbcac60acf06c1212de1f4e8593fdc50ecd854fa349e5968a89c33e"
+   },
+   "packs": 506,
+   "pairs": 506,
+   "refs_per_pack": {
+    "4": 506
+   },
+   "fileref": {
+    "present": 2024
+   },
+   "fileref_absent_first": [],
+   "brands_in_packs": [
+    [
+     0,
+     256
+    ],
+    [
+     1,
+     81
+    ],
+    [
+     2,
+     51
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     16
+    ],
+    [
+     6,
+     69
+    ],
+    [
+     7,
+     1
+    ]
+   ],
+   "max_brands_per_maskid": 7,
+   "pairs_with_several_records": [],
+   "geometry_by_brand": {
+    "0": [
+     "goalie_helmet_itech"
+    ],
+    "1": [
+     "goalie_helmet_hasek"
+    ],
+    "2": [
+     "goalie_helmet_cooper"
+    ],
+    "3": [
+     "goalie_helmet_dryden"
+    ],
+    "4": [
+     "goalie_helmet_liut"
+    ],
+    "5": [
+     "goalie_helmet_bromley"
+    ],
+    "6": [
+     "itech_certifiedcage"
+    ],
+    "7": [
+     "goalie_helmet_brodeur"
+    ]
+   },
+   "throat_by_brand": {
+    "0": [
+     1
+    ],
+    "2": [
+     1
+    ]
+   },
+   "thumbnails": {
+    "std": {
+     "thumbnails": 89,
+     "decode_to_catalogue_pair": 89,
+     "catalogue_pairs_with_thumbnail": 89,
+     "thumbnails_not_catalogue_pairs_first": []
+    }
+   },
+   "creation_zone": {}
+  },
+  "nhl16": {
+   "vault_sha256": {
+    "gccollections.vlt": "202035cfc80f9dbf283ea610cef13262b92a6314cbe1c2fbeb360bbedc394d7e",
+    "gccollections.bin": "b1217f4a536542607b61a49aaa65b31bb74cb95756a90e2dcbe0c1ba9e092571",
+    "gcschema.bin": "ac1d8014934fd5258e9234b5c7138f1214cf0192fa49751fa405803274745dfd",
+    "gcschema.vlt": "304d2f87e5a13195fb34b3d91563a114ccf4cb72fb0955d05cf7b0b39e63c911"
+   },
+   "packs": 492,
+   "pairs": 492,
+   "refs_per_pack": {
+    "4": 492
+   },
+   "fileref": {
+    "present": 1968
+   },
+   "fileref_absent_first": [],
+   "brands_in_packs": [
+    [
+     0,
+     242
+    ],
+    [
+     1,
+     81
+    ],
+    [
+     2,
+     51
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     16
+    ],
+    [
+     6,
+     69
+    ],
+    [
+     7,
+     1
+    ]
+   ],
+   "max_brands_per_maskid": 7,
+   "pairs_with_several_records": [],
+   "geometry_by_brand": {
+    "0": [
+     "goalie_helmet_itech"
+    ],
+    "1": [
+     "goalie_helmet_hasek"
+    ],
+    "2": [
+     "goalie_helmet_cooper"
+    ],
+    "3": [
+     "goalie_helmet_dryden"
+    ],
+    "4": [
+     "goalie_helmet_liut"
+    ],
+    "5": [
+     "goalie_helmet_bromley"
+    ],
+    "6": [
+     "itech_certifiedcage"
+    ],
+    "7": [
+     "goalie_helmet_brodeur"
+    ]
+   },
+   "throat_by_brand": {
+    "6": [
+     1
+    ],
+    "0": [
+     1
+    ],
+    "2": [
+     1
+    ],
+    "1": [
+     1
+    ]
+   },
+   "thumbnails": {
+    "std": {
+     "thumbnails": 90,
+     "decode_to_catalogue_pair": 76,
+     "catalogue_pairs_with_thumbnail": 76,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      107,
+      114,
+      115,
+      212,
+      213,
+      214,
+      215,
+      216,
+      217
+     ]
+    }
+   },
+   "creation_zone": {}
+  },
+  "nhl17": {
+   "vault_sha256": {
+    "gccollections.vlt": "df39aeaa7f10a97570d35159d0a031b33f4a66e4ea5f9cef7bf213a2ddf06531",
+    "gccollections.bin": "2da87ee854ea844aac1b1484b9fe1f688e71b622bdee86d0d5a3eddbf5de5811",
+    "gcschema.bin": "31312e80917a5ea5e9f72b915a5ae3010ba996932b33ede23c8d42404adf7791",
+    "gcschema.vlt": "ad1edb3625fcf9399eecfefe79a30a8cf672d454fc6deddbc118f4ac5076ce79"
+   },
+   "packs": 526,
+   "pairs": 526,
+   "refs_per_pack": {
+    "4": 526
+   },
+   "fileref": {
+    "present": 2104
+   },
+   "fileref_absent_first": [],
+   "brands_in_packs": [
+    [
+     0,
+     274
+    ],
+    [
+     1,
+     81
+    ],
+    [
+     2,
+     51
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     16
+    ],
+    [
+     6,
+     71
+    ],
+    [
+     7,
+     1
+    ]
+   ],
+   "max_brands_per_maskid": 7,
+   "pairs_with_several_records": [],
+   "geometry_by_brand": {
+    "0": [
+     "goalie_helmet_itech"
+    ],
+    "1": [
+     "goalie_helmet_hasek"
+    ],
+    "2": [
+     "goalie_helmet_cooper"
+    ],
+    "3": [
+     "goalie_helmet_dryden"
+    ],
+    "4": [
+     "goalie_helmet_liut"
+    ],
+    "5": [
+     "goalie_helmet_bromley"
+    ],
+    "6": [
+     "itech_certifiedcage"
+    ],
+    "7": [
+     "goalie_helmet_brodeur"
+    ]
+   },
+   "throat_by_brand": {
+    "6": [
+     1
+    ],
+    "0": [
+     1
+    ],
+    "2": [
+     1
+    ],
+    "1": [
+     1
+    ]
+   },
+   "thumbnails": {
+    "std": {
+     "thumbnails": 90,
+     "decode_to_catalogue_pair": 76,
+     "catalogue_pairs_with_thumbnail": 76,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      107,
+      114,
+      115,
+      212,
+      213,
+      214,
+      215,
+      216,
+      217
+     ]
+    }
+   },
+   "creation_zone": {
+    "goaliemaskinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 577,
+      "wrapped": true,
+      "bytes": 2089,
+      "sha256": "b7224fed583b99e5c5c29a6cfc3b97e475abe375cda278ed4105e6f6a09fe629"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 28,
+     "columns": [
+      "index",
+      "identifier",
+      "name",
+      "assetid",
+      "stylerenderassetid",
+      "patternrenderassetid",
+      "stylename",
+      "styleabbreviation",
+      "patternname",
+      "logoid"
+     ],
+     "assetid_eq_style1000_plus_pattern": 0,
+     "pattern_style_in_catalogue": 28,
+     "assetid_has_std_thumbnail": 28,
+     "styles": [
+      [
+       "0",
+       "bauer"
+      ],
+      [
+       "1",
+       "cage2"
+      ],
+      [
+       "2",
+       "cage"
+      ],
+      [
+       "6",
+       "bauer"
+      ]
+     ],
+     "sample": [
+      {
+       "index": "0",
+       "identifier": "GoalieMask0",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "3",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "119",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$yellow",
+       "logoid": "4"
+      },
+      {
+       "index": "1",
+       "identifier": "GoalieMask1",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "4",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "120",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$white",
+       "logoid": "4"
+      },
+      {
+       "index": "2",
+       "identifier": "GoalieMask2",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "5",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "121",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$orange",
+       "logoid": "4"
+      }
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 8,
+     "columns": [
+      "displayindex",
+      "displayname",
+      "goalieposition",
+      "maskstyle"
+     ],
+     "rows_data": [
+      {
+       "displayindex": "0",
+       "displayname": "MaskPrimaryItech",
+       "goalieposition": "0",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "1",
+       "displayname": "MaskPrimaryHasek",
+       "goalieposition": "0",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "2",
+       "displayname": "MaskPrimaryCooper",
+       "goalieposition": "0",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "6",
+       "displayname": "MaskPrimaryCHL",
+       "goalieposition": "0",
+       "maskstyle": "6"
+      },
+      {
+       "displayindex": "7",
+       "displayname": "MaskBackupItech",
+       "goalieposition": "1",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "8",
+       "displayname": "MaskBackupHasek",
+       "goalieposition": "1",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "9",
+       "displayname": "MaskBackupCooper",
+       "goalieposition": "1",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "13",
+       "displayname": "MaskBackupCHL",
+       "goalieposition": "1",
+       "maskstyle": "6"
+      }
+     ]
+    }
+   }
+  },
+  "nhl18": {
+   "vault_sha256": {
+    "gccollections.vlt": "0a5e019da94855f20ebc9d389ffec8c538a9d464df2ea8b777c4b34746490fd8",
+    "gccollections.bin": "cf0cfab277acb2f5bb9598384e523f38ddf455c8e1bdee691677e2ce3f23999c",
+    "gcschema.bin": "464ae27714777498e779787c0b8d34eb1d34a0c0d541042e98d26a32e0f32b63",
+    "gcschema.vlt": "e6232c258ac236f53f06230082a282a66ddfd9a794cc13c3a77dbb63730505c2"
+   },
+   "packs": 578,
+   "pairs": 578,
+   "refs_per_pack": {
+    "4": 578
+   },
+   "fileref": {
+    "present": 2312
+   },
+   "fileref_absent_first": [],
+   "brands_in_packs": [
+    [
+     0,
+     326
+    ],
+    [
+     1,
+     81
+    ],
+    [
+     2,
+     51
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     16
+    ],
+    [
+     6,
+     71
+    ],
+    [
+     7,
+     1
+    ]
+   ],
+   "max_brands_per_maskid": 7,
+   "pairs_with_several_records": [],
+   "geometry_by_brand": {
+    "0": [
+     "goalie_helmet_itech"
+    ],
+    "1": [
+     "goalie_helmet_hasek"
+    ],
+    "2": [
+     "goalie_helmet_cooper"
+    ],
+    "3": [
+     "goalie_helmet_dryden"
+    ],
+    "4": [
+     "goalie_helmet_liut"
+    ],
+    "5": [
+     "goalie_helmet_bromley"
+    ],
+    "6": [
+     "itech_certifiedcage"
+    ],
+    "7": [
+     "goalie_helmet_brodeur"
+    ]
+   },
+   "throat_by_brand": {
+    "6": [
+     1
+    ],
+    "0": [
+     1
+    ],
+    "2": [
+     1
+    ],
+    "1": [
+     1
+    ]
+   },
+   "thumbnails": {
+    "std": {
+     "thumbnails": 90,
+     "decode_to_catalogue_pair": 81,
+     "catalogue_pairs_with_thumbnail": 81,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      114,
+      115,
+      216,
+      217,
+      218,
+      219,
+      220,
+      999
+     ]
+    }
+   },
+   "creation_zone": {
+    "goaliemaskinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 577,
+      "wrapped": true,
+      "bytes": 2089,
+      "sha256": "b7224fed583b99e5c5c29a6cfc3b97e475abe375cda278ed4105e6f6a09fe629"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 28,
+     "columns": [
+      "index",
+      "identifier",
+      "name",
+      "assetid",
+      "stylerenderassetid",
+      "patternrenderassetid",
+      "stylename",
+      "styleabbreviation",
+      "patternname",
+      "logoid"
+     ],
+     "assetid_eq_style1000_plus_pattern": 0,
+     "pattern_style_in_catalogue": 28,
+     "assetid_has_std_thumbnail": 28,
+     "styles": [
+      [
+       "0",
+       "bauer"
+      ],
+      [
+       "1",
+       "cage2"
+      ],
+      [
+       "2",
+       "cage"
+      ],
+      [
+       "6",
+       "bauer"
+      ]
+     ],
+     "sample": [
+      {
+       "index": "0",
+       "identifier": "GoalieMask0",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "3",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "119",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$yellow",
+       "logoid": "4"
+      },
+      {
+       "index": "1",
+       "identifier": "GoalieMask1",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "4",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "120",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$white",
+       "logoid": "4"
+      },
+      {
+       "index": "2",
+       "identifier": "GoalieMask2",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "5",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "121",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$orange",
+       "logoid": "4"
+      }
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 8,
+     "columns": [
+      "displayindex",
+      "displayname",
+      "goalieposition",
+      "maskstyle"
+     ],
+     "rows_data": [
+      {
+       "displayindex": "0",
+       "displayname": "MaskPrimaryItech",
+       "goalieposition": "0",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "1",
+       "displayname": "MaskPrimaryHasek",
+       "goalieposition": "0",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "2",
+       "displayname": "MaskPrimaryCooper",
+       "goalieposition": "0",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "6",
+       "displayname": "MaskPrimaryCHL",
+       "goalieposition": "0",
+       "maskstyle": "6"
+      },
+      {
+       "displayindex": "7",
+       "displayname": "MaskBackupItech",
+       "goalieposition": "1",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "8",
+       "displayname": "MaskBackupHasek",
+       "goalieposition": "1",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "9",
+       "displayname": "MaskBackupCooper",
+       "goalieposition": "1",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "13",
+       "displayname": "MaskBackupCHL",
+       "goalieposition": "1",
+       "maskstyle": "6"
+      }
+     ]
+    }
+   }
+  },
+  "nhl19": {
+   "vault_sha256": {
+    "gccollections.vlt": "6e537bb7b61f1832a88377757a3769586643f70d6452e9c4b61a76c2568146a1",
+    "gccollections.bin": "aece3f7a24bb26139472c0ec870d26909c3b9883838eef8997a76d32ee4c5a25",
+    "gcschema.bin": "1df5e941370e40f394ba3911038b9a7f7bc03a8737ce950293492fc3292ac659",
+    "gcschema.vlt": "96e01d98621c0ad09ca8a2dc6d89a655aaf5fda7104889659c0dd086192c36e6"
+   },
+   "packs": 940,
+   "pairs": 940,
+   "refs_per_pack": {
+    "4": 940
+   },
+   "fileref": {
+    "present": 3760
+   },
+   "fileref_absent_first": [],
+   "brands_in_packs": [
+    [
+     0,
+     344
+    ],
+    [
+     1,
+     81
+    ],
+    [
+     2,
+     51
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     16
+    ],
+    [
+     6,
+     71
+    ],
+    [
+     7,
+     1
+    ],
+    [
+     8,
+     344
+    ]
+   ],
+   "max_brands_per_maskid": 8,
+   "pairs_with_several_records": [],
+   "geometry_by_brand": {
+    "0": [
+     "goalie_helmet_itech"
+    ],
+    "1": [
+     "goalie_helmet_hasek"
+    ],
+    "2": [
+     "goalie_helmet_cooper"
+    ],
+    "3": [
+     "goalie_helmet_dryden"
+    ],
+    "4": [
+     "goalie_helmet_liut"
+    ],
+    "5": [
+     "goalie_helmet_bromley"
+    ],
+    "6": [
+     "itech_certifiedcage"
+    ],
+    "7": [
+     "goalie_helmet_brodeur"
+    ],
+    "8": [
+     "goalie_helmet_itech_toquepompom"
+    ]
+   },
+   "throat_by_brand": {
+    "0": [
+     1
+    ],
+    "8": [
+     1
+    ],
+    "6": [
+     1
+    ],
+    "2": [
+     1
+    ],
+    "1": [
+     1
+    ]
+   },
+   "thumbnails": {
+    "std": {
+     "thumbnails": 437,
+     "decode_to_catalogue_pair": 426,
+     "catalogue_pairs_with_thumbnail": 426,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      114,
+      115,
+      216,
+      217,
+      218,
+      219,
+      220,
+      368,
+      369
+     ]
+    },
+    "xl": {
+     "thumbnails": 437,
+     "decode_to_catalogue_pair": 426,
+     "catalogue_pairs_with_thumbnail": 426,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      114,
+      115,
+      216,
+      217,
+      218,
+      219,
+      220,
+      368,
+      369
+     ]
+    }
+   },
+   "creation_zone": {
+    "goaliemaskinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 854,
+      "wrapped": true,
+      "bytes": 3287,
+      "sha256": "0573c36d23249b11161c5e9848f142eac8e353ccf33da4f91849f06ca1368533"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 38,
+     "columns": [
+      "index",
+      "identifier",
+      "name",
+      "assetid",
+      "stylerenderassetid",
+      "patternrenderassetid",
+      "stylename",
+      "styleabbreviation",
+      "patternname",
+      "logoid",
+      "isprocasual",
+      "isearesort",
+      "canusetoque"
+     ],
+     "assetid_eq_style1000_plus_pattern": 38,
+     "pattern_style_in_catalogue": 38,
+     "assetid_has_std_thumbnail": 38,
+     "styles": [
+      [
+       "0",
+       "$GoalieMaskBrandAbbr"
+      ],
+      [
+       "0",
+       "bauer"
+      ],
+      [
+       "1",
+       "cage2"
+      ],
+      [
+       "2",
+       "cage"
+      ],
+      [
+       "6",
+       "bauer"
+      ]
+     ],
+     "sample": [
+      {
+       "index": "0",
+       "identifier": "GoalieMask0",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "119",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "119",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$yellow",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      },
+      {
+       "index": "1",
+       "identifier": "GoalieMask1",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "120",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "120",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$white",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      },
+      {
+       "index": "2",
+       "identifier": "GoalieMask2",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "121",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "121",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$orange",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      }
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 8,
+     "columns": [
+      "displayindex",
+      "displayname",
+      "goalieposition",
+      "maskstyle"
+     ],
+     "rows_data": [
+      {
+       "displayindex": "0",
+       "displayname": "MaskPrimaryItech",
+       "goalieposition": "0",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "1",
+       "displayname": "MaskPrimaryHasek",
+       "goalieposition": "0",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "2",
+       "displayname": "MaskPrimaryCooper",
+       "goalieposition": "0",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "6",
+       "displayname": "MaskPrimaryCHL",
+       "goalieposition": "0",
+       "maskstyle": "6"
+      },
+      {
+       "displayindex": "7",
+       "displayname": "MaskBackupItech",
+       "goalieposition": "1",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "8",
+       "displayname": "MaskBackupHasek",
+       "goalieposition": "1",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "9",
+       "displayname": "MaskBackupCooper",
+       "goalieposition": "1",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "13",
+       "displayname": "MaskBackupCHL",
+       "goalieposition": "1",
+       "maskstyle": "6"
+      }
+     ]
+    }
+   }
+  },
+  "nhl21": {
+   "vault_sha256": {
+    "gccollections.vlt": "dd4ceff033fd052a4e3a1e85c964d9b32a81778cd31e24c4f193e8fd54b4ea8d",
+    "gccollections.bin": "d668bbe104dbb441b2868a60fb3644537a3b4489b2bc30bad67f6056b22971db",
+    "gcschema.bin": "772ccd15e3c7a8bd00d47d30cb1960af0ed82fe51c452878d367350d45d26e34",
+    "gcschema.vlt": "04d0b43c5ad2b0ef7033d107912e95b39612daebf2a66dc99d731e7b05ff63d4"
+   },
+   "packs": 991,
+   "pairs": 991,
+   "refs_per_pack": {
+    "4": 991
+   },
+   "fileref": {
+    "present": 3964
+   },
+   "fileref_absent_first": [],
+   "brands_in_packs": [
+    [
+     0,
+     370
+    ],
+    [
+     1,
+     81
+    ],
+    [
+     2,
+     51
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     16
+    ],
+    [
+     6,
+     71
+    ],
+    [
+     7,
+     1
+    ],
+    [
+     8,
+     369
+    ]
+   ],
+   "max_brands_per_maskid": 8,
+   "pairs_with_several_records": [],
+   "geometry_by_brand": {
+    "0": [
+     "goalie_helmet_itech"
+    ],
+    "1": [
+     "goalie_helmet_hasek"
+    ],
+    "2": [
+     "goalie_helmet_cooper"
+    ],
+    "3": [
+     "goalie_helmet_dryden"
+    ],
+    "4": [
+     "goalie_helmet_liut"
+    ],
+    "5": [
+     "goalie_helmet_bromley"
+    ],
+    "6": [
+     "itech_certifiedcage"
+    ],
+    "7": [
+     "goalie_helmet_brodeur"
+    ],
+    "8": [
+     "goalie_helmet_itech_toquepompom"
+    ]
+   },
+   "throat_by_brand": {
+    "0": [
+     1
+    ],
+    "8": [
+     1
+    ],
+    "6": [
+     1
+    ],
+    "2": [
+     1
+    ],
+    "1": [
+     1
+    ]
+   },
+   "thumbnails": {
+    "std": {
+     "thumbnails": 462,
+     "decode_to_catalogue_pair": 453,
+     "catalogue_pairs_with_thumbnail": 453,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      114,
+      115,
+      216,
+      217,
+      218,
+      219,
+      220,
+      999
+     ]
+    },
+    "xl": {
+     "thumbnails": 462,
+     "decode_to_catalogue_pair": 453,
+     "catalogue_pairs_with_thumbnail": 453,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      114,
+      115,
+      216,
+      217,
+      218,
+      219,
+      220,
+      999
+     ]
+    }
+   },
+   "creation_zone": {
+    "goaliemaskinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 1141,
+      "wrapped": true,
+      "bytes": 4741,
+      "sha256": "c4920c36b481f247b89125709baf00db0f0690650f2f53960b55aa1176a81575"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 53,
+     "columns": [
+      "index",
+      "identifier",
+      "name",
+      "assetid",
+      "stylerenderassetid",
+      "patternrenderassetid",
+      "stylename",
+      "styleabbreviation",
+      "patternname",
+      "logoid",
+      "isprocasual",
+      "isearesort",
+      "canusetoque"
+     ],
+     "assetid_eq_style1000_plus_pattern": 53,
+     "pattern_style_in_catalogue": 53,
+     "assetid_has_std_thumbnail": 53,
+     "styles": [
+      [
+       "0",
+       "$GoalieMaskBrandAbbr"
+      ],
+      [
+       "0",
+       "bauer"
+      ],
+      [
+       "1",
+       "cage2"
+      ],
+      [
+       "2",
+       "cage"
+      ],
+      [
+       "6",
+       "bauer"
+      ]
+     ],
+     "sample": [
+      {
+       "index": "0",
+       "identifier": "GoalieMask0",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "119",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "119",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$yellow",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      },
+      {
+       "index": "1",
+       "identifier": "GoalieMask1",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "120",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "120",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$white",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      },
+      {
+       "index": "2",
+       "identifier": "GoalieMask2",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "121",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "121",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$orange",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      }
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 8,
+     "columns": [
+      "displayindex",
+      "displayname",
+      "goalieposition",
+      "maskstyle"
+     ],
+     "rows_data": [
+      {
+       "displayindex": "0",
+       "displayname": "MaskPrimaryItech",
+       "goalieposition": "0",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "1",
+       "displayname": "MaskPrimaryHasek",
+       "goalieposition": "0",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "2",
+       "displayname": "MaskPrimaryCooper",
+       "goalieposition": "0",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "6",
+       "displayname": "MaskPrimaryCHL",
+       "goalieposition": "0",
+       "maskstyle": "6"
+      },
+      {
+       "displayindex": "7",
+       "displayname": "MaskBackupItech",
+       "goalieposition": "1",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "8",
+       "displayname": "MaskBackupHasek",
+       "goalieposition": "1",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "9",
+       "displayname": "MaskBackupCooper",
+       "goalieposition": "1",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "13",
+       "displayname": "MaskBackupCHL",
+       "goalieposition": "1",
+       "maskstyle": "6"
+      }
+     ]
+    }
+   }
+  },
+  "nhl20": {
+   "vault_sha256": {
+    "gccollections.vlt": "31a2727f470d32262b9b0462378e1fc1bf907964f1b523ff954f4d49980e5a63",
+    "gccollections.bin": "e5266477c8c158653c4aa40f302a5fa2e782ec30ff48d9d10e8934013f8d3ef8",
+    "gcschema.bin": "c102d02353180813638e65897eb33d317078574d48fcdbc6c39ee8709234a13c",
+    "gcschema.vlt": "84b89a5cc4aeccfe5137b4a8dcd377d78eac75a70210f7544b9de4bfa6beea1a"
+   },
+   "packs": 974,
+   "pairs": 974,
+   "refs_per_pack": {
+    "4": 974
+   },
+   "fileref": {
+    "present": 3896
+   },
+   "fileref_absent_first": [],
+   "brands_in_packs": [
+    [
+     0,
+     361
+    ],
+    [
+     1,
+     81
+    ],
+    [
+     2,
+     51
+    ],
+    [
+     3,
+     16
+    ],
+    [
+     4,
+     16
+    ],
+    [
+     5,
+     16
+    ],
+    [
+     6,
+     71
+    ],
+    [
+     7,
+     1
+    ],
+    [
+     8,
+     361
+    ]
+   ],
+   "max_brands_per_maskid": 8,
+   "pairs_with_several_records": [],
+   "geometry_by_brand": {
+    "0": [
+     "goalie_helmet_itech"
+    ],
+    "1": [
+     "goalie_helmet_hasek"
+    ],
+    "2": [
+     "goalie_helmet_cooper"
+    ],
+    "3": [
+     "goalie_helmet_dryden"
+    ],
+    "4": [
+     "goalie_helmet_liut"
+    ],
+    "5": [
+     "goalie_helmet_bromley"
+    ],
+    "6": [
+     "itech_certifiedcage"
+    ],
+    "7": [
+     "goalie_helmet_brodeur"
+    ],
+    "8": [
+     "goalie_helmet_itech_toquepompom"
+    ]
+   },
+   "throat_by_brand": {
+    "0": [
+     1
+    ],
+    "8": [
+     1
+    ],
+    "6": [
+     1
+    ],
+    "2": [
+     1
+    ],
+    "1": [
+     1
+    ]
+   },
+   "thumbnails": {
+    "std": {
+     "thumbnails": 452,
+     "decode_to_catalogue_pair": 443,
+     "catalogue_pairs_with_thumbnail": 443,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      114,
+      115,
+      216,
+      217,
+      218,
+      219,
+      220,
+      999
+     ]
+    },
+    "xl": {
+     "thumbnails": 452,
+     "decode_to_catalogue_pair": 443,
+     "catalogue_pairs_with_thumbnail": 443,
+     "thumbnails_not_catalogue_pairs_first": [
+      61,
+      114,
+      115,
+      216,
+      217,
+      218,
+      219,
+      220,
+      999
+     ]
+    }
+   },
+   "creation_zone": {
+    "goaliemaskinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskinfo.csv",
+      "stored_bytes": 1064,
+      "wrapped": true,
+      "bytes": 4427,
+      "sha256": "c2d54977ef5b6d8ad5df12e4ac5cdd36d33751b80af38e135fd80f69b3ced200"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 50,
+     "columns": [
+      "index",
+      "identifier",
+      "name",
+      "assetid",
+      "stylerenderassetid",
+      "patternrenderassetid",
+      "stylename",
+      "styleabbreviation",
+      "patternname",
+      "logoid",
+      "isprocasual",
+      "isearesort",
+      "canusetoque"
+     ],
+     "assetid_eq_style1000_plus_pattern": 50,
+     "pattern_style_in_catalogue": 50,
+     "assetid_has_std_thumbnail": 50,
+     "styles": [
+      [
+       "0",
+       "$GoalieMaskBrandAbbr"
+      ],
+      [
+       "0",
+       "bauer"
+      ],
+      [
+       "1",
+       "cage2"
+      ],
+      [
+       "2",
+       "cage"
+      ],
+      [
+       "6",
+       "bauer"
+      ]
+     ],
+     "sample": [
+      {
+       "index": "0",
+       "identifier": "GoalieMask0",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "119",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "119",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$yellow",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      },
+      {
+       "index": "1",
+       "identifier": "GoalieMask1",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "120",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "120",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$white",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      },
+      {
+       "index": "2",
+       "identifier": "GoalieMask2",
+       "name": "$TXT_STANDARD_MASK_DESC",
+       "assetid": "121",
+       "stylerenderassetid": "0",
+       "patternrenderassetid": "121",
+       "stylename": "$bauer",
+       "styleabbreviation": "bauer",
+       "patternname": "$orange",
+       "logoid": "4",
+       "isprocasual": "2",
+       "isearesort": "1",
+       "canusetoque": "1"
+      }
+     ]
+    },
+    "goaliemaskdisplayinfo.csv": {
+     "source": {
+      "archive": "inxp_00.big",
+      "member": "nhl/data/common/gamemodes/creation_zone_csv/goaliemaskdisplayinfo.csv",
+      "stored_bytes": 238,
+      "wrapped": false,
+      "bytes": 238,
+      "sha256": "f8cd3044ddd6cd5e182f022311b6d2ce15510073fe77e307a438032942c2d04a"
+     },
+     "copies": [
+      "inxp_00.big"
+     ],
+     "rows": 8,
+     "columns": [
+      "displayindex",
+      "displayname",
+      "goalieposition",
+      "maskstyle"
+     ],
+     "rows_data": [
+      {
+       "displayindex": "0",
+       "displayname": "MaskPrimaryItech",
+       "goalieposition": "0",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "1",
+       "displayname": "MaskPrimaryHasek",
+       "goalieposition": "0",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "2",
+       "displayname": "MaskPrimaryCooper",
+       "goalieposition": "0",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "6",
+       "displayname": "MaskPrimaryCHL",
+       "goalieposition": "0",
+       "maskstyle": "6"
+      },
+      {
+       "displayindex": "7",
+       "displayname": "MaskBackupItech",
+       "goalieposition": "1",
+       "maskstyle": "0"
+      },
+      {
+       "displayindex": "8",
+       "displayname": "MaskBackupHasek",
+       "goalieposition": "1",
+       "maskstyle": "1"
+      },
+      {
+       "displayindex": "9",
+       "displayname": "MaskBackupCooper",
+       "goalieposition": "1",
+       "maskstyle": "2"
+      },
+      {
+       "displayindex": "13",
+       "displayname": "MaskBackupCHL",
+       "goalieposition": "1",
+       "maskstyle": "6"
+      }
+     ]
+    }
+   }
+  }
+ },
+ "sources": [
+  {
+   "label": "ps4-nhl15",
+   "title": "nhl15",
+   "db_sha256": "ae9d1d56bf896b83b3376cc179e5bf3a6986cb594880f43de8a81e5b7e5078d8",
+   "db_source": "anchors/ps4/nhl15",
+   "goalie_rows": 559,
+   "pair_classes": {
+    "unique": 559
+   },
+   "exceptions": {},
+   "distinct_pairs_used": 224,
+   "masktype_values": [
+    [
+     0,
+     416
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     140
+    ]
+   ],
+   "team_slot_columns": 14,
+   "team_slot_nonzero_uses": 3317,
+   "team_slot_classes": {
+    "one brand": 390,
+    "several brands": 2927
+   },
+   "team_slot_examples": {
+    "one brand": [
+     {
+      "value": 126,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 259,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 128,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 129,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 130,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 131,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 132,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     }
+    ],
+    "several brands": [
+     {
+      "value": 49,
+      "uses": 67,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 176,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 551,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 357,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 157,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 71,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 46,
+      "uses": 161,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 40,
+      "uses": 66,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 105,
+   "team_slot_values_with_brand0_thumbnail_name": 77
+  },
+  {
+   "label": "ps4-nhl16",
+   "title": "nhl16",
+   "db_sha256": "7d95f1dbe1862fdbc3c380afb1481a8dcff3a729a8f1d49736c60c0c4b95af7c",
+   "db_source": "anchors/ps4/nhl16",
+   "goalie_rows": 566,
+   "pair_classes": {
+    "maskid absent": 7,
+    "unique": 556,
+    "maskid under other brands only": 3
+   },
+   "exceptions": {
+    "maskid absent": [
+     {
+      "row": 0,
+      "playerid": null,
+      "maskid": 198,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 3,
+      "playerid": null,
+      "maskid": 208,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 21,
+      "playerid": null,
+      "maskid": 261,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 32,
+      "playerid": null,
+      "maskid": 198,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 203,
+      "playerid": null,
+      "maskid": 173,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 386,
+      "playerid": null,
+      "maskid": 173,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 527,
+      "playerid": null,
+      "maskid": 208,
+      "masktype": 0,
+      "brands_for_maskid": []
+     }
+    ],
+    "maskid under other brands only": [
+     {
+      "row": 78,
+      "playerid": null,
+      "maskid": 77,
+      "masktype": 0,
+      "brands_for_maskid": [
+       1
+      ]
+     },
+     {
+      "row": 241,
+      "playerid": null,
+      "maskid": 77,
+      "masktype": 0,
+      "brands_for_maskid": [
+       1
+      ]
+     },
+     {
+      "row": 338,
+      "playerid": null,
+      "maskid": 77,
+      "masktype": 0,
+      "brands_for_maskid": [
+       1
+      ]
+     }
+    ]
+   },
+   "distinct_pairs_used": 199,
+   "masktype_values": [
+    [
+     0,
+     421
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     6,
+     144
+    ]
+   ],
+   "team_slot_columns": 14,
+   "team_slot_nonzero_uses": 3401,
+   "team_slot_classes": {
+    "one brand": 396,
+    "several brands": 2995,
+    "no record": 10
+   },
+   "team_slot_examples": {
+    "one brand": [
+     {
+      "value": 126,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 259,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 128,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 129,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 130,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 131,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 132,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     }
+    ],
+    "several brands": [
+     {
+      "value": 49,
+      "uses": 69,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 183,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 572,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 363,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 164,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 74,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 46,
+      "uses": 168,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 40,
+      "uses": 68,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     }
+    ],
+    "no record": [
+     {
+      "value": 173,
+      "uses": 1,
+      "brands": []
+     },
+     {
+      "value": 198,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 208,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 261,
+      "uses": 1,
+      "brands": []
+     },
+     {
+      "value": 248,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 249,
+      "uses": 2,
+      "brands": []
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 88,
+   "team_slot_values_with_brand0_thumbnail_name": 76
+  },
+  {
+   "label": "ps4-nhl17",
+   "title": "nhl17",
+   "db_sha256": "de48b02b054e989a2797a07640da25b2a295416ad1c98d3b58c704d20a4d85ff",
+   "db_source": "anchors/ps4/nhl17",
+   "goalie_rows": 601,
+   "pair_classes": {
+    "unique": 596,
+    "maskid absent": 5
+   },
+   "exceptions": {
+    "maskid absent": [
+     {
+      "row": 3,
+      "playerid": null,
+      "maskid": 208,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 109,
+      "playerid": null,
+      "maskid": 208,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 119,
+      "playerid": null,
+      "maskid": 208,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 458,
+      "playerid": null,
+      "maskid": 208,
+      "masktype": 0,
+      "brands_for_maskid": []
+     },
+     {
+      "row": 540,
+      "playerid": null,
+      "maskid": 208,
+      "masktype": 0,
+      "brands_for_maskid": []
+     }
+    ]
+   },
+   "distinct_pairs_used": 244,
+   "masktype_values": [
+    [
+     0,
+     491
+    ],
+    [
+     6,
+     110
+    ]
+   ],
+   "team_slot_columns": 18,
+   "team_slot_nonzero_uses": 3511,
+   "team_slot_classes": {
+    "one brand": 406,
+    "several brands": 3099,
+    "no record": 6
+   },
+   "team_slot_examples": {
+    "one brand": [
+     {
+      "value": 126,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 259,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 128,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 129,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 130,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 131,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 132,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     }
+    ],
+    "several brands": [
+     {
+      "value": 49,
+      "uses": 75,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 181,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 554,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 342,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 185,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 95,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 46,
+      "uses": 168,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 40,
+      "uses": 74,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     }
+    ],
+    "no record": [
+     {
+      "value": 208,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 248,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 249,
+      "uses": 2,
+      "brands": []
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 88,
+   "team_slot_values_with_brand0_thumbnail_name": 75
+  },
+  {
+   "label": "ps4-nhl18",
+   "title": "nhl18",
+   "db_sha256": "65eaa6e82c6dbad77b301f30284e9c2256096d78cf356d0dab7fdad722bb2704",
+   "db_source": "anchors/ps4/nhl18",
+   "goalie_rows": 714,
+   "pair_classes": {
+    "unique": 714
+   },
+   "exceptions": {},
+   "distinct_pairs_used": 287,
+   "masktype_values": [
+    [
+     0,
+     647
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     6,
+     66
+    ]
+   ],
+   "team_slot_columns": 18,
+   "team_slot_nonzero_uses": 4065,
+   "team_slot_classes": {
+    "one brand": 489,
+    "several brands": 3572,
+    "no record": 4
+   },
+   "team_slot_examples": {
+    "one brand": [
+     {
+      "value": 126,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 107,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 128,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 129,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 130,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 131,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 132,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     }
+    ],
+    "several brands": [
+     {
+      "value": 49,
+      "uses": 73,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 219,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 662,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 465,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 221,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 138,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 46,
+      "uses": 203,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 40,
+      "uses": 72,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     }
+    ],
+    "no record": [
+     {
+      "value": 248,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 249,
+      "uses": 2,
+      "brands": []
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 92,
+   "team_slot_values_with_brand0_thumbnail_name": 76
+  },
+  {
+   "label": "ps4-nhl19-base",
+   "title": "nhl19",
+   "db_sha256": "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
+   "db_source": "anchors/ps4/nhl19",
+   "goalie_rows": 747,
+   "pair_classes": {
+    "unique": 743,
+    "masktype not a catalogue brand": 4
+   },
+   "exceptions": {
+    "masktype not a catalogue brand": [
+     {
+      "row": 93,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 648,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 687,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 703,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     }
+    ]
+   },
+   "distinct_pairs_used": 278,
+   "masktype_values": [
+    [
+     0,
+     704
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     5,
+     1
+    ],
+    [
+     6,
+     27
+    ],
+    [
+     99,
+     4
+    ]
+   ],
+   "team_slot_columns": 18,
+   "team_slot_nonzero_uses": 5763,
+   "team_slot_classes": {
+    "several brands": 5737,
+    "one brand": 22,
+    "no record": 4
+   },
+   "team_slot_examples": {
+    "several brands": [
+     {
+      "value": 126,
+      "uses": 3,
+      "brands": [
+       0,
+       8
+      ]
+     },
+     {
+      "value": 49,
+      "uses": 82,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 234,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 919,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 580,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 306,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 176,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 3,
+      "brands": [
+       0,
+       8
+      ]
+     }
+    ],
+    "one brand": [
+     {
+      "value": 79,
+      "uses": 22,
+      "brands": [
+       1
+      ]
+     }
+    ],
+    "no record": [
+     {
+      "value": 248,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 249,
+      "uses": 2,
+      "brands": []
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 732,
+   "team_slot_values_with_brand0_thumbnail_name": 280
+  },
+  {
+   "label": "ps4-nhl21",
+   "title": "nhl21",
+   "db_sha256": "90ee1ec49d36dbb0f6d9cefe75e259d9661e3aa05338d03347b4842e33c8e9f9",
+   "db_source": "anchors/ps4/nhl21",
+   "goalie_rows": 749,
+   "pair_classes": {
+    "unique": 744,
+    "masktype not a catalogue brand": 5
+   },
+   "exceptions": {
+    "masktype not a catalogue brand": [
+     {
+      "row": 75,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 467,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 491,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 503,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 509,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     }
+    ]
+   },
+   "distinct_pairs_used": 260,
+   "masktype_values": [
+    [
+     0,
+     712
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     3,
+     10
+    ],
+    [
+     4,
+     3
+    ],
+    [
+     5,
+     2
+    ],
+    [
+     6,
+     5
+    ],
+    [
+     99,
+     5
+    ]
+   ],
+   "team_slot_columns": 18,
+   "team_slot_nonzero_uses": 5959,
+   "team_slot_classes": {
+    "several brands": 5929,
+    "one brand": 26,
+    "no record": 4
+   },
+   "team_slot_examples": {
+    "several brands": [
+     {
+      "value": 126,
+      "uses": 4,
+      "brands": [
+       0,
+       8
+      ]
+     },
+     {
+      "value": 49,
+      "uses": 91,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 249,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 1003,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 538,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 334,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 163,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 3,
+      "brands": [
+       0,
+       8
+      ]
+     }
+    ],
+    "one brand": [
+     {
+      "value": 79,
+      "uses": 24,
+      "brands": [
+       1
+      ]
+     },
+     {
+      "value": 401,
+      "uses": 2,
+      "brands": [
+       0
+      ]
+     }
+    ],
+    "no record": [
+     {
+      "value": 248,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 249,
+      "uses": 2,
+      "brands": []
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 719,
+   "team_slot_values_with_brand0_thumbnail_name": 281
+  },
+  {
+   "label": "ps4-nhl20-real",
+   "title": "nhl20",
+   "db_sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+   "db_source": "CUSA15439 inxp_00.big (01.00)",
+   "goalie_rows": 773,
+   "pair_classes": {
+    "unique": 768,
+    "masktype not a catalogue brand": 5
+   },
+   "exceptions": {
+    "masktype not a catalogue brand": [
+     {
+      "row": 88,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 559,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 592,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 605,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 611,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     }
+    ]
+   },
+   "distinct_pairs_used": 259,
+   "masktype_values": [
+    [
+     0,
+     742
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     6
+    ],
+    [
+     3,
+     8
+    ],
+    [
+     4,
+     3
+    ],
+    [
+     5,
+     2
+    ],
+    [
+     6,
+     5
+    ],
+    [
+     99,
+     5
+    ]
+   ],
+   "team_slot_columns": 18,
+   "team_slot_nonzero_uses": 5721,
+   "team_slot_classes": {
+    "several brands": 5695,
+    "one brand": 22,
+    "no record": 4
+   },
+   "team_slot_examples": {
+    "several brands": [
+     {
+      "value": 126,
+      "uses": 3,
+      "brands": [
+       0,
+       8
+      ]
+     },
+     {
+      "value": 49,
+      "uses": 88,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 243,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 931,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 539,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 310,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 163,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 3,
+      "brands": [
+       0,
+       8
+      ]
+     }
+    ],
+    "one brand": [
+     {
+      "value": 79,
+      "uses": 22,
+      "brands": [
+       1
+      ]
+     }
+    ],
+    "no record": [
+     {
+      "value": 248,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 249,
+      "uses": 2,
+      "brands": []
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 747,
+   "team_slot_values_with_brand0_thumbnail_name": 279
+  },
+  {
+   "label": "ps4-nhl19-patch56",
+   "title": "nhl19",
+   "db_sha256": "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d",
+   "db_source": "CUSA11126 patch_inxp_56.big entry 504; base meta",
+   "goalie_rows": 849,
+   "pair_classes": {
+    "unique": 845,
+    "masktype not a catalogue brand": 4
+   },
+   "exceptions": {
+    "masktype not a catalogue brand": [
+     {
+      "row": 95,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 661,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 696,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "row": 712,
+      "playerid": null,
+      "maskid": 0,
+      "masktype": 99,
+      "brands_for_maskid": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     }
+    ]
+   },
+   "distinct_pairs_used": 264,
+   "masktype_values": [
+    [
+     0,
+     812
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     5,
+     2
+    ],
+    [
+     6,
+     20
+    ],
+    [
+     99,
+     4
+    ]
+   ],
+   "team_slot_columns": 18,
+   "team_slot_nonzero_uses": 5816,
+   "team_slot_classes": {
+    "several brands": 5786,
+    "one brand": 26,
+    "no record": 4
+   },
+   "team_slot_examples": {
+    "several brands": [
+     {
+      "value": 126,
+      "uses": 3,
+      "brands": [
+       0,
+       8
+      ]
+     },
+     {
+      "value": 49,
+      "uses": 81,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 236,
+      "brands": [
+       0,
+       1,
+       2,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 927,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 577,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 307,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 176,
+      "brands": [
+       0,
+       1,
+       6,
+       8
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 3,
+      "brands": [
+       0,
+       8
+      ]
+     }
+    ],
+    "one brand": [
+     {
+      "value": 79,
+      "uses": 26,
+      "brands": [
+       1
+      ]
+     }
+    ],
+    "no record": [
+     {
+      "value": 248,
+      "uses": 2,
+      "brands": []
+     },
+     {
+      "value": 249,
+      "uses": 2,
+      "brands": []
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 833,
+   "team_slot_values_with_brand0_thumbnail_name": 280
+  },
+  {
+   "label": "ps4-nhl15-patch00",
+   "title": "nhl15",
+   "db_sha256": "abe36f58fd0a65ab074aff13f83f2e671b707afc539ee57c01df128200c320ff",
+   "db_source": "CUSA00561 patch_inxp00.big; base meta",
+   "goalie_rows": 559,
+   "pair_classes": {
+    "unique": 559
+   },
+   "exceptions": {},
+   "distinct_pairs_used": 224,
+   "masktype_values": [
+    [
+     0,
+     416
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     6,
+     140
+    ]
+   ],
+   "team_slot_columns": 14,
+   "team_slot_nonzero_uses": 3317,
+   "team_slot_classes": {
+    "one brand": 390,
+    "several brands": 2927
+   },
+   "team_slot_examples": {
+    "one brand": [
+     {
+      "value": 126,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 127,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 259,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 128,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 129,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 130,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 131,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     },
+     {
+      "value": 132,
+      "uses": 1,
+      "brands": [
+       0
+      ]
+     }
+    ],
+    "several brands": [
+     {
+      "value": 49,
+      "uses": 67,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 45,
+      "uses": 176,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 1,
+      "uses": 551,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 6,
+      "uses": 357,
+      "brands": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "value": 65,
+      "uses": 157,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 60,
+      "uses": 71,
+      "brands": [
+       0,
+       1,
+       6
+      ]
+     },
+     {
+      "value": 46,
+      "uses": 161,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     },
+     {
+      "value": 40,
+      "uses": 66,
+      "brands": [
+       0,
+       1,
+       2,
+       6
+      ]
+     }
+    ]
+   },
+   "goalie_rows_with_std_thumbnail_name": 105,
+   "team_slot_values_with_brand0_thumbnail_name": 77
+  }
+ ]
+}

@@ -124,7 +124,11 @@ pub struct TableCapacity {
 /// PS4 mains and pre-grown mirrors). A table absent from this title's schema is skipped. When no
 /// reliable ceiling exists (unknown title **and** a packed table), the row is reported unenforced so
 /// preview never blocks on a headroom it cannot know.
-pub fn project_capacity(db: &TdbFile, game_id: Option<&str>, creates: PendingCreates) -> Vec<TableCapacity> {
+pub fn project_capacity(
+    db: &TdbFile,
+    game_id: Option<&str>,
+    creates: PendingCreates,
+) -> Vec<TableCapacity> {
     let gen7 = game_id.and_then(gen7_ceilings);
     let mut out = Vec::new();
     for (i, cid) in ROSTER_TABLES.iter().enumerate() {

@@ -19,9 +19,15 @@ fn computes_ratings_for_a_real_player() {
 
     let profile = default_profile();
     // Default profile is Nominal, which ignores the maxima.
-    let cr = compute_person_ratings(&corpus, crosby.person_id, year, &profile, &AttributeMaxima::default())
-        .unwrap()
-        .expect("Crosby has a position + ratings");
+    let cr = compute_person_ratings(
+        &corpus,
+        crosby.person_id,
+        year,
+        &profile,
+        &AttributeMaxima::default(),
+    )
+    .unwrap()
+    .expect("Crosby has a position + ratings");
     let set = &cr.set;
 
     println!(

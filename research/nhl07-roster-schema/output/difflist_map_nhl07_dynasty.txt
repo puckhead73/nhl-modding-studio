@@ -1,0 +1,137 @@
+$ python research/nhl07-roster-schema/scripts/difflist_map.py anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1 0x1c anchors/xbox360/nhl07/databases/NHL07NG.db anchors/xbox360/nhl07/databases/NHL07NG-meta.xml
+meta tables: 90, with insert ids: 53, with delete ids: 52
+savegroups: {'dynasty': 29, 'league': 22, 'currentrosters': 9, 'defaultbiosattributes': 6, 'rosters': 16, 'rosterupdate': 9, 'settings': 4, 'defaultrosters': 3}
+
+save  role   parent  parent name                        inGame  recB pRecB   nf  pnf | maxins/maxdel savegroups
+WExj  insert HUMb    leaguetasks                        yes        8     8    4    4 | 64/-1 dynasty,league
+oWfM  delete HUMb    leaguetasks                        yes        4     8    1    4 | 64/-1 dynasty,league
+ioPQ  insert kGzd    leaguefreeagents                   yes        4     4    1    1 | 400/-1 dynasty,league
+oiBf  delete kGzd    leaguefreeagents                   yes        4     4    1    1 | 400/-1 dynasty,league
+XSfs  insert xZCi    gmdata                             yes      396   396   58   58 | 100/-1 dynasty
+BoxD  delete xZCi    gmdata                             yes        4   396    1   58 | 100/-1 dynasty
+ulaJ  UNMAPPED
+VMdm  insert ccZn    leagueownertask                    yes        8     8    2    2 | 64/-1 dynasty
+DCzJ  delete ccZn    leagueownertask                    yes        4     8    1    2 | 64/-1 dynasty
+esMb  insert IALy    leagueawardstable                  yes      328   328    9    9 | 200/-1 dynasty,league
+wiOU  delete IALy    leagueawardstable                  yes        4   328    1    9 | 200/-1 dynasty,league
+xFwu  insert WRGI    leaguestates                       yes        8     8    3    3 | 256/-1 dynasty,league
+TXSB  delete WRGI    leaguestates                       yes        4     8    1    3 | 256/-1 dynasty,league
+cSVD  UNMAPPED
+paEP  insert xxMJ    leagueretirementtable              yes      324   324    3    3 | 400/-1 dynasty
+fwKg  delete xxMJ    leagueretirementtable              yes        4   324    1    3 | 400/-1 dynasty
+KcZA  insert CtBM    leagueplayerseasonstats            yes       28    28   20   20 | 16000/-1 dynasty,league
+EeDv  delete CtBM    leagueplayerseasonstats            yes        4    28    1   20 | 16000/-1 dynasty,league
+rbMB  UNMAPPED
+Pwkd  insert rgQY    leaguerostertable                  yes       16    16   71   71 | 1280/-1 dynasty,league
+VeqS  delete rgQY    leaguerostertable                  yes        4    16    1   71 | 1280/-1 dynasty,league
+azBc  UNMAPPED
+wtoq  insert sziH    leaguerookiegoalieai               yes       20    20   27   27 | 60/-1 dynasty
+mXaF  delete sziH    leaguerookiegoalieai               yes        4    20    1   27 | 60/-1 dynasty
+PjxU  insert QfUJ    leagueteamstrategies               yes        8     8   11   11 | 32/-1 dynasty,league
+BRfb  delete QfUJ    leagueteamstrategies               yes        4     8    1   11 | 32/-1 dynasty,league
+ukol  UNMAPPED
+keBr  insert kPYO    leaguegamestats                    yes       16    16   19   19 | 1336/-1 dynasty,league
+moPE  delete kPYO    leaguegamestats                    yes        4    16    1   19 | 1336/-1 dynasty,league
+frUz  insert BRDa    leaguerookiebiotable               yes      508   508   42   42 | 160/-1 dynasty
+lJuw  delete BRDa    leaguerookiebiotable               yes        4   508    1   42 | 160/-1 dynasty
+KExm  UNMAPPED
+JvZd  insert wcLl    leaguetweaks                       yes     2044  2044    2    2 | 4/-1 dynasty,league
+zFDS  delete wcLl    leaguetweaks                       yes        4  2044    1    2 | 4/-1 dynasty,league
+wAMQ  UNMAPPED
+eiHK  insert PSFv    leaguearena                        yes        4     4    3    3 | 32/-1 dynasty,league
+coVl  delete PSFv    leaguearena                        yes        4     4    1    3 | 32/-1 dynasty,league
+HPAr  insert wFSR    leagueteamseasonstats              yes       36    36   43   43 | 320/-1 dynasty,league
+BJaE  delete wFSR    leagueteamseasonstats              yes        4    36    1   43 | 320/-1 dynasty,league
+uMRy  UNMAPPED
+SbrI  insert Ewsk    leagueteamplayoffsstats            yes       32    32   43   43 | 160/-1 dynasty,league
+wJln  delete Ewsk    leagueteamplayoffsstats            yes        4    32    1   43 | 160/-1 dynasty,league
+zMit  UNMAPPED
+oiax  insert ZXww    leaguenews                         yes       32    32   17   17 | 64/-1 dynasty,league
+egAy  delete ZXww    leaguenews                         yes        4    32    1   17 | 64/-1 dynasty,league
+Rlnw  UNMAPPED
+DnxP  insert sbGR    leagueteams                        yes        4     4    5    5 | 32/-1 dynasty,league
+dlfg  delete sbGR    leagueteams                        yes        4     4    1    5 | 32/-1 dynasty,league
+SoUW  UNMAPPED
+naRH  insert vHJZ    leagueoptions                      yes     2044  2044    2    2 | 1/-1 dynasty,league
+lYzo  delete vHJZ    leagueoptions                      yes        4  2044    1    2 | 1/-1 dynasty,league
+KtUe  UNMAPPED
+ZCvv  insert uGze    leagueemaildata                    yes        8     8    2    2 | 1200/-1 dynasty
+zYhA  delete uGze    leagueemaildata                    yes        4     8    1    2 | 1200/-1 dynasty
+gTQc  insert Icui    leaguerules                        yes     2044  2044    2    2 | 1/-1 dynasty,league
+CpyT  delete Icui    leaguerules                        yes        4  2044    1    2 | 1/-1 dynasty,league
+tktN  UNMAPPED
+ULcv  insert yvnq    leaguescheduletable                yes        8     8    7    7 | 1336/-1 dynasty,league
+CRmA  delete yvnq    leaguescheduletable                yes        4     8    1    7 | 1336/-1 dynasty,league
+tMBG  UNMAPPED
+ogsK  insert wiLv    leagueskaterai                     yes       48    48   61   61 | 1540/-1 dynasty,league
+eiil  delete wiLv    leagueskaterai                     yes        4    48    1   61 | 1540/-1 dynasty,league
+RPlb  UNMAPPED
+wOpG  insert cPLz    leaguerookieplayerai               yes       24    24   31   31 | 160/-1 dynasty
+eIbp  delete cPLz    leaguerookieplayerai               yes        4    24    1   31 | 160/-1 dynasty
+vmSc  insert kPCA    leaguegoalieai                     yes       40    40   53   53 | 300/-1 dynasty,league
+ZkIT  delete kPCA    leaguegoalieai                     yes        4    40    1   53 | 300/-1 dynasty,league
+WpPN  UNMAPPED
+INYI  insert sDbJ    leaguedraftpick                    yes        4     4    5    5 | 150/-1 dynasty
+CHqn  delete sDbJ    leaguedraftpick                    yes        4     4    1    5 | 150/-1 dynasty
+talx  UNMAPPED
+fcdR  insert MMxP    leagueplayerbiotable               yes      516   516   55   55 | 1600/-1 dynasty,league
+lWze  delete MMxP    leagueplayerbiotable               yes        4   516    1   55 | 1600/-1 dynasty,league
+Krok  UNMAPPED
+aAMH  insert juMS    leagueplayerplayoffsstats          yes       28    28   20   20 | 6400/-1 dynasty,league
+gSOo  delete juMS    leagueplayerplayoffsstats          yes        4    28    1   20 | 6400/-1 dynasty,league
+PPFi  UNMAPPED
+
+Game tables whose savegroups include 'roster' but have no table in this save:
+
+All savegroup memberships:
+  customgoalieai                       YzeG  ins=KboR  del=Exae  maxins=30   maxdel=-1   groups=rosters
+  customplayerai                       oDHy  ins=KERl  del=wKzK  maxins=150  maxdel=-1   groups=rosters
+  customplayerbiotable                 MqdK  ins=eUOR  del=oCMe  maxins=180  maxdel=-1   groups=rosters
+  exhibitionarena                      OEtS  ins=CTnc  del=None  maxins=30   maxdel=None groups=rosters
+  exhibitioncontroller                 EClp  ins=VLuJ  del=LFUm  maxins=1    maxdel=-1   groups=settings
+  exhibitiondownloadgoalieai           dDrd  ins=None  del=None  maxins=None maxdel=None groups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+  exhibitiondownloadplayerbio          EhOn  ins=None  del=None  maxins=None maxdel=None groups=rosters,currentrosters,defaultbiosattributes,rosterupdate
+  exhibitiondownloadskaterai           Raym  ins=None  del=None  maxins=None maxdel=None groups=rosters,currentrosters,defaultbiosattributes,rosterupdate
+  exhibitionfreeagents                 QEoV  ins=sAMA  del=mGOv  maxins=200  maxdel=-1   groups=currentrosters,defaultrosters,rosters,rosterupdate
+  exhibitiongoalieai                   yuHm  ins=None  del=None  maxins=None maxdel=None groups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+  exhibitionoptions                    JLWf  ins=PlbK  del=BPpl  maxins=1    maxdel=-1   groups=settings
+  exhibitionplayerbiotable             cPbu  ins=None  del=None  maxins=None maxdel=None groups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+  exhibitionplayers                    caBZ  ins=LZbD  del=Frps  maxins=180  maxdel=-1   groups=rosters
+  exhibitionrostertable                ulGe  ins=ibGM  del=AtUj  maxins=3200 maxdel=-1   groups=currentrosters,defaultrosters,rosters,rosterupdate
+  exhibitionrules                      FKif  ins=ISIq  del=CQSF  maxins=1    maxdel=-1   groups=settings
+  exhibitionskaterai                   yvSd  ins=None  del=None  maxins=None maxdel=None groups=currentrosters,defaultbiosattributes,rosters,rosterupdate
+  exhibitionteams                      ttOk  ins=fyFF  del=dULq  maxins=30   maxdel=-1   groups=rosters
+  exhibitionteamstrategies             oYeE  ins=znPC  del=JhBt  maxins=30   maxdel=-1   groups=rosters
+  exhibitiontweaks                     PwCR  ins=vOBu  del=ZkPB  maxins=4    maxdel=-1   groups=settings
+  gmdata                               xZCi  ins=XSfs  del=BoxD  maxins=100  maxdel=-1   groups=dynasty
+  leaguearena                          PSFv  ins=eiHK  del=coVl  maxins=32   maxdel=-1   groups=dynasty,league
+  leagueawardstable                    IALy  ins=esMb  del=wiOU  maxins=200  maxdel=-1   groups=dynasty,league
+  leaguedraftpick                      sDbJ  ins=INYI  del=CHqn  maxins=150  maxdel=-1   groups=dynasty
+  leagueemaildata                      uGze  ins=ZCvv  del=zYhA  maxins=1200 maxdel=-1   groups=dynasty
+  leaguefreeagents                     kGzd  ins=ioPQ  del=oiBf  maxins=400  maxdel=-1   groups=dynasty,league
+  leaguegamestats                      kPYO  ins=keBr  del=moPE  maxins=1336 maxdel=-1   groups=dynasty,league
+  leaguegoalieai                       kPCA  ins=vmSc  del=ZkIT  maxins=300  maxdel=-1   groups=dynasty,league
+  leaguenews                           ZXww  ins=oiax  del=egAy  maxins=64   maxdel=-1   groups=dynasty,league
+  leagueoptions                        vHJZ  ins=naRH  del=lYzo  maxins=1    maxdel=-1   groups=dynasty,league
+  leagueownertask                      ccZn  ins=VMdm  del=DCzJ  maxins=64   maxdel=-1   groups=dynasty
+  leagueplayerbiotable                 MMxP  ins=fcdR  del=lWze  maxins=1600 maxdel=-1   groups=dynasty,league
+  leagueplayerplayoffsstats            juMS  ins=aAMH  del=gSOo  maxins=6400 maxdel=-1   groups=dynasty,league
+  leagueplayerseasonstats              CtBM  ins=KcZA  del=EeDv  maxins=16000 maxdel=-1   groups=dynasty,league
+  leagueretirementtable                xxMJ  ins=paEP  del=fwKg  maxins=400  maxdel=-1   groups=dynasty
+  leaguerookiebiotable                 BRDa  ins=frUz  del=lJuw  maxins=160  maxdel=-1   groups=dynasty
+  leaguerookiegoalieai                 sziH  ins=wtoq  del=mXaF  maxins=60   maxdel=-1   groups=dynasty
+  leaguerookieplayerai                 cPLz  ins=wOpG  del=eIbp  maxins=160  maxdel=-1   groups=dynasty
+  leaguerostertable                    rgQY  ins=Pwkd  del=VeqS  maxins=1280 maxdel=-1   groups=dynasty,league
+  leaguerules                          Icui  ins=gTQc  del=CpyT  maxins=1    maxdel=-1   groups=dynasty,league
+  leaguescheduletable                  yvnq  ins=ULcv  del=CRmA  maxins=1336 maxdel=-1   groups=dynasty,league
+  leagueskaterai                       wiLv  ins=ogsK  del=eiil  maxins=1540 maxdel=-1   groups=dynasty,league
+  leaguestates                         WRGI  ins=xFwu  del=TXSB  maxins=256  maxdel=-1   groups=dynasty,league
+  leaguetasks                          HUMb  ins=WExj  del=oWfM  maxins=64   maxdel=-1   groups=dynasty,league
+  leagueteamplayoffsstats              Ewsk  ins=SbrI  del=wJln  maxins=160  maxdel=-1   groups=dynasty,league
+  leagueteampractice                   TlmR  ins=OcqD  del=UqYs  maxins=30   maxdel=-1   groups=league
+  leagueteams                          sbGR  ins=DnxP  del=dlfg  maxins=32   maxdel=-1   groups=dynasty,league
+  leagueteamseasonstats                wFSR  ins=HPAr  del=BJaE  maxins=320  maxdel=-1   groups=dynasty,league
+  leagueteamstrategies                 QfUJ  ins=PjxU  del=BRfb  maxins=32   maxdel=-1   groups=dynasty,league
+  leaguetweaks                         wcLl  ins=JvZd  del=zFDS  maxins=4    maxdel=-1   groups=dynasty,league
+  rosterversiontable                   bZvB  ins=tMYP  del=nGCg  maxins=1    maxdel=-1   groups=currentrosters,defaultrosters,rosters,rosterupdate
+

@@ -1,0 +1,474 @@
+{
+ "note": "R108 (P2, review 2026-09-26) - parsed in-payload references of team-art / kit members on the ARCHIVE-ONLY PS3 NHL 12 / 13 trees, from\nthe titles' own EB archive members. Per member: archive, row index, stored size / SHA-256, wrapper (chunkzip expected, established route\nR76 / developer receipt 03), decoded size / SHA-256, chunkzip-declared decoded size vs actual (wrapper-to-payload provenance); then the\nR104 RW4 parser (imported unchanged: file table, manifest sections, 0xEC0010 name dictionary with object-index checks) and the same checks:\nsubreference / atom counts, external-arena values, self-name test, scoped ASCII / djb2 search of non-payload bytes.\nSock grammar: NHL 12 two-file form `sock_{style}_{0|1}_{teamartid}_{variant}_cm` (R56 / R74; developer kit_files.rs TwoFile), NHL 13\nsingle-file `sock_{style}_{teamartid}_{variant}_cm`; other sock names are listed as residuals, not forced.\nOccupancy reconciliation: team-art ids per family recomputed with the corrected sock grammar; the R102 \"ids 0-1023 free in every family\"\nfigure for PS3 12 recomputed and compared with the published (superseded) value.\nUsage: python r108_ps3_12_13_payload_references.py <out.json>\n",
+ "trees": {
+  "ps3-nhl12": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 12\\[BLUS 30791] NHL\u00ae 12\\PS3_GAME\\USRDIR",
+   "members": 6775,
+   "per_family": {
+    "center_logo": {
+     "parsed": 213
+    },
+    "logo": {
+     "parsed": 1701
+    },
+    "kit_pant": {
+     "parsed": 979
+    },
+    "kit_sock_two_file": {
+     "parsed": 1946
+    },
+    "nameplate": {
+     "parsed": 969
+    },
+    "kit_jersey": {
+     "parsed": 967
+    }
+   },
+   "wrappers": {
+    "chunkzip": 6775
+   },
+   "declared_vs_decoded": {
+    "equal": 6775
+   },
+   "subreferences": {
+    "0": 6775
+   },
+   "atoms": {
+    "0": 6775
+   },
+   "external_arenas": {
+    "04000000 ffb00000 04000000": 6775
+   },
+   "self_name": {
+    "center_logo:self": 213,
+    "logo:self": 5102,
+    "kit_pant:self": 2937,
+    "kit_sock_two_file:self": 1946,
+    "nameplate:self": 969,
+    "kit_jersey:self": 5798
+   },
+   "cross_id_names": [],
+   "ascii_outside_dict": 0,
+   "hash_hits": 0,
+   "nonpayload_bytes": 6526436,
+   "refused": [],
+   "sock_residual_names": {
+    "sock_#_#_#_#.rpsgl": 40,
+    "sock_#_#_#_#_am.rpsgl": 18,
+    "sock_#_#_nm.rpsgl": 4,
+    "sock_#_#_sm.rpsgl": 4,
+    "sock_#_nm.rpsgl": 2,
+    "sock_#_sm.rpsgl": 2
+   },
+   "examples": {
+    "center_logo": {
+     "path": "rendering/icesurface/centerlogo_0_cm.rpsgl",
+     "archive": "cacherender.big",
+     "row": 0,
+     "stored_size": 156298,
+     "stored_sha256": "304b11d4d60ef7d1449d799a06f17ff75897e04c3faafad9c885d114a2f5904e",
+     "wrapper": "chunkzip",
+     "decoded_size": 1398768,
+     "decoded_sha256": "281c1e0715dae86bf4395ebcbff2a1e63e4d23857a09a15c38ea150a5e045cde",
+     "names": [
+      "centerlogo_0_cm.Raster"
+     ]
+    },
+    "logo": {
+     "path": "rendering/logo/texlib_0_0_0.rpsgl",
+     "archive": "cacherender.big",
+     "row": 4153,
+     "stored_size": 6550,
+     "stored_sha256": "49e5544e8f65b2e25f0c000f033670f4bef4def95bd4bc76df6bbe305b885495",
+     "wrapper": "chunkzip",
+     "decoded_size": 77552,
+     "decoded_sha256": "b98677b3618828aeb1426bd444d887df05ec0ce3110a8a62d1a84f5ae8b26bdd",
+     "names": [
+      "logo_0_0_0_0.Raster",
+      "logo_0_0_0_1.Raster",
+      "logo_0_0_0_2.Raster"
+     ]
+    },
+    "kit_pant": {
+     "path": "rendering/pant/texlib_0_0_0.rpsgl",
+     "archive": "cacherender.big",
+     "row": 5878,
+     "stored_size": 250406,
+     "stored_sha256": "e84e761e4252b9576a95e2149494dbc5c2257b086a453fcf3359f782835d8c7d",
+     "wrapper": "chunkzip",
+     "decoded_size": 569016,
+     "decoded_sha256": "6c04b4654b71d9d206550e5b22bb6b4e1f61479dc17eafe3540e31446519faad",
+     "names": [
+      "pant_0_0_0_cm.Raster",
+      "pant_0_0_0_nm.Raster",
+      "pant_0_0_0_sm.Raster"
+     ]
+    },
+    "kit_sock_two_file": {
+     "path": "rendering/sock/sock_0_0_0_0_cm.rpsgl",
+     "archive": "cacherender.big",
+     "row": 9210,
+     "stored_size": 8832,
+     "stored_sha256": "7d75b9b18dd049b580250c8a4b899d51efb71e4c748d960f0c0e28a457867888",
+     "wrapper": "chunkzip",
+     "decoded_size": 175416,
+     "decoded_sha256": "4ed295606f93776534f0364fdc167e12ffc08665f5cd653ea73d098b04b1b716",
+     "names": [
+      "sock_0_0_0_0_cm.Raster"
+     ]
+    },
+    "nameplate": {
+     "path": "rendering/jersey/name_0_0_0_cm.rpsgl",
+     "archive": "nocacherender.big",
+     "row": 68,
+     "stored_size": 1892,
+     "stored_sha256": "b473f4d348640657b0a49fbee60213d407f221ec60973f14f014a6dfc7709742",
+     "wrapper": "chunkzip",
+     "decoded_size": 350164,
+     "decoded_sha256": "1a55e4de6c38a0732ee547c37b3df8ce455b96b3b4478f35642572cd3777cadf",
+     "names": [
+      "name_0_0_0_cm.Raster"
+     ]
+    },
+    "kit_jersey": {
+     "path": "rendering/jersey/texlib_0_0_0.rpsgl",
+     "archive": "nocacherender.big",
+     "row": 1041,
+     "stored_size": 1184725,
+     "stored_sha256": "cebb1dc671e0e70d801fe47a132d7dff8e8688e20046296b0bdc7a46c372c831",
+     "wrapper": "chunkzip",
+     "decoded_size": 3671664,
+     "decoded_sha256": "8853dd259d885f9a83c46fa457bb267b6b8a86d9f38e6aef2f21b0c116887ea4",
+     "names": [
+      "font_0_0_0_cm.Raster",
+      "font_0_0_0_nm.Raster",
+      "font_0_0_0_sm.Raster",
+      "jersey_0_0_0_cm.Raster",
+      "jersey_0_0_0_sm.Raster",
+      "jersey_0_0_0_0_nm.Raster"
+     ]
+    }
+   },
+   "occupancy": {
+    "center_logo": {
+     "ids": 213
+    },
+    "logo": {
+     "ids": 337
+    },
+    "kit_pant": {
+     "ids": 228
+    },
+    "kit_sock": {
+     "ids": 228
+    },
+    "nameplate": {
+     "ids": 228
+    },
+    "kit_jersey": {
+     "ids": 228
+    }
+   },
+   "occupancy_reconciliation": {
+    "ids_0_1023_free_in_every_family_now": 773,
+    "r102_published": 761,
+    "families_now": [
+     "logo",
+     "kit_pant",
+     "kit_sock",
+     "nameplate",
+     "kit_jersey"
+    ],
+    "note": "R102 used R99 family regexes (single-file sock grammar, \"rink logo\" regex); recomputed here with the two-file sock grammar on NHL 12. Occupancy in the inspected archives only."
+   },
+   "hash_random_expectation": 27.9
+  },
+  "ps3-nhl13": {
+   "root": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 13\\PS3_GAME\\USRDIR",
+   "members": 5356,
+   "per_family": {
+    "center_logo": {
+     "parsed": 218
+    },
+    "logo": {
+     "parsed": 1700
+    },
+    "kit_pant": {
+     "parsed": 865
+    },
+    "kit_sock_single": {
+     "parsed": 865
+    },
+    "nameplate": {
+     "parsed": 843
+    },
+    "kit_jersey": {
+     "parsed": 865
+    }
+   },
+   "wrappers": {
+    "chunkzip": 5356
+   },
+   "declared_vs_decoded": {
+    "equal": 5356
+   },
+   "subreferences": {
+    "0": 5356
+   },
+   "atoms": {
+    "0": 5356
+   },
+   "external_arenas": {
+    "04000000 ffb00000 04000000": 5356
+   },
+   "self_name": {
+    "center_logo:self": 218,
+    "logo:self": 5099,
+    "kit_pant:self": 2592,
+    "kit_pant:OTHER": 3,
+    "kit_sock_single:self": 864,
+    "kit_sock_single:OTHER": 1,
+    "nameplate:self": 842,
+    "nameplate:OTHER": 1,
+    "kit_jersey:self": 5184,
+    "kit_jersey:OTHER": 6
+   },
+   "cross_id_names": [
+    {
+     "member": "rendering/pant/texlib_1_421_2.rpsgl",
+     "name": "pant_1_400_2_cm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/pant/texlib_1_421_2.rpsgl",
+     "name": "pant_1_400_2_nm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/pant/texlib_1_421_2.rpsgl",
+     "name": "pant_1_400_2_sm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/sock/sock_1_421_2_cm.rpsgl",
+     "name": "sock_1_400_2_cm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/jersey/name_1_138_2_cm.rpsgl",
+     "name": "name_1_138_1_cm.Raster",
+     "key": [
+      138,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/jersey/texlib_1_421_2.rpsgl",
+     "name": "font_1_400_2_cm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/jersey/texlib_1_421_2.rpsgl",
+     "name": "font_1_400_2_nm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/jersey/texlib_1_421_2.rpsgl",
+     "name": "font_1_400_2_sm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/jersey/texlib_1_421_2.rpsgl",
+     "name": "jersey_1_400_2_cm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/jersey/texlib_1_421_2.rpsgl",
+     "name": "jersey_1_400_2_sm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    },
+    {
+     "member": "rendering/jersey/texlib_1_421_2.rpsgl",
+     "name": "jersey_1_400_2_0_nm.Raster",
+     "key": [
+      421,
+      1,
+      2
+     ]
+    }
+   ],
+   "ascii_outside_dict": 0,
+   "hash_hits": 0,
+   "nonpayload_bytes": 5474896,
+   "refused": [],
+   "sock_residual_names": {
+    "goaliesock_#_#.rpsgl": 4,
+    "goaliesock_#_#_am.rpsgl": 1,
+    "playersock_#_#.rpsgl": 16,
+    "playersock_#_#_am.rpsgl": 8,
+    "sock_#_nm.rpsgl": 2,
+    "sock_#_rm.rpsgl": 2,
+    "sock_#_sm.rpsgl": 2
+   },
+   "examples": {
+    "center_logo": {
+     "path": "rendering/icesurface/centerlogo_0_cm.rpsgl",
+     "archive": "cacherender.big",
+     "row": 0,
+     "stored_size": 160038,
+     "stored_sha256": "158274ae5736deaf3d3cf4a4f2d3537f1e0cb7337ca667023078512a1398d3b9",
+     "wrapper": "chunkzip",
+     "decoded_size": 1398768,
+     "decoded_sha256": "bc1ec5210771751229b1df44e9066a7ae730a85b99c4687245617333b1d4b155",
+     "names": [
+      "centerlogo_0_cm.Raster"
+     ]
+    },
+    "logo": {
+     "path": "rendering/logo/texlib_0_0_0.rpsgl",
+     "archive": "cacherender.big",
+     "row": 4481,
+     "stored_size": 8252,
+     "stored_sha256": "6aac5df26eebc0584cde1f0177b8b3acef5a0e3b6d7ac28d223a08f005db2962",
+     "wrapper": "chunkzip",
+     "decoded_size": 77552,
+     "decoded_sha256": "53fcdc3627d72562fc4b7036d7961212f12beba7e8130fd2905c6d20d7ae963f",
+     "names": [
+      "logo_0_0_0_0.Raster",
+      "logo_0_0_0_1.Raster",
+      "logo_0_0_0_2.Raster"
+     ]
+    },
+    "kit_pant": {
+     "path": "rendering/pant/texlib_0_0_0.rpsgl",
+     "archive": "cacherender.big",
+     "row": 6212,
+     "stored_size": 244058,
+     "stored_sha256": "d76103df39271ce37d90e180280b629e329f186066f53855a47aaa66b94dd014",
+     "wrapper": "chunkzip",
+     "decoded_size": 569016,
+     "decoded_sha256": "96c47ee3f1742ade97abb9171ae1247710850451b8311788bfd2f01d3afea6ad",
+     "names": [
+      "pant_0_0_0_cm.Raster",
+      "pant_0_0_0_nm.Raster",
+      "pant_0_0_0_sm.Raster"
+     ]
+    },
+    "kit_sock_single": {
+     "path": "rendering/sock/sock_0_0_0_cm.rpsgl",
+     "archive": "cacherender.big",
+     "row": 9057,
+     "stored_size": 24740,
+     "stored_sha256": "8aa55edddbc65a802959c35dd66d3d084b14b525593a84e32d41faafc1baee81",
+     "wrapper": "chunkzip",
+     "decoded_size": 350184,
+     "decoded_sha256": "e114e8439abea5a38f47eaddcdebfaafad70d95f95e6a1af7bdcddc4df7cc0bd",
+     "names": [
+      "sock_0_0_0_cm.Raster"
+     ]
+    },
+    "nameplate": {
+     "path": "rendering/jersey/name_0_0_0_cm.rpsgl",
+     "archive": "nocacherender.big",
+     "row": 68,
+     "stored_size": 1892,
+     "stored_sha256": "b473f4d348640657b0a49fbee60213d407f221ec60973f14f014a6dfc7709742",
+     "wrapper": "chunkzip",
+     "decoded_size": 350164,
+     "decoded_sha256": "1a55e4de6c38a0732ee547c37b3df8ce455b96b3b4478f35642572cd3777cadf",
+     "names": [
+      "name_0_0_0_cm.Raster"
+     ]
+    },
+    "kit_jersey": {
+     "path": "rendering/jersey/texlib_0_0_0.rpsgl",
+     "archive": "nocacherender.big",
+     "row": 915,
+     "stored_size": 1255445,
+     "stored_sha256": "5d4a7bf8c41098041713ffa4f92b04d7249d23334643e5b5ef60efae2fb04a81",
+     "wrapper": "chunkzip",
+     "decoded_size": 3671664,
+     "decoded_sha256": "3eb475dc101709191f712d581db3866b69c24bfdf77d20667fdebf82d9af13da",
+     "names": [
+      "font_0_0_0_cm.Raster",
+      "font_0_0_0_nm.Raster",
+      "font_0_0_0_sm.Raster",
+      "jersey_0_0_0_cm.Raster",
+      "jersey_0_0_0_sm.Raster",
+      "jersey_0_0_0_0_nm.Raster"
+     ]
+    }
+   },
+   "occupancy": {
+    "center_logo": {
+     "ids": 218
+    },
+    "logo": {
+     "ids": 337
+    },
+    "kit_pant": {
+     "ids": 215
+    },
+    "kit_sock": {
+     "ids": 215
+    },
+    "nameplate": {
+     "ids": 215
+    },
+    "kit_jersey": {
+     "ids": 215
+    }
+   },
+   "occupancy_reconciliation": {
+    "ids_0_1023_free_in_every_family_now": 772,
+    "r102_published": 757,
+    "families_now": [
+     "logo",
+     "kit_pant",
+     "kit_sock",
+     "nameplate",
+     "kit_jersey"
+    ],
+    "note": "R102 used R99 family regexes (single-file sock grammar, \"rink logo\" regex); recomputed here with the two-file sock grammar on NHL 12. Occupancy in the inspected archives only."
+   },
+   "hash_random_expectation": 18.25
+  }
+ }
+}

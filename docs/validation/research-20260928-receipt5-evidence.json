@@ -1,0 +1,29 @@
+{
+  "hashes": [
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-28\\probes\\r123r2_schedule_reference.py",
+      "sha256": "e63339f3db5c38056188e3fd53490eaad99286a4389f23e3d1d46edeb6c2d3ea"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\docs\\research\\overnight-2026-09-28\\data\\r123r2-schedule-reference.json",
+      "sha256": "4f25e5bc20132545c7cf4928efbff45d02f3c039100da86298a3dbed3eebb2b8"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\docs\\research\\overnight-2026-09-28\\03-board-art-replacement-boundaries.md",
+      "sha256": "0660aa12284f72c9e475e0ec57ad56af86154d638bd1a464a752cb48d560bac3"
+    },
+    {
+      "path": "E:\\Repositories\\nhl-modding-studio\\local\\runs\\overnight-research-2026-09-28\\probes\\r137b_venue_roundtrip_copy.py",
+      "sha256": "b340ff971b0debce6e99d2039616a3ded0337c21556ba872271ad0c779c94890"
+    }
+  ],
+  "replay": {
+    "rev1_vectors": 27,
+    "rev2_vectors": 29,
+    "rev1_ok": true,
+    "rev2_ok": true,
+    "stock_tables": 144,
+    "equals_published": true
+  },
+  "date": "2026-09-28"
+}

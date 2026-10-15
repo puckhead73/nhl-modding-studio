@@ -1,0 +1,23 @@
+{
+  "bundle": "E:\\nhlms-review-build-r33-2026-09-27",
+  "built": "2026-09-27T05:47:59-06:00 .. 05:50:38-06:00",
+  "command": "npm run build -- --no-bundle (repo root; tauri build: npm --prefix app run build, then the release Rust build; existing target\\release cache reused)",
+  "head": "8d60a6d582c1bf208e0a5bc590b28d5add7d5051",
+  "dirty_inputs": 841,
+  "dirty_manifest_sha256": "39504158d5645f4f1d07214cd7a0a412bf6b7e3b77c6aef221e2f8d245de8cd8",
+  "dirty_inputs_after_build_identical": true,
+  "exe_sha256": "d44ad451372525ceaaa3602aa39b937e8ecbde2cc6e1476ecbe6a6e15953e7b8",
+  "exe_bytes": 49594368,
+  "exe_equals_target_release_at_copy": true,
+  "defs_files": 121,
+  "defs_tree_sha256": "7f0a98d221ef9b9d0bccf0ffb03f7507c08c31828f41bfa878f9752fd8e7e47b",
+  "defs_equal_live_repo_at_copy": true,
+  "helpers_files": 21,
+  "helpers_tree_sha256": "1caa5f4da3a52629ce8d78595a1bed55f6127a73c85ef1cc624d28fea9ef5c4e",
+  "helper_exe_sha256": "dc3533ed3234782703ebeab72034d9298b920b3e1fbb7c3fb9a9d2adfd818c21",
+  "frontend_dist_files": 55,
+  "frontend_dist_tree_sha256": "9a596302774fcff701a9e34957685857fc263ded2a02e46fe039780b4a2a5ade",
+  "tree_sha_definition": "SHA-256 of '<relpath>\\t<sha256>\\n' lines in sorted path order (tools/review-build/manifest.py)",
+  "source_inventory": "unchanged since review-build/source-dictionary-inventory.tsv (anchors: 0 working-tree changes; NHL 20 private fixture nhl_game.db 1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b re-hashed equal)",
+  "launched": false
+}

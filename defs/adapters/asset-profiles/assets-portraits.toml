@@ -1,0 +1,1597 @@
+# Per-family asset output profile — player portraits (Q07a.1).
+#
+# A profile says how a canonical source asset becomes the bytes ONE target consumes. Canonical
+# sources stay non-destructive and high fidelity; everything here is a derivation recipe, and a
+# derived output is a reproducible artefact, never canonical Project data.
+#
+# THIS FILE STATES FORMAT CONSTRAINTS ONLY. It carries no key in which a converter, a support level
+# or an operation result could be recorded. `[[target_profile.operation]]` says which format facts
+# an operation would need, NOT that Studio performs it. Implementation status lives in the evidence
+# system, and no profile can declare `game-verified` — the vocabulary has no such term.
+#
+# ---------------------------------------------------------------------------------------------
+# HISTORY, IN ORDER, BECAUSE THE NUMBERS HERE HAVE MOVED THREE TIMES
+#
+#   C0-AS1     re-authored the file from `asset-output-profile/1` prose. NOTHING established: the
+#              only portrait source in the repository was an operations CSV, which is `asserted`.
+#   C0-POR1    read bytes from three supplied private copies and promoted 14 blocks on 3 targets.
+#   C0-POR1-R1 found most of those over-scoped and cut them to 3, on one target.
+#   C0-AS3     Schema `asset-output-profile/3`. It does not re-measure anything: it represents what
+#              POR1/R1 already recorded at the scope that evidence actually has, which `/2` could
+#              not express without over-claiming.
+#   C0-AS5     Schema `/5`; `legacyrecomp-recomp` registered by reference (Q47).
+#   C0-AS6     this revision (profile_version 5). MEASURES the database half of `[identity]` on
+#              the committed anchors of all three declared targets and carries it as a CANDIDATE
+#              on each (`ubPc.lOnr`, with the collisions the anchor actually stores). Establishes
+#              nothing: the census holds id RANGES, not ids, so no anchor id was placed beside its
+#              file. See docs/receipts/c0-as6-asset-family-coverage.md.
+#   C0-AS7     this revision (profile_version 6). MEASURES the FILE half on `nhllegacy-ps3`: a
+#              per-id census of the same installed copy (18 663 files, each hashed) joined to the
+#              anchor, and `patch.big` at that copy's USRDIR root opened through the committed EB
+#              reader. The join does NOT support promoting `[identity]`: 4 500 of the 5 449 non-zero
+#              anchor ids have a loose current `playerheads` file and 949 do not (350 outside the
+#              observed regular ranges, 599 inside them); `patch.big` supplies 33 of the 949. The
+#              candidate stays a candidate with the join cited. `[discovery]` and `[runtime_lookup]`
+#              stay unknown: `patch.big` is now READ — 83 portrait members at the same relative
+#              paths as the loose tree, 23 of them colliding with a loose file of different content —
+#              and which copy the game loads is still not observed. On `nhllegacy-xbox360` the two
+#              render archives were listed and hold no `fe/ion/artassets` member; the other eleven
+#              shipping archives were not opened. See docs/receipts/c0-as7-asset-evidence-measurements.md.
+#
+#   docs/receipts/c0-por1-portrait-measurements.md   (measurements, with an appended corrections log)
+#   docs/receipts/c0-por1-r1-evidence-scope.md       (the correction, and the rules used below)
+#   docs/receipts/c0-as3-scoped-asset-variants.md    (this schema revision)
+#
+# ---------------------------------------------------------------------------------------------
+# THE THREE EVIDENCE LEVELS, NOW STRUCTURAL RATHER THAN PROSE
+#
+# `/2` had one axis — measured/derived/asserted — which says how well something was measured and
+# nothing about what population the measurement covers. Every block below carries TWO more keys:
+#
+#   scope   specimen-observation        named specimens only. NEVER establishes a block.
+#           inspected-corpus-invariant  holds for every file inspected in the cited corpus, across
+#                                       ALL of its groups. A property that holds only inside a group
+#                                       DEFINED by that property is circular, not invariant.
+#           supported-target-constraint what the target itself requires. NOTHING here reaches this:
+#                                       no load test, no acceptance test, no shipping-manifest check
+#                                       was performed on any target.
+#
+#   force   observed-source-format      this is what the inspected source CARRIES. It authorises
+#                                       reproducing that value and nothing else. It does not prove
+#                                       another format is forbidden, and does not prove one is
+#                                       supported. EVERY established block below is this one.
+#           target-required             the target requires it; another value is refused. Unused
+#                                       here, and unusable: it needs a supported-target-constraint.
+#
+#   corpus  the [[corpus]] the fact rests on. A block established on a corpus that is not
+#           attributable to the target is refused by `asset-corpus-attribution-unsupported`.
+#
+# ---------------------------------------------------------------------------------------------
+# WHAT EACH TARGET'S CORPUS PERMITS
+#
+#   nhllegacy-ps3     an OBSERVED INSTALLED COPY — this title's own directory layout, identity from
+#                     its own PARAM.SFO. The only corpus here attributable to its target, and so the
+#                     only target with anything established. It is NOT established to be pristine:
+#                     it carries third-party writes, no shipping manifest was checked, and
+#                     `patch.big` at USRDIR root was never opened.
+#   nhllegacy-xbox360 a DERIVED `_compiled` tree beside the title's shipping archives. Not
+#                     attributable. Its measurements are exhaustive and are candidates anyway —
+#                     because of what the tree is, not how much was measured.
+#   nhl21-ps4         an EXTRACTED tree (`databigs\Extracted\...`). Same position.
+#
+# ---------------------------------------------------------------------------------------------
+# WHAT `/3` LET THIS REVISION STOP MISREPRESENTING
+#
+#   CORRELATED VARIANTS. NHL Legacy carries three portrait forms at once — 512x512 and 512x256
+#   inside `playerheads`, 256x128 in `playerheadssmall`. `/2` held ONE dimension per target, so
+#   `dimensions` had to be left unknown with the distribution written in a note. `/3` carries them
+#   as `[[variant]]` entries whose dimensions, codec, mip layout and tiling stay together, selected
+#   by structured clauses. There is no per-target list of allowed sizes or allowed codecs, so no
+#   unobserved pairing is spellable.
+#
+#   PARTIAL VALUES. `/2` bundled {codec, color_space, channels, alpha} into one `raster` value, so
+#   an unmeasurable colour space blocked the whole block — and C0-POR1 filled it with a guess to
+#   make the bundle well-formed. Here `codec` and `channels` are established while `color_space` and
+#   `alpha` are absent, each with its own `[raster.property.<name>]` reason. `preview` requires
+#   `raster.codec`, so the unknown colour space blocks only what actually needs it.
+#
+#   ATLAS. `/2` recorded `kind = "none"` off a count of one texture payload per archive. That count
+#   establishes that no surface is SHARED between assets; whether the family is an atlas, a pool or
+#   neither is a further question about page geometry and slot addressing it does not answer. `/3`
+#   records `sharing = "per-asset-surface"` and leaves `kind` unknown, so `replace` — which requires
+#   `atlas.kind` — stays blocked.
+#
+#   CONTAINER AND COMPRESSION, RESCOPED. Both were `established` under `/2` with no way to say what
+#   that meant for a Build. They are still established, now explicitly at `observed-source-format`:
+#   reading `BIGF` and RefPack on every file establishes what those files ARE. A Build may reproduce
+#   them; a Build proposing something else is BLOCKED, not refused, because nothing here shows the
+#   game would reject it.
+#
+#   PATHS. The two path families and their observed bucket membership are first-class data instead
+#   of prose. `bucket_resolution = "unknown"` says the authoritative id-to-directory rule is not
+#   known, and `[path_rule]` cannot be established through an unresolved family. C0-POR1 wrote that
+#   the rule "is not the literal folder-name ranges"; R1 withdrew that as a rule, and nothing here
+#   reinstates it.
+#
+#   RUNTIME LOOKUP. New block, unknown on every target. Observed file placement in one installed
+#   copy is not evidence of what the GAME loads. C0-AS7 opened `patch.big` on the PS3 copy (it
+#   carries 83 portrait members beside 8 localization databases and 328 `rendering/` members);
+#   what the runtime does with a member that also exists loose was not traced, so the block
+#   still blocks `discover` and `install` everywhere.
+#
+# COVERAGE. One family, three declared target profiles and one by reference (`legacyrecomp-recomp`
+# reuses `nhllegacy-xbox360`, C0-AS5 / Q47). Six established constraints: four on
+# `nhllegacy-ps3` at target level and in one of its variants, none anywhere else. C0-AS6 adds a
+# measured identity CANDIDATE on each declared target and establishes nothing further. See
+# docs/validation/c0-06-canonical-project-and-adapters.md.
+
+schema = "asset-output-profile/5"
+profile_version = 6
+family = "assets-portraits"
+note = """
+Everything established here is established at `observed-source-format`, on one target, over one
+observed installed copy. Nothing on any target reaches a demonstrated target requirement: no load,
+acceptance or shipping-manifest test was performed anywhere, so nothing in this file authorises
+refusing a Build a different format — only reproducing the one that was observed.
+"""
+
+[[canonical_source]]
+role = "portrait"
+class = "raster"
+interchange = "rgba8"
+# Q14: portrait library inputs arrive already normalized to a consistent composition/background
+# state, and Studio must not recrop, reframe, remove backgrounds or apply style treatment. The
+# target adapter scales and encodes; it does not compose.
+retention = "normalized-input"
+description = "A lossless RGBA source image at the highest available resolution, retained unmodified by Studio."
+
+# =================================================================== NHL Legacy, PS3
+
+[[target_profile]]
+target = "nhllegacy-ps3"
+note = """
+The only target here with anything established, and the reason is provenance rather than volume of
+measurement: its corpus is the title's own installed directory. See [[corpus]] below for what that
+does and does not mean.
+"""
+
+[[target_profile.corpus]]
+id = "ps3-installed-copy"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "incomplete"
+identity_source = "the copy's own PARAM.SFO (TITLE `NHL Legacy`, TITLE_ID `BLUS31540`), whose title id matches the one recorded at crates/studio-domain/src/discovery.rs:48"
+inspected_files = 18663
+groups = ["current", "backup-labelled"]
+limitations = [
+    "A title id plus an SFO version field is not a build: no patch level, disc revision or executable build string was established.",
+    "Not established to be pristine or complete. The copy carries third-party writes: 206 backup-labelled `.bak` files and 206 current files carrying mip chains where the rest carry none.",
+    "Neither a `.bak` sibling nor a zero mip count establishes who wrote a file. Groups are named neutrally — current / backup-labelled — and no provenance is attached to either.",
+    "No shipping manifest was checked, and `patch.big` at USRDIR root was never opened, so nothing rules out that it shadows or supersedes these loose files.",
+    "\"Accepted by the inspection parser\" means the C0-POR1 parser found the fields it looks for at the offsets it expects. It is not semantic validation and does not establish that any file is well-formed for the game.",
+]
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+
+[[target_profile.path_family]]
+id = "playerheads"
+template = "fe/ion/artassets/playerheads/{variant}/p{numeric-id}.big"
+tokens = ["variant", "numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+`{variant}` stands for the bucket directory, and `bucket_resolution = "unknown"` records that NOTHING
+computes it. The [[observed_bucket]] entries below record that the directory was seen and point at
+the census that holds which ids were seen inside it; that is membership, and it is not a function.
+Since C0-AS7 that census is the committed PER-ID record of this copy (one row per file: bucket,
+name, label, id, size, SHA-256, and the BIGF member table's texture-member sizes), which supersedes
+the C0-POR1 range summary the entries cited before; the ranges it shows are the same
+(`p0_4000` 1-3999, `p4001_8000` 4001-7998, `p8001_12000` 8003-12401, `silhouettes` 60000-60003).
+C0-POR1 turned the mismatch between `p8001_12000` and the ids inside it into the finding "the rule
+is not the literal folder-name ranges"; R1 withdrew that, because no candidate rule was ever
+formulated or tested. A folder label is not evidence of the rule behind it.
+
+C0-AS3-R1 moved the id ranges themselves out of this file and into the census reference above. A
+column of ranges sitting in a profile reads as a lookup table however it is labelled, and the next
+reader resolves id 500 with it. The reference names a fixed document by digest instead, and anyone
+who needs the membership finds it there, where it is recorded as an observation.
+"""
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p0_4000"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p4001_8000"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p8001_12000"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+note = "248 ids in this folder exceed 12 000. An observation about membership, recorded in the census because it is what was seen — not because it implies a rule."
+
+[[target_profile.path_family.observed_bucket]]
+directory = "silhouettes"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+
+[[target_profile.path_family]]
+id = "playerheadssmall"
+template = "fe/ion/artassets/playerheadssmall/{variant}/p{numeric-id}.big"
+tokens = ["variant", "numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+The second family. `/2` held one path template per target and could not carry both; that alone
+blocked `[path_rule]` regardless of the bucket question, and it still does.
+
+The directory spellings are the real ones. The C0-POR1 package scoped `playerhead` and
+`playerheadsmall`; neither exists, and the actual directories carry the plural `s`.
+"""
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p0_4000"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p4001_8000"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p8001_12000"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "silhouettes"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+
+# ---- the three co-existing portrait forms ------------------------------------------------
+
+[[target_profile.variant]]
+id = "playerheads-512x512"
+note = """
+Selected by path family AND stored dimensions, because the two `playerheads` forms co-exist inside
+one folder and NOTHING observed separates them by path. A query that supplies only the family is
+therefore ambiguous between this variant and `playerheads-512x256`, and selection refuses it. That
+refusal is the honest answer, not a gap to be closed by preferring one.
+"""
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "playerheads"
+
+[[target_profile.variant.selector]]
+dimension = "stored-dimensions"
+width = 512
+height = 512
+
+[target_profile.variant.raster]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+derivation = """
+`ddspf.dwFourCC` is `DXT5` on all 18 663 files of this copy — current and backup-labelled alike —
+with `dwPitchOrLinearSize` matching the payload exactly. The invariance across BOTH groups is what
+makes this a corpus invariant rather than a group-conditional claim, and selecting a subset of that
+corpus by path family and stored size does not weaken an invariant that holds over all of it.
+
+The channel set follows from the codec. NOT a target requirement: no load test shows the game
+rejects another codec, which is why `force` is `observed-source-format`.
+"""
+
+[target_profile.variant.raster.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.raster.property.color_space]
+state = "unknown"
+reason = "The `DDS` header does not record a colour space at all, so there is nothing to read. C0-POR1 filled this with a guessed `srgb` to make the bundled value well-formed; R1 removed it."
+scope = "inspected-corpus-invariant"
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+
+[target_profile.variant.raster.property.alpha]
+state = "unknown"
+reason = "Only a SPECIMEN OBSERVATION exists: three PS3 files were decoded and carry texels whose colour channels exceed alpha, which is inconsistent with premultiplication in those three files. Three files by one decoder is not a target-wide alpha mode."
+scope = "specimen-observation"
+confidence = "measured"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+]
+candidate_value = "straight"
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = """
+Measured on every file, and still unknown — because establishing it HERE would be circular. This
+variant is selected BY its stored dimensions, so reporting those dimensions as a finding about the
+variant is the same defect R1 caught in `[mipmaps]`: a group defined by a property, and then that
+property reported as the group's invariant.
+
+What is observed, without provenance attached: 6465 current + 102 backup-labelled files at 512x512
+in `playerheads`. Full per-group counts in docs/receipts/data/c0-por1-census.json.
+
+Q10 makes this load-bearing: a release replacement must preserve original dimensions, so `replace`
+stays blocked on this variant.
+"""
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = """
+WITHDRAWN BY R1 and not reinstated. C0-POR1 established `policy = "none"` by measuring the subset it
+had already labelled "vanilla" — a subset DEFINED by carrying no mip chain. The underlying corpus is
+not invariant: of 18 457 current files, 206 carry mip chains (counts 9, 10 and 1). Separating
+EA-authored from third-party-authored files needs provenance evidence this package does not have.
+"""
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "The corpus invariant is that the container is `DDS `, which [container] already carries. That the PAYLOAD is linear rests on three specimen decodes, and a DDS file can carry console-swizzled data, so the container does not settle it."
+
+[target_profile.variant.tiling.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+]
+note = "Three specimens decoded to coherent portrait images with no deswizzle applied. Offered as a proposal; promoting it needs the property shown over the corpus rather than over three files."
+
+[target_profile.variant.tiling.candidate.value]
+kind = "linear"
+
+[[target_profile.variant]]
+id = "playerheads-512x256"
+note = "The second form inside `playerheads`. Same selector shape, same reason: only the stored size separates it from the first."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "playerheads"
+
+[[target_profile.variant.selector]]
+dimension = "stored-dimensions"
+width = 512
+height = 256
+
+[target_profile.variant.raster]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+derivation = "The same corpus invariant as the 512x512 form: `DXT5` on all 18 663 files, both groups, zero exceptions. Not a target requirement — no load test was run."
+
+[target_profile.variant.raster.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.raster.property.color_space]
+state = "unknown"
+reason = "Not recorded by the `DDS` header at all."
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+
+[target_profile.variant.raster.property.alpha]
+state = "unknown"
+reason = "Specimen observation only, and on files of the other form. Nothing was decoded from a 512x256 portrait."
+scope = "specimen-observation"
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Circular here for the same reason as the 512x512 form: the variant is selected by its stored size. Observed: 2660 current + 1 backup-labelled file at 512x256."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "The corpus is not invariant on this property; see the 512x512 form."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Three specimen decodes, none of them of this form."
+
+[[target_profile.variant]]
+id = "playerheadssmall-256x128"
+note = """
+The one portrait form on this target whose dimensions are NOT circular. It is selected by path family
+alone — `playerheadssmall` holds a single stored size — so the size is a genuine invariant over a
+subset picked out by an independent, observable criterion rather than by the property being reported.
+"""
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "playerheadssmall"
+
+[target_profile.variant.raster]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+derivation = "`DXT5` on all 18 663 files of this copy, both groups, zero exceptions; the channel set follows from the codec. Not a target requirement."
+
+[target_profile.variant.raster.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.raster.property.color_space]
+state = "unknown"
+reason = "Not recorded by the `DDS` header at all."
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+
+[target_profile.variant.raster.property.alpha]
+state = "unknown"
+reason = "Specimen observation only — one decoded file in this folder (`playerheadssmall/p1008`), which is not a corpus invariant."
+scope = "specimen-observation"
+confidence = "measured"
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+candidate_value = "straight"
+
+[target_profile.variant.dimensions]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+derivation = """
+Every file in the `playerheadssmall` folder of this copy carries a 256x128 base surface — 9126
+current plus 103 backup-labelled with base-level-only headers, and the 103 current files carrying mip
+chains carry them over the SAME 256x128 base. The invariant therefore holds across both groups and
+across the mip-chain files, which is what distinguishes it from the withdrawn `[mipmaps]` promotion.
+
+NOT circular: the selector for this variant is the path family, which is observable without reading
+a single header, so the dimension is a finding about the selected subset rather than its definition.
+
+NOT a target requirement: nothing shows the game rejects another size. `power_of_two` records that
+256 and 128 both are; it is an observation about these numbers, not a stated target rule.
+"""
+
+[target_profile.variant.dimensions.value]
+width = 256
+height = 128
+variant = "portrait-small"
+power_of_two = true
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not invariant: 103 current files in this folder carry mip chains (counts 9 and 1) where the rest carry none, and nothing here establishes who wrote which."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "One specimen from this folder was decoded. A specimen observation, kept as the proposal below."
+
+[target_profile.variant.tiling.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "ps3-installed-copy"
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+note = "`playerheadssmall/p1008` decoded to a coherent portrait with no deswizzle applied."
+
+[target_profile.variant.tiling.candidate.value]
+kind = "linear"
+
+# ---- target-level blocks ------------------------------------------------------------------
+
+[target_profile.discovery]
+state = "unknown"
+note = """
+Every portrait file in this copy is a loose file under `fe/ion/artassets/<folder>/<bucket>/`. That is
+a CORPUS OBSERVATION about placement, not a discovery rule: nothing shows this is where the game
+loads them from. C0-POR1 established this block on placement alone; R1 withdrew that, and the
+`[runtime_lookup]` block below now carries the question placement was standing in for.
+"""
+
+[target_profile.discovery.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+]
+note = """
+Observed placement in one installed copy, offered as a proposal. C0-AS7 opened `patch.big` at the
+same copy's USRDIR root (SHA-256 d2d26273a742cc21667b56e483b089ae15c23b462c335bea2dcf38405dc9bbe0,
+an `EB\\0\\3` archive of the 16-byte-entry variant, 459 members): it carries 83 portrait members
+stored raw as `BIGF` under the SAME relative paths as the loose tree (58 `playerheads`, 25
+`playerheadssmall`); 23 of those paths also exist loose, and in every one of the 23 the loose file's
+bytes differ from the member's. So this copy holds two candidate sources for some ids and the
+proposal `loose-tree` describes only one of them. Promoting it needs evidence about what the game
+actually loads — a trace or load test — not another listing; see `[runtime_lookup]`.
+"""
+
+[target_profile.discovery.candidate.value]
+scope = "loose-tree"
+root = "fe/ion/artassets"
+recursive = true
+
+[target_profile.identity]
+state = "unknown"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps3-nhllegacy.json#ubPc.lOnr",
+    "docs/receipts/data/c0-as7-ps3-portrait-census.csv",
+    "docs/receipts/data/c0-as7-ps3-portrait-join.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#ps3_portrait_census_joins_to_the_legacy_anchor_and_the_join_record_matches",
+]
+note = """
+The filename shape IS a corpus invariant: all 18 663 files match `p{digits}.big` or
+`p{digits}.big.bak`, zero exceptions. What blocked the block until C0-AS6 was that the binding of
+that number to a database field had never been examined; R1 also removed a `reject` ambiguity
+policy that C0-POR1 had filled in with nothing behind it.
+
+C0-AS6 MEASURES the database half on the committed anchor `anchors/ps3/nhllegacy/databases/nhlng.db`
+(byte-identical to the Xbox 360 anchor — one SHA-256, asserted by the named case) and carries it as
+the candidate below. C0-AS7 then placed every anchor id beside the census of this copy, per id,
+and the join is what keeps the block UNKNOWN rather than what promotes it: of the 5 449 distinct
+non-zero ids the anchor stores, 4 500 name a loose current `playerheads` file and 949 do not —
+350 lie outside the observed regular ranges (12403..12814) and 599 lie inside them (1..12401) with
+no file in this copy. The binding "`ubPc.lOnr` = N names `p{N}.big`" therefore holds for most rows
+of this specimen and fails for 949 of them, which is not an inspected-corpus invariant, and the
+runtime's own lookup is unobserved. The `reject` policy is grounded the way C0-AS4 grounded it for
+jerseys: the anchor stores three portrait ids on two players each, so an ambiguous match is a
+live case and the contract's own rule (C4: never silently bind an ambiguous match) applies rather
+than being invented.
+"""
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "ps3-installed-copy"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps3-nhllegacy.json#ubPc.lOnr",
+    "docs/receipts/data/c0-as7-ps3-portrait-census.csv",
+    "docs/receipts/data/c0-as7-ps3-portrait-join.csv",
+    "docs/receipts/data/c0-as7-ps3-patch-members.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#ps3_portrait_census_joins_to_the_legacy_anchor_and_the_join_record_matches",
+]
+note = """
+PROPOSED, NOT OPERATIVE. MEASURED on the committed anchor by the named case (C0-AS6): `ubPc.lOnr`
+(metadata name `artid`, 16 bits) over 5 632 player rows stores 5 450 distinct values in 0..12814;
+180 rows store 0 (a value — no absence code is established); no row stores the all-ones pattern;
+ids 2, 7 and 12 are each stored by two rows (a live ambiguity, hence `reject`). Set against the
+census's observed bucket membership — `p0_4000` ids 1-3999, `p4001_8000` ids 4001-7998,
+`p8001_12000` ids 8003-12401, `silhouettes` ids 60000-60003 — the anchor's distinct non-zero ids
+fall 1 313 / 1 201 / 2 585 into the three bucket ranges and NONE into the silhouette range, while
+350 distinct ids (12403..12814) lie ABOVE the highest id observed in either Gen7 copy: for those
+350 no portrait file was seen in this copy at all.
+
+C0-AS7 DID THE PER-ID JOIN (the census and join records cited above, re-derived on every test run
+by the named case). Per folder of this copy: `playerheads` holds 9 228 current files over ids
+1-12401 plus 60000-60003, no id with two current files, 103 backup-labelled siblings, no `p0`;
+4 500 anchor ids have a current file, 949 do not — the 350 in 12403..12814 (OUTSIDE the observed
+regular ranges; not "above the silhouette range", which begins at 60000) and 599 inside 1..12401,
+listed by id in the join record; 4 728 current files name ids no anchor row stores.
+`playerheadssmall`: 9 229 files, 4 501 / 948 (350 + 598). `patch.big` (the D3 record) carries 58
+`playerheads` and 25 `playerheadssmall` members: 45 / 12 of them name anchor ids, 13 name ids no
+row stores (8323, 12508, and 12816-12832 — eleven ABOVE the anchor's highest id), and 33 / 1 of
+them are anchor ids that have NO loose file (28 of the 33 are among the 350, at 12633-12666). That
+leaves 916 / 947 anchor ids in neither the loose tree nor `patch.big`, 322 / 350 of them among the
+350. `scope = specimen-observation` because these are counts over one copy joined to one anchor;
+`confidence = measured` describes that join. The candidate is not promoted because the binding is
+not total on this specimen and the runtime's lookup is unobserved; what would promote it is a
+trace or load test showing the lookup, with the 949 accounted for by the game's own behaviour.
+"""
+
+[target_profile.identity.candidate.value]
+key = "numeric-id"
+source = "ubPc.lOnr (artid): one portrait id per player row"
+ambiguity = "reject"
+
+[target_profile.container]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+derivation = """
+All 18 663 files in this copy — current and backup-labelled alike — parse as a `BIGF` archive with
+exactly 6 members in the name pattern `0, <num>, sg1, <num>, sg2, 1`, and in every one exactly one
+member is a RefPack stream whose decompressed head begins `DDS `. Zero exceptions in either group.
+Surviving the third-party-written files is what makes this an invariant rather than a
+group-conditional claim.
+
+Header layout, read from bytes: `BIGF` at 0x00; a u32 at 0x04 equal to filesize minus 16 that is
+LITTLE-endian while the member count, header size and every member offset/length are BIG-endian;
+members 64-byte aligned. The 6-member order and the 64-byte alignment are independently corroborated
+by a leftover EA packaging command line found in the Xbox 360 tree (`-align64`, and the same member
+order under a `_textures` group) — a non-pixel corroboration, unrelated to the withdrawn
+decoded-pixel argument.
+
+`outermost_layer_examined` is true: these are loose files in the title's own directory, so `BIGF` is
+the outermost container that exists for them. The RefPack layer sits between the two layers below and
+is recorded under [compression], following this file's convention that a payload compression is not a
+container layer.
+
+FORCE IS `observed-source-format` AND THAT IS THE WHOLE CLAIM: nothing here shows the game REJECTS
+another container. No load test was run. A Build reproducing this chain is authorised; a Build
+proposing another one is blocked, not refused.
+"""
+
+[target_profile.container.value]
+outermost_layer_examined = true
+
+[[target_profile.container.value.layer]]
+format = "bigf"
+index = "name-table"
+note = "Six members in a fixed name pattern; exactly one carries the texture. The other members carry the Scaleform APT resource, not pixels."
+
+[[target_profile.container.value.layer]]
+format = "dds"
+index = "none"
+note = "A 124-byte `DDS ` header on every file inspected."
+
+[target_profile.path_rule]
+state = "unknown"
+note = """
+Both blockers are now structural rather than prose, and either alone is sufficient.
+
+(1) Both declared path families carry `bucket_resolution = "unknown"`, and `[path_rule]` cannot be
+    established through an unresolved family — the rule is enforced, not described.
+(2) There are TWO families. `/2` could hold one template per target; `/3` holds both, which makes the
+    gap visible instead of hiding it behind a single value that would have had to pick one.
+
+`PATH_TOKEN` still has no token for a directory COMPUTED from an id, so even a known rule could not
+be spelled today. That is recorded as the remaining schema gap rather than worked around.
+"""
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants: this target has three portrait forms, and `/3` requires the correlated blocks to live in one place. The codec happens to be the same in all three, and it is still recorded per variant rather than lifted, so no reader can pair it with a size no variant carries."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants. Established in `playerheadssmall-256x128` only; circular in the two `playerheads` forms, which are selected by their size."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants, and unknown in all three."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants, and unknown in all three."
+
+[target_profile.compression]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+derivation = """
+The texture member of all 18 663 files — both groups — begins with the RefPack magic `10 FB` followed
+by a 3-byte big-endian decompressed size, and decompresses far enough to yield a valid `DDS ` header.
+On the named specimens the full stream was decompressed and its output length equalled the declared
+size exactly. As with [container], the invariance across the third-party-written files is what lets
+this survive the provenance caveat.
+
+`deterministic` is false because it was NOT tested: nothing establishes that any encoder reproduces
+EA's exact RefPack bytes for unchanged input.
+
+FORCE: no load test shows the game rejects an uncompressed member, so this authorises reproducing
+RefPack and nothing more.
+"""
+
+[target_profile.compression.value]
+payload = "refpack"
+deterministic = false
+
+[target_profile.atlas]
+state = "established"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+force = "observed-source-format"
+corpus = "ps3-installed-copy"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+derivation = """
+Exactly one texture payload was found in each of the 18 663 files — the census counts texture members
+per archive and the count is 1 everywhere, in both groups, with no archive carrying two. Since each
+numeric id has its own archive with its own texture, no surface is shared BETWEEN ids. That is
+precisely what `sharing = "per-asset-surface"` records, and it is the whole of what the count
+establishes.
+
+`kind` IS DELIBERATELY ABSENT. C0-POR1 read `kind = "none"` off this same count. Whether the family is
+an atlas, a pool or neither is a question about page geometry and slot addressing that counting
+payloads does not answer, so the kind is unknown and `[atlas.property.kind]` says why. `replace`
+requires `atlas.kind` and therefore stays blocked.
+"""
+
+[target_profile.atlas.value]
+sharing = "per-asset-surface"
+
+[target_profile.atlas.property.kind]
+state = "unknown"
+reason = "Counting one texture payload per archive shows no surface is shared between ids. It does not distinguish an atlas from a pool from neither, and it says nothing about page geometry or slot addressing. C0-POR1 recorded `none` from this count; that was a stronger claim than the count supports."
+scope = "inspected-corpus-invariant"
+confidence = "measured"
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+
+[target_profile.install]
+state = "unknown"
+note = "Nothing was tested. No file was written, no replacement was installed and no runtime was launched anywhere in C0-POR1, R1 or C0-AS3. Placement is not proof of required install behaviour, and `patch.big` was not examined."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+provenance = [
+    "docs/receipts/data/c0-as7-ps3-patch-members.csv",
+    "docs/receipts/data/c0-as7-ps3-patch-overlap.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#ps3_patch_members_overlap_the_loose_tree_as_the_record_says",
+]
+note = """
+THE BLOCKER `/2` HAD NOWHERE TO PUT. What the game loads, and what wins when two copies of an asset
+exist, is unknown on this target. C0-AS7 opened `patch.big` (USRDIR root; `EB\\0\\3`, 459 members,
+digest in the record): it holds 83 portrait members, 23 of which share a relative path with a loose
+file whose bytes differ, and 60 of which have no loose counterpart — so both `patch-member` and
+`loose-file` are live candidates for `source` and a `patch_precedence` exists to be determined. The
+archive's contents do not determine it: no trace, disassembly or load test exists, and a listing
+never can. No value is proposed.
+
+This is why `[discovery]` was demoted and stays demoted, and why `discover` and `install` are blocked
+here regardless of anything else in this file.
+"""
+
+[[target_profile.operation]]
+operation = "discover"
+requires = ["discovery", "runtime_lookup"]
+note = "Finding the files is not enough: a scan that lists loose portraits the runtime never reads would report assets that do not exist as far as the game is concerned."
+
+[[target_profile.operation]]
+operation = "identify"
+requires = ["identity"]
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+note = "Decoding pixels needs the container chain, the pixel codec, the surface size and its memory layout. It does NOT need the colour space or the alpha mode, which is why the requirement names `raster.codec` rather than the whole block."
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling", "mipmaps"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = [
+    "container",
+    "raster.codec",
+    "raster.color_space",
+    "dimensions",
+    "tiling",
+    "mipmaps",
+    "compression",
+    "atlas.kind",
+]
+note = "Q10 requires a release replacement to preserve the original dimensions and encoded format, so both are prerequisites rather than outputs. Re-encoding pixels needs the colour space this time, and writing into the right surface needs to know whether one is shared."
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
+
+# =============================================================== NHL Legacy, Xbox 360
+
+[[target_profile]]
+target = "nhllegacy-xbox360"
+note = """
+NOTHING IS ESTABLISHED, and the reason is provenance rather than measurement. The measurements below
+are exhaustive over the inspected tree; they are candidates because of what that tree is.
+"""
+
+[[target_profile.corpus]]
+id = "xbox360-compiled-tree"
+kind = "derived-tree"
+attribution = "not-attributable"
+build_identification = "incomplete"
+identity_source = "the title's own XEX2 EXECUTION_INFO header — title id `454109EC`, media id `3CF2A23F`, executable `nhlzf.exe` — matching the NHL Legacy Xbox 360 title id at crates/studio-domain/src/discovery.rs:48"
+inspected_files = 18457
+groups = ["current"]
+limitations = [
+    "A DERIVED tree. `_compiled\\` sits beside the title's own shipping archives (boot.big, cache.big, nocache.big, cacherender.big, data0.big, ...) and a sibling `Extracted BIG Files\\` directory, so it is an extraction or a rebuild and is not attributable to the shipped title.",
+    "C0-POR1 argued the tree carries authentic content because 49 of 50 sampled ids decoded to block streams identical to the PS3 copy. R1 WITHDRAWS that: the two decode chains share their BIGF, RefPack and DXT5 stages, and agreement between two copies is evidence about those specimens, not about whether either tree was modified.",
+    "A title id plus a XEX version field is not a build.",
+    "One further file, an EA build-tool `.options` artefact, is not an archive and is excluded from every archive count.",
+]
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+
+[[target_profile.path_family]]
+id = "playerheads"
+template = "fe/ion/artassets/playerheads/{variant}/p{numeric-id}.big"
+tokens = ["variant", "numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = "Observed inside a derived tree, which is a second reason this cannot become a path rule for the shipped title. The bucket rule is unknown here for the same reason it is on PS3."
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p0_4000"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p4001_8000"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p8001_12000"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "silhouettes"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.path_family]]
+id = "playerheadssmall"
+template = "fe/ion/artassets/playerheadssmall/{variant}/p{numeric-id}.big"
+tokens = ["variant", "numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p0_4000"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p4001_8000"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "p8001_12000"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.path_family.observed_bucket]]
+directory = "silhouettes"
+census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
+census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+
+[[target_profile.variant]]
+id = "playerheads-512x512"
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "playerheads"
+
+[[target_profile.variant.selector]]
+dimension = "stored-dimensions"
+width = 512
+height = 512
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Provenance: the tree is derived. The measurement itself is invariant over everything inspected, so it is kept as a proposal."
+
+[target_profile.variant.raster.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+note = "`data_format_bits = 20` (DXT4/5 in the Xenos data-format table) on all 18 457 archives, with a payload of exactly width x height bytes for a 16-byte-per-block codec. Colour space is not recorded by `XPR2` at all and alpha was never measured on this target, so both are absent from the proposal rather than filled."
+
+[target_profile.variant.raster.candidate.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = """
+Provenance, and circularity. Observed in the inspected tree: 6567 archives at 512x512. Dimensions
+were read as an INTERPRETATION of the `XPR2` GPU fetch constant's size dword
+(`width-1 = v & 0x1FFF`, `height-1 = (v >> 13) & 0x1FFF`), corroborated by the payload byte counts and
+separately by the PS3 copy's explicit `DDS` dimensions for the same ids — the latter being a
+cross-copy agreement, not an independent measurement.
+"""
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Provenance, not measurement: unlike the PS3 copy this corpus IS invariant on this property, which is why a candidate is recorded."
+
+[target_profile.variant.mipmaps.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+note = "Invariant across all 18 457 archives: the decompressed `XPR2` payload is exactly the base level (262 144 / 131 072 / 32 768 bytes for the three sizes, where a full chain would be about 349 520), and the fetch constant's mip descriptor dword is the constant `0x00000d10` on every file."
+
+[target_profile.variant.mipmaps.candidate.value]
+policy = "none"
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Provenance, and a dependence on repository code — see the candidate note."
+
+[target_profile.variant.tiling.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+]
+note = """
+The fetch constant's tiled bit (bit 31 of dword 0) is set on all 18 457 archives and its pitch field
+decodes consistently with the widths — an interpretation of a header field, invariant over the
+inspected tree. That the layout is specifically the standard Xbox 360 2D tiling was checked by
+DECODING, and that check is NOT independent of this repository: the address formula was transcribed
+from crates/tdb-rx2/src/texlib.rs::xg_address_2d_tiled. `alignment_bytes` is omitted rather than
+guessed.
+"""
+
+[target_profile.variant.tiling.candidate.value]
+kind = "xbox360-tiled"
+
+[[target_profile.variant]]
+id = "playerheads-512x256"
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "playerheads"
+
+[[target_profile.variant.selector]]
+dimension = "stored-dimensions"
+width = 512
+height = 256
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Provenance: the tree is derived."
+
+[target_profile.variant.raster.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/receipts/data/c0-por1-census.json"]
+note = "`data_format_bits = 20` on all 18 457 archives."
+
+[target_profile.variant.raster.candidate.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Provenance, and circularity. Observed: 2661 archives at 512x256."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Provenance, not measurement."
+
+[target_profile.variant.mipmaps.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/receipts/data/c0-por1-census.json"]
+note = "Base level only on every archive inspected."
+
+[target_profile.variant.mipmaps.candidate.value]
+policy = "none"
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Provenance, and the same dependence on transcribed repository code."
+
+[target_profile.variant.tiling.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+note = "Tiled bit set on every archive inspected."
+
+[target_profile.variant.tiling.candidate.value]
+kind = "xbox360-tiled"
+
+[[target_profile.variant]]
+id = "playerheadssmall-256x128"
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "playerheadssmall"
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Provenance: the tree is derived."
+
+[target_profile.variant.raster.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/receipts/data/c0-por1-census.json"]
+note = "`data_format_bits = 20` on all 9229 archives of this family."
+
+[target_profile.variant.raster.candidate.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Provenance only — unlike the two `playerheads` forms this one is selected by path family, so it is not circular. It stays a candidate because the tree is derived."
+
+[target_profile.variant.dimensions.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+note = "9229 archives at 256x128, read from the `XPR2` fetch constant and corroborated by the payload byte counts."
+
+[target_profile.variant.dimensions.candidate.value]
+width = 256
+height = 128
+variant = "portrait-small"
+power_of_two = true
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Provenance, not measurement."
+
+[target_profile.variant.mipmaps.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/receipts/data/c0-por1-census.json"]
+note = "Base level only on every archive inspected."
+
+[target_profile.variant.mipmaps.candidate.value]
+policy = "none"
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Provenance, and the same dependence on transcribed repository code."
+
+[target_profile.variant.tiling.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/receipts/c0-por1-r1-evidence-scope.md"]
+note = "Tiled bit set on every archive inspected."
+
+[target_profile.variant.tiling.candidate.value]
+kind = "xbox360-tiled"
+
+[target_profile.discovery]
+state = "unknown"
+provenance = [
+    "docs/receipts/data/c0-as7-x360-cacherender-members.csv",
+    "docs/receipts/data/c0-as7-x360-nocacherender-members.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches",
+]
+note = "A derived tree's loose-file placement is a property of the extraction. Establishing this needs the portrait members located inside the shipping archives. C0-AS7 listed two of the thirteen through the committed EB reader — `cacherender.big` (12 845 members) and `nocacherender.big` (3 237) — and NEITHER holds a `fe/ion/artassets` member: every member of both sits under `rendering/`. The portrait members are in one of the eleven archives not opened (the recorder's summary names `cache.big` / `nocache.big`), and that remains unobserved."
+
+[target_profile.identity]
+state = "unknown"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/xbox360-nhllegacy.json#ubPc.lOnr",
+]
+note = "All 18 457 archives match `p{digits}.big`, zero exceptions. The database half is MEASURED by C0-AS6 on `anchors/xbox360/nhllegacy/databases/nhlng.db` — the same bytes as the PS3 anchor — and carried as the candidate below; the file half is unobserved per id, and this corpus is a derived tree besides, so the block stays unknown."
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/xbox360-nhllegacy.json#ubPc.lOnr",
+]
+note = "PROPOSED, NOT OPERATIVE. The same measurement as on `nhllegacy-ps3` (the two anchors are byte-identical): 5 632 rows, 5 450 distinct `ubPc.lOnr` values in 0..12814, 180 zeros, ids 2 / 7 / 12 each on two rows, 350 distinct ids above the highest id the census observed in this tree (12401). Recorded against the derived tree's census ranges for the same reason as on PS3; nothing here becomes attributable by being measured on the anchor, because the FILE side is still this tree."
+
+[target_profile.identity.candidate.value]
+key = "numeric-id"
+source = "ubPc.lOnr (artid): one portrait id per player row"
+ambiguity = "reject"
+
+[target_profile.container]
+state = "unknown"
+note = "Two separate reasons, either sufficient. The tree is derived, so the chain is not attributable to the shipped title. And the measured chain is not known to be the WHOLE chain: whether a shipping outer archive layer precedes `bigf` was never examined, which the candidate records structurally."
+
+[target_profile.container.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+note = "Invariant across all 18 457 archives of the inspected tree: the same 6-member `BIGF` pattern as the PS3 copy, including the little-endian size word at 0x04 inside an otherwise big-endian header, with exactly one member decompressing to an `XPR2` head. This resolves C0-AS1's unresolved `XPR2/RX2` alternation in favour of XPR2 for every file inspected."
+
+[target_profile.container.candidate.value]
+outermost_layer_examined = false
+
+[[target_profile.container.candidate.value.layer]]
+format = "bigf"
+index = "name-table"
+note = "Six members in a fixed name pattern; exactly one carries the texture."
+
+[[target_profile.container.candidate.value.layer]]
+format = "xpr2"
+index = "none"
+note = "XPR2 on every archive inspected."
+
+[target_profile.path_rule]
+state = "unknown"
+note = "Blocked by both declared families carrying `bucket_resolution = \"unknown\"`, by there being two of them, and additionally by the derived tree — a path observed in an extraction is not a path rule for the shipped title."
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.compression]
+state = "unknown"
+note = "Provenance, not measurement."
+
+[target_profile.compression.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+note = "RefPack magic and a valid decompressed head on all 18 457 archives; full-stream round trip verified on the named specimens. `deterministic` false because reproducing EA's exact bytes was never tested."
+
+[target_profile.compression.candidate.value]
+payload = "refpack"
+deterministic = false
+
+[target_profile.atlas]
+state = "unknown"
+note = "Provenance, not measurement — and the candidate records only what the payload count establishes, without the atlas kind C0-POR1 read off it."
+
+[target_profile.atlas.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/receipts/data/c0-por1-census.json"]
+note = "Exactly one texture payload per archive across all 18 457 archives inspected; no surface is shared between ids. The atlas/pool kind is a further question the count does not answer, so the proposal leaves it out."
+
+[target_profile.atlas.candidate.value]
+sharing = "per-asset-surface"
+
+[target_profile.install]
+state = "unknown"
+note = "C0-AS1's finding stands: the capability CSV's `install` column is the undefined token `external` (contract Q-A: no meaning is invented). The tree that CSV's pipeline operated on is additionally derived. Nothing was installed or tested."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "Unknown, and further from an answer than on PS3: the portrait members were never located inside the shipping archives at all (C0-AS7 established only that they are NOT in the two render archives), so nothing is known about where the runtime reads them from or what a patch layer would do."
+
+[[target_profile.operation]]
+operation = "discover"
+requires = ["discovery", "runtime_lookup"]
+
+[[target_profile.operation]]
+operation = "identify"
+requires = ["identity"]
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling", "mipmaps"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = [
+    "container",
+    "raster.codec",
+    "raster.color_space",
+    "dimensions",
+    "tiling",
+    "mipmaps",
+    "compression",
+    "atlas.kind",
+]
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
+
+# ===================================================================== NHL 21, PS4
+
+[[target_profile]]
+target = "nhl21-ps4"
+note = """
+NOTHING IS ESTABLISHED, for the same provenance reason as Xbox 360, plus one that is specific to this
+target: no PS4 pixel data was decoded at all. Every geometry and format value below is an
+INTERPRETATION of T# descriptor bitfields.
+"""
+
+[[target_profile.corpus]]
+id = "ps4-extracted-tree"
+kind = "extracted-tree"
+attribution = "not-attributable"
+build_identification = "incomplete"
+identity_source = "the copy's own sce_sys/param.sfo — TITLE `NHL 21`, TITLE_ID `CUSA18182`, CONTENT_ID `EP0006-CUSA18182_00-NHLICEHOCKEY2021`"
+inspected_files = 10421
+groups = ["current"]
+limitations = [
+    "An EXTRACTED tree: the supplied path is literally `databigs\\Extracted\\...`. It establishes nothing about the outer `.big` packaging, about where a shipped portrait lives, or about install behaviour.",
+    "NO PS4 PIXEL DATA WAS DECODED. `data_format 41` is BC7 by the GCN table — a documented lookup, not a decode — and `tiling_index 13` was never exercised.",
+    "C0-POR1 claimed the payload's 384 all-zero blocks independently confirm a 340-pixel logical height, and that a linear surface could carry no padding. R1 withdraws both: all-zero blocks are consistent with padding but have other explanations, and linear surfaces can be pitch-padded.",
+    "A title id plus an SFO version field is not a build.",
+    "Colour format is NOT uniform on this target: the num_format field reads 0 (UNORM) on 10 246 files and 9 (SRGB) on 175. Whether those 175 are a distinct asset class is unknown.",
+]
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+
+[[target_profile.path_family]]
+id = "playerportraits"
+template = "nhl/ui/kettle_assets/playerportraits/p{numeric-id}.gnf"
+tokens = ["numeric-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+Flat: no bucket directories were observed in this tree. `bucket_resolution` is still `unknown` rather
+than `template-only`, and deliberately — a path observed INSIDE an extraction says nothing about where
+the shipped title keeps the file, so the template is not known to resolve anything for the target.
+"""
+
+[[target_profile.variant]]
+id = "portrait-512x340"
+note = "The one portrait form observed on this target, selected by its single path family. Uniform across the whole inspected corpus — and still a candidate, because that corpus is an extraction."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "playerportraits"
+
+[target_profile.variant.raster]
+state = "unknown"
+note = """
+Blocked three ways. `data_format 41` maps to BC7 by a table lookup, not a decode. `color_space` IS
+recorded on this target and is NOT uniform, so no single target-wide value is correct even in
+principle — which is why the candidate omits it rather than picking the majority. And `alpha` was
+never measured on this target at all.
+"""
+
+[target_profile.variant.raster.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "ps4-extracted-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+]
+note = "`data_format 41` on all 10 421 files, read from the T# descriptor. Colour space and alpha are deliberately absent: the first is non-uniform on this target and the second was never measured."
+
+[target_profile.variant.raster.candidate.value]
+codec = "bc7"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Provenance: the corpus is an extracted tree. This is the one portrait dimension in the family that is uniform across a whole inspected corpus, so a candidate is recorded."
+
+[target_profile.variant.dimensions.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "ps4-extracted-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+note = """
+Uniform across all 10 421 files. Read as an interpretation of the T# descriptor
+(`width-1 = dword2 & 0x3FFF`, `height-1 = (dword2 >> 14) & 0x3FFF`); every file is also exactly
+180 480 bytes, which is CONSISTENT with a 512x352 padded BC7 surface plus a 256-byte header. The
+padding arithmetic is not independent confirmation of the logical height, and R1 withdrew C0-POR1's
+claim that it was. `variant` carries no measurement — it is a label naming the observed form.
+"""
+
+[target_profile.variant.dimensions.candidate.value]
+width = 512
+height = 340
+variant = "portrait"
+power_of_two = false
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Provenance, not measurement."
+
+[target_profile.variant.mipmaps.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "ps4-extracted-tree"
+provenance = ["docs/receipts/data/c0-por1-census.json"]
+note = "`last_level = 0` in the T# descriptor on all 10 421 files — an interpretation of a header field. The payload arithmetic leaves no room for a chain, being exactly the padded base level."
+
+[target_profile.variant.mipmaps.candidate.value]
+policy = "none"
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Provenance, and the layout was never exercised — see the candidate note."
+
+[target_profile.variant.tiling.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "ps4-extracted-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/c0-por1-r1-evidence-scope.md",
+]
+note = """
+`tiling_index = 13` on all 10 421 files — an interpretation of a T# bitfield, and the ONLY evidence
+for this block. No PS4 pixel data was decoded, so the layout that index names was never exercised and
+nothing here shows it reproduces these images. C0-POR1 additionally argued from the payload padding
+that the surface must be tiled because a linear surface would carry none; R1 withdraws that, since
+linear surfaces can be pitch-padded. `alignment_bytes` is omitted rather than guessed.
+"""
+
+[target_profile.variant.tiling.candidate.value]
+kind = "gnf-tiled"
+
+[target_profile.discovery]
+state = "unknown"
+note = "The tree is an extraction; where these files live in the shipped title was not examined."
+
+[target_profile.identity]
+state = "unknown"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps4-nhl21.json#ubPc.lOnr",
+]
+note = "All 10 421 filenames match `p{digits}.gnf` with zero exceptions. The database half is MEASURED by C0-AS6 on `anchors/ps4/nhl21/databases/nhl_game.db` and carried below; the census records no id range for this tree, so not even a range comparison exists, and the block stays unknown."
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "ps4-extracted-tree"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps4-nhl21.json#ubPc.lOnr",
+]
+note = "PROPOSED, NOT OPERATIVE. MEASURED on the committed anchor: `ubPc.lOnr` (`artid`, 16 bits) over 7 247 player rows stores 7 244 distinct values in 1..21813, no zeros, no all-ones; ids 5, 12 and 16 are each stored by two rows (the live ambiguity behind `reject`). The tree holds 10 421 files against 7 244 distinct ids, so at least 3 177 files name no rostered player — or the id space is not what this proposes; nothing here decides which. To promote: the tree's ids (not just its count) joined to the anchor."
+
+[target_profile.identity.candidate.value]
+key = "numeric-id"
+source = "ubPc.lOnr (artid): one portrait id per player row"
+ambiguity = "reject"
+
+[target_profile.container]
+state = "unknown"
+note = "The `GNF ` layer is known NOT to be the whole chain — these files came out of `.big` containers, so at least one outer layer exists and was not examined. The candidate records that structurally rather than in prose."
+
+[target_profile.container.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "ps4-extracted-tree"
+provenance = [
+    "docs/receipts/c0-por1-portrait-measurements.md",
+    "docs/receipts/data/c0-por1-census.json",
+]
+note = "Innermost observed layer only, invariant across all 10 421 files: `GNF ` magic, `contentsSize = 0xF8`, version 2, a GNM T# descriptor at 0x10, payload at 0x100."
+
+[target_profile.container.candidate.value]
+outermost_layer_examined = false
+
+[[target_profile.container.candidate.value.layer]]
+format = "gnf"
+index = "none"
+note = "One GNM 2D texture per file. At least one outer archive layer exists and was not measured."
+
+[target_profile.path_rule]
+state = "unknown"
+note = "A path observed inside an extraction is not a path rule for the shipped title, and the single declared family carries `bucket_resolution = \"unknown\"` for exactly that reason."
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variant."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variant."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variant."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variant."
+
+[target_profile.compression]
+state = "unknown"
+note = """
+NOT MEASURABLE from this corpus, which is a different position from the other blocks here. The files
+were read from an extraction and are stored decompressed there, so whatever payload codec the shipping
+archive applies is simply not observable. This is an absence of evidence, not a measurement of `none`,
+and no candidate is recorded.
+"""
+
+[target_profile.atlas]
+state = "unknown"
+note = "Provenance, not measurement."
+
+[target_profile.atlas.candidate]
+confidence = "measured"
+scope = "inspected-corpus-invariant"
+corpus = "ps4-extracted-tree"
+provenance = ["docs/receipts/data/c0-por1-census.json"]
+note = "One GNM 2D texture per file across all 10 421 files; no surface is shared between ids. As on the Gen7 targets the atlas/pool kind is left out — the count does not answer it."
+
+[target_profile.atlas.candidate.value]
+sharing = "per-asset-surface"
+
+[target_profile.install]
+state = "unknown"
+note = "An extracted tree establishes nothing about install behaviour or about the outer `.big` packaging a replacement would have to satisfy. Nothing was installed or tested."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "Unknown. The files were read out of an extraction, so nothing is known about how the runtime addresses them or what a patch layer would take precedence over."
+
+[[target_profile.operation]]
+operation = "discover"
+requires = ["discovery", "runtime_lookup"]
+
+[[target_profile.operation]]
+operation = "identify"
+requires = ["identity"]
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling", "mipmaps"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = [
+    "container",
+    "raster.codec",
+    "raster.color_space",
+    "dimensions",
+    "tiling",
+    "mipmaps",
+    "compression",
+    "atlas.kind",
+]
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
+
+
+# ===================================================== NHL Legacy Recompiled (by reference)
+
+[[target_profile]]
+target = "legacyrecomp-recomp"
+reuses = "nhllegacy-xbox360"
+note = """
+Q47 (user direction, 2026-09-15; package C0-AS5): Legacy Recompiled uses the same portrait files and the
+same asset definitions as Legacy Xbox 360. This profile therefore inherits, BY REFERENCE and without
+a copy, the SHARED definitions of `nhllegacy-xbox360` — identity, container, path families and
+naming, the geometry/codec blocks, variants, resolution chains and the operation requirements
+(`asset_reuse::SHARED_BLOCKS` / `SHARED_TABLES`), with the corpora those blocks cite — in exactly
+the states they have there: what is a candidate or unknown on Legacy Xbox 360 is a candidate or
+unknown here, and nothing inherited becomes operative by being inherited. The reuse is the user's
+attributed decision, not a measurement: no Recompiled file was hashed or inspected for it, no corpus
+is declared here, and no provenance bridge is claimed. DESTINATION behaviour is this target's own
+and is UNKNOWN below: where a Recompiled installation keeps these files, how they are written there
+and what its runtime reads have not been inspected (FR4: no Recompiled installation, anchor or save
+fixture is committed). Nothing here says anything about Recompiled's database (its database unit
+stays absent from the registry) or about a reference-update capability. Qualification is not
+inherited: no automated case, evidence cell or runtime record of Legacy Xbox 360 applies here.
+"""
+
+[target_profile.discovery]
+state = "unknown"
+note = "Where a Legacy Recompiled installation keeps this family's files is not inspected (FR4). Not inherited from Legacy Xbox 360 by design: a destination root is the destination's own fact."
+
+[target_profile.install]
+state = "unknown"
+note = "How this family's files are written into a Recompiled installation is not inspected. Not inherited: an install kind, size policy or backup rule observed on an Xbox 360 tree is that tree's. While this is unknown, creation through any inherited resolution chain stays refused (`CreationSupport` reads this block, on this target)."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the Recompiled runtime reads for this family is not inspected. Not inherited: runtime evidence is a trace, a disassembly or a load test on the destination itself, never a folder listing and never another target's record."

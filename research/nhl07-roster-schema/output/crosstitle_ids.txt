@@ -1,0 +1,73 @@
+$ python research/nhl07-roster-schema/scripts/crosstitle_ids.py
+declared insert/delete ids for parents present in BOTH metas (same raw id):
+  CtBM  leagueplayerseasonstats         /leagueplayerseasonstats          ins KcZA/KcZA del EeDv/EeDv SAME
+  EClp  exhibitioncontroller            /exhibitioncontroller             ins VLuJ/VLuJ del LFUm/LFUm SAME
+  Ewsk  leagueteamplayoffsstats         /leagueteamplayoffsstats          ins SbrI/SbrI del wJln/wJln SAME
+  FJTs  exhibitionstates                /exhibitionstates                 ins bkIZ/bkIZ del lqSW/lqSW SAME
+  FKif  exhibitionrules                 /exhibitionrules                  ins ISIq/ISIq del CQSF/CQSF SAME
+  FekM  leaguecustomfacetable           /leaguecustomfacetable            ins lWmS/lWmS del rccd/rccd SAME
+  HUMb  leaguetasks                     /leaguetasks                      ins WExj/WExj del oWfM/oWfM SAME
+  IALy  leagueawardstable               /leagueawardstable                ins esMb/esMb del wiOU/wiOU SAME
+  Icui  leaguerules                     /leaguerules                      ins gTQc/gTQc del CpyT/CpyT SAME
+  JLWf  exhibitionoptions               /exhibitionoptions                ins PlbK/PlbK del BPpl/BPpl SAME
+  MMxP  leagueplayerbiotable            /leagueplayerbiotable             ins fcdR/fcdR del lWze/lWze SAME
+  OEtS  exhibitionarena                 /exhibitionarena                  ins CTnc/None del None/None DIFF
+  PSFv  leaguearena                     /leaguearena                      ins eiHK/eiHK del coVl/coVl SAME
+  PwCR  exhibitiontweaks                /exhibitiontweaks                 ins vOBu/vOBu del ZkPB/ZkPB SAME
+  QEoV  exhibitionfreeagents            /exhibitionfreeagents             ins sAMA/sAMA del mGOv/mGOv SAME
+  QfUJ  leagueteamstrategies            /leagueteamstrategies             ins PjxU/PjxU del BRfb/BRfb SAME
+  TlmR  leagueteampractice              /leagueteampractice               ins OcqD/OcqD del UqYs/UqYs SAME
+  Vzjq  customfacetable                 /customfacetable                  ins igwM/None del giej/None DIFF
+  WRGI  leaguestates                    /leaguestates                     ins xFwu/xFwu del TXSB/TXSB SAME
+  ZXww  leaguenews                      /leaguenews                       ins oiax/oiax del egAy/egAy SAME
+  cPbu  exhibitionplayerbiotable        /exhibitionplayerbiotable         ins None/PsvH del None/None DIFF
+  caBZ  exhibitionplayers               /exhibitionplayers                ins LZbD/LZbD del Frps/Frps SAME
+  juMS  leagueplayerplayoffsstats       /leagueplayerplayoffsstats        ins aAMH/aAMH del gSOo/gSOo SAME
+  kGzd  leaguefreeagents                /leaguefreeagents                 ins ioPQ/ioPQ del oiBf/oiBf SAME
+  kKzq  leaguecustomplayerremap         /leaguecustomplayerremap          ins tXWz/tXWz del Ttsw/Ttsw SAME
+  kPCA  leaguegoalieai                  /leaguegoalieai                   ins vmSc/vmSc del ZkIT/ZkIT SAME
+  kPYO  leaguegamestats                 /leaguegamestats                  ins keBr/keBr del moPE/moPE SAME
+  oYeE  exhibitionteamstrategies        /exhibitionteamstrategies         ins znPC/None del JhBt/None DIFF
+  rgQY  leaguerostertable               /leaguerostertable                ins Pwkd/Pwkd del VeqS/VeqS SAME
+  sDbJ  leaguedraftpick                 /leaguedraftpick                  ins INYI/INYI del CHqn/CHqn SAME
+  sbGR  leagueteams                     /leagueteams                      ins DnxP/DnxP del dlfg/dlfg SAME
+  sziH  leaguerookiegoalieai            /leaguerookiegoalieai             ins wtoq/wtoq del mXaF/mXaF SAME
+  ttOk  exhibitionteams                 /exhibitionteams                  ins fyFF/None del dULq/None DIFF
+  uGze  leagueemaildata                 /leagueemaildata                  ins ZCvv/ZCvv del zYhA/zYhA SAME
+  ulGe  exhibitionrostertable           /exhibitionrostertable            ins ibGM/ibGM del AtUj/AtUj SAME
+  vHJZ  leagueoptions                   /leagueoptions                    ins naRH/naRH del lYzo/lYzo SAME
+  wFSR  leagueteamseasonstats           /leagueteamseasonstats            ins HPAr/HPAr del BJaE/BJaE SAME
+  wcLl  leaguetweaks                    /leaguetweaks                     ins JvZd/JvZd del zFDS/zFDS SAME
+  wiLv  leagueskaterai                  /leagueskaterai                   ins ogsK/ogsK del eiil/eiil SAME
+  xZCi  gmdata                          /gmdata                           ins XSfs/XSfs del BoxD/BoxD SAME
+  xxMJ  leagueretirementtable           /leagueretirementtable            ins paEP/paEP del fwKg/fwKg SAME
+  yuHm  exhibitiongoalieai              /exhibitiongoalieai               ins None/PxTk del None/None DIFF
+  yvSd  exhibitionskaterai              /exhibitionskaterai               ins None/kbtS del None/None DIFF
+  yvnq  leaguescheduletable             /leaguescheduletable              ins ULcv/ULcv del CRmA/CRmA SAME
+same: 37 diff: 7
+
+update-table ids resolved by field set, NHL 07 vs NHL 08 (same save table id -> parents):
+  CvSu  nhl07->['cPbu'] nhl08->['cPbu']
+  DZfz  nhl07->['dDrd', 'YzeG', 'yuHm'] nhl08->None
+  HHLk  nhl07->['MqdK'] nhl08->None
+  Iblm  nhl07->['bZvB'] nhl08->None
+  JJDo  nhl07->None nhl08->['lVMf']
+  KjDh  nhl07->None nhl08->['Roup']
+  MSZu  nhl07->None nhl08->['ajmx']
+  MVOx  nhl07->['EhOn'] nhl08->None
+  PPVt  nhl07->None nhl08->['Vzjq']
+  RosT  nhl07->['Raym', 'yvSd', 'oDHy'] nhl08->['yvSd']
+  SREo  nhl07->None nhl08->['ttOk']
+  TUaR  nhl07->None nhl08->['OEtS']
+  UHgc  nhl07->None nhl08->['vbHh']
+  VDLc  nhl07->None nhl08->['nAUy']
+  XGls  nhl07->None nhl08->['sozv']
+  YvhR  nhl07->['Raym', 'yvSd', 'oDHy'] nhl08->None
+  hTDj  nhl07->None nhl08->['NDEo']
+  mASv  nhl07->['oYeE'] nhl08->['oYeE']
+  qWeu  nhl07->None nhl08->['caBZ']
+  rcpY  nhl07->['dDrd', 'YzeG', 'yuHm'] nhl08->None
+  uyGF  nhl07->['dDrd', 'YzeG', 'yuHm'] nhl08->['yuHm']
+  vozd  nhl07->['ulGe'] nhl08->['ulGe']
+  zrsU  nhl07->['Raym', 'yvSd', 'oDHy'] nhl08->None
+

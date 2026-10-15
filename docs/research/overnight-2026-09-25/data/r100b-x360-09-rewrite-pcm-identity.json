@@ -1,0 +1,107 @@
+{
+ "note": "R100b - the X360 NHL 09 header-rewrite control, strengthened (review 2026-09-25 R97-R101 F3): for the same three vectors as R100,\ndecode (i) the shipped packets and (ii) the synthesised-header construction through ffmpeg `xma2`, and compare the two PCM outputs\nsample by sample (identical? max abs difference?). Plus a third reading (iii): every packet header word zeroed (frame count 0,\noffset 0, metadata 0) - a control that DOES change a field the reader could use (the frame-offset bits), to show whether the\ndecoder output depends on the header at all on these vectors. Scope: three vectors, one decoder build; nothing universal follows.\nUsage: python r100b_x360_09_rewrite_pcm_identity.py <out.json> --scratch DIR\n",
+ "vectors": [
+  {
+   "bank": "playercalls",
+   "record": 254,
+   "samples_sum": 49382,
+   "ast_sha256": "372543ad6151d12818ff78cd67d3bf44c20436ad11a815fe609cfdb8de56014d",
+   "raw": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 49382,
+    "pcm_sha256": "a4e83418bc56b2f2fcade5850bf31665852721ea3571a107fd52df44eff34430"
+   },
+   "synth": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 49382,
+    "pcm_sha256": "a4e83418bc56b2f2fcade5850bf31665852721ea3571a107fd52df44eff34430"
+   },
+   "zeroed": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 49382,
+    "pcm_sha256": "a4e83418bc56b2f2fcade5850bf31665852721ea3571a107fd52df44eff34430"
+   },
+   "raw_vs_synth": {
+    "identical": true,
+    "max_abs_diff": 0,
+    "differing_samples": 0
+   },
+   "raw_vs_zeroed": {
+    "identical": true,
+    "max_abs_diff": 0,
+    "differing_samples": 0
+   }
+  },
+  {
+   "bank": "crowds",
+   "record": 41,
+   "samples_sum": 450000,
+   "ast_sha256": "a963728b686eb5d2cc18e2bff307c2747b1f0e8ba8038f452f43a4baab079ef0",
+   "raw": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 450000,
+    "pcm_sha256": "319d787ec9ed06c7c85ba7b24aa60e8bbe5425db6f969904717e91f848309dec"
+   },
+   "synth": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 450000,
+    "pcm_sha256": "319d787ec9ed06c7c85ba7b24aa60e8bbe5425db6f969904717e91f848309dec"
+   },
+   "zeroed": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 450000,
+    "pcm_sha256": "319d787ec9ed06c7c85ba7b24aa60e8bbe5425db6f969904717e91f848309dec"
+   },
+   "raw_vs_synth": {
+    "identical": true,
+    "max_abs_diff": 0,
+    "differing_samples": 0
+   },
+   "raw_vs_zeroed": {
+    "identical": true,
+    "max_abs_diff": 0,
+    "differing_samples": 0
+   }
+  },
+  {
+   "bank": "colors1",
+   "record": 69,
+   "samples_sum": 69662,
+   "ast_sha256": "16178401f2e56527cf27276d3bb840df2d86bda2d4bf8c2ad3d022dd90d1e585",
+   "raw": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 69662,
+    "pcm_sha256": "ea7d2dc1cf679ff214491783ec1f58c4989dc2f4d85e811dc5bd16850aa16df2"
+   },
+   "synth": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 69662,
+    "pcm_sha256": "ea7d2dc1cf679ff214491783ec1f58c4989dc2f4d85e811dc5bd16850aa16df2"
+   },
+   "zeroed": {
+    "ffmpeg_rc": 0,
+    "stderr_tail": "",
+    "decoded_samples": 69662,
+    "pcm_sha256": "ea7d2dc1cf679ff214491783ec1f58c4989dc2f4d85e811dc5bd16850aa16df2"
+   },
+   "raw_vs_synth": {
+    "identical": true,
+    "max_abs_diff": 0,
+    "differing_samples": 0
+   },
+   "raw_vs_zeroed": {
+    "identical": true,
+    "max_abs_diff": 0,
+    "differing_samples": 0
+   }
+  }
+ ]
+}

@@ -9,11 +9,12 @@ import { call } from "../lib/client";
 import { Card, ErrorBanner, EmptyState, Pill, Spinner } from "../components/primitives";
 import { HeadMeshViewer } from "../components/HeadMeshViewer";
 import { usePlayerAssets } from "./PlayerAssets";
+import { PlayerContainmentCard } from "../components/PlayerContainmentCard";
 import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 
 export function PlayerAssetDetail() {
   const { id } = useParams();
-  const { installDir, rootArgs, assets } = usePlayerAssets();
+  const { projectId, installDir, rootArgs, assets } = usePlayerAssets();
   const player = (assets.data ?? []).find((p) => String(p.bio_record) === id);
 
   if (!player) {
@@ -23,17 +24,19 @@ export function PlayerAssetDetail() {
       <EmptyState title="Player not found" hint="This record isn't in the current scan." />
     );
   }
-  return <AssetDetail player={player} installDir={installDir} rootArgs={rootArgs} />;
+  return <AssetDetail player={player} installDir={installDir} rootArgs={rootArgs} projectId={projectId} />;
 }
 
 function AssetDetail({
   player,
   installDir,
   rootArgs,
+  projectId,
 }: {
   player: PlayerAssetsDto;
   installDir: string | null;
   rootArgs: ReturnType<typeof usePlayerAssets>["rootArgs"];
+  projectId: number;
 }) {
   const preview = useQuery({
     queryKey: ["portraitPreview", player.portrait_path],
@@ -66,8 +69,8 @@ function AssetDetail({
           <div className="flex flex-wrap gap-1">
             {player.mesh_path ? (
               <Pill tone="ok">Own head model</Pill>
-            ) : player.pool_head ? (
-              <Pill tone="neutral">Shared pool head</Pill>
+            ) : player.pool_head || player.head_shared ? (
+              <Pill tone="neutral">Shared generic head</Pill>
             ) : (
               <Pill tone="neutral">No head model</Pill>
             )}
@@ -81,7 +84,7 @@ function AssetDetail({
             {player.slug ? null : <Pill tone="warn">Not exportable</Pill>}
           </div>
 
-          {player.pool_head ? (
+          {player.pool_head || player.head_shared ? (
             <p className="text-xs text-slate-500">
               This player uses a generic head model shared with many others, so it isn't exported
               under their name.
@@ -95,6 +98,13 @@ function AssetDetail({
           )}
         </div>
       </Card>
+
+      {/* Phase 3 (22 Sep 2026): this player's portrait / head containment, read-only. */}
+      {installDir ? (
+        <Card title="Containment" subtitle="the ids, the hasportrait flag as stored, and what the install ships">
+          <PlayerContainmentCard projectId={projectId} rootArgs={rootArgs} installDir={installDir} bioRecord={player.bio_record} />
+        </Card>
+      ) : null}
 
       {player.mesh_path && installDir ? (
         <Card

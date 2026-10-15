@@ -1,0 +1,3009 @@
+{
+ "note": "R35 \u2014 gen7 database audio ids vs the speech graffiti tag tables (read-only): for every `*audioid*` / `surnameid` column of every table\nof the PS3 anchors 09\u2013Legacy (repo `anchors/ps3/<title>/databases/nhlng.db` + metadata; PS3 = Xbox 360 for the speech data per handoff 04),\nthe set of non-zero values is compared with the key set of every tag type of `pbp_eng_graffitidata` (handoff 04 \u00a72 layout, tag = EVT0\nparameter id) and of the KWD0 keyword ids (15 / Legacy). Reports, per column: the best-matching tag type (largest containment), the\ncontainment ratio, the values outside it (first 40), and the same for the ann (rink announcer) graffiti where it exists.\nUsage: python r35_gen7_audio_id_bindings.py <out.json>\n",
+ "titles": {
+  "nhl09": {
+   "tree": "ps3-nhl09",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl09\\databases\\nhlng.db",
+   "pbp_tag_types": 49,
+   "ann_tag_types": 15,
+   "params": 48,
+   "kwd0": false,
+   "columns": [
+    {
+     "table": "leaguerookieplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 188,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 188,
+     "distinct_nonzero": 157,
+     "min": 1,
+     "max": 509,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2870,
+       "tag_name": "tag 2870",
+       "values_in_keys": 157,
+       "key_set_size": 2832
+      },
+      {
+       "containment": 0.9873,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 155,
+       "key_set_size": 254
+      },
+      {
+       "containment": 0.9618,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 151,
+       "key_set_size": 247
+      },
+      {
+       "containment": 0.9108,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 143,
+       "key_set_size": 239
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 3968,
+     "distinct_nonzero": 3778,
+     "min": 1,
+     "max": 13000,
+     "best": [
+      {
+       "containment": 0.7001,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 2645,
+       "key_set_size": 5410
+      },
+      {
+       "containment": 0.5881,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 2222,
+       "key_set_size": 3146
+      },
+      {
+       "containment": 0.5537,
+       "source": "pbp",
+       "tag": 2870,
+       "tag_name": "tag 2870",
+       "values_in_keys": 2092,
+       "key_set_size": 2832
+      },
+      {
+       "containment": 0.0413,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 156,
+       "key_set_size": 254
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      42,
+      157,
+      280,
+      493,
+      510,
+      618,
+      921,
+      1015,
+      1142,
+      1166,
+      1221,
+      1231,
+      1264,
+      1557,
+      1559,
+      1569,
+      1573,
+      1579,
+      1584,
+      1596,
+      1597,
+      1611,
+      1617,
+      1619,
+      1629,
+      1630,
+      1634,
+      1647,
+      1648,
+      1656,
+      1658,
+      1659,
+      1669,
+      1687,
+      1703,
+      1707,
+      1708,
+      1714,
+      1716,
+      1720
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 188,
+     "distinct_nonzero": 52,
+     "min": 1,
+     "max": 146,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2870,
+       "tag_name": "tag 2870",
+       "values_in_keys": 52,
+       "key_set_size": 2832
+      },
+      {
+       "containment": 0.7692,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 40,
+       "key_set_size": 230
+      },
+      {
+       "containment": 0.7308,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 38,
+       "key_set_size": 5410
+      },
+      {
+       "containment": 0.6923,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 36,
+       "key_set_size": 202
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 188,
+     "distinct_nonzero": 80,
+     "min": 1,
+     "max": 158,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2870,
+       "tag_name": "tag 2870",
+       "values_in_keys": 80,
+       "key_set_size": 2832
+      },
+      {
+       "containment": 0.9875,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 79,
+       "key_set_size": 202
+      },
+      {
+       "containment": 0.9875,
+       "source": "pbp",
+       "tag": 2486,
+       "tag_name": "playoff_focus_team",
+       "values_in_keys": 79,
+       "key_set_size": 202
+      },
+      {
+       "containment": 0.9875,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 79,
+       "key_set_size": 107
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 188,
+     "distinct_nonzero": 81,
+     "min": 1,
+     "max": 255,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2870,
+       "tag_name": "tag 2870",
+       "values_in_keys": 81,
+       "key_set_size": 2832
+      },
+      {
+       "containment": 0.9877,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 80,
+       "key_set_size": 202
+      },
+      {
+       "containment": 0.9877,
+       "source": "pbp",
+       "tag": 2486,
+       "tag_name": "playoff_focus_team",
+       "values_in_keys": 80,
+       "key_set_size": 202
+      },
+      {
+       "containment": 0.9877,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 80,
+       "key_set_size": 107
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 2142,
+     "distinct_nonzero": 1902,
+     "min": 10000,
+     "max": 12399,
+     "best": [
+      {
+       "containment": 0.9989,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 1900,
+       "key_set_size": 5410
+      },
+      {
+       "containment": 0.0016,
+       "source": "pbp",
+       "tag": 2417,
+       "tag_name": "rivalry_ID",
+       "values_in_keys": 3,
+       "key_set_size": 25
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      10226,
+      11255
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  },
+  "nhl10": {
+   "tree": "ps3-nhl10",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl10\\databases\\nhlng.db",
+   "pbp_tag_types": 51,
+   "ann_tag_types": 16,
+   "params": 52,
+   "kwd0": false,
+   "columns": [
+    {
+     "table": "leaguerookieplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 182,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 182,
+     "distinct_nonzero": 151,
+     "min": 1,
+     "max": 509,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2903,
+       "tag_name": "tag 2903",
+       "values_in_keys": 151,
+       "key_set_size": 3333
+      },
+      {
+       "containment": 0.9868,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 149,
+       "key_set_size": 272
+      },
+      {
+       "containment": 0.9603,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 145,
+       "key_set_size": 265
+      },
+      {
+       "containment": 0.947,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 143,
+       "key_set_size": 257
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 3933,
+     "distinct_nonzero": 3750,
+     "min": 1,
+     "max": 11554,
+     "best": [
+      {
+       "containment": 0.7576,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 2841,
+       "key_set_size": 5873
+      },
+      {
+       "containment": 0.6336,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 2376,
+       "key_set_size": 3891
+      },
+      {
+       "containment": 0.6139,
+       "source": "pbp",
+       "tag": 2903,
+       "tag_name": "tag 2903",
+       "values_in_keys": 2302,
+       "key_set_size": 3333
+      },
+      {
+       "containment": 0.0579,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 217,
+       "key_set_size": 272
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      52,
+      53,
+      61,
+      63,
+      69,
+      70,
+      74,
+      75,
+      78,
+      79,
+      83,
+      85,
+      86,
+      89,
+      90,
+      91,
+      101,
+      107,
+      114,
+      115,
+      118,
+      121,
+      128,
+      132,
+      135,
+      136,
+      137,
+      138,
+      150,
+      152,
+      153,
+      157,
+      158,
+      161,
+      238,
+      262,
+      282,
+      288,
+      330,
+      339
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 182,
+     "distinct_nonzero": 63,
+     "min": 1,
+     "max": 136,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2903,
+       "tag_name": "tag 2903",
+       "values_in_keys": 63,
+       "key_set_size": 3333
+      },
+      {
+       "containment": 0.9048,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 57,
+       "key_set_size": 220
+      },
+      {
+       "containment": 0.9048,
+       "source": "pbp",
+       "tag": 2486,
+       "tag_name": "playoff_focus_team",
+       "values_in_keys": 57,
+       "key_set_size": 220
+      },
+      {
+       "containment": 0.9048,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 57,
+       "key_set_size": 272
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 182,
+     "distinct_nonzero": 105,
+     "min": 1,
+     "max": 417,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2903,
+       "tag_name": "tag 2903",
+       "values_in_keys": 105,
+       "key_set_size": 3333
+      },
+      {
+       "containment": 0.8762,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 92,
+       "key_set_size": 121
+      },
+      {
+       "containment": 0.8762,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 92,
+       "key_set_size": 257
+      },
+      {
+       "containment": 0.8762,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 92,
+       "key_set_size": 265
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 182,
+     "distinct_nonzero": 106,
+     "min": 1,
+     "max": 417,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2903,
+       "tag_name": "tag 2903",
+       "values_in_keys": 106,
+       "key_set_size": 3333
+      },
+      {
+       "containment": 0.8774,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 93,
+       "key_set_size": 121
+      },
+      {
+       "containment": 0.8774,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 93,
+       "key_set_size": 257
+      },
+      {
+       "containment": 0.8774,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 93,
+       "key_set_size": 265
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 2405,
+     "distinct_nonzero": 2242,
+     "min": 10000,
+     "max": 12989,
+     "best": [
+      {
+       "containment": 0.8466,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 1898,
+       "key_set_size": 5873
+      },
+      {
+       "containment": 0.1517,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 340,
+       "key_set_size": 3891
+      },
+      {
+       "containment": 0.0013,
+       "source": "pbp",
+       "tag": 2417,
+       "tag_name": "rivalry_ID",
+       "values_in_keys": 3,
+       "key_set_size": 25
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      10226,
+      11255,
+      11506,
+      11705,
+      12600,
+      12601,
+      12602,
+      12603,
+      12604,
+      12605,
+      12606,
+      12607,
+      12608,
+      12609,
+      12610,
+      12611,
+      12612,
+      12613,
+      12614,
+      12615,
+      12616,
+      12617,
+      12618,
+      12619,
+      12620,
+      12621,
+      12622,
+      12624,
+      12625,
+      12626,
+      12627,
+      12628,
+      12629,
+      12630,
+      12631,
+      12632,
+      12633,
+      12635,
+      12636,
+      12637
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  },
+  "nhl11": {
+   "tree": "ps3-nhl11",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl11\\databases\\nhlng.db",
+   "pbp_tag_types": 52,
+   "ann_tag_types": 21,
+   "params": 50,
+   "kwd0": false,
+   "columns": [
+    {
+     "table": "leaguerookieplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 242,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 242,
+     "distinct_nonzero": 211,
+     "min": 1,
+     "max": 459,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2918,
+       "tag_name": "tag 2918",
+       "values_in_keys": 211,
+       "key_set_size": 3668
+      },
+      {
+       "containment": 0.9858,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 208,
+       "key_set_size": 320
+      },
+      {
+       "containment": 0.981,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 207,
+       "key_set_size": 347
+      },
+      {
+       "containment": 0.9763,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 206,
+       "key_set_size": 338
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 5310,
+     "distinct_nonzero": 5127,
+     "min": 2,
+     "max": 11554,
+     "best": [
+      {
+       "containment": 0.828,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 4245,
+       "key_set_size": 4654
+      },
+      {
+       "containment": 0.614,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 3148,
+       "key_set_size": 6574
+      },
+      {
+       "containment": 0.4552,
+       "source": "pbp",
+       "tag": 2918,
+       "tag_name": "tag 2918",
+       "values_in_keys": 2334,
+       "key_set_size": 3668
+      },
+      {
+       "containment": 0.0427,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 219,
+       "key_set_size": 347
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      7,
+      27,
+      35,
+      52,
+      74,
+      84,
+      86,
+      88,
+      96,
+      107,
+      118,
+      126,
+      136,
+      140,
+      160,
+      163,
+      170,
+      171,
+      210,
+      215,
+      219,
+      242,
+      245,
+      258,
+      285,
+      295,
+      298,
+      343,
+      383,
+      386,
+      399,
+      404,
+      424,
+      426,
+      456,
+      469,
+      487,
+      491,
+      508,
+      553
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 242,
+     "distinct_nonzero": 63,
+     "min": 1,
+     "max": 136,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2918,
+       "tag_name": "tag 2918",
+       "values_in_keys": 63,
+       "key_set_size": 3668
+      },
+      {
+       "containment": 0.9365,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 59,
+       "key_set_size": 295
+      },
+      {
+       "containment": 0.9365,
+       "source": "pbp",
+       "tag": 2486,
+       "tag_name": "playoff_focus_team",
+       "values_in_keys": 59,
+       "key_set_size": 295
+      },
+      {
+       "containment": 0.9365,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 59,
+       "key_set_size": 330
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 242,
+     "distinct_nonzero": 152,
+     "min": 1,
+     "max": 479,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2918,
+       "tag_name": "tag 2918",
+       "values_in_keys": 152,
+       "key_set_size": 3668
+      },
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 152,
+       "key_set_size": 181
+      },
+      {
+       "containment": 0.875,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 133,
+       "key_set_size": 330
+      },
+      {
+       "containment": 0.875,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 133,
+       "key_set_size": 338
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 242,
+     "distinct_nonzero": 152,
+     "min": 1,
+     "max": 479,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2918,
+       "tag_name": "tag 2918",
+       "values_in_keys": 152,
+       "key_set_size": 3668
+      },
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 152,
+       "key_set_size": 181
+      },
+      {
+       "containment": 0.875,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 133,
+       "key_set_size": 330
+      },
+      {
+       "containment": 0.875,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 133,
+       "key_set_size": 338
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 2405,
+     "distinct_nonzero": 2242,
+     "min": 10000,
+     "max": 12989,
+     "best": [
+      {
+       "containment": 0.8466,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 1898,
+       "key_set_size": 6574
+      },
+      {
+       "containment": 0.0125,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 28,
+       "key_set_size": 4654
+      },
+      {
+       "containment": 0.0013,
+       "source": "pbp",
+       "tag": 2417,
+       "tag_name": "rivalry_ID",
+       "values_in_keys": 3,
+       "key_set_size": 25
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      10226,
+      11255,
+      11506,
+      11705,
+      12600,
+      12601,
+      12602,
+      12603,
+      12604,
+      12605,
+      12606,
+      12607,
+      12608,
+      12609,
+      12610,
+      12611,
+      12612,
+      12613,
+      12614,
+      12615,
+      12616,
+      12617,
+      12618,
+      12619,
+      12620,
+      12621,
+      12622,
+      12624,
+      12625,
+      12626,
+      12627,
+      12628,
+      12629,
+      12630,
+      12631,
+      12632,
+      12633,
+      12635,
+      12636,
+      12637
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  },
+  "nhl12": {
+   "tree": "ps3-nhl12",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl12\\databases\\nhlng.db",
+   "pbp_tag_types": 60,
+   "ann_tag_types": 23,
+   "params": 58,
+   "kwd0": false,
+   "columns": [
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 243,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 243,
+     "distinct_nonzero": 210,
+     "min": 1,
+     "max": 505,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2969,
+       "tag_name": "tag 2969",
+       "values_in_keys": 210,
+       "key_set_size": 4345
+      },
+      {
+       "containment": 0.981,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 206,
+       "key_set_size": 323
+      },
+      {
+       "containment": 0.9762,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 205,
+       "key_set_size": 322
+      },
+      {
+       "containment": 0.9667,
+       "source": "pbp",
+       "tag": 2165,
+       "tag_name": "team_home",
+       "values_in_keys": 203,
+       "key_set_size": 338
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 5395,
+     "distinct_nonzero": 5212,
+     "min": 2,
+     "max": 11554,
+     "best": [
+      {
+       "containment": 0.8302,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 4327,
+       "key_set_size": 5328
+      },
+      {
+       "containment": 0.6612,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 3446,
+       "key_set_size": 8378
+      },
+      {
+       "containment": 0.4662,
+       "source": "pbp",
+       "tag": 2969,
+       "tag_name": "tag 2969",
+       "values_in_keys": 2430,
+       "key_set_size": 4345
+      },
+      {
+       "containment": 0.0397,
+       "source": "pbp",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 207,
+       "key_set_size": 347
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      7,
+      27,
+      74,
+      86,
+      88,
+      96,
+      107,
+      118,
+      126,
+      140,
+      163,
+      215,
+      219,
+      242,
+      258,
+      285,
+      343,
+      383,
+      399,
+      404,
+      424,
+      426,
+      456,
+      469,
+      487,
+      508,
+      553,
+      565,
+      576,
+      611,
+      617,
+      640,
+      648,
+      653,
+      662,
+      685,
+      755,
+      762,
+      768,
+      769
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 243,
+     "distinct_nonzero": 61,
+     "min": 1,
+     "max": 136,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2969,
+       "tag_name": "tag 2969",
+       "values_in_keys": 61,
+       "key_set_size": 4345
+      },
+      {
+       "containment": 0.9344,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 57,
+       "key_set_size": 294
+      },
+      {
+       "containment": 0.9344,
+       "source": "pbp",
+       "tag": 2486,
+       "tag_name": "playoff_focus_team",
+       "values_in_keys": 57,
+       "key_set_size": 294
+      },
+      {
+       "containment": 0.9344,
+       "source": "pbp",
+       "tag": 2166,
+       "tag_name": "team_away",
+       "values_in_keys": 57,
+       "key_set_size": 330
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 243,
+     "distinct_nonzero": 152,
+     "min": 1,
+     "max": 479,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2969,
+       "tag_name": "tag 2969",
+       "values_in_keys": 152,
+       "key_set_size": 4345
+      },
+      {
+       "containment": 0.9737,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 148,
+       "key_set_size": 180
+      },
+      {
+       "containment": 0.875,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 133,
+       "key_set_size": 323
+      },
+      {
+       "containment": 0.8618,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 131,
+       "key_set_size": 294
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 243,
+     "distinct_nonzero": 153,
+     "min": 1,
+     "max": 700,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 2969,
+       "tag_name": "tag 2969",
+       "values_in_keys": 153,
+       "key_set_size": 4345
+      },
+      {
+       "containment": 0.9739,
+       "source": "pbp",
+       "tag": 2167,
+       "tag_name": "intro_venue",
+       "values_in_keys": 149,
+       "key_set_size": 180
+      },
+      {
+       "containment": 0.8693,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 133,
+       "key_set_size": 323
+      },
+      {
+       "containment": 0.8562,
+       "source": "pbp",
+       "tag": 2487,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 131,
+       "key_set_size": 294
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 4200,
+     "distinct_nonzero": 3737,
+     "min": 10000,
+     "max": 14341,
+     "best": [
+      {
+       "containment": 0.8469,
+       "source": "pbp",
+       "tag": 2164,
+       "tag_name": "player_ID",
+       "values_in_keys": 3165,
+       "key_set_size": 8378
+      },
+      {
+       "containment": 0.012,
+       "source": "pbp",
+       "tag": 2950,
+       "tag_name": "stats_num_team_win_loss_otl_encoded",
+       "values_in_keys": 45,
+       "key_set_size": 276
+      },
+      {
+       "containment": 0.0075,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "team_ID",
+       "values_in_keys": 28,
+       "key_set_size": 5328
+      },
+      {
+       "containment": 0.0011,
+       "source": "pbp",
+       "tag": 2417,
+       "tag_name": "rivalry_ID",
+       "values_in_keys": 4,
+       "key_set_size": 25
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      11642,
+      11705,
+      12735,
+      13397,
+      13631,
+      13769,
+      13770,
+      13771,
+      13772,
+      13773,
+      13774,
+      13775,
+      13776,
+      13777,
+      13778,
+      13779,
+      13780,
+      13781,
+      13782,
+      13783,
+      13784,
+      13785,
+      13786,
+      13787,
+      13788,
+      13789,
+      13790,
+      13791,
+      13792,
+      13793,
+      13794,
+      13795,
+      13796,
+      13797,
+      13798,
+      13799,
+      13800,
+      13801,
+      13802,
+      13803
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  },
+  "nhl13": {
+   "tree": "ps3-nhl13",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl13\\databases\\nhlng.db",
+   "pbp_tag_types": 83,
+   "ann_tag_types": 23,
+   "params": 84,
+   "kwd0": false,
+   "columns": [
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 248,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 248,
+     "distinct_nonzero": 211,
+     "min": 1,
+     "max": 505,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 211,
+       "key_set_size": 4661
+      },
+      {
+       "containment": 0.9573,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 202,
+       "key_set_size": 347
+      },
+      {
+       "containment": 0.9573,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 202,
+       "key_set_size": 318
+      },
+      {
+       "containment": 0.9526,
+       "source": "pbp",
+       "tag": 3,
+       "tag_name": "team_home",
+       "values_in_keys": 201,
+       "key_set_size": 337
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 5412,
+     "distinct_nonzero": 5230,
+     "min": 2,
+     "max": 11554,
+     "best": [
+      {
+       "containment": 0.9233,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "tag 2163",
+       "values_in_keys": 4829,
+       "key_set_size": 6711
+      },
+      {
+       "containment": 0.7325,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 3831,
+       "key_set_size": 9761
+      },
+      {
+       "containment": 0.4476,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 2341,
+       "key_set_size": 4661
+      },
+      {
+       "containment": 0.0344,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 180,
+       "key_set_size": 347
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      107,
+      118,
+      126,
+      163,
+      219,
+      258,
+      383,
+      399,
+      426,
+      456,
+      469,
+      576,
+      617,
+      640,
+      662,
+      769,
+      863,
+      1001,
+      1032,
+      1059,
+      1069,
+      1081,
+      1112,
+      1128,
+      1165,
+      1205,
+      1267,
+      1289,
+      1329,
+      1424,
+      1441,
+      1476,
+      1488,
+      1524,
+      1766,
+      1865,
+      1896,
+      1981,
+      2003,
+      2027
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 174,
+     "distinct_nonzero": 61,
+     "min": 1,
+     "max": 136,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 61,
+       "key_set_size": 4661
+      },
+      {
+       "containment": 0.9344,
+       "source": "pbp",
+       "tag": 68,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 57,
+       "key_set_size": 294
+      },
+      {
+       "containment": 0.9344,
+       "source": "pbp",
+       "tag": 67,
+       "tag_name": "playoff_focus_team",
+       "values_in_keys": 57,
+       "key_set_size": 294
+      },
+      {
+       "containment": 0.9016,
+       "source": "pbp",
+       "tag": 4,
+       "tag_name": "team_away",
+       "values_in_keys": 55,
+       "key_set_size": 329
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 174,
+     "distinct_nonzero": 153,
+     "min": 1,
+     "max": 480,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 153,
+       "key_set_size": 4661
+      },
+      {
+       "containment": 0.9869,
+       "source": "pbp",
+       "tag": 5,
+       "tag_name": "intro_venue",
+       "values_in_keys": 151,
+       "key_set_size": 186
+      },
+      {
+       "containment": 0.902,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 138,
+       "key_set_size": 9761
+      },
+      {
+       "containment": 0.8693,
+       "source": "pbp",
+       "tag": 4,
+       "tag_name": "team_away",
+       "values_in_keys": 133,
+       "key_set_size": 329
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 174,
+     "distinct_nonzero": 155,
+     "min": 1,
+     "max": 701,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 155,
+       "key_set_size": 4661
+      },
+      {
+       "containment": 0.9806,
+       "source": "pbp",
+       "tag": 5,
+       "tag_name": "intro_venue",
+       "values_in_keys": 152,
+       "key_set_size": 186
+      },
+      {
+       "containment": 0.9032,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 140,
+       "key_set_size": 9761
+      },
+      {
+       "containment": 0.8581,
+       "source": "pbp",
+       "tag": 4,
+       "tag_name": "team_away",
+       "values_in_keys": 133,
+       "key_set_size": 329
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 4516,
+     "distinct_nonzero": 4046,
+     "min": 10000,
+     "max": 14678,
+     "best": [
+      {
+       "containment": 0.8562,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 3464,
+       "key_set_size": 9761
+      },
+      {
+       "containment": 0.0106,
+       "source": "pbp",
+       "tag": 216,
+       "tag_name": "stats_num_team_win_loss_otl_encoded",
+       "values_in_keys": 43,
+       "key_set_size": 276
+      },
+      {
+       "containment": 0.0069,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "tag 2163",
+       "values_in_keys": 28,
+       "key_set_size": 6711
+      },
+      {
+       "containment": 0.001,
+       "source": "pbp",
+       "tag": 52,
+       "tag_name": "rivalry_ID",
+       "values_in_keys": 4,
+       "key_set_size": 24
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      10435,
+      10568,
+      10740,
+      10937,
+      11133,
+      11204,
+      11642,
+      11705,
+      11877,
+      11971,
+      12735,
+      13385,
+      13386,
+      13397,
+      13631,
+      13769,
+      13770,
+      13771,
+      13772,
+      13773,
+      13774,
+      13775,
+      13776,
+      13777,
+      13778,
+      13779,
+      13780,
+      13781,
+      13782,
+      13783,
+      13784,
+      13785,
+      13786,
+      13787,
+      13788,
+      13789,
+      13790,
+      13791,
+      13792,
+      13793
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  },
+  "nhl14": {
+   "tree": "ps3-nhl14",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl14\\databases\\nhlng.db",
+   "pbp_tag_types": 81,
+   "ann_tag_types": 23,
+   "params": 85,
+   "kwd0": false,
+   "columns": [
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 246,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 246,
+     "distinct_nonzero": 211,
+     "min": 1,
+     "max": 505,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 211,
+       "key_set_size": 4912
+      },
+      {
+       "containment": 0.981,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 207,
+       "key_set_size": 324
+      },
+      {
+       "containment": 0.9621,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 203,
+       "key_set_size": 320
+      },
+      {
+       "containment": 0.9526,
+       "source": "pbp",
+       "tag": 3,
+       "tag_name": "team_home",
+       "values_in_keys": 201,
+       "key_set_size": 340
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 5374,
+     "distinct_nonzero": 5127,
+     "min": 1,
+     "max": 14591,
+     "best": [
+      {
+       "containment": 0.9208,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "tag 2163",
+       "values_in_keys": 4721,
+       "key_set_size": 7518
+      },
+      {
+       "containment": 0.7156,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 3669,
+       "key_set_size": 10642
+      },
+      {
+       "containment": 0.4137,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 2121,
+       "key_set_size": 4912
+      },
+      {
+       "containment": 0.031,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 159,
+       "key_set_size": 346
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      107,
+      118,
+      163,
+      219,
+      383,
+      399,
+      426,
+      456,
+      469,
+      576,
+      769,
+      1001,
+      1059,
+      1069,
+      1205,
+      1329,
+      1424,
+      1441,
+      1524,
+      1790,
+      1896,
+      2130,
+      2170,
+      2221,
+      2340,
+      2384,
+      2492,
+      2556,
+      3010,
+      3015,
+      3022,
+      3042,
+      3044,
+      3051,
+      3052,
+      3060,
+      3061,
+      3079,
+      3080,
+      3081
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 177,
+     "distinct_nonzero": 60,
+     "min": 1,
+     "max": 136,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 60,
+       "key_set_size": 4912
+      },
+      {
+       "containment": 0.9333,
+       "source": "pbp",
+       "tag": 68,
+       "tag_name": "playoff_non_focus_team",
+       "values_in_keys": 56,
+       "key_set_size": 291
+      },
+      {
+       "containment": 0.9333,
+       "source": "pbp",
+       "tag": 67,
+       "tag_name": "playoff_focus_team",
+       "values_in_keys": 56,
+       "key_set_size": 292
+      },
+      {
+       "containment": 0.9333,
+       "source": "pbp",
+       "tag": 4,
+       "tag_name": "team_away",
+       "values_in_keys": 56,
+       "key_set_size": 332
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 177,
+     "distinct_nonzero": 156,
+     "min": 1,
+     "max": 511,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 156,
+       "key_set_size": 4912
+      },
+      {
+       "containment": 0.9679,
+       "source": "pbp",
+       "tag": 5,
+       "tag_name": "intro_venue",
+       "values_in_keys": 151,
+       "key_set_size": 186
+      },
+      {
+       "containment": 0.891,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 139,
+       "key_set_size": 10642
+      },
+      {
+       "containment": 0.8718,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 136,
+       "key_set_size": 320
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 177,
+     "distinct_nonzero": 158,
+     "min": 1,
+     "max": 701,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 257,
+       "tag_name": "tag 257",
+       "values_in_keys": 158,
+       "key_set_size": 4912
+      },
+      {
+       "containment": 0.962,
+       "source": "pbp",
+       "tag": 5,
+       "tag_name": "intro_venue",
+       "values_in_keys": 152,
+       "key_set_size": 186
+      },
+      {
+       "containment": 0.8924,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 141,
+       "key_set_size": 10642
+      },
+      {
+       "containment": 0.8608,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 136,
+       "key_set_size": 320
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 4348,
+     "distinct_nonzero": 3875,
+     "min": 30000,
+     "max": 35041,
+     "best": [
+      {
+       "containment": 0.9966,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 3862,
+       "key_set_size": 10642
+      },
+      {
+       "containment": 0.0077,
+       "source": "pbp",
+       "tag": 216,
+       "tag_name": "stats_num_team_win_loss_otl_encoded",
+       "values_in_keys": 30,
+       "key_set_size": 276
+      },
+      {
+       "containment": 0.0003,
+       "source": "pbp",
+       "tag": 122,
+       "tag_name": "drill_BIT",
+       "values_in_keys": 1,
+       "key_set_size": 14
+      },
+      {
+       "containment": 0.0003,
+       "source": "pbp",
+       "tag": 111,
+       "tag_name": "kttg_generic_matchups",
+       "values_in_keys": 1,
+       "key_set_size": 18
+      }
+     ],
+     "kwd0_containment": null,
+     "values_outside_best": [
+      30435,
+      30568,
+      30740,
+      30937,
+      31133,
+      31204,
+      31877,
+      31971,
+      33385,
+      33386,
+      34722,
+      34930,
+      35041
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  },
+  "nhl15": {
+   "tree": "ps3-nhl15",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhl15\\databases\\nhlng.db",
+   "pbp_tag_types": 31,
+   "ann_tag_types": 23,
+   "params": 108,
+   "kwd0": true,
+   "columns": [
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 246,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 246,
+     "distinct_nonzero": 211,
+     "min": 1,
+     "max": 505,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 287,
+       "tag_name": "tag 287",
+       "values_in_keys": 211,
+       "key_set_size": 3512
+      },
+      {
+       "containment": 0.981,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 207,
+       "key_set_size": 580
+      },
+      {
+       "containment": 0.981,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 207,
+       "key_set_size": 324
+      },
+      {
+       "containment": 0.9668,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 204,
+       "key_set_size": 320
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 5534,
+     "distinct_nonzero": 5311,
+     "min": 1,
+     "max": 14567,
+     "best": [
+      {
+       "containment": 0.8405,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "tag 2163",
+       "values_in_keys": 4464,
+       "key_set_size": 8200
+      },
+      {
+       "containment": 0.2672,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 1419,
+       "key_set_size": 3535
+      },
+      {
+       "containment": 0.2613,
+       "source": "pbp",
+       "tag": 287,
+       "tag_name": "tag 287",
+       "values_in_keys": 1388,
+       "key_set_size": 3512
+      },
+      {
+       "containment": 0.0523,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 278,
+       "key_set_size": 580
+      }
+     ],
+     "kwd0_containment": 0.173,
+     "values_outside_best": [
+      70,
+      205,
+      249,
+      383,
+      399,
+      456,
+      535,
+      576,
+      707,
+      769,
+      943,
+      1001,
+      1126,
+      1165,
+      1205,
+      1253,
+      1265,
+      1329,
+      1424,
+      1437,
+      1482,
+      1524,
+      1530,
+      1548,
+      1558,
+      1589,
+      1676,
+      1685,
+      1765,
+      1779,
+      1790,
+      1987,
+      2037,
+      2130,
+      2170,
+      2384,
+      2463,
+      2492,
+      2556,
+      2695
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 178,
+     "distinct_nonzero": 60,
+     "min": 1,
+     "max": 136,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 287,
+       "tag_name": "tag 287",
+       "values_in_keys": 60,
+       "key_set_size": 3512
+      },
+      {
+       "containment": 0.9167,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 55,
+       "key_set_size": 580
+      },
+      {
+       "containment": 0.9,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 54,
+       "key_set_size": 320
+      },
+      {
+       "containment": 0.9,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 54,
+       "key_set_size": 324
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 178,
+     "distinct_nonzero": 155,
+     "min": 1,
+     "max": 511,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 287,
+       "tag_name": "tag 287",
+       "values_in_keys": 155,
+       "key_set_size": 3512
+      },
+      {
+       "containment": 0.871,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 135,
+       "key_set_size": 320
+      },
+      {
+       "containment": 0.871,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 135,
+       "key_set_size": 324
+      },
+      {
+       "containment": 0.8387,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 130,
+       "key_set_size": 580
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 178,
+     "distinct_nonzero": 157,
+     "min": 1,
+     "max": 701,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 287,
+       "tag_name": "tag 287",
+       "values_in_keys": 157,
+       "key_set_size": 3512
+      },
+      {
+       "containment": 0.8599,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 135,
+       "key_set_size": 320
+      },
+      {
+       "containment": 0.8599,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 135,
+       "key_set_size": 324
+      },
+      {
+       "containment": 0.828,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 130,
+       "key_set_size": 580
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 4632,
+     "distinct_nonzero": 1172,
+     "min": 30004,
+     "max": 34059,
+     "best": [
+      {
+       "containment": 0.9974,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 1169,
+       "key_set_size": 3535
+      }
+     ],
+     "kwd0_containment": 0.0,
+     "values_outside_best": [
+      33465,
+      33469,
+      33484
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  },
+  "nhllegacy": {
+   "tree": "ps3-legacy",
+   "db": "E:\\Repositories\\nhl-modding-studio\\anchors\\ps3\\nhllegacy\\databases\\nhlng.db",
+   "pbp_tag_types": 31,
+   "ann_tag_types": 23,
+   "params": 101,
+   "kwd0": true,
+   "columns": [
+    {
+     "table": "exhibitionteams",
+     "column": "audioid2",
+     "rows": 252,
+     "distinct_nonzero": 1,
+     "min": 4095,
+     "max": 4095,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 298,
+       "tag_name": "tag 298",
+       "values_in_keys": 1,
+       "key_set_size": 4218
+      }
+     ],
+     "kwd0_containment": 0.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionteams",
+     "column": "audioid",
+     "rows": 252,
+     "distinct_nonzero": 212,
+     "min": 1,
+     "max": 1378,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 298,
+       "tag_name": "tag 298",
+       "values_in_keys": 212,
+       "key_set_size": 4218
+      },
+      {
+       "containment": 0.9717,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 206,
+       "key_set_size": 959
+      },
+      {
+       "containment": 0.9717,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 206,
+       "key_set_size": 961
+      },
+      {
+       "containment": 0.9292,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 197,
+       "key_set_size": 313
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "leaguearena",
+     "column": "chantaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "cityaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leaguearena",
+     "column": "arenaaudioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionplayerbiotable",
+     "column": "audioid",
+     "rows": 5632,
+     "distinct_nonzero": 5413,
+     "min": 2,
+     "max": 34034,
+     "best": [
+      {
+       "containment": 0.8058,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "tag 2163",
+       "values_in_keys": 4362,
+       "key_set_size": 7811
+      },
+      {
+       "containment": 0.3484,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 1886,
+       "key_set_size": 4911
+      },
+      {
+       "containment": 0.2485,
+       "source": "pbp",
+       "tag": 298,
+       "tag_name": "tag 298",
+       "values_in_keys": 1345,
+       "key_set_size": 4218
+      },
+      {
+       "containment": 0.0759,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 411,
+       "key_set_size": 959
+      }
+     ],
+     "kwd0_containment": 0.145,
+     "values_outside_best": [
+      7,
+      70,
+      85,
+      107,
+      163,
+      168,
+      205,
+      383,
+      456,
+      535,
+      576,
+      598,
+      769,
+      895,
+      981,
+      1129,
+      1199,
+      1205,
+      1214,
+      1223,
+      1253,
+      1299,
+      1329,
+      1400,
+      1407,
+      1424,
+      1437,
+      1473,
+      1482,
+      1506,
+      1524,
+      1530,
+      1548,
+      1558,
+      1586,
+      1676,
+      1733,
+      1765,
+      1790,
+      2037
+     ]
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid2",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "leagueteams",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "chantaudioid",
+     "rows": 187,
+     "distinct_nonzero": 61,
+     "min": 1,
+     "max": 511,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 298,
+       "tag_name": "tag 298",
+       "values_in_keys": 61,
+       "key_set_size": 4218
+      },
+      {
+       "containment": 0.918,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 56,
+       "key_set_size": 959
+      },
+      {
+       "containment": 0.9016,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 55,
+       "key_set_size": 961
+      },
+      {
+       "containment": 0.8852,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 54,
+       "key_set_size": 313
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "cityaudioid",
+     "rows": 187,
+     "distinct_nonzero": 154,
+     "min": 1,
+     "max": 1999,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 298,
+       "tag_name": "tag 298",
+       "values_in_keys": 154,
+       "key_set_size": 4218
+      },
+      {
+       "containment": 0.8636,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 133,
+       "key_set_size": 961
+      },
+      {
+       "containment": 0.8377,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 129,
+       "key_set_size": 959
+      },
+      {
+       "containment": 0.8377,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 129,
+       "key_set_size": 313
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "exhibitionarena",
+     "column": "arenaaudioid",
+     "rows": 187,
+     "distinct_nonzero": 156,
+     "min": 1,
+     "max": 1023,
+     "best": [
+      {
+       "containment": 1.0,
+       "source": "pbp",
+       "tag": 298,
+       "tag_name": "tag 298",
+       "values_in_keys": 156,
+       "key_set_size": 4218
+      },
+      {
+       "containment": 0.859,
+       "source": "ann",
+       "tag": 2164,
+       "tag_name": "tag 2164",
+       "values_in_keys": 134,
+       "key_set_size": 961
+      },
+      {
+       "containment": 0.8333,
+       "source": "pbp",
+       "tag": 1,
+       "tag_name": "team_ID",
+       "values_in_keys": 130,
+       "key_set_size": 959
+      },
+      {
+       "containment": 0.8269,
+       "source": "ann",
+       "tag": 2260,
+       "tag_name": "tag 2260",
+       "values_in_keys": 129,
+       "key_set_size": 313
+      }
+     ],
+     "kwd0_containment": 1.0,
+     "values_outside_best": []
+    },
+    {
+     "table": "playernames",
+     "column": "audioid",
+     "rows": 4116,
+     "distinct_nonzero": 1683,
+     "min": 30004,
+     "max": 34370,
+     "best": [
+      {
+       "containment": 0.9988,
+       "source": "pbp",
+       "tag": 2,
+       "tag_name": "player_ID",
+       "values_in_keys": 1681,
+       "key_set_size": 4911
+      },
+      {
+       "containment": 0.0172,
+       "source": "ann",
+       "tag": 2163,
+       "tag_name": "tag 2163",
+       "values_in_keys": 29,
+       "key_set_size": 7811
+      }
+     ],
+     "kwd0_containment": 0.0,
+     "values_outside_best": [
+      33465,
+      33484
+     ]
+    },
+    {
+     "table": "leagueplayerbiotable",
+     "column": "audioid",
+     "rows": 0,
+     "distinct_nonzero": 0
+    }
+   ]
+  }
+ }
+}

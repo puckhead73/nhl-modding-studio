@@ -1,0 +1,80 @@
+# Head-UV atlas classes per (title, platform) — MEASURED by the UV spike (HM-S1),
+# never assumed. Evidence: docs/audits/headmesh-uv-compat.md.
+#
+# Semantics: two games in the SAME class have interchangeable head-atlas layouts —
+# a texture authored for one maps correctly on the other's head UVs (within storage
+# jitter). Class equality gates TEXTURE-ONLY transplants. It does NOT gate Path A
+# conversion: Path A ships the source's UVs and the source's texture together, which is
+# how the proven cross-class NHL24→Legacy conversion works.
+#
+# `uv_class = "unmeasured"` means the spike has not fingerprinted that game yet.
+# Classes measured 2026-08-06 (sample sizes in the audit — provisional until the
+# per-title sample is widened and the visual wireframe pass lands):
+#   x360-rw-v2  Xbox 360 RenderWare, Legacy generation (2751v/5098t bespoke heads,
+#               2623v generic donor — one atlas, agree±2 = 1.0000 across all samples)
+#   x360-rw-v1  NHL 10 Xbox 360 (2657v/5032t; agree±2 vs v2 = 0.969 — close but
+#               distinct; own class until proven otherwise)
+#   kettle-fb   PS4 Kettle + NHL24 Frostbite exports (3157v/6014t family;
+#               NHL24 ↔ PS4 same-player agree±2 = 0.987)
+
+schema = "headmesh-uv-classes/1"
+
+[[game]]
+key = "nhl24"
+uv_class = "kettle-fb"
+evidence = "docs/audits/headmesh-uv-compat.md (2026-08-06)"
+
+[[game]]
+key = "nhllegacy-xbox360"
+uv_class = "x360-rw-v2"
+evidence = "docs/audits/headmesh-uv-compat.md (2026-08-06)"
+
+[[game]]
+key = "nhl15-xbox360"
+uv_class = "x360-rw-v2"
+evidence = "docs/audits/headmesh-uv-compat.md (2026-08-06)"
+
+[[game]]
+key = "nhl14-xbox360"
+uv_class = "unmeasured"
+
+[[game]]
+key = "nhl13-xbox360"
+uv_class = "unmeasured"
+
+[[game]]
+key = "nhl12-xbox360"
+uv_class = "unmeasured"
+# Build present but heads still packed in cacherender.big — extract, then measure.
+
+[[game]]
+key = "nhl11-xbox360"
+uv_class = "unmeasured"
+# Build present but heads still packed in .big archives — extract, then measure.
+
+[[game]]
+key = "nhl10-xbox360"
+uv_class = "x360-rw-v1"
+evidence = "docs/audits/headmesh-uv-compat.md (2026-08-06)"
+
+[[game]]
+key = "nhl09-xbox360"
+uv_class = "unmeasured"
+
+[[game]]
+key = "nhl08-xbox360"
+uv_class = "unmeasured"
+
+[[game]]
+key = "nhl07-xbox360"
+uv_class = "unmeasured"
+
+[[game]]
+key = "nhl15-ps4"
+uv_class = "kettle-fb"
+evidence = "docs/audits/headmesh-uv-compat.md (2026-08-06)"
+
+[[game]]
+key = "nhl16-ps4"
+uv_class = "kettle-fb"
+evidence = "docs/audits/headmesh-uv-compat.md (2026-08-06)"

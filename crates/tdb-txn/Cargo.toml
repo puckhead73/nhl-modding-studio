@@ -1,0 +1,17 @@
+[package]
+name = "tdb-txn"
+description = "Copied-target file transaction engine: change sets, durable journal, full-backup apply, restart recovery, verified restore. Dependency-neutral (no archive/DB knowledge)."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[dependencies]
+thiserror = "1"
+sha2 = "0.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+serde_json = "1"

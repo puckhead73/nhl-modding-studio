@@ -1,0 +1,41 @@
+$ python research/nhl07-roster-schema/scripts/container_checks.py anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1
+file size 1598888 magic b'Rosters' version word 3 word@0x18 0
+checksum_a stored 2f65c1be  crc32/ieee over [0x1C..EOF] 2f65c1be
+inner TDB @0x1C: db_size 10476 tables 31 header crc stored 4054dea1 computed 4054dea1
+records in any table: 0  max_records in any table: 0
+tail after inner TDB: 1588384 bytes, all zero: True
+
+save  role    parent                           recB capacity      bytes
+DZfz  update  exhibitiondownloadgoalieai         16       50        800
+YvhR  update  exhibitiondownloadskaterai         20      150       3000
+znPC  insert  exhibitionteamstrategies            8       30        240
+JhBt  delete  exhibitionteamstrategies            4       93        372
+mASv  update  exhibitionteamstrategies            8       93        744
+eUOR  insert  customplayerbiotable              508      180      91440
+oCMe  delete  customplayerbiotable                4        0          0
+HHLk  update  customplayerbiotable              504      180      90720
+MVOx  update  exhibitiondownloadplayerbio       504      200     100800
+KboR  insert  customgoalieai                     16       30        480
+Exae  delete  customgoalieai                      4        0          0
+rcpY  update  customgoalieai                     16       30        480
+sAMA  insert  exhibitionfreeagents                4      200        800
+mGOv  delete  exhibitionfreeagents                4       74        296
+fyFF  insert  exhibitionteams                     4       30        120
+dULq  delete  exhibitionteams                     4       93        372
+LZbD  insert  exhibitionplayers                   4      180        720
+Frps  delete  exhibitionplayers                   4     2790      11160
+ibGM  insert  exhibitionrostertable              16     3200      51200
+AtUj  delete  exhibitionrostertable               4     2516      10064
+vozd  update  exhibitionrostertable              16     2516      40256
+CvSu  update  exhibitionplayerbiotable          504     2250    1134000
+tMYP  insert  rosterversiontable                 68        1         68
+nGCg  delete  rosterversiontable                  4        1          4
+Iblm  update  rosterversiontable                 68        1         68
+CTnc  insert  exhibitionarena                     4       30        120
+RosT  update  exhibitionskaterai                 20     2015      40300
+uyGF  update  exhibitiongoalieai                 16      235       3760
+KERl  insert  customplayerai                     20      150       3000
+wKzK  delete  customplayerai                      4        0          0
+zrsU  update  customplayerai                     20      150       3000
+sum(capacity * rec_bytes) = 1588384 ; zero tail = 1588384 ; schema + capacity = 1598860 ; file - 0x1C = 1598860
+

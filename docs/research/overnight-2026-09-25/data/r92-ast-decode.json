@@ -1,0 +1,3035 @@
+{
+ "note": "R92 - diagnostic decode of `.ast` streams located by R89 and framed by R91: EALayer3 v1 (PS3) granules rebuilt into standard MPEG\nframes (R77 `rebuild`, bit reservoir used the standard way) and decoded by ffmpeg `mp3float`; EA-XMA (X360) packets padded to 0x800 and\ndecoded by ffmpeg `xma2` through a RIFF XMA2 wrapper (R84). Decoder acceptance only - nothing here is audible correctness or a game\ntrace; no encoder; no replacement.\n\nChecks, independent of the framing parser's own pass / fail:\n  D1 decoded sample count == granules x 576 per de-interleaved sub-stream (EAL3) / == num_samples (XMA: the count is bitstream-driven,\n     R84's header control repeated on one vector here);\n  D2 decoded - 1152 - terminal trim == num_samples (EAL3; the 47-sample PCM block frame of block 0 is NOT mixed in - stated);\n  D3 block -> sample map: a RESTART decode from block k (k = middle block) converges to the full decode at the offset the block map\n     predicts (\u03a3 decodable of blocks < k): rms of (restart - full) per granule, expected large on granule 0 (MDCT overlap / filter\n     state absent) and ~0 afterwards - a state-continuity measurement and an independent test of the per-block sample words;\n  D4 loops: stub and body decoded separately; loop start = stub samples (word a); the listening copy plays stub + body + body;\n  D5 interleaved (cc 3): frames de-interleaved i % 2 -> two stereo sub-streams (rule inferred from frame order + the gi alternation\n     measured by R91; NOT validated by any reference) - each decoded, counts checked; a 4-channel preview is written as two stereo files.\nOutputs (local only, never under docs/): <previews>/<label>__raw.wav = the decoder's full output untouched (warm-up and tail\nincluded, no gain change); <label>__trimmed.wav = delay 1152 (EAL3) / none (XMA) and the terminal trim applied -> exactly num_samples\n(a transformation, recorded as such); loops: <label>__loop_x2.wav. Limits: one ffmpeg process at a time, 180 s timeout each, streams\nabove MAX_SAMPLES skipped by name.\nUsage: python r92_ast_decode.py <out.json> --previews DIR [--set builtin|all-smoke] [--keep-mp3]\n",
+ "ffmpeg": "ffmpeg version 8.1.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+ "numpy": "2.5.1",
+ "started": "2026-09-25T05:56:35",
+ "inputs": {
+  "ps3-nhl15/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.abk",
+   "size": 92932,
+   "sha256": "317dc321afe5170272212f4949960a7ddfd42f6e17cda32e4b3eb192ad86d24c"
+  },
+  "ps3-nhl15/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.ast",
+   "size": 4274560,
+   "sha256": "baa988740d00cf0f9913ac8e1d693f954c5b530cdc2cf09ebaaa3fbbd73ace7d"
+  },
+  "ps3-nhl15/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.abk",
+   "size": 5606300,
+   "sha256": "4382317d3de2c754cf477274ea3ade7aef5b9fe40746e8c6ec28247dfe7a4594"
+  },
+  "ps3-nhl15/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.ast",
+   "size": 30080896,
+   "sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901"
+  },
+  "ps3-nhl15/ambientskatesandpunches.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.abk",
+   "size": 1376808,
+   "sha256": "597e711527951cc678a3df2219fa10d11b2e1787965dee07398f985965cec8b5"
+  },
+  "ps3-nhl15/ambientskatesandpunches.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 15\\PS3_GAME\\USRDIR\\audio\\sfx\\ambientskatesandpunches.ast",
+   "size": 8667968,
+   "sha256": "8a6c78c13e84f900fb10f977a72a3f3904ae5111289c35ca7f01dd8d6539df99"
+  },
+  "x360-nhl15/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\playercalls.abk",
+   "size": 81412,
+   "sha256": "b98d90fbd6119bff9346c1e6bb0942deb29fab83ddf6b735059f3a8befdebc20"
+  },
+  "x360-nhl15/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\playercalls.ast",
+   "size": 2676544,
+   "sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b"
+  },
+  "x360-nhl15/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\crowds.abk",
+   "size": 14393228,
+   "sha256": "c375f2f5d3ee3353d4e43d76ae561ba9117c284e152e37a064e50c747fd89b91"
+  },
+  "x360-nhl15/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 15\\NHL 15\\audio\\sfx\\crowds.ast",
+   "size": 13196608,
+   "sha256": "06ef0606a266e7aed80063441658e8bb49058b0f2e532252a4425e4074de4d94"
+  },
+  "ps3-nhl11/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.abk",
+   "size": 3832360,
+   "sha256": "bd4b94ace717c4e16914b817c7fa8d9e4362ba5c4d4a005ab116afaa04821983"
+  },
+  "ps3-nhl11/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 11\\PS3_GAME\\USRDIR\\audio\\sfx\\playercalls.ast",
+   "size": 440512,
+   "sha256": "82efd072a41bb0235aad1464e747c271a9f4c33a83809dfe966081996c28df8a"
+  },
+  "x360-nhl10/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\playercalls.abk",
+   "size": 2388752,
+   "sha256": "ec012c58bb5b01d0c8701f84e71c128997e6936f79f139023d3fa0fdd00cb4a9"
+  },
+  "x360-nhl10/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 10\\NHL 10\\audio\\sfx\\playercalls.ast",
+   "size": 337664,
+   "sha256": "f81f87c0b18e28b693c272a9c0c96460ddc733d4d04fb1ac8285fb953ec921a8"
+  },
+  "ps3-legacy/crowds.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.abk",
+   "size": 5606300,
+   "sha256": "4382317d3de2c754cf477274ea3ade7aef5b9fe40746e8c6ec28247dfe7a4594"
+  },
+  "ps3-legacy/crowds.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL Legacy - Vanilla\\PS3_GAME\\USRDIR\\audio\\sfx\\crowds.ast",
+   "size": 30080896,
+   "sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901"
+  },
+  "x360-legacy/playercalls.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\playercalls.abk",
+   "size": 81412,
+   "sha256": "b98d90fbd6119bff9346c1e6bb0942deb29fab83ddf6b735059f3a8befdebc20"
+  },
+  "x360-legacy/playercalls.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy\\audio\\sfx\\playercalls.ast",
+   "size": 2676544,
+   "sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b"
+  },
+  "ps3-nhl14/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.abk",
+   "size": 2585052,
+   "sha256": "5659405d5d8250b79f7566e5f73b98ad921c5ffd98e2b4ed43e0dc7732b37556"
+  },
+  "ps3-nhl14/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\Sony Playstation 3\\NHL 14\\PS3_GAME\\USRDIR\\audio\\sfx\\sfx.ast",
+   "size": 51518336,
+   "sha256": "d0ff4281682d175cb7df8fd747697607d1912a9d4f7656a09222cea6949a7a22"
+  },
+  "x360-nhl12/sfx.abk": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\sfx.abk",
+   "size": 1998932,
+   "sha256": "400ba16f70f9a88caacd7a3923281dd1fcc13c3835b733d0cded361d4b496064"
+  },
+  "x360-nhl12/sfx.ast": {
+   "path": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL 12\\NHL 12\\audio\\sfx\\sfx.ast",
+   "size": 42635776,
+   "sha256": "89ed5618cdd9ad022472b929a332efae5a469ae3b8f19733024b7f77934d501d"
+  }
+ },
+ "vectors": [
+  {
+   "label": "A-ps3-15-playercalls-0-eal3-mono22k",
+   "tree": "ps3-nhl15",
+   "bank": "playercalls",
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 33207
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 33207,
+   "O": 64,
+   "ast_sha256": "baa988740d00cf0f9913ac8e1d693f954c5b530cdc2cf09ebaaa3fbbd73ace7d",
+   "parts": {
+    "stream": {
+     "O": 64,
+     "end": 12224,
+     "blocks": 34,
+     "samples_sum": 33207,
+     "first_delta": 1152,
+     "last_trim": 1400,
+     "granules": 62,
+     "pcm_frames": 1,
+     "pcm_samples": 47,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 62,
+       "mp3_frames": 62,
+       "rebuild_note": "bit reservoir used, max main_data_begin 255",
+       "mp3_sha256": "502cb120f34fa6c6ed4f0f3f1039882646f6e66fb0737b87fc0c8e9950885615",
+       "mp3_bytes": 32364,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 35712,
+       "channels": 1,
+       "rate": 22050,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 5028.231127686704,
+       "peak": 31046,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 1,
+      "planar_reading_at_1105": null,
+      "lag_scan_diagnostic_only": {
+       "top3_interleaved": [
+        [
+         1.0,
+         1105
+        ],
+        [
+         0.998,
+         1106
+        ],
+        [
+         0.998,
+         1104
+        ]
+       ]
+      },
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       -1,
+       0,
+       0
+      ],
+      "decoded_1152_first8": [
+       143,
+       134,
+       127,
+       126,
+       122,
+       111,
+       91,
+       69
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 1.0,
+       "rms_pcm": 83.6,
+       "rms_dec": 84.1,
+       "rms_diff": 1.3
+      },
+      "vs_decoded_at_1152": {
+       "corr": -0.847,
+       "rms_pcm": 83.6,
+       "rms_dec": 367.9,
+       "rms_diff": 441.0
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 83.6,
+       "rms_dec": 0.0,
+       "rms_diff": 83.6
+      },
+      "vs_decoded_at_576": {
+       "corr": -0.252,
+       "rms_pcm": 83.6,
+       "rms_dec": 1.8,
+       "rms_diff": 84.1
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.139,
+       "rms_pcm": 83.6,
+       "rms_dec": 2.1,
+       "rms_diff": 83.4
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": -0.102,
+       "rms_pcm": 83.6,
+       "rms_dec": 4236.3,
+       "rms_diff": 4245.6
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 17,
+      "predicted_offset": 16704,
+      "compared_samples": 19008,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 2525.83,
+        "rms_ref": 2587.78,
+        "max_abs": 6914
+       },
+       {
+        "granule": 1,
+        "rms_diff": 901.6,
+        "rms_ref": 1397.39,
+        "max_abs": 4036
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 393.62,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 28.49,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 842.7,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 2075.96,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "A-ps3-15-playercalls-0-eal3-mono22k__stream__raw.wav",
+      "samples": 35712,
+      "sha256": "89a8b18c24ea66a5d21633151f64a1b97433b4993d6b00a1175caaca7fabdd12"
+     },
+     "trimmed": {
+      "file": "A-ps3-15-playercalls-0-eal3-mono22k__stream__trimmed.wav",
+      "samples": 33207,
+      "sha256": "2916c0068bd4e0efa3eac80bf67178105e54e91290f8da94338102be6311d320",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    }
+   }
+  },
+  {
+   "label": "B-ps3-15-crowds-40-eal3-mono44k-multiblock",
+   "tree": "ps3-nhl15",
+   "bank": "crowds",
+   "record": 40,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 129775
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 129775,
+   "O": 929792,
+   "ast_sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901",
+   "parts": {
+    "stream": {
+     "O": 929792,
+     "end": 963712,
+     "blocks": 69,
+     "samples_sum": 129775,
+     "first_delta": 1152,
+     "last_trim": 1600,
+     "granules": 230,
+     "pcm_frames": 1,
+     "pcm_samples": 47,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 230,
+       "mp3_frames": 115,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "1992280bb1ae29840d4cbccbba1e8d18f98d2c818ec98a990a8c8b521a118cc3",
+       "mp3_bytes": 120060,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 132480,
+       "channels": 1,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 5484.189105038673,
+       "peak": 32767,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 1,
+      "planar_reading_at_1105": null,
+      "lag_scan_diagnostic_only": {
+       "top3_interleaved": [
+        [
+         0.559,
+         1569
+        ],
+        [
+         0.557,
+         1105
+        ],
+        [
+         0.541,
+         2725
+        ]
+       ]
+      },
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      "decoded_1152_first8": [
+       1,
+       0,
+       0,
+       0,
+       -1,
+       0,
+       2,
+       0
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.557,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.8,
+       "rms_diff": 0.7
+      },
+      "vs_decoded_at_1152": {
+       "corr": -0.061,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.8,
+       "rms_diff": 0.9
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.0,
+       "rms_diff": 0.4
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.0,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.0,
+       "rms_diff": 0.4
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.0,
+       "rms_diff": 0.4
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": -0.086,
+       "rms_pcm": 0.4,
+       "rms_dec": 1.1,
+       "rms_diff": 1.2
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 34,
+      "predicted_offset": 63360,
+      "compared_samples": 69120,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 5943.5,
+        "rms_ref": 6646.51,
+        "max_abs": 17337
+       },
+       {
+        "granule": 1,
+        "rms_diff": 1840.7,
+        "rms_ref": 7718.61,
+        "max_abs": 7721
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 7127.69,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 6774.56,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 8134.52,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 7453.01,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "B-ps3-15-crowds-40-eal3-mono44k-multiblock__stream__raw.wav",
+      "samples": 132480,
+      "sha256": "0cd2a6af8caaee9a93ef5aca41a1467a92301e5e2e6954b8c7b014746fa9da62"
+     },
+     "trimmed": {
+      "file": "B-ps3-15-crowds-40-eal3-mono44k-multiblock__stream__trimmed.wav",
+      "samples": 129775,
+      "sha256": "ca37d1e20e61b9713d35dc54b2429d06dd66834704e9344c0f49ca18d815500d",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    }
+   }
+  },
+  {
+   "label": "C-ps3-15-crowds-first-cc1-stereo",
+   "tree": "ps3-nhl15",
+   "bank": "crowds",
+   "record": 58,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 1,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 670619
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 670619,
+   "O": 1483840,
+   "ast_sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901",
+   "parts": {
+    "stream": {
+     "O": 1483840,
+     "end": 1786368,
+     "blocks": 581,
+     "samples_sum": 670619,
+     "first_delta": 1152,
+     "last_trim": 2196,
+     "granules": 1170,
+     "pcm_frames": 1,
+     "pcm_samples": 47,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 1170,
+       "mp3_frames": 585,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "41e55d6c0658fc70e53f61c3b7c3de0bac38a341913c668e38fbad0c2502fb32",
+       "mp3_bytes": 610740,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.05
+       },
+       "decoded_samples": 673920,
+       "channels": 2,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 3459.1755221452427,
+       "peak": 32767,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 2,
+      "planar_reading_at_1105": {
+       "corr": 0.0,
+       "rms_diff": 0.0
+      },
+      "lag_scan_diagnostic_only": null,
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "decoded_1152_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_1152": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.9,
+       "rms_diff": 0.9
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 290,
+      "predicted_offset": 334080,
+      "compared_samples": 339840,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 3589.24,
+        "rms_ref": 3815.14,
+        "max_abs": 10021
+       },
+       {
+        "granule": 1,
+        "rms_diff": 960.2,
+        "rms_ref": 4403.88,
+        "max_abs": 4329
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 5389.6,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 3447.65,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 3955.73,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 4147.26,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "C-ps3-15-crowds-first-cc1-stereo__stream__raw.wav",
+      "samples": 673920,
+      "sha256": "0341f1a070d5b4ea57683f5277ade1161c8e1e9ab4753294cf69e86a0b4849c6"
+     },
+     "trimmed": {
+      "file": "C-ps3-15-crowds-first-cc1-stereo__stream__trimmed.wav",
+      "samples": 670619,
+      "sha256": "dcaece60f62e7e16a5a8cdc0ecf677436c6836953b59ede55bd1f1a5cff00a77",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    }
+   }
+  },
+  {
+   "label": "D-ps3-15-crowds-0-loop-cc3-4ch",
+   "tree": "ps3-nhl15",
+   "bank": "crowds",
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 3,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 1,
+    "num_samples": 689988
+   },
+   "loop": 1,
+   "loop_words": [
+    29,
+    1472
+   ],
+   "num_samples": 689988,
+   "O": 64,
+   "ast_sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901",
+   "parts": {
+    "stub": {
+     "O": 64,
+     "end": 1536,
+     "blocks": 1,
+     "samples_sum": 29,
+     "first_delta": 3456,
+     "last_trim": 3456,
+     "granules": 12,
+     "pcm_frames": 2,
+     "pcm_samples": 58,
+     "nstreams": 2,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 6,
+       "mp3_frames": 3,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "dd9cdeae2aabcb1c596abfe8c66a9821347abadb4dbd2a42c159ffd0c5025eda",
+       "mp3_bytes": 3132,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 3456,
+       "channels": 2,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 0.0,
+       "peak": 0,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": false,
+       "pcm_block_frame_not_applied": 29
+      },
+      {
+       "sub_stream": 1,
+       "granules": 6,
+       "mp3_frames": 3,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "71d0a8a84545d30c5d5bd1b92e2ee7efdc0b411c83e6125a247368f7932b272f",
+       "mp3_bytes": 3132,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 3456,
+       "channels": 2,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 0.40343576522993924,
+       "peak": 1,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": false,
+       "pcm_block_frame_not_applied": 29
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 2,
+      "planar_reading_at_1105": {
+       "corr": 0.0,
+       "rms_diff": 0.0
+      },
+      "lag_scan_diagnostic_only": null,
+      "pcm_samples": 29,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "decoded_1152_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_1152": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     }
+    },
+    "body": {
+     "O": 1536,
+     "end": 929792,
+     "blocks": 598,
+     "samples_sum": 689959,
+     "first_delta": 1152,
+     "last_trim": 1288,
+     "granules": 2404,
+     "pcm_frames": 2,
+     "pcm_samples": 94,
+     "nstreams": 2,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 1202,
+       "mp3_frames": 601,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "15153430f1cf3e212f59acbcff3a11b8ac4f272a42cecda9a89fdf5a4f714fae",
+       "mp3_bytes": 627444,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.05
+       },
+       "decoded_samples": 692352,
+       "channels": 2,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 6796.71585200013,
+       "peak": 32767,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      },
+      {
+       "sub_stream": 1,
+       "granules": 1202,
+       "mp3_frames": 601,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "358e26a4d1db4d1716c99a6f60c904c51f1bf452706663bb3db6afe5450ac8cc",
+       "mp3_bytes": 627444,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.05
+       },
+       "decoded_samples": 692352,
+       "channels": 2,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 4969.904391037111,
+       "peak": 24921,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 2,
+      "planar_reading_at_1105": {
+       "corr": 0.93,
+       "rms_diff": 55.5
+      },
+      "lag_scan_diagnostic_only": {
+       "top3_interleaved": [
+        [
+         0.221,
+         1215
+        ],
+        [
+         0.22,
+         514
+        ],
+        [
+         0.218,
+         1284
+        ]
+       ],
+       "top3_planar": [
+        [
+         0.93,
+         1105
+        ],
+        [
+         0.614,
+         1040
+        ],
+        [
+         0.387,
+         1109
+        ]
+       ]
+      },
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       -1,
+       0,
+       8,
+       -9,
+       8,
+       -9,
+       43,
+       12
+      ],
+      "decoded_1152_first8": [
+       44,
+       301,
+       90,
+       -201,
+       -8,
+       61,
+       -153,
+       110
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.066,
+       "rms_pcm": 86.1,
+       "rms_dec": 125.6,
+       "rms_diff": 147.6
+      },
+      "vs_decoded_at_1152": {
+       "corr": 0.018,
+       "rms_pcm": 86.1,
+       "rms_dec": 791.7,
+       "rms_diff": 794.8
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 86.1,
+       "rms_dec": 0.0,
+       "rms_diff": 86.1
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.004,
+       "rms_pcm": 86.1,
+       "rms_dec": 32.9,
+       "rms_diff": 92.1
+      },
+      "vs_decoded_at_529": {
+       "corr": -0.048,
+       "rms_pcm": 86.1,
+       "rms_dec": 23.3,
+       "rms_diff": 90.3
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": 0.065,
+       "rms_pcm": 86.1,
+       "rms_dec": 6551.8,
+       "rms_diff": 6546.7
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 299,
+      "predicted_offset": 344448,
+      "compared_samples": 347904,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 5844.36,
+        "rms_ref": 6378.24,
+        "max_abs": 18085
+       },
+       {
+        "granule": 1,
+        "rms_diff": 1464.61,
+        "rms_ref": 5627.45,
+        "max_abs": 7967
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 6055.15,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 6256.87,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 6008.06,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 6719.22,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stub_s0": {
+     "raw": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__stub_s0__raw.wav",
+      "samples": 3456,
+      "sha256": "6b440558d29cdde11ff449e446696bfc750a525b26a41bbfdd1c8257b3a541e8"
+     },
+     "trimmed": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__stub_s0__trimmed.wav",
+      "samples": 29,
+      "sha256": "1ca235af80290735bebffe833b5b743f44f4661dced9b687d691ff38b57c018a",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    },
+    "stub_s1": {
+     "raw": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__stub_s1__raw.wav",
+      "samples": 3456,
+      "sha256": "e9b142765cdbc700b73b9cde1d0872d642b440e98d6d81161c900ccdb83ba76e"
+     },
+     "trimmed": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__stub_s1__trimmed.wav",
+      "samples": 29,
+      "sha256": "1f1712245ae8c8e903c3605cb737c5f52b377e388447ce665ea8364b68776dce",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    },
+    "body_s0": {
+     "raw": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__body_s0__raw.wav",
+      "samples": 692352,
+      "sha256": "aa500eb69d76199cce0841d689b5d8f356d66aa91ba719e89191b9e1a080b162"
+     },
+     "trimmed": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__body_s0__trimmed.wav",
+      "samples": 689959,
+      "sha256": "7ea3eb1a00ae24c1dd54c033d5e1b66b92df1fee3b22aacfc8242ca9c0603fb4",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    },
+    "body_s1": {
+     "raw": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__body_s1__raw.wav",
+      "samples": 692352,
+      "sha256": "398b4636cb81848646d5b7c2e2bd46959eca04ccbf92d805630e5c30d5c0f72f"
+     },
+     "trimmed": {
+      "file": "D-ps3-15-crowds-0-loop-cc3-4ch__body_s1__trimmed.wav",
+      "samples": 689959,
+      "sha256": "1ed9f91600e69a51857380920b660bc647ca290567c9c9757864b6818607a5a6",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    },
+    "loop_x2_s0": {
+     "file": "D-ps3-15-crowds-0-loop-cc3-4ch__loop_x2_s0.wav",
+     "samples": 1379947,
+     "sha256": "fb330251c051822bd784e63d56d5239b17c85cc546be585825fc8e01318aa6b5",
+     "construction": "stub trimmed (29) + body trimmed (689959) x 2; loop point = word a = 29"
+    },
+    "loop_x2_s1": {
+     "file": "D-ps3-15-crowds-0-loop-cc3-4ch__loop_x2_s1.wav",
+     "samples": 1379947,
+     "sha256": "4e65871c51b41217aaed064af33a0f8c29e4475d4967b6bff6bb6b2dde1522d0",
+     "construction": "stub trimmed (29) + body trimmed (689959) x 2; loop point = word a = 29"
+    }
+   }
+  },
+  {
+   "label": "E-ps3-15-first-loop-cc0or1-any-bank",
+   "tree": "ps3-nhl15",
+   "bank": "ambientskatesandpunches",
+   "record": 132,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 1,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 1,
+    "num_samples": 749376
+   },
+   "loop": 1,
+   "loop_words": [
+    29,
+    256
+   ],
+   "num_samples": 749376,
+   "O": 678528,
+   "ast_sha256": "8a6c78c13e84f900fb10f977a72a3f3904ae5111289c35ca7f01dd8d6539df99",
+   "parts": {
+    "stub": {
+     "O": 678528,
+     "end": 678784,
+     "blocks": 1,
+     "samples_sum": 29,
+     "first_delta": 3456,
+     "last_trim": 3456,
+     "granules": 6,
+     "pcm_frames": 1,
+     "pcm_samples": 29,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 6,
+       "mp3_frames": 3,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "dd9cdeae2aabcb1c596abfe8c66a9821347abadb4dbd2a42c159ffd0c5025eda",
+       "mp3_bytes": 3132,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 3456,
+       "channels": 2,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 0.0,
+       "peak": 0,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": false,
+       "pcm_block_frame_not_applied": 29
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 2,
+      "planar_reading_at_1105": {
+       "corr": 0.0,
+       "rms_diff": 0.0
+      },
+      "lag_scan_diagnostic_only": null,
+      "pcm_samples": 29,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "decoded_1152_first8": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_1152": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.0,
+       "rms_dec": 0.0,
+       "rms_diff": 0.0
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     }
+    },
+    "body": {
+     "O": 678784,
+     "end": 1062400,
+     "blocks": 649,
+     "samples_sum": 749347,
+     "first_delta": 1152,
+     "last_trim": 1804,
+     "granules": 1306,
+     "pcm_frames": 1,
+     "pcm_samples": 47,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 1306,
+       "mp3_frames": 653,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "0471e96c9e4feb8e2c3564790cddcc38169869963c1f87ce681c8e5ab03afe44",
+       "mp3_bytes": 681732,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.05
+       },
+       "decoded_samples": 752256,
+       "channels": 2,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 2154.1076443868587,
+       "peak": 20824,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 2,
+      "planar_reading_at_1105": {
+       "corr": 1.0,
+       "rms_diff": 84.1
+      },
+      "lag_scan_diagnostic_only": {
+       "top3_interleaved": [
+        [
+         0.575,
+         1714
+        ],
+        [
+         0.554,
+         1713
+        ],
+        [
+         0.539,
+         1715
+        ]
+       ],
+       "top3_planar": [
+        [
+         1.0,
+         1105
+        ],
+        [
+         0.965,
+         1106
+        ],
+        [
+         0.953,
+         1104
+        ]
+       ]
+      },
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       1346,
+       2454,
+       3591,
+       2807,
+       1912,
+       1311,
+       -945,
+       -690
+      ],
+      "decoded_1152_first8": [
+       1726,
+       1759,
+       1166,
+       805,
+       861,
+       1535,
+       2187,
+       2105
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": -0.213,
+       "rms_pcm": 2692.9,
+       "rms_dec": 2721.7,
+       "rms_diff": 4216.6
+      },
+      "vs_decoded_at_1152": {
+       "corr": -0.271,
+       "rms_pcm": 2692.9,
+       "rms_dec": 1946.6,
+       "rms_diff": 3725.9
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 2692.9,
+       "rms_dec": 0.0,
+       "rms_diff": 2692.9
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.051,
+       "rms_pcm": 2692.9,
+       "rms_dec": 82.9,
+       "rms_diff": 2689.9
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.071,
+       "rms_pcm": 2692.9,
+       "rms_dec": 66.0,
+       "rms_diff": 2689.0
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": -0.307,
+       "rms_pcm": 2692.9,
+       "rms_dec": 3729.9,
+       "rms_diff": 5228.0
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 324,
+      "predicted_offset": 373248,
+      "compared_samples": 379008,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 1947.24,
+        "rms_ref": 2085.95,
+        "max_abs": 6294
+       },
+       {
+        "granule": 1,
+        "rms_diff": 539.42,
+        "rms_ref": 1853.83,
+        "max_abs": 2494
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 1997.46,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 1876.4,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 2080.98,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 1934.21,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stub": {
+     "raw": {
+      "file": "E-ps3-15-first-loop-cc0or1-any-bank__stub__raw.wav",
+      "samples": 3456,
+      "sha256": "6b440558d29cdde11ff449e446696bfc750a525b26a41bbfdd1c8257b3a541e8"
+     },
+     "trimmed": {
+      "file": "E-ps3-15-first-loop-cc0or1-any-bank__stub__trimmed.wav",
+      "samples": 29,
+      "sha256": "1ca235af80290735bebffe833b5b743f44f4661dced9b687d691ff38b57c018a",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    },
+    "body": {
+     "raw": {
+      "file": "E-ps3-15-first-loop-cc0or1-any-bank__body__raw.wav",
+      "samples": 752256,
+      "sha256": "03633a61de89f33d4f5f8c06792560b511915fe23eb9ba0fe570b4a14c1fc446"
+     },
+     "trimmed": {
+      "file": "E-ps3-15-first-loop-cc0or1-any-bank__body__trimmed.wav",
+      "samples": 749347,
+      "sha256": "cb56206859843a514891c56a3f227f2a4761604f96f22dd7207b00a9f28452a6",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    },
+    "loop_x2": {
+     "file": "E-ps3-15-first-loop-cc0or1-any-bank__loop_x2.wav",
+     "samples": 1498723,
+     "sha256": "6c4b5908c13c01c76486a34af04c03b4a7010e43017dc54a085ffc3eee863de6",
+     "construction": "stub trimmed (29) + body trimmed (749347) x 2; loop point = word a = 29"
+    }
+   }
+  },
+  {
+   "label": "F-x360-15-playercalls-0-xma-mono22k",
+   "tree": "x360-nhl15",
+   "bank": "playercalls",
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 33207
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 33207,
+   "O": 64,
+   "ast_sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b",
+   "parts": {
+    "stream": {
+     "O": 64,
+     "end": 9266,
+     "blocks": 5,
+     "samples_sum": 33207,
+     "first_delta": 384,
+     "last_trim": 201,
+     "granules": 0,
+     "pcm_frames": 0,
+     "pcm_samples": 0,
+     "nstreams": 1,
+     "class": "xma-subblocks-tiled",
+     "xma": {
+      "packets": 5,
+      "xma_frames": 66,
+      "channels": 1,
+      "riff_streams": 1,
+      "sub_blocks_per_block": {
+       "1": 5
+      },
+      "sub_stream": null,
+      "ffmpeg": {
+       "rc": 0,
+       "stderr": "",
+       "seconds": 0.05
+      },
+      "decoded_samples": 33207,
+      "decoded_channels": 1,
+      "rate": 22050,
+      "rms": 5247.129464694674,
+      "peak": 31865,
+      "D1_decoded_eq_samples_sum": true,
+      "frames_x512_minus_samples_sum": 585,
+      "header_control_plus_1000": {
+       "decoded_samples": 33207,
+       "output_follows_header": false
+      },
+      "D3_restart_from_block": {
+       "k": 2,
+       "predicted_offset_frames_x512": 16896,
+       "note": "offset = \u03a3 frame_count x 512 of blocks < k; the restart decode itself drops a 384-sample delay per R84, so its output is compared at offset - 384 (the R84 delay) - both offsets reported",
+       "compared_samples": 16695,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 705.85,
+         "rms_ref": 648.86,
+         "max_abs": 2445
+        },
+        {
+         "granule": 1,
+         "rms_diff": 143.08,
+         "rms_ref": 139.66,
+         "max_abs": 697
+        },
+        {
+         "granule": 2,
+         "rms_diff": 777.34,
+         "rms_ref": 75.08,
+         "max_abs": 4294
+        },
+        {
+         "granule": 3,
+         "rms_diff": 2167.85,
+         "rms_ref": 1126.09,
+         "max_abs": 7766
+        },
+        {
+         "granule": 4,
+         "rms_diff": 3418.25,
+         "rms_ref": 2168.89,
+         "max_abs": 11888
+        },
+        {
+         "granule": 5,
+         "rms_diff": 5610.09,
+         "rms_ref": 3070.18,
+         "max_abs": 18084
+        }
+       ],
+       "tail_rms_diff": 7161.298,
+       "tail_max_abs": 44129,
+       "tail_identical": false
+      },
+      "D3_restart_at_raw_offset": {
+       "compared_samples": 16311,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 0.0,
+         "rms_ref": 270.09,
+         "max_abs": 0
+        },
+        {
+         "granule": 1,
+         "rms_diff": 0.0,
+         "rms_ref": 30.88,
+         "max_abs": 0
+        },
+        {
+         "granule": 2,
+         "rms_diff": 0.0,
+         "rms_ref": 768.94,
+         "max_abs": 0
+        },
+        {
+         "granule": 3,
+         "rms_diff": 0.0,
+         "rms_ref": 1774.51,
+         "max_abs": 0
+        },
+        {
+         "granule": 4,
+         "rms_diff": 0.0,
+         "rms_ref": 2702.21,
+         "max_abs": 0
+        },
+        {
+         "granule": 5,
+         "rms_diff": 0.0,
+         "rms_ref": 5326.4,
+         "max_abs": 0
+        }
+       ],
+       "tail_rms_diff": 0.0,
+       "tail_max_abs": 0,
+       "tail_identical": true
+      }
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "F-x360-15-playercalls-0-xma-mono22k__stream__raw.wav",
+      "samples": 33207,
+      "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2"
+     },
+     "trimmed": {
+      "file": "F-x360-15-playercalls-0-xma-mono22k__stream__trimmed.wav",
+      "samples": 33207,
+      "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    }
+   }
+  },
+  {
+   "label": "G-x360-15-crowds-58-xma-stereo-multiblock",
+   "tree": "x360-nhl15",
+   "bank": "crowds",
+   "record": 58,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 1,
+    "sample_rate": 36000,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 547444
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 547444,
+   "O": 1472000,
+   "ast_sha256": "06ef0606a266e7aed80063441658e8bb49058b0f2e532252a4425e4074de4d94",
+   "parts": {
+    "stream": {
+     "O": 1472000,
+     "end": 1777454,
+     "blocks": 159,
+     "samples_sum": 547444,
+     "first_delta": 384,
+     "last_trim": 12,
+     "granules": 0,
+     "pcm_frames": 0,
+     "pcm_samples": 0,
+     "nstreams": 1,
+     "class": "xma-subblocks-tiled",
+     "xma": {
+      "packets": 159,
+      "xma_frames": 1070,
+      "channels": 2,
+      "riff_streams": 1,
+      "sub_blocks_per_block": {
+       "1": 159
+      },
+      "sub_stream": null,
+      "ffmpeg": {
+       "rc": 0,
+       "stderr": "",
+       "seconds": 0.05
+      },
+      "decoded_samples": 547444,
+      "decoded_channels": 2,
+      "rate": 36000,
+      "rms": 3479.3555449440996,
+      "peak": 32767,
+      "D1_decoded_eq_samples_sum": true,
+      "frames_x512_minus_samples_sum": 396,
+      "header_control_plus_1000": {
+       "decoded_samples": 547444,
+       "output_follows_header": false
+      },
+      "D3_restart_from_block": {
+       "k": 79,
+       "predicted_offset_frames_x512": 270848,
+       "note": "offset = \u03a3 frame_count x 512 of blocks < k; the restart decode itself drops a 384-sample delay per R84, so its output is compared at offset - 384 (the R84 delay) - both offsets reported",
+       "compared_samples": 276928,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 5285.99,
+         "rms_ref": 4273.04,
+         "max_abs": 18609
+        },
+        {
+         "granule": 1,
+         "rms_diff": 4794.15,
+         "rms_ref": 3390.01,
+         "max_abs": 15823
+        },
+        {
+         "granule": 2,
+         "rms_diff": 4950.84,
+         "rms_ref": 3475.31,
+         "max_abs": 14962
+        },
+        {
+         "granule": 3,
+         "rms_diff": 6070.82,
+         "rms_ref": 4315.71,
+         "max_abs": 21926
+        },
+        {
+         "granule": 4,
+         "rms_diff": 7008.97,
+         "rms_ref": 4937.01,
+         "max_abs": 23861
+        },
+        {
+         "granule": 5,
+         "rms_diff": 5083.22,
+         "rms_ref": 4160.88,
+         "max_abs": 19826
+        }
+       ],
+       "tail_rms_diff": 4602.953,
+       "tail_max_abs": 40939,
+       "tail_identical": false
+      },
+      "D3_restart_at_raw_offset": {
+       "compared_samples": 276596,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 0.0,
+         "rms_ref": 3420.98,
+         "max_abs": 0
+        },
+        {
+         "granule": 1,
+         "rms_diff": 0.0,
+         "rms_ref": 3617.46,
+         "max_abs": 0
+        },
+        {
+         "granule": 2,
+         "rms_diff": 0.0,
+         "rms_ref": 4008.52,
+         "max_abs": 0
+        },
+        {
+         "granule": 3,
+         "rms_diff": 0.0,
+         "rms_ref": 4535.41,
+         "max_abs": 0
+        },
+        {
+         "granule": 4,
+         "rms_diff": 0.0,
+         "rms_ref": 4881.02,
+         "max_abs": 0
+        },
+        {
+         "granule": 5,
+         "rms_diff": 0.0,
+         "rms_ref": 3883.32,
+         "max_abs": 0
+        }
+       ],
+       "tail_rms_diff": 0.0,
+       "tail_max_abs": 0,
+       "tail_identical": true
+      }
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "G-x360-15-crowds-58-xma-stereo-multiblock__stream__raw.wav",
+      "samples": 547444,
+      "sha256": "8dac98a18c5f2d6ba8b50fe27b911f3990b2e52d3abdc1ea908f8953a1a7ceee"
+     },
+     "trimmed": {
+      "file": "G-x360-15-crowds-58-xma-stereo-multiblock__stream__trimmed.wav",
+      "samples": 547444,
+      "sha256": "8dac98a18c5f2d6ba8b50fe27b911f3990b2e52d3abdc1ea908f8953a1a7ceee",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    }
+   }
+  },
+  {
+   "label": "H-x360-15-crowds-0-loop-xma-cc3",
+   "tree": "x360-nhl15",
+   "bank": "crowds",
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 3,
+    "sample_rate": 36000,
+    "type": "stream",
+    "loop": 1,
+    "num_samples": 563256
+   },
+   "loop": 1,
+   "loop_words": [
+    24,
+    64
+   ],
+   "num_samples": 563256,
+   "O": 64,
+   "ast_sha256": "06ef0606a266e7aed80063441658e8bb49058b0f2e532252a4425e4074de4d94",
+   "parts": {
+    "stub": {
+     "O": 64,
+     "end": 128,
+     "blocks": 1,
+     "samples_sum": 24,
+     "first_delta": 488,
+     "last_trim": 488,
+     "granules": 0,
+     "pcm_frames": 0,
+     "pcm_samples": 0,
+     "nstreams": 2,
+     "class": "xma-subblocks-tiled",
+     "xma_multistream": [
+      {
+       "packets": 1,
+       "xma_frames": 1,
+       "channels": 2,
+       "riff_streams": 1,
+       "sub_blocks_per_block": {
+        "2": 1
+       },
+       "sub_stream": 0,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 24,
+       "decoded_channels": 2,
+       "rate": 36000,
+       "rms": 0.0,
+       "peak": 0,
+       "D1_decoded_eq_samples_sum": true
+      },
+      {
+       "packets": 1,
+       "xma_frames": 1,
+       "channels": 2,
+       "riff_streams": 1,
+       "sub_blocks_per_block": {
+        "2": 1
+       },
+       "sub_stream": 1,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 24,
+       "decoded_channels": 2,
+       "rate": 36000,
+       "rms": 0.0,
+       "peak": 0,
+       "D1_decoded_eq_samples_sum": true
+      }
+     ]
+    },
+    "body": {
+     "O": 128,
+     "end": 595956,
+     "blocks": 159,
+     "samples_sum": 563232,
+     "first_delta": 384,
+     "last_trim": 96,
+     "granules": 0,
+     "pcm_frames": 0,
+     "pcm_samples": 0,
+     "nstreams": 2,
+     "class": "xma-subblocks-tiled",
+     "xma_multistream": [
+      {
+       "packets": 159,
+       "xma_frames": 1101,
+       "channels": 2,
+       "riff_streams": 1,
+       "sub_blocks_per_block": {
+        "2": 159
+       },
+       "sub_stream": 0,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.06
+       },
+       "decoded_samples": 563232,
+       "decoded_channels": 2,
+       "rate": 36000,
+       "rms": 6833.377239469582,
+       "peak": 32767,
+       "D1_decoded_eq_samples_sum": true
+      },
+      {
+       "packets": 159,
+       "xma_frames": 1101,
+       "channels": 2,
+       "riff_streams": 1,
+       "sub_blocks_per_block": {
+        "2": 159
+       },
+       "sub_stream": 1,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.06
+       },
+       "decoded_samples": 563232,
+       "decoded_channels": 2,
+       "rate": 36000,
+       "rms": 5001.140413988457,
+       "peak": 24568,
+       "D1_decoded_eq_samples_sum": true
+      }
+     ]
+    }
+   },
+   "previews": {
+    "stub_s0": {
+     "raw": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__stub_s0__raw.wav",
+      "samples": 24,
+      "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011"
+     },
+     "trimmed": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__stub_s0__trimmed.wav",
+      "samples": 24,
+      "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    },
+    "stub_s1": {
+     "raw": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__stub_s1__raw.wav",
+      "samples": 24,
+      "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011"
+     },
+     "trimmed": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__stub_s1__trimmed.wav",
+      "samples": 24,
+      "sha256": "3b40454e9246895b0d8c1876e5d68ccb2e901e8d6097c5eea8052f25b5b9d011",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    },
+    "body_s0": {
+     "raw": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__body_s0__raw.wav",
+      "samples": 563232,
+      "sha256": "d4835e5151eb2d5f73c6be2d856db414d3fe51b874d979fe77291f0c4b638865"
+     },
+     "trimmed": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__body_s0__trimmed.wav",
+      "samples": 563232,
+      "sha256": "d4835e5151eb2d5f73c6be2d856db414d3fe51b874d979fe77291f0c4b638865",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    },
+    "body_s1": {
+     "raw": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__body_s1__raw.wav",
+      "samples": 563232,
+      "sha256": "00a3bf670004478c1cbc4ff0a570f4bbba18f0c8618fcd15d4cb22208af1ac2e"
+     },
+     "trimmed": {
+      "file": "H-x360-15-crowds-0-loop-xma-cc3__body_s1__trimmed.wav",
+      "samples": 563232,
+      "sha256": "00a3bf670004478c1cbc4ff0a570f4bbba18f0c8618fcd15d4cb22208af1ac2e",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    },
+    "loop_x2_s0": {
+     "file": "H-x360-15-crowds-0-loop-xma-cc3__loop_x2_s0.wav",
+     "samples": 1126488,
+     "sha256": "5bb8f13b3ffd3cf3a4ff3b82e1ef979f7ac5a5db87a1df817235f075fa8630e0",
+     "construction": "stub trimmed (24) + body trimmed (563232) x 2; loop point = word a = 24"
+    },
+    "loop_x2_s1": {
+     "file": "H-x360-15-crowds-0-loop-xma-cc3__loop_x2_s1.wav",
+     "samples": 1126488,
+     "sha256": "b971b15991406aa921cf603a15c6a665ea79b4e1be5dd4c2d161314ad1795139",
+     "construction": "stub trimmed (24) + body trimmed (563232) x 2; loop point = word a = 24"
+    }
+   }
+  },
+  {
+   "label": "I1-ps3-11-playercalls-first",
+   "tree": "ps3-nhl11",
+   "bank": "playercalls",
+   "record": 380,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 49382
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 49382,
+   "O": 64,
+   "ast_sha256": "82efd072a41bb0235aad1464e747c271a9f4c33a83809dfe966081996c28df8a",
+   "parts": {
+    "stream": {
+     "O": 64,
+     "end": 16384,
+     "blocks": 51,
+     "samples_sum": 49382,
+     "first_delta": 1152,
+     "last_trim": 1353,
+     "granules": 90,
+     "pcm_frames": 1,
+     "pcm_samples": 47,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 90,
+       "mp3_frames": 90,
+       "rebuild_note": "bit reservoir used, max main_data_begin 255",
+       "mp3_sha256": "708de1e6547e23e225781d8dbe6eaaf42a2caeab5c077beaeb103af96456b679",
+       "mp3_bytes": 46980,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 51840,
+       "channels": 1,
+       "rate": 22050,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 5878.691805091963,
+       "peak": 32720,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 1,
+      "planar_reading_at_1105": null,
+      "lag_scan_diagnostic_only": {
+       "top3_interleaved": [
+        [
+         0.995,
+         1105
+        ],
+        [
+         0.871,
+         1106
+        ],
+        [
+         0.871,
+         1104
+        ]
+       ]
+      },
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       291,
+       630,
+       399,
+       -293,
+       140,
+       -407,
+       -140,
+       541
+      ],
+      "decoded_1152_first8": [
+       776,
+       985,
+       1232,
+       1886,
+       1562,
+       1968,
+       2223,
+       2090
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.995,
+       "rms_pcm": 896.9,
+       "rms_dec": 888.1,
+       "rms_diff": 86.5
+      },
+      "vs_decoded_at_1152": {
+       "corr": 0.54,
+       "rms_pcm": 896.9,
+       "rms_dec": 1173.1,
+       "rms_diff": 1022.3
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 896.9,
+       "rms_dec": 0.0,
+       "rms_diff": 896.9
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.203,
+       "rms_pcm": 896.9,
+       "rms_dec": 23.2,
+       "rms_diff": 892.5
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.462,
+       "rms_pcm": 896.9,
+       "rms_dec": 30.3,
+       "rms_diff": 883.4
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": -0.523,
+       "rms_pcm": 896.9,
+       "rms_dec": 2714.8,
+       "rms_diff": 3274.7
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 25,
+      "predicted_offset": 24192,
+      "compared_samples": 27648,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 6075.51,
+        "rms_ref": 8384.2,
+        "max_abs": 16987
+       },
+       {
+        "granule": 1,
+        "rms_diff": 1707.81,
+        "rms_ref": 12229.12,
+        "max_abs": 7864
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 7540.12,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 8601.56,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 9444.98,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 9963.26,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "I1-ps3-11-playercalls-first__stream__raw.wav",
+      "samples": 51840,
+      "sha256": "1f7cfab1c529912f004197fcc74b2292c29151af5e045de707496cc3a02050bd"
+     },
+     "trimmed": {
+      "file": "I1-ps3-11-playercalls-first__stream__trimmed.wav",
+      "samples": 49382,
+      "sha256": "03bfb8e488f3a7bbf522114ad052aa73f81c8036013fddc7385311abc1a248ce",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    }
+   }
+  },
+  {
+   "label": "I2-x360-10-playercalls-first",
+   "tree": "x360-nhl10",
+   "bank": "playercalls",
+   "record": 382,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 49382
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 49382,
+   "O": 64,
+   "ast_sha256": "f81f87c0b18e28b693c272a9c0c96460ddc733d4d04fb1ac8285fb953ec921a8",
+   "parts": {
+    "stream": {
+     "O": 64,
+     "end": 16114,
+     "blocks": 9,
+     "samples_sum": 49382,
+     "first_delta": 384,
+     "last_trim": 410,
+     "granules": 0,
+     "pcm_frames": 0,
+     "pcm_samples": 0,
+     "nstreams": 1,
+     "class": "xma-subblocks-tiled",
+     "xma": {
+      "packets": 9,
+      "xma_frames": 98,
+      "channels": 1,
+      "riff_streams": 1,
+      "sub_blocks_per_block": {
+       "1": 9
+      },
+      "sub_stream": null,
+      "ffmpeg": {
+       "rc": 0,
+       "stderr": "",
+       "seconds": 0.04
+      },
+      "decoded_samples": 49382,
+      "decoded_channels": 1,
+      "rate": 22050,
+      "rms": 6047.993539659014,
+      "peak": 32160,
+      "D1_decoded_eq_samples_sum": true,
+      "frames_x512_minus_samples_sum": 794,
+      "header_control_plus_1000": {
+       "decoded_samples": 49382,
+       "output_follows_header": false
+      },
+      "D3_restart_from_block": {
+       "k": 4,
+       "predicted_offset_frames_x512": 25600,
+       "note": "offset = \u03a3 frame_count x 512 of blocks < k; the restart decode itself drops a 384-sample delay per R84, so its output is compared at offset - 384 (the R84 delay) - both offsets reported",
+       "compared_samples": 24166,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 9444.96,
+         "rms_ref": 8935.38,
+         "max_abs": 26186
+        },
+        {
+         "granule": 1,
+         "rms_diff": 8019.05,
+         "rms_ref": 10009.49,
+         "max_abs": 19521
+        },
+        {
+         "granule": 2,
+         "rms_diff": 10746.83,
+         "rms_ref": 10804.86,
+         "max_abs": 28822
+        },
+        {
+         "granule": 3,
+         "rms_diff": 9635.69,
+         "rms_ref": 9324.24,
+         "max_abs": 27209
+        },
+        {
+         "granule": 4,
+         "rms_diff": 12468.59,
+         "rms_ref": 9870.19,
+         "max_abs": 41895
+        },
+        {
+         "granule": 5,
+         "rms_diff": 12714.8,
+         "rms_ref": 9695.33,
+         "max_abs": 33081
+        }
+       ],
+       "tail_rms_diff": 4801.852,
+       "tail_max_abs": 42884,
+       "tail_identical": false
+      },
+      "D3_restart_at_raw_offset": {
+       "compared_samples": 23782,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 0.0,
+         "rms_ref": 9648.42,
+         "max_abs": 0
+        },
+        {
+         "granule": 1,
+         "rms_diff": 0.0,
+         "rms_ref": 9896.79,
+         "max_abs": 0
+        },
+        {
+         "granule": 2,
+         "rms_diff": 0.0,
+         "rms_ref": 10563.13,
+         "max_abs": 0
+        },
+        {
+         "granule": 3,
+         "rms_diff": 0.0,
+         "rms_ref": 10030.71,
+         "max_abs": 0
+        },
+        {
+         "granule": 4,
+         "rms_diff": 0.0,
+         "rms_ref": 9125.57,
+         "max_abs": 0
+        },
+        {
+         "granule": 5,
+         "rms_diff": 0.0,
+         "rms_ref": 9860.1,
+         "max_abs": 0
+        }
+       ],
+       "tail_rms_diff": 0.0,
+       "tail_max_abs": 0,
+       "tail_identical": true
+      }
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "I2-x360-10-playercalls-first__stream__raw.wav",
+      "samples": 49382,
+      "sha256": "3307855e7294966c03274d86229eaddb40a592935afdc23025d9a7c9d0b6155b"
+     },
+     "trimmed": {
+      "file": "I2-x360-10-playercalls-first__stream__trimmed.wav",
+      "samples": 49382,
+      "sha256": "3307855e7294966c03274d86229eaddb40a592935afdc23025d9a7c9d0b6155b",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    }
+   }
+  },
+  {
+   "label": "I3-ps3-legacy-crowds-40",
+   "tree": "ps3-legacy",
+   "bank": "crowds",
+   "record": 40,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 129775
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 129775,
+   "O": 929792,
+   "ast_sha256": "e5fbafb7ae5771ab20bacbdc8997005f4c5be95e2854505e78b703aad6ae8901",
+   "parts": {
+    "stream": {
+     "O": 929792,
+     "end": 963712,
+     "blocks": 69,
+     "samples_sum": 129775,
+     "first_delta": 1152,
+     "last_trim": 1600,
+     "granules": 230,
+     "pcm_frames": 1,
+     "pcm_samples": 47,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 230,
+       "mp3_frames": 115,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "1992280bb1ae29840d4cbccbba1e8d18f98d2c818ec98a990a8c8b521a118cc3",
+       "mp3_bytes": 120060,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 132480,
+       "channels": 1,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 5484.189105038673,
+       "peak": 32767,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 1,
+      "planar_reading_at_1105": null,
+      "lag_scan_diagnostic_only": {
+       "top3_interleaved": [
+        [
+         0.559,
+         1569
+        ],
+        [
+         0.557,
+         1105
+        ],
+        [
+         0.541,
+         2725
+        ]
+       ]
+      },
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      "decoded_1152_first8": [
+       1,
+       0,
+       0,
+       0,
+       -1,
+       0,
+       2,
+       0
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.557,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.8,
+       "rms_diff": 0.7
+      },
+      "vs_decoded_at_1152": {
+       "corr": -0.061,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.8,
+       "rms_diff": 0.9
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.0,
+       "rms_diff": 0.4
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.0,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.0,
+       "rms_diff": 0.4
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.0,
+       "rms_pcm": 0.4,
+       "rms_dec": 0.0,
+       "rms_diff": 0.4
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": -0.086,
+       "rms_pcm": 0.4,
+       "rms_dec": 1.1,
+       "rms_diff": 1.2
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 34,
+      "predicted_offset": 63360,
+      "compared_samples": 69120,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 5943.5,
+        "rms_ref": 6646.51,
+        "max_abs": 17337
+       },
+       {
+        "granule": 1,
+        "rms_diff": 1840.7,
+        "rms_ref": 7718.61,
+        "max_abs": 7721
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 7127.69,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 6774.56,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 8134.52,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 7453.01,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "I3-ps3-legacy-crowds-40__stream__raw.wav",
+      "samples": 132480,
+      "sha256": "0cd2a6af8caaee9a93ef5aca41a1467a92301e5e2e6954b8c7b014746fa9da62"
+     },
+     "trimmed": {
+      "file": "I3-ps3-legacy-crowds-40__stream__trimmed.wav",
+      "samples": 129775,
+      "sha256": "ca37d1e20e61b9713d35dc54b2429d06dd66834704e9344c0f49ca18d815500d",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    }
+   }
+  },
+  {
+   "label": "I4-x360-legacy-playercalls-0",
+   "tree": "x360-legacy",
+   "bank": "playercalls",
+   "record": 0,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 0,
+    "sample_rate": 22050,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 33207
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 33207,
+   "O": 64,
+   "ast_sha256": "2e638a9a910d119dad46a5ee8952621edbee0231d06659d33da0d358ef21044b",
+   "parts": {
+    "stream": {
+     "O": 64,
+     "end": 9266,
+     "blocks": 5,
+     "samples_sum": 33207,
+     "first_delta": 384,
+     "last_trim": 201,
+     "granules": 0,
+     "pcm_frames": 0,
+     "pcm_samples": 0,
+     "nstreams": 1,
+     "class": "xma-subblocks-tiled",
+     "xma": {
+      "packets": 5,
+      "xma_frames": 66,
+      "channels": 1,
+      "riff_streams": 1,
+      "sub_blocks_per_block": {
+       "1": 5
+      },
+      "sub_stream": null,
+      "ffmpeg": {
+       "rc": 0,
+       "stderr": "",
+       "seconds": 0.05
+      },
+      "decoded_samples": 33207,
+      "decoded_channels": 1,
+      "rate": 22050,
+      "rms": 5247.129464694674,
+      "peak": 31865,
+      "D1_decoded_eq_samples_sum": true,
+      "frames_x512_minus_samples_sum": 585,
+      "header_control_plus_1000": {
+       "decoded_samples": 33207,
+       "output_follows_header": false
+      },
+      "D3_restart_from_block": {
+       "k": 2,
+       "predicted_offset_frames_x512": 16896,
+       "note": "offset = \u03a3 frame_count x 512 of blocks < k; the restart decode itself drops a 384-sample delay per R84, so its output is compared at offset - 384 (the R84 delay) - both offsets reported",
+       "compared_samples": 16695,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 705.85,
+         "rms_ref": 648.86,
+         "max_abs": 2445
+        },
+        {
+         "granule": 1,
+         "rms_diff": 143.08,
+         "rms_ref": 139.66,
+         "max_abs": 697
+        },
+        {
+         "granule": 2,
+         "rms_diff": 777.34,
+         "rms_ref": 75.08,
+         "max_abs": 4294
+        },
+        {
+         "granule": 3,
+         "rms_diff": 2167.85,
+         "rms_ref": 1126.09,
+         "max_abs": 7766
+        },
+        {
+         "granule": 4,
+         "rms_diff": 3418.25,
+         "rms_ref": 2168.89,
+         "max_abs": 11888
+        },
+        {
+         "granule": 5,
+         "rms_diff": 5610.09,
+         "rms_ref": 3070.18,
+         "max_abs": 18084
+        }
+       ],
+       "tail_rms_diff": 7161.298,
+       "tail_max_abs": 44129,
+       "tail_identical": false
+      },
+      "D3_restart_at_raw_offset": {
+       "compared_samples": 16311,
+       "per_granule": [
+        {
+         "granule": 0,
+         "rms_diff": 0.0,
+         "rms_ref": 270.09,
+         "max_abs": 0
+        },
+        {
+         "granule": 1,
+         "rms_diff": 0.0,
+         "rms_ref": 30.88,
+         "max_abs": 0
+        },
+        {
+         "granule": 2,
+         "rms_diff": 0.0,
+         "rms_ref": 768.94,
+         "max_abs": 0
+        },
+        {
+         "granule": 3,
+         "rms_diff": 0.0,
+         "rms_ref": 1774.51,
+         "max_abs": 0
+        },
+        {
+         "granule": 4,
+         "rms_diff": 0.0,
+         "rms_ref": 2702.21,
+         "max_abs": 0
+        },
+        {
+         "granule": 5,
+         "rms_diff": 0.0,
+         "rms_ref": 5326.4,
+         "max_abs": 0
+        }
+       ],
+       "tail_rms_diff": 0.0,
+       "tail_max_abs": 0,
+       "tail_identical": true
+      }
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "I4-x360-legacy-playercalls-0__stream__raw.wav",
+      "samples": 33207,
+      "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2"
+     },
+     "trimmed": {
+      "file": "I4-x360-legacy-playercalls-0__stream__trimmed.wav",
+      "samples": 33207,
+      "sha256": "722aa950fd3aec8b3467b1ae44decece6841c9b98adbb9a66d368ffd457624c2",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    }
+   }
+  },
+  {
+   "label": "I5-ps3-14-sfx-first-stream",
+   "tree": "ps3-nhl14",
+   "bank": "sfx",
+   "record": 27,
+   "snr": {
+    "version": 0,
+    "codec": "ealayer3-v1",
+    "codec_code": 5,
+    "channel_config": 0,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 11136
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 11136,
+   "O": 64,
+   "ast_sha256": "d0ff4281682d175cb7df8fd747697607d1912a9d4f7656a09222cea6949a7a22",
+   "parts": {
+    "stream": {
+     "O": 64,
+     "end": 3648,
+     "blocks": 5,
+     "samples_sum": 11136,
+     "first_delta": 1152,
+     "last_trim": 1583,
+     "granules": 24,
+     "pcm_frames": 1,
+     "pcm_samples": 47,
+     "nstreams": 1,
+     "class": "eal3-frames-tiled",
+     "sub_streams": [
+      {
+       "sub_stream": 0,
+       "granules": 24,
+       "mp3_frames": 12,
+       "rebuild_note": "bit reservoir used, max main_data_begin 511",
+       "mp3_sha256": "cce08d187be39378a30791169ad9fac47672947761d7a876da9dedee507da63a",
+       "mp3_bytes": 12528,
+       "ffmpeg": {
+        "rc": 0,
+        "stderr": "",
+        "seconds": 0.04
+       },
+       "decoded_samples": 13824,
+       "channels": 1,
+       "rate": 44100,
+       "D1_decoded_eq_granules_x576": true,
+       "rms": 4546.840766249833,
+       "peak": 31592,
+       "D2_decoded_minus_1152_minus_trim_eq_samples_sum": false,
+       "D2b_decoded_plus_pcm_minus_1152_minus_trim_eq_samples_sum": true,
+       "pcm_block_frame_not_applied": 47
+      }
+     ],
+     "D6_pcm_block_frame_vs_decoded": {
+      "nch": 1,
+      "planar_reading_at_1105": null,
+      "lag_scan_diagnostic_only": {
+       "top3_interleaved": [
+        [
+         0.998,
+         1105
+        ],
+        [
+         0.823,
+         1106
+        ],
+        [
+         0.822,
+         1104
+        ]
+       ]
+      },
+      "pcm_samples": 47,
+      "offset_samples_field": 0,
+      "unknown_u32": 0,
+      "raw_first8": [
+       105,
+       1125,
+       1444,
+       -7001,
+       7326,
+       13976,
+       -6666,
+       -30940
+      ],
+      "decoded_1152_first8": [
+       -10969,
+       -6282,
+       -2507,
+       -3886,
+       -8605,
+       -11461,
+       -15808,
+       -21513
+      ],
+      "vs_decoded_at_1152_minus_cnt": {
+       "corr": 0.998,
+       "rms_pcm": 14651.3,
+       "rms_dec": 14628.7,
+       "rms_diff": 871.3
+      },
+      "vs_decoded_at_1152": {
+       "corr": 0.247,
+       "rms_pcm": 14651.3,
+       "rms_dec": 14130.6,
+       "rms_diff": 17667.6
+      },
+      "vs_decoded_at_0": {
+       "corr": 0.0,
+       "rms_pcm": 14651.3,
+       "rms_dec": 0.0,
+       "rms_diff": 14651.3
+      },
+      "vs_decoded_at_576": {
+       "corr": 0.03,
+       "rms_pcm": 14651.3,
+       "rms_dec": 31.3,
+       "rms_diff": 14650.4
+      },
+      "vs_decoded_at_529": {
+       "corr": 0.144,
+       "rms_pcm": 14651.3,
+       "rms_dec": 26.1,
+       "rms_diff": 14647.6
+      },
+      "vs_decoded_at_1152_plus_529": {
+       "corr": -0.15,
+       "rms_pcm": 14651.3,
+       "rms_dec": 11071.7,
+       "rms_diff": 19641.0
+      },
+      "note": "candidate positions only; no reference consulted; a high correlation at one position is a data-supported candidate, not a rule"
+     },
+     "D3_restart_from_block": {
+      "k": 2,
+      "predicted_offset": 3456,
+      "compared_samples": 10368,
+      "per_granule": [
+       {
+        "granule": 0,
+        "rms_diff": 2747.05,
+        "rms_ref": 2862.1,
+        "max_abs": 7988
+       },
+       {
+        "granule": 1,
+        "rms_diff": 593.53,
+        "rms_ref": 1515.31,
+        "max_abs": 3281
+       },
+       {
+        "granule": 2,
+        "rms_diff": 0.0,
+        "rms_ref": 1360.11,
+        "max_abs": 0
+       },
+       {
+        "granule": 3,
+        "rms_diff": 0.0,
+        "rms_ref": 981.52,
+        "max_abs": 0
+       },
+       {
+        "granule": 4,
+        "rms_diff": 0.0,
+        "rms_ref": 790.14,
+        "max_abs": 0
+       },
+       {
+        "granule": 5,
+        "rms_diff": 0.0,
+        "rms_ref": 404.56,
+        "max_abs": 0
+       }
+      ],
+      "tail_rms_diff": 0.0,
+      "tail_max_abs": 0,
+      "tail_identical": true
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "I5-ps3-14-sfx-first-stream__stream__raw.wav",
+      "samples": 13824,
+      "sha256": "d4b0eff78cc95e692aecb82cc1b1c500d86f158c3879b5612fc2b52972bd8055"
+     },
+     "trimmed": {
+      "file": "I5-ps3-14-sfx-first-stream__stream__trimmed.wav",
+      "samples": 11136,
+      "sha256": "725e344203c045215546a6e07d8eac19374f403ed657078ee1cbcd4bc86caacc",
+      "transformation": "block-0 PCM frame (planar per channel, D6 candidate alignment) as the first samples, then the MP3 decode from index 1152; terminal trim applied; total = samples_sum"
+     }
+    }
+   }
+  },
+  {
+   "label": "I6-x360-12-sfx-first-stream",
+   "tree": "x360-nhl12",
+   "bank": "sfx",
+   "record": 27,
+   "snr": {
+    "version": 0,
+    "codec": "ea-xma",
+    "codec_code": 3,
+    "channel_config": 0,
+    "sample_rate": 44100,
+    "type": "stream",
+    "loop": 0,
+    "num_samples": 11136
+   },
+   "loop": 0,
+   "loop_words": null,
+   "num_samples": 11136,
+   "O": 64,
+   "ast_sha256": "89ed5618cdd9ad022472b929a332efae5a469ae3b8f19733024b7f77934d501d",
+   "parts": {
+    "stream": {
+     "O": 64,
+     "end": 2669,
+     "blocks": 2,
+     "samples_sum": 11136,
+     "first_delta": 384,
+     "last_trim": 256,
+     "granules": 0,
+     "pcm_frames": 0,
+     "pcm_samples": 0,
+     "nstreams": 1,
+     "class": "xma-subblocks-tiled",
+     "xma": {
+      "packets": 2,
+      "xma_frames": 23,
+      "channels": 1,
+      "riff_streams": 1,
+      "sub_blocks_per_block": {
+       "1": 2
+      },
+      "sub_stream": null,
+      "ffmpeg": {
+       "rc": 0,
+       "stderr": "",
+       "seconds": 0.05
+      },
+      "decoded_samples": 11136,
+      "decoded_channels": 1,
+      "rate": 44100,
+      "rms": 5305.823495197958,
+      "peak": 32767,
+      "D1_decoded_eq_samples_sum": true,
+      "frames_x512_minus_samples_sum": 640
+     }
+    }
+   },
+   "previews": {
+    "stream": {
+     "raw": {
+      "file": "I6-x360-12-sfx-first-stream__stream__raw.wav",
+      "samples": 11136,
+      "sha256": "b2e7ee5c82c2e34f6a2da9d41c4c84ea1cace5d963f552970db35090f74c2167"
+     },
+     "trimmed": {
+      "file": "I6-x360-12-sfx-first-stream__stream__trimmed.wav",
+      "samples": 11136,
+      "sha256": "b2e7ee5c82c2e34f6a2da9d41c4c84ea1cace5d963f552970db35090f74c2167",
+      "transformation": "first samples_sum samples (no leading drop: XMA output already equals the declared count)"
+     }
+    }
+   }
+  }
+ ],
+ "scratch_left": [
+  "H-x360-15-crowds-0-loop-xma-cc3__body.wav",
+  "H-x360-15-crowds-0-loop-xma-cc3__stub.wav"
+ ]
+}

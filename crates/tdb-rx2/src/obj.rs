@@ -195,7 +195,7 @@ pub fn parse_obj(text: &str) -> Result<ObjMesh, ObjError> {
         dedup.insert(triple, new_idx);
         new_idx
     };
-    for (tri, group) in face_triples.iter().zip(face_groups.into_iter()) {
+    for (tri, group) in face_triples.iter().zip(face_groups) {
         let idxs = [intern(tri[0]), intern(tri[1]), intern(tri[2])];
         mesh.triangles.push(idxs);
         mesh.triangle_groups.push(group);
@@ -241,7 +241,7 @@ pub fn write_obj(
         }
     }
     for t in triangles {
-        s.push_str("f");
+        s.push('f');
         for &idx in t {
             let i = idx + 1; // OBJ is 1-based.
             match (have_uv, have_nrm) {

@@ -1,0 +1,762 @@
+{
+ "note": "R148 - Legacy Recompiled equipment-preview inputs as archive members (after-receipt-8 prompt, package 3). Read-only.\nFolders Studio's equipment consumers read (`equipment_slots.rs` slot specs: playerstick, goaliestick, glove, helmet, skate, blocker,\ntrapper, goaliepad, goaliehelmet; shared / companion meshes are found by prefix inside the same folders: playerskate_, playersticktape_,\ngoaliesticktape_, cage_, visor_): for every `rendering/<folder>/*` member of the 13 top-level EB archives - archive, wrapper by 8-byte head\n(every member), duplicates within / across archives, the name set against the X360 NHL Legacy loose folder, and stem SHAPES (digits -> N,\nso the role tokens - mesh / map suffix / texlib / fe / companion prefix - stay visible without assigning any number a meaning). A\ndeterministic in-memory byte sample per folder (2 smallest + 2 at even strides) unwrapped by the research decoder and compared with the\nX360 loose file. No slot id, hand, style or thumbnail meaning is inferred here.\nUsage: python r148_recomp_equipment_members.py <out.json>",
+ "recomp_root": "H:\\Emulators\\games\\XBOX\\NHL Legacy Decomp Test\\game",
+ "x360_root": "X:\\Games\\Emulation\\Roms\\XBOX360\\NHL Legacy\\NHL Legacy",
+ "folders": {
+  "playerstick": {
+   "members": 83,
+   "per_archive": {
+    "cacherender.big": 74,
+    "renderboot.big": 9
+   },
+   "wrappers": {
+    "chunklzx": 83
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 49886,
+   "x360_loose_files": 83,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "texlib_N.rxN": 75,
+    "playerstick_N_N.rxN": 4,
+    "playersticktape_N_N.rxN": 4
+   },
+   "shape_count": 3,
+   "companion_prefix_files": {
+    "playersticktape": [
+     "playersticktape_0_2.rx2",
+     "playersticktape_0_4.rx2",
+     "playersticktape_1_2.rx2",
+     "playersticktape_1_4.rx2"
+    ]
+   },
+   "sample": [
+    {
+     "member": "rendering/playerstick/playersticktape_0_4.rx2",
+     "archive": "renderboot.big",
+     "wrapper": "chunklzx",
+     "stored": 3372,
+     "unwrapped": 7760,
+     "unwrapped_sha256": "d589dc70d6f0dc55ac2af97c01b4eac2cca8b8b8fe2eae8c5036dec01bdd9b21",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/playerstick/playersticktape_1_4.rx2",
+     "archive": "renderboot.big",
+     "wrapper": "chunklzx",
+     "stored": 3398,
+     "unwrapped": 7776,
+     "unwrapped_sha256": "241f24b581dbf1509ad3ed862194b01615ca38df0eb14d29807e57095842caf9",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/playerstick/texlib_33.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 26842,
+     "unwrapped": 126976,
+     "unwrapped_sha256": "86c19bfae11e64c3e67d49b4f4f00e1424122c2bc46d2bdd3cd1c13e4e4c4bc0",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/playerstick/texlib_49.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 35872,
+     "unwrapped": 126976,
+     "unwrapped_sha256": "3f8598fe4aa2b322467c4cef490edd70c6779f6f1bbff3b988ebc28b9d5548f6",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "goaliestick": {
+   "members": 86,
+   "per_archive": {
+    "cacherender.big": 78,
+    "renderboot.big": 8
+   },
+   "wrappers": {
+    "chunklzx": 86
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 51722,
+   "x360_loose_files": 86,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "goaliestick_N_tm.rxN": 38,
+    "goaliestick_N_dm.rxN": 38,
+    "goaliesticktape_N_N.rxN": 4,
+    "goaliestick_N_N.rxN": 4,
+    "goaliestick_goaliestick_tm.rxN": 1,
+    "goaliestick_goaliestick_dm.rxN": 1
+   },
+   "shape_count": 6,
+   "companion_prefix_files": {
+    "goaliesticktape": [
+     "goaliesticktape_0_2.rx2",
+     "goaliesticktape_0_4.rx2",
+     "goaliesticktape_1_2.rx2",
+     "goaliesticktape_1_4.rx2"
+    ]
+   },
+   "sample": [
+    {
+     "member": "rendering/goaliestick/goaliestick_42_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 440,
+     "unwrapped": 69632,
+     "unwrapped_sha256": "b860a7e93fd204e3392370af2a72ccc535f443f64979d6c103123b9c7fb0a759",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliestick/goaliestick_0_2.rx2",
+     "archive": "renderboot.big",
+     "wrapper": "chunklzx",
+     "stored": 4414,
+     "unwrapped": 10592,
+     "unwrapped_sha256": "8575f9dfc151a618162bb5e7da521c976b7de607f49e0cbb699ee77de5a9deb5",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliestick/goaliestick_25_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 12706,
+     "unwrapped": 69632,
+     "unwrapped_sha256": "15e98ac69546f9f500c36d8b56c87393cc660e78e5f24502237949e44eaf3be6",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliestick/goaliestick_20_dm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 18626,
+     "unwrapped": 135168,
+     "unwrapped_sha256": "e1202b5e0d9b5ccfe40d21fa5bc3d633ad5795e035dabd4dd6b1f9e7f3aeb08e",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "glove": {
+   "members": 578,
+   "per_archive": {
+    "cacherender.big": 575,
+    "renderboot.big": 3
+   },
+   "wrappers": {
+    "chunklzx": 578
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 682612,
+   "x360_loose_files": 578,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "glove_N_N_tm.rxN": 159,
+    "feglove_N_N_tm.rxN": 159,
+    "glove_N_nm.rxN": 53,
+    "glove_N_am.rxN": 53,
+    "glove_N_sm.rxN": 53,
+    "glove_N_N_dm.rxN": 53,
+    "feglove_N_N_dm.rxN": 45,
+    "glove_N.rxN": 3
+   },
+   "shape_count": 8,
+   "companion_prefix_files": {},
+   "sample": [
+    {
+     "member": "rendering/glove/feglove_70_0_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 722,
+     "unwrapped": 266240,
+     "unwrapped_sha256": "d827c6248a2674e282bdccbb21f919a3002a273ce5411f57d766536a042afa9b",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/glove/feglove_70_1_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 722,
+     "unwrapped": 266240,
+     "unwrapped_sha256": "f41bb00370a21d48fed46f7f43b9b9b8115b0acce58b0d336fd606fae7a2ad89",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/glove/glove_42_am.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 13122,
+     "unwrapped": 45056,
+     "unwrapped_sha256": "f15332e59ce7cf5c0bc2c6e61b4c50e07635790a6db4027edfd266564aa7a6e7",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/glove/glove_82_0_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 25198,
+     "unwrapped": 266240,
+     "unwrapped_sha256": "8b7e9880b71c9063a26e60426b986ec6f102612fd913e22bb0df4177e58c1d69",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "helmet": {
+   "members": 394,
+   "per_archive": {
+    "cacherender.big": 348,
+    "renderboot.big": 46
+   },
+   "wrappers": {
+    "chunklzx": 394
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 301610,
+   "x360_loose_files": 394,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "visor_N_N_N.rxN": 90,
+    "helmet_N_N_N_dm.rxN": 86,
+    "helmet_N_N.rxN": 54,
+    "chinstrap_N_N.rxN": 54,
+    "jawprotector_N_N.rxN": 45,
+    "texlib_N.rxN": 20,
+    "helmet_N_N_tm.rxN": 19,
+    "padding_N_N.rxN": 17,
+    "visor_N_cm.rxN": 5,
+    "visor_N_sm.rxN": 1,
+    "visor_N_am.rxN": 1,
+    "visor_N_rm.rxN": 1,
+    "visor_N_nm.rxN": 1
+   },
+   "shape_count": 13,
+   "companion_prefix_files": {
+    "visor": [
+     "visor_0_am.rx2",
+     "visor_0_cm.rx2",
+     "visor_0_nm.rx2",
+     "visor_0_rm.rx2",
+     "visor_0_sm.rx2",
+     "visor_11_0_0.rx2",
+     "visor_11_0_2.rx2",
+     "visor_11_0_3.rx2",
+     "visor_11_1_0.rx2",
+     "visor_11_1_2.rx2",
+     "visor_11_1_3.rx2",
+     "visor_12_0_0.rx2",
+     "visor_12_0_2.rx2",
+     "visor_12_0_3.rx2",
+     "visor_12_1_0.rx2",
+     "visor_12_1_2.rx2",
+     "visor_12_1_3.rx2",
+     "visor_13_0_0.rx2",
+     "visor_13_0_2.rx2",
+     "visor_13_0_3.rx2",
+     "visor_13_1_0.rx2",
+     "visor_13_1_2.rx2",
+     "visor_13_1_3.rx2",
+     "visor_14_0_0.rx2",
+     "visor_14_0_2.rx2",
+     "visor_14_0_3.rx2",
+     "visor_14_1_0.rx2",
+     "visor_14_1_2.rx2",
+     "visor_14_1_3.rx2",
+     "visor_15_0_0.rx2",
+     "visor_15_0_2.rx2",
+     "visor_15_0_3.rx2",
+     "visor_15_1_0.rx2",
+     "visor_15_1_2.rx2",
+     "visor_15_1_3.rx2",
+     "visor_16_0_0.rx2",
+     "visor_16_0_2.rx2",
+     "visor_16_0_3.rx2",
+     "visor_16_1_0.rx2",
+     "visor_16_1_2.rx2",
+     "visor_16_1_3.rx2",
+     "visor_18_0_0.rx2",
+     "visor_18_0_2.rx2",
+     "visor_18_0_3.rx2",
+     "visor_18_1_0.rx2",
+     "visor_18_1_2.rx2",
+     "visor_18_1_3.rx2",
+     "visor_19_0_0.rx2",
+     "visor_19_0_2.rx2",
+     "visor_19_0_3.rx2",
+     "visor_19_1_0.rx2",
+     "visor_19_1_2.rx2",
+     "visor_19_1_3.rx2",
+     "visor_1_0_0.rx2",
+     "visor_1_0_2.rx2",
+     "visor_1_0_3.rx2",
+     "visor_1_1_0.rx2",
+     "visor_1_1_2.rx2",
+     "visor_1_1_3.rx2",
+     "visor_1_cm.rx2",
+     "visor_20_0_0.rx2",
+     "visor_20_0_2.rx2",
+     "visor_20_0_3.rx2",
+     "visor_20_1_0.rx2",
+     "visor_20_1_2.rx2",
+     "visor_20_1_3.rx2",
+     "visor_21_0_0.rx2",
+     "visor_21_0_2.rx2",
+     "visor_21_0_3.rx2",
+     "visor_21_1_0.rx2",
+     "visor_21_1_2.rx2",
+     "visor_21_1_3.rx2",
+     "visor_23_0_0.rx2",
+     "visor_23_0_2.rx2",
+     "visor_23_0_3.rx2",
+     "visor_23_1_0.rx2",
+     "visor_23_1_2.rx2",
+     "visor_23_1_3.rx2",
+     "visor_24_0_0.rx2",
+     "visor_24_0_2.rx2",
+     "visor_24_0_3.rx2",
+     "visor_24_1_0.rx2",
+     "visor_24_1_2.rx2",
+     "visor_24_1_3.rx2",
+     "visor_25_0_0.rx2",
+     "visor_25_0_2.rx2",
+     "visor_25_0_3.rx2",
+     "visor_25_1_0.rx2",
+     "visor_25_1_2.rx2",
+     "visor_25_1_3.rx2",
+     "visor_2_cm.rx2",
+     "visor_3_cm.rx2",
+     "visor_4_cm.rx2",
+     "visor_6_0_0.rx2",
+     "visor_6_0_2.rx2",
+     "visor_6_0_3.rx2",
+     "visor_6_1_0.rx2",
+     "visor_6_1_2.rx2",
+     "visor_6_1_3.rx2"
+    ]
+   },
+   "sample": [
+    {
+     "member": "rendering/helmet/visor_0_am.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 540,
+     "unwrapped": 69632,
+     "unwrapped_sha256": "e2a55fac5c9029ad3e2938fc24228cf8a92d25ff6fadb8610e9dd741f5a6d595",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/helmet/visor_12_0_3.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 586,
+     "unwrapped": 2336,
+     "unwrapped_sha256": "af6eddffddfe2cd585143fe32fea4e41f1cdf512c566e29a0f578ce3d81ee5e6",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/helmet/visor_6_1_0.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 4452,
+     "unwrapped": 12672,
+     "unwrapped_sha256": "b5945f89fdef643bdcab07c14a0292f0995545c4307cd4ad83ad22399e37ded8",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/helmet/helmet_18_0.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 15438,
+     "unwrapped": 37456,
+     "unwrapped_sha256": "b48b6286eec4f402e6726f09ad46b6b6024e07a1b3ded6afae717c654d9282f1",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "skate": {
+   "members": 51,
+   "per_archive": {
+    "cacherender.big": 32,
+    "renderboot.big": 19
+   },
+   "wrappers": {
+    "chunklzx": 51
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 338128,
+   "x360_loose_files": 51,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "texlib_N.rxN": 33,
+    "skatetongue_N_N.rxN": 9,
+    "goalieskate_N.rxN": 3,
+    "playerskate_N.rxN": 3,
+    "skatelace_N.rxN": 3
+   },
+   "shape_count": 5,
+   "companion_prefix_files": {
+    "playerskate": [
+     "playerskate_0.rx2",
+     "playerskate_2.rx2",
+     "playerskate_3.rx2"
+    ]
+   },
+   "sample": [
+    {
+     "member": "rendering/skate/skatetongue_2_3.rx2",
+     "archive": "renderboot.big",
+     "wrapper": "chunklzx",
+     "stored": 776,
+     "unwrapped": 2672,
+     "unwrapped_sha256": "f1b153da0f54715fbd4adb81d454925dc3b534607b4ab2761f7fb1af4e7b5655",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/skate/skatetongue_3_3.rx2",
+     "archive": "renderboot.big",
+     "wrapper": "chunklzx",
+     "stored": 778,
+     "unwrapped": 2688,
+     "unwrapped_sha256": "b4eaa7980b24aebffa178aa4bf70f679223189eb0750dbb92534d22721844abb",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/skate/playerskate_2.rx2",
+     "archive": "renderboot.big",
+     "wrapper": "chunklzx",
+     "stored": 34180,
+     "unwrapped": 72368,
+     "unwrapped_sha256": "114b7d134fdbe1af50221e68542d6452fd862b6dfa52b3898101c5a0ddeac8d1",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/skate/texlib_30.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 297794,
+     "unwrapped": 733184,
+     "unwrapped_sha256": "6a0831525ebed3be0104aa3f7f807f70f75dbc2adbc7d983ab3b1519962f8a94",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "blocker": {
+   "members": 1304,
+   "per_archive": {
+    "cacherender.big": 1296,
+    "renderboot.big": 8
+   },
+   "wrappers": {
+    "chunklzx": 1304
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 429022,
+   "x360_loose_files": 1304,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "feblocker_N_N_N_tm.rxN": 380,
+    "blocker_N_N_N_tm.rxN": 380,
+    "blocker_N_N_N_dm.rxN": 136,
+    "feblocker_N_N_N_dm.rxN": 136,
+    "blocker_N_N_sm.rxN": 136,
+    "blocker_N_N_nm.rxN": 128,
+    "blocker_N_N.rxN": 6,
+    "blocker_N_am.rxN": 2
+   },
+   "shape_count": 8,
+   "companion_prefix_files": {},
+   "sample": [
+    {
+     "member": "rendering/blocker/blocker_0_72_2_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 508,
+     "unwrapped": 135168,
+     "unwrapped_sha256": "a270c5d0073bb5c4fa90639bee9051a0a86337edc949daa5aa9e50e6d482da42",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/blocker/blocker_0_72_0_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 510,
+     "unwrapped": 135168,
+     "unwrapped_sha256": "8f02357726f099a6d87a5bb146801d56c902fd183cca111d7c60345935667750",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/blocker/blocker_0_65_sm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 16062,
+     "unwrapped": 69632,
+     "unwrapped_sha256": "e135e0005335d03ddf4ca26ec55ef3754404b8819115d9a9b199af0eaf2ffcaa",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/blocker/blocker_0_11_0_dm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 52516,
+     "unwrapped": 266240,
+     "unwrapped_sha256": "82b8d65205ac1d2425693482bd899b567f4eb5b671506d5a15a3c6aa1d9933db",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "trapper": {
+   "members": 1296,
+   "per_archive": {
+    "cacherender.big": 1288,
+    "renderboot.big": 8
+   },
+   "wrappers": {
+    "chunklzx": 1296
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 448376,
+   "x360_loose_files": 1296,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "trapper_N_N_N_tm.rxN": 380,
+    "fetrapper_N_N_N_tm.rxN": 380,
+    "trapper_N_N_N_dm.rxN": 132,
+    "fetrapper_N_N_N_dm.rxN": 132,
+    "trapper_N_N_sm.rxN": 132,
+    "trapper_N_N_nm.rxN": 132,
+    "trapper_N_N.rxN": 6,
+    "trapper_N_am.rxN": 2
+   },
+   "shape_count": 8,
+   "companion_prefix_files": {},
+   "sample": [
+    {
+     "member": "rendering/trapper/trapper_0_18_2_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 508,
+     "unwrapped": 135168,
+     "unwrapped_sha256": "a8b264d15b719ec3d1caf2d19f9847a3f3344096d9236c926d18b38b987dd171",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/trapper/trapper_1_25_2_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 508,
+     "unwrapped": 135168,
+     "unwrapped_sha256": "c5d3bcf986a21040930019c5c483d9106fb9738582a1d939e61aac8ee4233a62",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/trapper/trapper_1_23_1_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 21026,
+     "unwrapped": 135168,
+     "unwrapped_sha256": "2fe565de25fbf4be5e63c353e021a4536e215a4cfdf45effb58547e041c2d673",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/trapper/fetrapper_1_61_1_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 77066,
+     "unwrapped": 724992,
+     "unwrapped_sha256": "8166564dafc4aef6d844635ff67a0f0b652ee7245f60f61f1b539417fe4c36fc",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "goaliepad": {
+   "members": 654,
+   "per_archive": {
+    "cacherender.big": 650,
+    "renderboot.big": 4
+   },
+   "wrappers": {
+    "chunklzx": 654
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 1172598,
+   "x360_loose_files": 654,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "goaliepad_N_N_tm.rxN": 191,
+    "fegoaliepad_N_N_tm.rxN": 191,
+    "goaliepad_N_N_dm.rxN": 67,
+    "goaliepad_N_nm.rxN": 67,
+    "fegoaliepad_N_N_dm.rxN": 67,
+    "goaliepad_N_sm.rxN": 67,
+    "goaliepad_N.rxN": 3,
+    "goaliepad_am.rxN": 1
+   },
+   "shape_count": 8,
+   "companion_prefix_files": {},
+   "sample": [
+    {
+     "member": "rendering/goaliepad/goaliepad_48_2_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 738,
+     "unwrapped": 266240,
+     "unwrapped_sha256": "acf93b44ca402a33489203ce1eded40b1a4f4de08637b5d578481b1f32325f6f",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliepad/goaliepad_50_2_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 738,
+     "unwrapped": 266240,
+     "unwrapped_sha256": "b45877dc6cd35bb8e0ff73803ba17c43ef97972023ad0de1e0203ec3397b4c18",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliepad/goaliepad_76_1_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 15406,
+     "unwrapped": 266240,
+     "unwrapped_sha256": "62d7c56ce49240250deeb7439330d02b2babecff46e90e56c2cc8796382f240a",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliepad/fegoaliepad_58_0_tm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 85684,
+     "unwrapped": 1421312,
+     "unwrapped_sha256": "681920434c400bb35b580d9d90d8e638221f1cc5a6c5a38710333666f3331c40",
+     "equals_x360_loose": true
+    }
+   ]
+  },
+  "goaliehelmet": {
+   "members": 599,
+   "per_archive": {
+    "cacherender.big": 575,
+    "renderboot.big": 24
+   },
+   "wrappers": {
+    "chunklzx": 599
+   },
+   "cross_archive_duplicates": {},
+   "max_stored": 201944,
+   "x360_loose_files": 599,
+   "names_equal_x360_loose": true,
+   "only_in_recomp": [],
+   "only_in_x360_loose": [],
+   "shapes": {
+    "goaliehelmet_N_N_cm.rxN": 539,
+    "helmet_N_N.rxN": 24,
+    "cage_N_N_N.rxN": 15,
+    "throatprotector_N_N_N.rxN": 9,
+    "texlib_N.rxN": 8,
+    "goaliehelmet_N_am.rxN": 2,
+    "goaliehelmet_N_nm.rxN": 2
+   },
+   "shape_count": 7,
+   "companion_prefix_files": {
+    "cage": [
+     "cage_0_0_0.rx2",
+     "cage_0_0_2.rx2",
+     "cage_0_0_3.rx2",
+     "cage_1_0_0.rx2",
+     "cage_1_0_2.rx2",
+     "cage_1_0_3.rx2",
+     "cage_2_0_0.rx2",
+     "cage_2_0_2.rx2",
+     "cage_2_0_3.rx2",
+     "cage_6_0_0.rx2",
+     "cage_6_0_2.rx2",
+     "cage_6_0_3.rx2",
+     "cage_7_0_0.rx2",
+     "cage_7_0_2.rx2",
+     "cage_7_0_3.rx2"
+    ],
+    "helmet": [
+     "helmet_0_0.rx2",
+     "helmet_0_2.rx2",
+     "helmet_0_3.rx2",
+     "helmet_1_0.rx2",
+     "helmet_1_2.rx2",
+     "helmet_1_3.rx2",
+     "helmet_2_0.rx2",
+     "helmet_2_2.rx2",
+     "helmet_2_3.rx2",
+     "helmet_3_0.rx2",
+     "helmet_3_2.rx2",
+     "helmet_3_3.rx2",
+     "helmet_4_0.rx2",
+     "helmet_4_2.rx2",
+     "helmet_4_3.rx2",
+     "helmet_5_0.rx2",
+     "helmet_5_2.rx2",
+     "helmet_5_3.rx2",
+     "helmet_6_0.rx2",
+     "helmet_6_2.rx2",
+     "helmet_6_3.rx2",
+     "helmet_7_0.rx2",
+     "helmet_7_2.rx2",
+     "helmet_7_3.rx2"
+    ]
+   },
+   "sample": [
+    {
+     "member": "rendering/goaliehelmet/goaliehelmet_0_am.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 400,
+     "unwrapped": 12288,
+     "unwrapped_sha256": "325c707bb53f89c9d85fab1ba44bb35fa57460817fd48460009f92e333ee6614",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliehelmet/goaliehelmet_6_am.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 402,
+     "unwrapped": 12288,
+     "unwrapped_sha256": "3c99f1d5adec6315da7609382ea6a1b939f35ca55fa7cd86cbe083acb51abc46",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliehelmet/goaliehelmet_6_44_cm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 61076,
+     "unwrapped": 200704,
+     "unwrapped_sha256": "112824a0b1acb2efd234df45b4b5e39ceda89ef74c75a9be8c5ae59372d6b4fa",
+     "equals_x360_loose": true
+    },
+    {
+     "member": "rendering/goaliehelmet/goaliehelmet_0_77_cm.rx2",
+     "archive": "cacherender.big",
+     "wrapper": "chunklzx",
+     "stored": 78122,
+     "unwrapped": 200704,
+     "unwrapped_sha256": "fc57b2ee7a315f9470e21bf23dc7ba4f884037343d7165163e8922a25390aa9f",
+     "equals_x360_loose": true
+    }
+   ]
+  }
+ },
+ "within_archive_duplicates": []
+}

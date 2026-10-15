@@ -1,0 +1,15 @@
+[package]
+name = "tdb-speex"
+description = "Diagnostic Speex ultra-wideband decoding for EA-Speex previews: pinned upstream libspeex 1.2.1 (BSD-3-Clause, vendored unmodified) behind a small C shim compiled with cc; no bindgen / libclang. Decoder only."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+# Studio's shim and bindings: MIT (Q46e); the vendored, unmodified libspeex 1.2.1: BSD-3-Clause.
+license = "MIT AND BSD-3-Clause"
+links = "nhlms_speex"
+
+[dependencies]
+
+[build-dependencies]
+cc = "1"

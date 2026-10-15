@@ -1,0 +1,52 @@
+# post-run 2026-09-18T05:21:03Z
+aeb048921e7749ef9dc580a6009bc0cbff08b193ae9f04cce209c9e7cf012790 */h/Emulators/ShadPS4/shadPS4.exe
+be6decd22a15114dedc1a6360e4801d926f7b6f6ce695ff873a3897572e64fee */c/Users/puckh/AppData/Roaming/shadPS4/config.toml
+bb8c97e3377f029a0a2ead4e17c753c711041fd928f113e57fc40489640e56d4 */h/Emulators/ShadPS4/Games/CUSA18182/sce_sys/param.sfo
+fc95ca66cc65a45f6d125f5f02920c296d0c6ff1d7a65a727b6e6a25b1dd1731 */h/Emulators/ShadPS4/Games/CUSA18182/eboot.bin
+1c41f578a595dbd5aae7ad921445626636f3a842d8fb869bc054d35e3e849e87 */h/Emulators/ShadPS4/Games/CUSA18182/databigs/inxp_00.big
+## config unchanged:
+pre/config.pre.toml post/config.post.toml differ: char 2564, line 107
+## log lines: 18108
+## log head
+[Loader] <Info> (shadPS4:Main) emulator.cpp:228 Run: Starting shadps4 emulator v0.16.1 DMC 
+[Loader] <Info> (shadPS4:Main) emulator.cpp:229 Run: Revision d96133b0aee984ede33a7e6063b60df3ddc12bb2
+[Loader] <Info> (shadPS4:Main) emulator.cpp:230 Run: Branch dev-next
+[Loader] <Info> (shadPS4:Main) emulator.cpp:231 Run: Description checkpoint/p4-entry-0-gd96133b0a-dirty
+[Loader] <Info> (shadPS4:Main) emulator.cpp:232 Run: Remote https://github.com/puckhead73/shadPS4.git
+[Config] <Info> (shadPS4:Main) emulator.cpp:236 Run: Game-specific config exists: false
+33:[Loader] <Info> (shadPS4:Main) emulator.cpp:272 Run: Game id: CUSA18182 Title: NHL™ 21
+34:[Loader] <Info> (shadPS4:Main) emulator.cpp:273 Run: Fw: 0x7508000 App Version: 01.00
+## log tail
+[Loader] <Info> (shadPS4:Main) emulator.cpp:681 UpdatePlayTime: Playing time for CUSA18182: 0:06:19
+[Render] <Info> (shadPS4:Main) cache_storage.cpp:145 Close: Cache dumped
+[Lib.Net] <Info> (SocketRecv) net.cpp:841 sceNetEpollCreate: called, name = DirtySDK_SocketRecvThread, flags = 0
+[Lib.Net] <Warning> (SocketRecv) net.cpp:654 sceNetEpollControl: called, epollid = 44 (DirtySDK_SocketRecvThread), op = ORBIS_NET_EPOLL_CTL_ADD, id = 45
+[Lib.Net] <Info> (SocketRecv) net.cpp:841 sceNetEpollCreate: called, name = DirtySDK_SocketRecvThread, flags = 0
+## errors (unique, first 15)
+      7 <Error> (WebApi) np_web_api.cpp:337 sceNpWebApiSendRequest2: (STUBBED) called
+      6 <Error> (rwfilesys) file_system.cpp:161 open: Opening path /app0/nhl/ui/lua/homepage/homepagetutorial.lreq failed, file does not exist
+      6 <Error> (rwfilesys) file_system.cpp:161 open: Opening path /app0/nhl/ui/lua/dynamicmessages/retrievedynamicmessages.lreq failed, file does not exist
+      6 <Error> (rwfilesys) file_system.cpp:161 open: Opening path /app0/nhl/ui/features/homepage/vvms/eashladprovider.lreq failed, file does not exist
+      6 <Error> (DIME) np_web_api.cpp:141 sceNpWebApiCreateRequest: (STUBBED) called
+      5 <Error> (SimThread) ssl2.cpp:230 sceSslInit: (DUMMY) called poolSize = 393216
+      5 <Error> (SimThread) np_web_api.cpp:250 sceNpWebApiInitialize: (DUMMY) called
+      5 <Error> (SimThread) np_web_api.cpp:128 sceNpWebApiCreateHandle: (STUBBED) called
+      4 <Error> (rwfilesys) file_system.cpp:161 open: Opening path /app0/nhl/ui/lua/saveload/rostersaveloadutility.lreq failed, file does not exist
+      4 <Error> (rwfilesys) file_system.cpp:161 open: Opening path /app0/nhl/ui/lua/saveload/profilesaveloadutility.lreq failed, file does not exist
+      4 <Error> (rwfilesys) file_system.cpp:161 open: Opening path /app0/nhl/ui/lua/external/packages/tableutil.lreq failed, file does not exist
+      4 <Error> (rwfilesys) file_system.cpp:161 open: Opening path /app0/nhl/ui/lua/common/gridnav.lreq failed, file does not exist
+      4 <Error> (WebApi) stubs.cpp:37 CommonStub: Stub: _ZNK3sce4Json5Value5countEv (nid: RBw+4NukeGQ) called, returning zero to 0x804f37d65
+      4 <Error> (WebApi) stubs.cpp:37 CommonStub: Stub: _ZNK3sce4Json5Value5countEv (nid: RBw+4NukeGQ) called, returning zero to 0x804f354bb
+      4 <Error> (WebApi) stubs.cpp:37 CommonStub: Stub: _ZN3sce4Json6Parser5parseERNS0_5ValueEPKcm (nid: S5JxQnoGF3E) called, returning zero to 0x804f37d54
+## save-related lines
+      5 [Kernel.Fs] <Info> (Save Load Runner) file_system.cpp:296 close: Closing /savedata0/DATA
+     10 [Kernel.Fs] <Info> (Save Load Runner) file_system.cpp:296 close: Closing /savedata0/INDEX
+      1 [Kernel.Fs] <Info> (Save Load Runner) file_system.cpp:296 close: Closing /savedata0/NAME
+      5 [Kernel.Fs] <Info> (Save Load Runner) file_system.cpp:78 open: path = /savedata0/DATA flags = 0x201 mode = 0777
+      4 [Kernel.Fs] <Info> (Save Load Runner) file_system.cpp:78 open: path = /savedata0/INDEX flags = 0x0 mode = 0555
+      6 [Kernel.Fs] <Info> (Save Load Runner) file_system.cpp:78 open: path = /savedata0/INDEX flags = 0x601 mode = 0777
+      1 [Kernel.Fs] <Info> (Save Load Runner) file_system.cpp:78 open: path = /savedata0/NAME flags = 0x201 mode = 0777
+      1 [Lib.AppContent] <Info> (Game:Main) app_content.cpp:463 sceAppContentTemporaryDataMount2: sceAppContentTemporaryDataMount2: option = 0, mountPoint = /temp0
+## loose nhl tree unchanged
+5
+config

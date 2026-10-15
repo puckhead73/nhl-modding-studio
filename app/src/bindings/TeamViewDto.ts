@@ -6,11 +6,21 @@ import type { FieldViewDto } from "./FieldViewDto";
 /**
  * The full Team detail: curated identity, resolved arena, roster size, and all `kOtt` fields.
  */
-export type TeamViewDto = { team_id: number, record: number, identity: Array<FieldViewDto>, arena: ArenaRefDto | null, roster_count: number, 
+export type TeamViewDto = { team_id: number, name: string, record: number, identity: Array<FieldViewDto>, arena: ArenaRefDto | null, roster_count: number, 
 /**
  * Retired jersey numbers (`wcSL`), sorted ascending.
  */
-retired_numbers: Array<number>, all_fields: Array<FieldViewDto>, 
+retired_numbers: Array<number>, 
+/**
+ * The team's native league code and the league catalog's display text for it (a resolved
+ * label, else the localization key shown as a key, else `League code N`).
+ */
+league: number | null, league_label: string | null, 
+/**
+ * Conference / division labels, only where anchored for this title under this league;
+ * `None` means the raw group id is the only truthful display.
+ */
+conference_label: string | null, division_label: string | null, all_fields: Array<FieldViewDto>, 
 /**
  * The server-driven curated section layout the UI renders (per-game field profile).
  */

@@ -1,0 +1,68 @@
+# NHL24 facemesh import — manual folder -> player overrides.
+#
+# The importer (`tdb-cli --bin nhl24_facemesh_import`) matches each NHL24
+# `licensed/<first_last>` source folder to a historical player by name. For
+# folders that are ambiguous (two players share a first+last name) or that
+# don't auto-match at all, map the folder name to the exact historical slug
+# (`lastname_firstname_dd_mm_yyyy`) here. An entry here always wins over the
+# automatic name match.
+#
+# Format:  <folder_name> = "<historical slug>"
+# Example: sebastian_aho = "aho_sebastian_26_07_1997"
+
+# Current stars whose name collides with an older, longer-career namesake the
+# auto-picker preferred. NHL24's licensed asset is the modern player.
+tom_wilson = "wilson_tom_29_03_1994"   # WSH; auto-picked the 1921 namesake
+jack_hughes = "hughes_jack_14_05_2001" # NJD; auto-picked the 1957 namesake
+# Two real Sebastian Ahos: the auto-picker takes the longer-career NYI
+# defenseman (17_02_1996); NHL24's licensed asset is the CAR forward.
+sebastian_aho = "aho_sebastian_26_07_1997" # auto-picked aho_sebastian_17_02_1996 (NYI D)
+# Close-DOB collisions: a longer-career dupe outranked the real player, who is
+# the one whose DOB matches reality (verified against the store).
+jesper_bratt = "bratt_jesper_30_07_1998"     # NJD; auto-picked 30_06_1998
+ryan_donato = "donato_ryan_09_04_1996"       # auto-picked 06_04_1996
+travis_konecny = "konecny_travis_11_03_1997" # PHI; auto-picked 10_03_1997
+
+# Misspelled / nickname-mismatched folder names. The NHL24 export spells some
+# names differently from the historical store (typos, anglicizations, or
+# Alex/Alexander-style first-name forms), so they don't auto-match. Each slug
+# below was resolved against the store (longest-career candidate of the
+# corrected name).
+alex_steen = "steen_alexander_01_03_1984"
+alexander_ovechkin = "ovechkin_alex_17_09_1985"
+alexandre_burrows = "burrows_alex_11_04_1981"
+artemi_parnarin = "panarin_artemi_30_10_1991"        # parnarin -> panarin
+brian_little = "little_bryan_12_11_1987"              # brian -> bryan
+christopher_tanev = "tanev_chris_20_12_1989"
+cory_perry = "perry_corey_16_05_1985"                # cory -> corey
+dave_legwand = "legwand_david_17_08_1980"
+derrick_brassard = "brassard_derick_22_09_1987"      # derrick -> derick
+gabriel_lendeskog = "landeskog_gabriel_23_11_1992"   # lendeskog -> landeskog
+gabriel_vilardi = "vilardi_gabe_16_08_1999"
+ilja_bryzgalov = "bryzgalov_ilya_22_06_1980"         # ilja -> ilya
+jonathan_marchessault = "marchessault_jon_27_12_1990"
+josh_morrisey = "morrissey_josh_28_03_1995"          # morrisey -> morrissey
+js_giguere = "giguere_jeansebastien_16_05_1977"      # j-s giguere
+kevin_bieska = "bieksa_kevin_16_06_1981"             # bieska -> bieksa
+lanny_macdonald = "mcdonald_lanny_16_02_1953"        # macdonald -> mcdonald
+marcus_sorenson = "sorensen_marcus_07_04_1992"       # sorenson -> sorensen
+mathew_dumba = "dumba_matt_25_07_1994"               # Matt Dumba (not the older Al Dumba)
+michael_cammalleri = "cammalleri_mike_08_06_1982"
+mike_komiserek = "komisarek_mike_19_01_1982"         # komiserek -> komisarek
+mikka_kiprusoff = "kiprusoff_miikka_26_10_1976"      # mikka -> miikka
+nicklas_kronwall = "kronwall_niklas_12_01_1981"      # nicklas -> niklas
+nik_antropov = "antropov_nikolai_18_02_1980"
+nikolay_goldobin = "goldobin_nikolai_07_10_1995"
+oscar_linblom = "lindblom_oskar_15_08_1996"          # oscar linblom -> oskar lindblom
+patrick_eilas = "elias_patrik_13_04_1976"            # patrick eilas -> patrik elias
+paul_mertin = "martin_paul_05_03_1981"               # mertin -> martin
+peter_mahovlich = "mahovlich_pete_10_10_1946"
+phillipe_myers = "myers_philippe_25_01_1997"         # phillipe -> philippe
+ryan_oreily = "oreilly_ryan_07_02_1991"              # oreily -> oreilly
+sergei_federov = "fedorov_sergei_13_12_1969"         # federov -> fedorov
+tomas_plekanic = "plekanec_tomas_31_10_1982"         # plekanic -> plekanec
+valterri_filppula = "filppula_valtteri_20_03_1984"   # valterri -> valtteri
+wendel_clarke = "clark_wendel_25_10_1966"            # clarke -> clark
+zach_kassian = "kassian_zack_24_01_1991"             # zach -> zack
+zach_stortini = "stortini_zack_11_09_1985"           # zach -> zack
+andrej_bykov = "bykov_andrei_10_02_1988"             # andrej -> andrei

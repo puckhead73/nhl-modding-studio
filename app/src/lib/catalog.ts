@@ -22,18 +22,23 @@ export type GameDef = {
   label: string;
   file: string;
   platforms: Platform[];
+  /** Listed so it can be selected, but backend support (title ids, schema, anchors) is still being
+   *  added — the picker marks it rather than presenting it as a finished target. */
+  inDevelopment?: boolean;
 };
 
 const PS3_XBOX: Platform[] = ["ps3", "xbox"];
 const PS3_XBOX_PS4: Platform[] = ["ps3", "xbox", "ps4"];
 
 // Every ingested title, in release order. Multi-system titles prompt for the console after selection;
-// NHL 07–09 are Xbox 360 only (the pre-nhl10 titles we've verified); NHL 15 spans PS3/Xbox/PS4 (the
-// bridge title); NHL 16–21 are PS4; Legacy Recompiled is PC (recomp).
+// NHL 07 is Xbox 360 only; NHL 08–09 span PS3/Xbox; NHL 15 spans PS3/Xbox/PS4 (the
+// bridge title); NHL 16–24 are PS4 (22–24 in development); NHL 25–27 are PS5 (in development);
+// Legacy Recompiled is PC (recomp).
+// Box art resolves by `file` from assets/ui; a missing image falls back to a labelled card.
 export const GAMES: GameDef[] = [
   { id: "nhl07", label: "NHL 07", file: "nhl07.png", platforms: ["xbox"] },
-  { id: "nhl08", label: "NHL 08", file: "nhl08.png", platforms: ["xbox"] },
-  { id: "nhl09", label: "NHL 09", file: "nhl09.png", platforms: ["xbox"] },
+  { id: "nhl08", label: "NHL 08", file: "nhl08.png", platforms: PS3_XBOX },
+  { id: "nhl09", label: "NHL 09", file: "nhl09.png", platforms: PS3_XBOX },
   { id: "nhl10", label: "NHL 10", file: "nhl10.png", platforms: PS3_XBOX },
   { id: "nhl11", label: "NHL 11", file: "nhl11.png", platforms: PS3_XBOX },
   { id: "nhl12", label: "NHL 12", file: "nhl12.png", platforms: PS3_XBOX },
@@ -48,6 +53,12 @@ export const GAMES: GameDef[] = [
   { id: "nhl19", label: "NHL 19", file: "nhl19.png", platforms: ["ps4"] },
   { id: "nhl20", label: "NHL 20", file: "nhl20.png", platforms: ["ps4"] },
   { id: "nhl21", label: "NHL 21", file: "nhl21.png", platforms: ["ps4"] },
+  { id: "nhl22", label: "NHL 22", file: "nhl22.png", platforms: ["ps4"], inDevelopment: true },
+  { id: "nhl23", label: "NHL 23", file: "nhl23.png", platforms: ["ps4"], inDevelopment: true },
+  { id: "nhl24", label: "NHL 24", file: "nhl24.png", platforms: ["ps4"], inDevelopment: true },
+  { id: "nhl25", label: "NHL 25", file: "nhl25.png", platforms: ["ps5"], inDevelopment: true },
+  { id: "nhl26", label: "NHL 26", file: "nhl26.png", platforms: ["ps5"], inDevelopment: true },
+  { id: "nhl27", label: "NHL 27", file: "nhl27.png", platforms: ["ps5"], inDevelopment: true },
 ];
 
 export function gameById(id: string | null | undefined): GameDef | null {
@@ -55,12 +66,13 @@ export function gameById(id: string | null | undefined): GameDef | null {
 }
 
 // The consoles we target, in display order.
-export const PLATFORM_ORDER: Platform[] = ["ps3", "xbox", "ps4", "recomp"];
+export const PLATFORM_ORDER: Platform[] = ["ps3", "xbox", "ps4", "ps5", "recomp"];
 
 export const CONSOLE_LABEL: Record<Platform, string> = {
   ps3: "PS3",
   xbox: "Xbox 360",
   ps4: "PS4",
+  ps5: "PS5",
   recomp: "NHL Legacy Recompiled",
 };
 
@@ -69,15 +81,21 @@ export const CONSOLE_ICON: Partial<Record<Platform, string>> = {
   ps3: "PS3.png",
   xbox: "360.png",
   ps4: "ps4.png",
+  ps5: "ps5.png",
 };
 
 // Platforms whose emulator/runtime saves aren't in a consistent location — the user points us at the
-// save folder directly. PS3 (RPCS3) and PS4 (shadPS4) save under the emulator root, so we find those
-// automatically and don't ask.
+// save folder directly, and a roster save is required to open. PS3 (RPCS3) saves under the emulator
+// root, so we find those automatically and don't ask.
 export const SAVE_PATH_PLATFORMS: Platform[] = ["xbox", "recomp"];
 
 export function needsSavePath(p: Platform | null): boolean {
   return p != null && SAVE_PATH_PLATFORMS.includes(p);
+}
+
+// Save destinations can be separate from the installation on every platform.
+export function showsSavePath(p: Platform | null): boolean {
+  return p != null;
 }
 
 /** Games available on a given platform, in catalog order. */

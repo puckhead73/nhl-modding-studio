@@ -6,7 +6,7 @@ import type { FieldViewDto } from "./FieldViewDto";
  */
 export type FieldCellDto = { label: string, 
 /**
- * `"field"` | `"team"` | `"arena"` | `"derived"` — how the UI edits the cell.
+ * `"field"` | `"team"` | `"arena"` | `"derived"` | `"color"` — how the UI edits the cell.
  */
 control: string, 
 /**
@@ -30,6 +30,12 @@ none_label: string | null,
  * Resolved read-only text for `"derived"` cells.
  */
 derived_display: string | null, 
+/**
+ * `"color"` cells: the fields that make up the colour — one packed 24-bit word
+ * (`(r << 16) | (g << 8) | b`) or the `_r`, `_g`, `_b` byte fields in that order; edited as
+ * one operation through `set_cells_int`.
+ */
+color_fields: Array<FieldViewDto>, 
 /**
  * When set, this cell's value semantics are not yet confirmed for the loaded title — the UI
  * shows the raw value plus this note.

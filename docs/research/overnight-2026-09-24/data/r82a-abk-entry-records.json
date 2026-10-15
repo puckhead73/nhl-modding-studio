@@ -1,0 +1,1666 @@
+{
+ "note": "R82a - ABKC sample-record grammar re-read on every loose PS3 `.abk` (NHL 11 / 14 / 15 / Legacy), to explain the R80 chant entry-1\nresidual and to state the record classes the 2026-09-20 handoff 02 did not. Read-only; every entry of every table (not a sample).\n\nGrammar under test (derived from the PS3 NHL 15 bytes, then tested here on all four trees):\n  table:  'S10A' | u32 0 | u32 count | u32 header length = 16 + 4*(count-1) (0 when count = 0) | (count-1) x u32 offset of samples\n          2..n relative to the table start; offset 0xFFFFFFFF = absent slot (no record). Records are NOT padded; the table's data size\n          (file word 0x24) is 4-aligned, so the last record may end 0-3 bytes before table start + data size.\n  record: SNR h1 | SNR h2 (type = h2 >> 30, loop = bit 29, num_samples = low 29 bits), then by type:\n    ram (0):     [u32 loop_start when loop] | segments{ u32 size (counts the 8 SNR bytes) | u32 samples | (size - 8) codec bytes }\n                 repeated until sum(samples) == num_samples (one segment for non-loop records; loop records carry one or two -\n                 an intro segment of loop_start samples then the loop body);\n    stream (1):  8 bytes, or 16 with the loop bit (u32 a | u32 b); no size, no inline audio - the audio is in the sibling `<bank>.ast`.\n  codec 0x05 segment = one EALayer3 v1 block per R77: channel_config 0 -> mono; 1 -> stereo (2-channel side info); 3 -> two stereo\n  EA-frame streams interleaved frame by frame (two warm-up frames, two 47-sample PCM frames, granules x 576 = 2 x (samples + 1152 + trim)).\nTests, per entry:\n  T1 record ends exactly at the next present entry's offset (last entry: 0-3 bytes before the data end);\n  T2 (ram) every segment's `samples` word sums to num_samples; single-segment non-loop records have samples == num_samples;\n  T3 (ram, codec 0x05) every segment tiles under R77 and its granule count matches the channel class\n      (cc 0 / 1: G + 47 - samples = 1152 + trim, 0 <= trim < 4 * 576; cc 3: G + 94 - 2 * samples = 2304 + trim, 0 <= trim < 8 * 576;\n      the trim distribution is recorded per class);\n  T4 (ram loop) loop_start == 0 for one segment, == segment-1 samples for two segments;\n  T5 (stream entries) the sibling `.ast`: header 'S10S' + u32, data from 0x40 as a chain of blocks (u8 flags | u24 size | u32 word),\n      walked to the file end or not; blocks with flag 0x80 counted against the bank's stream entries. Observation only - no join claimed.\nUsage: python r82_abk_entry_records.py <out.json>\n",
+ "trees": {
+  "ps3-nhl11": {
+   "files": 210,
+   "tables": 210,
+   "table_errors": {},
+   "entries": 2816,
+   "absent_slots": 24,
+   "classes": {
+    "ram": 1570,
+    "ram+loop": 138,
+    "stream": 1104,
+    "stream+loop": 4
+   },
+   "codecs": {
+    "ealayer3-v1": 2816
+   },
+   "segments_per_record": {
+    "ram:1": 1570,
+    "ram+loop:1": 91,
+    "ram+loop:2": 47
+   },
+   "T1_fail": [],
+   "T2_fail": [],
+   "T3_checked": 1755,
+   "T3_by_class": {
+    "cc1:ok": 385,
+    "cc0:ok": 1315,
+    "cc3:ok": 49,
+    "cc5:unclassified": 4,
+    "cc0:fail": 2
+   },
+   "T3_fail": [
+    {
+     "entry": "ambientskatesandpunches.abk#283",
+     "segment": 0,
+     "cc": 5,
+     "samples": 156373,
+     "granules": 828,
+     "G": 476928,
+     "pcm": 141,
+     "pcm_frames": [
+      3,
+      4,
+      5
+     ],
+     "nch": 2,
+     "tiles": true
+    },
+    {
+     "entry": "ambientskatesandpunches.abk#294",
+     "segment": 0,
+     "cc": 0,
+     "samples": 11567,
+     "granules": 26,
+     "G": 14976,
+     "pcm": 47,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 1,
+     "trim": 2304,
+     "tiles": true
+    },
+    {
+     "entry": "fe.abk#2",
+     "segment": 0,
+     "cc": 5,
+     "samples": 267,
+     "granules": 18,
+     "G": 10368,
+     "pcm": 141,
+     "pcm_frames": [
+      3,
+      4,
+      5
+     ],
+     "nch": 2,
+     "tiles": true
+    },
+    {
+     "entry": "fe.abk#3",
+     "segment": 0,
+     "cc": 5,
+     "samples": 1342,
+     "granules": 24,
+     "G": 13824,
+     "pcm": 141,
+     "pcm_frames": [
+      3,
+      4,
+      5
+     ],
+     "nch": 2,
+     "tiles": true
+    },
+    {
+     "entry": "fe.abk#12",
+     "segment": 0,
+     "cc": 5,
+     "samples": 6384,
+     "granules": 48,
+     "G": 27648,
+     "pcm": 141,
+     "pcm_frames": [
+      3,
+      4,
+      5
+     ],
+     "nch": 2,
+     "tiles": true
+    },
+    {
+     "entry": "playercalls.abk#315",
+     "segment": 0,
+     "cc": 0,
+     "samples": 26543,
+     "granules": 52,
+     "G": 29952,
+     "pcm": 47,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 1,
+     "trim": 2304,
+     "tiles": true
+    }
+   ],
+   "T4_fail": [],
+   "beyond_file": [],
+   "malformed": [],
+   "last_end_gap": {
+    "3": 49,
+    "1": 45,
+    "0": 76,
+    "2": 37
+   },
+   "loop_examples": [
+    {
+     "entry": "000_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 07 2d 00 00 00 00 00 00 79 e5 00 01 07 2d",
+     "loop_start": 0,
+     "num_samples": 67373,
+     "segments": [
+      [
+       105990,
+       31205,
+       67373
+      ]
+     ],
+     "end": 137195,
+     "next": 137195
+    },
+    {
+     "entry": "055_chant.abk#0",
+     "hdr": "05 04 ac 44 20 02 2f 04 00 00 16 04 00 00 0d cd 00 00 16 04",
+     "loop_start": 5636,
+     "num_samples": 143108,
+     "segments": [
+      [
+       1836,
+       3533,
+       5636
+      ],
+      [
+       5369,
+       66490,
+       137472
+      ]
+     ],
+     "end": 71859,
+     "next": 71859
+    },
+    {
+     "entry": "055_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 96 22 00 00 09 80 00 00 0a 50 00 00 09 80",
+     "loop_start": 2432,
+     "num_samples": 103970,
+     "segments": [
+      [
+       71871,
+       2640,
+       2432
+      ],
+      [
+       74511,
+       48913,
+       101538
+      ]
+     ],
+     "end": 123424,
+     "next": 123424
+    },
+    {
+     "entry": "055_chant.abk#3",
+     "hdr": "05 04 ac 44 20 01 f9 00 00 00 00 59 00 00 07 7e 00 00 00 59",
+     "loop_start": 89,
+     "num_samples": 129280,
+     "segments": [
+      [
+       253041,
+       1918,
+       89
+      ],
+      [
+       254959,
+       64523,
+       129191
+      ]
+     ],
+     "end": 319482,
+     "next": 319482
+    }
+   ],
+   "T5": {
+    "colors1.abk": {
+     "stream_entries": 455,
+     "ast": {
+      "size": 10112448,
+      "magic": "S10S",
+      "word4": 2193335680,
+      "header_zero_8_to_0x40": true,
+      "blocks": 22144,
+      "flag_0x80_blocks": 455,
+      "flag_values": {
+       "0x0": 21689,
+       "0x80": 455
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10112448
+     }
+    },
+    "colors2.abk": {
+     "stream_entries": 455,
+     "ast": {
+      "size": 10384960,
+      "magic": "S10S",
+      "word4": 2322955200,
+      "header_zero_8_to_0x40": true,
+      "blocks": 22830,
+      "flag_0x80_blocks": 455,
+      "flag_values": {
+       "0x0": 22375,
+       "0x80": 455
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10384960
+     }
+    },
+    "createplayer.abk": {
+     "stream_entries": 11,
+     "ast": {
+      "size": 2244480,
+      "magic": "S10S",
+      "word4": 11121472,
+      "header_zero_8_to_0x40": true,
+      "blocks": 3370,
+      "flag_0x80_blocks": 11,
+      "flag_values": {
+       "0x0": 3359,
+       "0x80": 11
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 2244480
+     }
+    },
+    "crowds.abk": {
+     "stream_entries": 86,
+     "ast": {
+      "size": 30419776,
+      "magic": "S10S",
+      "word4": 1559650624,
+      "header_zero_8_to_0x40": true,
+      "blocks": 31388,
+      "flag_0x80_blocks": 89,
+      "flag_values": {
+       "0x0": 31299,
+       "0x80": 89
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 30419776
+     }
+    },
+    "playercalls.abk": {
+     "stream_entries": 51,
+     "ast": {
+      "size": 440512,
+      "magic": "S10S",
+      "word4": 11874432,
+      "header_zero_8_to_0x40": true,
+      "blocks": 1146,
+      "flag_0x80_blocks": 51,
+      "flag_values": {
+       "0x0": 1095,
+       "0x80": 51
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 440512
+     }
+    },
+    "practicerink.abk": {
+     "stream_entries": 26,
+     "ast": {
+      "size": 5440320,
+      "magic": "S10S",
+      "word4": 128710784,
+      "header_zero_8_to_0x40": true,
+      "blocks": 10622,
+      "flag_0x80_blocks": 27,
+      "flag_values": {
+       "0x80": 27,
+       "0x0": 10595
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 5440320
+     }
+    },
+    "sfx.abk": {
+     "stream_entries": 24,
+     "ast": {
+      "size": 49326592,
+      "magic": "S10S",
+      "word4": 625850496,
+      "header_zero_8_to_0x40": true,
+      "blocks": 63679,
+      "flag_0x80_blocks": 24,
+      "flag_values": {
+       "0x0": 63655,
+       "0x80": 24
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 49326592
+     }
+    }
+   },
+   "codec5_cc": {
+    "1": 338,
+    "0": 1317,
+    "3": 49,
+    "5": 4
+   },
+   "trim_hist": {
+    "cc1:2g": 181,
+    "cc1:3g": 204,
+    "cc0:2g": 870,
+    "cc3:4g": 8,
+    "cc3:7g": 10,
+    "cc3:5g": 10,
+    "cc3:6g": 21,
+    "cc0:3g": 445,
+    "cc0:4g": 2
+   },
+   "T5_summary": {
+    "banks_with_stream_entries": 7,
+    "ast_present": 7,
+    "ast_walked_to_end": 7,
+    "flag80_equals_entries": 5
+   }
+  },
+  "ps3-nhl14": {
+   "files": 218,
+   "tables": 218,
+   "table_errors": {},
+   "entries": 5110,
+   "absent_slots": 43,
+   "classes": {
+    "ram": 1277,
+    "ram+loop": 140,
+    "stream": 3684,
+    "stream+loop": 9
+   },
+   "codecs": {
+    "ealayer3-v1": 5110
+   },
+   "segments_per_record": {
+    "ram:1": 1277,
+    "ram+loop:1": 85,
+    "ram+loop:2": 55
+   },
+   "T1_fail": [],
+   "T2_fail": [],
+   "T3_checked": 1472,
+   "T3_by_class": {
+    "cc1:ok": 379,
+    "cc0:ok": 1018,
+    "cc3:ok": 72,
+    "cc1:fail": 3
+   },
+   "T3_fail": [
+    {
+     "entry": "loadloop007.abk#0",
+     "segment": 0,
+     "cc": 1,
+     "samples": 1,
+     "granules": 6,
+     "G": 3456,
+     "pcm": 1,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 2,
+     "trim": 2304,
+     "tiles": true
+    },
+    {
+     "entry": "loadloop008.abk#0",
+     "segment": 0,
+     "cc": 1,
+     "samples": 1,
+     "granules": 6,
+     "G": 3456,
+     "pcm": 1,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 2,
+     "trim": 2304,
+     "tiles": true
+    },
+    {
+     "entry": "loadloop_nhl94.abk#0",
+     "segment": 0,
+     "cc": 1,
+     "samples": 1,
+     "granules": 6,
+     "G": 3456,
+     "pcm": 1,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 2,
+     "trim": 2304,
+     "tiles": true
+    }
+   ],
+   "T4_fail": [],
+   "beyond_file": [],
+   "malformed": [],
+   "last_end_gap": {
+    "3": 52,
+    "1": 45,
+    "0": 81,
+    "2": 37
+   },
+   "loop_examples": [
+    {
+     "entry": "000_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 07 2d 00 00 00 00 00 00 79 e5 00 01 07 2d",
+     "loop_start": 0,
+     "num_samples": 67373,
+     "segments": [
+      [
+       105990,
+       31205,
+       67373
+      ]
+     ],
+     "end": 137195,
+     "next": 137195
+    },
+    {
+     "entry": "055_chant.abk#0",
+     "hdr": "05 04 ac 44 20 02 2f 04 00 00 16 04 00 00 0d cd 00 00 16 04",
+     "loop_start": 5636,
+     "num_samples": 143108,
+     "segments": [
+      [
+       1836,
+       3533,
+       5636
+      ],
+      [
+       5369,
+       66490,
+       137472
+      ]
+     ],
+     "end": 71859,
+     "next": 71859
+    },
+    {
+     "entry": "055_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 96 22 00 00 09 80 00 00 0a 50 00 00 09 80",
+     "loop_start": 2432,
+     "num_samples": 103970,
+     "segments": [
+      [
+       71871,
+       2640,
+       2432
+      ],
+      [
+       74511,
+       48913,
+       101538
+      ]
+     ],
+     "end": 123424,
+     "next": 123424
+    },
+    {
+     "entry": "055_chant.abk#3",
+     "hdr": "05 04 ac 44 20 01 f9 00 00 00 00 59 00 00 07 7e 00 00 00 59",
+     "loop_start": 89,
+     "num_samples": 129280,
+     "segments": [
+      [
+       253041,
+       1918,
+       89
+      ],
+      [
+       254959,
+       64523,
+       129191
+      ]
+     ],
+     "end": 319482,
+     "next": 319482
+    }
+   ],
+   "T5": {
+    "ambientskatesandpunches.abk": {
+     "stream_entries": 261,
+     "ast": {
+      "size": 8667968,
+      "magic": "S10S",
+      "word4": 959829440,
+      "header_zero_8_to_0x40": true,
+      "blocks": 15829,
+      "flag_0x80_blocks": 262,
+      "flag_values": {
+       "0x0": 15567,
+       "0x80": 262
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 8667968
+     }
+    },
+    "bap_coach_feedback1.abk": {
+     "stream_entries": 421,
+     "ast": {
+      "size": 11468608,
+      "magic": "S10S",
+      "word4": 2329832064,
+      "header_zero_8_to_0x40": true,
+      "blocks": 16683,
+      "flag_0x80_blocks": 421,
+      "flag_values": {
+       "0x0": 16262,
+       "0x80": 421
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 11468608
+     }
+    },
+    "bap_coach_feedback2.abk": {
+     "stream_entries": 198,
+     "ast": {
+      "size": 6067008,
+      "magic": "S10S",
+      "word4": 578440576,
+      "header_zero_8_to_0x40": true,
+      "blocks": 8902,
+      "flag_0x80_blocks": 198,
+      "flag_values": {
+       "0x0": 8704,
+       "0x80": 198
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 6067008
+     }
+    },
+    "bap_coachtasks_assign.abk": {
+     "stream_entries": 381,
+     "ast": {
+      "size": 12396480,
+      "magic": "S10S",
+      "word4": 2371463744,
+      "header_zero_8_to_0x40": true,
+      "blocks": 18343,
+      "flag_0x80_blocks": 381,
+      "flag_values": {
+       "0x0": 17962,
+       "0x80": 381
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 12396480
+     }
+    },
+    "bap_coachtasks_fbneg.abk": {
+     "stream_entries": 182,
+     "ast": {
+      "size": 6609920,
+      "magic": "S10S",
+      "word4": 607988096,
+      "header_zero_8_to_0x40": true,
+      "blocks": 10232,
+      "flag_0x80_blocks": 182,
+      "flag_values": {
+       "0x0": 10050,
+       "0x80": 182
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 6609920
+     }
+    },
+    "bap_coachtasks_fbpos.abk": {
+     "stream_entries": 288,
+     "ast": {
+      "size": 8451072,
+      "magic": "S10S",
+      "word4": 1218648512,
+      "header_zero_8_to_0x40": true,
+      "blocks": 12375,
+      "flag_0x80_blocks": 288,
+      "flag_values": {
+       "0x0": 12087,
+       "0x80": 288
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 8451072
+     }
+    },
+    "colors1.abk": {
+     "stream_entries": 459,
+     "ast": {
+      "size": 10208064,
+      "magic": "S10S",
+      "word4": 2148250112,
+      "header_zero_8_to_0x40": true,
+      "blocks": 22340,
+      "flag_0x80_blocks": 459,
+      "flag_values": {
+       "0x0": 21881,
+       "0x80": 459
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10208064
+     }
+    },
+    "colors2.abk": {
+     "stream_entries": 459,
+     "ast": {
+      "size": 10480576,
+      "magic": "S10S",
+      "word4": 2266719744,
+      "header_zero_8_to_0x40": true,
+      "blocks": 23026,
+      "flag_0x80_blocks": 459,
+      "flag_values": {
+       "0x0": 22567,
+       "0x80": 459
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10480576
+     }
+    },
+    "createplayer.abk": {
+     "stream_entries": 11,
+     "ast": {
+      "size": 2244480,
+      "magic": "S10S",
+      "word4": 11121472,
+      "header_zero_8_to_0x40": true,
+      "blocks": 3370,
+      "flag_0x80_blocks": 11,
+      "flag_values": {
+       "0x0": 3359,
+       "0x80": 11
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 2244480
+     }
+    },
+    "crowds.abk": {
+     "stream_entries": 86,
+     "ast": {
+      "size": 30080896,
+      "magic": "S10S",
+      "word4": 1175377536,
+      "header_zero_8_to_0x40": true,
+      "blocks": 30895,
+      "flag_0x80_blocks": 89,
+      "flag_values": {
+       "0x80": 89,
+       "0x0": 30806
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 30080896
+     }
+    },
+    "crowds_winterclassic.abk": {
+     "stream_entries": 89,
+     "ast": {
+      "size": 27617408,
+      "magic": "S10S",
+      "word4": 1177497984,
+      "header_zero_8_to_0x40": true,
+      "blocks": 33755,
+      "flag_0x80_blocks": 93,
+      "flag_values": {
+       "0x0": 33662,
+       "0x80": 93
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 27617408
+     }
+    },
+    "playercalls.abk": {
+     "stream_entries": 500,
+     "ast": {
+      "size": 4274560,
+      "magic": "S10S",
+      "word4": 1075571968,
+      "header_zero_8_to_0x40": true,
+      "blocks": 11500,
+      "flag_0x80_blocks": 500,
+      "flag_values": {
+       "0x0": 11000,
+       "0x80": 500
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 4274560
+     }
+    },
+    "playercalls2.abk": {
+     "stream_entries": 89,
+     "ast": {
+      "size": 790016,
+      "magic": "S10S",
+      "word4": 35894400,
+      "header_zero_8_to_0x40": true,
+      "blocks": 2175,
+      "flag_0x80_blocks": 89,
+      "flag_values": {
+       "0x0": 2086,
+       "0x80": 89
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 790016
+     }
+    },
+    "practicerink.abk": {
+     "stream_entries": 26,
+     "ast": {
+      "size": 5440320,
+      "magic": "S10S",
+      "word4": 128703872,
+      "header_zero_8_to_0x40": true,
+      "blocks": 10622,
+      "flag_0x80_blocks": 27,
+      "flag_values": {
+       "0x80": 27,
+       "0x0": 10595
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 5440320
+     }
+    },
+    "sfx.abk": {
+     "stream_entries": 243,
+     "ast": {
+      "size": 51518336,
+      "magic": "S10S",
+      "word4": 2238832896,
+      "header_zero_8_to_0x40": true,
+      "blocks": 67364,
+      "flag_0x80_blocks": 243,
+      "flag_values": {
+       "0x0": 67121,
+       "0x80": 243
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 51518336
+     }
+    }
+   },
+   "codec5_cc": {
+    "1": 327,
+    "0": 1018,
+    "3": 72
+   },
+   "trim_hist": {
+    "cc1:2g": 183,
+    "cc1:3g": 196,
+    "cc0:2g": 533,
+    "cc3:4g": 13,
+    "cc3:7g": 28,
+    "cc3:5g": 10,
+    "cc3:6g": 21,
+    "cc0:3g": 485,
+    "cc1:4g": 3
+   },
+   "T5_summary": {
+    "banks_with_stream_entries": 15,
+    "ast_present": 15,
+    "ast_walked_to_end": 15,
+    "flag80_equals_entries": 11
+   }
+  },
+  "ps3-nhl15": {
+   "files": 217,
+   "tables": 217,
+   "table_errors": {},
+   "entries": 5099,
+   "absent_slots": 43,
+   "classes": {
+    "ram": 1277,
+    "ram+loop": 140,
+    "stream": 3673,
+    "stream+loop": 9
+   },
+   "codecs": {
+    "ealayer3-v1": 5099
+   },
+   "segments_per_record": {
+    "ram:1": 1277,
+    "ram+loop:1": 85,
+    "ram+loop:2": 55
+   },
+   "T1_fail": [],
+   "T2_fail": [],
+   "T3_checked": 1472,
+   "T3_by_class": {
+    "cc1:ok": 380,
+    "cc0:ok": 1018,
+    "cc3:ok": 72,
+    "cc1:fail": 2
+   },
+   "T3_fail": [
+    {
+     "entry": "loadloop002.abk#0",
+     "segment": 0,
+     "cc": 1,
+     "samples": 1,
+     "granules": 6,
+     "G": 3456,
+     "pcm": 1,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 2,
+     "trim": 2304,
+     "tiles": true
+    },
+    {
+     "entry": "loadloop_nhl94.abk#0",
+     "segment": 0,
+     "cc": 1,
+     "samples": 1,
+     "granules": 6,
+     "G": 3456,
+     "pcm": 1,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 2,
+     "trim": 2304,
+     "tiles": true
+    }
+   ],
+   "T4_fail": [],
+   "beyond_file": [],
+   "malformed": [],
+   "last_end_gap": {
+    "3": 54,
+    "1": 43,
+    "0": 80,
+    "2": 37
+   },
+   "loop_examples": [
+    {
+     "entry": "000_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 07 2d 00 00 00 00 00 00 79 e5 00 01 07 2d",
+     "loop_start": 0,
+     "num_samples": 67373,
+     "segments": [
+      [
+       105990,
+       31205,
+       67373
+      ]
+     ],
+     "end": 137195,
+     "next": 137195
+    },
+    {
+     "entry": "055_chant.abk#0",
+     "hdr": "05 04 ac 44 20 02 2f 04 00 00 16 04 00 00 0d cd 00 00 16 04",
+     "loop_start": 5636,
+     "num_samples": 143108,
+     "segments": [
+      [
+       1836,
+       3533,
+       5636
+      ],
+      [
+       5369,
+       66490,
+       137472
+      ]
+     ],
+     "end": 71859,
+     "next": 71859
+    },
+    {
+     "entry": "055_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 96 22 00 00 09 80 00 00 0a 50 00 00 09 80",
+     "loop_start": 2432,
+     "num_samples": 103970,
+     "segments": [
+      [
+       71871,
+       2640,
+       2432
+      ],
+      [
+       74511,
+       48913,
+       101538
+      ]
+     ],
+     "end": 123424,
+     "next": 123424
+    },
+    {
+     "entry": "055_chant.abk#3",
+     "hdr": "05 04 ac 44 20 01 f9 00 00 00 00 59 00 00 07 7e 00 00 00 59",
+     "loop_start": 89,
+     "num_samples": 129280,
+     "segments": [
+      [
+       253041,
+       1918,
+       89
+      ],
+      [
+       254959,
+       64523,
+       129191
+      ]
+     ],
+     "end": 319482,
+     "next": 319482
+    }
+   ],
+   "T5": {
+    "ambientskatesandpunches.abk": {
+     "stream_entries": 261,
+     "ast": {
+      "size": 8667968,
+      "magic": "S10S",
+      "word4": 959829440,
+      "header_zero_8_to_0x40": true,
+      "blocks": 15829,
+      "flag_0x80_blocks": 262,
+      "flag_values": {
+       "0x0": 15567,
+       "0x80": 262
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 8667968
+     }
+    },
+    "bap_coach_feedback1.abk": {
+     "stream_entries": 421,
+     "ast": {
+      "size": 11468608,
+      "magic": "S10S",
+      "word4": 2329832064,
+      "header_zero_8_to_0x40": true,
+      "blocks": 16683,
+      "flag_0x80_blocks": 421,
+      "flag_values": {
+       "0x0": 16262,
+       "0x80": 421
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 11468608
+     }
+    },
+    "bap_coach_feedback2.abk": {
+     "stream_entries": 198,
+     "ast": {
+      "size": 6067008,
+      "magic": "S10S",
+      "word4": 578440576,
+      "header_zero_8_to_0x40": true,
+      "blocks": 8902,
+      "flag_0x80_blocks": 198,
+      "flag_values": {
+       "0x0": 8704,
+       "0x80": 198
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 6067008
+     }
+    },
+    "bap_coachtasks_assign.abk": {
+     "stream_entries": 381,
+     "ast": {
+      "size": 12396480,
+      "magic": "S10S",
+      "word4": 2371463744,
+      "header_zero_8_to_0x40": true,
+      "blocks": 18343,
+      "flag_0x80_blocks": 381,
+      "flag_values": {
+       "0x0": 17962,
+       "0x80": 381
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 12396480
+     }
+    },
+    "bap_coachtasks_fbneg.abk": {
+     "stream_entries": 182,
+     "ast": {
+      "size": 6609920,
+      "magic": "S10S",
+      "word4": 607988096,
+      "header_zero_8_to_0x40": true,
+      "blocks": 10232,
+      "flag_0x80_blocks": 182,
+      "flag_values": {
+       "0x0": 10050,
+       "0x80": 182
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 6609920
+     }
+    },
+    "bap_coachtasks_fbpos.abk": {
+     "stream_entries": 288,
+     "ast": {
+      "size": 8451072,
+      "magic": "S10S",
+      "word4": 1218648512,
+      "header_zero_8_to_0x40": true,
+      "blocks": 12375,
+      "flag_0x80_blocks": 288,
+      "flag_values": {
+       "0x0": 12087,
+       "0x80": 288
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 8451072
+     }
+    },
+    "colors1.abk": {
+     "stream_entries": 459,
+     "ast": {
+      "size": 10208064,
+      "magic": "S10S",
+      "word4": 2148250112,
+      "header_zero_8_to_0x40": true,
+      "blocks": 22340,
+      "flag_0x80_blocks": 459,
+      "flag_values": {
+       "0x0": 21881,
+       "0x80": 459
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10208064
+     }
+    },
+    "colors2.abk": {
+     "stream_entries": 459,
+     "ast": {
+      "size": 10480576,
+      "magic": "S10S",
+      "word4": 2266719744,
+      "header_zero_8_to_0x40": true,
+      "blocks": 23026,
+      "flag_0x80_blocks": 459,
+      "flag_values": {
+       "0x0": 22567,
+       "0x80": 459
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10480576
+     }
+    },
+    "crowds.abk": {
+     "stream_entries": 86,
+     "ast": {
+      "size": 30080896,
+      "magic": "S10S",
+      "word4": 1175377536,
+      "header_zero_8_to_0x40": true,
+      "blocks": 30895,
+      "flag_0x80_blocks": 89,
+      "flag_values": {
+       "0x80": 89,
+       "0x0": 30806
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 30080896
+     }
+    },
+    "crowds_winterclassic.abk": {
+     "stream_entries": 89,
+     "ast": {
+      "size": 27617408,
+      "magic": "S10S",
+      "word4": 1177497984,
+      "header_zero_8_to_0x40": true,
+      "blocks": 33755,
+      "flag_0x80_blocks": 93,
+      "flag_values": {
+       "0x0": 33662,
+       "0x80": 93
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 27617408
+     }
+    },
+    "playercalls.abk": {
+     "stream_entries": 500,
+     "ast": {
+      "size": 4274560,
+      "magic": "S10S",
+      "word4": 1075571968,
+      "header_zero_8_to_0x40": true,
+      "blocks": 11500,
+      "flag_0x80_blocks": 500,
+      "flag_values": {
+       "0x0": 11000,
+       "0x80": 500
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 4274560
+     }
+    },
+    "playercalls2.abk": {
+     "stream_entries": 89,
+     "ast": {
+      "size": 790016,
+      "magic": "S10S",
+      "word4": 35894400,
+      "header_zero_8_to_0x40": true,
+      "blocks": 2175,
+      "flag_0x80_blocks": 89,
+      "flag_values": {
+       "0x0": 2086,
+       "0x80": 89
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 790016
+     }
+    },
+    "practicerink.abk": {
+     "stream_entries": 26,
+     "ast": {
+      "size": 5440320,
+      "magic": "S10S",
+      "word4": 128703872,
+      "header_zero_8_to_0x40": true,
+      "blocks": 10622,
+      "flag_0x80_blocks": 27,
+      "flag_values": {
+       "0x80": 27,
+       "0x0": 10595
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 5440320
+     }
+    },
+    "sfx.abk": {
+     "stream_entries": 243,
+     "ast": {
+      "size": 51518336,
+      "magic": "S10S",
+      "word4": 2238832896,
+      "header_zero_8_to_0x40": true,
+      "blocks": 67364,
+      "flag_0x80_blocks": 243,
+      "flag_values": {
+       "0x0": 67121,
+       "0x80": 243
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 51518336
+     }
+    }
+   },
+   "codec5_cc": {
+    "1": 327,
+    "0": 1018,
+    "3": 72
+   },
+   "trim_hist": {
+    "cc1:2g": 176,
+    "cc1:3g": 204,
+    "cc0:2g": 533,
+    "cc3:4g": 13,
+    "cc3:7g": 28,
+    "cc3:5g": 10,
+    "cc3:6g": 21,
+    "cc0:3g": 485,
+    "cc1:4g": 2
+   },
+   "T5_summary": {
+    "banks_with_stream_entries": 14,
+    "ast_present": 14,
+    "ast_walked_to_end": 14,
+    "flag80_equals_entries": 10
+   }
+  },
+  "ps3-legacy": {
+   "files": 217,
+   "tables": 217,
+   "table_errors": {},
+   "entries": 5099,
+   "absent_slots": 43,
+   "classes": {
+    "ram": 1281,
+    "ram+loop": 136,
+    "stream": 3673,
+    "stream+loop": 9
+   },
+   "codecs": {
+    "ealayer3-v1": 5099
+   },
+   "segments_per_record": {
+    "ram:1": 1281,
+    "ram+loop:1": 94,
+    "ram+loop:2": 42
+   },
+   "T1_fail": [],
+   "T2_fail": [],
+   "T3_checked": 1459,
+   "T3_by_class": {
+    "cc1:ok": 338,
+    "cc0:ok": 1048,
+    "cc3:ok": 72,
+    "cc1:fail": 1
+   },
+   "T3_fail": [
+    {
+     "entry": "loadloop_nhl94.abk#0",
+     "segment": 0,
+     "cc": 1,
+     "samples": 1,
+     "granules": 6,
+     "G": 3456,
+     "pcm": 1,
+     "pcm_frames": [
+      1
+     ],
+     "nch": 2,
+     "trim": 2304,
+     "tiles": true
+    }
+   ],
+   "T4_fail": [],
+   "beyond_file": [],
+   "malformed": [],
+   "last_end_gap": {
+    "3": 46,
+    "1": 40,
+    "2": 46,
+    "0": 82
+   },
+   "loop_examples": [
+    {
+     "entry": "000_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 07 2d 00 00 00 00 00 00 79 e5 00 01 07 2d",
+     "loop_start": 0,
+     "num_samples": 67373,
+     "segments": [
+      [
+       105990,
+       31205,
+       67373
+      ]
+     ],
+     "end": 137195,
+     "next": 137195
+    },
+    {
+     "entry": "055_chant.abk#0",
+     "hdr": "05 04 ac 44 20 02 2f 04 00 00 16 04 00 00 0d cd 00 00 16 04",
+     "loop_start": 5636,
+     "num_samples": 143108,
+     "segments": [
+      [
+       1836,
+       3533,
+       5636
+      ],
+      [
+       5369,
+       66490,
+       137472
+      ]
+     ],
+     "end": 71859,
+     "next": 71859
+    },
+    {
+     "entry": "055_chant.abk#1",
+     "hdr": "05 04 ac 44 20 01 96 22 00 00 09 80 00 00 0a 50 00 00 09 80",
+     "loop_start": 2432,
+     "num_samples": 103970,
+     "segments": [
+      [
+       71871,
+       2640,
+       2432
+      ],
+      [
+       74511,
+       48913,
+       101538
+      ]
+     ],
+     "end": 123424,
+     "next": 123424
+    },
+    {
+     "entry": "055_chant.abk#3",
+     "hdr": "05 04 ac 44 20 01 f9 00 00 00 00 59 00 00 07 7e 00 00 00 59",
+     "loop_start": 89,
+     "num_samples": 129280,
+     "segments": [
+      [
+       253041,
+       1918,
+       89
+      ],
+      [
+       254959,
+       64523,
+       129191
+      ]
+     ],
+     "end": 319482,
+     "next": 319482
+    }
+   ],
+   "T5": {
+    "ambientskatesandpunches.abk": {
+     "stream_entries": 261,
+     "ast": {
+      "size": 8667968,
+      "magic": "S10S",
+      "word4": 959829440,
+      "header_zero_8_to_0x40": true,
+      "blocks": 15829,
+      "flag_0x80_blocks": 262,
+      "flag_values": {
+       "0x0": 15567,
+       "0x80": 262
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 8667968
+     }
+    },
+    "bap_coach_feedback1.abk": {
+     "stream_entries": 421,
+     "ast": {
+      "size": 11468608,
+      "magic": "S10S",
+      "word4": 2329832064,
+      "header_zero_8_to_0x40": true,
+      "blocks": 16683,
+      "flag_0x80_blocks": 421,
+      "flag_values": {
+       "0x0": 16262,
+       "0x80": 421
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 11468608
+     }
+    },
+    "bap_coach_feedback2.abk": {
+     "stream_entries": 198,
+     "ast": {
+      "size": 6067008,
+      "magic": "S10S",
+      "word4": 578440576,
+      "header_zero_8_to_0x40": true,
+      "blocks": 8902,
+      "flag_0x80_blocks": 198,
+      "flag_values": {
+       "0x0": 8704,
+       "0x80": 198
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 6067008
+     }
+    },
+    "bap_coachtasks_assign.abk": {
+     "stream_entries": 381,
+     "ast": {
+      "size": 12396480,
+      "magic": "S10S",
+      "word4": 2371463744,
+      "header_zero_8_to_0x40": true,
+      "blocks": 18343,
+      "flag_0x80_blocks": 381,
+      "flag_values": {
+       "0x0": 17962,
+       "0x80": 381
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 12396480
+     }
+    },
+    "bap_coachtasks_fbneg.abk": {
+     "stream_entries": 182,
+     "ast": {
+      "size": 6609920,
+      "magic": "S10S",
+      "word4": 607988096,
+      "header_zero_8_to_0x40": true,
+      "blocks": 10232,
+      "flag_0x80_blocks": 182,
+      "flag_values": {
+       "0x0": 10050,
+       "0x80": 182
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 6609920
+     }
+    },
+    "bap_coachtasks_fbpos.abk": {
+     "stream_entries": 288,
+     "ast": {
+      "size": 8451072,
+      "magic": "S10S",
+      "word4": 1218648512,
+      "header_zero_8_to_0x40": true,
+      "blocks": 12375,
+      "flag_0x80_blocks": 288,
+      "flag_values": {
+       "0x0": 12087,
+       "0x80": 288
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 8451072
+     }
+    },
+    "colors1.abk": {
+     "stream_entries": 459,
+     "ast": {
+      "size": 10208064,
+      "magic": "S10S",
+      "word4": 2148250112,
+      "header_zero_8_to_0x40": true,
+      "blocks": 22340,
+      "flag_0x80_blocks": 459,
+      "flag_values": {
+       "0x0": 21881,
+       "0x80": 459
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10208064
+     }
+    },
+    "colors2.abk": {
+     "stream_entries": 459,
+     "ast": {
+      "size": 10480576,
+      "magic": "S10S",
+      "word4": 2266719744,
+      "header_zero_8_to_0x40": true,
+      "blocks": 23026,
+      "flag_0x80_blocks": 459,
+      "flag_values": {
+       "0x0": 22567,
+       "0x80": 459
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 10480576
+     }
+    },
+    "crowds.abk": {
+     "stream_entries": 86,
+     "ast": {
+      "size": 30080896,
+      "magic": "S10S",
+      "word4": 1175377536,
+      "header_zero_8_to_0x40": true,
+      "blocks": 30895,
+      "flag_0x80_blocks": 89,
+      "flag_values": {
+       "0x80": 89,
+       "0x0": 30806
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 30080896
+     }
+    },
+    "crowds_winterclassic.abk": {
+     "stream_entries": 89,
+     "ast": {
+      "size": 27617408,
+      "magic": "S10S",
+      "word4": 1177497984,
+      "header_zero_8_to_0x40": true,
+      "blocks": 33755,
+      "flag_0x80_blocks": 93,
+      "flag_values": {
+       "0x0": 33662,
+       "0x80": 93
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 27617408
+     }
+    },
+    "playercalls.abk": {
+     "stream_entries": 500,
+     "ast": {
+      "size": 4274560,
+      "magic": "S10S",
+      "word4": 1075571968,
+      "header_zero_8_to_0x40": true,
+      "blocks": 11500,
+      "flag_0x80_blocks": 500,
+      "flag_values": {
+       "0x0": 11000,
+       "0x80": 500
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 4274560
+     }
+    },
+    "playercalls2.abk": {
+     "stream_entries": 89,
+     "ast": {
+      "size": 790016,
+      "magic": "S10S",
+      "word4": 35894400,
+      "header_zero_8_to_0x40": true,
+      "blocks": 2175,
+      "flag_0x80_blocks": 89,
+      "flag_values": {
+       "0x0": 2086,
+       "0x80": 89
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 790016
+     }
+    },
+    "practicerink.abk": {
+     "stream_entries": 26,
+     "ast": {
+      "size": 5440320,
+      "magic": "S10S",
+      "word4": 128703872,
+      "header_zero_8_to_0x40": true,
+      "blocks": 10622,
+      "flag_0x80_blocks": 27,
+      "flag_values": {
+       "0x80": 27,
+       "0x0": 10595
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 5440320
+     }
+    },
+    "sfx.abk": {
+     "stream_entries": 243,
+     "ast": {
+      "size": 51518336,
+      "magic": "S10S",
+      "word4": 2238832896,
+      "header_zero_8_to_0x40": true,
+      "blocks": 67364,
+      "flag_0x80_blocks": 243,
+      "flag_values": {
+       "0x0": 67121,
+       "0x80": 243
+      },
+      "walked_to_end": true,
+      "note": null,
+      "stopped_at": 51518336
+     }
+    }
+   },
+   "codec5_cc": {
+    "1": 297,
+    "0": 1048,
+    "3": 72
+   },
+   "trim_hist": {
+    "cc1:2g": 168,
+    "cc1:3g": 170,
+    "cc0:3g": 502,
+    "cc0:2g": 546,
+    "cc3:4g": 13,
+    "cc3:7g": 28,
+    "cc3:5g": 10,
+    "cc3:6g": 21,
+    "cc1:4g": 1
+   },
+   "T5_summary": {
+    "banks_with_stream_entries": 14,
+    "ast_present": 14,
+    "ast_walked_to_end": 14,
+    "flag80_equals_entries": 10
+   }
+  }
+ },
+ "totals": {
+  "files": 862,
+  "tables": 862,
+  "entries": 18124,
+  "absent_slots": 153,
+  "T3_checked": 6158
+ }
+}
