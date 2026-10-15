@@ -323,6 +323,12 @@ An experimental NHL07 jersey writer now preserves existing roster replacements, 
 
 ## DB-07 Game Settings and Executable Tunables
 
+**Research addition, 2026-10-14:** [Gameplay tweakables catalogue review](../research/frostbite-2026-10-14/gameplay-tweakables-review.md)
+records 25,474 supplied candidates, source fingerprint, type/editability counts, duplicate
+names, missing values, and range inconsistencies. Title/build and storage provenance remain
+unbound. Source `editable=yes` does not qualify a Studio control; use the progression below.
+Documentation ingestion only; implementation remains subject to the user's roadmap review.
+
 1. Catalogue menu settings, stored defaults, competition rules and database/archive CSV settings; verify load timing and affected modes.
 2. Investigate executable configuration readers, constants, tables and consumers beyond exposed menus. Distinguish active paths from debug/unused/obsolete code.
 3. AI research: decision-making, positioning, offense/defense, passing, shooting, checking and goalies. These are research objectives, not promised controls.

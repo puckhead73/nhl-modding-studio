@@ -47,6 +47,18 @@ a reference tool can load it. Keep unsupported compressed assets listable/raw-ex
 
 ## Ordered roadmap and acceptance criteria
 
+Research addition, 14 October: the [NHL24 texture bridge archive review](../research/frostbite-2026-10-14/texture-bridge-review.md)
+records a supplied emulator binary with replacement-loader implementation evidence. The
+host-side loader is now a binary prototype rather than only a proposal; its pack interface
+and runtime behavior remain unqualified. Plan emulator texture-pack export separately
+from CAS/TOC deployment, after obtaining the exact source/interface and a working pack.
+
+Research addition, 14 October: the [gameplay tweakables CSV review](../research/frostbite-2026-10-14/gameplay-tweakables-review.md)
+adds a 25,474-record discovery catalogue to DB-07. Its game/build and storage are not yet
+identified; do not assume EBX residency or promote source editability into Studio support.
+Resolve provenance and ownership before adding qualified tuning controls. This is a
+documentation update, not approval to begin the proposed implementation.
+
 1. **Container foundation and onboarding (in progress).** Native bounded readers; metadata
    inspection; decoded bundle names; layer-aware paginated browser; manifest asset details;
    raw and stored-block decoded export outside the install. Reject unknown profiles and
