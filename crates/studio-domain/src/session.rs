@@ -1045,6 +1045,13 @@ impl EditSession {
         self.run(|tx| { let mut out=OpOutcome::default(); for (table,rows) in prepared { out.edits += tx.replace_integer_rows(&table,&rows)?.edits; } Ok(out) })
     }
 
+    /// Replay a complete roster growth operation only against its reviewed original state.
+    pub fn set_package_roster(&mut self, op: &crate::mod_package::RosterTableOp) -> Result<OpOutcome> {
+        if crate::package_roster::check_destination(self.bytes(), op)? { return Ok(OpOutcome::default()); }
+        let rows: Vec<Vec<(String,u64)>> = op.after.iter().map(|r|r.iter().map(|(k,v)|(k.clone(),*v)).collect()).collect();
+        self.run(|tx| tx.replace_integer_rows("eGlu", &rows))
+    }
+
     pub fn set_package_fields(&mut self, cells: &[(String, u32, String, FieldValue)]) -> Result<OpOutcome> {
         self.set_project_revert(cells, None)
     }

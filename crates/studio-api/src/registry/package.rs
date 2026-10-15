@@ -144,6 +144,7 @@ fn cell_dto(c: &CellOp) -> PackageCellDto {
 
 /// What a saved project's baseline ↔ working comparison yields, per category.
 struct ProjectEdits {
+    roster_table: Option<pkg::RosterTableOp>,
     schedules: Vec<pkg::ScheduleOp>,
     career_removals: Vec<pkg::CareerRemovalOp>,
     free_agents: Option<pkg::FreeAgentPoolOp>,
@@ -172,7 +173,7 @@ fn row_fingerprint(bytes: &[u8], table: &tdb_core::Table, record: u32) -> Option
 
 /// Compare two files of one role through the title's codecs and name every changed cell with its
 /// row identity (key values and fingerprint from the baseline row).
-fn cells_between(baseline: &Path, working: &Path, meta: &Path, platform: Platform, role: ProjectRole, defs: &str, file: &str, schedule_ops:bool) -> Result<(Vec<CellOp>, Vec<String>, Vec<pkg::CareerRemovalOp>), ApiError> {
+fn cells_between(baseline: &Path, working: &Path, meta: &Path, platform: Platform, role: ProjectRole, defs: &str, file: &str, schedule_ops:bool, roster_growth: bool) -> Result<(Vec<CellOp>, Vec<String>, Vec<pkg::CareerRemovalOp>), ApiError> {
     let base = Project::load(baseline, platform, role, meta, defs).map_err(|e| ApiError::Workspace(format!("the project's baseline {} does not open: {e}", s(baseline))))?;
     let work = Project::load(working, platform, role, meta, defs).map_err(|e| ApiError::Workspace(format!("the project's saved {} does not open: {e}", s(working))))?;
     let pending = studio_domain::pending::pending_changes(base.db_bytes(), work.db_bytes(), work.meta(), work.enums(), None, usize::MAX);
@@ -184,7 +185,7 @@ fn cells_between(baseline: &Path, working: &Path, meta: &Path, platform: Platfor
         ("vufv","intldelschedule")|("fBWa","intlelitserienschedule")|("ADlP","intlsmliigaschedule")|("uRbu","nhlschedulelongleap")|("ksGb","nhlschedulelongnoleap")|("qyyN","nhlschedulemedium")|("zcVp","nhlschedulesmall")));
     let mut cells = Vec::new();
     for c in &pending.cells {
-        if c.studio_table == "VoEQ" || is_schedule(&c.studio_table) { continue; }
+        if (roster_growth && c.studio_table == "eGlu") || c.studio_table == "VoEQ" || is_schedule(&c.studio_table) { continue; }
         let table = bdb.table_canonical(&c.studio_table).ok_or_else(|| ApiError::Workspace(format!("{}: table {} is not in the baseline", c.entity, c.table_name)))?;
         let keys: Vec<KeyValue> = key_fields(&bdb, base.meta(), table)
             .into_iter()
@@ -212,7 +213,7 @@ fn cells_between(baseline: &Path, working: &Path, meta: &Path, platform: Platfor
     let mut structural = Vec::new();
     let mut career_removals = Vec::new();
     for t in &pending.tables {
-        if t.studio_table == "VoEQ" || is_schedule(&t.studio_table) { continue; }
+        if (roster_growth && t.studio_table == "eGlu") || t.studio_table == "VoEQ" || is_schedule(&t.studio_table) { continue; }
         if schedule_ops && ["tsSy", "OAqO", "USfF", "nCDp"].contains(&t.studio_table.as_str()) && t.rows_only_in_working.is_empty() && !t.rows_only_in_baseline.is_empty() &&
             t.before_records.zip(t.after_records).is_some_and(|(before, after)| before.checked_sub(after) == Some(t.rows_only_in_baseline.len() as u32)) {
             let table = bdb.table_canonical(&t.studio_table).ok_or_else(|| ApiError::Workspace("Missing career table".into()))?;
@@ -281,6 +282,7 @@ fn project_edits(store: &ProjectStore, defs: &str) -> Result<ProjectEdits, ApiEr
     let m = &store.manifest;
     let platform = super::parse_platform(&m.platform)?;
     let baseline_of = |role: &str| m.source.components.iter().find(|c| c.role == role);
+    let mut roster_table = None;
     let mut free_agents = None;
     let mut schedules = Vec::new();
     let mut career_removals = Vec::new();
@@ -290,9 +292,10 @@ fn project_edits(store: &ProjectStore, defs: &str) -> Result<ProjectEdits, ApiEr
     let meta = m.working.meta.as_ref().map(|r| store.path(r));
     if let (Some(main), Some(meta)) = (&m.working.main_db, &meta) {
         if let Some(b) = baseline_of(ROLE_MAIN_DB) {
-            let (c, st, cr) = cells_between(&store.path(&b.baseline), &store.path(main), meta, platform, ProjectRole::Nhlng, defs, "main_db", m.game_id == "nhl07" && m.platform == "xbox")?;
             let before_bytes = std::fs::read(store.path(&b.baseline)).map_err(|e| ApiError::Workspace(e.to_string()))?;
             let after_bytes = std::fs::read(store.path(main)).map_err(|e| ApiError::Workspace(e.to_string()))?;
+            roster_table = studio_domain::package_roster::between(&before_bytes, &after_bytes)?;
+            let (c, st, cr) = cells_between(&store.path(&b.baseline), &store.path(main), meta, platform, ProjectRole::Nhlng, defs, "main_db", m.game_id == "nhl07" && m.platform == "xbox", roster_table.is_some())?;
             if m.game_id == "nhl07" && m.platform == "xbox" {
                 let load = |path: &Path| -> Result<studio_domain::EditSession,ApiError> {
                     let mut p=Project::load(path,platform,ProjectRole::Nhlng,meta,defs)?;
@@ -401,7 +404,7 @@ fn project_edits(store: &ProjectStore, defs: &str) -> Result<ProjectEdits, ApiEr
         .iter()
         .map(|e| format!("{} › {} ({}×{} {}{}): archive-member replacements are recorded with their source but this build has no installer adapter for them yet", e.archive_relative, e.member_path, e.width, e.height, e.container, if e.whole_group { ", whole group" } else { "" }))
         .collect();
-    Ok(ProjectEdits { career_removals, schedules, free_agents, cells, dictionary, textures, structural, members, native, base })
+    Ok(ProjectEdits { roster_table, career_removals, schedules, free_agents, cells, dictionary, textures, structural, members, native, base })
 }
 
 /// Loose-asset layouts registered as shared between two platforms of one title: NHL Legacy
@@ -425,10 +428,10 @@ fn target_support(store: &ProjectStore, edits: &ProjectEdits, inventory: Option<
         let inv = inventory.and_then(|st| st.target(t.game_id, t.platform));
         let mut components = Vec::new();
         // Cells.
-        let cells = if edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty() {
+        let cells = if edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty() && edits.roster_table.is_none() {
             ComponentSupport { category: CAT_CELLS.into(), status: "empty".into(), reason: "no database cell edits".into() }
         } else if same {
-            ComponentSupport { category: CAT_CELLS.into(), status: "supported".into(), reason: "the author's platform; each row is found by its key values in the recipient's own database and checked for its before value".into() }
+            ComponentSupport { category: CAT_CELLS.into(), status: "supported".into(), reason: "the author's platform; cell edits check row identities and before values; roster additions require the original roster and matching player/team identities".into() }
         } else if roster_only {
             ComponentSupport { category: CAT_CELLS.into(), status: "unsupported".into(), reason: "roster-save-only edits are not mapped across save containers".into() }
         } else {
@@ -736,7 +739,7 @@ impl Registry {
             blockers.push("the project has unsaved edits; save the project first (a package carries saved edits only)".into());
         }
         let categories = vec![
-            category_dto(CAT_CELLS, edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len(), edits.cells.iter().take(200).map(|c| format!("{} › {} › {}: {} → {}{}", c.table_name, c.entity, c.field_name, value_display(&c.before), value_display(&c.after), if c.file == "both" { " (database + roster)" } else if c.file == "roster" { " (roster save)" } else { "" })).chain(edits.schedules.iter().map(|s|format!("Schedule {}: {} → {} games",s.table,s.before.len(),s.after.len()))).collect(), Vec::new()),
+            category_dto(CAT_CELLS, edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len() + usize::from(edits.roster_table.is_some()), edits.cells.iter().take(200).map(|c| format!("{} › {} › {}: {} → {}{}", c.table_name, c.entity, c.field_name, value_display(&c.before), value_display(&c.after), if c.file == "both" { " (database + roster)" } else if c.file == "roster" { " (roster save)" } else { "" })).chain(edits.schedules.iter().map(|s|format!("Schedule {}: {} → {} games",s.table,s.before.len(),s.after.len()))).chain(edits.roster_table.iter().map(|r|format!("Roster entries: {} → {}",r.before.len(),r.after.len()))).collect(), Vec::new()),
             category_dto(CAT_DICTIONARY, edits.dictionary.len(), edits.dictionary.iter().take(200).map(|d| format!("{}: {:?} → {:?}", d.key, d.before, d.after)).collect(), Vec::new()),
             category_dto(CAT_TEXTURES, edits.textures.len(), edits.textures.iter().map(|(t, _, _)| format!("{} ({}×{}{})", t.rel_path, t.width, t.height, t.texture_index.map(|i| format!(", texture {i}")).unwrap_or_default())).collect(), Vec::new()),
             category_dto(CAT_MEMBERS, edits.members.len(), Vec::new(), edits.members.clone()),
@@ -803,18 +806,19 @@ impl Registry {
                 refusals.push(format!("the project has {} {} item(s) that cannot be packaged; exclude the category explicitly to build without them: {}", items.len(), cat, items.join(" | ")));
             }
         }
-        for (cat, count) in [(CAT_CELLS, (edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len())), (CAT_DICTIONARY, edits.dictionary.len()), (CAT_TEXTURES, edits.textures.len())] {
+        for (cat, count) in [(CAT_CELLS, (edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len() + usize::from(edits.roster_table.is_some()))), (CAT_DICTIONARY, edits.dictionary.len()), (CAT_TEXTURES, edits.textures.len())] {
             if count > 0 && !include.contains(&cat) && !req.exclude.iter().any(|e| e == cat) {
                 refusals.push(format!("{count} {cat} edit(s) are neither included nor explicitly excluded"));
             }
         }
         let cells: Vec<CellOp> = if include.contains(&CAT_CELLS) { edits.cells.clone() } else { Vec::new() };
+        let roster_table = if include.contains(&CAT_CELLS) { edits.roster_table.clone() } else { None };
         let career_removals = if include.contains(&CAT_CELLS) { edits.career_removals.clone() } else { Vec::new() };
         let schedules = if include.contains(&CAT_CELLS) { edits.schedules.clone() } else { Vec::new() };
         let free_agents = if include.contains(&CAT_CELLS) { edits.free_agents.clone() } else { None };
         let dictionary: Vec<DictionaryOp> = if include.contains(&CAT_DICTIONARY) { edits.dictionary.clone() } else { Vec::new() };
         let textures: Vec<&(TextureOp, Vec<u8>, String)> = if include.contains(&CAT_TEXTURES) { edits.textures.iter().collect() } else { Vec::new() };
-        if cells.is_empty() && free_agents.is_none() && schedules.is_empty() && career_removals.is_empty() && dictionary.is_empty() && textures.is_empty() {
+        if cells.is_empty() && free_agents.is_none() && schedules.is_empty() && career_removals.is_empty() && roster_table.is_none() && dictionary.is_empty() && textures.is_empty() {
             refusals.push("nothing selected: the package would carry no edits".into());
         }
         // Platforms: every requested platform must be supported for every included non-empty category.
@@ -831,7 +835,7 @@ impl Registry {
             let mut comps = Vec::new();
             for c in &t.components {
                 let included = match c.category.as_str() {
-                    CAT_CELLS => !cells.is_empty() || free_agents.is_some() || !schedules.is_empty() || !career_removals.is_empty(),
+                    CAT_CELLS => !cells.is_empty() || free_agents.is_some() || !schedules.is_empty() || !career_removals.is_empty() || roster_table.is_some(),
                     CAT_DICTIONARY => !dictionary.is_empty(),
                     CAT_TEXTURES => !textures.is_empty(),
                     _ => false,
@@ -870,14 +874,14 @@ impl Registry {
             targets: targets.clone(),
             base: edits.base.clone(),
             categories: vec![
-                CategoryCount { category: CAT_CELLS.into(), count: (cells.len() + usize::from(free_agents.is_some()) + schedules.len() + career_removals.len()) as u64 },
+                CategoryCount { category: CAT_CELLS.into(), count: (cells.len() + usize::from(free_agents.is_some()) + schedules.len() + career_removals.len() + usize::from(roster_table.is_some())) as u64 },
                 CategoryCount { category: CAT_DICTIONARY.into(), count: dictionary.len() as u64 },
                 CategoryCount { category: CAT_TEXTURES.into(), count: textures.len() as u64 },
             ],
             entries: Vec::new(),
             project: ProjectProvenance { project_id: m.project_id.clone(), source_kind: m.source.kind.clone(), save_seq: m.saves.last().map(|x| x.seq).unwrap_or(0) },
         };
-        let edits_doc = PackageEdits { schema: pkg::EDITS_SCHEMA.into(), career_removals, schedules, free_agents, cells, dictionary, textures: textures.iter().map(|(t, _, _)| t.clone()).collect() };
+        let edits_doc = PackageEdits { schema: pkg::EDITS_SCHEMA.into(), roster_table, career_removals, schedules, free_agents, cells, dictionary, textures: textures.iter().map(|(t, _, _)| t.clone()).collect() };
         let mut payloads: Vec<(String, Vec<u8>)> = Vec::new();
         for (_, bytes, payload) in &textures {
             if !payloads.iter().any(|(n, _)| n == payload) {
@@ -966,12 +970,12 @@ impl Registry {
         let ins = pkg::inspect_package(Path::new(package_path), &pkg::Limits::default()).map_err(ApiError::Domain)?;
         let m = &ins.manifest;
         let edits = &ins.edits;
-        if edits.schema == pkg::EDITS_SCHEMA_V1 && !(edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty()) {
+        if edits.schema == pkg::EDITS_SCHEMA_V1 && !(edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty() && edits.roster_table.is_none()) {
             return Err(ApiError::Workspace(format!(
                 "this package ({} {}) was built by an earlier Studio that bound its {} database edit(s) to row positions instead of row identities; it cannot be installed safely. Rebuild it from its project with this Studio",
                 m.name,
                 m.version,
-                (edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len())
+                (edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len() + usize::from(edits.roster_table.is_some()))
             )));
         }
         let mut blocked: Vec<String> = Vec::new();
@@ -994,7 +998,7 @@ impl Registry {
         std::fs::create_dir_all(&records_dir).map_err(|source| ApiError::Io { path: records_dir.display().to_string(), source })?;
         // Dependencies come from every selected operation's declared file role — nothing else —
         // and they are known before any path is validated (R72-R1).
-        let needs_main = !edits.career_removals.is_empty() || !edits.schedules.is_empty() || edits.free_agents.is_some() || edits.cells.iter().any(|c| c.file != "roster");
+        let needs_main = !edits.career_removals.is_empty() || edits.roster_table.is_some() || !edits.schedules.is_empty() || edits.free_agents.is_some() || edits.cells.iter().any(|c| c.file != "roster");
         let needs_roster = edits.cells.iter().any(|c| c.file != "main_db");
         let needs_installation = needs_main || !edits.dictionary.is_empty() || !edits.textures.is_empty();
         let root_given = !picked_root.trim().is_empty();
@@ -1055,7 +1059,7 @@ impl Registry {
         } else {
             None
         };
-        if !(edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty()) {
+        if !(edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty() && edits.roster_table.is_none()) {
             requirements.push(InstallRequirementDto {
                 role: "main_db".into(),
                 status: if !needs_main { "not-needed" } else if main_db.is_some() && meta.is_some() { "found" } else { "missing" }.into(),
@@ -1112,7 +1116,7 @@ impl Registry {
         let _ = std::fs::remove_dir_all(&staging);
         std::fs::create_dir_all(&staging).map_err(|source| ApiError::Io { path: staging.display().to_string(), source })?;
         let result = (|| -> Result<(), ApiError> {
-            if !(edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty()) && blocked.is_empty() {
+            if !(edits.cells.is_empty() && edits.free_agents.is_none() && edits.schedules.is_empty() && edits.career_removals.is_empty() && edits.roster_table.is_none()) && blocked.is_empty() {
                 let (meta_bytes, meta_src) = schema.clone().ok_or_else(|| ApiError::Workspace(format!("no {} found", target.meta)))?;
                 let st_meta = staging.join(target.meta);
                 std::fs::write(&st_meta, &meta_bytes).map_err(|e| ApiError::Workspace(format!("could not stage the schema metadata ({meta_src}): {e}")))?;
@@ -1137,6 +1141,20 @@ impl Registry {
                     let mut ws = Workspace::single(session, st.to_string_lossy().into_owned());
                     ws.set_game_id(game_id.to_string());
                     targets.insert("roster", StagedTarget { ws, destination: rp.to_path_buf(), where_: "roster save" });
+                }
+                if let Some(roster) = &edits.roster_table {
+                    let target = targets.get_mut("main_db").ok_or_else(|| ApiError::Workspace("Roster additions require the main database".into()))?;
+                    match studio_domain::package_roster::check_destination(target.ws.primary().bytes(), roster) {
+                        Err(e) => blocked.push(e.to_string()),
+                        Ok(true) => already += 1,
+                        Ok(false) => {
+                            target.ws.set_package_roster(roster)?;
+                            if studio_domain::package_roster::rows(target.ws.primary().bytes())? != roster.after {
+                                return Err(ApiError::Workspace("Roster replay differs from the package; nothing installed".into()));
+                            }
+                            applied += 1;
+                        }
+                    }
                 }
                 for op in &edits.career_removals {
                     let target = targets.get("main_db").ok_or_else(|| ApiError::Workspace("Career removal requires a game database".into()))?;
@@ -1785,6 +1803,10 @@ fn package_changes(edits: &PackageEdits) -> Vec<crate::dto::ProjectOverviewChang
             add(vec!["Schedules".into(), schedule.table.clone()], format!("Game {}", index + 1),
                 before.map(&describe).unwrap_or_else(|| "Not present".into()), after.map(&describe).unwrap_or_else(|| "Removed".into()));
         }
+    }
+    if let Some(roster) = &edits.roster_table {
+        add(vec!["Database".into(), "Rosters".into()], "Roster entries (including additions)".into(),
+            format!("{} entries", roster.before.len()), format!("{} entries", roster.after.len()));
     }
     for removal in &edits.career_removals {
         let table = match removal.table.as_str() { "tsSy" => "Skater regular season", "OAqO" => "Skater playoffs", "USfF" => "Goalie regular season", "nCDp" => "Goalie playoffs", _ => &removal.table };

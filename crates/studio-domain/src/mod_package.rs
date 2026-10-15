@@ -29,7 +29,8 @@ use crate::{DomainError, Result};
 pub const PACKAGE_SCHEMA: &str = "nhlms-modpkg/1";
 /// The edits document: version 2 binds every cell to its row's **key values** (and a fingerprint
 /// of the author's baseline row), never to a row position alone (R71-R1).
-pub const EDITS_SCHEMA: &str = "nhlms-modpkg-edits/6";
+pub const EDITS_SCHEMA: &str = "nhlms-modpkg-edits/7";
+pub const EDITS_SCHEMA_V6: &str = "nhlms-modpkg-edits/6";
 /// Version 5: as 6, but a career-row removal cannot also rewrite surviving rows.
 pub const EDITS_SCHEMA_V5: &str = "nhlms-modpkg-edits/5";
 pub const EDITS_SCHEMA_V4: &str = "nhlms-modpkg-edits/4";
@@ -154,6 +155,8 @@ pub struct EntryRecord {
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Default)]
 pub struct PackageEdits {
     pub schema: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub roster_table: Option<RosterTableOp>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub career_removals: Vec<CareerRemovalOp>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -166,6 +169,16 @@ pub struct PackageEdits {
     pub dictionary: Vec<DictionaryOp>,
     #[serde(default)]
     pub textures: Vec<TextureOp>,
+}
+
+/// A structural roster edit, bound to the complete original roster and its join identities.
+/// Canonical field IDs and raw integer values avoid platform-specific row-byte payloads.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub struct RosterTableOp {
+    pub before: Vec<std::collections::BTreeMap<String, u64>>,
+    pub after: Vec<std::collections::BTreeMap<String, u64>>,
+    pub player_links: std::collections::BTreeMap<u64, u64>,
+    pub team_ids: Vec<u64>,
 }
 
 /// Ordered career-table removals bound to every original row, preventing index drift.
@@ -719,7 +732,7 @@ pub fn inspect_package_bytes(bytes: Vec<u8>, limits: &Limits) -> Result<Inspecte
     }
     let edits_bytes = archive.read(EDITS_ENTRY).map_err(|_| refuse(format!("no {EDITS_ENTRY}")))?;
     let edits: PackageEdits = serde_json::from_slice(&edits_bytes).map_err(|e| refuse(format!("{EDITS_ENTRY}: {e}")))?;
-    if edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4 && edits.schema != EDITS_SCHEMA_V3 && edits.schema != EDITS_SCHEMA_V2 && edits.schema != EDITS_SCHEMA_V1 {
+    if edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V6 && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4 && edits.schema != EDITS_SCHEMA_V3 && edits.schema != EDITS_SCHEMA_V2 && edits.schema != EDITS_SCHEMA_V1 {
         return Err(refuse(format!("edits schema {:?} is not {EDITS_SCHEMA:?}", edits.schema)));
     }
     for t in &edits.textures {
@@ -749,7 +762,7 @@ pub fn inspect_package_bytes(bytes: Vec<u8>, limits: &Limits) -> Result<Inspecte
     }
     let counts = |cat: &str| manifest.categories.iter().find(|c| c.category == cat).map(|c| c.count).unwrap_or(0);
     if let Some(pool) = &edits.free_agents {
-        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4 && edits.schema != EDITS_SCHEMA_V3) || manifest.game_id != "nhl07" || manifest.author_platform != "xbox" {
+        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V6 && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4 && edits.schema != EDITS_SCHEMA_V3) || manifest.game_id != "nhl07" || manifest.author_platform != "xbox" {
             return Err(refuse("Explicit free-agent packages are qualified only for NHL 07 Xbox 360, edits schema 3".into()));
         }
         for ids in [&pool.before, &pool.after] {
@@ -760,7 +773,7 @@ pub fn inspect_package_bytes(bytes: Vec<u8>, limits: &Limits) -> Result<Inspecte
     }
     let mut schedule_tables = std::collections::HashSet::new();
     for s in &edits.schedules {
-        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4) || manifest.game_id != "nhl07" || manifest.author_platform != "xbox" ||
+        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V6 && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4) || manifest.game_id != "nhl07" || manifest.author_platform != "xbox" ||
             !["vufv","fBWa","ADlP","uRbu","ksGb","qyyN","zcVp"].contains(&s.table.as_str()) ||
             !schedule_tables.insert(&s.table) || s.before.len()>8192 || s.after.len()>8192 || edits.cells.iter().any(|c| c.studio_table==s.table) {
             return Err(refuse("Invalid or overlapping NHL07 schedule replacement".into()));
@@ -768,8 +781,8 @@ pub fn inspect_package_bytes(bytes: Vec<u8>, limits: &Limits) -> Result<Inspecte
     }
     let mut career_tables = std::collections::HashSet::new();
     for op in &edits.career_removals {
-        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V5) || manifest.game_id != "nhl07" || manifest.author_platform != "xbox" ||
-            (!op.rewritten.is_empty() && edits.schema != EDITS_SCHEMA) ||
+        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V6 && edits.schema != EDITS_SCHEMA_V5) || manifest.game_id != "nhl07" || manifest.author_platform != "xbox" ||
+            (!op.rewritten.is_empty() && edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V6) ||
             op.rewritten.windows(2).any(|w| w[0].row >= w[1].row) ||
             op.rewritten.iter().any(|r| r.row as usize >= op.before_rows.len() || op.removed.contains(&r.row) || from_hex(&r.bytes).is_none_or(|b| b.is_empty() || b.len() > 4096)) ||
             !["tsSy", "OAqO", "USfF", "nCDp"].contains(&op.table.as_str()) || !career_tables.insert(&op.table) ||
@@ -780,7 +793,13 @@ pub fn inspect_package_bytes(bytes: Vec<u8>, limits: &Limits) -> Result<Inspecte
             return Err(refuse("Invalid NHL07 career-row removal".into()));
         }
     }
-    if counts("cells") != (edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len()) as u64 || counts("dictionary") != edits.dictionary.len() as u64 || counts("textures") != edits.textures.len() as u64 {
+    if let Some(roster) = &edits.roster_table {
+        if edits.schema != EDITS_SCHEMA || edits.cells.iter().any(|c| c.studio_table == "eGlu") {
+            return Err(refuse("Roster additions require edits schema 7 and cannot overlap roster cell edits".into()));
+        }
+        crate::package_roster::validate_shape(roster)?;
+    }
+    if counts("cells") != (edits.cells.len() + usize::from(edits.free_agents.is_some()) + edits.schedules.len() + edits.career_removals.len() + usize::from(edits.roster_table.is_some())) as u64 || counts("dictionary") != edits.dictionary.len() as u64 || counts("textures") != edits.textures.len() as u64 {
         return Err(refuse("the manifest's category counts disagree with the edits document".into()));
     }
     Ok(InspectedPackage { manifest, edits, archive, file_len, file_sha256 })
@@ -813,10 +832,32 @@ mod tests {
 
     fn edits() -> PackageEdits {
         PackageEdits {
-            schema: EDITS_SCHEMA.into(), free_agents: None,
+            schema: EDITS_SCHEMA.into(), roster_table: None, free_agents: None,
             textures: vec![TextureOp { rel_path: "fe/x/logo.png".into(), texture_index: None, payload: "payloads/aa.png".into(), width: 1, height: 1, prior_len: None, prior_sha256: None, platform: "ps3".into() }],
             ..Default::default()
         }
+    }
+
+    #[test]
+    fn roster_growth_schema_round_trip_and_legacy_compatibility() {
+        let mut m = manifest();
+        m.categories = vec![CategoryCount { category: "cells".into(), count: 1 }];
+        let row = |player| [("XSWT".into(), player), ("dXSB".into(), 94)].into_iter().collect();
+        let mut e = PackageEdits {
+            schema: EDITS_SCHEMA.into(),
+            roster_table: Some(RosterTableOp {
+                before: vec![row(1)], after: vec![row(1), row(2)],
+                player_links: [(1, 100), (2, 101)].into_iter().collect(), team_ids: vec![94],
+            }),
+            ..Default::default()
+        };
+        let check = |m: PackageManifest, e: &PackageEdits| inspect_package_bytes(build_package(m, e, &[]).unwrap(), &Limits::default());
+        assert_eq!(check(m.clone(), &e).unwrap().edits, e);
+        e.schema = EDITS_SCHEMA_V6.into();
+        assert!(check(m.clone(), &e).is_err());
+        e.roster_table = None;
+        m.categories[0].count = 0;
+        assert!(check(m, &e).is_ok());
     }
 
     #[test]

@@ -1250,6 +1250,13 @@ impl Workspace {
         Ok(outcome)
     }
 
+    pub fn set_package_roster(&mut self, op: &crate::mod_package::RosterTableOp) -> Result<OpOutcome> {
+        if self.roster.is_some() { return Err(DomainError::Validation("Package roster growth requires a single-file workspace".into())); }
+        let outcome = self.nhlng.set_package_roster(op)?;
+        self.record_mirrored(false);
+        Ok(outcome)
+    }
+
     pub fn set_package_fields(&mut self, cells: &[(String, u32, String, FieldValue)]) -> Result<OpOutcome> {
         if self.roster.is_some() {
             return Err(DomainError::Validation("package replay requires a single-file workspace".into()));

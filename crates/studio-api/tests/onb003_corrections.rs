@@ -420,7 +420,7 @@ fn r1_a_position_bound_package_from_r71_is_refused_by_the_installer() {
         entries: vec![],
         project: pkg::ProjectProvenance { project_id: "p".into(), source_kind: "import".into(), save_seq: 1 },
     };
-    let edits = pkg::PackageEdits { schema: pkg::EDITS_SCHEMA_V1.into(), free_agents: None, schedules: vec![], cells: vec![cell], dictionary: vec![], textures: vec![] };
+    let edits = pkg::PackageEdits { schema: pkg::EDITS_SCHEMA_V1.into(), cells: vec![cell], ..Default::default() };
     let bytes = pkg::build_package(manifest, &edits, &[]).unwrap();
     let path = t.0.join("old.nhlmod");
     std::fs::write(&path, &bytes).unwrap();

@@ -241,3 +241,5 @@ pub use tdb_edit::txn::{
 pub use tdb_relations::{Player, RosterModel, RosterSlot, Team};
 
 pub use tdb_edit::txn::explicit_free_agents;
+
+pub mod package_roster;
