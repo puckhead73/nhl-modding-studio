@@ -3,8 +3,8 @@ import { uniformColorMap } from "../lib/uniformTextures";
 // (from the `xjgw` jersey registry, unioned with any kits found only in the art tree); selecting a
 // kit shows its editable DB metadata and its textures — jersey body, number font, pants, socks, and
 // the nameplate template — decoded lazily so only the chosen kit's art is loaded. Paintable textures
-// offer Replace (the before/after → write loop); nameplate sheets offer the name/number/patch
-// location editor. Writes target the extracted file in place; the operator repacks/installs their way.
+// offer Replace (the before/after → write loop). The button beneath the 3D preview opens the
+// name/number/patch location editor. Writes target the extracted file in place; the operator repacks/installs their way.
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -267,7 +267,6 @@ export function UniformsTab({ projectId, teamId }: { projectId: number; teamId: 
         busyRel={replace.pendingRel}
         onZoom={setZoom}
         onReplace={(t) => void replace.pick(t.rel_path, t.label, t.texture_index)}
-        onEditLocations={(t) => setNameplate({ tex: t, kit: current })}
       />
     );
 
@@ -275,7 +274,7 @@ export function UniformsTab({ projectId, teamId }: { projectId: number; teamId: 
   // the moulded gear (helmet/gloves — goalie kits swap in blocker/trapper/pads),
   // part-specific textures for the cloth pieces.
   const partContent: Record<KitPart, React.ReactNode> = {
-    jersey: texturesFor(["jersey", "font"]),
+    jersey: texturesFor(["jersey", "font", "name"]),
     helmet: (
       <div className="space-y-4">
         <KitEquipment
@@ -602,7 +601,6 @@ function KitTextures({
   busyRel,
   onZoom,
   onReplace,
-  onEditLocations,
 }: {
   installDir: string;
   kit: Kit;
@@ -611,7 +609,6 @@ function KitTextures({
   busyRel: string | null;
   onZoom: (t: OutfitTextureDto) => void;
   onReplace: (t: OutfitTextureDto) => void;
-  onEditLocations: (t: OutfitTextureDto) => void;
 }) {
   const grouped = useMemo(() => {
     const m = new Map<string, OutfitTextureDto[]>();
@@ -656,11 +653,10 @@ function KitTextures({
                     key={`${t.rel_path}#${t.texture_index}`}
                     installDir={installDir}
                     outfit={t}
-                    preview={t.is_nameplate ? uniformColorMap(kit.textures,"jersey") ?? null : t}
+                    preview={t}
                     busy={busyRel === t.rel_path}
-                    onZoom={() => {const image=t.is_nameplate?uniformColorMap(kit.textures,"jersey"):t;if(image)onZoom(image);}}
+                    onZoom={() => onZoom(t)}
                     onReplace={() => onReplace(t)}
-                    onEditLocations={t.is_nameplate ? () => onEditLocations(t) : undefined}
                   />
                 ))}
               </div>
@@ -678,7 +674,6 @@ function OutfitCard({
   busy,
   onZoom,
   onReplace,
-  onEditLocations,
 }: {
   installDir: string;
   outfit: OutfitTextureDto;
@@ -686,7 +681,6 @@ function OutfitCard({
   busy: boolean;
   onZoom: () => void;
   onReplace: () => void;
-  onEditLocations?: () => void;
 }) {
   return (
     <div className="flex flex-col gap-2 rounded-lg border border-slate-800 bg-slate-900/50 p-2">
@@ -702,27 +696,6 @@ function OutfitCard({
       <p className="min-w-0 truncate text-xs font-medium text-slate-200" title={outfit.file_name}>
         {outfit.label}
       </p>
-      {onEditLocations ? (
-        <div className="flex flex-col gap-1">
-          <button
-            type="button"
-            onClick={onEditLocations}
-            className="rounded border border-sky-700/50 bg-sky-900/40 px-2 py-1 text-xs font-medium text-sky-100 transition-colors hover:bg-sky-900/70"
-            title="Edit where the name, number and patches sit on the jersey"
-          >
-            Edit locations…
-          </button>
-          <button
-            type="button"
-            onClick={onReplace}
-            disabled={busy}
-            className="text-[11px] text-slate-400 hover:text-slate-200 disabled:text-slate-600"
-            title="Replace the raw sheet image (advanced)"
-          >
-            Replace raw sheet…
-          </button>
-        </div>
-      ) : (
         <button
           type="button"
           onClick={onReplace}
@@ -732,7 +705,6 @@ function OutfitCard({
         >
           Replace…
         </button>
-      )}
     </div>
   );
 }

@@ -3175,6 +3175,17 @@ pub async fn package_installs(app: tauri::AppHandle) -> CmdResult<Vec<crate::dto
     off_main(app, move |registry| registry.package_installs(&records.to_string_lossy()).map_err(|e| e.to_string())).await
 }
 
+/// Preview an explicit recovery, including foreign-file conflicts.
+#[tauri::command]
+pub async fn package_recovery_review(app: tauri::AppHandle, record_dir: String) -> CmdResult<crate::dto::InstallRecoveryDto> {
+    off_main(app, move |registry| registry.package_recovery_review(&record_dir).map_err(|e| e.to_string())).await
+}
+
+#[tauri::command]
+pub async fn package_recovery_apply(app: tauri::AppHandle, record_dir: String, review_id: String) -> CmdResult<crate::dto::InstallApplyDto> {
+    off_main(app, move |registry| registry.package_recovery_apply(&record_dir, &review_id).map_err(|e| e.to_string())).await
+}
+
 /// Restore (uninstall) one installation from its record; refuses when a destination changed since.
 #[tauri::command]
 pub async fn package_restore(app: tauri::AppHandle, record_dir: String) -> CmdResult<crate::dto::InstallApplyDto> {

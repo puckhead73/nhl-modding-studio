@@ -1,3 +1,4 @@
+import { InstallationRecovery } from "../components/InstallationRecovery";
 import { ChangeTree } from "../components/ChangeTree";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -62,6 +63,8 @@ export function ModManagerPage() {
   const installs = useQuery({ queryKey: ["package_installs"], queryFn: () => call("package_installs", {}), refetchOnMount: "always" });
   const recordsFor = (m: typeof mods[number]) => target ? installationRecords(installs.data ?? [], m, target) : [];
   const active = mod ? recordsFor(mod) : [];
+  const [recovering, setRecovering] = useState(false);
+  const [recoveryResult, setRecoveryResult] = useState<string | null>(null);
   const [operationStage, setOperationStage] = useState("Checking installation…");
   const toggle = useMutation({ mutationFn: async ({ selectedMod, destination, deactivate }: { selectedMod: typeof mods[number]; destination: ManagerTarget; deactivate: boolean }) => {
     setOperationStage("Checking installation…");
@@ -94,8 +97,8 @@ export function ModManagerPage() {
     if (result.state !== "committed") throw new Error(result.detail || "Activation did not complete. Your installation status has been refreshed.");
     return "Mod activated.";
   }, onSettled: async () => { setOperationStage("Refreshing installation status…"); await qc.invalidateQueries({ queryKey: ["package_installs"] }); } });
-  const busy = toggle.isPending;
-  useEffect(() => { toggle.reset(); }, [mod?.path, target?.gameId, target?.platform, target?.root]);
+  const busy = toggle.isPending || recovering;
+  useEffect(() => { toggle.reset(); setRecoveryResult(null); }, [mod?.path, target?.gameId, target?.platform, target?.root]);
   return <main className="flex h-screen flex-col bg-slate-950 text-slate-100">
     <header className="shrink-0 space-y-4 border-b border-slate-800 bg-slate-900/60 p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -115,6 +118,8 @@ export function ModManagerPage() {
         {target && <Button disabled={busy} variant="secondary" onClick={() => { setEditTarget(target); setSetup("target"); }}>Change installation folder</Button>}
       </div>
       {target && <p className="break-all text-xs text-slate-400">Installation folder: <span className="select-text text-slate-300">{target.root}</span></p>}
+      {target && targetInstallationRecords(installs.data ?? [], target).length > 0 && <Button variant="secondary" disabled={busy} onClick={() => setRecovering(true)}>Recover installation…</Button>}
+      {recoveryResult && <p role="status" className="break-all text-sm text-emerald-300">{recoveryResult}</p>}
       {storageError && <p role="alert" className="text-xs text-amber-300">{storageError}</p>}
     </header>
     <div className="grid min-h-0 flex-1 grid-cols-[minmax(220px,28%)_minmax(0,1fr)]">
@@ -165,6 +170,10 @@ export function ModManagerPage() {
         {!!library.data?.warnings.length && <details className="mt-6 rounded-lg border border-amber-800/60 p-3 text-xs text-amber-300"><summary className="cursor-pointer">{library.data.warnings.length} library warning(s)</summary>{library.data.warnings.map((w, i) => <p key={i} className="mt-2 break-words">{w}</p>)}</details>}
       </section>
     </div>
+    {recovering && target && <InstallationRecovery records={targetInstallationRecords(installs.data ?? [], target)}
+      onClose={() => setRecovering(false)} onRecovered={async (message) => {
+        setRecoveryResult(message); toggle.reset(); await qc.invalidateQueries({ queryKey: ["package_installs"] }); setRecovering(false);
+      }} />}
     {setup && <ManagerSetup key={`${setup}:${editTarget ? targetKey(editTarget) : ""}`} mode={setup} downloads={prefs.downloads} target={setup === "target" ? editTarget : undefined} suggestedGame={incoming?.gameId} suggestedPlatforms={incoming?.platforms}
       onCancel={() => { if (setup === "first") navigate("/"); else setSetup(null); }}
       onDone={(downloads, nextTarget) => {

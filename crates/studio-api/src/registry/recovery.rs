@@ -58,6 +58,11 @@ pub(crate) fn recoverable(state: &str) -> bool {
 /// Classify every destination and plan the step set. `what` names the operation ("installed" /
 /// "deployed") for messages. A foreign change anywhere refuses the whole plan.
 pub(crate) fn plan_restore(items: &[RecordedItem], what: &str) -> Result<RestorePlan, ApiError> {
+    plan_restore_mode(items, what, false)
+}
+
+/// Explicit reviewed recovery only; callers must preserve displaced bytes before publication.
+pub(crate) fn plan_restore_mode(items: &[RecordedItem], what: &str, preserve_conflicts: bool) -> Result<RestorePlan, ApiError> {
     let mut writes = Vec::new();
     let mut removals = Vec::new();
     let mut actions = Vec::new();
@@ -71,6 +76,8 @@ pub(crate) fn plan_restore(items: &[RecordedItem], what: &str) -> Result<Restore
             (Some(cur), Some(prior)) if cur == prior => ItemAction::AlreadyPrior, // prior == replacement: nothing to put back
             (Some(cur), Some(_)) if *cur == it.replacement => ItemAction::Restore,
             (Some(cur), None) if *cur == it.replacement => ItemAction::Remove,
+            (Some(_), Some(_)) if preserve_conflicts => ItemAction::Restore,
+            (Some(_), None) if preserve_conflicts => ItemAction::Remove,
             (Some(cur), _) => {
                 return Err(ApiError::Workspace(format!(
                     "{}: {display} is {cur} now, not the {what} file ({}) and not the original{}; it changed after the {operation} and is not touched — nothing restored",

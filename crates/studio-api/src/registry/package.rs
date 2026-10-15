@@ -380,7 +380,7 @@ fn project_edits(store: &ProjectStore, defs: &str) -> Result<ProjectEdits, ApiEr
                 let payload = format!("payloads/{}.{ext}", src.sha256);
                 textures.push((
                     TextureOp {
-                        rel_path: sf.relative.clone(),
+                        rel_path: portable_texture_path(&sf.relative, &m.platform),
                         texture_index: sf.texture_index,
                         payload: payload.clone(),
                         width: img.width,
@@ -496,6 +496,22 @@ fn safe_file_stem(name: &str) -> String {
     } else {
         out
     }
+}
+
+/// Packages address PS3 textures relative to USRDIR. Older projects can stage paths
+/// from the disc or PS3_GAME folder instead; remove only those known wrappers.
+/// Preserve every remaining segment so the normal safe resolver still rejects traversal.
+fn portable_texture_path(relative: &str, author_platform: &str) -> String {
+    let normalized = relative.replace('\\', "/");
+    if author_platform == "ps3" {
+        let lower = normalized.to_ascii_lowercase();
+        for prefix in ["ps3_game/usrdir/", "usrdir/"] {
+            if lower.starts_with(prefix) {
+                return normalized[prefix.len()..].to_string();
+            }
+        }
+    }
+    normalized
 }
 
 /// The folders a destination's loose assets are addressed from, platform-correct and independent
@@ -1309,8 +1325,9 @@ impl Registry {
                 for t in &edits.textures {
                     // The recipient's own file at the same relative path under its asset root(s).
                     let mut candidates = Vec::new();
+                    let relative = portable_texture_path(&t.rel_path, &t.platform);
                     for root in &roots {
-                        match studio_domain::resolve_install_path(root, &t.rel_path) {
+                        match studio_domain::resolve_install_path(root, &relative) {
                             Some(p) => candidates.push(p),
                             None => {
                                 blocked.push(format!("{}: escapes the destination's asset tree; refused", t.rel_path));
@@ -1572,25 +1589,51 @@ impl Registry {
         self.package_restore_with(record_dir, &mut ips::NoHooks)
     }
 
+    /// Review recovery against verified pre-installation backups. No writes occur here.
+    pub fn package_recovery_review(&self, record_dir: &str) -> Result<crate::dto::InstallRecoveryDto, ApiError> {
+        let record = read_install_record(Path::new(record_dir))?;
+        if !recovery::recoverable(&record.state) {
+            return Err(ApiError::Workspace("This installation is already restored.".into()));
+        }
+        let items = recovery_items(Path::new(record_dir), &record);
+        // Validate every needed original backup before offering the action.
+        recovery::plan_restore_mode(&items, "installed", true)?;
+        recovery_review(Path::new(record_dir), &record, &items)
+    }
+
+    /// Preserve current files, then restore verified originals using the normal transaction engine.
+    pub fn package_recovery_apply(&self, record_dir: &str, review_id: &str) -> Result<InstallApplyDto, ApiError> {
+        self.package_recovery_apply_with(record_dir, review_id, &mut ips::NoHooks)
+    }
+
+    pub fn package_recovery_apply_with(&self, record_dir: &str, review_id: &str, hooks: &mut dyn Hooks) -> Result<InstallApplyDto, ApiError> {
+        self.package_restore_internal(record_dir, hooks, Some(review_id))
+    }
+
     /// [`Registry::package_restore`] with publication hooks (fault injection in tests).
     pub fn package_restore_with(&self, record_dir: &str, hooks: &mut dyn Hooks) -> Result<InstallApplyDto, ApiError> {
+        self.package_restore_internal(record_dir, hooks, None)
+    }
+
+    fn package_restore_internal(&self, record_dir: &str, hooks: &mut dyn Hooks, review_id: Option<&str>) -> Result<InstallApplyDto, ApiError> {
         let record_dir = PathBuf::from(record_dir);
         let mut record = read_install_record(&record_dir)?;
         if !recovery::recoverable(&record.state) {
             return Err(ApiError::Workspace(format!("installation {} is {}; there is nothing to restore or recover", record.seq, record.state)));
         }
-        let items: Vec<recovery::RecordedItem> = record
-            .items
-            .iter()
-            .map(|it| recovery::RecordedItem {
-                label: it.label.clone(),
-                destination: PathBuf::from(&it.destination),
-                prior: it.prior.as_ref().map(|p| p.to_identity()),
-                replacement: it.replacement.to_identity(),
-                backup: it.backup.as_ref().map(|b| record_dir.join(b.replace('/', std::path::MAIN_SEPARATOR_STR))),
-            })
-            .collect();
-        let plan = recovery::plan_restore(&items, "installed")?;
+        let items = recovery_items(&record_dir, &record);
+        let before = recovery_review(&record_dir, &record, &items)?;
+        if let Some(expected) = review_id {
+            if before.review_id != expected {
+                return Err(ApiError::Workspace("Files or installation records changed since review. Review recovery again; nothing was restored.".into()));
+            }
+        }
+        let plan = recovery::plan_restore_mode(&items, "installed", review_id.is_some())?;
+        // Bind the plan to the review too, including changes while the backups were read.
+        if recovery_review(&record_dir, &record, &items)?.review_id != before.review_id {
+            return Err(ApiError::Workspace("Files changed while preparing recovery. Review again.".into()));
+        }
+        let preserved = if review_id.is_some() { Some(preserve_recovery_files(&record_dir, &plan)?) } else { None };
         let outcome = if recovery::nothing_to_do(&plan) { ips::Outcome::Committed } else { ips::publish_all(&plan.writes, &plan.removals, hooks) };
         let (state, item_states) = recovery::classify(&outcome, &items, &plan, "installed", &record.state);
         for (it, st) in record.items.iter_mut().zip(item_states) {
@@ -1598,7 +1641,7 @@ impl Registry {
         }
         record.state = state.clone();
         write_install_record(&record_dir, &record)?;
-        let dto = InstallApplyDto { seq: record.seq, state: state.clone(), detail: None, record_dir: s(&record_dir), destinations: record.items.iter().map(|i| DeployOutcomeDto { key: i.key.clone(), label: i.label.clone(), path: i.destination.clone(), state: i.state.clone(), backup: i.backup.clone() }).collect() };
+        let dto = InstallApplyDto { seq: record.seq, state: state.clone(), detail: preserved.map(|p| format!("Original files restored. Previous file contents preserved in {}", p.display())), record_dir: s(&record_dir), destinations: record.items.iter().map(|i| DeployOutcomeDto { key: i.key.clone(), label: i.label.clone(), path: i.destination.clone(), state: i.state.clone(), backup: i.backup.clone() }).collect() };
         if state != "restored" {
             return Err(ApiError::Workspace(format!(
                 "the restore did not complete (record {}): {}; retry once the destination is reachable again — every destination still holding the installed bytes is put back then",
@@ -1608,6 +1651,54 @@ impl Registry {
         }
         Ok(dto)
     }
+}
+
+fn recovery_items(dir: &Path, record: &InstallRecord) -> Vec<recovery::RecordedItem> {
+    record.items.iter().map(|it| recovery::RecordedItem {
+        label: it.label.clone(), destination: PathBuf::from(&it.destination),
+        prior: it.prior.as_ref().map(|p| p.to_identity()), replacement: it.replacement.to_identity(),
+        backup: it.backup.as_ref().map(|b| dir.join(b.replace('/', std::path::MAIN_SEPARATOR_STR))),
+    }).collect()
+}
+
+fn recovery_review(dir: &Path, record: &InstallRecord, items: &[recovery::RecordedItem]) -> Result<crate::dto::InstallRecoveryDto, ApiError> {
+    let mut identities = vec![sha256_hex(&std::fs::read(dir.join("record.json")).map_err(|e| ApiError::Workspace(e.to_string()))?)];
+    let mut conflicts = Vec::new();
+    for it in items {
+        let current = FileIdentity::of_path_or_absent(&it.destination).map_err(|e| ApiError::Workspace(e.to_string()))?;
+        if current.as_ref().is_some_and(|c| Some(c) != it.prior.as_ref() && c != &it.replacement) {
+            conflicts.push(s(&it.destination));
+        }
+        identities.push(format!("{}:{:?}", it.destination.display(), current));
+        if let Some(backup) = &it.backup {
+            identities.push(format!("{}:{:?}", backup.display(), FileIdentity::of_path_or_absent(backup).map_err(|e| ApiError::Workspace(e.to_string()))?));
+        }
+    }
+    Ok(crate::dto::InstallRecoveryDto { review_id: sha256_hex(&serde_json::to_vec(&identities).map_err(|e| ApiError::Workspace(e.to_string()))?),
+        record_dir: s(dir), package_name: record.package_name.clone(), destinations: items.iter().map(|it| s(&it.destination)).collect(), conflicts })
+}
+
+/// Save all displaced bytes before touching any destination; keep these even if publication rolls back.
+fn preserve_recovery_files(dir: &Path, plan: &recovery::RestorePlan) -> Result<PathBuf, ApiError> {
+    use std::io::Write;
+    let stamp = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_err(|e| ApiError::Workspace(e.to_string()))?.as_nanos();
+    let saved = dir.join(format!("recovery-preserved-{stamp}"));
+    std::fs::create_dir(&saved).map_err(|e| ApiError::Workspace(e.to_string()))?;
+    let mut manifest = Vec::new();
+    let contents = plan.writes.iter().filter_map(|w| match &w.prior { Prior::Bytes(b) => Some((&w.path, b)), Prior::Absent => None })
+        .chain(plan.removals.iter().map(|r| (&r.path, &r.prior)));
+    for (index, (path, bytes)) in contents.enumerate() {
+        let filename = format!("{index:04}.bin");
+        let mut file = std::fs::OpenOptions::new().write(true).create_new(true).open(saved.join(&filename)).map_err(|e| ApiError::Workspace(e.to_string()))?;
+        file.write_all(bytes).and_then(|_| file.sync_all()).map_err(|e| ApiError::Workspace(e.to_string()))?;
+        if FileIdentity::of_file(&saved.join(&filename)).map_err(|e| ApiError::Workspace(e.to_string()))? != FileIdentity::of_bytes(bytes) {
+            return Err(ApiError::Workspace("Preserved copy failed verification; no game files were restored.".into()));
+        }
+        manifest.push(serde_json::json!({"destination": s(path), "file": filename, "sha256": sha256_hex(bytes)}));
+    }
+    let mut file = std::fs::OpenOptions::new().write(true).create_new(true).open(saved.join("manifest.json")).map_err(|e| ApiError::Workspace(e.to_string()))?;
+    file.write_all(&serde_json::to_vec_pretty(&manifest).map_err(|e| ApiError::Workspace(e.to_string()))?).and_then(|_| file.sync_all()).map_err(|e| ApiError::Workspace(e.to_string()))?;
+    Ok(saved)
 }
 
 // ---------------------------------------------------------------------- helpers
@@ -1797,4 +1888,113 @@ fn next_install_seq(records_dir: &Path) -> Result<u64, ApiError> {
         }
     }
     Ok(max + 1)
+}
+
+#[cfg(test)]
+mod recovery_review_tests {
+    use super::*;
+    use studio_domain::project_store::IdentityRecord;
+
+    fn fixture() -> (tempfile::TempDir, PathBuf, PathBuf) {
+        let temp = tempfile::tempdir().unwrap();
+        let dir = temp.path().join("record");
+        std::fs::create_dir(&dir).unwrap();
+        let destination = temp.path().join("jersey.rpsgl");
+        std::fs::write(&destination, b"foreign edit").unwrap();
+        std::fs::write(dir.join("original.bin"), b"original").unwrap();
+        let record = InstallRecord { schema: RECORD_SCHEMA.into(), seq: 1, at: String::new(), state: "committed".into(),
+            package_id: "mod".into(), package_name: "Test mod".into(), package_version: "1".into(), package_sha256: String::new(),
+            game_id: "nhllegacy".into(), platform: "ps3".into(), picked_root: s(temp.path()), save_root: None,
+            items: vec![InstallRecordItem { key: "jersey".into(), label: "Jersey".into(), destination: s(&destination),
+                prior: Some(IdentityRecord::from(&FileIdentity::of_bytes(b"original"))),
+                replacement: IdentityRecord::from(&FileIdentity::of_bytes(b"installed")), backup: Some("original.bin".into()), state: "installed".into() }] };
+        write_install_record(&dir, &record).unwrap();
+        (temp, dir, destination)
+    }
+
+    #[test]
+    fn reviewed_recovery_preserves_foreign_bytes_and_reconciles_record() {
+        let (_temp, dir, destination) = fixture();
+        let registry = Registry::default();
+        assert!(registry.package_restore(&s(&dir)).is_err());
+        let review = registry.package_recovery_review(&s(&dir)).unwrap();
+        assert_eq!(review.conflicts, vec![s(&destination)]);
+        assert_eq!(std::fs::read(&destination).unwrap(), b"foreign edit");
+        let result = registry.package_recovery_apply(&s(&dir), &review.review_id).unwrap();
+        assert_eq!(result.state, "restored");
+        assert_eq!(std::fs::read(&destination).unwrap(), b"original");
+        let saved = std::fs::read_dir(&dir).unwrap().flatten().find(|e| e.file_name().to_string_lossy().starts_with("recovery-preserved-")).unwrap().path();
+        assert_eq!(std::fs::read(saved.join("0000.bin")).unwrap(), b"foreign edit");
+        assert!(std::fs::read_to_string(saved.join("manifest.json")).unwrap().contains("jersey.rpsgl"));
+        assert_eq!(read_install_record(&dir).unwrap().state, "restored");
+        assert!(registry.package_recovery_apply(&s(&dir), &review.review_id).is_err());
+    }
+
+    #[test]
+    fn recovery_rejects_stale_review_and_corrupt_backup_without_writes() {
+        let (_temp, dir, destination) = fixture();
+        let registry = Registry::default();
+        let review = registry.package_recovery_review(&s(&dir)).unwrap();
+        std::fs::write(&destination, b"newer edit").unwrap();
+        assert!(registry.package_recovery_apply(&s(&dir), &review.review_id).is_err());
+        assert_eq!(std::fs::read(&destination).unwrap(), b"newer edit");
+        std::fs::write(dir.join("original.bin"), b"bad backup").unwrap();
+        assert!(registry.package_recovery_review(&s(&dir)).is_err());
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 2);
+        assert_eq!(read_install_record(&dir).unwrap().state, "committed");
+    }
+
+    #[test]
+    fn failed_publication_rolls_back_to_foreign_bytes_and_keeps_preserved_copy() {
+        struct Fail;
+        impl Hooks for Fail {
+            fn event(&mut self, event: &ips::Event) -> std::io::Result<()> {
+                if matches!(event, ips::Event::AfterRename(_)) { return Err(std::io::Error::other("injected")); }
+                Ok(())
+            }
+        }
+        let (_temp, dir, destination) = fixture();
+        let registry = Registry::default();
+        let review = registry.package_recovery_review(&s(&dir)).unwrap();
+        assert!(registry.package_recovery_apply_with(&s(&dir), &review.review_id, &mut Fail).is_err());
+        assert_eq!(std::fs::read(&destination).unwrap(), b"foreign edit");
+        assert_ne!(read_install_record(&dir).unwrap().state, "restored");
+        let saved = std::fs::read_dir(&dir).unwrap().flatten().find(|e| e.file_name().to_string_lossy().starts_with("recovery-preserved-")).unwrap().path();
+        assert_eq!(std::fs::read(saved.join("0000.bin")).unwrap(), b"foreign edit");
+    }
+}
+
+#[cfg(test)]
+mod portable_texture_path_tests {
+    use super::*;
+
+    #[test]
+    fn ps3_disc_wrappers_resolve_to_the_same_existing_texture() {
+        let temp = tempfile::tempdir().unwrap();
+        let root = temp.path().join("PS3_GAME/USRDIR");
+        let relative = "rendering/jersey/name_1_23_6_cm.rpsgl";
+        let file = root.join(relative);
+        std::fs::create_dir_all(file.parent().unwrap()).unwrap();
+        std::fs::write(&file, b"fixture").unwrap();
+        for prefix in ["", "USRDIR/", "PS3_GAME/USRDIR/", "ps3_game/usrdir/"] {
+            let normalized = portable_texture_path(&format!("{prefix}{relative}"), "ps3");
+            assert_eq!(normalized, relative);
+            assert_eq!(studio_domain::resolve_install_path(&root, &normalized).unwrap(), file);
+        }
+        assert_eq!(portable_texture_path(r"USRDIR\rendering\jersey\name_1_23_6_cm.rpsgl", "ps3"), relative);
+    }
+
+    #[test]
+    fn other_platforms_and_non_wrapper_directories_are_not_reinterpreted() {
+        assert_eq!(portable_texture_path("USRDIR/rendering/a.rx2", "xbox"), "USRDIR/rendering/a.rx2");
+        assert_eq!(portable_texture_path("custom/USRDIR/rendering/a.rpsgl", "ps3"), "custom/USRDIR/rendering/a.rpsgl");
+    }
+
+    #[test]
+    fn normalization_does_not_allow_escaping_the_asset_root() {
+        let temp = tempfile::tempdir().unwrap();
+        for relative in ["USRDIR/../outside.rpsgl", "PS3_GAME/USRDIR/../../outside.rpsgl", "USRDIR/C:/outside.rpsgl"] {
+            assert!(studio_domain::resolve_install_path(temp.path(), &portable_texture_path(relative, "ps3")).is_none());
+        }
+    }
 }

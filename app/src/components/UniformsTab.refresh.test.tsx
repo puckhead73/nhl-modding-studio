@@ -1,11 +1,12 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, expect, it, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import { UniformsTab } from "./UniformsTab";
 
 const mocks = vi.hoisted(() => ({
+  pick: vi.fn(),
   call: vi.fn(async (_cmd: string, _args: unknown): Promise<unknown> => []),
   root: { install_dir: "H:/copied disc", platform: "ps3", rendering_override: null as string | null, fe_override: null },
 }));
@@ -15,11 +16,37 @@ vi.mock("../lib/project", () => ({
   useProject: () => ({}),
 }));
 vi.mock("../lib/sidebarCollapse", () => ({ useSidebarCollapse: () => () => {} }));
-vi.mock("./TextureReplace", () => ({ useTextureReplace: () => ({}), TextureThumbnail: () => null }));
+vi.mock("./TextureReplace", () => ({ useTextureReplace: () => ({ pick: mocks.pick }), TextureThumbnail: ({ relPath }: { relPath: string }) => <img alt={relPath} /> }));
+vi.mock("./NameplateEditor", () => ({ NameplateEditor: ({ relPath, referenceRelPath, onClose }: { relPath: string; referenceRelPath: string | null; onClose: () => void }) => <div role="dialog" aria-label="Layout editor"><span>{relPath}</span><span>{referenceRelPath}</span><button onClick={onClose}>Close editor</button></div> }));
 vi.mock("./TeamKitsCard", () => ({ TeamKitsCard: () => null }));
 vi.mock("./JerseyMetadataCard", () => ({ JerseyMetadataCard: () => null }));
 vi.mock("./KitMeshViewer", () => ({ TeamKitViewer: () => null }));
-afterEach(() => { cleanup(); mocks.call.mockReset(); mocks.call.mockResolvedValue([]); mocks.root = { ...mocks.root, platform: "ps3", rendering_override: null }; });
+afterEach(() => { cleanup(); mocks.call.mockReset(); mocks.pick.mockReset(); mocks.call.mockResolvedValue([]); mocks.root = { ...mocks.root, platform: "ps3", rendering_override: null }; });
+
+it("shows the replaceable layout sheet and keeps editing exclusive to the preview button", async () => {
+  const body = "rendering/jersey/texlib_0_1_0.rpsgl";
+  const sheet = "rendering/jersey/name_0_1_0_cm.rpsgl";
+  mocks.call.mockImplementation(async cmd => cmd === "team_outfits" ? [
+    { piece: "jersey", file_name: "texlib_0_1_0.rpsgl", rel_path: body, label: "Jersey color map", texture_index: 1, is_nameplate: false },
+    { piece: "name", file_name: "name_0_1_0_cm.rpsgl", rel_path: sheet, label: "Layout sheet", texture_index: 0, is_nameplate: true },
+  ] : []);
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  render(<MemoryRouter><QueryClientProvider client={client}><UniformsTab projectId={1} teamId={0} /></QueryClientProvider></MemoryRouter>);
+  // The thumbnail must use the layout sheet itself, not another jersey body preview.
+  await screen.findByRole("img", { name: sheet });
+  const card = screen.getByText("Layout sheet").parentElement!;
+  fireEvent.click(within(card).getByRole("button", { name: /Replace/ }));
+  expect(mocks.pick).toHaveBeenCalledWith(sheet, "Layout sheet", 0);
+  expect(screen.queryByRole("button", { name: /Edit locations/ })).toBeNull();
+  expect(screen.queryByRole("button", { name: /Replace raw sheet/ })).toBeNull();
+  expect(screen.getAllByRole("button", { name: "Edit Jersey Layout" })).toHaveLength(1);
+  fireEvent.click(screen.getByRole("button", { name: "Edit Jersey Layout" }));
+  await screen.findByRole("dialog", { name: "Layout editor" });
+  expect(screen.getByText(sheet)).toBeTruthy();
+  expect(screen.getByText(body)).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: "Close editor" }));
+  client.clear();
+});
 
 it("requests ambiguous PS4 filenames only after opting in and preserves the warning", async () => {
   mocks.root.platform = "ps4";

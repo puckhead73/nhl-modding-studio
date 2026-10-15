@@ -249,3 +249,25 @@ it("shows inspection failure and retries without blocking library navigation", a
   await waitFor(() => expect(screen.queryByText(/Unreadable package/)).toBeNull());
   expect(attempts).toBe(2);
 });
+
+it("recovers a previous build's installation independently of the selected package", async () => {
+  configured();
+  let records = [record({ record_dir: "old-build", package_id: "different-package" })];
+  call.mockImplementation(async (cmd) => {
+    if (cmd === "package_inspect") return { package_id: mods[0].package_id, changes: [] };
+    if (cmd === "mod_library_scan") return { mods, warnings: [] };
+    if (cmd === "package_installs") return records;
+    if (cmd === "package_recovery_review") return { record_dir: "old-build", review_id: "checked", conflicts: ["texture.rpsgl"], destinations: ["texture.rpsgl"] };
+    if (cmd === "package_recovery_apply") { records = []; return { state: "restored", detail: "Files preserved in old-build/recovery-preserved-1" }; }
+    throw new Error(`Unexpected ${cmd}`);
+  });
+  mount();
+  fireEvent.click(await screen.findByRole("button", { name: "Recover installation…" }));
+  await screen.findByText(/Files different from both/);
+  expect(call).toHaveBeenCalledWith("package_recovery_review", { recordDir: "old-build" });
+  fireEvent.click(screen.getByRole("checkbox"));
+  fireEvent.click(screen.getByRole("button", { name: "Preserve files and restore originals" }));
+  await screen.findByText("Files preserved in old-build/recovery-preserved-1");
+  await waitFor(() => expect(screen.queryByRole("dialog", { name: "Recover installation" })).toBeNull());
+  expect(call.mock.calls.some(([cmd]) => cmd === "package_apply")).toBe(false);
+});

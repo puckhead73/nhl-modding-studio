@@ -92,6 +92,7 @@ import type { PackageInspectDto } from "../bindings/PackageInspectDto";
 import type { ModLibraryDto } from "../bindings/ModLibraryDto";
 import type { InstallPlanDto } from "../bindings/InstallPlanDto";
 import type { InstallApplyDto } from "../bindings/InstallApplyDto";
+import type { InstallRecoveryDto } from "../bindings/InstallRecoveryDto";
 import type { InstallRecordDto } from "../bindings/InstallRecordDto";
 import type { AutocorrectSummaryDto } from "../bindings/AutocorrectSummaryDto";
 import type { RepairBlocksSummaryDto } from "../bindings/RepairBlocksSummaryDto";
@@ -253,6 +254,8 @@ type Commands = {
   };
   package_apply: { args: { handle: number }; ret: InstallApplyDto };
   package_installs: { args: Record<string, never>; ret: InstallRecordDto[] };
+  package_recovery_review: { args: { recordDir: string }; ret: InstallRecoveryDto };
+  package_recovery_apply: { args: { recordDir: string; reviewId: string }; ret: InstallApplyDto };
   package_restore: { args: { recordDir: string }; ret: InstallApplyDto };
   project_info: { args: { projectId: number }; ret: ProjectInfoDto };
   project_revert_change: { args: { projectId: number; changeId: string }; ret: OpOutcomeDto };

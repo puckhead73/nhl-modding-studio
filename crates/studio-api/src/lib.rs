@@ -75,6 +75,8 @@ macro_rules! command_handler {
             $crate::commands::package_apply,
             $crate::commands::package_installs,
             $crate::commands::package_restore,
+            $crate::commands::package_recovery_review,
+            $crate::commands::package_recovery_apply,
             $crate::commands::project_info,
             $crate::commands::project_save,
             $crate::commands::project_set_extraction,

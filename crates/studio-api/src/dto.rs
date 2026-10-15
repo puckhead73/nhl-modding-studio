@@ -5482,6 +5482,16 @@ pub struct InstallApplyDto {
     pub destinations: Vec<DeployOutcomeDto>,
 }
 
+/// Read-only recovery review, bound to the exact record and current file contents.
+#[derive(Serialize, TS)]
+pub struct InstallRecoveryDto {
+    pub review_id: String,
+    pub record_dir: String,
+    pub package_name: String,
+    pub destinations: Vec<String>,
+    pub conflicts: Vec<String>,
+}
+
 #[derive(Serialize, TS)]
 pub struct InstallRecordDto {
     pub record_dir: String,
