@@ -317,9 +317,103 @@ fn ps4_save_roster_opens_and_repacks() {
     assert_eq!(payload, original, "the opaque trailer also survives the no-op save");
     if let Source::Ps4Save { trailer, .. } = session.project().source() {
         assert!(!trailer.is_empty(), "NHL19 fixture must exercise the trailer boundary");
+        // Bytes appended without the TDB declaring them are refused (real growth is covered by
+        // `ps4_roster_growth_rewrites_the_trailer_size`).
         let mut grown = inner.clone();
         grown.push(0);
-        assert!(session.project().package(&grown).is_err(), "growth must not move the opaque trailer");
+        assert!(session.project().package(&grown).is_err(), "undeclared growth must be refused");
+    }
+}
+
+/// PS4 parity roadmap P0-2 (13 Oct 2026): NHL 17–19 roster payloads end with an 18–20-byte record
+/// after the TDB. A *real* edit (not a no-op, which cannot expose a misplaced checksum) must land
+/// the EOF CRC at the end of the database, never inside that trailer: the saved payload's TDB is
+/// CRC-valid at its declared size (recomputing its CRCs changes nothing), the trailer is byte-for-
+/// byte the original, and the edit reads back.
+#[test]
+fn ps4_roster_edit_keeps_the_trailer_outside_the_crc_scope() {
+    for title in ["nhl17", "nhl18", "nhl19"] {
+        let data = format!("anchors/ps4/{title}/savefiles/RosterCustom0/DATA");
+        let meta = format!("anchors/ps4/{title}/databases/nhl_game-meta.xml");
+        let original_payload = tdb_savedata::ps4_extract_roster(&std::fs::read(repo(&data)).unwrap()).unwrap();
+        let project = Project::load(repo(&data), Platform::Ps4, ProjectRole::Roster, repo(&meta), repo(DEFS)).unwrap();
+        let Source::Ps4Save { trailer, original_db_len, .. } = project.source().clone() else {
+            panic!("{title}: the roster save must open as a PS4 save");
+        };
+        assert!(!trailer.is_empty(), "{title}: the fixture must carry a trailer for this case to mean anything");
+        assert_eq!(&original_payload[original_db_len..], &trailer[..], "{title}: trailer split at the declared TDB size");
+        let inner = project.db_bytes().to_vec();
+
+        let mut session = EditSession::begin(project);
+        // Position (vjla) on the first player row: try values until the database actually changes.
+        let changed = [1i64, 3, 2].into_iter().any(|v| {
+            session.set_field("ubPc", 0, "vjla", FieldValue::Int(v)).is_ok() && session.bytes() != inner.as_slice()
+        });
+        assert!(changed, "{title}: the position edit must change the database");
+        let edited = session.bytes().to_vec();
+
+        let saved = session.save().unwrap();
+        let payload = tdb_savedata::ps4_extract_roster(&saved).unwrap();
+        let db = TdbFile::parse(&payload).unwrap();
+        let size = db.db_size as usize;
+        assert_eq!(size, original_db_len, "{title}: same-size edit keeps the declared TDB size");
+        assert_eq!(&payload[size..], &trailer[..], "{title}: trailer byte-identical after an edit");
+        let tdb = &payload[..size];
+        let mut recomputed = tdb.to_vec();
+        TdbFile::parse(tdb).unwrap().recompute_crcs(&mut recomputed);
+        assert_eq!(recomputed, tdb, "{title}: every TDB CRC (including EOF) is already correct at the database's end");
+        assert!(TdbFile::parse(tdb).unwrap().header_crc_ok(), "{title}: header CRC valid");
+        assert_eq!(tdb, &edited[..], "{title}: the saved database is exactly the edited one");
+        assert_ne!(tdb, &original_payload[..original_db_len], "{title}: the edit persisted");
+    }
+}
+
+/// P0-2: a roster database that genuinely grows (the capacity-normalization primitive raising a
+/// table's allocation) saves on NHL 17–19. The trailer's embedded database size follows the new
+/// length, its other bytes are untouched, every TDB CRC is correct at the database's end, and the
+/// saved file reopens through the same route with the grown allocation.
+#[test]
+fn ps4_roster_growth_rewrites_the_trailer_size() {
+    for title in ["nhl17", "nhl18", "nhl19"] {
+        let data = format!("anchors/ps4/{title}/savefiles/RosterCustom0/DATA");
+        let meta = format!("anchors/ps4/{title}/databases/nhl_game-meta.xml");
+        let project = Project::load(repo(&data), Platform::Ps4, ProjectRole::Roster, repo(&meta), repo(DEFS)).unwrap();
+        let Source::Ps4Save { trailer, original_db_len, .. } = project.source().clone() else {
+            panic!("{title}: the roster save must open as a PS4 save");
+        };
+        let table = studio_domain::capacity::ROSTER_TABLES[1];
+        let before = TdbFile::parse(project.db_bytes()).unwrap().table_canonical(table).unwrap().max_records;
+
+        let mut session = EditSession::begin(project);
+        let grown = session.grow_table_max(table, before + 8).unwrap();
+        assert_eq!(grown, Some((before, before + 8)), "{title}: the allocation grew");
+        let new_len = session.bytes().len();
+        assert!(new_len > original_db_len, "{title}: the database is longer");
+
+        let saved = session.save().unwrap();
+        let payload = tdb_savedata::ps4_extract_roster(&saved).unwrap();
+        let db = TdbFile::parse(&payload).unwrap();
+        let size = db.db_size as usize;
+        assert_eq!(size, new_len, "{title}: the TDB declares its new length");
+        let tail = &payload[size..];
+        assert_eq!(tail.len(), trailer.len(), "{title}: trailer length unchanged");
+        assert_eq!(u64::from_le_bytes(tail[8..16].try_into().unwrap()), new_len as u64, "{title}: embedded size follows");
+        assert_eq!(&tail[..8], &trailer[..8], "{title}: tag and zero word kept");
+        assert_eq!(&tail[16..], &trailer[16..], "{title}: unknown tail kept verbatim");
+        let mut recomputed = payload[..size].to_vec();
+        TdbFile::parse(&payload[..size]).unwrap().recompute_crcs(&mut recomputed);
+        assert_eq!(recomputed, &payload[..size], "{title}: CRCs correct at the database's end");
+
+        // The saved file reopens through the same route with the grown allocation.
+        let out = std::env::temp_dir().join(format!("nhlms-p02-{title}-{}.DATA", std::process::id()));
+        std::fs::write(&out, &saved).unwrap();
+        let reopened = Project::load(&out, Platform::Ps4, ProjectRole::Roster, repo(&meta), repo(DEFS));
+        let _ = std::fs::remove_file(&out);
+        let reopened = reopened.unwrap();
+        let after = TdbFile::parse(reopened.db_bytes()).unwrap().table_canonical(table).unwrap().max_records;
+        assert_eq!(after, before + 8, "{title}: reopened with the grown allocation");
+        let Source::Ps4Save { original_db_len: reopened_len, .. } = reopened.source() else { unreachable!() };
+        assert_eq!(*reopened_len, new_len, "{title}: reopen splits at the new size");
     }
 }
 

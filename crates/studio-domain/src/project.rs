@@ -424,13 +424,27 @@ impl Project {
                 Ok(container.repack(inner_db)?)
             }
             Source::Ps4Save { original, trailer, original_db_len } => {
-                // The opaque suffix belongs to the DATA record, not the TDB CRC scope.
-                // Its offset semantics are unknown, so do not move it by growing the DB.
-                if !trailer.is_empty() && inner_db.len() != *original_db_len {
-                    return Err(DomainError::Validation("Cannot resize a PS4 roster with an opaque trailer.".into()));
-                }
+                // The suffix belongs to the DATA record, not the TDB CRC scope, so it is re-appended
+                // after the database. A size change is allowed only for the measured roster trailer,
+                // whose embedded database size is rewritten; any other trailer stays refused.
                 let mut payload = inner_db.to_vec();
-                payload.extend_from_slice(trailer);
+                if trailer.is_empty() || inner_db.len() == *original_db_len {
+                    payload.extend_from_slice(trailer);
+                } else {
+                    let declared = TdbFile::parse(inner_db)?.db_size as usize;
+                    if declared != inner_db.len() {
+                        return Err(DomainError::Validation(format!(
+                            "The edited PS4 roster database declares {declared} bytes but is {} bytes long.",
+                            inner_db.len()
+                        )));
+                    }
+                    let resized = ps4_roster_trailer_resized(trailer, *original_db_len, inner_db.len()).ok_or_else(|| {
+                        DomainError::Validation(
+                            "This PS4 save keeps data after its roster database whose layout is not known, so the database cannot change size.".into(),
+                        )
+                    })?;
+                    payload.extend_from_slice(&resized);
+                }
                 Ok(tdb_savedata::ps4_repack_roster(original, &payload)?)
             }
         }
@@ -507,6 +521,27 @@ fn detect_source(file_bytes: Vec<u8>) -> Result<(Source, Vec<u8>)> {
     Err(DomainError::NotADatabase)
 }
 
+/// The leading constant of the record NHL 17–19 PS4 roster payloads carry after their TDB.
+const PS4_ROSTER_TRAILER_TAG: [u8; 4] = [0xD9, 0x2E, 0xB7, 0x58];
+
+/// The PS4 roster trailer with its embedded database size changed from `old_len` to `new_len`, or
+/// `None` when `trailer` is not the measured form. Measured on the NHL 17/18/19 roster anchors
+/// (P0-2, 13 Oct 2026): `D9 2E B7 58`, a zero `u32`, the TDB size as `u64` little-endian at +8,
+/// then 2–4 bytes of unknown meaning (`02 00 01 00` on NHL 17, `01 00` on 18/19), kept verbatim.
+/// The size must equal `old_len`, so a trailer that only resembles the form is not rewritten.
+pub(crate) fn ps4_roster_trailer_resized(trailer: &[u8], old_len: usize, new_len: usize) -> Option<Vec<u8>> {
+    if trailer.len() < 16 || trailer[..4] != PS4_ROSTER_TRAILER_TAG || trailer[4..8] != [0; 4] {
+        return None;
+    }
+    let embedded = u64::from_le_bytes(trailer[8..16].try_into().ok()?);
+    if embedded != old_len as u64 {
+        return None;
+    }
+    let mut out = trailer.to_vec();
+    out[8..16].copy_from_slice(&(new_len as u64).to_le_bytes());
+    Some(out)
+}
+
 fn read(path: &Path) -> Result<Vec<u8>> {
     fs::read(path).map_err(|source| DomainError::Io {
         path: path.display().to_string(),
@@ -528,4 +563,42 @@ fn read_to_string(path: &Path) -> Result<String> {
         path: path.display().to_string(),
         source: std::io::Error::new(std::io::ErrorKind::InvalidData, error),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ps4_roster_trailer_resized;
+
+    /// The NHL 17 roster trailer as measured (P0-2), with an embedded size of 5 603 060.
+    fn nhl17_trailer() -> Vec<u8> {
+        let mut t = vec![0xD9, 0x2E, 0xB7, 0x58, 0, 0, 0, 0];
+        t.extend_from_slice(&5_603_060u64.to_le_bytes());
+        t.extend_from_slice(&[0x02, 0x00, 0x01, 0x00]);
+        t
+    }
+
+    #[test]
+    fn the_measured_roster_trailer_takes_the_new_size_and_keeps_every_other_byte() {
+        let t = nhl17_trailer();
+        let out = ps4_roster_trailer_resized(&t, 5_603_060, 5_700_000).unwrap();
+        assert_eq!(u64::from_le_bytes(out[8..16].try_into().unwrap()), 5_700_000);
+        assert_eq!(&out[..8], &t[..8]);
+        assert_eq!(&out[16..], &t[16..]);
+    }
+
+    #[test]
+    fn anything_but_the_measured_form_is_not_rewritten() {
+        let t = nhl17_trailer();
+        assert!(ps4_roster_trailer_resized(&t, 5_603_061, 5_700_000).is_none(), "embedded size must equal the old length");
+        let mut tag = t.clone();
+        tag[0] ^= 1;
+        assert!(ps4_roster_trailer_resized(&tag, 5_603_060, 5_700_000).is_none(), "tag");
+        let mut zero = t.clone();
+        zero[5] = 1;
+        assert!(ps4_roster_trailer_resized(&zero, 5_603_060, 5_700_000).is_none(), "zero word");
+        assert!(ps4_roster_trailer_resized(&t[..15], 5_603_060, 5_700_000).is_none(), "too short");
+        // The 3-on-3 JSON trailer and mode-save padding are other forms.
+        assert!(ps4_roster_trailer_resized(b"{\n\"DefaultPlayers\":\n{\n", 5_603_060, 5_700_000).is_none());
+        assert!(ps4_roster_trailer_resized(&[0u8; 64], 0, 5_700_000).is_none());
+    }
 }
