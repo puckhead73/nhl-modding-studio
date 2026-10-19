@@ -17,7 +17,7 @@ fn session(db: &Path, meta: &Path) -> EditSession {
 }
 
 #[test]
-#[ignore = "real PS4 installs under H:/Emulators/ShadPS4/Games and the genuine NHL 20 fixture (NHL_STUDIO_FIXTURES): select with --ignored"]
+#[ignore = "real PS4 installs under H:/Emulators/ShadPS4/Games: select with --ignored"]
 fn lists_thumbnails_and_census_match_r136() {
     let defs = repo("defs");
     // (title, CUSA, rows helmet / gloves / skates / stick / visor) — R136 §1.
@@ -45,7 +45,7 @@ fn lists_thumbnails_and_census_match_r136() {
         eprintln!("{title}: rows {:?}, thumbnails {:?} ({:.1} s)", got, cat.families.iter().map(|f| f.thumbnails.len()).collect::<Vec<_>>(), t0.elapsed().as_secs_f32());
     }
     // Genuine NHL 20: 6 803 skater rows; helmet: 6 734 rows are Creation Zone items, 69 store 99 (outside); others all rows.
-    let fx = PathBuf::from(std::env::var("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES (fails, never skips)")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let fx = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let s20 = session(&fx.join("nhl_game.db"), &fx.join("nhl_game-meta.xml"));
     let cat20 = SkaterGearCatalogue::load(&install("CUSA15439"), &defs, "nhl20").unwrap();
     let c = s20.ps4_skater_gear_census(&cat20).unwrap();

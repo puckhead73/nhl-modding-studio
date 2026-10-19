@@ -750,6 +750,14 @@ mod tests {
             (ps4[0].game_id.as_str(), ps4[0].platform),
             ("nhl21", Platform::Ps4)
         );
+        // FR9: NHL 19's install and its saves use CUSA11126.
+        let nhl19 = path_hints(Path::new(
+            "E:/shadps4/user/savedata/1/CUSA11126/RosterCustom0/DATA",
+        ));
+        assert_eq!(
+            (nhl19[0].game_id.as_str(), nhl19[0].platform),
+            ("nhl19", Platform::Ps4)
+        );
         assert!(path_hints(Path::new("C:/Users/me/Desktop/nhlng.db")).is_empty());
     }
 }

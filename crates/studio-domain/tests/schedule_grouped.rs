@@ -268,9 +268,8 @@ fn ps4_nhl17_finnish_five_groups_of_three() {
 }
 
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn genuine_nhl20_swiss_shipped_groups() {
-    let root = PathBuf::from(std::env::var("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES (fails, never skips)")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     assert!(root.join("nhl_game.db").is_file(), "{}: missing", root.display());
     // Work on a copy: the fixture is only read.
     let scratch = Scratch::new("nhl20");

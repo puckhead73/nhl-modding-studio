@@ -7,9 +7,9 @@
 //! the committed anchors through the ordinary `EditSession` seams — bulk edit, scalar edit, undo,
 //! redo, save → reopen — and assert display, edit form and stored bytes together.
 //!
-//! Anchor note (audit F2): the 27 anchor directories are **not** 27 independent titles —
-//! `anchors/ps4/nhl20` is an NHL 19 base copy (no real NHL 20 anchor is committed). The real
-//! NHL 20 witness is the private fixture case at the end of this file.
+//! Anchor note (audit F2): until P0-4 (2026-10-15) `anchors/ps4/nhl20` was an NHL 19 base copy; it
+//! now holds the genuine CUSA15439 database, also pinned by identity in the case at the end of
+//! this file.
 use std::path::{Path, PathBuf};
 
 use studio_domain::{
@@ -61,7 +61,7 @@ fn anchors() -> Vec<(String, String, PathBuf, PathBuf)> {
     assert_eq!(
         out.len(),
         27,
-        "27 anchor directories (ps4/nhl20 is an NHL 19 base copy)"
+        "27 anchor directories"
     );
     out
 }
@@ -700,13 +700,11 @@ fn the_import_seam_reads_the_contract_offset_after_a_bulk_edit() {
     }
 }
 
-/// F2: the real NHL 20 database (private fixture, recorded identity) carries the PS4 contract and
-/// the same witnessed cap hits as the NHL 19 base copy under `anchors/ps4/nhl20`.
+/// F2: the real NHL 20 database (committed as `anchors/ps4/nhl20` since P0-4, recorded identity)
+/// carries the PS4 contract and the same witnessed cap hits as the NHL 19 base database.
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn the_real_nhl20_database_carries_the_ps4_contract() {
-    let root = std::env::var_os("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES is not set");
-    let root = PathBuf::from(root).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let db_path = root.join("nhl_game.db");
     let meta_path = root.join("nhl_game-meta.xml");
     let bytes = std::fs::read(&db_path).unwrap_or_else(|e| panic!("{}: {e}", db_path.display()));

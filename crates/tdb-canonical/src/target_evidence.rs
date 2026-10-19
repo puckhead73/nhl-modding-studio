@@ -1418,20 +1418,6 @@ pub(crate) fn candidate_value<'a, T>(c: &'a Constraint<T>, what: &str) -> &'a T 
     candidate_of(c, what).value.as_ref().unwrap()
 }
 
-/// The capacity block's note and provenance wherever they live: on the established block, or on
-/// the candidate of an unresolved one.
-pub(crate) fn capacity_note_and_provenance(
-    cap: &CapacityDecl,
-    unresolved: bool,
-) -> (&str, &[String]) {
-    if unresolved {
-        let c = candidate_of(&cap.declared, &format!("capacity {}", cap.table));
-        (c.note.as_str(), &c.provenance)
-    } else {
-        (cap.declared.note.as_str(), &cap.declared.provenance)
-    }
-}
-
 /// A copy of the adapter with every unknown-with-candidate block promoted to established (value,
 /// confidence and provenance from the candidate). **Test-only**: it says what the measurements would
 /// declare *if* the bytes were attributed, so that the measured numbers can be checked through the

@@ -129,9 +129,11 @@ fn kukkonen_weighs_190_lb_on_every_title_that_lists_him() {
                     Some(expect),
                     "{platform}/{game}"
                 );
+                // The genuine NHL 20 roster (anchor since P0-4) lists him at 6'0".
+                let height = if platform == "ps4" && game == "nhl20" { "6'0\"" } else { "6'1\"" };
                 assert_eq!(
                     v.header.height.as_deref(),
-                    Some("6'1\""),
+                    Some(height),
                     "{platform}/{game}"
                 );
                 seen += 1;

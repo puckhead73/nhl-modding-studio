@@ -893,7 +893,7 @@ impl EditSession {
                 .table_canonical(studio_table)
                 .map(|kott| {
                     let src = crate::view::team_name_source(db, meta, kott, record);
-                    let pick = ["fullname", "teamname", "abbrname"]
+                    let pick = ["fullname", "teamname", "nickname", "abbrname"]
                         .iter()
                         .map(|n| crate::view::read_str_by_name(db, meta, src.table, src.record, n))
                         .find(|v| !v.trim().is_empty());

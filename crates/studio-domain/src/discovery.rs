@@ -67,7 +67,9 @@ pub fn ps4_title_ids(game_id: &str) -> &'static [&'static str] {
         "nhl16" => &["CUSA01909"],
         "nhl17" => &["CUSA04326", "CUSA04330"],
         "nhl18" => &["CUSA07569", "CUSA07580"],
-        "nhl19" => &["CUSA11116"],
+        // CUSA11126 is the US install (param.sfo CONTENT_ID UP0006-CUSA11126_00, and the
+        // committed NHL 19 save fixtures). CUSA11116 has no install or save witness (FR9).
+        "nhl19" => &["CUSA11126", "CUSA11116"],
         "nhl20" => &["CUSA15439", "CUSA15447"],
         "nhl21" => &["CUSA18182"],
         _ => &[],
@@ -1500,6 +1502,24 @@ mod tests {
                 Some(title),
                 "TITLE round-trips"
             );
+        }
+    }
+
+    /// FR9: the first fast-path id per title is the content id read from a real install's
+    /// `param.sfo` (NHL 19 is `UP0006-CUSA11126_00`, not CUSA11116), so a save under that
+    /// folder gets a title hint without the TITLE fallback.
+    #[test]
+    fn ps4_fast_path_lists_the_install_witnessed_content_id_first() {
+        for (game, cusa) in [
+            ("nhl15", "CUSA00561"),
+            ("nhl16", "CUSA01909"),
+            ("nhl17", "CUSA04326"),
+            ("nhl18", "CUSA07569"),
+            ("nhl19", "CUSA11126"),
+            ("nhl20", "CUSA15439"),
+            ("nhl21", "CUSA18182"),
+        ] {
+            assert_eq!(ps4_title_ids(game).first(), Some(&cusa), "{game}");
         }
     }
 

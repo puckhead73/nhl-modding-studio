@@ -11,9 +11,9 @@ fn repo(rel: &str) -> PathBuf {
 }
 
 #[test]
-#[ignore = "genuine NHL 20 private fixture (NHL_STUDIO_FIXTURES) and the PS4 install under H:/Emulators/ShadPS4/Games: select with --ignored"]
+#[ignore = "the PS4 install under H:/Emulators/ShadPS4/Games: select with --ignored"]
 fn goalie_pair_and_team_paints_through_the_registry() {
-    let fx = PathBuf::from(std::env::var("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES (fails, never skips)")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let fx = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let s = |p: &Path| p.to_string_lossy().into_owned();
     let defs = repo("defs");
     let reg = Registry::default();
@@ -56,9 +56,9 @@ fn goalie_pair_and_team_paints_through_the_registry() {
 
 /// Receipt 52 — the skater-gear check and a Creation Zone thumbnail through the Registry (genuine NHL 20 + its install).
 #[test]
-#[ignore = "genuine NHL 20 private fixture (NHL_STUDIO_FIXTURES) and the PS4 install under H:/Emulators/ShadPS4/Games: select with --ignored"]
+#[ignore = "the PS4 install under H:/Emulators/ShadPS4/Games: select with --ignored"]
 fn skater_gear_and_thumbnails_through_the_registry() {
-    let fx = PathBuf::from(std::env::var("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES (fails, never skips)")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let fx = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let s = |p: &Path| p.to_string_lossy().into_owned();
     let defs = repo("defs");
     let reg = Registry::default();

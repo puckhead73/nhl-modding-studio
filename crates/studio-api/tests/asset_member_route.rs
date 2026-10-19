@@ -428,8 +428,7 @@ fn every_real_ps4_inxp10_archive_takes_a_logo_and_an_imagery_member_through_the_
         let db_dir = root.join("nhl/data/common/gamemodes/database/t3db");
         std::fs::create_dir_all(&db_dir).unwrap();
         let db = db_dir.join("nhl_game.db");
-        let anchor_title = if title == "nhl20" { "nhl19" } else { title.as_str() }; // the nhl20 anchor is the NHL 19 base copy; the DB is not edited here
-        std::fs::copy(repo(&format!("anchors/ps4/{anchor_title}/databases/nhl_game.db")), &db).unwrap();
+        std::fs::copy(repo(&format!("anchors/ps4/{title}/databases/nhl_game.db")), &db).unwrap();
         std::fs::create_dir_all(root.join("databigs")).unwrap();
         let archive = root.join(&archive_relative);
         std::fs::copy(&source_archive, &archive).unwrap();
@@ -440,7 +439,7 @@ fn every_real_ps4_inxp10_archive_takes_a_logo_and_an_imagery_member_through_the_
 
         let reg = Registry::default();
         let id = reg
-            .open_workspace_from_paths(Some(title), parse_platform("ps4").unwrap(), &s(&db), None, &s(&repo(&format!("anchors/ps4/{anchor_title}/databases/nhl_game-meta.xml"))), &s(&repo("defs")))
+            .open_workspace_from_paths(Some(title), parse_platform("ps4").unwrap(), &s(&db), None, &s(&repo(&format!("anchors/ps4/{title}/databases/nhl_game-meta.xml"))), &s(&repo("defs")))
             .unwrap()
             .project_id;
         let root_s = s(&root);

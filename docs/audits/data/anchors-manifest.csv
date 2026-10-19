@@ -354,6 +354,7 @@ anchors/ps4/nhl18/savefiles/ThreeOnThree0/NAME,ps4,nhl18,save-data,NAME,13,150b5
 anchors/ps4/nhl18/savefiles/ThreeOnThree0/sce_sys/icon0.png,ps4,nhl18,save-icon,icon0.png,54979,f084704793ad05c88c50e21de738b9f0cf082e109188817d877936ff9d199219
 anchors/ps4/nhl18/savefiles/ThreeOnThree0/sce_sys/param.sfo,ps4,nhl18,save-param,param.sfo,1596,d145bf57958f109ba6490aa8303bb333d0807f4cee60d6c3aeb3c1785494035d
 anchors/ps4/nhl19/databases/eng_us-meta.xml,ps4,nhl19,localization-metadata,eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b
+anchors/ps4/nhl19/databases/eng_us.db,ps4,nhl19,localization-database,eng_us.db,2492428,62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2
 anchors/ps4/nhl19/databases/entry_draft.db,ps4,nhl19,aux-database,entry_draft.db,4690880,3c16727ea6bf100580a3cd26ca9b665aad840721910cddd9106ad8dba5ec1e11
 anchors/ps4/nhl19/databases/expansion_draft.db,ps4,nhl19,aux-database,expansion_draft.db,4690880,e13ded661b927c8d0a57642ee20b0263de985abde299a826baa2c1349bb97fb0
 anchors/ps4/nhl19/databases/initial_experience.db,ps4,nhl19,aux-database,initial_experience.db,6239164,49bdaacb32561581b1d070a8c783c078389a805022cf677635e96b710420ce50
@@ -386,14 +387,14 @@ anchors/ps4/nhl19/savefiles/Season0/NAME,ps4,nhl19,save-data,NAME,7,50246a63e233
 anchors/ps4/nhl19/savefiles/Season0/sce_sys/icon0.png,ps4,nhl19,save-icon,icon0.png,36963,45c281b3d2fbfca50327cbf8e10815c99d1e7e5cbc583c4343593ff81ff01fe0
 anchors/ps4/nhl19/savefiles/Season0/sce_sys/param.sfo,ps4,nhl19,save-param,param.sfo,1596,b183813d0e66e522fafc6d1e62d60e867a192572bd81ff23c035e2c4b49343bd
 anchors/ps4/nhl20/databases/eng_us-meta.xml,ps4,nhl20,localization-metadata,eng_us-meta.xml,962,54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b
-anchors/ps4/nhl20/databases/eng_us.db,ps4,nhl20,localization-database,eng_us.db,2492428,62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2
-anchors/ps4/nhl20/databases/entry_draft.db,ps4,nhl20,aux-database,entry_draft.db,4690880,3c16727ea6bf100580a3cd26ca9b665aad840721910cddd9106ad8dba5ec1e11
-anchors/ps4/nhl20/databases/expansion_draft.db,ps4,nhl20,aux-database,expansion_draft.db,4690880,e13ded661b927c8d0a57642ee20b0263de985abde299a826baa2c1349bb97fb0
-anchors/ps4/nhl20/databases/initial_experience.db,ps4,nhl20,aux-database,initial_experience.db,6239164,49bdaacb32561581b1d070a8c783c078389a805022cf677635e96b710420ce50
-anchors/ps4/nhl20/databases/nhl_game-meta.xml,ps4,nhl20,schema-metadata,nhl_game-meta.xml,478763,c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3
-anchors/ps4/nhl20/databases/nhl_game.db,ps4,nhl20,main-database,nhl_game.db,10347860,265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408
-anchors/ps4/nhl20/databases/proam.db,ps4,nhl20,aux-database,proam.db,4690880,e13ded661b927c8d0a57642ee20b0263de985abde299a826baa2c1349bb97fb0
-anchors/ps4/nhl20/databases/threes_campaign.db,ps4,nhl20,aux-database,threes_campaign.db,4690880,d764ed3752383b880175d4c3c23b855b4b9ef960be9133d480093b7fbc7613eb
+anchors/ps4/nhl20/databases/eng_us.db,ps4,nhl20,localization-database,eng_us.db,2675972,0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad
+anchors/ps4/nhl20/databases/entry_draft.db,ps4,nhl20,aux-database,entry_draft.db,4042212,787564019054b21f65bfffc5ac355dfa4e296ab2873f8499483ebd8f941cdb83
+anchors/ps4/nhl20/databases/expansion_draft.db,ps4,nhl20,aux-database,expansion_draft.db,4042212,787564019054b21f65bfffc5ac355dfa4e296ab2873f8499483ebd8f941cdb83
+anchors/ps4/nhl20/databases/initial_experience.db,ps4,nhl20,aux-database,initial_experience.db,5608528,2d875023adcc3621491dd9a9aaa6812fe03f26ade9bca15bebdd28de0a26a3ac
+anchors/ps4/nhl20/databases/nhl_game-meta.xml,ps4,nhl20,schema-metadata,nhl_game-meta.xml,485366,2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93
+anchors/ps4/nhl20/databases/nhl_game.db,ps4,nhl20,main-database,nhl_game.db,10226516,1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b
+anchors/ps4/nhl20/databases/proam.db,ps4,nhl20,aux-database,proam.db,4042212,787564019054b21f65bfffc5ac355dfa4e296ab2873f8499483ebd8f941cdb83
+anchors/ps4/nhl20/databases/threes_campaign.db,ps4,nhl20,aux-database,threes_campaign.db,4042212,787564019054b21f65bfffc5ac355dfa4e296ab2873f8499483ebd8f941cdb83
 anchors/ps4/nhl20/savefiles/BeAGM0/DATA,ps4,nhl20,save-data,DATA,1660767,6d9119b7faf31716f89df8e7f8fdba73efe9eb68ed08bebe480a1f3aa63eba86
 anchors/ps4/nhl20/savefiles/BeAGM0/INDEX,ps4,nhl20,save-data,INDEX,320,8a1fb40379f97e7d0c4c46fff481b1a35eba347844fba3e7085481e8450aabcf
 anchors/ps4/nhl20/savefiles/BeAGM0/NAME,ps4,nhl20,save-data,NAME,6,b88e9595b9f713c23aaa5bf26a39a4b5040d31816bf4557d3ba7cd93042c1fe3
@@ -455,6 +456,7 @@ anchors/xbox360/nhl07/databases/NHL07NG-meta.xml,xbox360,nhl07,schema-metadata,N
 anchors/xbox360/nhl07/databases/NHL07NG.db,xbox360,nhl07,main-database,NHL07NG.db,4189776,67a00beaa05690d30527c9059146c7e610f33f892b0ddadc381e1cfefc8dbad3
 anchors/xbox360/nhl07/databases/nhl_eng_us-meta.xml,xbox360,nhl07,localization-metadata,nhl_eng_us-meta.xml,970,5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2
 anchors/xbox360/nhl07/databases/nhl_eng_us.db,xbox360,nhl07,localization-database,nhl_eng_us.db,182500,5d3c0b0187b8d673b9642eaec4fabf346fc3451f9a3bf14e4e6bfb4cd61743c3
+anchors/xbox360/nhl07/game-files.json,xbox360,nhl07,other,game-files.json,63137,6bb3c5d1e84cd59487e43af10e8c11366a9d4da1dca0c9a292ae13d620a628fd
 anchors/xbox360/nhl07/savefiles/DYNASTY1/DYNASTY1,xbox360,nhl07,save-data,DYNASTY1,2720632,4c5c1ec41be11ef28ae93077a258df5b70ffbc979fd2c2d338e260bada9ebb00
 anchors/xbox360/nhl07/savefiles/ROSTER1/ROSTER1,xbox360,nhl07,save-data,ROSTER1,1598888,40a06d5344d4ca7460cffeb8ec0cb1626bdefb1a28ba337f17c6f9ddacd2223d
 anchors/xbox360/nhl07/savefiles/USER PROFILE1/USER PROFILE1,xbox360,nhl07,save-data,USER PROFILE1,30128,b3210a93ea480cc4b92ddf8d638b0a03c93cd1fff751f4d14f8cf1b277e7909b
@@ -462,6 +464,7 @@ anchors/xbox360/nhl08/databases/nhl_eng_us-meta.xml,xbox360,nhl08,localization-m
 anchors/xbox360/nhl08/databases/nhl_eng_us.db,xbox360,nhl08,localization-database,nhl_eng_us.db,267068,308021e71b4418011899a18252d0c9471bce8a5be9b2578927cbd073a29797f4
 anchors/xbox360/nhl08/databases/nhlng-meta.xml,xbox360,nhl08,schema-metadata,nhlng-meta.xml,243270,d2b6feb2ca30cab8aaca8d6477776eacc7944f63fea1e571deba9a6db8656da1
 anchors/xbox360/nhl08/databases/nhlng.db,xbox360,nhl08,main-database,nhlng.db,1556560,587204c3b18e9957c6a1530782340139ac743b9d31b84706b350fea7ddc858b9
+anchors/xbox360/nhl08/game-files.json,xbox360,nhl08,other,game-files.json,6965,3c4d2b19bb2941e1f5d15ff86fe0fa5f6897ba70c86013e3b90349830013c2b4
 anchors/xbox360/nhl08/savefiles/DYNASTY1 20260718064632/DYNASTY1 20260718064632,xbox360,nhl08,save-data,DYNASTY1 20260718064632,2461712,e0c93382c4ae685bf1ab367b5d212427001af1f132fd4932a289049be4e79a25
 anchors/xbox360/nhl08/savefiles/ROSTER1 20260718064658/ROSTER1 20260718064658,xbox360,nhl08,save-data,ROSTER1 20260718064658,1238480,b7a378359db02bc4eb5feec12d2c75e2fa6892386cf288dcf5a77980fe035755
 anchors/xbox360/nhl09/databases/nhl_eng_us-meta.xml,xbox360,nhl09,localization-metadata,nhl_eng_us-meta.xml,970,5971befdedee01b61c3a4a22bcc75cc2332a2871405c4f61499509855402fff2

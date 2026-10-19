@@ -65,10 +65,10 @@ fn every_title_catalogue_and_goalie_census_match_r135() {
 }
 
 #[test]
-#[ignore = "real PS4 installs (boot.big) and the genuine NHL 20 private fixture (NHL_STUDIO_FIXTURES): select with --ignored"]
+#[ignore = "real PS4 installs (boot.big): select with --ignored"]
 fn contract_fixture_cases_and_source_identity() {
     let defs = repo("defs");
-    let fx = PathBuf::from(std::env::var("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES (fails, never skips)")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let fx = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let s20 = EditSession::begin(Project::load(fx.join("nhl_game.db"), Platform::Ps4, ProjectRole::Nhlng, fx.join("nhl_game-meta.xml"), defs.clone()).unwrap());
     let cat20 = MaskCatalogue::load(&install("CUSA15439"), &defs, "nhl20").unwrap();
     let rows = s20.ps4_goalie_rows(&cat20).unwrap();
@@ -109,7 +109,10 @@ fn contract_fixture_cases_and_source_identity() {
     // Source identity: an NHL 19 project with the NHL 20 install attached is refused, never borrowed.
     let e = MaskCatalogue::load(&install("CUSA15439"), &defs, "nhl19").unwrap_err().to_string();
     assert!(e.contains("source mismatch") && e.contains("nhl20"), "{e}");
-    // `anchors/ps4/nhl20` is the NHL 19 base copy: classified against NHL 19's catalogue it matches NHL 19's census.
+    // `anchors/ps4/nhl20` is the genuine NHL 20 database (P0-4): it classifies against NHL 20's own
+    // catalogue, and its census is not NHL 19's.
+    let cat20 = MaskCatalogue::load(&install("CUSA15439"), &defs, "nhl20").unwrap();
     let cat19 = MaskCatalogue::load(&install("CUSA11126"), &defs, "nhl19").unwrap();
-    assert_eq!(census(&anchor("nhl20"), &cat19), census(&anchor("nhl19"), &cat19));
+    assert!(!census(&anchor("nhl20"), &cat20).is_empty());
+    assert_ne!(census(&anchor("nhl20"), &cat20), census(&anchor("nhl19"), &cat19));
 }

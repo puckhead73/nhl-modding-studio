@@ -51,7 +51,7 @@ Presence matrix (✓ = shipped in that game's `databases/`). PS3 and Xbox360 car
 |---|---|---|
 | `nhl_game.db` | all (15–21) | main game/roster database (TDB v6, **little-endian** analogue of `nhlng.db`) |
 | `initial_experience.db` | all | onboarding default full-game snapshot (35–43 tables) |
-| `eng_us.db` | 15, 16, 17, 18, 20 | localization — **absent for nhl19 & nhl21** (meta present, DB not shipped) |
+| `eng_us.db` | 15–20 | localization — **absent for nhl21** (meta present; its dictionary is a private fixture by coordinator decision) |
 | `entry_draft.db` | **nhl18+** | entry-draft roster pool (`exhibition*` projection) |
 | `expansion_draft.db` | **nhl18+** | expansion-draft roster pool (`exhibition*` projection) |
 | `threes_campaign.db` | **nhl18+** | Threes mode roster projection |
@@ -59,8 +59,9 @@ Presence matrix (✓ = shipped in that game's `databases/`). PS3 and Xbox360 car
 | `nhl_game-meta.xml` | all | schema backbone |
 | `eng_us-meta.xml` | all | localization schema (present even where `eng_us.db` is not) |
 
-> **Anchor completeness gaps:** PS4 `eng_us.db` is missing for **nhl19** and **nhl21**; `proam.db`
-> exists only for **nhl20**.
+> **Anchor completeness gaps:** PS4 `eng_us.db` is missing for **nhl21**; `proam.db` exists only for
+> **nhl20**. (Until 2026-10-15 the nhl19 dictionary sat in the nhl20 folder; see "Anchor replacement
+> (P0-4)" below.)
 
 ## Save files per game (`anchors/<platform>/<game>/savefiles/`)
 
@@ -85,7 +86,32 @@ and any change to a "vanilla" anchor is detectable. The largest single anchor is
 `CLAUDE.md`; still comfortably within git's own packing (no LFS). Real game data remains git-ignored
 by policy elsewhere; the anchors are the intentional packaged baseline and live under `anchors/`.
 
-## Provenance corrections (REG-1, 2026-09-18 — pending coordinator acceptance; no anchor bytes changed)
+## Anchor replacement (P0-4, 2026-10-15; owner-approved)
+
+The REG-1 finding below is resolved. The owner approved committing the genuine NHL 20 files as
+anchors under the EA data policy. Every file was re-extracted from, or re-hashed against, the
+installed title's own `databigs/inxp_00.big`:
+
+| Anchor path | Now | Source (install member) |
+|---|---|---|
+| `anchors/ps4/nhl20/databases/nhl_game.db` | `1e2004784bccfdd6…` (10 226 516 B) | CUSA15439 (APP_VER 01.00) `inxp_00.big` #13224 |
+| `anchors/ps4/nhl20/databases/nhl_game-meta.xml` | `2fac0e73…` | #7621 |
+| `anchors/ps4/nhl20/databases/eng_us.db` | `0fc95ec8…` (40 535 rows) | #6245 |
+| `anchors/ps4/nhl20/databases/eng_us-meta.xml` | `54febbf9…` (unchanged; the NHL 19 file is identical) | #14246 |
+| `anchors/ps4/nhl20/databases/{entry_draft, expansion_draft, proam, threes_campaign}.db` | `78756401…` (one deduplicated archive block, 4 042 212 B each) | #10942 / #12351 / #5359 / #1144 (`gamemodes/roster/`) |
+| `anchors/ps4/nhl20/databases/initial_experience.db` | `2d875023…` (5 608 528 B) | #8460 |
+| `anchors/ps4/nhl19/databases/eng_us.db` | `62260005…` (37 734 rows; moved from the nhl20 folder) | CUSA11126 `inxp_00.big` #936 |
+
+The committed NHL 20 savefiles were already genuine (`param.sfo` TITLE_ID CUSA15439 on all five)
+and are unchanged. Consumers were moved in the same change: the NHL 19 and NHL 20 adapters are
+established (C0-REG4-R1's attribution block is lifted), tests that read the private NHL 20 fixture
+read the anchor, and the league-group generator reads NHL 20's witness from the anchor. The
+generated QA artifacts (`data/anchors-manifest.csv`, `data/schema/ps4-nhl20.json`,
+`data/schema-diff.csv`, `data/game-qa-matrix.csv`) and `baselines/INVENTORY.json` are regenerated
+from the new bytes; the C0.4-owned `capability.csv` tree is not edited and still describes the NHL 19
+bytes wherever it says `ps4,nhl20` until that merge reruns.
+
+## Provenance corrections (REG-1, 2026-09-18 — historical; resolved by P0-4 above)
 
 Established by hashing the installed titles' own files (record:
 [league-parity-batch-2026-09-18](../validation/league-parity-batch-2026-09-18.md) §1–§2). The

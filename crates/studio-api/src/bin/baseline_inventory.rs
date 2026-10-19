@@ -47,6 +47,7 @@ struct Approval {
 }
 
 const W_REG1_PS4: &str = "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member";
+const W_P04_PS4: &str = "P0-4 (2026-10-15): committed from, and re-hashed against, the installed title's own base-archive member (inxp_00.big)";
 const W_REG1_PS3: &str = "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the PS3 disc's USRDIR file";
 const W_ANCHOR_ONLY: &str = "anchors manifest (docs/audits/anchors-manifest.md): Xbox 360 NHL 07–15 have no installed counterpart; the anchor is the only vanilla witness";
 const W_LEGACY_X360: &str = "REG-1: re-hashed against the Xbox 360 Legacy loose tree and cacheboot.big member";
@@ -153,16 +154,18 @@ fn approvals() -> Vec<Approval> {
         ps4("nhl18", dict_ps4("nhl18"), Ok(("RosterCustom0", "DATA"))),
         ps4(
             "nhl19",
-            Admit::Gap("no eng_us.db is committed for NHL 19 (anchors manifest); the NHL 19 base and patch-56 dictionaries exist only as private fixtures (databases/nhl19-ps4-cusa11126/…/eng_us.db) and are not bundled. The project opens without a dictionary"),
+            // The NHL 19 base dictionary (CUSA11126 inxp_00.big #936), which sat in the nhl20
+            // folder until P0-4.
+            Admit::From("ps4/nhl19/databases/eng_us.db", VERIFIED, W_P04_PS4),
             Ok(("RosterCustom0", "DATA")),
         ),
         Approval {
             game_id: "nhl20",
             platform: Platform::Ps4,
-            main_db: Admit::Gap("the committed anchors/ps4/nhl20 database set is NHL 19 base bytes under an NHL 20 path (REG-1, anchors manifest). Genuine NHL 20 (CUSA15439 01.00) nhl_game.db 1e200478… and nhl_game-meta.xml 2fac0e73… exist only as private fixtures (databases/nhl20-ps4-cusa15439/inxp_00.big/…) and are not bundled; the alias is never bundled as NHL 20"),
-            meta: Admit::Gap("see main_db: the committed nhl_game-meta.xml is NHL 19 base"),
-            dictionary: Admit::Gap("the committed eng_us.db is the NHL 19 base dictionary (REG-1); NHL 20's own 0fc95ec8… is a private fixture, not bundled"),
-            dictionary_meta: Admit::Gap("see dictionary"),
+            main_db: Admit::From("ps4/nhl20/databases/nhl_game.db", VERIFIED, W_P04_PS4),
+            meta: Admit::From("ps4/nhl20/databases/nhl_game-meta.xml", VERIFIED, W_P04_PS4),
+            dictionary: Admit::From("ps4/nhl20/databases/eng_us.db", VERIFIED, W_P04_PS4),
+            dictionary_meta: Admit::From("ps4/nhl20/databases/eng_us-meta.xml", VERIFIED, W_P04_PS4),
             roster_save: Err("no vanilla roster save is committed for NHL 20 (BeAGM0, BeAPro0, Profile0, Season0, ThreeOnThree0 only)"),
         },
         ps4(

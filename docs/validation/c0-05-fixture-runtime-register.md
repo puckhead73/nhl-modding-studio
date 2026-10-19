@@ -206,7 +206,7 @@ distinct string literals) and is **not** claimed to be a reduction beyond the C0
 **One unresolved discrepancy, recorded not fixed:** a hardcoded path names shadPS4 content id
 **`CUSA11126`**, while `discovery::ps4_title_ids` maps `nhl19` to **`CUSA11116`**. One digit differs.
 Which is correct — or whether both are real regional variants — is **unknown**; nothing here resolves
-it, and no code was changed.
+it, and no code was changed. *(Resolved 15 Oct 2026, P0-5; see FR9 in the table below.)*
 
 ### 5.3 The seven remaining mounted-data gates
 
@@ -420,7 +420,7 @@ now enumerated; the owners are not**.
 | **FR6** | No runtime build identity or deployment path recorded for any runtime | runtime | owner-unassigned | record before any manual campaign |
 | **FR7** | Per-title save-mode identification unverified against Q03's required modes | evidence | owner-unassigned | inventory each fixture's actual mode |
 | **FR8** | `texlib_67.rx2`: one logical role, two former physical sources, **byte identity unproven** | provenance | owner-unassigned | hash and compare if both become available; never assume |
-| **FR9** | `CUSA11126` (hardcoded) vs `CUSA11116` (`ps4_title_ids`) for NHL 19 | correctness | owner-unassigned | determine which is right; do not "fix" either by guessing |
+| **FR9** | `CUSA11126` (hardcoded) vs `CUSA11116` (`ps4_title_ids`) for NHL 19. **Resolved (15 Oct 2026, P0-5):** the installed NHL 19's `param.sfo` reads CONTENT_ID `UP0006-CUSA11126_00-NHLICEHOCKEY2019`, and the five committed NHL 19 saves carry TITLE_ID CUSA11126. `ps4_title_ids("nhl19")` now lists `CUSA11126` first; `CUSA11116` is kept second as an unwitnessed variant (no install or save names it). Cases `discovery::tests::ps4_fast_path_lists_the_install_witnessed_content_id_first` and `save_identify::tests::path_hints_read_product_codes_title_ids_and_content_ids` | correctness | owner-unassigned | determine which is right; do not "fix" either by guessing |
 | **FR10** | Audio: no fixtures, no implementation | scope | owner-unassigned | C7 |
 | **FR11** | Blender 4.5 presence unknown at both resolution locations | runtime | owner-unassigned | check the two documented locations when Blender work starts |
 | **FR12** | Every row is owner-unassigned | ownership | **architect** | assign owners |

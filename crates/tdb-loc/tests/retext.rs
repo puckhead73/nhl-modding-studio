@@ -72,8 +72,8 @@ fn nhl10_upper_case_tree_refuses_lowercase_and_accepts_caps() {
 
 #[test]
 fn ps4_little_endian_dictionary_re_encodes_too() {
-    // The anchor committed under nhl20 is the NHL 19 base dictionary (REG-1); little-endian PS4.
-    let bytes = std::fs::read(repo("anchors/ps4/nhl20/databases/eng_us.db")).unwrap();
+    // NHL 19's base dictionary (committed under nhl20 until P0-4); little-endian PS4.
+    let bytes = std::fs::read(repo("anchors/ps4/nhl19/databases/eng_us.db")).unwrap();
     let d = LocDictionary::parse(&bytes).unwrap();
     assert_eq!(d.text("TXT_ROW_LEAGUE"), Some("Rest Of World"));
     let plan = plan_retext(&bytes, "TXT_ROW_LEAGUE", "Rest Of Earth").unwrap();

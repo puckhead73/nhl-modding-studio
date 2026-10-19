@@ -105,9 +105,8 @@ fn every_stored_team_paint_names_files_on_the_x360_trees() {
 }
 
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn genuine_nhl20_reports_the_shipped_exceptions() {
-    let root = PathBuf::from(std::env::var_os("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES is not set")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let s = open_at(&root.join("nhl_game.db"), &root.join("nhl_game-meta.xml"), Platform::Ps4, "nhl20");
     let (by, slots, values, applies) = sweep(&s, None, "nhl20", Platform::Ps4);
     eprintln!("nhl20 (genuine): {slots} slots; statuses {by:?}; 248 × {:?}, 249 × {:?}", values.get(&248), values.get(&249));

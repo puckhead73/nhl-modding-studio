@@ -1,7 +1,8 @@
-//! REG-1 (2026-09-18): league catalogs over the **hash-bound install sources** that the committed
-//! anchors do not represent — the real NHL 20 database (the committed `anchors/ps4/nhl20` files are
-//! NHL 19 base members) and the NHL 19 patch-56 database. Contract as in C0-FX1: every case is
-//! `#[ignore]`d and fails loudly without its fixture (no early return).
+//! REG-1 (2026-09-18): league catalogs over the **hash-bound install sources**. The real NHL 20
+//! database has been the committed `anchors/ps4/nhl20` since P0-4 (2026-10-15), so its case reads
+//! the anchor and runs by default; the NHL 19 patch-56 database stays a private fixture. Contract
+//! as in C0-FX1: a private-fixture case is `#[ignore]`d and fails loudly without its fixture (no
+//! early return).
 //!
 //! ```text
 //! NHL_STUDIO_FIXTURES=<root> cargo test -p studio-api --test league_private_sources -- --ignored
@@ -11,7 +12,6 @@
 //! `docs/validation/league-parity-batch-2026-09-18.md` §1.1):
 //!
 //! ```text
-//! <root>/databases/nhl20-ps4-cusa15439/inxp_00.big/{nhl_game.db, nhl_game-meta.xml, eng_us.db}
 //! <root>/databases/nhl19-ps4-cusa11126/inxp_00.big/{nhl_game.db, nhl_game-meta.xml, eng_us.db}
 //! <root>/databases/nhl19-ps4-cusa11126/patch_inxp_56.big/{nhl_game.db, eng_us.db}
 //! ```
@@ -46,20 +46,17 @@ fn defs() -> String {
 }
 
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/*: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn nhl20_ps4_install_database_has_the_nhl21_family_league_table_and_resolves_through_its_own_dictionary() {
-    let db = require(
-        "databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db",
-        "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
-    );
-    let meta = require(
-        "databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game-meta.xml",
-        "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
-    );
-    let dict = require(
-        "databases/nhl20-ps4-cusa15439/inxp_00.big/eng_us.db",
-        "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad",
-    );
+    let dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
+    let pinned = |name: &str, sha256: &str| {
+        let path = dir.join(name);
+        let got = format!("{:x}", Sha256::digest(std::fs::read(&path).unwrap()));
+        assert_eq!(got, sha256, "{} is not the recorded CUSA15439 member", path.display());
+        path.to_str().unwrap().to_string()
+    };
+    let db = pinned("nhl_game.db", "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b");
+    let meta = dir.join("nhl_game-meta.xml").to_str().unwrap().to_string();
+    let dict = pinned("eng_us.db", "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad");
     let reg = Registry::default();
     let id = reg
         .open_workspace_from_paths(Some("nhl20"), parse_platform("ps4").unwrap(), &db, None, &meta, &defs())
@@ -69,7 +66,7 @@ fn nhl20_ps4_install_database_has_the_nhl21_family_league_table_and_resolves_thr
     assert_eq!(d.rows, 40_535);
     let cat = reg.list_leagues(id).unwrap();
     assert_eq!(cat.source, "stockleagues");
-    // 31 rows, 0..30 — the NHL 21-family layout, not the 29-row NHL 19 base layout the anchor has.
+    // 31 rows, 0..30 — the NHL 21-family layout, not NHL 19's 29-row base layout.
     assert_eq!(cat.leagues.len(), 31);
     let keys: Vec<&str> = cat.leagues.iter().map(|l| l.name_key.as_deref().unwrap()).collect();
     assert_eq!(keys[27], "TXT_USA_LEAGUE");
@@ -105,9 +102,9 @@ fn nhl19_ps4_patch56_database_keeps_the_base_league_rows_with_member_drift() {
         "databases/nhl19-ps4-cusa11126/patch_inxp_56.big/eng_us.db",
         "fbb8adcf2f2fd0558a7c1564f3a5bdd3d2acfb83f11e91477163f4935a3613fa",
     );
-    // The base member is byte-identical to the anchor committed under BOTH nhl19 and nhl20.
-    let anchor = std::fs::read(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases/nhl_game.db")).unwrap();
-    assert_eq!(std::fs::read(&base_db).unwrap(), anchor, "nhl20 anchor == NHL 19 base member");
+    // The base member is byte-identical to the anchor committed under nhl19.
+    let anchor = std::fs::read(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl19/databases/nhl_game.db")).unwrap();
+    assert_eq!(std::fs::read(&base_db).unwrap(), anchor, "nhl19 anchor == NHL 19 base member");
     let reg = Registry::default();
     let idb = reg
         .open_workspace_from_paths(Some("nhl19"), parse_platform("ps4").unwrap(), &base_db, None, &meta, &defs())

@@ -141,9 +141,7 @@ fn anchor(platform: &str, game: &str) -> (PathBuf, PathBuf) {
 
 #[test]
 fn goalie_overall_under_both_consistency_inputs_on_representative_populations() {
-    // The committed ps4/nhl20 directory holds an NHL 19 base copy; it is covered by ps4/nhl19 and
-    // the genuine NHL 20 is the separate private-fixture case below.
-    for (platform, game) in [("ps3", "nhl14"), ("ps3", "nhl15"), ("ps3", "nhllegacy"), ("ps4", "nhl15"), ("ps4", "nhl16"), ("ps4", "nhl17"), ("ps4", "nhl18"), ("ps4", "nhl19"), ("ps4", "nhl21")] {
+    for (platform, game) in [("ps3", "nhl14"), ("ps3", "nhl15"), ("ps3", "nhllegacy"), ("ps4", "nhl15"), ("ps4", "nhl16"), ("ps4", "nhl17"), ("ps4", "nhl18"), ("ps4", "nhl19"), ("ps4", "nhl20"), ("ps4", "nhl21")] {
         let (db, meta) = anchor(platform, game);
         let (n, ..) = measure(&format!("{platform}/{game}"), &db, &meta);
         assert!(n > 300, "{platform}/{game}: a real goalie population ({n})");
@@ -151,9 +149,8 @@ fn goalie_overall_under_both_consistency_inputs_on_representative_populations() 
 }
 
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn goalie_overall_under_both_consistency_inputs_on_the_real_nhl20() {
-    let root = PathBuf::from(std::env::var_os("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES is not set")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let (db, meta) = (root.join("nhl_game.db"), root.join("nhl_game-meta.xml"));
     assert!(db.is_file() && meta.is_file(), "fixture missing (fails, never skips)");
     let (n, ..) = measure("ps4/nhl20 (real install)", &db, &meta);

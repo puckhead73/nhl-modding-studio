@@ -1,7 +1,7 @@
 {
   "schema": "nhlms-baselines/1",
   "generated_from": {
-    "head": "2e9ac1b8f2363559f4f7375f999f86f202fe3153",
+    "head": "a21576fef1bbd45808713d24f8e761f05801d1ba",
     "generator": "crates/studio-api/src/bin/baseline_inventory.rs",
     "anchors_manifest": "docs/audits/data/anchors-manifest.csv"
   },
@@ -2042,7 +2042,7 @@
       "game_id": "nhl19",
       "platform": "ps4",
       "title": "NHL 19 (PS4)",
-      "status": "partial",
+      "status": "available",
       "components": [
         {
           "role": "main_db",
@@ -2066,6 +2066,18 @@
           "sha256": "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3",
           "provenance": "verified-vanilla",
           "witness": "REG-1 (league-parity-batch-2026-09-18 §1–2): anchor re-hashed against the installed title's own archive member",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps4/nhl19/databases/eng_us.db",
+          "file_name": "eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2492428,
+          "sha256": "62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2",
+          "provenance": "verified-vanilla",
+          "witness": "P0-4 (2026-10-15): committed from, and re-hashed against, the installed title's own base-archive member (inxp_00.big)",
           "codec": null
         },
         {
@@ -2147,36 +2159,64 @@
           "codec": null
         }
       ],
-      "gaps": [
-        {
-          "component": "dictionary",
-          "reason": "no eng_us.db is committed for NHL 19 (anchors manifest); the NHL 19 base and patch-56 dictionaries exist only as private fixtures (databases/nhl19-ps4-cusa11126/…/eng_us.db) and are not bundled. The project opens without a dictionary"
-        }
-      ]
+      "gaps": []
     },
     {
       "game_id": "nhl20",
       "platform": "ps4",
       "title": "NHL 20 (PS4)",
-      "status": "unavailable",
-      "components": [],
+      "status": "partial",
+      "components": [
+        {
+          "role": "main_db",
+          "path": "ps4/nhl20/databases/nhl_game.db",
+          "file_name": "nhl_game.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 10226516,
+          "sha256": "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+          "provenance": "verified-vanilla",
+          "witness": "P0-4 (2026-10-15): committed from, and re-hashed against, the installed title's own base-archive member (inxp_00.big)",
+          "codec": null
+        },
+        {
+          "role": "meta",
+          "path": "ps4/nhl20/databases/nhl_game-meta.xml",
+          "file_name": "nhl_game-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 485366,
+          "sha256": "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93",
+          "provenance": "verified-vanilla",
+          "witness": "P0-4 (2026-10-15): committed from, and re-hashed against, the installed title's own base-archive member (inxp_00.big)",
+          "codec": null
+        },
+        {
+          "role": "dictionary",
+          "path": "ps4/nhl20/databases/eng_us.db",
+          "file_name": "eng_us.db",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 2675972,
+          "sha256": "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad",
+          "provenance": "verified-vanilla",
+          "witness": "P0-4 (2026-10-15): committed from, and re-hashed against, the installed title's own base-archive member (inxp_00.big)",
+          "codec": null
+        },
+        {
+          "role": "dictionary_meta",
+          "path": "ps4/nhl20/databases/eng_us-meta.xml",
+          "file_name": "eng_us-meta.xml",
+          "container_dir": null,
+          "container_relative": null,
+          "len": 962,
+          "sha256": "54febbf9471b9a08270923426442852b1a4a04c8837f2e1236401568f000749b",
+          "provenance": "verified-vanilla",
+          "witness": "P0-4 (2026-10-15): committed from, and re-hashed against, the installed title's own base-archive member (inxp_00.big)",
+          "codec": null
+        }
+      ],
       "gaps": [
-        {
-          "component": "main_db",
-          "reason": "the committed anchors/ps4/nhl20 database set is NHL 19 base bytes under an NHL 20 path (REG-1, anchors manifest). Genuine NHL 20 (CUSA15439 01.00) nhl_game.db 1e200478… and nhl_game-meta.xml 2fac0e73… exist only as private fixtures (databases/nhl20-ps4-cusa15439/inxp_00.big/…) and are not bundled; the alias is never bundled as NHL 20"
-        },
-        {
-          "component": "meta",
-          "reason": "see main_db: the committed nhl_game-meta.xml is NHL 19 base"
-        },
-        {
-          "component": "dictionary",
-          "reason": "the committed eng_us.db is the NHL 19 base dictionary (REG-1); NHL 20's own 0fc95ec8… is a private fixture, not bundled"
-        },
-        {
-          "component": "dictionary_meta",
-          "reason": "see dictionary"
-        },
         {
           "component": "roster_save",
           "reason": "no vanilla roster save is committed for NHL 20 (BeAGM0, BeAPro0, Profile0, Season0, ThreeOnThree0 only)"

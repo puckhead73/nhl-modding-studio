@@ -31,7 +31,7 @@ executable_sha256 = "82ea5a63af999ed18d9800928f980f88b1aba7007aa0b4af94a292a7c27
 database_sha256 = "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b"
 dictionary_sha256 = "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad"
 param_sfo_versions = ["01.00"]
-notes = ["witnessed on the real CUSA15439 database (1e2004784bccfdd6...); the repository anchor anchors/ps4/nhl20 is an NHL 19 base copy (265e4a68...) whose structure identifies it as NHL 19, so opening it as nhl20 is refused rather than labelled", "block 53 (CUSTOM_TEAMS) is shared by stockleagues rows 14 = PROSPECT_TEAMS, 17 = TXT_EASHL, 18 = TXT_LEAGUE_MASCOT, 19 = TXT_LEAGUE_3ON3", "block 77 (unnamed) is shared by stockleagues rows 21 = TXT_LEAGUE_NHL_ALUMNI, 22 = TXT_LEAGUE_NHL_ALUMNI"]
+notes = ["witnessed on the real CUSA15439 database (1e2004784bccfdd6...), the committed anchors/ps4/nhl20 since 2026-10-15; the NHL 19 base identity (265e4a68...) that folder held before is recorded as excluded, so opening it as nhl20 is refused rather than labelled", "block 53 (CUSTOM_TEAMS) is shared by stockleagues rows 14 = PROSPECT_TEAMS, 17 = TXT_EASHL, 18 = TXT_LEAGUE_MASCOT, 19 = TXT_LEAGUE_3ON3", "block 77 (unnamed) is shared by stockleagues rows 21 = TXT_LEAGUE_NHL_ALUMNI, 22 = TXT_LEAGUE_NHL_ALUMNI"]
 
 [[groups]]
 id = 0
@@ -772,7 +772,7 @@ source = "CUSA15439 base nhl_game.db (inxp_00.big:nhl/data/common/gamemodes/data
 [[known_databases]]
 role = "excluded"
 sha256 = "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408"
-source = "anchors/ps4/nhl20/databases/nhl_game.db is an NHL 19 base copy (the NHL 19 base identity), not an NHL 20 database"
+source = "the NHL 19 base nhl_game.db (CUSA11126 inxp_00.big), which the repository's nhl20 folder held until 2026-10-15; not an NHL 20 database"
 
 [[pairs]]
 head = 1

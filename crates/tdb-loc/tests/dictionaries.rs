@@ -1,15 +1,16 @@
 //! Fixture checks over every committed localization dictionary (O6 / L1-support-LOC).
 //!
 //! Row counts and reference strings are compared with the authorized reference reader's results
-//! (`tool.mjs` on NHL 15/16/17/18/20: 24 251 / 27 468 / 30 799 / 33 396 / 37 734 rows, all CRCs
-//! matching, `NHL` → "NHL®", `TXT_ROW_LEAGUE` → "Rest Of World"). The big-endian PS3 / Xbox 360
+//! (`tool.mjs` on NHL 15/16/17/18 and the 37 734-row NHL 19 base file: 24 251 / 27 468 / 30 799 /
+//! 33 396 / 37 734 rows, all CRCs matching, `NHL` → "NHL®", `TXT_ROW_LEAGUE` → "Rest Of World").
+//! NHL 20's own 40 535-row dictionary was measured by this crate's reader (REG-1), not by `tool.mjs`. The big-endian PS3 / Xbox 360
 //! dictionaries are decoded with the same code path; their acceptance rests on the checks here
 //! (CRCs, strict UTF-8, hash agreement with every key) — no reference reader exists for them.
 //!
-//! PROVENANCE (REG-1, 2026-09-18): the file committed as `anchors/ps4/nhl20/databases/eng_us.db`
-//! is the **NHL 19 base** dictionary (byte-identical to CUSA11126 `inxp_00.big` member 936); the
-//! NHL 20 install ships a different 40 535-row file with no anchor. The `"nhl20"` row below is
-//! therefore an NHL 19 base measurement kept under the anchor's path. The PS3 NHL 08 / NHL 09
+//! PROVENANCE: REG-1 (2026-09-18) found the file then committed as `anchors/ps4/nhl20/databases/
+//! eng_us.db` to be the **NHL 19 base** dictionary (CUSA11126 `inxp_00.big` member 936). P0-4
+//! (2026-10-15) moved it to `anchors/ps4/nhl19/` and committed NHL 20's own 40 535-row file
+//! (CUSA15439 `inxp_00.big` member 6245) under `anchors/ps4/nhl20/`. The PS3 NHL 08 / NHL 09
 //! `nhl_eng_us.db` anchors are the Xbox 360 files (the PS3 discs ship different ones). The real
 //! sources are covered by the private-fixture cases in `tests/private_dictionaries.rs`.
 
@@ -44,7 +45,8 @@ fn ps4_dictionaries_match_the_reference_reader() {
         ("nhl16", 27_468),
         ("nhl17", 30_799),
         ("nhl18", 33_396),
-        ("nhl20", 37_734),
+        ("nhl19", 37_734),
+        ("nhl20", 40_535),
     ] {
         let d = load(&format!("anchors/ps4/{game}/databases/eng_us.db"));
         assert!(!d.stats.endian_big);
@@ -72,16 +74,21 @@ fn ps4_dictionaries_match_the_reference_reader() {
             "{game}: AHL is not a key in the supplied dictionaries"
         );
     }
-    let d20 = load("anchors/ps4/nhl20/databases/eng_us.db");
+    let d19 = load("anchors/ps4/nhl19/databases/eng_us.db");
     assert_eq!(
-        d20.text("TXT_LEAGUE_NHL_ALUMNI"),
+        d19.text("TXT_LEAGUE_NHL_ALUMNI"),
         Some("NHL Alumni Association")
     );
-    assert_eq!(d20.text("elitserien"), Some("SHL"));
+    assert_eq!(d19.text("elitserien"), Some("SHL"));
     assert_eq!(
-        d20.text("TXT_LEAGUE_EBEL"),
+        d19.text("TXT_LEAGUE_EBEL"),
         Some("Erste Bank Eishockey Liga")
     );
+    assert!(!d19.contains_key("TXT_USA_LEAGUE"));
+    let d20 = load("anchors/ps4/nhl20/databases/eng_us.db");
+    assert_eq!(d20.text("Allsvenskan"), Some("HockeyAllsvenskan"));
+    assert_eq!(d20.text("TXT_USA_LEAGUE"), Some("USA"));
+    assert_eq!(d20.text("TXT_RUSSIA_LEAGUE"), Some("RUS"));
     let d15 = load("anchors/ps4/nhl15/databases/eng_us.db");
     assert!(!d15.contains_key("TXT_LEAGUE_EBEL"));
 }
@@ -190,7 +197,7 @@ fn every_committed_dictionary_repoints_with_exactly_one_crc_scope_moving() {
             files.push(format!("anchors/{platform}/{game}/databases/nhl_eng_us.db"));
         }
     }
-    for game in ["nhl15", "nhl16", "nhl17", "nhl18", "nhl20"] {
+    for game in ["nhl15", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20"] {
         files.push(format!("anchors/ps4/{game}/databases/eng_us.db"));
     }
     for rel in files {
@@ -221,5 +228,5 @@ fn every_committed_dictionary_repoints_with_exactly_one_crc_scope_moving() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 25);
+    assert_eq!(checked, 26);
 }

@@ -36,6 +36,13 @@
 
 ---
 
+> **Superseded statements (P0-4, 2026-10-15).** `anchors/ps4/nhl20` now holds the genuine NHL 20
+> CUSA15439 database, metadata and dictionary, and NHL 19's base dictionary is committed as
+> `anchors/ps4/nhl19/databases/eng_us.db`. Every statement below that the NHL 20 anchor is NHL 19 base
+> bytes, that NHL 19 has no dictionary, or that the NHL 19 / NHL 20 adapters are unattributed
+> candidates is historical; the rows are kept as dated measurements. See
+> [anchors-manifest.md](../audits/anchors-manifest.md) "Anchor replacement (P0-4)".
+
 > **Batch preparation note (2026-09-18, LEAGUE-PARITY-BATCH, pending Codex review).** The
 > consolidated per-target matrix and the ordered runtime checklist for every installed title now
 > live in [league-parity-batch-2026-09-18](../validation/league-parity-batch-2026-09-18.md). Two

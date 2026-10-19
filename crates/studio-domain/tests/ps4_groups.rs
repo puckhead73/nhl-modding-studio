@@ -24,10 +24,10 @@ fn vocabs() -> LeagueVocabularies {
     LeagueVocabularies::from_dir(repo("defs/leagues")).unwrap()
 }
 
-/// The PS4 anchors that are what they claim; `anchors/ps4/nhl20` is an NHL 19 base copy and is
-/// exercised separately.
+/// The PS4 anchors, each the title it claims (`anchors/ps4/nhl20` holds the genuine CUSA15439
+/// database since P0-4; until then it was an NHL 19 base copy, exercised separately).
 const G77: &str = "TXT_LEAGUE_NHL_ALUMNI / TXT_LEAGUE_NHL_ALL_TIME (single group)";
-const PS4_ANCHORS: [&str; 6] = ["nhl15", "nhl16", "nhl17", "nhl18", "nhl19", "nhl21"];
+const PS4_ANCHORS: [&str; 7] = ["nhl15", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21"];
 
 fn catalog_of(bytes: &[u8], meta: &FieldMetaIndex, claimed: Option<&str>, platform: Option<Platform>, dict: Option<&AttachedDictionary>) -> LeagueCatalog {
     let db = TdbFile::parse(bytes).unwrap();
@@ -35,7 +35,7 @@ fn catalog_of(bytes: &[u8], meta: &FieldMetaIndex, claimed: Option<&str>, platfo
 }
 
 /// Build the catalog over a committed PS4 anchor, with its dictionary when the anchor ships one
-/// (NHL 15/16/17/18; the nhl20 anchor's `eng_us.db` is the NHL 19 dictionary — a base copy).
+/// (NHL 15–20; NHL 21's dictionary is a private fixture).
 fn ps4_catalog(game: &str, claimed: &str, platform: Option<Platform>) -> LeagueCatalog {
     let dir = repo(&format!("anchors/ps4/{game}/databases"));
     let bytes = std::fs::read(dir.join("nhl_game.db")).unwrap();
@@ -108,7 +108,7 @@ fn every_ps4_anchor_selects_its_own_table_by_recorded_identity() {
         assert_eq!(c.group(2).unwrap().kind, "unused", "{game}: duplicate NHL pointer");
         let src = c.group(8).unwrap().label_source;
         match game {
-            "nhl15" | "nhl16" | "nhl17" | "nhl18" => assert_eq!(src, "dictionary", "{game}"),
+            "nhl15" | "nhl16" | "nhl17" | "nhl18" | "nhl19" | "nhl20" => assert_eq!(src, "dictionary", "{game}"),
             _ => assert_eq!(src, "observed", "{game}: no dictionary committed for this anchor"),
         }
         assert_eq!(c.group(8).unwrap().label, "Pacific Division", "{game}");
@@ -230,7 +230,8 @@ fn nhl19_and_21_ids_77_and_78_are_labelled_from_their_leagues_with_the_hypothesi
         // Research 2026-09-21 handoff 08 §3: one flat pseudo-group shared by the Alumni and
         // All-Time leagues — labelled by rule from the leagues that carry it (their key when no
         // dictionary is attached; NHL 19 keys both rows ALUMNI, so one name), never "unknown".
-        let expect77 = if game == "nhl21" { "TXT_LEAGUE_NHL_ALUMNI / TXT_LEAGUE_NHL_ALL_TIME (single group)" } else { "TXT_LEAGUE_NHL_ALUMNI (single group)" };
+        // NHL 19's anchor ships its dictionary since P0-4, so its label is the resolved text.
+        let expect77 = if game == "nhl21" { "TXT_LEAGUE_NHL_ALUMNI / TXT_LEAGUE_NHL_ALL_TIME (single group)" } else { "NHL Alumni Association (single group)" };
         assert_eq!(g77.label, expect77, "{game}");
         assert_eq!(g77.label_source, "derived-from-leagues");
         assert_eq!(c.group(78).unwrap().label, "TXT_LEAGUE_PROAM (single group)");
@@ -281,17 +282,17 @@ fn cross_title_claims_are_refused_by_structure_not_by_row_agreement() {
         assert!(cat.group_label("OwTu", 0, 6).is_none(), "{claimed}: no labels from a refused table");
     }
     // The other way round: every anchor opened as NHL 21 is refused and names itself.
-    for game in ["nhl15", "nhl16", "nhl17", "nhl18", "nhl19"] {
+    for game in ["nhl15", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20"] {
         let cat = ps4_catalog(game, "nhl21", Some(Platform::Ps4));
         let b = cat.competition_blocker.as_deref().unwrap_or_else(|| panic!("{game}: accepted as nhl21"));
         assert!(b.contains(&format!("it identifies as {game}")), "{game}: {b}");
     }
-    // anchors/ps4/nhl20 is an NHL 19 base copy: opened as nhl20 it is refused and identified as
-    // NHL 19; opened as nhl19 it is NHL 19's recorded base identity.
-    let cat = ps4_catalog("nhl20", "nhl20", Some(Platform::Ps4));
+    // The NHL 19 base database (the bytes the nhl20 folder held until P0-4) is a recorded identity
+    // the nhl20 table excludes: opened as nhl20 it is refused by name, never labelled.
+    let cat = ps4_catalog("nhl19", "nhl20", Some(Platform::Ps4));
     let b = cat.competition_blocker.as_deref().unwrap();
-    assert!(b.contains("not nhl20") && b.contains("NHL 19 base copy"), "{b}");
-    let cat = ps4_catalog("nhl20", "nhl19", Some(Platform::Ps4));
+    assert!(b.contains("not nhl20") && b.contains("NHL 19 base"), "{b}");
+    let cat = ps4_catalog("nhl19", "nhl19", Some(Platform::Ps4));
     assert!(matches!(cat.competition.as_ref().unwrap_or_else(|| panic!("{:?}", cat.competition_blocker)).provenance, Some(Provenance::Recorded { .. })));
     // No game id: nothing can be selected, and the reason says so.
     let dir = repo("anchors/ps4/nhl21/databases");
@@ -598,12 +599,17 @@ fn fixture(key: &str, sha: &str) -> PathBuf {
 }
 
 #[test]
-#[ignore = "private fixtures databases/nhl20-ps4-cusa15439 and databases/nhl19-ps4-cusa11126: set NHL_STUDIO_FIXTURES and select with --ignored"]
-fn real_nhl20_and_nhl19_patch_databases_are_recorded_identities() {
-    // Real NHL 20: the witnessed database and dictionary of the nhl20 table.
-    let db = fixture("databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db", "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b");
-    let meta = fixture("databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game-meta.xml", "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93");
-    let dict = fixture("databases/nhl20-ps4-cusa15439/inxp_00.big/eng_us.db", "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad");
+fn real_nhl20_database_is_a_recorded_identity() {
+    // Real NHL 20 (the committed anchor since P0-4): the witnessed database and dictionary of the
+    // nhl20 table.
+    let dir = repo("anchors/ps4/nhl20/databases");
+    let (db, meta, dict) = (dir.join("nhl_game.db"), dir.join("nhl_game-meta.xml"), dir.join("eng_us.db"));
+    for (path, sha) in [
+        (&db, "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b"),
+        (&dict, "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad"),
+    ] {
+        assert_eq!(tdb_txn::FileIdentity::of_bytes(&std::fs::read(path).unwrap()).sha256, sha, "{}", path.display());
+    }
     let mut ws = open_ps4("nhl20", &db, &meta);
     ws.attach_dictionary(dict.to_str().unwrap()).unwrap();
     let cat = ws.display().league_catalog().unwrap();
@@ -628,7 +634,11 @@ fn real_nhl20_and_nhl19_patch_databases_are_recorded_identities() {
     let ws = open_ps4("nhl19", &db, &meta);
     let cat = ws.display().league_catalog().unwrap();
     assert!(cat.competition_blocker.as_deref().unwrap().contains("it identifies as nhl20"), "{:?}", cat.competition_blocker);
+}
 
+#[test]
+#[ignore = "private fixture databases/nhl19-ps4-cusa11126: set NHL_STUDIO_FIXTURES and select with --ignored"]
+fn real_nhl19_patch_database_is_a_recorded_identity() {
     // NHL 19 patch_inxp_56 database: a recorded patch identity; same ids, Pro Am grown to 84.
     let db = fixture("databases/nhl19-ps4-cusa11126/patch_inxp_56.big/nhl_game.db", "61332e666a6b4afd4032212e9b8710658a9eddeea2637d3a4d288b1f30cab58d");
     let meta = fixture("databases/nhl19-ps4-cusa11126/inxp_00.big/nhl_game-meta.xml", "c67f4bfd3d152bfb68dd3d3c16823ef4f5b7c833cb46751f0834cb14a0cc90b3");

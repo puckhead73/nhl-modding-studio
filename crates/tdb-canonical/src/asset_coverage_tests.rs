@@ -853,9 +853,6 @@ const REFERENCE_RECORD: &str = "docs/receipts/data/c0-as6-asset-db-references.cs
 fn unit_note(target: &str) -> &'static str {
     match target {
         "nhl07-ps3" => "research copy, not a shipping target; byte-identical to nhl07-xbox360",
-        "nhl19-ps4" | "nhl20-ps4" => {
-            "nhl19-ps4 and nhl20-ps4 anchors are byte-identical; attribution unresolved (C0-REG4-R1)"
-        }
         _ => "",
     }
 }

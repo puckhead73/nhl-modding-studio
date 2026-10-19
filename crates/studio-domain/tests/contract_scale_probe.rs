@@ -206,7 +206,7 @@ fn known_cap_hits_read_back_in_dollars_on_every_title_that_rosters_the_player() 
 /// stored raw of both columns and the dollars each reads at the family's contract unit, and the
 /// pinned assertions below it name only the exact matches. Season per title: NHL 07 = 2006-07 …
 /// NHL 15 / PS4 15 = 2014-15, Legacy / PS4 16 = 2015-16, PS4 17 = 2016-17 … PS4 21 = 2020-21;
-/// `ps4/nhl20` is the NHL 19 base copy (2018-19).
+/// `ps4/nhl20` has held the genuine NHL 20 database since P0-4 (2019-20; before, an NHL 19 base copy).
 #[test]
 fn candidate_public_cap_hits_against_both_dollar_columns_per_anchor() {
     use studio_domain::{player_encoding, schema_family};
@@ -278,7 +278,6 @@ fn candidate_public_cap_hits_against_both_dollar_columns_per_anchor() {
         // Measurement unit for the table: the contract's, or the width-implied candidate on NHL 08.
         let unit = enc.cap_hit_unit.unwrap_or(25_000);
         let year: u32 = if game == "nhllegacy" { 2016 } else { game[3..].parse::<u32>().unwrap() + 2000 };
-        let year = if platform == "ps4" && game == "nhl20" { 2019 } else { year };
         let by_name = |n: &str| bio.fields.iter().find(|f| meta.field(&bio.id.raw(), &f.id.raw()).is_some_and(|m| m.name == n));
         let (Some(dollars), Some(first), Some(last)) = (by_name("contractdollars"), by_name("firstname"), by_name("lastname")) else { continue };
         let salary = by_name("salary");

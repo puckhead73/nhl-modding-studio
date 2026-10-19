@@ -14,8 +14,7 @@
 //!
 //! ```text
 //! <root>/databases/
-//!   nhl20-ps4-cusa15439/inxp_00.big/eng_us.db           NHL 20's own dictionary (no anchor exists)
-//!   nhl19-ps4-cusa11126/inxp_00.big/eng_us.db           NHL 19 base = the anchor committed as "nhl20"
+//!   nhl19-ps4-cusa11126/inxp_00.big/eng_us.db           NHL 19 base = anchors/ps4/nhl19 (P0-4)
 //!   nhl19-ps4-cusa11126/patch_inxp_56.big/eng_us.db     NHL 19 patch-56 dictionary
 //!   nhl21-ps4-cusa18182/inxp_00.big/eng_us.db           NHL 21's own dictionary (no anchor exists)
 //!   nhl08-ps3-blus30062/PS3_GAME/USRDIR/fe/loc/nhl_eng_us.db   the PS3 disc file (the "ps3" anchor is the Xbox 360 file)
@@ -69,29 +68,8 @@ fn check(s: &Source) {
 }
 
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/eng_us.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
-fn nhl20_ps4_install_dictionary_is_not_the_committed_nhl20_anchor() {
-    check(&Source {
-        key: "databases/nhl20-ps4-cusa15439/inxp_00.big/eng_us.db",
-        sha256: "0fc95ec84b71aaf23c2447783b277ba2df22b4ed762f901acf220af83f7739ad",
-        rows: 40_535,
-        big_endian: false,
-        probes: &[
-            ("Allsvenskan", Some("HockeyAllsvenskan")),
-            ("TXT_ROW_LEAGUE", Some("Rest Of World")),
-            ("TXT_USA_LEAGUE", Some("USA")),
-            ("TXT_RUSSIA_LEAGUE", Some("RUS")),
-            ("NHL", Some("NHL\u{ae}")),
-        ],
-    });
-    // The committed "nhl20" anchor is a different file (37 734 rows): NHL 19 base.
-    let anchor = std::fs::read(concat!(env!("CARGO_MANIFEST_DIR"), "/../../anchors/ps4/nhl20/databases/eng_us.db")).unwrap();
-    assert_eq!(format!("{:x}", Sha256::digest(&anchor)), "62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2");
-}
-
-#[test]
 #[ignore = "private fixture databases/nhl19-ps4-cusa11126/inxp_00.big/eng_us.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
-fn nhl19_ps4_base_dictionary_is_the_anchor_committed_under_nhl20() {
+fn nhl19_ps4_base_dictionary_is_the_anchor_committed_under_nhl19() {
     check(&Source {
         key: "databases/nhl19-ps4-cusa11126/inxp_00.big/eng_us.db",
         sha256: "62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2",
@@ -103,6 +81,9 @@ fn nhl19_ps4_base_dictionary_is_the_anchor_committed_under_nhl20() {
             ("TXT_USA_LEAGUE", None),
         ],
     });
+    // P0-4: the same bytes are committed as NHL 19's anchor dictionary.
+    let anchor = std::fs::read(concat!(env!("CARGO_MANIFEST_DIR"), "/../../anchors/ps4/nhl19/databases/eng_us.db")).unwrap();
+    assert_eq!(format!("{:x}", Sha256::digest(&anchor)), "62260005fcb02a1b5fc6dfeea9b98b25d49e28a1d92a0fbb829ebf8fb167a0f2");
 }
 
 #[test]

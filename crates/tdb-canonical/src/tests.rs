@@ -69,7 +69,7 @@ const COMMITTED_ADAPTERS: [&str; 27] = [
 /// (`nhl15-xbox360`, `nhl10-xbox360`) still carry seven audit-derived capacities and candidate
 /// discriminators. The team *sentinel* is measured on all of these but `nhl10-ps3`, where the
 /// as-is encoding leaves no distinguishable absence code (see `target_batch_tests::nhl10_ps3`).
-const MEASURED_ON_OWN_ANCHOR: [&str; 22] = [
+const MEASURED_ON_OWN_ANCHOR: [&str; 24] = [
     "nhllegacy-xbox360.toml",
     "nhl15-ps3.toml",
     "nhllegacy-ps3.toml",
@@ -86,6 +86,8 @@ const MEASURED_ON_OWN_ANCHOR: [&str; 22] = [
     "nhl16-ps4.toml",
     "nhl17-ps4.toml",
     "nhl18-ps4.toml",
+    "nhl19-ps4.toml",
+    "nhl20-ps4.toml",
     "nhl21-ps4.toml",
     "nhl07-xbox360.toml",
     "nhl08-xbox360.toml",
@@ -94,12 +96,12 @@ const MEASURED_ON_OWN_ANCHOR: [&str; 22] = [
     "nhl09-ps3.toml",
 ];
 
-/// The adapters whose anchor attribution is unresolved (C0-REG4-R1): the files committed under
-/// `anchors/ps4/nhl19/` and `anchors/ps4/nhl20/` are byte-identical and no committed capture
-/// provenance says which title either is. Every measurement they carry is a candidate under an
-/// unknown block; they are registered representation, never target coverage, and every sweep that
-/// asserts an established fact takes the "nothing established" branch for them.
-const ATTRIBUTION_UNRESOLVED: [&str; 2] = ["nhl19-ps4.toml", "nhl20-ps4.toml"];
+/// The adapters whose anchor attribution is unresolved: every measurement they carry is a candidate
+/// under an unknown block; they are registered representation, never target coverage, and every
+/// sweep that asserts an established fact takes the "nothing established" branch for them. Empty
+/// since P0-4 (2026-10-15): C0-REG4-R1 listed `nhl19-ps4` and `nhl20-ps4`, whose folders held the
+/// same bytes; those were NHL 19's base database, and `anchors/ps4/nhl20/` now holds NHL 20's own.
+const ATTRIBUTION_UNRESOLVED: [&str; 0] = [];
 
 /// The NHL 07 PS3 research copy (C0-REG5): registered under its registry identity as
 /// representation only — its bytes are the Xbox 360 anchor's, the scope excludes it from the
@@ -364,10 +366,8 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         ("nhl16-ps4.toml", 3, Some("player.team")),
         ("nhl17-ps4.toml", 3, Some("player.team")),
         ("nhl18-ps4.toml", 3, Some("player.team")),
-        // Attribution unresolved (C0-REG4-R1): the team sentinel measured on the bytes is a
-        // candidate too — a measured one, kept apart below — so four candidates, none established.
-        ("nhl19-ps4.toml", 4, None),
-        ("nhl20-ps4.toml", 4, None),
+        ("nhl19-ps4.toml", 3, Some("player.team")),
+        ("nhl20-ps4.toml", 3, Some("player.team")),
         ("nhl21-ps4.toml", 3, Some("player.team")),
         // C0-REG5: shoots, the speed rating, and the as-is main-team pointer whose pattern 0 is
         // team code 0 (no absence code, as on NHL 10) — three asserted candidates each.
@@ -431,10 +431,9 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         assert_eq!(here, expected, "{name}: sentinel candidates");
     }
     // 37 across the fourteen gen7 adapters (C0-REG3) plus 3 on each of the seven PS4 adapters
-    // (C0-REG4) plus the two unattributed team sentinels (C0-REG4-R1) plus 3 on each of the six
-    // early-generation adapters (C0-REG5).
+    // (C0-REG4) plus 3 on each of the six early-generation adapters (C0-REG5).
     assert_eq!(
-        candidates, 78,
+        candidates, 76,
         "the reasoning is preserved on every field it was claimed for"
     );
 }
@@ -706,10 +705,10 @@ fn representation_completeness_is_reported_apart_from_registry_population() {
 }
 
 /// C0-REG4-R1. Registered representation and established target coverage are two different
-/// counts. The two adapters whose anchor bytes cannot be attributed to their title (byte-identical
-/// `nhl19` / `nhl20` folders, no capture provenance) are in the registry — every measurement is
-/// there as a candidate — and contribute **nothing** to coverage: nothing established, every
-/// mapping blocked, no human range, no editable scalar. The attributed adapters are the coverage.
+/// counts. An adapter whose anchor bytes cannot be attributed to its title (C0-REG4-R1's NHL 19 /
+/// NHL 20 pair until P0-4), or a research copy, is in the registry — every measurement is there as
+/// a candidate — and contributes **nothing** to coverage: nothing established, every mapping
+/// blocked, no human range, no editable scalar. The attributed adapters are the coverage.
 #[test]
 fn registered_representation_is_reported_apart_from_established_target_coverage() {
     let adapters: Vec<Adapter> = COMMITTED_ADAPTERS.iter().map(|n| adapter(n)).collect();
@@ -722,7 +721,7 @@ fn registered_representation_is_reported_apart_from_established_target_coverage(
             established.push(p.target.as_str());
         }
     }
-    assert_eq!(registered_only, ["nhl19-ps4", "nhl20-ps4", "nhl07-ps3"]);
+    assert_eq!(registered_only, ["nhl07-ps3"]);
     assert_eq!(
         established.len(),
         COMMITTED_ADAPTERS.len() - ATTRIBUTION_UNRESOLVED.len() - RESEARCH_COPIES.len()

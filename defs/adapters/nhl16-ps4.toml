@@ -1,7 +1,7 @@
 # Target adapter — NHL 16, PlayStation 4 (gen8, little-endian, TDB v6). Schema `target-adapter/2`.
 #
-# Package C0-REG4 (2026-09-15). EVIDENCE-BACKED AND DELIBERATELY PARTIAL: 7 canonical properties
-# over 9 physical fields, every number read from THIS target's committed snapshot
+# Package C0-REG4 (2026-09-15). EVIDENCE-BACKED AND DELIBERATELY PARTIAL: 8 canonical properties
+# over 10 physical fields, every number read from THIS target's committed snapshot
 # (`docs/audits/data/schema/ps4-nhl16.json`) and every non-physical fact cited to an audit row,
 # matrix row, named case or fixture that names NHL 16 on PlayStation 4. The gen7 adapters were
 # STRUCTURAL references only (which blocks exist, in what shape); no value, transform, origin,
@@ -25,7 +25,7 @@
 # `crates/tdb-canonical/src/target_ps4_tests.rs` (module `nhl16_ps4`), with expected labels taken from EA's
 # metadata names and declared foreign keys — never from the enum or probe under test. Handedness
 # stays blocked (no independently supported label exists here), the main-team parent table stays a
-# candidate (containment plus a name is not a foreign key), and `team.name` is NOT mapped: this team table has no field named `fullname` or `teamname`, and the omission records what it does have.
+# candidate (containment plus a name is not a foreign key), and `team.name` maps `nickname` (cXHn) on a derived cross-title argument (P0-5, 15 Oct 2026): this team table has no field named `fullname` or `teamname`.
 #
 # The mapped set is a representative sample over the roster core and the team table; the unmapped
 # remainder is a recorded gap, never an implied identity mapping. Adding this file does not make the
@@ -49,13 +49,13 @@ endian = "little"
 tdb_version = 6
 physical_snapshot = "docs/audits/data/schema/ps4-nhl16.json"
 
-# 135 tables / 3519 fields exist in the snapshot; 9 physical fields are mapped here (the three
+# 135 tables / 3519 fields exist in the snapshot; 10 physical fields are mapped here (the three
 # birth-date components count individually). The field total is read from this target's own
 # snapshot.
 [coverage_declared]
 tables_total = 135
 fields_total = 3519
-fields_mapped = 9
+fields_mapped = 10
 note = "Representative sample over the roster core and the team table. The unmapped remainder is UNKNOWN, not identity-mapped."
 
 # --------------------------------------------------------------------------------------------
@@ -741,20 +741,92 @@ note = "The table is a fixed-width record block (188 bytes per record), so the f
 [mapping.applicability.value]
 kind = "all-records"
 
-# --- team name: NOT mapped on this target ----------------------------------------------------------
-# This team table carries no field named `fullname` (the descriptor the engine's `team_name_source`
-# reads and the field the gen7 and NHL 15 PS4 adapters map) and none named `teamname` (the field the
-# NHL 17-21 PS4 adapters map). What it does carry is recorded below; picking one of them would be a
-# semantic decision this repository holds no evidence for.
+# --- team name ---------------------------------------------------------------------------------------
+# This team table carries no field named `fullname` (NHL 15 PS4) or `teamname` (NHL 17-21 PS4). Its
+# string fields are `shortname` (QNTI), `artabbr` (rbPR), `nickname` (cXHn) and `abbrname` (xsnn).
+# `nickname` is mapped (P0-5, 15 Oct 2026) on a DERIVED argument measured across the neighbouring
+# PS4 anchors; the in-game presentation of the field is not established.
 
-[[omission]]
+[[mapping]]
 canonical = "team.name"
-reason = "unresolved-semantics"
-detail = "DISCOVERY NOTE, NOT PROOF OF ABSENCE. The string fields of `kOtt` (`exhibitionteams`) on this snapshot are: `shortname` (QNTI, 320 bits at 88); `artabbr` (rbPR, 96 bits at 496); `nickname` (cXHn, 320 bits at 744); `abbrname` (xsnn, 96 bits at 1080). None is named `fullname` or `teamname`. OBSERVED on this anchor (C0-REG4, case `nhl16_ps4::no_field_on_the_team_table_is_named_for_the_full_team_name_so_team_name_is_unresolved`): `nickname` (cXHn) stores `Anaheim Ducks®` on record 0 and `Winnipeg Jets™` on record 1 — the text the NHL 15 PS4 anchor stores under `fullname` and the NHL 17 PS4 anchor under `teamname` — while `shortname` (QNTI) stores `Anaheim` / `Winnipeg`. Identical text on another title's differently named field is a resemblance, not an identity: which field the game presents as the club's name on this title is not established, and the engine at HEAD reads none of them (it reads `fullname`, absent here — a finding, not repaired). To move this to a mapping, an independent witness is needed: a localization or UI reference that names the field, or a controlled edit observed in the game."
+table = "kOtt"
+field = "cXHn"
+read_transform = "inline-string"
+write_transform = "inline-string"
+inverse_verified = true
+confidence = "derived"
+qualification = "automated-tested"
+automated_case = "tdb_canonical::target_ps4_tests::nhl16_ps4::team_name_edit_round_trips_on_a_disposable_copy"
 provenance = [
-  "docs/audits/data/schema/ps4-nhl16.json#kOtt",
-  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl16_ps4::no_field_on_the_team_table_is_named_for_the_full_team_name_so_team_name_is_unresolved",
+  "docs/audits/data/schema/ps4-nhl16.json#kOtt.cXHn",
+  "docs/audits/data/schema/ps4-nhl15.json#kOtt.YmkJ",
+  "docs/audits/data/schema/ps4-nhl17.json#kOtt.AUsv",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl16_ps4::nickname_holds_the_full_club_name_the_neighbouring_titles_store_as_fullname_and_teamname",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl16_ps4::team_name_edit_round_trips_on_a_disposable_copy",
+  "crates/studio-domain/src/view.rs#team_display_name",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
 ]
+note = "SEMANTICS DERIVED, LAYOUT MEASURED, BEHAVIOUR AUTOMATED-TESTED. That `kOtt.cXHn` (`nickname`) is the club's full name on this title is DERIVED, not named: no field here is called `fullname` or `teamname`. The argument, measured by the named case on the committed anchors (rows joined on `artabbr` + `abbrname`): this field equals NHL 15 PS4 `fullname` on 200 of 202 joined teams and NHL 17 PS4 `teamname` on 202 of 213, with every difference a real club or event-name change (World Cup suffixes, Springfield Falcons -> Thunderbirds); this title's `shortname` equals NHL 17's `cityname` on 213 of 213; and on NHL 17 the same field id `cXHn` (`nickname`) is byte-identical to `teamname` on all 256 records. So the full name moved from `fullname` (15) to `nickname` (16) and was duplicated into `teamname` from 17. The executable's string table was checked and does not settle it (a static `fullname` survives in its team-field list; `nickname` occurs once). NOT ESTABLISHED: that the game presents this field as the club's name in any menu; a controlled in-game edit is the open runtime witness. Studio reads it through `team_display_name` (after `fullname` and `teamname`, before `shortname`). The edit case reads record 0 (`Anaheim Ducks®`), overwrites it through `tdb_core::set_inline_str` on an in-memory copy, recomputes the CRC scopes, reopens and reads it back, shows only the field span and one CRC word changed, that a second no-op serialization is byte-identical, and that a 41-byte value is refused with nothing written. It exercises THIS field on THIS little-endian anchor only: no UI path, no save container, no runtime acceptance."
+
+[mapping.storage]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl16.json#kOtt.cXHn"]
+[mapping.storage.value]
+kind = "inline-string"
+bit_offset = 744
+bit_width = 320
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "little"
+
+[mapping.status]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl16.json#kOtt.cXHn",
+  "crates/tdb-canonical/src/target_ps4_tests.rs#nhl16_ps4::team_name_edit_round_trips_on_a_disposable_copy",
+]
+note = "MEASURED: the snapshot records key = false and updatable = true for this field, and the named case writes it as a scalar on an in-memory copy of this anchor and reopens the result with every other byte of every record unchanged."
+[mapping.status.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl16.json#kOtt.cXHn (kind_code = 0, meta_type = string)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+[mapping.transform.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "established"
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps4-nhl16.json#kOtt.cXHn",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "320 bits = a 40-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.value]
+storage = "inline-fixed"
+byte_capacity = 40
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "established"
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps4-nhl16.json#kOtt.record_len_bytes"]
+note = "The table is a fixed-width record block (200 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.value]
+kind = "all-records"
 
 # --------------------------------------------------------------------------------------------
 # Capacity. The GEN8 (PS4) main DB is NOT packed: `nhl_game.db` carries `max_records > current_records`

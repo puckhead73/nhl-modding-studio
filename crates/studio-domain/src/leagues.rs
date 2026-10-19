@@ -924,8 +924,8 @@ impl LeagueCatalog {
             Some(sig) => {
                 let identity = crate::competition_groups::hex(&sha2::Sha256::digest(db.bytes()));
                 if let Some(k) = table.known_databases.iter().find(|k| k.sha256 == identity && k.role == "excluded") {
-                    // A recorded identity known NOT to be this title (the repository nhl20 anchor
-                    // is an NHL 19 base copy): refused by name, never labelled.
+                    // A recorded identity known NOT to be this title (NHL 19's base database,
+                    // which the nhl20 anchor folder held until P0-4): refused by name, never labelled.
                     cat.competition_blocker = Some(format!(
                         "this database is a recorded file that is not {}: {}; group ids are shown raw",
                         table.game, k.source

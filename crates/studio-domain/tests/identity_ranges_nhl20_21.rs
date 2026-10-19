@@ -109,9 +109,8 @@ fn nhl21_identity_ranges_follow_the_metadata_through_edit_import_and_save() {
 }
 
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn real_nhl20_identity_ranges_follow_the_metadata_through_edit_import_and_save() {
-    let root = PathBuf::from(std::env::var_os("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES is not set")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let (db, meta) = (root.join("nhl_game.db"), root.join("nhl_game-meta.xml"));
     assert!(db.is_file() && meta.is_file(), "fixture missing (fails, never skips)");
     let tmp = Tmp::new("nhl20");

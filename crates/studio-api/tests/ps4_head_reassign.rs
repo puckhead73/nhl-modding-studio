@@ -86,9 +86,9 @@ fn cells(reg: &Registry, id: u32, player: u64) -> (i64, Option<i64>) {
 }
 
 #[test]
-#[ignore = "genuine NHL 20 fixture (NHL_STUDIO_FIXTURES) and PS4 installs under H:/Emulators/ShadPS4/Games (read only): select with --ignored"]
+#[ignore = "PS4 installs under H:/Emulators/ShadPS4/Games (read only): select with --ignored"]
 fn ps4_heads_reassign_against_the_titles_own_vault() {
-    let fx = PathBuf::from(std::env::var("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES (fails, never skips)")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let fx = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     for (game, dbdir, cusa) in [("nhl20", fx.clone(), "CUSA15439"), ("nhl21", repo("anchors/ps4/nhl21/databases"), "CUSA18182")] {
         let t = Tmp::new(game);
         let (db, meta) = t.copy(&dbdir, None);

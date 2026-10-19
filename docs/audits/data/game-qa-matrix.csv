@@ -341,7 +341,7 @@ nhl19,ps4,gen8,anchors/ps4/nhl19/databases/nhl_game.db,edit-roundtrip-pass,studi
 nhl19,ps4,gen8,anchors/ps4/nhl19/savefiles,edit-roundtrip-pass,studio_domain::save_matrix::save_matrix_over_all_fixtures,,2026-08-02,"save-matrix.csv: roster container detected-by-content, extract→edit→repack→reopen with valid checksums",PS4 save repack unverified on-console/emulator
 nhl19,ps4,gen8,,not-applicable,,,,anchors expose inner save payloads; no outer package layer handled here,
 nhl19,ps4,gen8,anchors/ps4/nhl19/,discovered,,,,studio-domain discovery install detection,
-nhl19,ps4,gen8,,missing-fixture,,,,localization DB not shipped (meta may be present),no localization DB anchor
+nhl19,ps4,gen8,anchors/ps4/nhl19/databases/eng_us.db,discovered,,,,localization DB present,
 nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
 nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture
 nhl19,ps4,gen8,,missing-fixture,,,,no asset fixtures under anchors/ (asset codec fixtures live in crate tests),no committed asset fixture

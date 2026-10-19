@@ -6,9 +6,7 @@
 //!   `docs/research/overnight-2026-09-18/data/ps4-competition-groups.json` (the key lookup per
 //!   id and its evidence class) and each title's witness database
 //!   `anchors/ps4/<game>/databases/nhl_game.db` (+ `-meta.xml`). NHL 20's witness is the real
-//!   CUSA15439 database, which is not committed (the repository anchor is an NHL 19 base copy):
-//!   it is read from `<fixtures>/databases/nhl20-ps4-cusa15439/inxp_00.big/` when `--fixtures`
-//!   is given and reported as *not verifiable* otherwise.
+//!   CUSA15439 database, committed as its anchor since 2026-10-15 (P0-4).
 //! * gen7 NHL 12–15 / Legacy: the maintained `defs/leagues/groups/<game>.toml` (everything above
 //!   the generated marker is hand-maintained metadata baked by P1.2-X and is never rewritten) and
 //!   the Xbox 360 witness `anchors/xbox360/<game>/databases/nhlng.db`.
@@ -61,7 +59,7 @@ fn known_databases(game: &str) -> Vec<(&'static str, &'static str, &'static str)
         "nhl20" => vec![(
             "excluded",
             "265e4a68d23ce44cef3240017beda0583c2cb6d246ea6672ca5612472429f408",
-            "anchors/ps4/nhl20/databases/nhl_game.db is an NHL 19 base copy (the NHL 19 base identity), not an NHL 20 database",
+            "the NHL 19 base nhl_game.db (CUSA11126 inxp_00.big), which the repository's nhl20 folder held until 2026-10-15; not an NHL 20 database",
         )],
         _ => Vec::new(),
     }
@@ -72,7 +70,7 @@ fn witness_notes(game: &str) -> Vec<&'static str> {
     match game {
         "nhl15" => vec!["patch_inxp00.big ships a patch nhl_game.db (abe36f58...); not a recorded identity of this table - it binds by structural signature, and the developer case ps4_groups::real_nhl15_patch_database_binds_by_structure_and_takes_membership_moves (private fixture, 2026-09-20) fits the witnessed groups with no conflict and takes the same membership moves as the base"],
         "nhl19" => vec!["patch_inxp_56.big nhl_game.db (61332e666a6b4afd...) uses the same group ids as the base except league 23 (Pro Am) growing 80 -> 84 teams, so this table holds for the patched build; the install's exact patch level is not separately recorded"],
-        "nhl20" => vec!["witnessed on the real CUSA15439 database (1e2004784bccfdd6...); the repository anchor anchors/ps4/nhl20 is an NHL 19 base copy (265e4a68...) whose structure identifies it as NHL 19, so opening it as nhl20 is refused rather than labelled"],
+        "nhl20" => vec!["witnessed on the real CUSA15439 database (1e2004784bccfdd6...), the committed anchors/ps4/nhl20 since 2026-10-15; the NHL 19 base identity (265e4a68...) that folder held before is recorded as excluded, so opening it as nhl20 is refused rather than labelled"],
         _ => Vec::new(),
     }
 }
@@ -214,14 +212,6 @@ fn load_witness(db: &Path, meta: &Path) -> Result<Witness, String> {
 }
 
 fn ps4_witness(ctx: &Ctx, game: &str) -> Result<Option<Witness>, String> {
-    if game == "nhl20" {
-        let Some(fx) = &ctx.fixtures else { return Ok(None) };
-        let d = fx.join("databases/nhl20-ps4-cusa15439/inxp_00.big");
-        if !d.join("nhl_game.db").is_file() {
-            return Ok(None);
-        }
-        return load_witness(&d.join("nhl_game.db"), &d.join("nhl_game-meta.xml")).map(Some);
-    }
     let d = ctx.repo.join(format!("anchors/ps4/{game}/databases"));
     load_witness(&d.join("nhl_game.db"), &d.join("nhl_game-meta.xml")).map(Some)
 }
@@ -290,7 +280,7 @@ fn render_ps4(ctx: &Ctx, json: &Value, vocabs: &LeagueVocabularies, game: &str) 
     let t = &json["titles"][game];
     let Some(w) = ps4_witness(ctx, game)? else {
         return Ok(Rendered::Skipped(format!(
-            "{game}: the witness database is the real CUSA15439 nhl_game.db (private fixture); pass --fixtures <root> to render and verify it"
+            "{game}: the witness database anchors/ps4/{game}/databases/nhl_game.db is not available"
         )));
     };
     let db = TdbFile::parse(&w.bytes).map_err(|e| format!("{game}: {e}"))?;

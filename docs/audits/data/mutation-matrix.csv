@@ -84,8 +84,8 @@ ps4,nhl19,inline-string,BGwe,vIys,160,0,Bedrich,QQQQQQQQQQQQQQQQQQQQ,yes,yes
 ps4,nhl20,boolean,BGwe,OGCG,1,0,0,1,yes,yes
 ps4,nhl20,unsigned,AafV,JKLp,4,0,9,11,yes,yes
 ps4,nhl20,signed-twos-complement,GezY,tzoh,5,0,-16,15,yes,yes
-ps4,nhl20,neg1-sentinel,Egqt,yeEP,15,0,1,32766,yes,yes
-ps4,nhl20,inline-string,BGwe,vIys,160,0,Bedrich,QQQQQQQQQQQQQQQQQQQQ,yes,yes
+ps4,nhl20,neg1-sentinel,BGwe,TBmW,16,0,1,65534,yes,yes
+ps4,nhl20,inline-string,BGwe,vIys,200,0,Adela,QQQQQQQQQQQQQQQQQQQQQQQQQ,yes,yes
 ps4,nhl21,boolean,BGwe,OGCG,1,0,0,1,yes,yes
 ps4,nhl21,unsigned,AafV,JKLp,4,0,9,11,yes,yes
 ps4,nhl21,signed-twos-complement,GezY,tzoh,5,0,-16,15,yes,yes

@@ -1603,7 +1603,7 @@ pub(crate) fn team_name_by_id(
 /// Prefer the native full-name column where it exists; modern PS4 schemas instead carry
 /// the complete name in `teamname`. Never join by row number or replace edited inline text.
 pub(crate) fn team_display_name(db: &TdbFile, meta: &FieldMetaIndex, src: &TeamNameSource<'_>) -> String {
-    ["fullname", "teamname", "shortname", "abbrname"]
+    ["fullname", "teamname", "nickname", "shortname", "abbrname"]
         .into_iter()
         .map(|field| read_str_by_name(db, meta, src.table, src.record, field))
         .find(|name| !name.trim().is_empty())

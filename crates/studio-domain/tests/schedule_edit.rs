@@ -1023,26 +1023,22 @@ fn edited_schedule_survives_copied_output_reopen_and_restore() {
 }
 
 // ---------------------------------------------------------------------------------------------
-// 7. Real NHL 20 (private fixture; the committed anchors/ps4/nhl20 is the NHL 19 base).
+// 7. Real NHL 20 (the committed anchors/ps4/nhl20 since P0-4; read only).
 // ---------------------------------------------------------------------------------------------
 
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/*: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn real_nhl20_install_database_edits_and_generates_within_its_own_layout() {
-    let root = std::env::var_os("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES is not set; the NHL 20 fixture cannot be resolved");
-    let require = |key: &str, sha: &str| -> String {
-        let path = PathBuf::from(&root).join(key);
-        let bytes = std::fs::read(&path).unwrap_or_else(|e| panic!("cannot read {}: {e}", path.display()));
-        assert!(!bytes.is_empty());
-        assert_eq!(tdb_txn::FileIdentity::of_bytes(&bytes).sha256, sha, "{key} is not the recorded source");
-        path.to_str().unwrap().to_string()
-    };
-    let db = require("databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db", "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b");
-    let meta = require("databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game-meta.xml", "2fac0e733c9792038a64f966f277b163136517438509283e7f646d2920ad1f93");
+    let db = repo("anchors/ps4/nhl20/databases/nhl_game.db").to_str().unwrap().to_string();
+    let meta = repo("anchors/ps4/nhl20/databases/nhl_game-meta.xml").to_str().unwrap().to_string();
+    assert_eq!(
+        tdb_txn::FileIdentity::of_bytes(&std::fs::read(&db).unwrap()).sha256,
+        "1e2004784bccfdd6bed6e82533a67595798379f2c2d763c0636d9d370977a57b",
+        "the recorded CUSA15439 database"
+    );
     let project = Project::load(PathBuf::from(&db), Platform::Ps4, ProjectRole::Nhlng, PathBuf::from(&meta), repo("defs")).unwrap();
     let mut ws = Workspace::single(EditSession::begin(project), db.clone());
     ws.set_game_id("nhl20");
-    // The season-specific tables differ from the NHL 19 copy: Austrian 270 rows / 11 slots,
+    // The season-specific tables differ from NHL 19's: Austrian 270 rows / 11 slots,
     // ECHL 936 rows / 26 slots; layouts and the rank rule are the NHL 18+ ones.
     let aut = table(&ws, "austrianschedule");
     let v = ws.display().schedule_view(&aut).unwrap().unwrap();

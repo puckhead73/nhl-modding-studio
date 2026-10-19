@@ -24,12 +24,12 @@ There are three main gaps:
 3. **No PS4 audio is editable, and most of it cannot even be previewed.** NHL 18–21 speech uses
    EA-Opus, which Studio refuses to preview, and no encoder exists for EA-MP3 or EA-Opus.
 
-There are also four correctness defects to fix first. *(Status 15 Oct: only the NHL 20 anchor
-remains; see Wave 0.)*
+There are also four correctness defects to fix first. *(Status 15 Oct: all four are resolved; see
+Wave 0.)*
 - the GNF same-size replace leaves the old image in the lower mips (fixed, P0-1);
 - the PS4 trailer CRC is written inside the trailer on the older roster-save path (**not a
   defect**: disproved by test, P0-2);
-- the committed NHL 20 anchor is really NHL 19 (open, P0-4);
+- the committed NHL 20 anchor is really NHL 19 (fixed: genuine NHL 20 files committed, P0-4);
 - the NHL 15 save codec and the save-matrix test are uncommitted, and that test fails (resolved,
   P0-3).
 
@@ -63,7 +63,7 @@ column is game-verified unless explicitly said.
 | League creation/resizing | ⬜ | ⬜ | Outside beta |
 | Schedules: browse/edit/CSV/generate | ✅T (+✅P real NHL 20) | ✅T | Three PS4 layouts: 15, 16/17, 18+ |
 | Settings / stored defaults | ✅T (NHL 15 DB; 16–21 `setting_csv`) | ⛔ (compiled into executable) | **PS4 ahead.** Runtime precedence 🔬 |
-| Team identity, colours, art-id | ✅T | ✅T | NHL 16 canonical team-name binding unresolved (no `fullname`/`teamname`) |
+| Team identity, colours, art-id | ✅T | ✅T | NHL 16 team name bound to `nickname` (derived across titles, P0-5); in-game presentation 🔬 |
 | Team links: membership, lines, captains, numbers, strategies, trades | ✅T (operation matrix, all 7 anchors) | ✅T | Phase 2 matrix still calls edit/reload/restore parity "not established" |
 | Arena assignment (DB FK) | 🟨 read | 🟨 read (NHL 07 editor) | `Nhl07ArenaEditor` is NHL 07-only |
 | Team schedule tab, competition-name/structure cards | ⛔ UI NHL 07-only | NHL 07 only | `TeamDetail.tsx:58`, `LeagueDetail.tsx` |
@@ -74,7 +74,7 @@ column is game-verified unless explicitly said.
 | Overall formula | ✅T | ✅T (era-calibrated) | |
 | Historical import | ✅T (lower sweep on every anchor) | ✅T | API roster-builder test is Legacy PS3 only |
 | Equipment cells (stick/glove/helmet/tape) | 🟨 edits raw numbers; read-only catalogue/CZ cards | 🟨 Legacy catalogue labels | No reassignment validation or new-id registration on any platform |
-| Canonical adapters | 🟨 NHL 19/20 representation-only | 🟨 | NHL 20 anchor alias (below) |
+| Canonical adapters | ✅T all seven established (NHL 19/20 since P0-4) | 🟨 | Handedness and main-team parent blocked on every PS4 title |
 
 ## 2. Capability matrix — localization, saves, deployment
 
@@ -83,14 +83,14 @@ column is game-verified unless explicitly said.
 | Dictionary re-point/retext | ✅T | ✅T | Same `GJCv` format, little-endian |
 | Dictionary growth/rebuild | ✅P (99 locale members) | ✅T/✅P | Runtime acceptance of a grown file and new-key lookup 🔬 |
 | Dictionary inside `inxp_00.big` (chunkzip member) | ✅T | — | Patch copies (NHL 15, NHL 19 ×6) never targeted |
-| Bundled dictionary | ⛔ NHL 19, 21 (no `eng_us` anchor); NHL 20 unavailable | ✅ | |
+| Bundled dictionary | ✅ NHL 15–20 (NHL 19/20 since P0-4); ⛔ NHL 21 (private fixture by decision) | ✅ | |
 | Roster save extract/edit/repack | ✅T NHL 16–21; NHL 15 chunkzip **uncommitted** | ✅T (v2/v4; v1 experimental) | Structural only; record-header tag, `INDEX`/`param.sfo` 🔬 |
 | Save Editor (identify, overlay, edit) | ✅T | ✅T | Growth refused when a trailer is present |
 | Trailer CRC on NHL 17–19 roster path | ✅T (P0-2) | — | Not a defect: `Project` splits the trailer at the declared TDB size, so the EOF CRC lands at the TDB's end. Roster-save growth rewrites the trailer's embedded size (`48a9e85`) |
 | Mode saves (Season/Franchise/BeAGM) | 🟨 read-only / 🔬 roster source | 🟨 | Save-matrix classification conflicts with the Save Editor record |
 | Settings/Profile saves | ⛔ opaque | ⛔ (container v5) | |
 | NHL 20/21 vanilla roster save | missing-fixture | — | Only ThreeOnThree saves committed |
-| Discovery (shadPS4 game + save roots) | ✅T | ✅T | NHL 19 title-id discrepancy CUSA11126 vs 11116 (FR9) |
+| Discovery (shadPS4 game + save roots) | ✅T | ✅T | NHL 19 fast path now CUSA11126 (install-witnessed, FR9 resolved, P0-5) |
 | Base-PKG onboarding | ✅P (real NHL 20 job) | ✅ ISO/folder | Patch/DLC PKGs refused; PS4 ISO onboarding not established |
 | **Deploy edited DB** | 🟨 loose file only from UI | ✅ | Loose-vs-archive precedence 🔬 |
 | **Copied `inxp_00.big` member apply/restore** | ✅P all 7 titles, **no UI** | n/a | `CopiedTargetPanel.tsx` is imported only by its test |
@@ -167,7 +167,8 @@ column is game-verified unless explicitly said.
 - **Behind, assets:** portraits in archives, kits/nameplates, arena/ice rebinding, boards, equipment
   authoring, new-head import route, GNF format coverage (BC6H, two-stream, small BC5).
 - **Behind, audio:** EA-Opus decode, player-name binding, horn bank join.
-- **Fixture gaps:** a genuine NHL 20 anchor, `eng_us` for NHL 19/21, roster saves for NHL 20/21.
+- **Fixture gaps:** `eng_us` for NHL 21, roster saves for NHL 20/21. (The genuine NHL 20 anchor and
+  NHL 19's dictionary landed in P0-4.)
 
 ## 7. Roadmap
 
@@ -183,8 +184,8 @@ acceptance under shadPS4. A wave closes per target, never by a representative ti
 | P0-1 | Regenerate the full GNF mip chain on same-size replace (as the resize path already does) | D | Test asserts every mip differs from the original after a changed-pixel replace; unchanged input still byte-identical. **Implemented + automated-tested 13 Oct (uncommitted, pending review):** `gnf::replace_chain_same_size`; unmeasured layouts keep base-only with a disclosure; GNF pre-Apply plan is now the writer's policy |
 | P0-2 | Fix trailer-aware CRC placement on the NHL 17–19 roster/package path, sharing the Save Editor's strip/restore logic; allow growth by rewriting the embedded TDB size | D | Trailer bytes preserved; CRC at TDB end; growth test on NHL 17/18/19. **14 Oct (uncommitted, pending review):** the CRC defect **does not exist**: every production writer goes through `Project::load`/`package`, which already split the trailer off at the declared TDB size. A real-edit test now proves it on 17/18/19. Growth implemented for the measured roster trailer only (`D9 2E B7 58`, zero `u32`, `u64` LE TDB size at +8, 2–4 unknown bytes kept); other trailer forms stay refused. Runtime acceptance of a grown save: unverified |
 | P0-3 | Review and commit the NHL 15 chunkzip save codec; regenerate the save matrix through the authorized generator path (not hand-edited) so its test passes | D (generator run needs explicit authorization) | Save matrix shows NHL 15 roster as edit-roundtrip. **Complete 15 Oct (approved by user):** codec, test and CSV landed in `d5576cc`. `tdb-savedata` 15/15 and `save_matrix_over_all_fixtures` pass against the committed CSV (compare mode, so no regeneration was needed). NHL 15 ROSTER and BEAGM rows read `edit-roundtrip` |
-| P0-4 | Replace the aliased `anchors/ps4/nhl20` with the genuine CUSA15439 DB/dictionary (owner decision on EA-data policy); make NHL 19/20 adapters operative | D + decision | NHL 20 tests run unignored |
-| P0-5 | Resolve the NHL 19 title id (CUSA11126 vs 11116) and the NHL 16 team-name binding | R → D | Discovery and adapter agree with installs |
+| P0-4 | Replace the aliased `anchors/ps4/nhl20` with the genuine CUSA15439 DB/dictionary (owner decision on EA-data policy); make NHL 19/20 adapters operative | D + decision | NHL 20 tests run unignored. **15 Oct (uncommitted, pending review):** owner approved committing. `anchors/ps4/nhl20` now holds the CUSA15439 base-archive DB, metadata, dictionary and five auxiliary DBs; NHL 19's dictionary moved to `anchors/ps4/nhl19`. Both adapters established (NHL 20 re-measured on the genuine bytes); NHL 20-only private-fixture tests read the anchor and run by default; install-dependent ones stay ignored but no longer need the fixture. Generated QA artifacts and `baselines/INVENTORY.json` regenerated |
+| P0-5 | Resolve the NHL 19 title id (CUSA11126 vs 11116) and the NHL 16 team-name binding | R → D | Discovery and adapter agree with installs. **15 Oct (uncommitted, pending review):** NHL 19 install and saves read CUSA11126; fast path and save path-hints fixed (FR9). NHL 16 `team.name` → `kOtt.nickname`, derived from a measured cross-title join (named case); Studio's team-name readers include `nickname`. Open: an in-game check (G card) that NHL 16 presents `nickname` as the club name |
 | P0-6 | Correct stale docs: `ps4-gnf-texture.md`, `ps4-rsf-mesh.md`, `arena_assets.rs` header, `assets-logos.toml:44`, STATE-OF-THE-REPO audio/mip claims, `cross-platform-format-audit.md` | D | No stale "read-only"/"excluded" claims. **Done 15 Oct (uncommitted, pending review):** all six corrected, plus `05-save-data.md` (PS4 pointer), `ps4-save-container.md` (template claim corrected, roster-trailer section added), register FR15 (resolution noted) and this roadmap's own P0-1/P0-2 rows. Historical records were annotated, not rewritten |
 
 ### Wave 1 — Delivery path: make PS4 edits reach the game
@@ -257,8 +258,8 @@ This is the critical gate. Without it, asset work beyond `inxp` members cannot b
 
 ## 8. Open questions for the architect
 
-1. Is committing the genuine NHL 20 database/dictionary as an anchor acceptable under the EA-data
-   policy, or should NHL 20 stay private-fixture-only?
+1. ~~Is committing the genuine NHL 20 database/dictionary as an anchor acceptable under the EA-data
+   policy?~~ Yes (owner, 15 Oct 2026); done in P0-4.
 2. Should Wave 1 (delivery path) be treated as a gate in front of further PS4 asset packages in
    Phases 2–5, as recommended here?
 3. Is a vault writer in scope for the beta, or final release only?

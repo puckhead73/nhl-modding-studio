@@ -1,7 +1,7 @@
 //! Receipt 66 — PS4 hair reassignment through the Registry (research R15: `ge_nhl_skaterhairtexturepack`'s `GenericHairStyle`
-//! value = the database `hairid`), on disposable copies of the genuine NHL 20 database (private fixture — **not** the
-//! `anchors/ps4/nhl20` files, which are NHL 19 base) and the NHL 21 anchor, each checked against its own install's vault (read
-//! only).
+//! value = the database `hairid`), on disposable copies of the genuine NHL 20 database (`anchors/ps4/nhl20` since P0-4;
+//! before that a private fixture, because the anchor held NHL 19 base bytes) and the NHL 21 anchor, each checked against its
+//! own install's vault (read only).
 //!
 //! Covered per title: a valid existing target (only `hairid` written; `headid` / `headtexture` untouched), an absent target, the
 //! vault carrying no ambiguous value (the ambiguous refusal is the synthetic domain case), a negative and an out-of-range value,
@@ -68,9 +68,9 @@ fn cells(reg: &Registry, id: u32, player: u64) -> (u32, i64, Option<i64>, Option
 }
 
 #[test]
-#[ignore = "genuine NHL 20 fixture (NHL_STUDIO_FIXTURES) and PS4 installs under H:/Emulators/ShadPS4/Games (read only): select with --ignored"]
+#[ignore = "PS4 installs under H:/Emulators/ShadPS4/Games (read only): select with --ignored"]
 fn ps4_hair_reassign_against_the_titles_own_vault() {
-    let fx = PathBuf::from(std::env::var("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES (fails, never skips)")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let fx = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     for (game, dbdir, cusa) in [("nhl20", fx.clone(), "CUSA15439"), ("nhl21", repo("anchors/ps4/nhl21/databases"), "CUSA18182")] {
         let t = Tmp::new(game);
         let (db, meta) = t.copy(&dbdir, None);

@@ -1,6 +1,6 @@
 //! Equipment 4.5 goalie gear (26 Sep 2026, after the receipt-27 review): the goalie equipment
 //! companion's mask, pads, blocker, trapper, goalie-stick and related columns on every committed anchor
-//! directory, plus the genuine NHL 20 install database (private fixture).
+//! directory, plus the genuine NHL 20 install database (the committed anchor since P0-4).
 //!
 //! Per title the case records which columns exist and their declared ranges, then edits each one to
 //! another in-range value through the ordinary validated `set_field` and checks: the re-read value;
@@ -36,7 +36,7 @@ fn anchors() -> Vec<(String, String, PathBuf, PathBuf)> {
             }
         }
     }
-    assert_eq!(out.len(), 27, "27 anchor directories (ps4/nhl20 is an NHL 19 base copy)");
+    assert_eq!(out.len(), 27, "27 anchor directories");
     out
 }
 
@@ -189,11 +189,10 @@ fn goalie_gear_columns_edit_review_undo_save_and_reopen_on_every_anchor() {
     assert_eq!(table.len(), 27);
 }
 
-/// The genuine NHL 20 install database (private fixture; identity pinned in `encoding_contract`).
+/// The genuine NHL 20 install database (the committed anchor since P0-4; identity pinned in `encoding_contract`).
 #[test]
-#[ignore = "private fixture databases/nhl20-ps4-cusa15439/inxp_00.big/nhl_game.db: set NHL_STUDIO_FIXTURES and select with --ignored"]
 fn goalie_gear_columns_on_the_real_nhl20_database() {
-    let root = PathBuf::from(std::env::var_os("NHL_STUDIO_FIXTURES").expect("NHL_STUDIO_FIXTURES is not set")).join("databases/nhl20-ps4-cusa15439/inxp_00.big");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../anchors/ps4/nhl20/databases");
     let (db, meta) = (root.join("nhl_game.db"), root.join("nhl_game-meta.xml"));
     assert!(db.is_file() && meta.is_file(), "fixture missing (fails, never skips)");
     let tmp = Tmp::new("nhl20");

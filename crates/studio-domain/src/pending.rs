@@ -370,7 +370,7 @@ impl EntityNames {
                     meta,
                     src.table,
                     src.record,
-                    &["fullname", "teamname", "abbrname", "shortname"],
+                    &["fullname", "teamname", "nickname", "abbrname", "shortname"],
                 );
                 if !name.is_empty() {
                     teams.insert(rec, name);

@@ -51,7 +51,7 @@ fn anchors() -> Vec<(String, String, PathBuf, PathBuf)> {
     assert_eq!(
         out.len(),
         27,
-        "27 anchor directories (ps4/nhl20 is an NHL 19 base copy)"
+        "27 anchor directories"
     );
     out
 }

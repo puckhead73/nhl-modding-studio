@@ -185,18 +185,17 @@ fn gen7_leagues_are_derived_and_name_edit_is_blocked_with_a_reason() {
 
 /// O6: the target's own dictionary resolves PS4 name keys to display text; keys absent from it
 /// stay keys; a dictionary attached to one project never leaks into another.
-/// REG-1 (2026-09-18): the `anchors/ps4/nhl20` database and dictionary used here are the NHL 19
-/// base members under an NHL 20 path; the pair is self-consistent (same capture), which is all
-/// this case needs. The real NHL 20 files are covered by `tests/league_private_sources.rs`.
+/// The NHL 19 base database and dictionary (`anchors/ps4/nhl19`; until P0-4 the same bytes sat under
+/// `anchors/ps4/nhl20`). The genuine NHL 20 files are covered by `tests/league_private_sources.rs`.
 #[test]
 fn attached_dictionary_resolves_ps4_labels_without_leaking() {
     let reg = Registry::default();
-    let id20 = open(
+    let id19 = open(
         &reg,
-        "nhl20",
+        "nhl19",
         "ps4",
-        "anchors/ps4/nhl20/databases/nhl_game.db",
-        "anchors/ps4/nhl20/databases/nhl_game-meta.xml",
+        "anchors/ps4/nhl19/databases/nhl_game.db",
+        "anchors/ps4/nhl19/databases/nhl_game-meta.xml",
     );
     let id21 = open(
         &reg,
@@ -205,16 +204,16 @@ fn attached_dictionary_resolves_ps4_labels_without_leaking() {
         "anchors/ps4/nhl21/databases/nhl_game.db",
         "anchors/ps4/nhl21/databases/nhl_game-meta.xml",
     );
-    let before = reg.list_leagues(id20).unwrap();
+    let before = reg.list_leagues(id19).unwrap();
     assert!(before.dictionary.is_none());
     assert!(before.leagues.iter().all(|l| l.label.is_none()));
 
     let d = reg
-        .attach_dictionary(id20, &s(repo("anchors/ps4/nhl20/databases/eng_us.db")))
+        .attach_dictionary(id19, &s(repo("anchors/ps4/nhl19/databases/eng_us.db")))
         .unwrap();
     assert_eq!(d.locale, "eng_us");
     assert_eq!(d.rows, 37_734);
-    let c = reg.list_leagues(id20).unwrap();
+    let c = reg.list_leagues(id19).unwrap();
     assert_eq!(c.dictionary.as_ref().unwrap().rows, 37_734);
     let alls = c.leagues.iter().find(|l| l.code == 8).unwrap();
     assert_eq!(alls.name_key.as_deref(), Some("Allsvenskan"));
@@ -241,7 +240,7 @@ fn attached_dictionary_resolves_ps4_labels_without_leaking() {
     assert_eq!(mascot.display, "TXT_LEAGUE_MASCOT");
     assert!(mascot.evidence.contains("not in this target"));
     // Team surfaces share the resolved text.
-    let teams = reg.list_teams(id20).unwrap();
+    let teams = reg.list_teams(id19).unwrap();
     assert_eq!(
         teams
             .iter()
@@ -253,7 +252,7 @@ fn attached_dictionary_resolves_ps4_labels_without_leaking() {
     );
     // A re-pointed key resolves through the same dictionary.
     reg.set_field(
-        id20,
+        id19,
         "fsLK",
         8,
         "vIys",
@@ -261,7 +260,7 @@ fn attached_dictionary_resolves_ps4_labels_without_leaking() {
     )
     .unwrap();
     assert_eq!(
-        reg.league_view(id20, 8)
+        reg.league_view(id19, 8)
             .unwrap()
             .unwrap()
             .summary
@@ -275,7 +274,7 @@ fn attached_dictionary_resolves_ps4_labels_without_leaking() {
     assert!(c21.leagues.iter().all(|l| l.label.is_none()));
     // A file that is not a dictionary is refused, leaving the previous attachment in place.
     assert!(reg
-        .attach_dictionary(id20, &s(repo("anchors/ps4/nhl20/databases/nhl_game.db")))
+        .attach_dictionary(id19, &s(repo("anchors/ps4/nhl19/databases/nhl_game.db")))
         .is_err());
-    assert!(reg.list_leagues(id20).unwrap().dictionary.is_some());
+    assert!(reg.list_leagues(id19).unwrap().dictionary.is_some());
 }

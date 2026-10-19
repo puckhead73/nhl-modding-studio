@@ -15427,45 +15427,11 @@ gen8-vs-nhl21,ps4/nhl21,ps4,nhl19,yrDg,customgoalieequipment,Kmxz,blocker,field-
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl19,yrDg,customgoalieequipment,OTJR,trapper,field-resized,10->9 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl19,yrDg,customgoalieequipment,mIUA,pads,field-resized,10->9 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl19,yrDg,customgoalieequipment,wXFx,stick,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,BGwe,playernames,TBmW,surnameid,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,BGwe,playernames,bCTK,availability,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,BGwe,playernames,vIys,name,field-resized,200->160 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,BGwe,playernames,vfEq,index,field-resized,15->13 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,BNEz,worldchampschedule,,,table-removed,6 fields
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,GezY,customgoalieai,LPaz,warmup,field-resized,3->4 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,GezY,customgoalieai,auWp,reactionbigsave,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,GezY,customgoalieai,vRxQ,reactionpostgame,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,AQdN,positionsecondary,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,FpGV,friendenemy5,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,Lelh,intlcountry,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,MjGL,friendenemycompat2,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,NaDd,friendenemycompat1,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,OHPU,friendenemycompat5,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,PyqS,friendenemycompat6,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,QvxI,state,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,TBmW,surnameid,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,ToKB,friendenemycompat3,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,Upwy,playoffbeardtype,field-resized,5->6 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,WiWb,friendenemy4,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,YQMS,eyebrowid,field-resized,7->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,Zufj,eyecolorcode,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,dXei,friendenemy0,field-resized,16->14 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,dbBW,proteam,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,geHU,friendenemy3,field-added,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,gkKW,positionprimary,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,hJVh,islegend,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,jdLO,friendenemy2,field-added,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,nLzZ,introsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,oUIh,playoffbeardcolor,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,ogfr,friendenemy6,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,uGEA,haircolorcode,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,vgWu,draftteam,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,xEzC,friendenemycompat4,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,yUOw,friendenemy1,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,KdqM,customplayerbiotable,zMjH,strategytemplate,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,MgUe,exhibitionresortplayerextras,TAGu,introtextid,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,MgUe,exhibitionresortplayerextras,wBAO,introanimid,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,MuLx,leaguegmdata,ZmGs,misccapexpensesnextyear,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,AQqR,skatingstyle12,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,AkYV,skatingstyle4,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,BJvn,skatingstyle11,field-removed,
@@ -15479,8 +15445,6 @@ gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,Iugq,skatingstyle1,field-r
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,JeAq,skatingstyle8,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,LTmf,skatingstyle13,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,LnUP,skatingstyle5,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,NOIq,snapshot,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,RSnF,wristshot,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,Sdwo,skatingstyle9,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,UVrv,skatingstyle18,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,cgko,skatingstyle,field-resized,3->8 bits
@@ -15488,14 +15452,10 @@ gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,dDdU,skatingstyle2,field-r
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,dXrY,skatingstyle14,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,eKLh,skatingstyle10,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,eetx,skatingstyle6,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,qEsn,onetimer,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,vObl,skatingstyle19,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,vuvk,goalsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,NXqo,customskaterai,yNtf,slapshot,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,LReO,timeoniceseconds,field-resized,17->18 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,Uomt,plusminus,field-resized,7->6 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,VTsq,gamesplayed,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,dXSB,team,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,mKrS,powerplaygoals,field-resized,5->4 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,mWac,powerplayassists,field-resized,5->4 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,nQQB,hits,field-resized,8->7 bits
@@ -15503,129 +15463,24 @@ gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,oSVQ,shots,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,pwAd,gamewinninggoals,field-resized,4->3 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,uFBC,giveaways,field-resized,7->6 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OAqO,stockcareerplayoffplayerstats,xEsZ,assists,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OGPu,customresortplayerextras,TAGu,introtextid,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,OGPu,customresortplayerextras,wBAO,introanimid,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,PuTc,customteamjerseys,FccT,variant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,PuTc,customteamjerseys,XMjH,orderid,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,PuTc,customteamjerseys,ddOX,fevariant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,PuTc,customteamjerseys,opkv,variantleadingscorer,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,PuTc,customteamjerseys,tYnx,jerseyindex,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,PuTc,customteamjerseys,tftz,pantsstyle,field-resized,5->6 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,PuTc,customteamjerseys,vqCa,variantlegend,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,AUsv,teamname,field-resized,320->256 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,BTDy,outtro,field-resized,4->6 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,DgMA,powerplaysongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,EIMa,stanchiontype,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,ISBu,signaturegoaleffect2id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,JYYZ,goalspotlightid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,JgLJ,signaturegoaleffect3id,field-resized,4->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,KFqt,centericelogo,field-resized,11->10 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,KRsd,stanchionintroeffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,MSly,audioid2,field-resized,12->11 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,NKzg,intromusicid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,NmUR,gloves,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,QvxI,state,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,SEZw,skaterspotlightid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,SNxv,stanchiongoaleffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,StZX,tunnel,field-resized,6->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,TTmQ,spotlight,field-resized,6->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,Tkem,logostyle3,field-resized,11->10 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,WNex,signatureintroeffect3id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,Wqyu,stanchionmaterialid,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,XXgu,signatureintroeffect2id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,YUZp,helmetbrand,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,bhQD,cityname,field-resized,320->240 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,cXHn,nickname,field-resized,320->256 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,gqJs,winsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,iBoe,centericelogostyle,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,kLXJ,stanchionledid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,ovok,signatureintroeffectid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,qhxt,centericelogotype,field-resized,3->2 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,rlHa,signaturegoaleffectid,field-resized,4->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,sniw,logostyle2,field-resized,11->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,teLG,logostyle1,field-resized,11->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,tpJl,goalcall,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,vaBo,propid,field-resized,6->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,vuvk,goalsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,wOSv,stanchionwineffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,wXFx,stick,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,wcYG,powerplaycrowdreaction,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,RGbs,leagueteams,xLLF,outropresentationid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,BmID,seatpatternid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,ClpB,periodhorn,field-resized,4->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,JJip,timeofday,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,KxWk,scoreboardid,field-resized,5->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,TeAh,stanchion,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,UAEa,cityaudioid,field-resized,12->11 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,dPhS,goallightid,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,dxQr,arenatype,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,xQXN,architectureid,field-resized,6->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,StEO,exhibitionarena,xlcJ,isoutdoor,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,BTDy,outtro,field-resized,4->6 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,DgMA,powerplaysongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,EIMa,stanchiontype,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,ISBu,signaturegoaleffect2id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,JYYZ,goalspotlightid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,JgLJ,signaturegoaleffect3id,field-resized,4->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,KFqt,centericelogo,field-resized,11->10 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,KRsd,stanchionintroeffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,MSly,audioid2,field-resized,12->11 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,NKzg,intromusicid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,NmUR,gloves,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,QvxI,state,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,SEZw,skaterspotlightid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,SNxv,stanchiongoaleffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,StZX,tunnel,field-resized,6->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,TTmQ,spotlight,field-resized,6->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,Tkem,logostyle3,field-resized,11->10 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,WNex,signatureintroeffect3id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,Wqyu,stanchionmaterialid,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,XXgu,signatureintroeffect2id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,YUZp,helmetbrand,field-resized,10->9 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,gqJs,winsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,iBoe,centericelogostyle,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,kLXJ,stanchionledid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,ovok,signatureintroeffectid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,qhxt,centericelogotype,field-resized,3->2 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,rlHa,signaturegoaleffectid,field-resized,4->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,sniw,logostyle2,field-resized,11->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,teLG,logostyle1,field-resized,11->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,tpJl,goalcall,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,vaBo,propid,field-resized,6->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,vuvk,goalsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,wOSv,stanchionwineffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,wXFx,stick,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,wcYG,powerplaycrowdreaction,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,SvDE,customteams,xLLF,outropresentationid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,TPhA,stockteamhistory,,,table-removed,6 fields
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,URpJ,customresortgoalieextras,HwNG,casualheadgearstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,URpJ,customresortgoalieextras,RTmR,casualbottomstyle,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,URpJ,customresortgoalieextras,WUSo,casualheadgearvariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,URpJ,customresortgoalieextras,YGqw,casualheadgeartype,field-resized,5->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,URpJ,customresortgoalieextras,egzy,casualjerseyindex,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,URpJ,customresortgoalieextras,pNjq,casualbottomvariant,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,URpJ,customresortgoalieextras,uDQD,casualbottomtype,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,USfF,stockcareerseasongoaliestats,VrIM,timeinnetseconds,field-resized,19->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,USfF,stockcareerseasongoaliestats,dXSB,team,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,UqeV,leaguefreeagentdata,wFvA,fromzone,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,BmID,seatpatternid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,ClpB,periodhorn,field-resized,4->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,JJip,timeofday,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,KxWk,scoreboardid,field-resized,5->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,TeAh,stanchion,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,UAEa,cityaudioid,field-resized,12->11 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,dPhS,goallightid,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,dxQr,arenatype,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,xQXN,architectureid,field-resized,6->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,Usqf,customarena,xlcJ,isoutdoor,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,WnSt,exhibitionresortgoalieextras,HwNG,casualheadgearstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,WnSt,exhibitionresortgoalieextras,RTmR,casualbottomstyle,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,WnSt,exhibitionresortgoalieextras,WUSo,casualheadgearvariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,WnSt,exhibitionresortgoalieextras,YGqw,casualheadgeartype,field-resized,5->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,WnSt,exhibitionresortgoalieextras,egzy,casualjerseyindex,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,WnSt,exhibitionresortgoalieextras,pNjq,casualbottomvariant,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,WnSt,exhibitionresortgoalieextras,uDQD,casualbottomtype,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ccEK,worldjuniorschedule,,,table-removed,6 fields
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,cyZi,stockplayoffteamstats,OjJN,ppgoalsfor,field-resized,6->5 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,cyZi,stockplayoffteamstats,VdOT,goalsfor,field-resized,8->7 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,cyZi,stockplayoffteamstats,YzbC,timesshorthanded,field-resized,8->7 bits
@@ -15647,8 +15502,6 @@ gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,Iugq,skatingstyle1,fie
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,JeAq,skatingstyle8,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,LTmf,skatingstyle13,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,LnUP,skatingstyle5,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,NOIq,snapshot,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,RSnF,wristshot,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,Sdwo,skatingstyle9,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,UVrv,skatingstyle18,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,cgko,skatingstyle,field-resized,3->8 bits
@@ -15656,185 +15509,27 @@ gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,dDdU,skatingstyle2,fie
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,dXrY,skatingstyle14,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,eKLh,skatingstyle10,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,eetx,skatingstyle6,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,qEsn,onetimer,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,vObl,skatingstyle19,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,vuvk,goalsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,dSvy,exhibitionskaterai,yNtf,slapshot,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,eOvg,echlscheduledebug,Yhkq,home,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,eOvg,echlscheduledebug,vMOr,away,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fFlH,championsschedule,Yhkq,home,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fFlH,championsschedule,vMOr,away,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fMVl,exhibitiongoalieequipment,Kmxz,blocker,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fMVl,exhibitiongoalieequipment,OTJR,trapper,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fMVl,exhibitiongoalieequipment,mIUA,pads,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fMVl,exhibitiongoalieequipment,wXFx,stick,field-resized,10->9 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fsLK,stockleagues,hGlL,secondarycolor,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fsLK,stockleagues,uhyr,primarycolor,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,HwNG,casualheadgearstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,RTmR,casualbottomstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,WUSo,casualheadgearvariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,YGqw,casualheadgeartype,field-resized,5->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,bMoz,casualfacemaskvariant,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,cGuy,casualfacemaskstyle,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,cNAy,casualfacemasktype,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,egzy,casualjerseyindex,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,mtMM,casualtopundertype,field-resized,5->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,pNjq,casualbottomvariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,tfWK,casualheadgearorient,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,uLgr,casualtopundervariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,fuoG,exhibitionresortskaterextras,wkJF,casualtopunderstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,hHbv,stockteamequipmenttable,FccT,variant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,hHbv,stockteamequipmenttable,TKWL,brand,field-resized,10->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,hHbv,stockteamequipmenttable,VhbR,era,field-resized,3->2 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ihwm,leaguescoutmiscdata,AhUh,seasoncompletionpct,field-resized,10->11 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,BTDy,outtro,field-resized,4->6 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,DgMA,powerplaysongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,EIMa,stanchiontype,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,ISBu,signaturegoaleffect2id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,JYYZ,goalspotlightid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,JgLJ,signaturegoaleffect3id,field-resized,4->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,KFqt,centericelogo,field-resized,11->10 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,KRsd,stanchionintroeffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,MSly,audioid2,field-resized,12->11 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,NKzg,intromusicid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,NmUR,gloves,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,QvxI,state,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,SEZw,skaterspotlightid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,SNxv,stanchiongoaleffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,StZX,tunnel,field-resized,6->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,TTmQ,spotlight,field-resized,6->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,Tkem,logostyle3,field-resized,11->10 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,WNex,signatureintroeffect3id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,Wqyu,stanchionmaterialid,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,XXgu,signatureintroeffect2id,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,YUZp,helmetbrand,field-resized,10->9 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,gqJs,winsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,iBoe,centericelogostyle,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,kLXJ,stanchionledid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,ovok,signatureintroeffectid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,qhxt,centericelogotype,field-resized,3->2 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,rlHa,signaturegoaleffectid,field-resized,4->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,sniw,logostyle2,field-resized,11->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,teLG,logostyle1,field-resized,11->10 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,tpJl,goalcall,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,vaBo,propid,field-resized,6->8 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,vuvk,goalsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,wOSv,stanchionwineffectid,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,wXFx,stick,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,wcYG,powerplaycrowdreaction,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kOtt,exhibitionteams,xLLF,outropresentationid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,AOOe,skatebrand,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,Cdkm,mouthguardmaterial,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,DUUx,skatesocktuck,field-resized,3->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,NmUR,gloves,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,SHNi,stickshafttapestyle,field-resized,3->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,VLJB,stickbladetapestyle,field-resized,3->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,YUZp,helmetbrand,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,cnFB,visortype,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,drnH,socktapestyle,field-resized,3->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,wXFx,stick,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,kVlL,customskaterequipment,xiVu,shoulderpads,field-resized,2->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,HwNG,casualheadgearstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,RTmR,casualbottomstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,WUSo,casualheadgearvariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,YGqw,casualheadgeartype,field-resized,5->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,bMoz,casualfacemaskvariant,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,cGuy,casualfacemaskstyle,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,cNAy,casualfacemasktype,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,egzy,casualjerseyindex,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,mtMM,casualtopundertype,field-resized,5->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,pNjq,casualbottomvariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,tfWK,casualheadgearorient,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,uLgr,casualtopundervariant,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,lIvS,customresortskaterextras,wkJF,casualtopunderstyle,field-resized,4->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,mHuy,exhibitiongoalieai,LPaz,warmup,field-resized,3->4 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,mHuy,exhibitiongoalieai,auWp,reactionbigsave,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,mHuy,exhibitiongoalieai,vRxQ,reactionpostgame,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,mkrU,stockawardstable,GDQL,teamartid,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,nCDp,stockcareerplayoffgoaliestats,VTsq,gamesplayed,field-resized,6->5 bits
+gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,nCDp,stockcareerplayoffgoaliestats,VrIM,timeinnetseconds,field-resized,18->17 bits
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,nCDp,stockcareerplayoffgoaliestats,ZgMz,goalsagainst,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,nCDp,stockcareerplayoffgoaliestats,dXSB,team,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,nCDp,stockcareerplayoffgoaliestats,uIbN,shotsagainst,field-resized,11->10 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,oEDN,customteamequipmenttable,FccT,variant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,oEDN,customteamequipmenttable,TKWL,brand,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,oEDN,customteamequipmenttable,VhbR,era,field-resized,3->2 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pGMV,echlschedule,Yhkq,home,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pGMV,echlschedule,vMOr,away,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pIzI,leagueteamjerseys,FccT,variant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pIzI,leagueteamjerseys,XMjH,orderid,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pIzI,leagueteamjerseys,ddOX,fevariant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pIzI,leagueteamjerseys,opkv,variantleadingscorer,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pIzI,leagueteamjerseys,tYnx,jerseyindex,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pIzI,leagueteamjerseys,tftz,pantsstyle,field-resized,5->6 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,pIzI,leagueteamjerseys,vqCa,variantlegend,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,qHav,exhibitiondraftpick,GFcg,origteamid,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,qHav,exhibitiondraftpick,Uwdb,owner,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,tsSy,stockcareerseasonplayerstats,LReO,timeoniceseconds,field-resized,18->19 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,tsSy,stockcareerseasonplayerstats,dXSB,team,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,AQdN,positionsecondary,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,FpGV,friendenemy5,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,Lelh,intlcountry,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,MjGL,friendenemycompat2,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,NaDd,friendenemycompat1,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,OHPU,friendenemycompat5,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,PyqS,friendenemycompat6,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,QvxI,state,field-resized,8->7 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,TBmW,surnameid,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,ToKB,friendenemycompat3,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,Upwy,playoffbeardtype,field-resized,5->6 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,WiWb,friendenemy4,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,YQMS,eyebrowid,field-resized,7->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,Zufj,eyecolorcode,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,dXei,friendenemy0,field-resized,16->14 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,geHU,friendenemy3,field-added,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,gkKW,positionprimary,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,hJVh,islegend,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,jdLO,friendenemy2,field-added,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,nLzZ,introsongid,field-resized,25->20 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,oUIh,playoffbeardcolor,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,ogfr,friendenemy6,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,uGEA,haircolorcode,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,vgWu,draftteam,field-resized,6->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,xEzC,friendenemycompat4,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,yUOw,friendenemy1,field-added,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,ubPc,exhibitionplayerbiotable,zMjH,strategytemplate,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,BmID,seatpatternid,field-resized,4->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,ClpB,periodhorn,field-resized,4->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,JJip,timeofday,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,KxWk,scoreboardid,field-resized,5->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,TeAh,stanchion,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,UAEa,cityaudioid,field-resized,12->11 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,dPhS,goallightid,field-resized,3->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,dxQr,arenatype,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,xQXN,architectureid,field-resized,6->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vFSP,leaguearena,xlcJ,isoutdoor,field-removed,
 gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vHde,stockrecordstable,,,table-removed,13 fields
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vInM,leagueteamequipmenttable,FccT,variant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vInM,leagueteamequipmenttable,TKWL,brand,field-resized,10->8 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,vInM,leagueteamequipmenttable,VhbR,era,field-resized,3->2 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xjgw,stockteamjerseys,FccT,variant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xjgw,stockteamjerseys,XMjH,orderid,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xjgw,stockteamjerseys,ddOX,fevariant,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xjgw,stockteamjerseys,opkv,variantleadingscorer,field-resized,7->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xjgw,stockteamjerseys,tYnx,jerseyindex,field-resized,8->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xjgw,stockteamjerseys,tftz,pantsstyle,field-resized,5->6 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xjgw,stockteamjerseys,vqCa,variantlegend,field-removed,
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,AOOe,skatebrand,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,Cdkm,mouthguardmaterial,field-resized,2->1 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,DUUx,skatesocktuck,field-resized,3->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,NmUR,gloves,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,SHNi,stickshafttapestyle,field-resized,3->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,VLJB,stickbladetapestyle,field-resized,3->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,YUZp,helmetbrand,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,cnFB,visortype,field-resized,4->5 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,drnH,socktapestyle,field-resized,3->4 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,wXFx,stick,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,xmja,exhibitionskaterequipment,xiVu,shoulderpads,field-resized,2->3 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yUAn,stockgoalieequipment,Kmxz,blocker,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yUAn,stockgoalieequipment,OTJR,trapper,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yUAn,stockgoalieequipment,mIUA,pads,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yUAn,stockgoalieequipment,wXFx,stick,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yrDg,customgoalieequipment,Kmxz,blocker,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yrDg,customgoalieequipment,OTJR,trapper,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yrDg,customgoalieequipment,mIUA,pads,field-resized,10->9 bits
-gen8-vs-nhl21,ps4/nhl21,ps4,nhl20,yrDg,customgoalieequipment,wXFx,stick,field-resized,10->9 bits
