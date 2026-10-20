@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "qualification": "Research only. No experiment is game-verified or integrated into Studio.",
+  "builds": [
+    {
+      "version": "01.00",
+      "sha256": "0118720c7e0338e20769063437be5656d1c16262c6b81a688adb659582544e17",
+      "experiments": [
+        {
+          "id": "neutral-pressure-ratings",
+          "name": "Research - neutral pressure rating multiplier",
+          "status": "isolated-machine-code-tested",
+          "limitation": "Only the traced attribute getter is neutralized. Meter, stamina, goalie, HUD and audio behavior remain unqualified.",
+          "edits": [{"va": "0x282f914", "expected": "83f8017422", "replacement": "31c0909090"}]
+        },
+        {
+          "id": "allow-leagues-outside-intended-modes",
+          "name": "Research - existing leagues outside intended modes",
+          "status": "static-initializer-and-consumer-traced",
+          "limitation": "Enables an existing debug default. Does not add league definitions or qualify Franchise integration.",
+          "edits": [{"va": "0x267574a", "expected": "00", "replacement": "01"}]
+        }
+      ]
+    },
+    {
+      "version": "01.60",
+      "sha256": "fe5dcab197256487dd47906a4b0e0601bfe77fac9f47ad3f4f91b03b9372deb9",
+      "experiments": [
+        {
+          "id": "neutral-pressure-ratings",
+          "name": "Research - neutral pressure rating multiplier",
+          "status": "isolated-machine-code-tested",
+          "limitation": "Only the traced attribute getter is neutralized. Meter, stamina, goalie, HUD and audio behavior remain unqualified.",
+          "edits": [{"va": "0x27b6394", "expected": "83f8017422", "replacement": "31c0909090"}]
+        },
+        {
+          "id": "allow-leagues-outside-intended-modes",
+          "name": "Research - existing leagues outside intended modes",
+          "status": "static-initializer-and-consumer-traced",
+          "limitation": "Enables an existing debug default. Does not add league definitions or qualify Franchise integration.",
+          "edits": [{"va": "0x25fafaa", "expected": "00", "replacement": "01"}]
+        }
+      ]
+    }
+  ]
+}

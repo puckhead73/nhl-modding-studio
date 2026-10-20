@@ -73,3 +73,13 @@ fixtures/private/
 # ---- Staging: transient review area. Contents are unverified until checked against anchors and
 #      promoted into docs/. Not tracked.
 /Staging/
+
+# ---- Supplementary portrait library (operator-compiled, ~110k PNGs + portraits.sqlite index).
+#      Read at runtime from beside the corpus; far too large for git. Downloaded tool binaries and
+#      one-off probe dumps stay out as well.
+/graphical database/
+/tools/oxipng/
+/tmp_*.json
+
+# ---- Arena-library census dump (588 MB of regenerable index JSON; rebuild with scripts/arena_library).
+/docs/research/arena-library/data/

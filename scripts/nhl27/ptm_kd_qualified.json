@@ -1,0 +1,61 @@
+{
+  "source_sha256": "10c7bee4c27e5260b417f9574e65cee8338019d08635b3ab9dddab30ba524126",
+  "target_sha256": "fe5dcab197256487dd47906a4b0e0601bfe77fac9f47ad3f4f91b03b9372deb9",
+  "verification": "test_ptm_kd.KDTests.test_actual_packed_trees",
+  "queries": 2100,
+  "nonempty_trees": 105,
+  "candidate_counts": [
+    1,
+    3,
+    8,
+    32,
+    200
+  ],
+  "note": "Native query results retain native invalid-candidate encoding. Sorted-source comparisons check membership and costs; unsorted comparisons also check order.",
+  "databases": [
+    {
+      "name": "psk_ptm_db_npc_priority_b2f_transition_panic_turns.Default",
+      "sha256": "15ba157b1efdf0be8fe7fa5e170fd6b657b3c27f0c1d9d76ba93f2462a15a3db"
+    },
+    {
+      "name": "psk_ptm_db_pc_priority_stop_vc_netlock.Default",
+      "sha256": "a653e272319d58dde480c3df65725ef2bf0ce692c6a5d00a5548735614c5219d"
+    },
+    {
+      "name": "psk_ptm_db_pc_priority_stopping_panic_turns.Default",
+      "sha256": "b2c97f454aacd990bde546072d73eba20077cb27ce015b093bf71bba9cfb70cc"
+    },
+    {
+      "name": "psk_ptm_db_npc_priority_hustle_transition_b2f_2HSU.DrasticTurn",
+      "sha256": "39ef540158041319fa23c45652f05ddf087480c4f69a142dbf5fabb7a55496d4"
+    },
+    {
+      "name": "psk_ptm_db_npc_priority_hustle_transition_b2f_2HSU.Default",
+      "sha256": "267bcf6578927546c33812d77939aac2930f2facc754084fdc7b2849ad27da7b"
+    },
+    {
+      "name": "psk_ptm_db_npc_priority_hustle_transition_b2f_1HSD.Default",
+      "sha256": "b7dc80f46373ab8e1d845c85cd67b7ce26e36d98ca577cfc66b7615dda229eae"
+    },
+    {
+      "name": "psk_ptm_db_npc_priority_hustle_transition_b2f_1HSD.DrasticTurn",
+      "sha256": "dcab97f0c14fd0960900d57c1f27e311a8f08fd4768bed82c2209fd24825926d"
+    },
+    {
+      "name": "psk_ptm_db_npc_priority_stop_vc_playerlock.Default",
+      "sha256": "e49d5b085aace6535581d398ebcceab3d65f925b926a4a73c8d844b8e824b8de"
+    },
+    {
+      "name": "psk_ptm_db_pc_priority_hustle_transition_b2f.Default",
+      "sha256": "a4bc490a05c03c794c78cb83234cbd47be2f4cb021ea368441c62dac91f8b3bc"
+    },
+    {
+      "name": "psk_ptm_db_pc_priority_hustle_transition_b2f.DrasticTurn",
+      "sha256": "4c0057e0b6122531dbb67424bd135b3a8e33009eec25c07befbd89f76e6f15a1"
+    },
+    {
+      "name": "ptmdb_stick_blend.Default",
+      "sha256": "03c42aecbe3fb50ede90797b15d1c8cca810b35254ebce4e933fa070d739349d"
+    }
+  ]
+}
