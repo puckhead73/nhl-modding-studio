@@ -1,5 +1,6 @@
 import { POS_BADGE, POS_FULL } from "../lib/position";
 import { JerseyBadge, SearchChip } from "./PlayerHeader";
+import { PortraitImage, useSelectedPortrait } from "./HistoricalAppearanceTab";
 import type { HistoricalPersonDto } from "../bindings/HistoricalPersonDto";
 
 /// The Historical Player banner — the same shape as the EA `PlayerHeader`: art window, name + team
@@ -25,7 +26,7 @@ export function HistoricalPlayerHeader({ p }: { p: HistoricalPersonDto }) {
 
   return (
     <div className="flex items-start gap-4 rounded-lg border border-slate-800 bg-gradient-to-r from-slate-900/80 to-slate-900/30 p-4">
-      <PortraitPlaceholder name={fullName} />
+      <HistoricalPortrait personId={p.person_id} name={fullName} />
 
       <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex items-center gap-2">
@@ -97,13 +98,23 @@ export function HistoricalPlayerHeader({ p }: { p: HistoricalPersonDto }) {
   );
 }
 
-/// The art window. The historical corpus carries no portrait art, so this is always the neutral
-/// silhouette — the same tile geometry as the EA banner's `Portrait` so the two pages line up.
-function PortraitPlaceholder({ name }: { name: string }) {
+/// The art window — the same tile geometry as the EA banner's `Portrait` so the two pages line up.
+/// The historical corpus carries no art of its own; the tile shows the portrait the operator selected
+/// from the supplementary portrait library (Appearance tab), else the neutral silhouette.
+function HistoricalPortrait({ personId, name }: { personId: number; name: string }) {
+  const sel = useSelectedPortrait(personId);
+  const rel = sel.data?.rel_path ?? null;
+  if (rel) {
+    return (
+      <div title={`${name} portrait`} className="shrink-0">
+        <PortraitImage relPath={rel} size={256} className="h-28 w-28 !rounded-md !border-slate-700 !bg-slate-800/70" alt={`${name} portrait`} />
+      </div>
+    );
+  }
   return (
     <div
       className="grid h-28 w-28 shrink-0 place-items-center overflow-hidden rounded-md border border-slate-700 bg-slate-800/70"
-      title={`${name} — the historical corpus ships no portrait art`}
+      title={`${name} — no portrait selected (Appearance tab)`}
     >
       <svg viewBox="0 0 24 24" className="h-14 w-14 text-slate-600" fill="currentColor" aria-hidden>
         <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />

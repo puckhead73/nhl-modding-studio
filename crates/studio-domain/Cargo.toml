@@ -33,6 +33,13 @@ tempfile = "3"
 toml = "0.8"
 # Portrait/texture export only needs PNG encoding — the DDS side is ours.
 image = { version = "0.25", default-features = false, features = ["png"] }
+# The supplementary portrait library reads its provenance CSV (portrait_library.rs).
+csv = "1"
+# The operator-built portrait index (portraits.sqlite, FTS5) is the primary library backend
+# (portrait_index.rs). Bundled SQLite is already compiled for tdb-fhm-store.
+rusqlite = { version = "0.31", features = ["bundled"] }
+# Name keys must reproduce the index builder's normalisation (casefold + NFKD + alnum filter).
+unicode-normalization = "0.1"
 
 # ONB-002: free-space query for materialisation, deployment backups and extraction (Windows only).
 [target.'cfg(windows)'.dependencies]
@@ -41,7 +48,6 @@ windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_Storage
 [dev-dependencies]
 # Synthetic in-memory FHM corpus for the Roster Builder orchestration tests (bundled SQLite is
 # already compiled for `tdb-fhm-store`, so this adds no new native build).
-rusqlite = { version = "0.31", features = ["bundled"] }
 # Layer-A QA observation for the four matrix emitters (docs/plans/qa-evidence-contract.md). Test-only,
 # opt-in via QA_EVIDENCE_ROOT: with the variable unset nothing is written and no file is created.
 tdb-qa = { path = "../tdb-qa" }

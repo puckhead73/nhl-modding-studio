@@ -15,7 +15,8 @@ use crate::dto::{
     ExportOptionsDto, FileExportOptionsDto, FileExportSummaryDto,
     FormulaCatalogDto, FormulaProfileDto, HeadPreviewDto, HistoricalCareerRatingsDto,
     HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto, HistoricalTeamDto,
-    HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto, HistoricalTeamIndexEntryDto,
+    HistoricalPortraitMatchesDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
+    HistoricalTeamIndexEntryDto, PortraitCandidateDto, PortraitLibraryStatusDto,
     HistoricalTeamSummaryDto, HockeyShopItemDto, HockeyShopSyncSummaryDto, ImportItemDto,
     ImportResultDto, ImportTextureSummaryDto, InstallReportDto, InstallStoreItemApplyResponseDto,
     InstallStoreItemPlanDto, InstallStoreItemRequestDto, IntegrityReportDto, KitPieceInputDto,
@@ -972,6 +973,92 @@ pub fn historical_franchise(
 ) -> CmdResult<Option<HistoricalTeamFranchiseDto>> {
     registry
         .historical_franchise(&kind, &key, season_year)
+        .map_err(|e| e.to_string())
+}
+
+// ---- Supplementary portrait library (historical Appearance tab) -------------
+
+/// Where the operator-compiled portrait library (`graphical database/portraits`) was found and
+/// what it holds. Needs an open corpus (the selection sidecar lives beside it).
+#[tauri::command]
+pub fn portrait_library_status(registry: State<'_, Registry>) -> CmdResult<PortraitLibraryStatusDto> {
+    registry.portrait_library_status().map_err(|e| e.to_string())
+}
+
+/// Point the library at another folder (empty clears the override) and rescan.
+#[tauri::command]
+pub fn portrait_library_set_root(
+    registry: State<'_, Registry>,
+    root: String,
+) -> CmdResult<PortraitLibraryStatusDto> {
+    registry.portrait_library_set_root(&root).map_err(|e| e.to_string())
+}
+
+/// Re-index the library after files or the provenance CSV were added.
+#[tauri::command]
+pub fn portrait_library_rescan(registry: State<'_, Registry>) -> CmdResult<PortraitLibraryStatusDto> {
+    registry.portrait_library_rescan().map_err(|e| e.to_string())
+}
+
+/// A historical person's portrait candidates under one identity tier: `exact` (last + first +
+/// DOB), `last_dob`, `last_only` or `dob_only`.
+#[tauri::command]
+pub fn historical_portrait_candidates(
+    registry: State<'_, Registry>,
+    person_id: i64,
+    mode: String,
+    limit: Option<usize>,
+) -> CmdResult<HistoricalPortraitMatchesDto> {
+    registry
+        .historical_portrait_candidates(person_id, &mode, limit.unwrap_or(200))
+        .map_err(|e| e.to_string())
+}
+
+/// Manual lookup across names, aliases, stems and sources, with an optional DOB filter.
+#[tauri::command]
+pub fn portrait_library_search(
+    registry: State<'_, Registry>,
+    query: String,
+    dob: Option<String>,
+    limit: Option<usize>,
+) -> CmdResult<Vec<PortraitCandidateDto>> {
+    registry
+        .portrait_library_search(&query, dob.as_deref(), limit.unwrap_or(100))
+        .map_err(|e| e.to_string())
+}
+
+/// One library portrait as a PNG data URL, downscaled to fit `maxSize` when given.
+#[tauri::command]
+pub fn portrait_library_image(
+    registry: State<'_, Registry>,
+    rel_path: String,
+    max_size: Option<u32>,
+) -> CmdResult<String> {
+    registry
+        .portrait_library_image(&rel_path, max_size)
+        .map_err(|e| e.to_string())
+}
+
+/// Record (or clear, with `null`) the portrait chosen for a historical person.
+#[tauri::command]
+pub fn set_historical_portrait(
+    registry: State<'_, Registry>,
+    person_id: i64,
+    rel_path: Option<String>,
+) -> CmdResult<Option<PortraitCandidateDto>> {
+    registry
+        .set_historical_portrait(person_id, rel_path.as_deref())
+        .map_err(|e| e.to_string())
+}
+
+/// The portrait currently selected for a historical person, if any.
+#[tauri::command]
+pub fn historical_portrait_selected(
+    registry: State<'_, Registry>,
+    person_id: i64,
+) -> CmdResult<Option<PortraitCandidateDto>> {
+    registry
+        .historical_portrait_selected(person_id)
         .map_err(|e| e.to_string())
 }
 

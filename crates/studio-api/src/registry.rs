@@ -154,6 +154,9 @@ pub struct Registry {
     texture_reviews: Mutex<texture_review::TextureReviewState>,
     /// ONB-002: the project folders bound to open sessions and the deployment plans held for them.
     projects: Mutex<project::ProjectState>,
+    /// The supplementary portrait library for historical people (lazily indexed; see
+    /// `registry/portraits.rs`).
+    portraits: Mutex<portraits::PortraitState>,
     /// ONB-002: extraction preflights and jobs (one job per destination).
     extractions: Mutex<extraction::ExtractionState>,
     /// ONB-003: installer plans held for a package installation (server-owned handles).
@@ -196,6 +199,7 @@ mod project_archive;
 mod mod_manager;
 mod team_editing;
 mod package;
+pub mod portraits;
 mod recovery;
 pub mod extraction;
 mod texture_review;
@@ -1295,6 +1299,19 @@ impl Registry {
             }
             if is_goalie && matches!(ws.game_id(), Some("nhl08" | "nhl09")) {
                 studio_domain::kit_preview::pair_early_equipment(&mut pieces);
+                // Pads/blocker/trapper colours are the goalie's own `fMVl` fields here
+                // (no team zone record), so they paint even when player gear is off.
+                let field = |name: &str| chosen_view.as_ref().and_then(|v| v.equipment.iter().chain(&v.all_fields).find(|f| f.name == name)).and_then(|f| f.decoded);
+                let gear = |kind: &str| -> Option<(u32, Vec<[u8; 3]>)> {
+                    let (_, _, prefix, names) = studio_domain::kit_preview::EARLY_GOALIE_GEAR_ZONES.iter().find(|z| z.0 == kind)?;
+                    let model = field(prefix).filter(|v| *v >= 0)? as u32;
+                    let zones = names.iter().map(|zone| {
+                        let channel = |c: &str| field(&format!("{prefix}{zone}color_{c}")).map(|v| v.clamp(0, 255) as u8);
+                        Some([channel("r")?, channel("g")?, channel("b")?])
+                    }).collect::<Option<Vec<_>>>()?;
+                    Some((model, zones))
+                };
+                studio_domain::kit_preview::complete_early_goalie_equipment(&mut pieces, &rendering, &gear);
             }
             if ws.game_id() == Some("nhl08") && !is_goalie {
                 // NHL08's equipment type codes precede the later 5/8 glove/helmet codes.
@@ -4489,8 +4506,10 @@ impl Registry {
         // Legends banner has a profile to report on. Best-effort: a read-only corpus dir must not
         // stop the corpus from opening.
         let _ = self.ensure_default_profile();
-        // A new corpus invalidates any previously-cached maxima.
+        // A new corpus invalidates any previously-cached maxima and the portrait library index
+        // (its root and selection sidecar live beside the corpus).
         *self.maxima.lock().unwrap() = None;
+        self.portraits.lock().unwrap().reset();
         *self.corpus_person_count.lock().unwrap() = Some(count);
         *self.corpus.lock().unwrap() = Some(corpus);
         Ok(count)

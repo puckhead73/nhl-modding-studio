@@ -3438,6 +3438,7 @@ dependencies = [
 name = "studio-domain"
 version = "0.0.0"
 dependencies = [
+ "csv",
  "image",
  "rusqlite",
  "serde",
@@ -3464,6 +3465,7 @@ dependencies = [
  "tdb-xiso",
  "tempfile",
  "toml 0.8.2",
+ "unicode-normalization",
  "windows-sys 0.59.0",
 ]
 
@@ -4645,6 +4647,15 @@ name = "unicode-ident"
 version = "1.0.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+
+[[package]]
+name = "unicode-normalization"
+version = "0.1.26"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75cd3fb03d5288b3ba9a1ee103ac7e9cbb59f0b03d64f8ddfcc04dd42758a85d"
+dependencies = [
+ "tinyvec",
+]
 
 [[package]]
 name = "unicode-segmentation"

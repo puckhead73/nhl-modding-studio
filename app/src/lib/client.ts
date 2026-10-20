@@ -202,6 +202,9 @@ import type { TeamTextDto } from "../bindings/TeamTextDto";
 import type { SettingsCatalogueResultDto } from "../bindings/SettingsCatalogueResultDto";
 import type { SettingsEditPreviewDto } from "../bindings/SettingsEditPreviewDto";
 import type { SettingsEditApplyDto } from "../bindings/SettingsEditApplyDto";
+import type { PortraitLibraryStatusDto } from "../bindings/PortraitLibraryStatusDto";
+import type { PortraitCandidateDto } from "../bindings/PortraitCandidateDto";
+import type { HistoricalPortraitMatchesDto } from "../bindings/HistoricalPortraitMatchesDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "ps5" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -595,6 +598,27 @@ type Commands = {
     ret: HistoricalPersonSummaryDto[];
   };
   historical_player: { args: { personId: number }; ret: HistoricalPersonDto | null };
+  // Supplementary portrait library (`graphical database/portraits`) for the historical
+  // Appearance tab. Needs an open corpus: the selection sidecar lives beside it.
+  portrait_library_status: { args: Record<string, never>; ret: PortraitLibraryStatusDto };
+  portrait_library_set_root: { args: { root: string }; ret: PortraitLibraryStatusDto };
+  portrait_library_rescan: { args: Record<string, never>; ret: PortraitLibraryStatusDto };
+  // mode: "exact" | "last_dob" | "last_only" | "dob_only"
+  historical_portrait_candidates: {
+    args: { personId: number; mode: string; limit?: number };
+    ret: HistoricalPortraitMatchesDto;
+  };
+  portrait_library_search: {
+    args: { query: string; dob: string | null; limit?: number };
+    ret: PortraitCandidateDto[];
+  };
+  // Returns a `data:image/png;base64,...` URL; maxSize downscales for grid thumbnails.
+  portrait_library_image: { args: { relPath: string; maxSize?: number }; ret: string };
+  set_historical_portrait: {
+    args: { personId: number; relPath: string | null };
+    ret: PortraitCandidateDto | null;
+  };
+  historical_portrait_selected: { args: { personId: number }; ret: PortraitCandidateDto | null };
   // Team browse is season-scoped (team ids are per-season).
   list_historical_teams: {
     args: { seasonYear: number; search: string; limit: number };

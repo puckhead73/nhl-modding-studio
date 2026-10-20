@@ -5683,3 +5683,75 @@ pub struct SaveEditorSaveDto {
     pub backup_path: Option<String>,
     pub summary: ProjectSummaryDto,
 }
+
+// ---- Supplementary portrait library (historical Appearance tab) ----------------------------
+
+/// Where the operator-compiled portrait library was found and what it holds.
+#[derive(Serialize, TS)]
+pub struct PortraitLibraryStatusDto {
+    /// The folder scanned (or the folder that would be scanned when `available` is false).
+    pub root: String,
+    /// False when the folder is missing or holds no images.
+    pub available: bool,
+    /// `sqlite_index` (the operator-built `portraits.sqlite`) or `filename_scan` (fallback).
+    pub backend: String,
+    /// The index's `library_version` stamp, when the index backend is in use.
+    pub library_version: Option<String>,
+    #[ts(type = "number")]
+    pub portrait_count: usize,
+    /// Distinct people (file stems minus the variant suffix).
+    #[ts(type = "number")]
+    pub person_count: usize,
+    /// The provenance CSV that was applied, when one was found.
+    pub csv_path: Option<String>,
+    #[ts(type = "number")]
+    pub csv_rows: usize,
+    /// How many historical people currently have a portrait selected.
+    #[ts(type = "number")]
+    pub selection_count: usize,
+    /// Non-fatal scan/CSV problems, for progressive disclosure.
+    pub warnings: Vec<String>,
+}
+
+/// One portrait in the library, as a match candidate or a search hit.
+#[derive(Serialize, TS)]
+pub struct PortraitCandidateDto {
+    /// Library-relative path — the stable key used for selection and image requests.
+    pub rel_path: String,
+    /// The person stem shared by every variant of the same person.
+    pub stem: String,
+    /// `First Last` from the CSV, or the title-cased filename tokens when no CSV names exist.
+    pub display_name: String,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
+    /// `YYYY-MM-DD` when known.
+    pub dob: Option<String>,
+    #[ts(type = "number")]
+    pub variant: u32,
+    /// Provenance label from the index (`nhl09 - nhl14`, a mod pack name) or the CSV.
+    pub source: Option<String>,
+    /// Index-only: `EA`, `Mod` or `Manual`.
+    pub source_type: Option<String>,
+    /// Index-only: the EA titles the portrait shipped in (`nhl09;nhl10;…`).
+    pub games: Option<String>,
+    /// Index-only: how the name boundary was established — `unambiguous_slug`,
+    /// `structured_reference`, `ambiguous_name_boundary` (reachable only by DOB and search) or
+    /// `malformed_identity`.
+    pub identity_status: Option<String>,
+    /// The identity tier that produced this candidate (`exact`, `last_dob`, `last_only`,
+    /// `dob_only`); `null` for search hits and selections.
+    pub tier: Option<String>,
+}
+
+/// The Appearance tab's match result for one historical person.
+#[derive(Serialize, TS)]
+pub struct HistoricalPortraitMatchesDto {
+    pub mode: String,
+    /// Matches before the request's limit was applied.
+    #[ts(type = "number")]
+    pub total: usize,
+    pub candidates: Vec<PortraitCandidateDto>,
+    /// The portrait currently chosen for this person, when one is recorded and still present.
+    pub selected: Option<PortraitCandidateDto>,
+    pub library_available: bool,
+}

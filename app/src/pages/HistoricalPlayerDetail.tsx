@@ -8,6 +8,7 @@ import { ComputedRatings } from "../components/ComputedRatings";
 import { Section } from "../components/FieldProfile";
 import { ReadonlyField } from "../components/EditableField";
 import { HistoricalPlayerHeader, heightStr } from "../components/HistoricalPlayerHeader";
+import { HistoricalAppearanceTab } from "../components/HistoricalAppearanceTab";
 import { useCrumbLabel } from "../lib/breadcrumbs";
 import { POS_FULL } from "../lib/position";
 import { useRosterCart } from "../lib/rosterCart";
@@ -36,8 +37,8 @@ export function HistoricalPlayerDetail() {
   if (!p) return <p className="text-sm text-slate-400">Select a player.</p>;
 
   // The EA player view's subtab set, in its order, plus Appearance — the historical-only surface
-  // the Legends builder needs (portrait match + head/appearance selection for an imported legend).
-  // Neither Equipment nor Appearance has a corpus source yet, so both stand as placeholders.
+  // the Legends builder needs. Appearance hosts the portrait selector over the supplementary portrait
+  // library; Equipment has no corpus source yet and stands as a placeholder.
   const tabs: DetailTab[] = [
     { key: "player-data", label: "Player Data", content: <PlayerDataTab p={p} /> },
     { key: "career", label: "Career Stats", content: <CareerTab career={p.career} /> },
@@ -55,12 +56,7 @@ export function HistoricalPlayerDetail() {
     {
       key: "appearance",
       label: "Appearance",
-      content: (
-        <EmptyState
-          title="Appearance — preview only"
-          hint="Portrait match and head/appearance import arrive with the Roster Builder + Production Asset tools in a later stage."
-        />
-      ),
+      content: <HistoricalAppearanceTab p={p} />,
     },
   ];
 
