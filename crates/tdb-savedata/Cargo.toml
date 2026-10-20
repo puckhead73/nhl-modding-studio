@@ -10,5 +10,15 @@ license.workspace = true
 [dependencies]
 tdb-core = { path = "../tdb-core" }
 tdb-archive-codec = { path = "../tdb-archive-codec" }
-flate2 = "1"
+# `zlib` = real zlib (libz-sys): the v4 container deflate reproduces the games' own streams
+# byte-for-byte (level 6, memLevel 9 — measured 2026-10-19), which miniz_oxide does not.
+flate2 = { version = "1", features = ["zlib"] }
+# The v4 writer calls deflateInit2_ directly: flate2 pins memLevel 8, the games use 9.
+libz-sys = "1"
 lz4_flex = "0.11"
+# xxHash32 for the LZ4 frame descriptor and content checksums the PS4 writer emits.
+twox-hash = { version = "2", default-features = false, features = ["xxhash32"] }
+
+[dev-dependencies]
+# Probes under `examples/` compare the game's frames against liblz4.
+lz4 = "1.24"

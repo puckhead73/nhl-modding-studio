@@ -21,6 +21,30 @@
 > **Container version varies by save TYPE, not just game** — e.g. NHL12 ROSTER is v2 but NHL12 BEAGM
 > is v1. Detect by body marker, not the version byte (see spec §4).
 
+> **Write-path corrections (2026-10-19, save-editor QA pass; all measured on the committed anchors):**
+> 1. **`checksum_b` covers `[0x2C .. 0x2C + uncompressed_size@0x24]`, not to EOF.** The two coincide
+>    on every roster save (the file is exactly `0x2C + uncompressed_size` long). Mode saves carry
+>    further sections after that region — a `00000002 00000001 <len> <tag> …` block list — covered only
+>    by `checksum_a`. Every stored `checksum_b` of the NHL 12/13 raw and NHL 14/15/Legacy zlib mode
+>    saves (PS3 and Xbox 360) matches this rule; none matches the EOF rule.
+> 2. **The variant is settled by the body marker, never by the version word**, which varies by title
+>    *and* type: NHL 12 SEASON/BEAGM carry word **1** over a 44-byte raw header, NHL 13 DYNASTY/SEASON
+>    word **3** over the same, NHL 14/15/Legacy DYNASTY/SEASON words **5**/**6** over a zlib body, NHL 14+
+>    Xbox PROFILE word 5 over a 44-byte raw header. The old word-first discriminator rejected all of them.
+> 3. **v4 zlib streams are real zlib, level 6, window 15, memLevel 9**: with those parameters the repack of
+>    every v4 roster anchor is byte-identical to the game's file. A v4 roster's `uncompressed_size`
+>    equals its inflated payload; a v4 **mode** save declares exactly **half** its inflated payload
+>    (meaning unknown — the writer keeps a mode save's declared region and refuses if the stream no
+>    longer fits).
+> 4. **`uncompressed_size` on a raw v2 mode save declares the database alone**; the mode sections follow it.
+> 5. **v1 `tag_1c` (NHL 10/11) is partly reversed:** on the NHL 10 BEAPRO (PS3 and Xbox) and SETTINGS
+>    saves it is **CRC-32/MPEG-2 (`crc32_tdb`) over `file[0x20 .. EOF-4]`** (payload minus its last
+>    word). The ROSTER, BEAGM and SEASON tags match no contiguous CRC of the file under any standard
+>    32-bit CRC/hash — and the PS3 and Xbox NHL 10 (and NHL 11) ROSTER anchors carry the **same** tag
+>    over bodies that differ in ~6 000 bytes, so for those types the tag is not a hash of the stored
+>    body. v1 writes still preserve the tag verbatim; in-game acceptance of an edited NHL 10/11 save is
+>    unverified.
+
 ## Save directory layout
 
 Each save is a directory `BLUS#####<N> - <TYPE>` containing:

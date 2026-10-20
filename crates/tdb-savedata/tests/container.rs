@@ -188,3 +188,65 @@ fn v1_repack_round_trips_experimentally() {
         "edited DB round-trips through v1"
     );
 }
+
+/// The v4 writer reproduces the games' own files: a same-DB repack of every v4 roster anchor
+/// (PS3 and Xbox 360, NHL 14 / 15 / Legacy) is **byte-identical** — zlib level 6, memLevel 9
+/// (measured 2026-10-19), zero-padded to the original allocation, both checksums recomputed.
+#[test]
+fn v4_repack_is_byte_identical_on_every_roster_anchor() {
+    for rel in [
+        "ps3/nhl14/savefiles/BLUS311790200 - ROSTER/SYS-DATA",
+        "ps3/nhl15/savefiles/BLUS314360200 - ROSTER/SYS-DATA",
+        "ps3/nhllegacy/savefiles/BLUS315400200 - ROSTER/SYS-DATA",
+        "xbox360/nhl14/savefiles/ROSTER 20260627054746/ROSTER 20260627054746",
+        "xbox360/nhl15/savefiles/ROSTER 20260627055422/ROSTER 20260627055422",
+        "xbox360/nhllegacy/savefiles/ROSTER 20260627060052/ROSTER 20260627060052",
+    ] {
+        let bytes = anchor(rel);
+        let c = SaveContainer::parse(&bytes).unwrap();
+        assert_eq!(c.header.version, ContainerVersion::ZlibV4, "{rel}");
+        let db = c.extract_db().unwrap();
+        let repacked = c.repack(&db).unwrap();
+        assert!(repacked == bytes, "{rel}: v4 same-DB repack must be byte-identical");
+    }
+}
+
+/// Mode saves whose version word is not 0/2/4 still resolve by body marker (2026-10-19): raw
+/// 44-byte headers under words 1 and 3, zlib bodies under words 5 and 6.
+#[test]
+fn container_variant_is_settled_by_body_marker_not_version_word() {
+    for (rel, expect) in [
+        (
+            "xbox360/nhl12/savefiles/SEASON 20260627051102/SEASON 20260627051102",
+            ContainerVersion::RawV2,
+        ),
+        (
+            "xbox360/nhl13/savefiles/DYNASTY 20260627051414/DYNASTY 20260627051414",
+            ContainerVersion::RawV2,
+        ),
+        ("ps3/nhl12/savefiles/BLUS307910100 - BEAGM/SYS-DATA", ContainerVersion::RawV2),
+        (
+            "xbox360/nhl14/savefiles/SEASON 20260627054727/SEASON 20260627054727",
+            ContainerVersion::ZlibV4,
+        ),
+        (
+            "xbox360/nhl15/savefiles/DYNASTY 20260627055335/DYNASTY 20260627055335",
+            ContainerVersion::ZlibV4,
+        ),
+        (
+            "xbox360/nhllegacy/savefiles/SEASON 20260627060034/SEASON 20260627060034",
+            ContainerVersion::ZlibV4,
+        ),
+        (
+            "xbox360/nhl14/savefiles/PROFILE 20260627054703/PROFILE 20260627054703",
+            ContainerVersion::RawV2,
+        ),
+    ] {
+        let bytes = anchor(rel);
+        let c = SaveContainer::parse(&bytes).unwrap_or_else(|e| panic!("{rel}: {e}"));
+        assert_eq!(c.header.version, expect, "{rel}");
+        assert!(c.checksums_valid(), "{rel}: checksums");
+        let db = c.extract_db().unwrap_or_else(|e| panic!("{rel}: extract: {e}"));
+        assert!(c.repack(&db).unwrap() == bytes, "{rel}: same-DB repack must be byte-identical");
+    }
+}

@@ -202,7 +202,7 @@ The four scopes that use Routine A:
 | Init | `0xFFFFFFFF` | `checksum.rs:86` |
 | In/out reflection | yes / yes | `checksum.rs:43-58` |
 | XorOut | `0xFFFFFFFF` | `checksum.rs:90` |
-| Covers | `file[0x1C..EOF]` (incl. padding and the stored `checksum_b`) | `CHECKSUM_A_REGION_START=0x1C` `checksum.rs:35,113` |
+| Covers | `file[0x1C..EOF]` (incl. padding, the stored `checksum_b` and any mode sections) | `CHECKSUM_A_REGION_START=0x1C` `checksum.rs` |
 | Stored | **big-endian** at `0x10..0x14` | `pack.rs:184,226` |
 
 Known answer: `crc32_ieee("123456789") = 0xCBF43926` (`checksum.rs:135`).
@@ -235,7 +235,7 @@ The v1 (NHL10/11) container has a third tag at `0x1C` (`tag_1c`) whose algorithm
 
 **Save container** (`pack.rs`):
 1. Assemble header (checksum slots zeroed) + body (zlib for v4 / raw `.db` for v2) + zero padding (v4).
-2. `checksum_b` first (region `0x2C..` starts after both slots) → BE at `0x28`.
+2. `checksum_b` first (region `0x2C .. 0x2C + uncompressed_size@0x24`, **not to EOF** — corrected 2026-10-19: a mode save's sections after the payload are outside it) → BE at `0x28`.
 3. `checksum_a` second (region `0x1C..` covers stored `checksum_b`) → BE at `0x10`.
 
 ---
@@ -282,8 +282,8 @@ Two **independent** systems — do not conflate:
 
 Standard **RFC-1950 zlib / DEFLATE via `flate2`** — only in the `ZlibV4` container. **Only `file[0x30..]` is the zlib stream** (`78 01/9C/DA/5E` + DEFLATE + Adler-32), followed by zero padding (`tdb-savedata/header.rs:17,95`, `extract.rs:78`).
 
-- **Inflate** (`extract.rs:47-105`): reject declared size > 128 MiB; `ZlibDecoder` over `data[0x30..]`; cross-check inflated length vs `uncompressed_size@0x24` within platform slack (PS3 = 0, Xbox360 = 4, the latter counting the Adler-32 trailer). Container tags are NOT verified on read — zlib's Adler-32 validates the stream.
-- **Deflate** (`pack.rs:124-192`): `ZlibEncoder` at default level 6 over the new `.db`; error `DeflatedTooLarge` if `0x30 + compressed > original_len`; rebuild header; **pad with zeros back to the original file allocation** (PS3 over-allocates for in-place inflate); then recompute `checksum_b` then `checksum_a`.
+- **Inflate** (`extract.rs`): reject inflated size > 128 MiB; `ZlibDecoder` over `data[0x30..]`. The inflated length is **not** cross-checked against `uncompressed_size@0x24` (corrected 2026-10-19): that word is the payload *region* / `checksum_b` scope — equal to the inflated payload on roster saves, exactly **half** of it on every NHL 14/15/Legacy mode save. Container tags are NOT verified on read — zlib's Adler-32 validates the stream.
+- **Deflate** (`pack.rs`): real zlib via `deflateInit2_` at **level 6, window 15, memLevel 9, default strategy** — measured 2026-10-19 to reproduce every v4 roster anchor's stream byte for byte (flate2 pins memLevel 8 and does not). Error `DeflatedTooLarge` if the stream does not fit the payload region; rebuild header; zero-pad the region to `0x2C + uncompressed_size`; append a mode save's sections verbatim; then recompute `checksum_b` then `checksum_a`. A roster save's region follows the new inflated size (the file stays exactly `0x2C + uncompressed_size` long); a mode save keeps its declared region.
 - RawV2 (NHL12/13) writes the body uncompressed and tight (no padding) — proven byte-for-byte against real saves (`pack.rs:194-234`).
 
 ---
@@ -347,9 +347,9 @@ Both tags use the same formulas as v4 → fully writeable.
 
 ### Trailing sections, padding, multi-part
 
-- **No trailing non-DB sections** inside a single container — only zero padding (v1/v4) or nothing (v2). No footer/index/per-part table.
-- **Padding:** v4 (PS3) is over-allocated; the writer zero-pads back to the **original file allocation** (`pack.rs:171-175`). v2 is tight. v1/v2 reads trim trailing padding using the inner TDB `db_size@0x08` (endian from body byte `0x04`).
-- Both checksum regions **include** the trailing padding.
+- **Roster saves carry no sections after the payload** — only zero padding (v1/v4) or nothing (v2). **Mode saves do** (corrected 2026-10-19): after `0x2C + uncompressed_size` a `00000002 00000001 <len> <tag> …` block list follows on both raw v2 and zlib v4 containers; it is preserved verbatim and covered by `checksum_a` only.
+- **Padding:** v4 zero-pads the payload region to `0x2C + uncompressed_size` (on a roster save that is the whole file). v2 is tight. v1/v2 reads trim trailing padding using the inner TDB `db_size@0x08` (endian from body byte `0x04`).
+- `checksum_a` covers the padding and any mode sections; `checksum_b` covers the payload region (padding included) and stops there.
 - **`DATA000N` multi-part reassembly: NOT PRESENT.** A repo-wide grep for `DATA000*` / `part_count` / `num_parts` / `reassembl*` returns zero matches in save code. These saves are single-file: PS3 = one `SYS-DATA` file; Xbox360 (Xenia) = the single inner file named after its folder (`<folder>/<basename>`, else "the only regular file"). There is no concatenation logic because no save is split.
 
 ### Title IDs and container version per game
@@ -366,7 +366,7 @@ From `app/src-tauri/resources/games/*.toml` + `header.rs:148-178` + `pack.rs:71-
 | NHL 15 | `454109DC` | `BLUS31436` | ZlibV4 (48B) | 2 | Yes |
 | NHL Legacy | `454109EC` | `BLUS31540` | ZlibV4 (48B) | 4 | Yes |
 
-Writeability rule (`header.rs:175-177`): writeable iff `ZlibV4 | RawV2`. RawV1 is refused (`PackError::UnsupportedV1Container`) because `tag_1c@0x1C` is un-reversed. RawV2 and ZlibV4 writers reproduce real saves byte-for-byte (gold tests `pack.rs:459-471`).
+Writeability (`header.rs`): every variant writes; RawV1 is **experimental** (`tag_1c@0x1C` preserved verbatim — partly reversed 2026-10-19: CRC-32/MPEG-2 over `file[0x20..EOF-4]` on BEAPRO/SETTINGS, unresolved on ROSTER/BEAGM/SEASON, see `ps3-save-container.md`). RawV2, RawV3, RawV1 and — since 2026-10-19 — ZlibV4 same-DB repacks reproduce the anchors byte for byte (`tests/container.rs`). **The variant is resolved by body marker** (`DB` at 0x1C / 0x20 / 0x2C, zlib at 0x30), never by the version word, which varies by title and save type (1, 3, 5, 6 all occur on 44-byte and zlib headers).
 
 ### Worked example (NHL14 disambiguation, `header.rs:769-785`)
 

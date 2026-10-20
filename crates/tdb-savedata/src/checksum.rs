@@ -5,8 +5,9 @@
 //!
 //! * [`checksum_a`] @ `0x10` — **CRC-32/IEEE** (reflected) over `file[0x1C..EOF]`.
 //! * [`checksum_b`] @ `0x28` — **CRC-32/BZIP2** (non-reflected, final complement) over
-//!   `file[0x2C..EOF]`. This differs from `tdb-core`'s `crc32_mpeg2` (the DB-internal CRC, routine A)
-//!   *only* by the final complement, so it is derived from it directly.
+//!   `file[0x2C..0x2C + uncompressed_size]` — the payload region, which on a roster save runs to
+//!   EOF (see [`checksum_b_region_end`]). This differs from `tdb-core`'s `crc32_mpeg2` (the
+//!   DB-internal CRC, routine A) *only* by the final complement, so it is derived from it directly.
 
 /// Stored big-endian at this offset.
 pub const CHECKSUM_A_OFFSET: usize = 0x10;
@@ -14,7 +15,7 @@ pub const CHECKSUM_A_OFFSET: usize = 0x10;
 pub const CHECKSUM_A_REGION_START: usize = 0x1C;
 /// Stored big-endian at this offset.
 pub const CHECKSUM_B_OFFSET: usize = 0x28;
-/// `checksum_b` covers from here to EOF (after both checksum slots).
+/// `checksum_b` covers from here to the end of the payload region (after both checksum slots).
 pub const CHECKSUM_B_REGION_START: usize = 0x2C;
 
 /// CRC-32/IEEE (reflected, the standard zlib CRC) — `checksum_a` over `file[0x1C..]`.
@@ -35,9 +36,25 @@ pub fn checksum_a(file: &[u8]) -> u32 {
     crc32_ieee(&file[CHECKSUM_A_REGION_START..])
 }
 
-/// `checksum_b` = CRC-32/BZIP2 over `file[0x2C..]` (= `crc32_mpeg2` with the final complement).
+/// Where `checksum_b`'s region ends: `0x2C + uncompressed_size@0x24`, clamped to the file.
+///
+/// `checksum_b` covers the **declared payload only**, not the file to EOF. For a roster save the
+/// two coincide (the file is exactly `0x2C + uncompressed_size` long). A mode save (BEAGM /
+/// SEASON / BEAPRO / PROFILE) carries further sections after the payload — a `00000002 00000001
+/// <len> <tag>` block list — that only `checksum_a` covers (measured 2026-10-19 on the NHL 12 /
+/// 13 raw and NHL 14 / 15 / Legacy zlib mode-save anchors, PS3 and Xbox 360: every stored
+/// `checksum_b` matches this region and none matches the EOF rule).
+pub fn checksum_b_region_end(file: &[u8]) -> usize {
+    let declared = u32::from_be_bytes([file[0x24], file[0x25], file[0x26], file[0x27]]) as usize;
+    CHECKSUM_B_REGION_START
+        .saturating_add(declared)
+        .min(file.len())
+}
+
+/// `checksum_b` = CRC-32/BZIP2 over `file[0x2C..0x2C + uncompressed_size]` (= `crc32_mpeg2` with
+/// the final complement). See [`checksum_b_region_end`].
 pub fn checksum_b(file: &[u8]) -> u32 {
-    !tdb_core::crc::crc32_mpeg2(&file[CHECKSUM_B_REGION_START..])
+    !tdb_core::crc::crc32_mpeg2(&file[CHECKSUM_B_REGION_START..checksum_b_region_end(file)])
 }
 
 /// Recompute and store both checksums in place. Order matters: `checksum_b` first (its region starts

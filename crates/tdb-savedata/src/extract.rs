@@ -52,15 +52,11 @@ pub(crate) fn payload(file: &[u8]) -> Result<Vec<u8>, SaveError> {
             if out.len() > MAX_INFLATE {
                 return Err(SaveError::Inflate("inflated stream exceeds cap".into()));
             }
-            if let Some(declared) = header.uncompressed_size {
-                let diff = (out.len() as i64 - declared as i64).unsigned_abs();
-                if diff > 4 {
-                    return Err(SaveError::Inflate(format!(
-                        "inflated {} bytes, header declares {declared}",
-                        out.len()
-                    )));
-                }
-            }
+            // `uncompressed_size@0x24` is the payload *region* the container reserves (and the
+            // scope of `checksum_b`), not a promise about the inflated length: a roster save's
+            // region equals its inflated payload, but every NHL 14 / 15 / Legacy mode save
+            // (PS3 and Xbox 360) inflates to exactly twice its declared region (measured
+            // 2026-10-19). The inflated bytes are validated as a TDB by the caller instead.
             Ok(out)
         }
     }

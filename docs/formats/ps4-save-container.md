@@ -54,6 +54,20 @@ The big record's payload is an **LZ4 Frame** (magic `04 22 4D 18`), optionally p
 codec-id byte. **NHL17–19+ use `[01][frame]`; NHL16 uses a bare `[frame]`** (no codec byte) — verified
 against both anchors. The 12-byte record header also varies by title (NHL19 starts `00 70 00…`, NHL16
 `07 00 00…`), so the codec preserves it verbatim and never interprets it.
+**Frame parameters and the size word (measured 2026-10-19 on every PS4 anchor).** Every frame is
+`FLG 0x64, BD 0x40`: independent 64 KiB blocks, a content checksum, no block checksums, no
+content size. NHL 17–21 records carry a little-endian `u32` **after** the frame holding the
+decompressed length (roster and mode saves alike); NHL 16 records end with the frame. Each block
+is the output of LZ4's fast compressor as it stood **before 1.9.0** (liblz4 1.10 reproduces most
+blocks but lets a match start one byte closer to the block end, so a few blocks come out 1–5 bytes
+shorter). `tdb_savedata::lz4_legacy` ports that compressor; with it a no-op repack of the
+NHL 17/18/19/21 roster and 3-on-3 anchors is **byte-identical** to the game's file
+(`ps4::tests::repack_of_unedited_lz4_rosters_is_byte_identical`). NHL 16 was written by an older
+LZ4 build still (12 of 52 blocks differ, in both directions); its repack is equivalent, not identical.
+
+The `CRCValue` string in the roster save's JSON record (54 base-62-looking characters) is **not
+recomputed** on write; what it covers and whether the game checks it are unknown.
+
 Decompressing the frame yields a **little-endian TDB v6** at offset 0:
 
 - nhl19 `RosterCustom0`: LZ4 1,734,365 B → **7,557,036 B** inner TDB, **54 tables** (a roster subset,
@@ -102,5 +116,12 @@ form refuses a size change. Tests: `studio-domain` `session.rs`
 
 ## Tooling note
 
-LZ4 Frame decode/encode is a standard codec (the engine's Rust uses the `lz4_flex` / `lz4` crate). The
-audit used Python `lz4.frame` (scratchpad only; not a repo dependency).
+LZ4 Frame decode uses `lz4_flex`; encode is the in-repo pre-1.9 port (`tdb_savedata::lz4_legacy`),
+checked against liblz4 (`lz4` crate, dev-dependency, `examples/lz4_*`). The audit used Python
+`lz4.frame` (scratchpad only; not a repo dependency).
+
+**Mode saves (NHL 17+).** The big record of an NHL 17+ Season / BeAGM / BeAPro save is an LZ4
+frame whose payload is **another** `[01][LZ4 frame]` (nested). NHL 17's inner frame inflates to the
+mode TDB at offset 0 (8.2 MB Season, 11.3 MB BeAPro); NHL 18–21's inflates to a small section
+table (`<len u32> … <len u32> …`) rather than a TDB. Neither is read by Studio yet (identification
+fails with "missing 'DB' magic"); NHL 15/16 mode saves hold the TDB directly and open read-only.

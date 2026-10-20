@@ -531,16 +531,20 @@ fn refusals_hold_on_open() {
 
 #[test]
 fn manual_metadata_must_describe_the_file() {
-    // NHL 20 PS4 has no bundled definitions: refused by default, and a mismatched metadata file
-    // supplied by hand is refused too (never borrowed from a neighbouring title silently).
+    // A mismatched metadata file supplied by hand is refused (never borrowed from a neighbouring
+    // title silently). NHL 20 PS4 identifies since its genuine anchor landed (P0-4, 15 Oct 2026),
+    // so the manual route is exercised on an acknowledged mode save.
     let tmp = Temp::new("manual");
     let store = store();
     let reg = Registry::default();
     let f = copy_save(&tmp, "ps4/nhl20/savefiles/ThreeOnThree0/DATA");
     let f = f.to_string_lossy().into_owned();
     let id = reg.save_editor_identify(&f, &store).unwrap();
-    assert_eq!(id.decision, "refused");
-    assert!(id.candidates.is_empty());
+    assert_eq!(id.decision, "caution", "{:?}", id.decision_reason);
+    assert!(id
+        .candidates
+        .iter()
+        .any(|c| c.game_id == "nhl20" && c.platform == "ps4"));
     let wrong = repo().join("anchors/ps4/nhl15/databases/nhl_game-meta.xml");
     let err = reg
         .save_editor_open(

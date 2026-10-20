@@ -170,10 +170,11 @@ fn every_anchor_save_fixture_is_classified() {
         decision("ps4/nhl17/savefiles/RosterCustom0/DATA"),
         ("roster".into(), OpenPolicy::Allowed)
     );
-    // NHL 20 PS4 has no bundled definitions: refused rather than borrowed from a neighbour.
-    assert!(
-        matches!(decision("ps4/nhl20/savefiles/ThreeOnThree0/DATA").1, OpenPolicy::Refused(ref r) if r.contains("bundled game definitions"))
-    );
+    // NHL 20 PS4 has bundled definitions since the genuine CUSA15439 anchor landed (roadmap
+    // P0-4, 15 Oct 2026): its 3-on-3 save identifies as NHL 20 and opens with the mode caution.
+    let twenty = decision("ps4/nhl20/savefiles/ThreeOnThree0/DATA");
+    assert_eq!(twenty.0, "threes");
+    assert!(matches!(twenty.1, OpenPolicy::Caution(_)), "{:?}", twenty.1);
     // An Xbox 360 roster save opens as its game.
     assert_eq!(
         decision("xbox360/nhl14/savefiles/ROSTER 20260627054746/ROSTER 20260627054746").1,

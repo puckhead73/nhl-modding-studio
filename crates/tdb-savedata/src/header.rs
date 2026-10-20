@@ -123,19 +123,39 @@ impl SaveHeader {
         let checksum_a = be32(file, 0x10);
         let version_word = be32(file, 0x14);
 
-        // Discriminator (spec §4): the version word is shared across raw/zlib, so disambiguate v2 by
-        // looking for the zlib magic at 0x30 vs the "DB" marker at 0x2C.
-        let zlib_at_30 = file.get(0x30) == Some(&0x78);
+        // Discriminator: the version word is unreliable on its own — it varies by title *and*
+        // save type (verified over the anchors, 2026-10-19: NHL 12 Xbox SEASON and NHL 12 PS3
+        // BEAGM carry word 1 over a 44-byte raw header, NHL 13 DYNASTY word 3 over the same,
+        // NHL 14/15/Legacy DYNASTY/SEASON words 5 and 6 over a zlib body, NHL 14 Xbox PROFILE
+        // word 5 over a 44-byte raw header). The body marker settles the variant; the word is
+        // only consulted when no marker is present.
+        let zlib_at_30 = matches!(
+            file.get(0x30..0x32),
+            Some([0x78, 0x01 | 0x5E | 0x9C | 0xDA])
+        );
         let db_at_2c = file.get(0x2C..0x2E) == Some(b"DB");
-        let version = match version_word {
-            3 => ContainerVersion::RawV3,
-            1 => ContainerVersion::RawV1,
-            0 => ContainerVersion::RawV2,
-            4 => ContainerVersion::ZlibV4,
-            2 if zlib_at_30 => ContainerVersion::ZlibV4,
-            2 if db_at_2c => ContainerVersion::RawV2,
-            2 => return Err(SaveError::NotTdb),
-            other => return Err(SaveError::UnsupportedVersion(other)),
+        let db_at_20 = file.get(0x20..0x22) == Some(b"DB");
+        let db_at_1c = file.get(0x1C..0x1E) == Some(b"DB");
+        let version = if db_at_1c {
+            ContainerVersion::RawV3
+        } else if db_at_20 {
+            ContainerVersion::RawV1
+        } else if db_at_2c {
+            ContainerVersion::RawV2
+        } else if zlib_at_30 {
+            ContainerVersion::ZlibV4
+        } else {
+            // No marker (a HockeyCard image blob, a gen6 dynasty, a PS3 settings save with an
+            // unknown layout): classify the header by its word as before, so such files keep
+            // their save type and version label; extraction then reports the missing TDB.
+            match version_word {
+                3 => ContainerVersion::RawV3,
+                1 => ContainerVersion::RawV1,
+                0 => ContainerVersion::RawV2,
+                4 => ContainerVersion::ZlibV4,
+                2 => return Err(SaveError::NotTdb),
+                other => return Err(SaveError::UnsupportedVersion(other)),
+            }
         };
 
         let (checksum_b, uncompressed_size, compressed_size, field_20) = match version {

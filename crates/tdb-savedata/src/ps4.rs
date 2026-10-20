@@ -20,7 +20,7 @@
 //! structurally; in-game/real-console validation of the recompressed frame + header tag is pending
 //! (the doc marks write-back deferred — no PFD encryption was observed on emulator exports).
 
-use std::io::{Read, Write};
+use std::io::Read;
 
 use crate::SaveError;
 
@@ -150,22 +150,67 @@ pub fn repack_roster(original: &[u8], new_inner: &[u8]) -> Result<Vec<u8>, SaveE
     let (idx, framing) = roster_record(&records)
         .ok_or_else(|| SaveError::Ps4("no supported roster record in DATA".into()))?;
 
-    let frame = if framing == Framing::Chunkzip {
+    let (frame, suffix) = if framing == Framing::Chunkzip {
         // Preserve the measured NHL15 native chunking, rather than a single oversized chunk.
         tdb_archive_codec::is_native_chunkzip_framing(&records[idx].payload)
             .map_err(|e| SaveError::Ps4(format!("unqualified chunkzip roster framing: {e}")))?;
-        tdb_archive_codec::compress_chunkzip_native(new_inner)
+        (tdb_archive_codec::compress_chunkzip_native(new_inner), Vec::new())
     } else {
-        lz4_compress(new_inner)?
+        // NHL 17+ records carry the decompressed length after the frame: keep it current.
+        let old = &records[idx].payload[framing.prefix_len()..];
+        let old_len = lz4_decompress(old)?.len();
+        (lz4_compress(new_inner)?, lz4_frame_suffix(old, old_len, new_inner.len()))
     };
-    let mut payload = Vec::with_capacity(frame.len() + framing.prefix_len());
+    let mut payload = Vec::with_capacity(frame.len() + framing.prefix_len() + suffix.len());
     if framing == Framing::Codec01 {
         payload.push(CODEC_LZ4);
     }
     payload.extend_from_slice(&frame);
+    payload.extend_from_slice(&suffix);
     records[idx].payload = payload;
 
     Ok(serialize_records(&records))
+}
+
+/// Length of the LZ4 frame at the start of `bytes` (descriptor, blocks, end mark, content
+/// checksum), or `None` when it is not well formed. NHL 17+ records follow the frame with a
+/// little-endian `u32` holding the decompressed length (measured on every NHL 17–21 anchor,
+/// 2026-10-19); NHL 16 records end with the frame.
+fn lz4_frame_len(bytes: &[u8]) -> Option<usize> {
+    if bytes.get(0..4) != Some(&LZ4_MAGIC[..]) {
+        return None;
+    }
+    let flg = *bytes.get(4)?;
+    let mut pos = if flg & 0x08 != 0 { 15 } else { 7 };
+    loop {
+        let size = u32::from_le_bytes(bytes.get(pos..pos + 4)?.try_into().ok()?);
+        pos += 4;
+        if size == 0 {
+            break;
+        }
+        pos += (size & 0x7FFF_FFFF) as usize;
+        if flg & 0x10 != 0 {
+            pos += 4;
+        }
+    }
+    if flg & 0x04 != 0 {
+        pos += 4;
+    }
+    (pos <= bytes.len()).then_some(pos)
+}
+
+/// The bytes a record carries after its LZ4 frame, rewritten for a new decompressed length when
+/// they are the measured size word; anything else is kept verbatim.
+fn lz4_frame_suffix(payload_after_prefix: &[u8], old_len: usize, new_len: usize) -> Vec<u8> {
+    let suffix = match lz4_frame_len(payload_after_prefix) {
+        Some(n) => &payload_after_prefix[n..],
+        None => return Vec::new(),
+    };
+    if suffix.len() == 4 && suffix == (old_len as u32).to_le_bytes() {
+        (new_len as u32).to_le_bytes().to_vec()
+    } else {
+        suffix.to_vec()
+    }
 }
 
 fn lz4_decompress(frame: &[u8]) -> Result<Vec<u8>, SaveError> {
@@ -176,11 +221,14 @@ fn lz4_decompress(frame: &[u8]) -> Result<Vec<u8>, SaveError> {
     Ok(out)
 }
 
+/// Compress an inner payload the way the games write it (measured on every PS4 anchor, 2026-10-19):
+/// an LZ4 frame with **independent 64 KiB blocks**, a **content checksum**, no block checksums and
+/// no content size (`FLG 0x64`, `BD 0x40`), each block produced by the pre-1.9 LZ4 fast
+/// compressor ([`crate::lz4_legacy`]). The result reproduces the NHL 17/18/19/21 anchor frames
+/// byte for byte; NHL 16 was written by an older LZ4 build still, so its frame is equivalent but
+/// not identical.
 fn lz4_compress(inner: &[u8]) -> Result<Vec<u8>, SaveError> {
-    let mut enc = lz4_flex::frame::FrameEncoder::new(Vec::new());
-    enc.write_all(inner)
-        .map_err(|e| SaveError::Lz4(e.to_string()))?;
-    enc.finish().map_err(|e| SaveError::Lz4(e.to_string()))
+    Ok(crate::lz4_legacy::compress_frame(inner))
 }
 
 #[cfg(test)]
@@ -298,6 +346,25 @@ mod tests {
                     );
                 }
             }
+        }
+    }
+
+    /// The writer reproduces the games' own frames: a no-op repack of the NHL 17/18/19/21 anchors
+    /// is byte-identical to the file the game wrote (NHL 16 differs only by LZ4 build — checked
+    /// for equivalence above).
+    #[test]
+    fn repack_of_unedited_lz4_rosters_is_byte_identical() {
+        for rel in [
+            "anchors/ps4/nhl17/savefiles/RosterCustom0/DATA",
+            "anchors/ps4/nhl18/savefiles/RosterCustom0/DATA",
+            "anchors/ps4/nhl19/savefiles/RosterCustom0/DATA",
+            "anchors/ps4/nhl18/savefiles/ThreeOnThree0/DATA",
+            "anchors/ps4/nhl21/savefiles/ThreeOnThree0/DATA",
+        ] {
+            let data = read_anchor(rel);
+            let inner = extract_roster(&data).unwrap();
+            let repacked = repack_roster(&data, &inner).unwrap();
+            assert!(repacked == data, "{rel}: no-op repack must be byte-identical");
         }
     }
 

@@ -10,9 +10,15 @@
 //! * **Read:** v3 (gen6 NHL07-09 ROSTER), v1 (NHL10/11), v2 (NHL12/13), v4 (NHL14/15/Legacy)
 //!   headers; save-type taxonomy; inner-DB extraction (raw for v3/v1/v2, zlib-inflate for v4).
 //! * **Write:** v3 (gen6, tight, single `checksum_a`), v2 (raw, tight) and v4 (zlib + zero-pad)
-//!   repack with checksum recompute. **v1 (NHL10/11) is writeable but experimental** — its `tag_1c`
-//!   integrity word is un-reversed, so an edited body carries a stale tag (preserved verbatim);
-//!   `checksum_a` is recomputed and a no-op repack is byte-identical, but in-game load is unverified.
+//!   repack with checksum recompute. Every one of them reproduces the committed anchors byte for
+//!   byte on a same-DB repack (v4 since 2026-10-19: real zlib, level 6, memLevel 9). **v1
+//!   (NHL10/11) is writeable but experimental** — its `tag_1c` integrity word is only partly
+//!   reversed (see `docs/formats/ps3-save-container.md`), so an edited body carries a stale tag
+//!   (preserved verbatim); `checksum_a` is recomputed and a no-op repack is byte-identical, but
+//!   in-game load is unverified.
+//! * **Mode saves** (BEAGM / SEASON / BEAPRO / PROFILE) carry sections after the database
+//!   payload; they are preserved verbatim, `checksum_b` stops at the payload region and
+//!   `checksum_a` covers them (measured 2026-10-19).
 //!
 //! ## Not implemented (deferred / out of scope, marked here so callers don't assume otherwise)
 //!
@@ -24,6 +30,7 @@
 pub mod checksum;
 pub mod extract;
 pub mod header;
+pub mod lz4_legacy;
 pub mod pack;
 pub mod ps4;
 
