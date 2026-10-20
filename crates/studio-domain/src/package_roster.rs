@@ -1,4 +1,5 @@
-//! Explicit package roster-table growth. No row-position cell replay across an insertion.
+//! Explicit package roster-table replacement. No row-position cell replay across an inserted,
+//! removed or re-keyed roster row.
 use crate::{mod_package::RosterTableOp, DomainError, Result};
 use std::collections::{BTreeMap, BTreeSet};
 type Row = BTreeMap<String, u64>;
@@ -80,12 +81,20 @@ pub fn between(before: &[u8], after: &[u8]) -> Result<Option<RosterTableOp>> {
         Ok(db.table_canonical("eGlu").map(|t| t.current_records))
     };
     match (count(before)?, count(after)?) {
-        (Some(b), Some(a)) if a > b => {}
+        (Some(_), Some(_)) => {}
         _ => return Ok(None),
     }
     let b = rows(before)?;
     let a = rows(after)?;
-    if a.len() <= b.len() {
+    // In-place slot edits (jersey, line position) stay ordinary cell edits. Rows that were
+    // inserted, removed or re-keyed (NHL 08 releases and signings remove and insert rows,
+    // possibly leaving the count unchanged) cannot be replayed by row position.
+    let keys = |rows: &[Row]| {
+        let mut k: Vec<_> = rows.iter().map(|r| r.get("toWX").copied()).collect();
+        k.sort_unstable();
+        k
+    };
+    if a.len() == b.len() && keys(&a) == keys(&b) {
         return Ok(None);
     }
     let op = RosterTableOp {
@@ -95,7 +104,7 @@ pub fn between(before: &[u8], after: &[u8]) -> Result<Option<RosterTableOp>> {
         team_ids: teams(before)?,
     };
     if links(after)? != op.player_links || teams(after)? != op.team_ids {
-        return Err(invalid("Roster growth with new or remapped player/team identities is not supported; existing-player roster additions are supported"));
+        return Err(invalid("Roster changes with new or remapped player/team identities are not supported; existing players can be added, released or moved"));
     }
     validate_shape(&op)?;
     Ok(Some(op))
@@ -103,12 +112,13 @@ pub fn between(before: &[u8], after: &[u8]) -> Result<Option<RosterTableOp>> {
 
 pub fn validate_shape(op: &RosterTableOp) -> Result<()> {
     if op.before.is_empty()
-        || op.after.len() <= op.before.len()
+        || op.after.is_empty()
+        || op.after == op.before
         || op.after.len() > u16::MAX as usize
         || op.player_links.len() > u16::MAX as usize
         || op.team_ids.len() > u16::MAX as usize
     {
-        return Err(invalid("Invalid roster addition counts"));
+        return Err(invalid("Invalid roster change counts"));
     }
     let fields: BTreeSet<_> = op.before[0].keys().collect();
     if fields.len() > 255
@@ -161,7 +171,7 @@ pub fn check_destination(bytes: &[u8], op: &RosterTableOp) -> Result<bool> {
         return Ok(true);
     }
     if current != op.before {
-        return Err(invalid("The destination roster differs from this mod's baseline. Restore the original installation first; roster additions cannot overwrite a different roster"));
+        return Err(invalid("The destination roster differs from this mod's baseline. Restore the original installation first; roster changes cannot overwrite a different roster"));
     }
     Ok(false)
 }

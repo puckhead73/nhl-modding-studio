@@ -86,3 +86,32 @@ fn ps3_team_and_shannon_equipment_previews_assemble() {
         }
     }
 }
+#[test]
+#[ignore = "requires NHL08_PS3_INSTALL; original assets read-only"]
+fn ps3_goalie_gear_paints_from_the_goalies_own_colours() {
+    use base64::Engine;
+    let root=std::env::var("NHL08_PS3_INSTALL").unwrap();
+    let reg=Registry::default();
+    let id=reg.open_workspace_from_paths(Some("nhl08"),Platform::Ps3,
+        &s(&repo("anchors/ps3/nhl08/databases/nhlng.db")),None,
+        &s(&repo("anchors/ps3/nhl08/databases/nhlng-meta.xml")),&s(&repo("defs"))).unwrap().project_id;
+    let player=reg.list_players(id).unwrap().into_iter().find(|p|p.first_name=="Kari"&&p.last_name=="Lehtonen").unwrap();
+    let args=AssetRootsArgsDto{install_dir:root,platform:Some("ps3".into()),rendering_override:None,fe_override:None};
+    for gear in [false,true] {
+        let kit=reg.team_kit_preview(id,&args,player.team_id.unwrap(),0,0,Some(player.player_id),gear).unwrap();
+        for (kind, prefix) in [("pads","goaliepad_"),("blocker","blocker_"),("trapper","trapper_")] {
+            let pieces: Vec<_>=kit.pieces.iter().filter(|p|p.kind==kind).collect();
+            assert!(!pieces.is_empty(),"missing {kind}, gear={gear}");
+            for piece in pieces {
+                for mesh in &piece.submeshes {
+                    let tex=&kit.textures[mesh.material_index.unwrap_or_else(||panic!("{kind} lacks texture, gear={gear}")) as usize];
+                    assert!(tex.name.starts_with(prefix)&&tex.name.ends_with("_cm"),"{kind}: {}",tex.name);
+                    if let Ok(dir)=std::env::var("NHL08_PREVIEW_DUMP") {
+                        let rgba=base64::engine::general_purpose::STANDARD.decode(&tex.rgba_base64).unwrap();
+                        image::RgbaImage::from_raw(tex.width,tex.height,rgba).unwrap().save(Path::new(&dir).join(format!("{}.png",tex.name))).unwrap();
+                    }
+                }
+            }
+        }
+    }
+}

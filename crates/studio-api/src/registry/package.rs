@@ -312,10 +312,9 @@ fn project_edits(store: &ProjectStore, defs: &str) -> Result<ProjectEdits, ApiEr
             }
             let before = studio_domain::explicit_free_agents(&before_bytes).map_err(|e| ApiError::Workspace(e.to_string()))?;
             let after = studio_domain::explicit_free_agents(&after_bytes).map_err(|e| ApiError::Workspace(e.to_string()))?;
+            // Every title's main database carries the same single-key `VoEQ` list;
+            // `explicit_free_agents` refuses any other layout, so no per-title gate is needed.
             if before != after {
-                if m.game_id != "nhl07" || m.platform != "xbox" {
-                    return Err(ApiError::Workspace("Free-agent packages are currently qualified only for NHL 07 Xbox 360".into()));
-                }
                 free_agents = Some(pkg::FreeAgentPoolOp { before: before.ok_or_else(|| ApiError::Workspace("Missing baseline free-agent list".into()))?, after: after.ok_or_else(|| ApiError::Workspace("Missing saved free-agent list".into()))? });
             }
             career_removals.extend(cr);

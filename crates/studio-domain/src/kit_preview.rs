@@ -502,6 +502,36 @@ pub fn complete_modern_equipment(
     }
 }
 
+/// The `fMVl` colour each NHL08/09 goalie-gear zone (`mask*3 + channel`) takes, by piece kind:
+/// `(texture folder, colour-field stem prefix, zone colour names)`. Read off the shipped NHL08
+/// PS3 masks: the logo lettering (pads/trapper zone 4, blocker zone 5) and the trapper web/lacing
+/// (zone 5) are unambiguous; the base/stripe/strap/other/trim order is a **FLAGGED BEST-GUESS**
+/// consistent with those (zone 0 = the largest shell area), not yet game-verified.
+pub const EARLY_GOALIE_GEAR_ZONES: [(&str, &str, &str, [&str; 6]); 3] = [
+    ("pads", "goaliepad", "pads", ["base", "stripe1", "stripe2", "strap", "logo", "other"]),
+    ("blocker", "blocker", "blocker", ["base", "stripe1", "stripe2", "trim1", "trim2", "logo"]),
+    ("trapper", "trapper", "trapper", ["base", "stripe1", "stripe2", "other", "logo", "mesh"]),
+];
+
+/// NHL08/09 goalie gear has no colour map on disk: paint each pad/blocker/trapper from its
+/// model's bundled zone masks with the goalie's own colours. `gear(kind)` gives the selected
+/// model and the six zone colours in [`EARLY_GOALIE_GEAR_ZONES`] order; pieces it cannot
+/// paint keep whatever texture they already had.
+pub fn complete_early_goalie_equipment(pieces: &mut [KitPieceInput], rendering: &std::path::Path, gear: &dyn Fn(&str) -> Option<(u32, Vec<[u8; 3]>)>) {
+    for piece in pieces.iter_mut() {
+        let Some(&(_, folder, _, _)) = EARLY_GOALIE_GEAR_ZONES.iter().find(|z| z.0 == piece.kind) else { continue };
+        let Some((model, zones)) = gear(&piece.kind) else { continue };
+        // Handed meshes are `<piece>_<a>_<b>_<side>_<c>_<lod>`.
+        let stem = piece.mesh_path.file_stem().and_then(|s| s.to_str()).unwrap_or_default();
+        let tokens: Vec<_> = stem.split('_').collect();
+        let side = if tokens.len() == 6 { tokens[3].parse().unwrap_or(0) } else { 0 };
+        if let Some(texture) = crate::equipment_texture::composite_early_goalie_gear(rendering, folder, model, side, &zones) {
+            piece.texture_paths.clear();
+            piece.prebuilt_textures = vec![texture];
+        }
+    }
+}
+
 fn complete_early_equipment(pieces: &mut Vec<KitPieceInput>, rendering: &std::path::Path, glove: Option<(u32, Vec<[u8; 3]>)>, helmet: Option<Vec<[u8; 3]>>, brand_offset: u32) {
     // NHL08/09 share handed geometry and masks, but glove brand numbering differs.
     pair_early_equipment(pieces);

@@ -762,8 +762,8 @@ pub fn inspect_package_bytes(bytes: Vec<u8>, limits: &Limits) -> Result<Inspecte
     }
     let counts = |cat: &str| manifest.categories.iter().find(|c| c.category == cat).map(|c| c.count).unwrap_or(0);
     if let Some(pool) = &edits.free_agents {
-        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V6 && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4 && edits.schema != EDITS_SCHEMA_V3) || manifest.game_id != "nhl07" || manifest.author_platform != "xbox" {
-            return Err(refuse("Explicit free-agent packages are qualified only for NHL 07 Xbox 360, edits schema 3".into()));
+        if (edits.schema != EDITS_SCHEMA && edits.schema != EDITS_SCHEMA_V6 && edits.schema != EDITS_SCHEMA_V5 && edits.schema != EDITS_SCHEMA_V4 && edits.schema != EDITS_SCHEMA_V3) {
+            return Err(refuse("Explicit free-agent packages require edits schema 3 or later".into()));
         }
         for ids in [&pool.before, &pool.after] {
             if ids.len() > 8191 || ids.iter().collect::<std::collections::HashSet<_>>().len() != ids.len() {
@@ -875,8 +875,10 @@ mod tests {
         e.free_agents.as_mut().unwrap().after = vec![3, 3];
         assert!(check(m.clone(), &e).is_err());
         e.free_agents.as_mut().unwrap().after = vec![3];
+        // The list is title-agnostic: every main database carries the same `VoEQ` layout.
         m.game_id = "nhl08".into();
-        assert!(check(m, &e).is_err());
+        m.author_platform = "ps3".into();
+        assert!(check(m, &e).is_ok());
         // Existing schema-2 packages continue to inspect without a rebuild.
         let p = vec![("payloads/aa.png".into(), b"PNG".to_vec())];
         let mut e = edits(); e.schema = EDITS_SCHEMA_V2.into();

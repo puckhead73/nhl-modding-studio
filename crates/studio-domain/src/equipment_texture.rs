@@ -167,6 +167,30 @@ pub fn composite_nhl08_glove(rendering: &Path, brand: u32, side: u32, zones: &[[
     Some(PreviewTexture { name: format!("glove_{side}_cm"), width: base.width, height: base.height, rgba_base64: base64_encode(&base.rgba) })
 }
 
+/// NHL08/09 goalie gear (`goaliepad` / `blocker` / `trapper`) bundles each model's two handed
+/// mask sets in `texlib_<model>` — `<piece>_0_<side>_<model>_{0,1}_tm` plus `_0_dm` — like the
+/// NHL08 glove, but with two masks (six zones) painted by the goalie's own `fMVl` colours. The
+/// loose `_am/_nm/_sm` maps beside them are not colour maps.
+pub fn composite_early_goalie_gear(rendering: &Path, folder: &str, model: u32, side: u32, zones: &[[u8; 3]]) -> Option<PreviewTexture> {
+    let path = rendering.join(folder).join(format!("texlib_{model}.rx2"));
+    let path = if path.is_file() { path } else { path.with_extension("rpsgl") };
+    let bytes = crate::assets::read_asset_file(&path).ok()?;
+    let names: Vec<String> = if bytes.starts_with(tdb_rx2::ps3_mesh::MAGIC) {
+        tdb_rx2::texlib_ps3::parse(&bytes).ok()?.textures.into_iter().map(|t| t.name).collect()
+    } else {
+        tdb_rx2::texlib::parse(&bytes).ok()?.textures.into_iter().map(|t| t.name).collect()
+    };
+    let image = |suffix: &str| -> Option<DecodedImage> {
+        let name = format!("{folder}_0_{side}_{model}_{suffix}.Raster");
+        let index = names.iter().position(|n| *n == name)?;
+        crate::assets::decode_texture_bytes(bytes.clone(), &path, Some(index)).ok().map(|(_, img)| img)
+    };
+    let masks: Option<Vec<_>> = (0..2).map(|k| image(&format!("{k}_tm"))).collect();
+    let mut base = composite_zone_masks(&masks?, zones, zones.first().copied())?;
+    if let Some(detail) = image("0_dm") { blend_detail(&mut base, &detail); }
+    Some(PreviewTexture { name: format!("{folder}_{side}_cm"), width: base.width, height: base.height, rgba_base64: base64_encode(&base.rgba) })
+}
+
 /// Later gloves use either a bundled handed mask set (NHL10–11) or loose
 /// feglove masks. Resolve the requested brand and paint the team's zone colours.
 pub fn composite_modern_glove(
