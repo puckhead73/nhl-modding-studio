@@ -39,6 +39,9 @@ const PIECES: { key: string; label: string }[] = [
 ];
 
 /** A uniform kit: a `(style, variant)` pair, its `xjgw` row (for metadata, if any), and its textures. */
+/** Kits per team: the registry's per-team jersey index is 5 bits (0..31). */
+const MAX_KITS_PER_TEAM = 32;
+
 interface Kit {
   key: string;
   style: number;
@@ -860,7 +863,7 @@ function JerseySelectPreview({
  *  `{style}_{art}_{variant}` identity (staged as a pending, undoable edit), and optionally the
  *  kit's texture files are cloned onto the new asset id (same-length ids only — the containers
  *  reference the id in fixed-length name slots). */
-function AddJerseyDialog({
+export function AddJerseyDialog({
   projectId,
   teamId,
   source,
@@ -886,8 +889,12 @@ function AddJerseyDialog({
   // "Last variant + 1" convention from the reference app (fall back to 0 past the 5-bit ceiling).
   const [variant, setVariant] = useState(source.variant_raw >= 31 ? 0 : source.variant_raw + 1);
   const [cloneTextures, setCloneTextures] = useState(true);
+  // "Texture files only": skip the database row and just clone the kit's files under the new
+  // id. Testers whose jersey table is packed (every stock PS3/360 database ships full) build
+  // their kits here and register the row in a database they edit elsewhere.
+  const [filesOnly, setFilesOnly] = useState(false);
   const [result, setResult] = useState<{
-    db: CloneJerseyResultDto;
+    db: CloneJerseyResultDto | null;
     tex: CloneKitTexturesSummaryDto | null;
   } | null>(null);
 
@@ -902,18 +909,26 @@ function AddJerseyDialog({
       k.jersey.team_art_id === artId &&
       k.jersey.variant_raw === variant,
   );
-  const willCloneTextures = cloneTextures && !!installDir && sameLen && !sameId;
+  const canCloneTextures = !!installDir && sameLen && !sameId;
+  const willCloneTextures = (cloneTextures || filesOnly) && canCloneTextures;
+  // The per-team ceiling: the jersey index is 5 bits, and 32 kits on one team is game-verified
+  // on NHL Legacy (Xbox 360). The registry itself grows as needed.
+  const teamKits = kits.filter((k) => k.jersey).length;
+  const teamFull = teamKits >= MAX_KITS_PER_TEAM;
 
   const run = useMutation({
-    mutationFn: async () => {
-      const db = await call("clone_jersey", {
-        projectId,
-        sourceRecord: source.record,
-        team: teamId,
-        style,
-        artId,
-        variant,
-      });
+    mutationFn: async (mode: "db" | "filesOnly") => {
+      let db: CloneJerseyResultDto | null = null;
+      if (mode === "db") {
+        db = await call("clone_jersey", {
+          projectId,
+          sourceRecord: source.record,
+          team: teamId,
+          style,
+          artId,
+          variant,
+        });
+      }
       let tex: CloneKitTexturesSummaryDto | null = null;
       if (willCloneTextures) {
         tex = await call("clone_kit_textures", {
@@ -930,11 +945,17 @@ function AddJerseyDialog({
     },
     onSuccess: async (r) => {
       setResult(r);
-      update(await call("project_summary", { projectId }));
+      if (r.db) update(await call("project_summary", { projectId }));
       await qc.invalidateQueries();
-      onCreated(style, variant);
+      if (r.db) onCreated(style, variant);
     },
   });
+
+  // The engine refuses a DB row when the jersey table has no free record. Offer the files-only
+  // route instead of a dead end.
+  const tableFull = run.isError && /table is full/i.test(String(run.error));
+  const blockedForDb = sameId || taken || teamFull;
+  const blockedForFiles = sameId || !canCloneTextures;
 
   const num = (
     label: string,
@@ -964,8 +985,9 @@ function AddJerseyDialog({
           <>
             <h2 className="mb-1 text-lg font-semibold text-slate-100">Add New Jersey</h2>
             <p className="mb-4 text-xs text-slate-400">
-              Clones the selected kit — every registry value is copied onto a new jersey row, then
-              stamped with the identity below. The row is staged as a pending, undoable edit.
+              {filesOnly
+                ? "Clones the selected kit's texture files under the identity below. No database row is written — register the kit in your database yourself."
+                : "Clones the selected kit — every registry value is copied onto a new jersey row, then stamped with the identity below. The row is staged as a pending, undoable edit."}
             </p>
 
             <div className="mb-3 grid grid-cols-3 gap-3">
@@ -985,12 +1007,21 @@ function AddJerseyDialog({
               </div>
             </div>
 
+            <p className="mb-2 text-xs text-slate-500">
+              This team has {teamKits} of {MAX_KITS_PER_TEAM} kits.
+            </p>
+            {teamFull && !filesOnly && (
+              <p className="mb-2 text-xs text-rose-400">
+                This team already carries the full {MAX_KITS_PER_TEAM}-kit set. Delete or move a kit
+                before adding another, or create texture files only.
+              </p>
+            )}
             {sameId && (
               <p className="mb-2 text-xs text-rose-400">
                 The new identity equals the source kit's — change the style, art id or variant.
               </p>
             )}
-            {taken && !sameId && (
+            {taken && !sameId && !filesOnly && (
               <p className="mb-2 text-xs text-rose-400">
                 A kit with asset id {dstId} is already registered on this team.
               </p>
@@ -999,29 +1030,74 @@ function AddJerseyDialog({
               <p className="mb-2 text-xs text-amber-300">
                 The new id has a different character length than the source ({dstId.length} vs{" "}
                 {srcId.length}), so the texture files can't be cloned (their containers reference
-                the id in fixed-length name slots). The registry row can still be created.
+                the id in fixed-length name slots).
+                {filesOnly ? " Pick an id of the same length." : " The registry row can still be created."}
               </p>
             )}
 
             <label
-              className="mb-4 flex items-center gap-2 text-xs text-slate-300"
+              className="mb-2 flex items-center gap-2 text-xs text-slate-300"
               title="Copy the source kit's jersey/pants/socks textures (and its FE jersey-select thumbnail) under the new asset id, rewriting the embedded id strings"
             >
               <input
                 type="checkbox"
-                checked={cloneTextures && !!installDir && sameLen}
-                disabled={!installDir || !sameLen || run.isPending}
+                checked={(cloneTextures || filesOnly) && !!installDir && sameLen}
+                disabled={!installDir || !sameLen || run.isPending || filesOnly}
                 onChange={(e) => setCloneTextures(e.target.checked)}
               />
               Also clone the kit's texture files onto {dstId}
               {!installDir && <span className="text-slate-500">(needs an install tree)</span>}
             </label>
+            <label
+              className="mb-4 flex items-center gap-2 text-xs text-slate-300"
+              title="Create the texture files only. Nothing is written to the database — use this when the jersey table is full, or when you register kits in a database you edit elsewhere."
+            >
+              <input
+                type="checkbox"
+                checked={filesOnly}
+                disabled={run.isPending || !installDir}
+                onChange={(e) => {
+                  setFilesOnly(e.target.checked);
+                  run.reset();
+                }}
+              />
+              Texture files only — don't add a row to the database
+              {!installDir && <span className="text-slate-500">(needs an install tree)</span>}
+            </label>
 
-            {run.isError && (
+            {filesOnly && (
+              <p className="mb-3 rounded-md border border-amber-700/60 bg-amber-950/50 px-3 py-2 text-xs text-amber-100">
+                This jersey will <strong>not</strong> be added to the database. The game only shows a kit
+                that has a jersey row, so register {dstId} in your database before testing it.
+              </p>
+            )}
+
+            {run.isError && tableFull && !filesOnly ? (
+              <div className="mb-3 rounded-md border border-amber-700/60 bg-amber-950/50 px-3 py-2 text-xs text-amber-100">
+                <p className="font-semibold">The jersey table in this database is full.</p>
+                <p className="mt-1 text-amber-200/90">{String(run.error)}</p>
+                <p className="mt-1">
+                  You can still create the texture files for {dstId} and add the jersey row to your
+                  database elsewhere.
+                </p>
+                <button
+                  type="button"
+                  disabled={!canCloneTextures}
+                  title={!canCloneTextures ? "Needs an install tree and a same-length asset id" : undefined}
+                  onClick={() => {
+                    setFilesOnly(true);
+                    run.reset();
+                  }}
+                  className="mt-2 rounded-md border border-amber-500/60 bg-amber-800/60 px-2.5 py-1 text-xs font-medium text-amber-50 hover:bg-amber-700/70 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Create texture files only
+                </button>
+              </div>
+            ) : run.isError ? (
               <p className="mb-3 rounded-md border border-rose-800 bg-rose-950/60 px-3 py-2 text-xs text-rose-100">
                 {String(run.error)}
               </p>
-            )}
+            ) : null}
 
             <div className="flex justify-end gap-2">
               <Button variant="secondary" onClick={onClose} disabled={run.isPending}>
@@ -1029,24 +1105,31 @@ function AddJerseyDialog({
               </Button>
               <button
                 type="button"
-                onClick={() => run.mutate()}
-                disabled={run.isPending || sameId || taken}
+                onClick={() => run.mutate(filesOnly ? "filesOnly" : "db")}
+                disabled={run.isPending || (filesOnly ? blockedForFiles : blockedForDb)}
                 className="rounded-md border border-emerald-600/50 bg-emerald-700/80 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {run.isPending ? "Creating…" : "Create jersey"}
+                {run.isPending ? "Creating…" : filesOnly ? "Create texture files" : "Create jersey"}
               </button>
             </div>
           </>
         ) : (
           <>
             <h2 className="mb-2 text-lg font-semibold text-emerald-200">
-              New jersey {dstId} created
+              {result.db ? `New jersey ${dstId} created` : `Texture files for ${dstId} created`}
             </h2>
             <div className="space-y-2 text-xs text-slate-300">
-              <p>
-                Registry row {result.db.record} was staged as a pending edit —{" "}
-                <strong>Save</strong> to keep it, or undo.
-              </p>
+              {result.db ? (
+                <p>
+                  Registry row {result.db.record} was staged as a pending edit —{" "}
+                  <strong>Save</strong> to keep it, or undo.
+                </p>
+              ) : (
+                <p className="rounded-md border border-amber-700/60 bg-amber-950/50 px-3 py-2 text-amber-100">
+                  No database row was written. Register {dstId} in your database for the game to
+                  pick this kit up.
+                </p>
+              )}
               {result.tex ? (
                 <div className="max-h-[40vh] overflow-auto rounded-md border border-slate-800 bg-slate-950/50 p-2">
                   <p className="mb-1 font-semibold text-slate-400">

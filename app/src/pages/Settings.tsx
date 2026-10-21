@@ -16,6 +16,7 @@ import {
 import { useSettings, type PathEntry } from "../lib/settings";
 import { Button, Card } from "../components/primitives";
 import { ExtractionPanel } from "../components/ExtractionPanel";
+import { PortraitLibraryCard } from "../components/PortraitLibraryCard";
 import { ProjectsStorageField } from "../components/ProjectLocationFields";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -43,6 +44,7 @@ export function SettingsGeneralPage() {
   return (
     <SettingsFrame>
       <GeneralTab />
+      <PortraitLibraryCard />
       <AutosaveSettings />
       <ToolsCard />
       <PlayerManifestCard />

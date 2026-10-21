@@ -10,7 +10,7 @@
 //! * **facial hair** — only when distinct geometry exists (rare; vanilla facial
 //!   hair is painted), `{base}_facialhair_{game}.glb`
 //!
-//! plus the head's textures as PNG (`{base}_{map}_{game}.png`), shared by the head
+//! plus the head's textures as DDS (`{base}_{map}_{game}.dds`), shared by the head
 //! and hair assets — the game keeps one texlib per head carrying both. Geometry is
 //! written geometry-only (no armature — the appearance editor wants the mesh, and
 //! the porting rig is out of scope here).
@@ -28,10 +28,7 @@ use serde::{Deserialize, Serialize};
 
 use tdb_rx2::playermesh::PlayerAsset;
 
-use crate::assets::{
-    gnf_to_rgba, linear_to_rgba, parse_head_mesh_geometry, read_asset_file, DecodedImage,
-    PlayerAssets,
-};
+use crate::assets::{parse_head_mesh_geometry, read_asset_file, PlayerAssets};
 use crate::head_submesh::{head_asset_indices, partition};
 use crate::Result;
 
@@ -40,7 +37,7 @@ use crate::Result;
 pub struct CatalogOptions {
     /// Game token appended to every asset name (the workspace `game_id`).
     pub game_tag: String,
-    /// Decode + write the head's textures as PNG alongside the meshes.
+    /// Decode + write the head's textures as DDS alongside the meshes.
     pub textures: bool,
 }
 
@@ -60,10 +57,10 @@ pub struct CatalogEntry {
     pub mesh_file: String,
     /// Submesh names that went into this asset.
     pub submeshes: Vec<String>,
-    /// Relative paths of the exported PNG textures the head/hair share.
+    /// Relative paths of the exported DDS textures the head/hair share.
     pub textures: Vec<String>,
     /// Absolute paths of the **source** texture containers (texlib/raster/gnf)
-    /// those PNGs were decoded from — fed back to the viewer so the preview binds
+    /// those DDS files were decoded from — fed back to the viewer so the preview binds
     /// the same maps the game does (via the proven name-keyed binding). Defaulted
     /// so catalogs written before this field still read.
     #[serde(default)]
@@ -142,7 +139,10 @@ fn run_catalog_workers<T: Sync>(
             .collect();
         handles
             .into_iter()
-            .map(|h| h.join().unwrap_or_default())
+            .map(|h| h.join().unwrap_or_else(|_| HeadCatalogSummary {
+                failures: vec!["Catalog worker failed unexpectedly; its output is incomplete.".into()],
+                ..Default::default()
+            }))
             .collect()
     });
     let mut merged = HeadCatalogSummary::default();
@@ -252,59 +252,20 @@ fn map_label(raster_name: &str, file_stem: &str, single_generic: bool) -> String
     }
 }
 
-/// Decode one texture container (`.rx2` texlib or PS4 `.gnf`) to `(label, png)`
-/// pairs. A container that can't be read/parsed yields nothing (non-fatal).
-fn decode_texture_pngs(path: &Path) -> Vec<(String, Vec<u8>)> {
-    let Ok(bytes) = read_asset_file(path) else {
-        return Vec::new();
-    };
+/// Decode one texture container (`.rx2` texlib or PS4 `.gnf`) to `(label, dds)`
+/// pairs. Read/decode failures are returned for the export report.
+fn decode_texture_dds(path: &Path) -> Result<Vec<(String, Vec<u8>)>> {
     let stem = path
         .file_stem()
         .map(|s| s.to_string_lossy().into_owned())
         .unwrap_or_default();
-    let mut out = Vec::new();
-    if path
-        .extension()
-        .is_some_and(|e| e.eq_ignore_ascii_case("gnf"))
-    {
-        if let Ok(tex) = tdb_rx2::gnf::parse(&bytes) {
-            if let Ok(rgba) = gnf_to_rgba(&tex) {
-                if let Ok(png) = (DecodedImage {
-                    width: tex.width,
-                    height: tex.height,
-                    rgba,
-                })
-                .to_png()
-                {
-                    out.push((map_label(&stem, &stem, false), png));
-                }
-            }
-        }
-        return out;
-    }
-    let Ok(textures) = crate::assets::read_render_rasters(&bytes) else {
-        return out;
-    };
+    let textures = crate::appearance_texture::decode_dds(path)?;
     let single = textures.len() == 1;
-    for tex in &textures {
-        let Ok(rgba) = linear_to_rgba(tex.format, tex.width, tex.height, &tex.base_mip_linear)
-        else {
-            continue;
-        };
-        let Ok(png) = (DecodedImage {
-            width: tex.width,
-            height: tex.height,
-            rgba,
-        })
-        .to_png() else {
-            continue;
-        };
-        out.push((map_label(&tex.name, &stem, single), png));
-    }
-    out
+    Ok(textures.into_iter().map(|(name, bytes)|
+        (map_label(&name, &stem, single), bytes)).collect())
 }
 
-/// Decode every texture container to PNG under `{base}_{map}_{game}.png` and
+/// Decode every texture container to DDS under `{base}_{map}_{game}.dds` and
 /// return the relative paths. Shared by the head and hair writers.
 fn write_textures(
     base: &str,
@@ -314,11 +275,25 @@ fn write_textures(
     summary: &mut HeadCatalogSummary,
 ) -> Vec<String> {
     let mut rel = Vec::new();
+    let mut used = HashSet::new();
     for src in texture_paths {
-        for (label, png) in decode_texture_pngs(Path::new(src)) {
-            let fname = format!("{base}_{label}_{game}.png");
+        let decoded = match decode_texture_dds(Path::new(src)) {
+            Ok(value) => value,
+            Err(error) => {
+                summary.failures.push(format!("{src}: texture — {error}"));
+                continue;
+            }
+        };
+        for (label, dds) in decoded {
+            let mut unique = label.clone();
+            let mut variant = 2;
+            while !used.insert(unique.clone()) {
+                unique = format!("{label}_{variant}");
+                variant += 1;
+            }
+            let fname = format!("{base}_{unique}_{game}.dds");
             let dst = out_dir.join("textures").join(&fname);
-            match write_out(&dst, &png) {
+            match write_out(&dst, &dds) {
                 Ok(n) => {
                     summary.textures_written += 1;
                     summary.bytes_written += n;
@@ -420,11 +395,12 @@ pub fn export_player_head_catalog(
     }
 
     // Pre-pass (single-threaded, cheap): resolve the base, count the un-slugged, and
-    // dedup by slug — the identity bookkeeping that must be deterministic — before the
+    // dedup by identity and source — bookkeeping that must be deterministic — before the
     // heavy mesh decode is fanned out. Doing the dedup here also guarantees every work
     // item owns a unique output base, so the parallel writes never collide.
     let mut summary = HeadCatalogSummary::default();
-    let mut seen: HashSet<&str> = HashSet::new();
+    let mut seen = HashSet::new();
+    let mut bases = HashSet::new();
     let mut work: Vec<PlayerWork> = Vec::new();
     for p in players.iter().filter(|p| p.mesh_path.is_some()) {
         let Some(slug) = p.slug.as_deref() else {
@@ -435,20 +411,24 @@ pub fn export_player_head_catalog(
         };
         // Bespoke assets carry the player's full slug (`last_first_dd_mm_yyyy`) —
         // the canonical identity that keys the historical corpus, so an identifiable
-        // player's head is unambiguous. The slug is unique per person; a genuine
-        // duplicate means two records describe the same player, so skip the second
-        // rather than overwrite.
-        if !seen.insert(slug) {
-            summary.failures.push(format!(
-                "{}: slug {slug} already exported — skipped",
-                p.full_name
-            ));
+        // player's head is unambiguous. Repeated rows for the same identity and
+        // source need one export; distinct sources get separate output bases.
+        let mesh = p.mesh_path.as_deref().unwrap();
+        if !seen.insert((slug, mesh)) {
             continue;
         }
+        // Duplicate biography rows may refer to the same asset; a different
+        // source for that identity must still survive with a unique filename.
+        let mut base = slug.to_string();
+        let mut ordinal = 2;
+        while !bases.insert(base.clone()) {
+            base = format!("{slug}_{ordinal:02}");
+            ordinal += 1;
+        }
         work.push(PlayerWork {
-            base: slug.to_string(),
+            base,
             full_name: &p.full_name,
-            mesh: p.mesh_path.as_deref().unwrap(),
+            mesh,
             textures: &p.texture_paths,
         });
     }
@@ -477,7 +457,7 @@ pub fn export_player_head_catalog(
 /// `{base}_hair_{game}.glb` with no head/facial split.
 // Mirrors `write_head_group`'s parameter list; see the note there.
 #[allow(clippy::too_many_arguments)]
-fn write_hair_only(
+fn write_standalone_hair(
     base: &str,
     origin: &str,
     asset: &PlayerAsset,
@@ -486,6 +466,7 @@ fn write_hair_only(
     out_dir: &Path,
     opts: &CatalogOptions,
     summary: &mut HeadCatalogSummary,
+    facial: bool,
 ) {
     if asset.submeshes.is_empty() {
         summary
@@ -500,16 +481,18 @@ fn write_hair_only(
         Vec::new()
     };
     let glb = tdb_rx2::playermesh::write_glb_geometry_only(asset);
-    let fname = format!("{base}_hair_{game}.glb");
+    let class = if facial { "facialhair" } else { "hair" };
+    let fname = format!("{base}_{class}_{game}.glb");
     let dst = out_dir.join("heads").join(&fname);
     match write_out(&dst, &glb) {
         Ok(n) => {
-            summary.hair_written += 1;
+            if facial { summary.facial_hair_written += 1; }
+            else { summary.hair_written += 1; }
             summary.bytes_written += n;
             summary.entries.push(CatalogEntry {
-                name: format!("{base}_hair_{game}"),
+                name: format!("{base}_{class}_{game}"),
                 origin: origin.to_string(),
-                class: "hair".to_string(),
+                class: class.to_string(),
                 game: game.clone(),
                 mesh_file: format!("heads/{fname}"),
                 submeshes: asset.submeshes.iter().map(|s| s.name.clone()).collect(),
@@ -537,6 +520,16 @@ fn folder_textures_by_id(
             continue;
         };
         let e = classify(folder, fname, platform);
+        // Numeric runs also occur in jersey names and equipment textures.
+        // Only appearance texture families belong in a head-ID lookup.
+        let lower = fname.to_ascii_lowercase();
+        if matches!(folder, "player" | "skater" | "common" | "player_common")
+            && !["head", "hair", "eye", "texlib", "commonhead", "commonhair",
+            "facialhair", "beard", "moustache", "mustache", "goatee",
+            "allczhead", "czhair"].iter().any(|prefix| lower.starts_with(prefix))
+        {
+            continue;
+        }
         let (Some(id), true) = (e.id, e.is_texture) else {
             continue;
         };
@@ -643,6 +636,8 @@ pub fn sweep_nonplayer_heads(
         base: String,
         origin: &'static str,
         is_hair: bool,
+        is_facial_hair: bool,
+        is_body: bool,
         path: PathBuf,
         src: String,
         textures: Vec<String>,
@@ -661,13 +656,9 @@ pub fn sweep_nonplayer_heads(
     };
     // Fallback counter for files whose name carries no id.
     let mut anon = 0u64;
-    // Reserve each (base, is_hair) once: a head file and a *separate* hair file for
-    // the same id (era-split 08/09/PS4) legitimately share a base but write different
-    // classes, so they must both survive — but two head files (or two hair files) that
-    // resolve to the same `{role}_{id}` would race to write the same path once decode
-    // is fanned out, so the duplicate is dropped (a skip that was a silent overwrite
-    // before) rather than left to corrupt the file.
-    let mut seen_base: HashSet<(String, bool)> = HashSet::new();
+    // Each source gets a unique base, including its texture filenames. Hair and
+    // head variants with shared IDs must never race to overwrite one another.
+    let mut seen_base: HashSet<String> = HashSet::new();
 
     // Collection pass (single-threaded): walk the tree, classify, exclude,
     // assign ids/textures, and dedup output bases — all the deterministic
@@ -701,7 +692,7 @@ pub fn sweep_nonplayer_heads(
             Default::default()
         };
 
-        for path in files {
+        for path in &files {
             let Some(fname) = path.file_name().and_then(|s| s.to_str()) else {
                 continue;
             };
@@ -710,7 +701,7 @@ pub fn sweep_nonplayer_heads(
                 continue;
             }
             let entry = classify(folder, fname, platform);
-            if entry.is_texture || !matches!(entry.part, Part::Head | Part::Hair) {
+            if entry.is_texture || !matches!(entry.part, Part::Head | Part::Hair | Part::Body) {
                 continue;
             }
             if exclude_sources.contains(&canon(&path)) {
@@ -722,6 +713,9 @@ pub fn sweep_nonplayer_heads(
                 900_000 + anon
             });
             let is_hair = matches!(entry.part, Part::Hair);
+            let lower = fname.to_ascii_lowercase();
+            let is_facial_hair = ["facialhair", "beard", "moustache", "mustache", "goatee"]
+                .iter().any(|prefix| lower.starts_with(prefix));
             // A player-folder head with no bio row is `generic_<id>` — unless it's
             // a *known* retired orphan (a leftover model whose player was removed),
             // in which case name it for the player it modelled. Title-scoped: an id
@@ -729,23 +723,46 @@ pub fn sweep_nonplayer_heads(
             let orphan = (origin == "generic" && !is_hair)
                 .then(|| crate::orphan_heads::orphan_head_name(&opts.game_tag, id))
                 .flatten();
-            let base = match orphan {
+            let mut base = match orphan {
                 Some(name) => {
                     origin = "retired";
                     name.base()
                 }
+                None if entry.id.is_none() => format!("{origin}_{}_{}", folder,
+                    path.file_stem().unwrap_or_default().to_string_lossy()),
                 None => format!("{origin}_{id}"),
             };
             let src = path.to_string_lossy().into_owned();
-            if !seen_base.insert((base.clone(), is_hair)) {
-                summary
-                    .failures
-                    .push(format!("{src}: base {base} already swept — skipped"));
-                continue;
+            if !seen_base.insert(base.clone()) {
+                // A shared ID does not mean the geometry is identical: preserve
+                // every hairstyle variant and LOD with a source-derived suffix.
+                let variant = format!("{base}_{folder}_{}", path.file_stem().unwrap_or_default().to_string_lossy());
+                base = variant.clone();
+                let mut ordinal = 2;
+                while !seen_base.insert(base.clone()) {
+                    base = format!("{variant}_{ordinal}");
+                    ordinal += 1;
+                }
             }
             let textures = if opts.textures {
                 let idx = if is_hair { &hair_tex } else { &head_tex };
-                idx.get(&id).cloned().unwrap_or_default()
+                let mut maps = idx.get(&id).cloned().unwrap_or_default();
+                if entry.id.is_none() {
+                    let stem = path.file_stem().unwrap_or_default().to_string_lossy().to_ascii_lowercase();
+                    for texture in &files {
+                        let Some(name) = texture.file_name().and_then(|s| s.to_str()) else { continue };
+                        let lower = name.to_ascii_lowercase();
+                        if classify(folder, name, platform).is_texture
+                            && [format!("{stem}_"), format!("head_{stem}_"), format!("hair_{stem}_"), format!("eyes_{stem}_")]
+                                .iter().any(|prefix| lower.starts_with(prefix))
+                        {
+                            maps.push(texture.to_string_lossy().into_owned());
+                        }
+                    }
+                }
+                maps.sort();
+                maps.dedup();
+                maps
             } else {
                 Vec::new()
             };
@@ -753,7 +770,9 @@ pub fn sweep_nonplayer_heads(
                 base,
                 origin,
                 is_hair,
-                path,
+                is_facial_hair,
+                is_body: entry.part == Part::Body,
+                path: path.clone(),
                 src,
                 textures,
             });
@@ -763,7 +782,7 @@ pub fn sweep_nonplayer_heads(
     // Fan the decode + write out across cores. Each unit reads and decodes its own
     // container (the expensive part) and writes uniquely-named files.
     let worked = run_catalog_workers(&work, |w, s| {
-        let asset =
+        let mut asset =
             match read_asset_file(&w.path).and_then(|b| parse_head_mesh_geometry(&w.path, &b)) {
                 Ok(a) => a,
                 Err(e) => {
@@ -771,8 +790,18 @@ pub fn sweep_nonplayer_heads(
                     return;
                 }
             };
-        if w.is_hair {
-            write_hair_only(
+        if w.is_body {
+            // A body container is head-bearing only when its decoded submeshes
+            // identify head geometry. Never export an anonymous body as a head.
+            asset.submeshes.retain(|s| {
+                let name = s.name.to_ascii_lowercase();
+                ["head", "eye", "mouth", "teeth", "tongue", "hair", "cards", "beard", "facegear"]
+                    .iter().any(|token| name.contains(token))
+            });
+            if asset.submeshes.is_empty() { return; }
+        }
+        if w.is_hair || w.is_facial_hair {
+            write_standalone_hair(
                 &w.base,
                 w.origin,
                 &asset,
@@ -781,6 +810,7 @@ pub fn sweep_nonplayer_heads(
                 out_dir,
                 opts,
                 s,
+                w.is_facial_hair,
             );
         } else {
             // A head file: split head / hair / facial-hair. Head-context textures
@@ -820,6 +850,9 @@ pub fn export_full_catalog(
         })
         .collect();
     sweep_nonplayer_heads(roots, &exclude, out_dir, opts, &mut summary);
+    if opts.textures {
+        export_supplemental_textures(roots, out_dir, opts, &mut summary);
+    }
     // The manifest is the whole point — write it even if some assets failed.
     match write_manifest(out_dir, &opts.game_tag, &summary) {
         Ok(()) => summary.manifest_file = Some("catalog.json".to_string()),
@@ -828,9 +861,71 @@ pub fn export_full_catalog(
     Ok(summary)
 }
 
+/// CAP overlays and shared eye maps have no standalone mesh. Preserve them in
+/// source-relative folders with provenance, without inventing a mesh binding.
+fn export_supplemental_textures(
+    roots: &crate::assets::AssetRoots, out_dir: &Path,
+    opts: &CatalogOptions, summary: &mut HeadCatalogSummary,
+) {
+    let used: HashSet<String> = summary.entries.iter()
+        .flat_map(|entry| entry.texture_sources.iter().cloned()).collect();
+    let rendering = Path::new(&roots.rendering);
+    let base = if roots.platform() == crate::Platform::Ps4 {
+        rendering.join("characters")
+    } else { rendering.to_path_buf() };
+    let mut manifest = Vec::new();
+    for folder in crate::head_census::appearance_folders(roots.platform()) {
+        let mut dirs = vec![(base.join(folder), 0)];
+        while let Some((dir, depth)) = dirs.pop() {
+            let Ok(entries) = std::fs::read_dir(&dir) else { continue };
+            let mut entries: Vec<_> = entries.flatten().collect();
+            entries.sort_by_key(|entry| entry.path());
+            for entry in entries {
+                let path = entry.path();
+                if entry.file_type().is_ok_and(|t| t.is_dir()) {
+                    if depth < 4 { dirs.push((path, depth + 1)); }
+                    continue;
+                }
+                let source = path.to_string_lossy().into_owned();
+                if used.contains(&source) { continue; }
+                let name = entry.file_name().to_string_lossy().to_ascii_lowercase();
+                if !crate::head_census::classify(folder, &name, roots.platform()).is_texture { continue; }
+                if !matches!(*folder, "czhead" | "czhair") &&
+                    !["head", "hair", "eye", "commonhead", "commonhair", "texlib",
+                      "facialhair", "beard", "moustache", "mustache", "goatee"]
+                        .iter().any(|prefix| name.starts_with(prefix)) { continue; }
+                let relative = path.strip_prefix(rendering).unwrap().with_extension("");
+                let target = out_dir.join("shared-textures").join(&relative);
+                let files = write_textures("map", &opts.game_tag, &[source.clone()], &target, summary);
+                let files: Vec<_> = files.into_iter().map(|file|
+                    format!("shared-textures/{}/{}", relative.to_string_lossy().replace('\\', "/"), file)).collect();
+                if !files.is_empty() {
+                    manifest.push(serde_json::json!({"source":source, "game":opts.game_tag, "files":files}));
+                }
+            }
+        }
+    }
+    match serde_json::to_vec_pretty(&manifest) {
+        Ok(bytes) => if let Err(error) = write_out(&out_dir.join("supplemental-textures.json"), &bytes) {
+            summary.failures.push(format!("supplemental texture manifest: {error}"));
+        },
+        Err(error) => summary.failures.push(format!("supplemental texture manifest: {error}")),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn head_texture_index_excludes_numbered_jersey_maps() {
+        let files = ["head_generic_player_1_cm.gnf", "hair_1_cm.gnf",
+            "name_nineties_champions_1_away.gnf", "goaliehelmet_1_cm.gnf"]
+            .map(PathBuf::from);
+        let (head, hair) = folder_textures_by_id(&files, "player", crate::Platform::Ps4);
+        assert_eq!(head[&1], vec!["head_generic_player_1_cm.gnf"]);
+        assert_eq!(hair[&1], vec!["hair_1_cm.gnf"]);
+    }
 
     #[test]
     fn catalog_base_strips_the_trailing_date() {
@@ -966,6 +1061,49 @@ mod tests {
         assert_eq!(map_label("texture_0000", "head_10000_cm", true), "head_cm");
     }
 
+    #[test]
+    fn texture_variants_do_not_overwrite_and_errors_are_reported() {
+        let dir = tempfile::tempdir().unwrap();
+        let first = dir.path().join("head_7_0_cm.gnf");
+        let second = dir.path().join("head_7_1_cm.gnf");
+        for (path, byte) in [(&first, 17u8), (&second, 31)] {
+            let blocks = vec![byte; 64 * 8];
+            std::fs::write(path, tdb_rx2::gnf::encode_gnf(
+                tdb_rx2::gnf::BcFormat::Bc1, 32, 32, &blocks)).unwrap();
+        }
+        let missing = dir.path().join("missing.gnf");
+        let mut summary = HeadCatalogSummary::default();
+        let files = write_textures("generic_7", "nhl15",
+            &[first, second, missing].map(|p| p.to_string_lossy().into_owned()),
+            dir.path(), &mut summary);
+        assert_eq!(files.len(), 2);
+        assert_ne!(files[0], files[1]);
+        assert_eq!(summary.failures.len(), 1);
+        for (file, byte) in files.iter().zip([17u8, 31]) {
+            let dds = std::fs::read(dir.path().join(file)).unwrap();
+            assert_eq!(&dds[..4], b"DDS ");
+            assert!(dds[128..].iter().all(|b| *b == byte));
+        }
+    }
+
+    #[test]
+    fn sweep_attempts_every_same_id_variant_instead_of_dropping_it() {
+        let dir = tempfile::tempdir().unwrap();
+        let player = dir.path().join("rendering/player/player_7");
+        std::fs::create_dir_all(&player).unwrap();
+        for name in ["head_7.rx2", "head_7_1.rx2", "hair_7_0_0_0.rx2", "hair_7_1_0_0.rx2"] {
+            std::fs::write(player.join(name), b"invalid geometry fixture").unwrap();
+        }
+        let roots = crate::assets::AssetRoots::resolve(dir.path(), crate::Platform::Xbox);
+        let mut summary = HeadCatalogSummary::default();
+        sweep_nonplayer_heads(&roots, &HashSet::new(), &dir.path().join("out"),
+            &CatalogOptions { game_tag: "nhl07".into(), textures: false }, &mut summary);
+        // Each malformed source must reach the decoder and be reported distinctly.
+        assert_eq!(summary.failures.len(), 4);
+        assert!(summary.failures.iter().all(|error| error.contains("mesh —")));
+        assert!(!summary.failures.iter().any(|error| error.contains("already swept")));
+    }
+
     fn vtx() -> tdb_rx2::playermesh::Vertex {
         tdb_rx2::playermesh::Vertex {
             position: [0.0; 3],
@@ -1045,9 +1183,26 @@ mod tests {
         std::fs::remove_dir_all(&tmp).ok();
     }
 
+    #[test]
+    fn standalone_beard_is_facial_hair_not_another_head() {
+        let dir = tempfile::tempdir().unwrap();
+        let asset = PlayerAsset {
+            submeshes: vec![sm("geo_beardcapShape"), sm("geo_beardcardsShape")],
+            skin: tdb_rx2::playermesh::BonePalette { matrices: Vec::new() },
+        };
+        let mut summary = HeadCatalogSummary::default();
+        write_standalone_hair("beard_test", "generic", &asset, &[], "beard_test.mcd",
+            dir.path(), &CatalogOptions { game_tag: "nhl15".into(), textures: false },
+            &mut summary, true);
+        assert_eq!(summary.heads_written, 0);
+        assert_eq!(summary.hair_written, 0);
+        assert_eq!(summary.facial_hair_written, 1);
+        assert_eq!(summary.entries[0].class, "facialhair");
+    }
+
     /// End-to-end on a real title (mount-gated): scan the Legacy anchor + mount,
     /// export the catalog for the bespoke players, and assert real head + hair GLBs
-    /// and PNG textures land with the catalog naming. Legacy heads bundle hair as a
+    /// and DDS textures land with the catalog naming. Legacy heads bundle hair as a
     /// `haircap_` submesh, so every full head should also yield a hair asset.
     #[test]
     fn legacy_catalog_export_writes_head_hair_and_png_textures() {
@@ -1112,7 +1267,7 @@ mod tests {
         );
         assert!(
             summary.textures_written > 0,
-            "textures should decode to PNG"
+            "textures should decode to DDS"
         );
         assert!(
             summary.failures.is_empty(),
@@ -1120,7 +1275,7 @@ mod tests {
             summary.failures
         );
 
-        // Every written GLB is a real binary glTF and every texture a real PNG.
+        // Every written GLB is a real binary glTF and every texture a real DDS.
         for e in &summary.entries {
             let p = tmp.join(&e.mesh_file);
             let bytes = std::fs::read(&p).unwrap_or_else(|_| panic!("missing {}", e.mesh_file));
@@ -1142,7 +1297,7 @@ mod tests {
             }
             for t in &e.textures {
                 let tb = std::fs::read(tmp.join(t)).unwrap_or_else(|_| panic!("missing {t}"));
-                assert_eq!(&tb[..8], b"\x89PNG\r\n\x1a\n", "{t} is not a PNG");
+                assert_eq!(&tb[..4], b"DDS ", "{t} is not a DDS");
             }
         }
         eprintln!(
@@ -1380,7 +1535,7 @@ mod tests {
 
     /// Sweep texture resolution (mount-gated, fast — one head): the coach-head
     /// folder's textures resolve folder-locally by id, and a swept coach head then
-    /// carries real PNG maps. Covers the path the full-tree sweep is too slow to
+    /// carries real DDS maps. Covers the path the full-tree sweep is too slow to
     /// exercise per-asset.
     #[test]
     fn sweep_resolves_folder_local_textures() {
@@ -1446,7 +1601,7 @@ mod tests {
         );
         for t in &head_entry.textures {
             let tb = std::fs::read(tmp.join(t)).unwrap_or_else(|_| panic!("missing {t}"));
-            assert_eq!(&tb[..8], b"\x89PNG\r\n\x1a\n", "{t} is a PNG");
+            assert_eq!(&tb[..4], b"DDS ", "{t} is a DDS");
         }
         std::fs::remove_dir_all(&tmp).ok();
     }

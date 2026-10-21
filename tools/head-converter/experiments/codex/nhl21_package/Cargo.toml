@@ -1,0 +1,12 @@
+[package]
+name = "nhl21-candidate-pack"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+tdb-rx2 = { path = "E:/Repositories/nhl-modding-studio/crates/tdb-rx2" }
+serde_json = "1"
+sha2 = "0.10"
+
+[workspace]

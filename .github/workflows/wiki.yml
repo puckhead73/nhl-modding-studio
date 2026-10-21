@@ -1,0 +1,70 @@
+name: Wiki
+
+# Mirrors wiki/ from the main repository to the GitHub Wiki
+# (https://github.com/<owner>/<repo>/wiki). The wiki/ folder is the only source
+# of truth; nothing is ever edited in the wiki repository directly.
+#
+# First-time setup (once, by a maintainer):
+#   1. Create any page in the Wiki web UI so the wiki git repository exists.
+#   2. Run this workflow manually (Actions > Wiki > Run workflow) with dry_run
+#      unticked. Later publishes happen on every push to main that touches wiki/.
+#   3. If GITHUB_TOKEN is refused on push, add a fine-grained personal access
+#      token with "Contents: read and write" on this repository as the
+#      WIKI_TOKEN secret; it is used in preference when present.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "wiki/**"
+      - ".github/workflows/wiki.yml"
+      - "scripts/wiki_check.py"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Lint and stage the sync, but do not push to the wiki"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wiki-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generated wiki pages are current
+        run: python scripts/wiki_generate.py --check
+      - name: Lint wiki sources
+        run: python scripts/wiki_check.py
+      - name: Clone the wiki repository
+        env:
+          TOKEN: ${{ secrets.WIKI_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          git clone "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" wiki-repo
+      - name: Stage the sync
+        run: |
+          rsync -a --delete --exclude .git wiki/ wiki-repo/
+          cd wiki-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No wiki changes."
+            echo "changed=false" >> "$GITHUB_ENV"
+          else
+            git commit -m "wiki: sync from ${GITHUB_SHA}"
+            git --no-pager show --stat --oneline HEAD
+            echo "changed=true" >> "$GITHUB_ENV"
+          fi
+      - name: Push to the wiki
+        if: env.changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: git -C wiki-repo push origin HEAD:master

@@ -304,6 +304,11 @@ pub fn parse(data: &[u8]) -> Result<Document> {
                     (4, 9) => (16, 12), // position, normal, tangent, UV
                     (5, 12) => (20, 12), // position, normal, tangent, two UV sets
                     (5, 13) => (21, 9),  // position, normal, three UV sets
+                    // NHL09 hair cards: fixed XYZ (6), packed normal (3),
+                    // and two half2 UV sets (8), without a tangent stream.
+                    (4, 14) => (17, 9),
+                    // Single-UV hair cards use the same XYZ/normal prefix.
+                    (3, 15) => (13, 9),
                     _ => return Err("PS3 unsupported early EDGE vertex format".into()),
                 };
                 need([0x22, 0x23].contains(&data[c + 5]), "unsupported early EDGE index mode")?;

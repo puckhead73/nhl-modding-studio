@@ -985,6 +985,39 @@ pub fn portrait_library_status(registry: State<'_, Registry>) -> CmdResult<Portr
     registry.portrait_library_status().map_err(|e| e.to_string())
 }
 
+/// Where the portrait database would download to / install, and what is already there.
+#[tauri::command]
+pub fn portrait_install_plan(app: tauri::AppHandle, registry: State<'_, Registry>) -> CmdResult<crate::dto::PortraitInstallPlanDto> {
+    let root = app.path().resource_dir().map_err(|e| e.to_string())?;
+    registry.portrait_install_plan(&root).map_err(|e| e.to_string())
+}
+
+/// Start the background download of the published portrait database and install it when done.
+#[tauri::command]
+pub fn portrait_download_start(app: tauri::AppHandle, registry: State<'_, Registry>) -> CmdResult<crate::dto::PortraitInstallStatusDto> {
+    let root = app.path().resource_dir().map_err(|e| e.to_string())?;
+    registry.portrait_download_start(&root).map_err(|e| e.to_string())
+}
+
+/// Install the portrait database from a `.7z` archive the operator already has.
+#[tauri::command]
+pub fn portrait_install_archive(app: tauri::AppHandle, registry: State<'_, Registry>, path: String) -> CmdResult<crate::dto::PortraitInstallStatusDto> {
+    let root = app.path().resource_dir().map_err(|e| e.to_string())?;
+    registry.portrait_install_archive(&path, &root).map_err(|e| e.to_string())
+}
+
+/// Progress of the running (or last) portrait-database job.
+#[tauri::command]
+pub fn portrait_install_status(registry: State<'_, Registry>) -> CmdResult<crate::dto::PortraitInstallStatusDto> {
+    registry.portrait_install_status().map_err(|e| e.to_string())
+}
+
+/// Stop the running portrait-database job (a download keeps its partial file for resume).
+#[tauri::command]
+pub fn portrait_install_cancel(registry: State<'_, Registry>) -> CmdResult<crate::dto::PortraitInstallStatusDto> {
+    registry.portrait_install_cancel().map_err(|e| e.to_string())
+}
+
 /// Point the library at another folder (empty clears the override) and rescan.
 #[tauri::command]
 pub fn portrait_library_set_root(
@@ -1444,6 +1477,21 @@ pub fn clone_jersey(
         .map_err(|e| e.to_string())
 }
 
+/// Move an existing `xjgw` kit to another team (staged as a pending, undoable edit).
+/// `jersey_index: None` picks the destination's smallest unused per-team index.
+#[tauri::command]
+pub fn reassign_jersey(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    record: u32,
+    team: u64,
+    jersey_index: Option<u64>,
+) -> CmdResult<crate::dto::OpOutcomeDto> {
+    registry
+        .reassign_jersey(project_id, record, team, jersey_index)
+        .map_err(|e| e.to_string())
+}
+
 /// The in-game jersey-select thumbnail for a kit (FE tree, with the game's custom fallbacks).
 #[tauri::command]
 pub fn team_jersey_thumbnail(
@@ -1763,16 +1811,16 @@ pub fn export_assets(
 /// Build the appearance catalog (every head + hair + facial hair, players and
 /// non-players) with a `catalog.json` manifest, into `out_dir`.
 #[tauri::command]
-pub fn export_head_catalog(
-    registry: State<'_, Registry>,
+pub async fn export_head_catalog(
+    app: tauri::AppHandle,
     project_id: u32,
     roots: AssetRootsArgsDto,
     out_dir: String,
     textures: bool,
 ) -> CmdResult<crate::dto::HeadCatalogSummaryDto> {
-    registry
+    off_main(app, move |registry| registry
         .export_head_catalog(project_id, &roots, &out_dir, textures)
-        .map_err(|e| e.to_string())
+        .map_err(|e| e.to_string())).await
 }
 
 /// Read a built appearance catalog's `catalog.json` back for the browser.

@@ -12,6 +12,8 @@ import { VanillaCheck } from "../components/VanillaCheck";
 import { useProject } from "../lib/project";
 import { assetRoot } from "../lib/assetRoot";
 import { useSettings } from "../lib/settings";
+import { PortraitInstallBanner } from "../components/PortraitInstallBanner";
+import { formatBytes, isActivePhase, usePortraitInstallActions, usePortraitInstallPlan, usePortraitInstallStatus } from "../lib/portraitInstall";
 import { projectLocation, organizedProjectLocation } from "../lib/projectLocation";
 import { GameSourcePicker, type GameSource } from "../components/GameSourcePicker";
 import { jobFinished } from "../components/ExtractionPanel";
@@ -111,7 +113,24 @@ export function OpenProject() {
   const cancelDisc = useMutation({ mutationFn: (job: number) => call("extract_cancel", { job }) });
   const [pendingChoice, setPendingChoice] = useState<"fresh" | "import" | "load" | "archive">("fresh");
   const storageError = projectLocation(settings.projectsRoot, "Builds").error;
+  // Onboarding offer: download the portrait database in the background while the Studio is used.
+  // Shown until answered once; afterwards the offer lives in Settings → General.
+  const portraitPlan = usePortraitInstallPlan();
+  const portraitStatus = usePortraitInstallStatus();
+  const portraitActions = usePortraitInstallActions();
+  const { setPortraitOfferAnswered } = useSettings();
+  const [wantPortraits, setWantPortraits] = useState(true);
+  const showPortraitOffer =
+    !settings.portraitOfferAnswered &&
+    portraitPlan.data != null &&
+    !portraitPlan.data.installed &&
+    !isActivePhase(portraitStatus.data?.phase);
+
   function enterStudio(choice: "fresh" | "import" | "load" | "archive") {
+    if (showPortraitOffer) {
+      setPortraitOfferAnswered(true);
+      if (wantPortraits) portraitActions.download.mutate();
+    }
     setPendingChoice(choice);
     if (storageError) { setStep("storage"); return; }
     if (choice === "load" || choice === "archive") setStep(choice);
@@ -400,6 +419,9 @@ export function OpenProject() {
       {/* Keep every wizard step reachable when detection results exceed the window height. */}
       <div className="max-h-full min-w-0 w-full max-w-3xl overflow-auto rounded-lg border border-slate-800 bg-slate-900 p-6 shadow-2xl">
         <img src={headerLogo} alt="NHL Modding Studio" className="mx-auto mb-5 h-12 w-auto object-contain" />
+        <div className="mb-3 overflow-hidden rounded border border-transparent [&:has([data-testid=portrait-install-banner])]:border-slate-800">
+          <PortraitInstallBanner compact />
+        </div>
 
         {forcePicker && <LingeringProjectNotice />}
 
@@ -412,6 +434,27 @@ export function OpenProject() {
               <Button onClick={() => enterStudio("archive")} disabled={escapeBlocked}>Import Project Package</Button>
               <Button onClick={() => enterStudio("import")} disabled={escapeBlocked}>Import non-studio project</Button>
             </div>
+            {showPortraitOffer && (
+              <label className="mt-4 flex items-start gap-2 rounded border border-slate-800 bg-slate-950/50 px-3 py-2 text-xs text-slate-300">
+                <input
+                  type="checkbox"
+                  className="mt-0.5"
+                  checked={wantPortraits}
+                  onChange={(e) => setWantPortraits(e.target.checked)}
+                  data-testid="portrait-offer"
+                />
+                <span>
+                  <span className="font-medium text-slate-100">Download the portrait database in the background</span>{" "}
+                  ({formatBytes(portraitPlan.data!.expected_bytes)}) while you use the Studio — about 110,000 player
+                  portraits for the historical database and roster builder. It installs itself when the download
+                  finishes, and a progress bar shows under the main tabs.
+                  {portraitPlan.data!.free_bytes != null && portraitPlan.data!.free_bytes < portraitPlan.data!.expected_bytes * 1.125 && (
+                    <span className="text-amber-300"> Only {formatBytes(portraitPlan.data!.free_bytes)} is free on that drive, which is likely not enough.</span>
+                  )}
+                  <span className="block text-slate-500">You can start or skip it later under Settings → General.</span>
+                </span>
+              </label>
+            )}
             <div className="mt-4"><Button variant="secondary" onClick={() => navigate("/", { state: location.state })}>Back</Button></div>
           </>
         )}

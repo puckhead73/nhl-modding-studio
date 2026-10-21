@@ -157,6 +157,8 @@ pub struct Registry {
     /// The supplementary portrait library for historical people (lazily indexed; see
     /// `registry/portraits.rs`).
     portraits: Mutex<portraits::PortraitState>,
+    /// The one background portrait-database download / install job (see `portrait_install`).
+    portrait_install: Arc<portrait_install::PortraitInstallState>,
     /// ONB-002: extraction preflights and jobs (one job per destination).
     extractions: Mutex<extraction::ExtractionState>,
     /// ONB-003: installer plans held for a package installation (server-owned handles).
@@ -200,6 +202,7 @@ mod mod_manager;
 mod team_editing;
 mod package;
 pub mod portraits;
+pub mod portrait_install;
 mod recovery;
 pub mod extraction;
 mod texture_review;
@@ -518,7 +521,7 @@ impl Registry {
 
     /// Build the appearance catalog: every player's own head + hair + facial hair,
     /// plus the non-player sweep (generics, referees, coaches, trainers), written
-    /// as GLB + PNG with a `catalog.json` manifest. The game token comes from the
+    /// as GLB + DDS with a `catalog.json` manifest. The game token comes from the
     /// workspace `game_id`.
     pub fn export_head_catalog(
         &self,
@@ -4293,6 +4296,12 @@ impl Registry {
         self.with_workspace(id, |ws| {
             Ok(convert::outcome_dto(ws.retire_jersey(team, number)?))
         })
+    }
+
+    /// Move an existing `xjgw` kit to another team (`jersey_index: None` picks the destination's
+    /// smallest unused index). Staged as a pending, undoable edit.
+    pub fn reassign_jersey(&self, id: u32, record: u32, team: u64, jersey_index: Option<u64>) -> Result<OpOutcomeDto, ApiError> {
+        self.with_workspace(id, |ws| Ok(convert::outcome_dto(ws.reassign_jersey(record, team, jersey_index)?)))
     }
 
     /// Clone an `xjgw` jersey row into a new kit on `team` — the DB half of "Add New Jersey"

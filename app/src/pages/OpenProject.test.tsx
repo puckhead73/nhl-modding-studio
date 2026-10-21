@@ -551,7 +551,7 @@ describe("ONB-002 onboarding", () => {
     // First screen, with the remembered target named; nothing was called yet except the inventory.
     expect(screen.getByText("Create New Project")).toBeTruthy();
     // Only read-only lookups ran (the inventory and the PS4 save-folder suggestion): no scan, no open.
-    expect(calls.filter((c) => c.cmd !== "baseline_inventory" && c.cmd !== "ps4_save_root_suggestion").length).toBe(0);
+    expect(calls.filter((c) => !["baseline_inventory", "ps4_save_root_suggestion", "portrait_install_plan", "portrait_install_status"].includes(c.cmd)).length).toBe(0);
     expect(opened.length).toBe(0);
     fireEvent.click(screen.getByText("Import non-studio project"));
     fireEvent.click(screen.getByText("NHL 21"));

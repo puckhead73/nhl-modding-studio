@@ -83,6 +83,8 @@ pub enum McdError {
     },
     #[error("submesh {sub}: could not locate a valid index buffer")]
     NoIndexBuffer { sub: usize },
+    #[error("invalid MCD mesh references: {0}")]
+    InvalidReferences(String),
     #[error("submesh {sub}: vertex format (VFMT) declared no POSITION attribute")]
     NoPositionAttr { sub: usize },
 }
@@ -471,6 +473,96 @@ fn walk_geometry(data: &[u8]) -> Vec<RawGeom> {
     geoms
 }
 
+/// TLST records explicitly reference VFMT, STRM and INDX ordinals within a VIEW.
+/// Range-fitting an arbitrary index buffer is insufficient: several hair/head
+/// buffers can fit the same vertex count, and paired eyes deliberately reuse one.
+fn referenced_geometry(data: &[u8]) -> Result<Option<Vec<RawGeom>>, McdError> {
+    if find_all(data, b"TSLT", 0x10).is_empty() {
+        return Ok(None);
+    }
+    let fail = || {
+        McdError::InvalidReferences("TLST format/stream/index reference or count mismatch".into())
+    };
+    let mut boundaries = vec![0];
+    boundaries.extend(
+        find_all(data, b"TIEW", 0x10)
+            .into_iter()
+            .filter(|&i| i > 0x10 && read_u32_le(data, i + 4) == Some(2)),
+    );
+    boundaries.push(data.len());
+    let mut result = Vec::new();
+    for range in boundaries.windows(2) {
+        let base = range[0];
+        let view = &data[base..range[1]];
+        let Some(first_stream) = find_all(view, TAG_STRM, 0x10).first().copied() else {
+            continue;
+        };
+        let formats: Vec<_> = find_all(view, TAG_VFMT, 0x10)
+            .into_iter()
+            .filter(|&i| i < first_stream)
+            .map(|i| {
+                let len = read_u32_le(view, i + 4)? as usize;
+                Some(parse_vfmt(
+                    std::str::from_utf8(view.get(i + 8..i + 8 + len)?).ok()?,
+                ))
+            })
+            .collect();
+        let streams = strm_records(view);
+        let indices = find_all(view, TAG_INDX, 0x10);
+        for tag in find_all(view, b"TSLT", 0x10) {
+            let word = |off| {
+                read_u32_le(view, tag + off)
+                    .map(|v| v as usize)
+                    .ok_or_else(&fail)
+            };
+            let triangle_count = word(12)?;
+            let attrs = formats
+                .get(word(16)?)
+                .and_then(|v| v.as_ref())
+                .ok_or_else(&fail)?;
+            if word(20)? != 1 {
+                return Err(fail());
+            }
+            let count = word(24)?;
+            let strides = stream_strides(attrs);
+            if count == 0 || count != strides.len() {
+                return Err(fail());
+            }
+            let mut bound = Vec::new();
+            let mut vertex_count = 0;
+            for (slot, &(stream_id, stride)) in strides.iter().enumerate() {
+                if stream_id != slot {
+                    return Err(fail());
+                }
+                let record = streams.get(word(28 + 4 * slot)?).ok_or_else(&fail)?;
+                if record.stride != stride || (slot > 0 && record.vertex_count != vertex_count) {
+                    return Err(fail());
+                }
+                vertex_count = record.vertex_count;
+                bound.push(GStream {
+                    data_off: base + record.data_off,
+                    stride,
+                });
+            }
+            let index_tag = *indices.get(word(28 + 4 * count)?).ok_or_else(&fail)?;
+            let triangles = read_indices(view, index_tag, vertex_count).ok_or_else(&fail)?;
+            if triangles.len() != triangle_count {
+                return Err(fail());
+            }
+            result.push(RawGeom {
+                attrs: attrs.clone(),
+                streams: bound,
+                vertex_count,
+                triangles,
+            });
+        }
+    }
+    if result.is_empty() {
+        return Err(fail());
+    }
+    Ok(Some(result))
+}
+
 /// Read an INDX chunk's triangle list. The index-count lives at
 /// `tag + CHUNK_COUNT_OFF`; the element width comes from the reversed ASCII
 /// token (`61DI`→`ID16`=u16, `23DI`→`ID32`=u32). The data offset (the header
@@ -534,6 +626,15 @@ fn tail_names(data: &[u8]) -> Vec<String> {
     };
     let mut names = Vec::new();
     for geom in find_all(data, TAG_GEOM, first_mesh) {
+        // A named tail record is GEOM/GEO3 (or an older GEO revision), not
+        // the numeric GEOM resource header in a following VIEW. Scanning that
+        // header for printable bytes mistook e.g. "TMFVk" for a mesh name.
+        let Some(kind) = data.get(geom + 4..geom + 8) else {
+            continue;
+        };
+        if &kind[1..] != b"OEG" || !kind[0].is_ascii_digit() {
+            continue;
+        }
         // The name string starts a little after the GEOM tag (tag + version +
         // size words). Scan the next window for the first plausible
         // null-terminated ASCII run.
@@ -786,15 +887,35 @@ pub fn parse_player_mesh(data: &[u8]) -> Result<PlayerAsset, McdError> {
         return Err(McdError::BadMagic);
     }
 
-    let geoms = walk_geometry(data);
+    let geoms = match referenced_geometry(data)? {
+        Some(geoms) => geoms,
+        None => walk_geometry(data),
+    };
     if geoms.is_empty() {
         return Err(McdError::NoGeometry);
     }
     let names = tail_names(data);
 
     let mut submeshes = Vec::with_capacity(geoms.len());
+    let mut seen = std::collections::HashSet::new();
     for (i, geom) in geoms.iter().enumerate() {
         let name = names.get(i).cloned().unwrap_or_else(|| format!("mesh_{i}"));
+        // Repeated VIEWs can contain byte-identical base meshes. Retain distinct
+        // geometry, but do not stack duplicate surfaces and cause z-fighting.
+        let mut signature = format!("{name}:{:?}", geom.attrs).into_bytes();
+        for stream in &geom.streams {
+            signature.extend_from_slice(
+                &data[stream.data_off..stream.data_off + stream.stride * geom.vertex_count],
+            );
+        }
+        for triangle in &geom.triangles {
+            for index in triangle {
+                signature.extend_from_slice(&index.to_le_bytes());
+            }
+        }
+        if !seen.insert(signature) {
+            continue;
+        }
         submeshes.push(decode_submesh(data, geom, name, i)?);
     }
 
@@ -817,6 +938,45 @@ pub fn parse_player_mesh_preview(data: &[u8]) -> Result<PlayerAsset, McdError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn tlst_references_disambiguate_in_range_index_buffers() {
+        let mut data = vec![0u8; 16];
+        data[..4].copy_from_slice(MAGIC_RSF);
+        let desc = b"p0:00:00:0001:3f32 n0:0C:00:0001:3f32";
+        data.extend_from_slice(TAG_VFMT);
+        data.extend_from_slice(&(desc.len() as u32).to_le_bytes());
+        data.extend_from_slice(desc);
+        for _ in 0..2 {
+            let at = data.len();
+            data.resize(at + 21 + 72, 0);
+            data[at..at + 4].copy_from_slice(TAG_STRM);
+            data[at + 9..at + 13].copy_from_slice(&3u32.to_le_bytes());
+            data[at + 13..at + 17].copy_from_slice(&24u32.to_le_bytes());
+        }
+        for indices in [[0u16, 1, 2], [2, 1, 0]] {
+            let at = data.len();
+            data.resize(at + 17, 0);
+            data[at..at + 4].copy_from_slice(TAG_INDX);
+            data[at + 9..at + 13].copy_from_slice(&3u32.to_le_bytes());
+            data[at + 13..at + 17].copy_from_slice(b"61DI");
+            for index in indices {
+                data.extend_from_slice(&index.to_le_bytes());
+            }
+        }
+        for (stream, index) in [(0u32, 1u32), (1, 0)] {
+            data.extend_from_slice(b"TSLT");
+            for word in [0u32, 0, 1, 0, 1, 1, stream, index] {
+                data.extend_from_slice(&word.to_le_bytes());
+            }
+        }
+        let geoms = referenced_geometry(&data).unwrap().unwrap();
+        assert_eq!(geoms[0].triangles, vec![[2, 1, 0]]);
+        assert_eq!(geoms[1].triangles, vec![[0, 1, 2]]);
+        let end = data.len();
+        data[end - 4..].copy_from_slice(&99u32.to_le_bytes());
+        assert!(referenced_geometry(&data).is_err());
+    }
 
     #[test]
     fn vfmt_parse_logo_layout() {

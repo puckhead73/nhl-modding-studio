@@ -2390,8 +2390,14 @@ impl EditTransaction {
     /// 0-indexed), the `{style}_{art_id}_{variant}` asset id (`cVLR`/`GDQL`/`FccT`, with `ddOX`
     /// mirroring `FccT` per the stock-data convention), and a per-team jersey index (`tYnx`;
     /// `None` picks the smallest unused value so deletes leave reusable holes). Returns the new
-    /// record index. Errors when the table is full (`max_records` reached — `nhlng.db` ships
-    /// packed on some titles), the source is out of range, or a value exceeds its field width.
+    /// record index.
+    ///
+    /// **Capacity.** A packed table (`current == max`, every GEN7 anchor) is grown by one row
+    /// through `append` — the engine's ordinary block-growth path. The ceiling that is enforced is
+    /// the **per-team** one: `tYnx` is 5 bits, so a team carries at most 32 kits, and 32 kits on
+    /// one team is game-verified on NHL Legacy (Xbox 360) — see
+    /// `docs/validation/legacy360-jersey-ceiling-probe-20261020.md`. Errors when the destination
+    /// team already holds the full set, the source is out of range, or a value exceeds its width.
     pub fn clone_jersey(
         &mut self,
         source_record: u32,
@@ -2406,18 +2412,12 @@ impl EditTransaction {
         let table = db
             .table_canonical(jerseys::TABLE)
             .ok_or_else(|| EditError::UnknownTable(jerseys::TABLE.to_string()))?;
-        let (current, max) = (table.current_records as u32, table.max_records as u32);
+        let current = table.current_records as u32;
         if source_record >= current {
             return Err(EditError::InvalidValue {
                 what: "source jersey record (out of range)",
                 value: source_record as i64,
             });
-        }
-        if current >= max {
-            return Err(EditError::Alloc(format!(
-                "the jersey table is full ({current}/{max} rows) — this database has no headroom \
-                 for a new kit"
-            )));
         }
 
         // Snapshot every field of the source row (xjgw is all fixed-bit numeric — no strings).
@@ -2450,6 +2450,16 @@ impl EditTransaction {
                 table: jerseys::TABLE.to_string(),
                 field: jerseys::INDEX.to_string(),
             })?;
+        let team_rows = (0..current)
+            .filter(|&r| db.read_u64(table, r, team_field) == Some(team))
+            .count() as u64;
+        if team_rows > idx_max {
+            return Err(EditError::Alloc(format!(
+                "this team already carries the full {}-kit set ({team_rows} kits); delete or move a \
+                 kit before adding another",
+                idx_max + 1
+            )));
+        }
         let occupied: HashSet<u64> = (0..current)
             .filter(|&r| db.read_u64(table, r, team_field) == Some(team))
             .filter_map(|r| db.read_u64(table, r, idx_field))
@@ -2543,6 +2553,106 @@ impl EditTransaction {
             Ok(OpOutcome { edits, repairs })
         })?;
         Ok((new_record, outcome))
+    }
+
+    /// Move an existing `xjgw` kit to another team: rewrite the row's `mCXg` (team, 0-indexed)
+    /// and `tYnx` (per-team jersey index; `None` picks the destination's smallest unused value).
+    /// Every other field — the `{style}_{art_id}_{variant}` asset id above all — is left alone,
+    /// so the destination team shows the kit's existing textures. The team field is the row's
+    /// key, which the scalar seam refuses by design; this is the structural operation that
+    /// legitimately reassigns it. Errors on an out-of-range record, an unknown destination
+    /// team, or an index beyond the field width. Audited + undoable.
+    pub fn reassign_jersey(
+        &mut self,
+        record: u32,
+        team: u64,
+        jersey_index: Option<u64>,
+    ) -> Result<OpOutcome, EditError> {
+        if self.model()?.team(team).is_none() {
+            return Err(EditError::InvalidValue {
+                what: "destination team (no such team)",
+                value: team as i64,
+            });
+        }
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(jerseys::TABLE)
+            .ok_or_else(|| EditError::UnknownTable(jerseys::TABLE.to_string()))?;
+        let current = table.current_records as u32;
+        if record >= current {
+            return Err(EditError::InvalidValue {
+                what: "jersey record (out of range)",
+                value: record as i64,
+            });
+        }
+        let field = |id: &str| {
+            table
+                .fields
+                .iter()
+                .find(|f| f.id.canonical(db.endian) == id)
+                .ok_or_else(|| EditError::UnknownField {
+                    table: jerseys::TABLE.to_string(),
+                    field: id.to_string(),
+                })
+        };
+        let (team_field, idx_field) = (field(jerseys::TEAM)?, field(jerseys::INDEX)?);
+        let team_max = (1u64 << self.field_width(jerseys::TABLE, jerseys::TEAM)?) - 1;
+        if team > team_max {
+            return Err(EditError::InvalidValue {
+                what: "destination team (exceeds the field width)",
+                value: team as i64,
+            });
+        }
+        let from_team = db.read_u64(table, record, team_field).unwrap_or(0);
+        let from_index = db.read_u64(table, record, idx_field).unwrap_or(0);
+        let idx_max = (1u64 << self.field_width(jerseys::TABLE, jerseys::INDEX)?) - 1;
+        let dest_rows = (0..current)
+            .filter(|&r| r != record && db.read_u64(table, r, team_field) == Some(team))
+            .count() as u64;
+        if dest_rows > idx_max {
+            return Err(EditError::Alloc(format!(
+                "the destination team already carries the full {}-kit set ({dest_rows} kits)",
+                idx_max + 1
+            )));
+        }
+        let occupied: HashSet<u64> = (0..current)
+            .filter(|&r| r != record && db.read_u64(table, r, team_field) == Some(team))
+            .filter_map(|r| db.read_u64(table, r, idx_field))
+            .collect();
+        let jersey_index = match jersey_index {
+            Some(i) if i > idx_max => {
+                return Err(EditError::InvalidValue {
+                    what: "jersey index (exceeds the field width)",
+                    value: i as i64,
+                })
+            }
+            Some(i) => i,
+            None => (0..=idx_max)
+                .find(|i| !occupied.contains(i))
+                .ok_or_else(|| {
+                    EditError::Alloc(format!(
+                        "no free jersey index — the destination team already carries the full {}-kit set",
+                        idx_max + 1
+                    ))
+                })?,
+        };
+        let dup_index = occupied.contains(&jersey_index);
+        self.with_repairing_transaction(|tx| {
+            tx.set_field(jerseys::TABLE, record, jerseys::TEAM, team)?;
+            tx.set_field(jerseys::TABLE, record, jerseys::INDEX, jersey_index)?;
+            let mut repairs = vec![format!(
+                "moved jersey row {record} from team {from_team} (index {from_index}) to team {team} \
+                 (index {jersey_index})"
+            )];
+            if dup_index {
+                repairs.push(format!(
+                    "note: jersey index {jersey_index} is already used on the destination team — the \
+                     in-game selector may not disambiguate the two kits"
+                ));
+            }
+            Ok(OpOutcome { edits: 2, repairs })
+        })
     }
 
     /// Trade a future draft pick to another team: rewrite the pick's current owner

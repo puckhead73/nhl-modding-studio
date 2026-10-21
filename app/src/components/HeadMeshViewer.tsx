@@ -15,6 +15,7 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
+import { configureEyeSampler } from "../lib/headPreviewGeometry";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { Spinner, ErrorBanner, Pill } from "./primitives";
@@ -124,7 +125,7 @@ function ViewerFrame({ children }: { children: React.ReactNode }) {
   );
 }
 
-function LoadedViewer({ data }: { data: HeadPreviewDto }) {
+export function LoadedViewer({ data }: { data: HeadPreviewDto }) {
   const [visible, setVisible] = useState<boolean[]>(() =>
     data.submeshes.map(() => true),
   );
@@ -157,7 +158,10 @@ function LoadedViewer({ data }: { data: HeadPreviewDto }) {
         />
       </ViewerFrame>
 
-      <TexturePanel textures={data.textures} />
+      <details className="rounded-md border border-slate-800 bg-slate-900/50 p-2">
+        <summary className="cursor-pointer text-xs text-slate-400">Textures ({data.textures.length})</summary>
+        <TexturePanel textures={data.textures} />
+      </details>
 
       <div className="rounded-md border border-slate-800 bg-slate-900/50 p-2">
         <div className="mb-1 flex items-center justify-between">
@@ -351,9 +355,12 @@ function HeadCanvas({
   const cameraDistance = data.span * 2.5;
   const maps = useMemo(
     () =>
-      data.textures.map((t) =>
-        buildRgbaTexture(t.width, t.height, t.rgba_base64),
-      ),
+      data.textures.map((t, index) => {
+        const texture = buildRgbaTexture(t.width, t.height, t.rgba_base64);
+        configureEyeSampler(texture, data.submeshes.some(sm => sm.material_index === index &&
+          /eye/i.test(sm.name) && !/eyelash/i.test(sm.name)));
+        return texture;
+      }),
     [data.textures],
   );
   useEffect(() => () => maps.forEach((m) => m.dispose()), [maps]);

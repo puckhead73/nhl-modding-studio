@@ -2434,6 +2434,36 @@ impl Workspace {
         })
     }
 
+    /// Move an existing `xjgw` kit to another team. Mirrored into the roster save when `xjgw` is
+    /// shared and aligned (same record index in both files by construction).
+    pub fn reassign_jersey(&mut self, record: u32, team: u64, jersey_index: Option<u64>) -> Result<OpOutcome> {
+        if self.roster_only() {
+            let outcome = self.roster_mut().reassign_jersey(record, team, jersey_index)?;
+            self.record(OpTarget::Roster);
+            return Ok(outcome);
+        }
+        let outcome = self.nhlng.reassign_jersey(record, team, jersey_index)?;
+        let do_mirror = matches!(
+            self.roster.as_ref(),
+            Some(m) if m.aligned && m.shared_tables.contains(tdb_edit::txn::jerseys::TABLE)
+        );
+        let roster_result = if do_mirror {
+            self.roster.as_mut().map(|m| m.session.reassign_jersey(record, team, jersey_index))
+        } else {
+            None
+        };
+        let mirror = match roster_result {
+            None => false,
+            Some(Ok(_)) => true,
+            Some(Err(e)) => {
+                self.abort_canonical();
+                return Err(e);
+            }
+        };
+        self.record_mirrored(mirror);
+        Ok(outcome)
+    }
+
     /// Clone an `xjgw` jersey row into a new kit; returns the new record index. Mirrored into the
     /// roster save when `xjgw` is shared and aligned (both files append at the same index by
     /// construction); a diverging mirror index rolls both back — the [`Workspace::add_career_season`]

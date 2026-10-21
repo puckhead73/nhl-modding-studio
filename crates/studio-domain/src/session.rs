@@ -1113,6 +1113,22 @@ impl EditSession {
                 prepared.push((table.clone(), *record, field.clone(), tdb_edit::txn::ImportCell::Int(*v as u64)));
                 continue;
             }
+            // A kit moved to another team (`reassign_jersey`): `xjgw.mCXg` is the row's key, so
+            // the scalar seam refuses it, but the installer has already resolved this row by the
+            // author's baseline key + row fingerprint and checked its current value. Admit the
+            // destination team when it exists and fits the field.
+            if table == "xjgw" && field == "mCXg" {
+                let FieldValue::Int(v) = value else { return Err(DomainError::Validation("Jersey team must be an integer".into())); };
+                let t = db.table_canonical("xjgw").ok_or_else(|| DomainError::Validation("Missing jersey registry".into()))?;
+                let f = t.fields.iter().find(|f| f.id.canonical(db.endian) == "mCXg").ok_or_else(|| DomainError::Validation("Missing jersey team field".into()))?;
+                let width_max = (1u64 << f.bit_width) - 1;
+                let model = RosterModel::build(&db).map_err(|e| DomainError::Validation(e.to_string()))?;
+                if *record >= t.current_records as u32 || *v < 0 || *v as u64 > width_max || model.team(*v as u64).is_none() {
+                    return Err(DomainError::Validation(format!("Jersey row {record} cannot be moved to team {v}: no such team")));
+                }
+                prepared.push((table.clone(), *record, field.clone(), tdb_edit::txn::ImportCell::Int(*v as u64)));
+                continue;
+            }
             // NHL07's roster occupant is part of a composite key. Release/sign may
             // change it, but ordinary scalar editing must still refuse key writes.
             if self.project.game_id() == Some("nhl07") && table == "eGlu" && field == "XSWT" {
@@ -1802,6 +1818,11 @@ impl EditSession {
     /// Set a player's jersey number on a team (unique within the team).
     pub fn set_jersey_number(&mut self, team: u64, player: u64, number: u64) -> Result<OpOutcome> {
         self.run(|tx| tx.set_jersey_number(team, player, number))
+    }
+
+    /// Move an existing `xjgw` kit to another team (see [`EditTransaction::reassign_jersey`]).
+    pub fn reassign_jersey(&mut self, record: u32, team: u64, jersey_index: Option<u64>) -> Result<OpOutcome> {
+        self.run(|tx| tx.reassign_jersey(record, team, jersey_index))
     }
 
     /// Clone an `xjgw` jersey row into a new kit on `team`; returns the new record index (see

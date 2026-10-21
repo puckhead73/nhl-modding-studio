@@ -1,0 +1,1 @@
+NHL Modding Studio is a fan-made tool, not affiliated with or endorsed by EA or the NHL. It edits files from copies of the games that you own. Beta software; no title is verified in-game yet. Found a mistake? Edit the page source under `wiki/` in the [repository](https://github.com/puckhead73/nhl-modding-studio) and open a pull request.

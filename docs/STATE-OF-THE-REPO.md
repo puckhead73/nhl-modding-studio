@@ -157,7 +157,10 @@ The dominant gap is fixtures, not code. Every asset family reads `missing-fixtur
 archives live under `anchors/`. The ten blocked rows are Xbox 360 STFS outer packaging.
 
 **No cell anywhere is `game-verified`.** Automated round trips are proven, but in-game acceptance is
-a separate manual gate that has not been run. This is the single largest outstanding risk to release
+a separate manual gate that has only been run once (21 Oct 2026, NHL Legacy Xbox 360: a database
+edit written into the `cacheboot.big` member loaded in game and a team listed 32 kits —
+[validation/legacy360-jersey-ceiling-probe-20261020.md](validation/legacy360-jersey-ceiling-probe-20261020.md);
+that run also showed the loose `db/nhlng.db` is not read). This is the single largest outstanding risk to release
 parity, and it gates write paths for every title.
 
 ### 4.2 Feature work not yet built
@@ -256,4 +259,4 @@ kept apart deliberately.
 | Working-tree state (§5) | 56 modified, large untracked mesh workstream | 269 status entries, index empty; additionally untracked: `docs/receipts/`, the evidence slice, `defs/qa/`, `scripts/`, N19 validation records, `crates/tdb-rx2/src/mcd_write.rs`, example binaries. Nothing here is recoverable from HEAD |
 | `cargo fmt`/`clippy` at HEAD | B1–B7 unfixed | Unchanged: repo-wide checks still fail **at HEAD**; the repairs remain working-tree only |
 
-**No cell anywhere is game-verified.** Nothing in this update promotes support.
+**No cell anywhere is game-verified** (one narrower fact is, see above). Nothing in this update promotes support.

@@ -206,6 +206,8 @@ export_roots![
     HistoricalTeamIndexEntryDto,
     HistoricalTeamFranchiseDto,
     PortraitLibraryStatusDto,
+    PortraitInstallStatusDto,
+    PortraitInstallPlanDto,
     PortraitCandidateDto,
     HistoricalPortraitMatchesDto,
     EaComputedRatingsDto,

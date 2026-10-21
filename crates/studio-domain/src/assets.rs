@@ -3717,7 +3717,7 @@ pub fn export_player_assets(
         if opts.meshes_glb {
             if let Some(src) = p.mesh_path.as_deref() {
                 match read_asset_file(Path::new(src))
-                    .and_then(|b| parse_head_mesh(Path::new(src), &b, false))
+                    .and_then(|b| parse_head_mesh_geometry(Path::new(src), &b))
                 {
                     Ok(asset) => {
                         let glb = tdb_rx2::playermesh::write_glb_geometry_only(&asset);
@@ -3757,82 +3757,25 @@ pub fn export_player_assets(
         }
 
         if opts.textures {
+            let mut used = std::collections::HashSet::new();
             for src in &p.texture_paths {
-                let src = src.as_str();
-                // PS4 GNF: de-tile + decode + write PNG (a `.gnf` holds one
-                // texture, named by the file stem's map suffix).
-                if Path::new(src)
-                    .extension()
-                    .is_some_and(|e| e.eq_ignore_ascii_case("gnf"))
-                {
-                    let map = Path::new(src)
-                        .file_stem()
-                        .map(|s| s.to_string_lossy().into_owned())
-                        .unwrap_or_default();
-                    match read_asset_file(Path::new(src))
-                        .and_then(|b| {
-                            tdb_rx2::gnf::parse(&b)
-                                .map_err(|e| DomainError::Extract(format!("{src}: {e}")))
-                        })
-                        .and_then(|tex| gnf_to_rgba(&tex).map(|rgba| (tex.width, tex.height, rgba)))
-                        .and_then(|(w, h, rgba)| {
-                            DecodedImage {
-                                width: w,
-                                height: h,
-                                rgba,
-                            }
-                            .to_png()
-                        }) {
-                        Ok(png) => {
-                            let dst = out_dir.join("textures").join(format!("{map}.png"));
-                            match write_file(&dst, &png) {
-                                Ok(n) => {
-                                    summary.textures_written += 1;
-                                    summary.bytes_written += n;
-                                }
-                                Err(e) => summary.failures.push(format!("{}: {e}", p.full_name)),
-                            }
+                match crate::appearance_texture::decode_dds(Path::new(src)) {
+                    Ok(textures) => for (name, dds) in textures {
+                        let source_stem = Path::new(src).file_stem().unwrap_or_default().to_string_lossy();
+                        let map = map_suffix(if name.starts_with("texture_") { &source_stem } else { &name }, p.head_id);
+                        let mut unique = map.clone();
+                        let mut variant = 2;
+                        while !used.insert(unique.clone()) {
+                            unique = format!("{map}_{variant}");
+                            variant += 1;
                         }
-                        // BC4/BC5/BC7 maps are skipped (decode pending) — not fatal.
-                        Err(e) => summary.failures.push(format!("{}: {e}", p.full_name)),
-                    }
-                    continue;
-                }
-                match read_asset_file(Path::new(src)).and_then(|b| read_render_rasters(&b)) {
-                    Ok(textures) => {
-                        for tex in &textures {
-                            let map = map_suffix(&tex.name, p.head_id);
-                            match dds_format_of(tex.format).map(|f| {
-                                tdb_archive_codec::encode_dds(
-                                    f,
-                                    tex.width,
-                                    tex.height,
-                                    1,
-                                    &tex.base_mip_linear,
-                                )
-                            }) {
-                                Ok(dds) => {
-                                    let dst =
-                                        out_dir.join("textures").join(format!("{slug}_{map}.dds"));
-                                    match write_file(&dst, &dds) {
-                                        Ok(n) => {
-                                            summary.textures_written += 1;
-                                            summary.bytes_written += n;
-                                        }
-                                        Err(e) => {
-                                            summary.failures.push(format!("{}: {e}", p.full_name))
-                                        }
-                                    }
-                                }
-                                Err(e) => summary
-                                    .failures
-                                    .push(format!("{} [{}]: {e}", p.full_name, tex.name)),
-                            }
+                        let dst = out_dir.join("textures").join(format!("{slug}_{unique}.dds"));
+                        match write_file(&dst, &dds) {
+                            Ok(n) => { summary.textures_written += 1; summary.bytes_written += n; }
+                            Err(e) => summary.failures.push(format!("{src}: {e}")),
                         }
-                    }
-                    Err(e) => summary
-                        .failures
-                        .push(format!("{}: texlib — {e}", p.full_name)),
+                    },
+                    Err(e) => summary.failures.push(format!("{src}: texture — {e}")),
                 }
             }
         }
@@ -3935,7 +3878,7 @@ pub enum AssetKind {
     Mesh,
     /// A portrait container (EA `.big`, PS4 `.png`/`.gnf`, or NHL 10's RX2 raster) → `.png`.
     Portrait,
-    /// A texture bundle or map (`texlib_*.rx2`, loose `*_cm.rx2`, PS4 `.gnf`) → `.dds`/`.png`.
+    /// A texture bundle or map (`texlib_*.rx2`, loose `*_cm.rx2`, PS4 `.gnf`) → `.dds`.
     Texture,
 }
 
@@ -3951,7 +3894,11 @@ impl AssetKind {
 
 /// The texture-map tokens EA appends to a raster stem (`head_67_cm` → `cm`). Used both to classify a
 /// loose `.rx2` as a texture (not a mesh) and to name a texlib's individual DDS outputs.
-const MAP_TOKENS: &[&str] = &["cm", "nm", "sm", "am", "rm", "mm", "coeff", "spec", "gloss"];
+const MAP_TOKENS: &[&str] = &[
+    "cm", "nm", "sm", "am", "rm", "mm", "coeff", "spec", "gloss",
+    "dm", "tm", "xm", "cam", "ccm", "cnm", "csm", "coef", "ao",
+    "aa", "ab", "snm", "ssm", "ism", "ctm", "cpm",
+];
 
 /// True when a file stem ends in one of EA's texture-map tokens (`head_10000_cm` → true). A mesh
 /// stem (`player_10000`, `hair_10000`) has no such tail.
@@ -3976,7 +3923,7 @@ fn classify_asset_kind(path: &Path) -> Option<AssetKind> {
         "mcd" => Some(AssetKind::Mesh),
         "big" => Some(AssetKind::Portrait),
         "png" => Some(AssetKind::Portrait),
-        // PS4: `p{id}.gnf` is a portrait; every other GNF is a texture map. Both decode to PNG.
+        // PS4: `p{id}.gnf` is a portrait (PNG); other GNF maps export as DDS.
         "gnf" => {
             let is_portrait = stem.len() > 1
                 && stem.starts_with('p')
@@ -4131,7 +4078,7 @@ fn raster_suffix(raster_name: &str) -> Option<String> {
 
 fn mesh_output(path: &Path) -> Result<DecodedOutput> {
     let bytes = read_asset_file(path)?;
-    let asset = parse_head_mesh(path, &bytes, false)?;
+    let asset = parse_head_mesh_geometry(path, &bytes)?;
     Ok(DecodedOutput {
         ext: "glb",
         suffix: None,
@@ -4149,27 +4096,7 @@ fn portrait_output(path: &Path, crop: bool) -> Result<DecodedOutput> {
     })
 }
 
-fn gnf_output(path: &Path) -> Result<DecodedOutput> {
-    let bytes = read_asset_file(path)?;
-    let tex = tdb_rx2::gnf::parse(&bytes)
-        .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
-    let rgba = gnf_to_rgba(&tex)?;
-    let png = DecodedImage {
-        width: tex.width,
-        height: tex.height,
-        rgba,
-    }
-    .to_png()?;
-    Ok(DecodedOutput {
-        ext: "png",
-        suffix: None,
-        bytes: png,
-    })
-}
-
-/// Decode a texlib bundle to one **PNG** per raster (decoded, directly viewable). A raster whose
-/// format we can't decode is skipped; the whole file only errors when nothing at all decodes.
-/// Platform-neutral read view. Writers still use the original platform container.
+/// Platform-neutral raster view; source-platform writers remain unchanged.
 pub(crate) struct RasterRead {
     pub name: String,
     pub width: u32,
@@ -4201,36 +4128,16 @@ pub(crate) fn read_render_rasters(bytes: &[u8]) -> Result<Vec<RasterRead>> {
 }
 
 fn texlib_outputs(path: &Path) -> Result<Vec<DecodedOutput>> {
-    let bytes = read_asset_file(path)?;
-    let textures = read_render_rasters(&bytes)?;
-    let mut out = Vec::new();
+    let textures = crate::appearance_texture::decode_dds(path)?;
     let mut used = std::collections::HashSet::new();
-    for (i, tex) in textures.iter().enumerate() {
-        let mut suffix = raster_suffix(&tex.name).unwrap_or_else(|| format!("tex{i}"));
-        // A head bundle can contain several colour maps; never overwrite the first.
+    let single_gnf = path.extension().is_some_and(|e| e.eq_ignore_ascii_case("gnf"));
+    let mut out = Vec::new();
+    for (i, (name, bytes)) in textures.into_iter().enumerate() {
+        let mut suffix = raster_suffix(&name).unwrap_or_else(|| format!("tex{i}"));
         if !used.insert(suffix.clone()) { suffix = format!("{suffix}_{i}"); }
-        if let Ok(rgba) = linear_to_rgba(tex.format, tex.width, tex.height, &tex.base_mip_linear) {
-            if let Ok(png) = (DecodedImage {
-                width: tex.width,
-                height: tex.height,
-                rgba,
-            })
-            .to_png()
-            {
-                out.push(DecodedOutput {
-                    ext: "png",
-                    suffix: Some(suffix),
-                    bytes: png,
-                });
-            }
-        }
+        out.push(DecodedOutput { ext: "dds", suffix: (!single_gnf).then_some(suffix), bytes });
     }
-    if out.is_empty() {
-        return Err(DomainError::Extract(format!(
-            "{}: texlib holds no decodable textures",
-            path.display()
-        )));
-    }
+    if out.is_empty() { return Err(DomainError::Extract(format!("{}: no textures", path.display()))); }
     Ok(out)
 }
 
@@ -4274,7 +4181,8 @@ fn decode_asset_file(path: &Path, crop: bool) -> Result<Vec<DecodedOutput>> {
         .to_ascii_lowercase();
     match ext.as_str() {
         "mcd" => Ok(vec![mesh_output(path)?]),
-        "gnf" => Ok(vec![gnf_output(path)?]),
+        "gnf" if classify_asset_kind(path) == Some(AssetKind::Portrait) => Ok(vec![portrait_output(path, crop)?]),
+        "gnf" => texlib_outputs(path),
         "png" | "big" => Ok(vec![portrait_output(path, crop)?]),
         "rx2" | "rpsgl" => decode_rx2(path, crop),
         other => Err(DomainError::Extract(format!(
@@ -4291,7 +4199,7 @@ pub struct FileExportOptions {
     pub meshes_glb: bool,
     /// Decode portraits to `.png`.
     pub portraits_png: bool,
-    /// Decode textures to `.dds` (RenderWare texlibs) / `.png` (PS4 GNF).
+    /// Export base-mip textures to `.dds` (RenderWare and PS4 GNF).
     pub textures: bool,
     /// Copy files that aren't a recognized decodable asset through unchanged rather than skipping
     /// them (also the fallback when a recognized file fails to decode).
@@ -5301,6 +5209,24 @@ fn export_ps4_outfits(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn file_export_keeps_gnf_portraits_png_and_head_maps_dds() {
+        let dir = tempfile::tempdir().unwrap();
+        let source = tdb_rx2::gnf::encode_gnf(
+            tdb_rx2::gnf::BcFormat::Bc1, 32, 32, &vec![0u8; 64 * 8]);
+        let portrait = dir.path().join("p7.gnf");
+        let texture = dir.path().join("head_7_cm.gnf");
+        std::fs::write(&portrait, &source).unwrap();
+        std::fs::write(&texture, &source).unwrap();
+        let png = decode_asset_file(&portrait, false).unwrap();
+        let dds = decode_asset_file(&texture, false).unwrap();
+        assert_eq!(png[0].ext, "png");
+        assert_eq!(&png[0].bytes[..8], PNG_MAGIC);
+        assert_eq!(dds[0].ext, "dds");
+        assert_eq!(&dds[0].bytes[..4], b"DDS ");
+        assert_eq!(&dds[0].bytes[128..], &vec![0u8; 64 * 8]);
+    }
 
     #[test]
     fn mip_levels_cover_the_full_chain_with_halving_dims() {

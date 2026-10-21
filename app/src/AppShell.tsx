@@ -6,6 +6,7 @@ import { call } from "./lib/client";
 import { Button, Pill } from "./components/primitives";
 import { SAVE_SECTIONS, SECTIONS, activeSection, type NavSection } from "./nav";
 import { SaveEditorControls } from "./components/SaveEditorControls";
+import { PortraitInstallBanner } from "./components/PortraitInstallBanner";
 import { isAvailable } from "./lib/surfaces";
 import { BreadcrumbProvider, useBreadcrumbs } from "./lib/breadcrumbs";
 import { gameById, img } from "./lib/catalog";
@@ -105,6 +106,9 @@ function Shell({ project }: { project: ProjectSummaryDto; dbPath: string }) {
             : <SessionControls key={project.project_id} historyTarget={historyTarget} />}
         </div>
       </header>
+      {/* Background portrait-database download / install — under the primary tabs, above the
+          contextual subtabs; hidden when no job is running. */}
+      <PortraitInstallBanner />
       {/* A Legends calculation owed for the active formula profile — persisted beside the corpus,
           so it survives a restart until it's run or acknowledged. */}
       <LegendsPendingBanner />

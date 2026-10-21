@@ -27,9 +27,9 @@ use crate::error::ApiError;
 
 /// The sidecar file: an optional explicit root plus the per-person selections.
 #[derive(Debug, Default, Serialize, Deserialize)]
-struct PortraitSidecar {
+pub(super) struct PortraitSidecar {
     #[serde(default)]
-    root: Option<String>,
+    pub(super) root: Option<String>,
     /// person_id → index-relative portrait path.
     #[serde(default)]
     selections: BTreeMap<i64, String>,
@@ -166,7 +166,7 @@ impl Registry {
         Ok(dir.join(SIDECAR))
     }
 
-    fn read_portrait_sidecar(&self) -> PortraitSidecar {
+    pub(super) fn read_portrait_sidecar(&self) -> PortraitSidecar {
         self.portrait_sidecar_path()
             .ok()
             .and_then(|p| std::fs::read_to_string(p).ok())
@@ -174,7 +174,7 @@ impl Registry {
             .unwrap_or_default()
     }
 
-    fn write_portrait_sidecar(&self, sidecar: &PortraitSidecar) -> Result<(), ApiError> {
+    pub(super) fn write_portrait_sidecar(&self, sidecar: &PortraitSidecar) -> Result<(), ApiError> {
         let path = self.portrait_sidecar_path()?;
         let json = serde_json::to_string_pretty(sidecar)
             .map_err(|e| ApiError::Workspace(format!("encode {SIDECAR}: {e}")))?;

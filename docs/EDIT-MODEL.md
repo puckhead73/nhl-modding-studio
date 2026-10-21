@@ -121,6 +121,7 @@ holes such as dup-on-team spread across two commands).
 | **assign_line_slot** | Sets the 1-bit `eGlu` position flag while keeping `toWX` block alignment and line-group coherence. |
 | **set_roster_status / set_captaincy / set_archetype** | `ZBac.RREB` tri-state; `eGlu.mCcl` with the **single-captain rule**; `eGlu.QgFs` *[binding unconfirmed]*. |
 | **set_jersey_number** | Validated, unique-where-required jersey assignment. |
+| **clone_jersey / reassign_jersey** | Kit registry (`xjgw`) growth and moves. `clone_jersey` appends a copied, re-stamped row — growing a packed table by one through the ordinary block-growth path. `reassign_jersey` rewrites a row's team key + per-team index (the structural path for a key the scalar seam refuses). Both enforce the **per-team ceiling of 32 kits** (`tYnx` is 5 bits); 32 on one team is game-verified on NHL Legacy (Xbox 360). Added rows are not packageable (structural); moved rows are (the installer admits the `xjgw.mCXg` key cell). |
 | **field edit (attributes, equipment, appearance, …)** | Goes through Layer 1 (`apply_field_edit`) — metadata-validated at entry. |
 
 **Roster scopes.** Operations are aware of the three roster pools: **main**, **free agents**,

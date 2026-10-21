@@ -1,0 +1,46 @@
+{
+ "schema": "nhl-head-job/1",
+ "job_id": "turgeon_ekblad_worker_repro",
+ "strategy": "donor_fit",
+ "route": "cc5-headshot-head-only -> nhl21-ps4-cusa18182 (Ekblad atlas-A donor)",
+ "source": {
+  "kind": "cc5_headshot_head_only_fbx",
+  "label": "Pierre Turgeon (CC5 / Headshot 3 head-only export TurgeonTest.Fbx)",
+  "fbx": {"path": "S:/Downloads/Mogilny Test/Turgeon/TurgeonTest.Fbx", "sha256": "d1dba1b9682cc43c488ad5c32f3171354fd7e8eddec2da96c1da7d3a6a5c12c3"},
+  "diffuse": {"path": "S:/Downloads/Mogilny Test/Turgeon/TurgeonTest.fbm/Std_Skin_Head_Diffuse.png", "sha256": "f23400469df090e32b845bf6f2e1c7b7020ffea1849f4f981af08132a41b50eb"},
+  "source_geometry": null,
+  "expected_family": "cc5-headshot-head-4119-8196"
+ },
+ "destination": {
+  "profile_id": "nhl21-ps4-cusa18182-game90-aaron-ekblad-v1",
+  "label": "Aaron Ekblad, NHL21 PS4 CUSA18182 game_90.big entry 11580 (profile nhl21-ps4-cusa18182-ekblad-v1)",
+  "profile": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/assets/codex/nhl21-phase3-exchange-01/profile.json", "sha256": "369c1bb898790ad3021dc2d897575fad4b868804a011292b2d5e02ae30ee892b"},
+  "exchange": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/runs/codex/nhl21-phase3-exchange-01/native_mesh.json", "sha256": "c2f0e8848f8df3d716c883809d06ac261abda54fe07d5ac5b1c0837e5c314318"},
+  "native_diffuse_png": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/runs/codex/nhl21-phase3-exchange-01/native_diffuse.png", "sha256": "483c8f668ac36ec6fd52a48e01410b485cc374e9242a93e2f11972951bc96728"},
+  "donor_mcd": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/assets/codex/nhl21-phase3-exchange-01/donor.mcd", "sha256": "9ba644045f3c4f50fdcf459b84b7e1599e2f205b0cd9538148b1d76c759abb43"},
+  "native_diffuse_gnf": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/assets/codex/nhl21-phase3-exchange-01/diffuse.gnf", "sha256": "6cbe6d8f6e2fa57af4cd71f64e87bbebb04522ccc7c6e3c5e4f2d66de3793b8f"},
+  "expected_donor_layout": {"schema": "native-fit-exchange/1", "profile_id": "nhl21-ps4-cusa18182-game90-aaron-ekblad-v1", "donor_sha256": "9ba644045f3c4f50fdcf459b84b7e1599e2f205b0cd9538148b1d76c759abb43",
+   "submeshes": {"geo_cardsBShape": {"records": 1808, "triangles": 1947}, "geo_eyesShape": {"records": 198, "triangles": 320}, "geo_haircapShape": {"records": 613, "triangles": 1048}, "geo_headShape": {"records": 3157, "triangles": 6014}}}
+ },
+ "calibration": {
+  "tps_ledger": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/runs/claude/overnight-2026-09-12-recipe-snapshot-01/calibration/nhl19_tps_ledger_turgeon.json", "sha256": "9b50219b9ec600c9594a0371612881f2e152a7a27eeba9a4deef3f58e61d6a75"},
+  "family": "cc5-headshot-head-4119-8196 -> nhl-head-atlas-a",
+  "justification": "45 Studio landmark pairs (native atlas -> CC5 atlas, 1024 px space) calibrated on NHL19 Gaborik/Bouwmeester; NHL21 Ekblad shares the NHL19 atlas template exactly (3157/3157 UV twins, IoU 1.0), so the registration is a family asset; only pairs_pixels and coefficients are consumed"
+ },
+ "policies": {
+  "atlas_policy": "nhl-head-atlas-a",
+  "fit": {"band_top": 1.775, "fit_top": 1.79, "miss_px": 1.5, "raster": 2048, "rear_y": 0.005, "rear_blend_rings": 4},
+  "neck": {},
+  "collision_repair": {"mode": "fixed", "rings": 3, "passes": 2, "alpha": 0.5, "force": false},
+  "eyes": {"operation": "component_similarity_to_cc5_sphere"},
+  "bake": {"mode": "G", "size": 1024},
+  "route_specific": {"id": "none"}
+ },
+ "tools": {"blender": {"path": "C:/Program Files/Blender Foundation/Blender 4.5/blender.exe", "expected_version": "4.5.5"}},
+ "output": {"run_root": "E:/Projects/Repositories/nhl-head-mesh-converter/local/runs/claude", "dir": "overnight-2026-09-12-job-turgeon-01"},
+ "references": {
+  "accepted_native_mesh": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/runs/claude/phase6-nhl21-candidate-02/turgeon_ekblad/native_mesh.json", "sha256": "7fb34573c38541dd63ad8b6bbe7bb124a4b7af83a1c1ad966a2c8ac7b01a2299"},
+  "accepted_atlas": {"path": "E:/Projects/Repositories/nhl-head-mesh-converter/local/runs/claude/phase6-nhl21-candidate-02/turgeon_ekblad/atlas_1024.png", "sha256": "df56d53251f41ee280a1bee3f416f780a203c73f66214c2ed6b2300aafdef8fe"}
+ },
+ "render": true
+}

@@ -5686,6 +5686,46 @@ pub struct SaveEditorSaveDto {
 
 // ---- Supplementary portrait library (historical Appearance tab) ----------------------------
 
+/// Progress of the in-app portrait-database download / install job (polled).
+#[derive(Serialize, TS)]
+pub struct PortraitInstallStatusDto {
+    /// `idle` | `downloading` | `extracting` | `done` | `failed` | `cancelled`.
+    pub phase: String,
+    pub message: String,
+    #[ts(type = "number")]
+    pub bytes_done: u64,
+    #[ts(type = "number | null")]
+    pub bytes_total: Option<u64>,
+    #[ts(type = "number")]
+    pub files_done: u64,
+    pub archive_path: Option<String>,
+    pub install_root: Option<String>,
+    pub error: Option<String>,
+    pub started_at: Option<String>,
+    pub finished_at: Option<String>,
+}
+
+/// Where the portrait database would download to and install, and what is already there.
+#[derive(Serialize, TS)]
+pub struct PortraitInstallPlanDto {
+    pub download_dir: String,
+    pub install_root: String,
+    /// `portraits.sqlite` is present at the install root.
+    pub installed: bool,
+    pub archive_name: String,
+    /// Published size, for the offer text (the download trusts the server's figure).
+    #[ts(type = "number")]
+    pub expected_bytes: u64,
+    /// Bytes of a resumable partial download already on disk.
+    #[ts(type = "number")]
+    pub partial_bytes: u64,
+    /// A complete, not yet installed download, when present.
+    pub downloaded_archive: Option<String>,
+    #[ts(type = "number | null")]
+    pub free_bytes: Option<u64>,
+    pub source_url: String,
+}
+
 /// Where the operator-compiled portrait library was found and what it holds.
 #[derive(Serialize, TS)]
 pub struct PortraitLibraryStatusDto {

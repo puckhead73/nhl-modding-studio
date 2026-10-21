@@ -10,6 +10,7 @@ import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import { call } from "../lib/client";
 import { Button, Card, ErrorBanner, PageScroll, Spinner, Stat } from "../components/primitives";
 import { AssetGate, isExportable, usePlayerAssets } from "./PlayerAssets";
+import { ProjectInputsCard } from "../components/ProjectInputsCard";
 import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
 import type { AssetRootsArgsDto } from "../bindings/AssetRootsArgsDto";
 import type { HeadCatalogSummaryDto } from "../bindings/HeadCatalogSummaryDto";
@@ -81,6 +82,7 @@ export function AssetExportPage() {
   return (
     <PageScroll>
       <div className="max-w-2xl space-y-3 p-3">
+        <CatalogExport key={`${projectId}:${installDir}`} projectId={projectId} rootArgs={rootArgs} />
         <Card
           title="Export player assets"
           subtitle="Portraits, head meshes and head textures, named by the player they belong to."
@@ -110,7 +112,7 @@ export function AssetExportPage() {
                   label="Head meshes (.glb)"
                   checked={meshes}
                   onChange={setMeshes}
-                  hint="Includes the skeleton, joints and skin weights."
+                  hint="Exports mesh geometry and UVs."
                 />
                 <Check
                   label="Head textures (.dds)"
@@ -149,14 +151,14 @@ export function AssetExportPage() {
 
         {summary ? <Summary summary={summary} /> : null}
 
-        <CatalogExport projectId={projectId} rootArgs={rootArgs} />
+        <ProjectInputsCard />
       </div>
     </PageScroll>
   );
 }
 
 // Appearance catalog — every head + hair + facial hair (players and non-players),
-// written as GLB + PNG with a catalog.json manifest the Appearance Studio reads.
+// written as GLB + DDS with a catalog.json manifest the Appearance Studio reads.
 function CatalogExport({
   projectId,
   rootArgs,
@@ -182,15 +184,15 @@ function CatalogExport({
 
   return (
     <Card
-      title="Appearance catalog"
+      title="All head meshes — appearance catalog"
       subtitle="Every head, hairstyle and facial-hair mesh — players, generics, referees, coaches and trainers — with a catalog.json the Appearance Studio reads to mix any combination."
     >
       <div className="space-y-4 text-sm">
         <Check
-          label="Player-head textures (.png)"
+          label="Head and hair textures (.dds)"
           checked={textures}
           onChange={setTextures}
-          hint="Decode each bespoke player's head texlib to PNG alongside the meshes."
+          hint="Includes player, create-a-player and staff maps. Exports the base mip without recompressing BC textures."
         />
         <div className="flex items-center gap-3 border-t border-slate-800 pt-3">
           <Button onClick={() => run.mutate()} disabled={run.isPending}>

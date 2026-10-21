@@ -16,6 +16,7 @@
 //! in `studio-api`) are what later phases extend.
 
 pub mod arena_venue;
+pub mod head_library;
 pub mod arena_edit;
 pub mod asset_member_edit;
 pub mod board_replace;

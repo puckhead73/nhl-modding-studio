@@ -11,6 +11,7 @@ import { AttributesTab } from "../components/AttributesTab";
 import { CareerStatsTab } from "../components/CareerStatsTab";
 import { PlayerEquipmentTab } from "../components/PlayerEquipmentTab";
 import { PlayerNameCallsCard } from "../components/PlayerNameCallsCard";
+import { HeadLibraryPanel } from "../components/HeadLibraryPanel";
 import { Spinner } from "../components/primitives";
 import { useCrumbLabel } from "../lib/breadcrumbs";
 import { PLAYER_TABS, isAvailable, visibleTabKeys } from "../lib/surfaces";
@@ -50,6 +51,8 @@ export function PlayerDetail() {
       label: "Player Data",
       content: <PlayerDataTab projectId={projectId} player={player} />,
     },
+    { key: "appearance", label: "Appearance",
+      content: <HeadLibraryPanel name={player.header.full_name} personKey={`ea:${projectId}:${playerId}`} /> },
     {
       key: "career",
       label: "Career Stats",
@@ -77,7 +80,7 @@ export function PlayerDetail() {
   // Gate the tab strip on the probed surface contract: omit tabs whose backing schema is absent (an
   // absent feature is never rendered as an empty tab a user can't tell from a bug).
   const visible = visibleTabKeys(PLAYER_TABS, surfaces);
-  const shownTabs = tabs.filter((t) => visible.has(t.key));
+  const shownTabs = tabs.filter((t) => t.key === "appearance" || visible.has(t.key));
 
   return (
     <div className="max-w-6xl space-y-3">

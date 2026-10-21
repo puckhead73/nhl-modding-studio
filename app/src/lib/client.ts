@@ -203,6 +203,8 @@ import type { SettingsCatalogueResultDto } from "../bindings/SettingsCatalogueRe
 import type { SettingsEditPreviewDto } from "../bindings/SettingsEditPreviewDto";
 import type { SettingsEditApplyDto } from "../bindings/SettingsEditApplyDto";
 import type { PortraitLibraryStatusDto } from "../bindings/PortraitLibraryStatusDto";
+import type { PortraitInstallStatusDto } from "../bindings/PortraitInstallStatusDto";
+import type { PortraitInstallPlanDto } from "../bindings/PortraitInstallPlanDto";
 import type { PortraitCandidateDto } from "../bindings/PortraitCandidateDto";
 import type { HistoricalPortraitMatchesDto } from "../bindings/HistoricalPortraitMatchesDto";
 
@@ -602,6 +604,12 @@ type Commands = {
   // Appearance tab. Needs an open corpus: the selection sidecar lives beside it.
   portrait_library_status: { args: Record<string, never>; ret: PortraitLibraryStatusDto };
   portrait_library_set_root: { args: { root: string }; ret: PortraitLibraryStatusDto };
+  // In-app portrait-database download / install (one background job; status is polled).
+  portrait_install_plan: { args: Record<string, never>; ret: PortraitInstallPlanDto };
+  portrait_download_start: { args: Record<string, never>; ret: PortraitInstallStatusDto };
+  portrait_install_archive: { args: { path: string }; ret: PortraitInstallStatusDto };
+  portrait_install_status: { args: Record<string, never>; ret: PortraitInstallStatusDto };
+  portrait_install_cancel: { args: Record<string, never>; ret: PortraitInstallStatusDto };
   portrait_library_rescan: { args: Record<string, never>; ret: PortraitLibraryStatusDto };
   // mode: "exact" | "last_dob" | "last_only" | "dob_only"
   historical_portrait_candidates: {
@@ -941,6 +949,13 @@ type Commands = {
       jerseyIndex?: number | null;
     };
     ret: CloneJerseyResultDto;
+  };
+  // Move an existing kit to another team (team + per-team index only; the asset id stays), staged
+  // as a pending, undoable edit. `jerseyIndex` omitted → the destination's smallest unused index.
+  // Refused when the destination already carries 32 kits.
+  reassign_jersey: {
+    args: { projectId: number; record: number; team: number; jerseyIndex?: number | null };
+    ret: OpOutcomeDto;
   };
   // The in-game jersey-select preview image for a kit's {style}_{art}_{variant} asset id,
   // resolved through the game's own fallback chain (stock archive → shared custom*.big).

@@ -1,0 +1,48 @@
+[
+  {
+    "game": "nhl22",
+    "platform": "ps4",
+    "distinct_mesh_resource_names_by_category": {
+      "bench/shared/head/generic": 300,
+      "bench/shared/head/licensed": 197,
+      "skater/referee/head/generic": 16,
+      "skater/shared/head/beard": 93,
+      "skater/shared/head/generic": 231,
+      "skater/shared/head/hair": 766,
+      "skater/shared/head/licensed": 1478
+    },
+    "source_occurrences": 3081,
+    "status": "inventoried; GLB conversion unavailable; codec 0x11 witnessed"
+  },
+  {
+    "game": "nhl23",
+    "platform": "ps4",
+    "distinct_mesh_resource_names_by_category": {
+      "bench/shared/head/generic": 300,
+      "bench/shared/head/licensed": 197,
+      "skater/referee/head/generic": 16,
+      "skater/shared/head/beard": 93,
+      "skater/shared/head/generic": 306,
+      "skater/shared/head/hair": 771,
+      "skater/shared/head/licensed": 1596
+    },
+    "source_occurrences": 3279,
+    "status": "inventoried; GLB conversion unavailable; codec 0x11 witnessed"
+  },
+  {
+    "game": "nhl24",
+    "platform": "ps4",
+    "distinct_mesh_resource_names_by_category": {
+      "bench/shared/head/generic": 300,
+      "bench/shared/head/licensed": 197,
+      "skater/referee/head/generic": 16,
+      "skater/shared/head/beard": 93,
+      "skater/shared/head/generic": 316,
+      "skater/shared/head/hair": 771,
+      "skater/shared/head/licensed": 1710,
+      "skater/shared/head/special": 38
+    },
+    "source_occurrences": 6853,
+    "status": "inventoried; GLB conversion unavailable; codec 0x11 witnessed"
+  }
+]

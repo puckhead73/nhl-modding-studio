@@ -55,6 +55,10 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the architecture and rationale.
 
 ## Documentation
 
+**User guide and modding knowledge base:** the [project wiki](https://github.com/puckhead73/nhl-modding-studio/wiki),
+authored under [`wiki/`](wiki/) in this repository and mirrored automatically (see
+[Contributing to the Wiki](wiki/Contributing-to-the-Wiki.md)).
+
 **Canonical:**
 
 | Doc | Purpose |

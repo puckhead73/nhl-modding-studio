@@ -29,6 +29,8 @@ tdb-defs = { path = "../tdb-defs" }
 sha2 = "0.10"
 zip = { version = "2", default-features = false, features = ["deflate"] }
 tempfile = "3"
+sevenz-rust2 = "0.24.1"
+reqwest = { version = "0.13.4", default-features = false, features = ["blocking", "rustls"] }
 
 # Headless edit-QA runner: drives the Registry seam across the anchor matrix, deposits edited
 # artifacts + markdown reports. See src/bin/edit_qa.rs.

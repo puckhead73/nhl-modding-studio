@@ -123,7 +123,12 @@ complete. Details: completion roadmap, C5 direction update.
   - **implemented** — the code exists;
   - **automated-tested** — a named automated case actually executed and asserted it;
   - **game-verified** — a manual run on the exact title/platform/build with recorded evidence.
-    **No cell anywhere is game-verified today.**
+    **One fact is game-verified (21 Oct 2026):** on NHL Legacy (Xbox 360) a database edit written
+    into the `db/nhlng.db` member of `cacheboot.big` loads in game, and a team carrying 32 kits
+    (the `jerseyindex` 5-bit ceiling) lists all 32 — see
+    [docs/validation/legacy360-jersey-ceiling-probe-20261020.md](docs/validation/legacy360-jersey-ceiling-probe-20261020.md).
+    The same run showed the game does **not** read the loose `db/nhlng.db`. Nothing else is
+    game-verified, and no target is.
   - **blocked** — implementation or evidence is blocked, with the blocker recorded;
   - **missing-fixture** — no fixture is available. A test that returns early on an absent fixture is
     a skip, not a pass.

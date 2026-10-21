@@ -3,6 +3,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tansta
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { call } from "../lib/client";
 import { Spinner } from "./primitives";
+import { HeadLibraryPanel } from "./HeadLibraryPanel";
 import type { HistoricalPersonDto } from "../bindings/HistoricalPersonDto";
 import type { PortraitCandidateDto } from "../bindings/PortraitCandidateDto";
 
@@ -18,25 +19,26 @@ export function HistoricalAppearanceTab({ p }: { p: HistoricalPersonDto }) {
     staleTime: 60_000,
   });
 
-  if (status.isLoading) return <Spinner label="Indexing the portrait library…" />;
-  if (status.isError) return <p className="text-sm text-rose-400">{String(status.error)}</p>;
-  const st = status.data!;
+  const st = status.data;
 
   return (
     <div className="space-y-6">
-      <LibraryStatusBar st={st} />
-      {st.available ? (
+      <HeadLibraryPanel name={`${p.last_name} ${p.first_name}`} personKey={`historical:${p.person_id}`} />
+      {status.isLoading && <Spinner label="Indexing the portrait library…" />}
+      {status.isError && <p className="text-sm text-rose-400">{String(status.error)}</p>}
+      {st && <LibraryStatusBar st={st} />}
+      {st?.available ? (
         <>
           <SelectedPortrait personId={p.person_id} />
           <CandidatePicker p={p} />
           <SearchPicker personId={p.person_id} dob={p.dob} />
         </>
-      ) : (
+      ) : st ? (
         <p className="text-sm text-slate-400">
           No portrait library was found. Place the compiled tree at the folder above (or point
           Studio at it under “Library location”), then rescan.
         </p>
-      )}
+      ) : null}
     </div>
   );
 }

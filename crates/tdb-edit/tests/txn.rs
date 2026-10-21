@@ -16,6 +16,102 @@ fn anchor(rel: &str) -> Vec<u8> {
     .unwrap()
 }
 
+/// `reassign_jersey`: a kit moves between teams by rewriting only its team + per-team index; the
+/// asset id stays; indexes are minted from the destination's free set; bad inputs roll back.
+#[test]
+fn reassign_jersey_moves_a_kit_and_keeps_its_asset_id() {
+    use tdb_edit::txn::jerseys;
+    let bytes = anchor("ps3/nhllegacy/databases/nhlng.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let t = db.table_canonical(jerseys::TABLE).unwrap();
+    let f = |id: &str| t.fields.iter().find(|f| f.id.canonical(db.endian) == id).unwrap();
+    let (team_f, idx_f, art_f, var_f) = (f(jerseys::TEAM), f(jerseys::INDEX), f(jerseys::ART_ID), f(jerseys::VARIANT));
+    let rows = t.current_records as u32;
+    let read = |b: &[u8], r: u32, fld| TdbFile::parse(b).unwrap().read_u64(TdbFile::parse(b).unwrap().table_canonical(jerseys::TABLE).unwrap(), r, fld).unwrap();
+    // Donor: team 1's last-indexed kit. Destination: team 0.
+    let donor = (0..rows).filter(|&r| db.read_u64(t, r, team_f) == Some(1)).max_by_key(|&r| db.read_u64(t, r, idx_f)).unwrap();
+    let dest_count = (0..rows).filter(|&r| db.read_u64(t, r, team_f) == Some(0)).count() as u64;
+    let (art, var) = (db.read_u64(t, donor, art_f).unwrap(), db.read_u64(t, donor, var_f).unwrap());
+
+    let mut tx = EditTransaction::begin(&bytes).unwrap();
+    let out = tx.reassign_jersey(donor, 0, None).unwrap();
+    assert_eq!(out.edits, 2);
+    let after = tx.bytes().to_vec();
+    assert_eq!(read(&after, donor, team_f), 0);
+    assert_eq!(read(&after, donor, idx_f), dest_count, "smallest unused index on the destination");
+    assert_eq!((read(&after, donor, art_f), read(&after, donor, var_f)), (art, var), "asset id untouched");
+    let after_db = TdbFile::parse(&after).unwrap();
+    let after_t = after_db.table_canonical(jerseys::TABLE).unwrap();
+    assert_eq!(after_t.current_records, t.current_records, "no rows added or removed");
+    assert_eq!((0..rows).filter(|&r| after_db.read_u64(after_t, r, team_f) == Some(0)).count() as u64, dest_count + 1);
+
+    // Explicit index, then refusals that leave the bytes untouched.
+    tx.reassign_jersey(donor, 1, Some(31)).unwrap();
+    assert_eq!(read(tx.bytes(), donor, idx_f), 31);
+    let snapshot = tx.bytes().to_vec();
+    assert!(matches!(tx.reassign_jersey(donor, 0, Some(32)), Err(EditError::InvalidValue { .. })), "index past the 5-bit width");
+    assert!(matches!(tx.reassign_jersey(rows, 0, None), Err(EditError::InvalidValue { .. })), "record out of range");
+    assert!(matches!(tx.reassign_jersey(donor, 9_999, None), Err(EditError::InvalidValue { .. })), "unknown team");
+    assert_eq!(tx.bytes(), &snapshot[..], "refusals change nothing");
+}
+
+/// `clone_jersey` on a packed registry grows the table by one row (block growth, downstream
+/// tables shifted, CRCs valid); the per-team ceiling is 32 (`tYnx` 5 bits): a team filled to 32
+/// refuses a 33rd by clone or by move, and another team still accepts one.
+#[test]
+fn clone_jersey_grows_a_packed_registry_and_the_team_ceiling_is_32() {
+    use tdb_edit::txn::jerseys;
+    let bytes = anchor("ps3/nhllegacy/databases/nhlng.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let t = db.table_canonical(jerseys::TABLE).unwrap();
+    assert_eq!(t.current_records, t.max_records, "the Legacy registry ships packed");
+    let (rows, cap) = (t.current_records, t.max_records);
+    let team_f = t.fields.iter().find(|f| f.id.canonical(db.endian) == jerseys::TEAM).unwrap();
+    let idx_f = t.fields.iter().find(|f| f.id.canonical(db.endian) == jerseys::INDEX).unwrap();
+    let count_team = |b: &[u8], team: u64| {
+        let d = TdbFile::parse(b).unwrap();
+        let tt = d.table_canonical(jerseys::TABLE).unwrap();
+        (0..tt.current_records as u32).filter(|&r| d.read_u64(tt, r, team_f) == Some(team)).count() as u64
+    };
+    let team0_before = count_team(&bytes, 0);
+    let source = (0..rows as u32).find(|&r| db.read_u64(t, r, team_f) == Some(0)).unwrap();
+
+    let mut tx = EditTransaction::begin(&bytes).unwrap();
+    let (new_rec, out) = tx.clone_jersey(source, 0, 1, 0, 30, None).unwrap();
+    assert_eq!(new_rec, rows as u32, "appended at the old row count");
+    assert!(out.edits > 0);
+    let grown = TdbFile::parse(tx.bytes()).unwrap();
+    let gt = grown.table_canonical(jerseys::TABLE).unwrap();
+    assert_eq!((gt.current_records, gt.max_records), (rows + 1, cap + 1), "grown by exactly one row");
+    assert_eq!(grown.read_u64(gt, new_rec, team_f), Some(0));
+    assert_eq!(grown.read_u64(gt, new_rec, idx_f), Some(team0_before), "smallest unused index");
+    assert_eq!(count_team(tx.bytes(), 0), team0_before + 1);
+    assert_eq!(grown.tables.len(), db.tables.len(), "every other table survived the shift");
+
+    // Fill team 0 to 32 by moving other teams' last kits onto it, then the ceiling holds.
+    let mut donors: Vec<u32> = Vec::new();
+    for team in 1..=40u64 {
+        if count_team(tx.bytes(), 0) >= 32 {
+            break;
+        }
+        let d = TdbFile::parse(tx.bytes()).unwrap();
+        let dt = d.table_canonical(jerseys::TABLE).unwrap();
+        let Some(rec) = (0..dt.current_records as u32).filter(|&r| d.read_u64(dt, r, team_f) == Some(team)).max_by_key(|&r| d.read_u64(dt, r, idx_f)) else { continue };
+        tx.reassign_jersey(rec, 0, None).unwrap();
+        donors.push(rec);
+    }
+    assert_eq!(count_team(tx.bytes(), 0), 32);
+    let snapshot = tx.bytes().to_vec();
+    assert!(matches!(tx.clone_jersey(source, 0, 1, 0, 31, None), Err(EditError::Alloc(_))), "a 33rd kit by clone is refused");
+    assert!(matches!(tx.clone_jersey(source, 0, 1, 0, 31, Some(5)), Err(EditError::Alloc(_))), "even with an explicit index");
+    let other = (0..rows as u32).find(|&r| db.read_u64(t, r, team_f) == Some(9)).unwrap();
+    assert!(matches!(tx.reassign_jersey(other, 0, None), Err(EditError::Alloc(_))), "a 33rd kit by move is refused");
+    assert_eq!(tx.bytes(), &snapshot[..], "refusals change nothing");
+    let team9_before = count_team(tx.bytes(), 9);
+    tx.clone_jersey(source, 9, 1, 9, 30, None).unwrap();
+    assert_eq!(count_team(tx.bytes(), 9), team9_before + 1, "another team still accepts a kit");
+}
+
 /// Patch one fixed-bit `eGlu` cell in raw bytes and fix CRCs — a dirty-fixture helper.
 fn patch_eglu(bytes: &[u8], record: u32, field: &str, value: u64) -> Vec<u8> {
     let db = TdbFile::parse(bytes).unwrap();

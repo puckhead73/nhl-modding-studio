@@ -1,0 +1,447 @@
+[
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\atlas.py",
+    "relative": "src\\conversion\\atlas.py",
+    "sha256": "6fdae3e423218fae236931cffbd007fb5193dbd2111d8a04b3a99b794b99654f"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\bake.py",
+    "relative": "src\\conversion\\bake.py",
+    "sha256": "8fcaca813f9113ab76e844ee82c2ce8593979d8789846876373189fa7892dee6"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\candidate.py",
+    "relative": "src\\conversion\\candidate.py",
+    "sha256": "6641573f60d15d995e4adcc0ace5f732745385722964212c7ce4ad0cdbca8a1f"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\cc5_source.py",
+    "relative": "src\\conversion\\cc5_source.py",
+    "sha256": "3956b0a6d75e6fe18dbf5c283afd1c987e05d38e23ca2f4cd82efb6d53740e32"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\classify.py",
+    "relative": "src\\conversion\\classify.py",
+    "sha256": "2396c89d11b942fc0e9b6517cbfa761bf796ba74bf12f73e7619c8ae4b3c33a8"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\collision_repair.py",
+    "relative": "src\\conversion\\collision_repair.py",
+    "sha256": "1d6e35b6c6e4490a5ec0b000c709c0e0fc81adcd3e5fcbf3da7299ed62c35834"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\crease.py",
+    "relative": "src\\conversion\\crease.py",
+    "sha256": "989ae8975178f686e0156f33d266598f516cb67c6a4ed3f28fb9dd3f936363d3"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\exchange.py",
+    "relative": "src\\conversion\\exchange.py",
+    "sha256": "2b91267273bba5af029d0e7bb968715bef2376243f8f4253543853ebe13a182b"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\eye_fit.py",
+    "relative": "src\\conversion\\eye_fit.py",
+    "sha256": "6af74cdb16e1f8ad245dbb38c537defb97a1ec535bc534d2ff55013bfc2a25f4"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\eye_place.py",
+    "relative": "src\\conversion\\eye_place.py",
+    "sha256": "ba004270655c433eedf3ea11a09856eae988266792aa69bf579677be16e58d84"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\eye_screen_calibration.py",
+    "relative": "src\\conversion\\eye_screen_calibration.py",
+    "sha256": "1d747346c939c264675d74262383cc57f05fb038ba30fa10e47da1133cbc0c13"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\face_quality.py",
+    "relative": "src\\conversion\\face_quality.py",
+    "sha256": "463f0001eefe5c7db8facdfe27a387b54ee9ada49b60436b339de7c40e8eb0b8"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\geometry.py",
+    "relative": "src\\conversion\\geometry.py",
+    "sha256": "81175e59ba21f87527e5382d2c6c4b093ab3c1ce64b0087b4cf404a0830facc8"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\jaw_metrics.py",
+    "relative": "src\\conversion\\jaw_metrics.py",
+    "sha256": "c38d853cf58442c82da62a38d2ad4762476030c7398c663e322a5370d1ae89bc"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\job.py",
+    "relative": "src\\conversion\\job.py",
+    "sha256": "ef4ab7bf3f59924bcfc8d0ed8869c93c8ba08a30ea97580cee046d83e18834d5"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\legacy_exchange.py",
+    "relative": "src\\conversion\\legacy_exchange.py",
+    "sha256": "b9da5f99aff0a986ecc139f28119f0b95c2851f0fdd3c8eb23ee1f8c6c75e1c2"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\legacy_fit.py",
+    "relative": "src\\conversion\\legacy_fit.py",
+    "sha256": "7fef8a5b6091a4d38fb4c11d6cadc11eb6d7f01ed2b525f77a78becd509dddc0"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\legacy_qualify.py",
+    "relative": "src\\conversion\\legacy_qualify.py",
+    "sha256": "416dbe63e806f86af9eabfcff64455fdd3810c56a8cb032a3e05e437c3657962"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\legacy_quant.py",
+    "relative": "src\\conversion\\legacy_quant.py",
+    "sha256": "8daadf5485785bd2ab414e5ff772721db50d45e65b6f1630a1bcb017284ed737"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\masks.py",
+    "relative": "src\\conversion\\masks.py",
+    "sha256": "b073c9f56e0ae43d846d318a6911b0e4b22c6d0488f009a7c2f9a11e1ba4c288"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\measure.py",
+    "relative": "src\\conversion\\measure.py",
+    "sha256": "609ae1498681c128a52a450ba2627bd0523a419f0c0bfd59b724cdf5a80ece7d"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\mouth_islands.py",
+    "relative": "src\\conversion\\mouth_islands.py",
+    "sha256": "4d83706c7a0ebbd9fcb5fa3612308ef8fca686cbe4e0299c8c7c39bb883c45fb"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\neck_transition.py",
+    "relative": "src\\conversion\\neck_transition.py",
+    "sha256": "605db63ca0deba73d5841c213365db3726575f69930988a9ae7798add3f28f46"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\preview.py",
+    "relative": "src\\conversion\\preview.py",
+    "sha256": "0bfd925fad6d4c7db08c2a955a1dca0dc32e883a9c56d687f05c18964e7cb80e"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\stages_nhl21.py",
+    "relative": "src\\conversion\\stages_nhl21.py",
+    "sha256": "b7a23735f773274d012ca887353423be606fcfbdcbb717732acaf5c0f74e41e6"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\ui_manifest.py",
+    "relative": "src\\conversion\\ui_manifest.py",
+    "sha256": "b3fc7503ea86ea283cf117e0b6ced5b91e354e5c5628d4b84f17dd5a7b87701a"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\uv_fit.py",
+    "relative": "src\\conversion\\uv_fit.py",
+    "sha256": "dd40fbd91fa1562592da0cdd8f5ed769f449508ad1f5d193bdd855305ca633af"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\conversion\\__init__.py",
+    "relative": "src\\conversion\\__init__.py",
+    "sha256": "8dcfaf99a928821148509d287c016cac382a2d5b839187afb308bf33d413e85a"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\adapters\\frostbite_sections.py",
+    "relative": "src\\adapters\\frostbite_sections.py",
+    "sha256": "41eb80cfdf647548256184206335e41942d20504766860eb56dda5c87166d77d"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\adapters\\glb_inspect.py",
+    "relative": "src\\adapters\\glb_inspect.py",
+    "sha256": "5e0aefdcfc9a6d77f415a2ba83d4efe8801aa80be1e393a94c8e923bb889cbf8"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\adapters\\legacy_mip_writer.py",
+    "relative": "src\\adapters\\legacy_mip_writer.py",
+    "sha256": "cc68e265f9c9f144652df95ce029c8362d48b0b698c4ed502e246c11e038bef8"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\adapters\\legacy_native.py",
+    "relative": "src\\adapters\\legacy_native.py",
+    "sha256": "59f5fdc9c4c859130a1b8990e85bd694f2022dfe25674d9407f0bfd9ca594f4b"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\adapters\\legacy_shading.py",
+    "relative": "src\\adapters\\legacy_shading.py",
+    "sha256": "9e33e027236ad9d52754f2b259c7e8f828d3fdec695fb3262e1565ea1a91aadd"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\adapters\\legacy_texlib.py",
+    "relative": "src\\adapters\\legacy_texlib.py",
+    "sha256": "acf2aa9e092154ee64925f949bcc80f5efaf41aea89e8356b574fe59f8b492d9"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\application\\export.py",
+    "relative": "src\\application\\export.py",
+    "sha256": "004cc37c12f0310bf901d80f9ad80b77f4598f318effd0e46f665c6e4dac842e"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\application\\export_profile.py",
+    "relative": "src\\application\\export_profile.py",
+    "sha256": "3668609645d7dd4dd6bf1a0c60b149fd1cb2958ebc6ca3bf65a741a545a6a55d"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\application\\lifecycle.py",
+    "relative": "src\\application\\lifecycle.py",
+    "sha256": "c969554dc5692c21963b8bdc6ab645dd448a0797f6ea1df940b525ec4c17fbfe"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\application\\native_build.py",
+    "relative": "src\\application\\native_build.py",
+    "sha256": "f44ed28ab69dbf5cc65c927f250d1a3f12be17c20148a4082899c42da9a7b03b"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\application\\native_paths.py",
+    "relative": "src\\application\\native_paths.py",
+    "sha256": "0aef054d1996cee19f745318512ce7afcbd3f4aeb98a804ae90f9aa84dab04c3"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\application\\__init__.py",
+    "relative": "src\\application\\__init__.py",
+    "sha256": "a86a542ca5c3b93311b8b2b880f78d3c24cc95ef63dcedd649fe08d3b67d5406"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\fake_blender.py",
+    "relative": "tests\\conversion\\fake_blender.py",
+    "sha256": "a216fef396da99f4f44077c3cc67dad647d9c2fc628310a888ad593c14c85cae"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_app_interface.py",
+    "relative": "tests\\conversion\\test_app_interface.py",
+    "sha256": "eccef55b1708abc0d05e3ea0289b690e913e94dde1756da4859eea79bfbbab1c"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_conversion.py",
+    "relative": "tests\\conversion\\test_conversion.py",
+    "sha256": "fcd3bb972a593694c6aa82f7998a3d4e68e164ece69463076ee462709b629bce"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_crease.py",
+    "relative": "tests\\conversion\\test_crease.py",
+    "sha256": "df9fd42ce81efd66bf4795ec0955b815e56726faf0e389d114b7cb374331453b"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_eye_screen_calibration.py",
+    "relative": "tests\\conversion\\test_eye_screen_calibration.py",
+    "sha256": "d10fbf89b7bdf1fff6893072354d0230276908df13f6732e39f579f1a8e50927"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_legacy_exchange.py",
+    "relative": "tests\\conversion\\test_legacy_exchange.py",
+    "sha256": "8399952ca68c4127d6461526384cc5e4d38cfa0751c1cce4c427e412d04d7c95"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_legacy_eye_preview.py",
+    "relative": "tests\\conversion\\test_legacy_eye_preview.py",
+    "sha256": "611b9aa5855915e66d3fbcdb5963bc6a95a638124554524aee69a9de5be78fb2"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_legacy_fit.py",
+    "relative": "tests\\conversion\\test_legacy_fit.py",
+    "sha256": "62a7ca35e25c8828b72e7b6c4e78567be33b51050eb6bf96b866a83644c367c5"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_legacy_qualify.py",
+    "relative": "tests\\conversion\\test_legacy_qualify.py",
+    "sha256": "b6359fcab021345a98fb415eebf19249e84950497fd48b86c0bd9b8e2aff5685"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_legacy_quant.py",
+    "relative": "tests\\conversion\\test_legacy_quant.py",
+    "sha256": "d0ede8e8615257cb15929d15afe05fdec5a02301c5bc3b1451c9c7499dff057a"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\test_worker.py",
+    "relative": "tests\\conversion\\test_worker.py",
+    "sha256": "2cb4fd1cf2596c41dc0cb52d6cb1e1c54558dbef3ea54c5d90d979ea348fafe6"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\conversion\\__init__.py",
+    "relative": "tests\\conversion\\__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\blender_tamper_harness.py",
+    "relative": "tests\\adapters\\blender_tamper_harness.py",
+    "sha256": "c96a212cf8123f3cb9384df75ca549dc65f2fa438b5b0ec0adac11f8db3c3866"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\fake_native_tools.py",
+    "relative": "tests\\adapters\\fake_native_tools.py",
+    "sha256": "7aadca98c8201f728435edcca75be4df6ed364e33cf57f205e08d3f220a7f475"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\read_trace.py",
+    "relative": "tests\\adapters\\read_trace.py",
+    "sha256": "925ec49544026567af15452334774ba19a5d0d937efd35845435ed89a759517b"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_export_lifecycle.py",
+    "relative": "tests\\adapters\\test_export_lifecycle.py",
+    "sha256": "6f75c6e950ca21b1f74313c5025b44cce0048a499fda18ee37ed7b837ba9c253"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_export_profile.py",
+    "relative": "tests\\adapters\\test_export_profile.py",
+    "sha256": "5817c995f27599e2740835327e25dda1a02ca0e6fd303478996f6a169fa8d9ee"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_frostbite_sections.py",
+    "relative": "tests\\adapters\\test_frostbite_sections.py",
+    "sha256": "f32cf5b98706bb941a2d1b122383d646f95fbb98b4725656cdbfea570123f896"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_glb_inspect.py",
+    "relative": "tests\\adapters\\test_glb_inspect.py",
+    "sha256": "0ae450ccc78263b326d8d86ac5876d4fbcf30e1726c84a33c391949bf2deca35"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_diagnostic.py",
+    "relative": "tests\\adapters\\test_legacy_diagnostic.py",
+    "sha256": "98167ebe3e006358186ffd78a1d20e2e5551ebc97f61dc3f6409bcfdb5edb3a2"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_dossier.py",
+    "relative": "tests\\adapters\\test_legacy_dossier.py",
+    "sha256": "7f49ab1af74ea62aaf968a6dfb405ab7355220c5ff9aad7995d8149d9731bb71"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_native.py",
+    "relative": "tests\\adapters\\test_legacy_native.py",
+    "sha256": "9def92250e10e47f0553cd929db24f290abfd969108c2aa90f80819a352624f2"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_repaired_native.py",
+    "relative": "tests\\adapters\\test_legacy_repaired_native.py",
+    "sha256": "4d44de4bdfe63fcdd1ee2fe11a3fcf03908350b923db37f8646045f4eeaa72de"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_session_dryrun.py",
+    "relative": "tests\\adapters\\test_legacy_session_dryrun.py",
+    "sha256": "f03323b81c614e3180a4404b13961c9b05964afdb6adccb3175477b022a68a00"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_session_stage.py",
+    "relative": "tests\\adapters\\test_legacy_session_stage.py",
+    "sha256": "e5a82175af1f5cc5a7f2a6c4a3580f0fce5b9dde30e7daa69f95d41f0d43c614"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_shading.py",
+    "relative": "tests\\adapters\\test_legacy_shading.py",
+    "sha256": "2e9b6c8df8c90e677c0f1d6660c277888e948252f139ba707b83e3f3deedba53"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_texlib.py",
+    "relative": "tests\\adapters\\test_legacy_texlib.py",
+    "sha256": "56fa0a67911a9fca1cc31471fb14323bf05b754520f15a424bf998fb71a90fcc"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_legacy_texture_native.py",
+    "relative": "tests\\adapters\\test_legacy_texture_native.py",
+    "sha256": "05a054dd2185527d0f44c30ccfb76390eb2d4429a874eebb005a9a7d49b13d89"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_native_build.py",
+    "relative": "tests\\adapters\\test_native_build.py",
+    "sha256": "d3ec8ae1896672b020cac5c17e88e2d53f25a1809c30b3f41660735352087189"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_native_export.py",
+    "relative": "tests\\adapters\\test_native_export.py",
+    "sha256": "69d222063dd108bacf097384607b5da9e8bda6959f7bea871cd26b335c3547aa"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_nhl19_package_shading.py",
+    "relative": "tests\\adapters\\test_nhl19_package_shading.py",
+    "sha256": "8cf7b96da33030bd638e56552e2865ace7ea4533475d051de761acfe12c5107a"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_nhl21_installed_baseline.py",
+    "relative": "tests\\adapters\\test_nhl21_installed_baseline.py",
+    "sha256": "1b2b682dc106d595beeb929b26fc30e8e857f060dfb9754e942c1dfbb29bbf7e"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_nhl21_package_fields.py",
+    "relative": "tests\\adapters\\test_nhl21_package_fields.py",
+    "sha256": "43c80444fdc351de4479865b12a72a469f3f1b0236daf63c5162b08bd29a2a51"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\tests\\adapters\\test_nhl21_runtime_packet.py",
+    "relative": "tests\\adapters\\test_nhl21_runtime_packet.py",
+    "sha256": "6025095cca866401b373f2731c502885686c62b290b391f648f8e48758c61ceb"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\claude\\render\\render_fixture_views.py",
+    "relative": "experiments/claude/render/render_fixture_views.py",
+    "sha256": "0616ca5a679cd697380764d11d63a5dd84b0b7cb63b25e87dc7a90f82951a59f"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\claude\\render\\render_textured.py",
+    "relative": "experiments/claude/render/render_textured.py",
+    "sha256": "c1833faf127bb06639bcfbdb6a7f5c7e481f6ff3ec370d0d732e5fe9be9a43cf"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\claude\\worker\\blender_bake.py",
+    "relative": "experiments/claude/worker/blender_bake.py",
+    "sha256": "eeef5d7fddb948fc7188da4787e231793f3e223b43c449d50becb347b2934bb8"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\claude\\worker\\blender_extract_cc5.py",
+    "relative": "experiments/claude/worker/blender_extract_cc5.py",
+    "sha256": "16610b7fe7721f001ca56deeb7484dc0bdaa8a2a62e40144ea1e7d7df0486349"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\claude\\worker\\run_job.py",
+    "relative": "experiments/claude/worker/run_job.py",
+    "sha256": "137b00fce0790724287b5b5b0b656097f6387b87b83cfdf73ec098bf610ccce7"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\Cargo.lock",
+    "relative": "experiments/codex/nhl21_package/Cargo.lock",
+    "sha256": "5ea3fe852156d03203ec8d6ea9df165ec55ffec2b61973fe7081e23b660a7974"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\Cargo.toml",
+    "relative": "experiments/codex/nhl21_package/Cargo.toml",
+    "sha256": "3ed40a067781abdf5bb3b26c8410c7329d111e5bb3f5862727518e9e4e52e67d"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\audit_candidate.py",
+    "relative": "experiments/codex/nhl21_package/audit_candidate.py",
+    "sha256": "5b5f017e97b167afa00d35665a0dc93b65db2c928893932ed598d0d2f9d92589"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\build.py",
+    "relative": "experiments/codex/nhl21_package/build.py",
+    "sha256": "d50e6fe6103551bcef3e0aeae58bdbaf97841bc466d6fc99d0b36ea13b2b3edc"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\layout_fields.py",
+    "relative": "experiments/codex/nhl21_package/layout_fields.py",
+    "sha256": "6ca0c7676e6e6a1807f357d12ffa95df2063684854ba80eaf4ab992b13618d6c"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\math_texture.py",
+    "relative": "experiments/codex/nhl21_package/math_texture.py",
+    "sha256": "8aa4f0f44fa601398dc88685950fdc2abbe15d017f32375b6978a750c33af008"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\reference_pack.py",
+    "relative": "experiments/codex/nhl21_package/reference_pack.py",
+    "sha256": "fc727f72e1e22dcc978b5084499c32b38ba4ee821d8730764c4c6a2cc98456dd"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\shading_proof.py",
+    "relative": "experiments/codex/nhl21_package/shading_proof.py",
+    "sha256": "5b8c04d89757037bc11a2edc878594a09a162eb3bcc3cf32f23e02ae70c151bb"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\experiments\\codex\\nhl21_package\\src\\main.rs",
+    "relative": "experiments/codex/nhl21_package/src/main.rs",
+    "sha256": "b9167931cc800bb28a96b2ffff5c9d5a268d252c4af022d6e7ca86748e98e420"
+  },
+  {
+    "source": "E:\\Projects\\Repositories\\nhl-head-mesh-converter\\src\\adapters\\mcd_profile.rs",
+    "relative": "src/adapters/mcd_profile.rs",
+    "sha256": "7ca9a72ffff4b96f6ca943947cf496349dd3b0e84f14788e97f6082c6a93bc3b"
+  }
+]

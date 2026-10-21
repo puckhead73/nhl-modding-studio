@@ -27,10 +27,13 @@ export type StudioSettings = {
   /** ONB-003: project folders opened most recently, newest first (a convenience list; opening
    *  one still goes through the full open with its validation). */
   recentProjects: string[];
+  /** The onboarding offer to download the portrait database was answered (checked or not); after
+   *  that the offer lives only in Settings → General. */
+  portraitOfferAnswered: boolean;
 };
 
 const STORAGE_KEY = "nhl-modding-studio.settings.v1";
-const EMPTY: StudioSettings = { autosaveMinutes: 10, projectsRoot: "", defaultGameId: null, defaultPlatform: null, paths: {}, recentProjects: [] };
+const EMPTY: StudioSettings = { autosaveMinutes: 10, projectsRoot: "", defaultGameId: null, defaultPlatform: null, paths: {}, recentProjects: [], portraitOfferAnswered: false };
 export function validAutosaveMinutes(value: unknown): number {
   return typeof value === "number" && Number.isInteger(value) && value >= 1 && value <= 1440 ? value : 10;
 }
@@ -53,6 +56,7 @@ function load(): StudioSettings {
       defaultPlatform: parsed.defaultPlatform ?? null,
       paths: parsed.paths ?? {},
       recentProjects: Array.isArray(parsed.recentProjects) ? parsed.recentProjects.filter((p) => typeof p === "string") : [],
+      portraitOfferAnswered: parsed.portraitOfferAnswered === true,
     };
   } catch {
     return EMPTY;
@@ -73,6 +77,8 @@ type SettingsCtx = {
   rememberProject: (dir: string) => void;
   /** ONB-003: drop a project folder from the recent list (it was moved or deleted). */
   forgetProject: (dir: string) => void;
+  /** Record that onboarding's portrait-database offer was answered. */
+  setPortraitOfferAnswered: (answered: boolean) => void;
 };
 
 const Ctx = createContext<SettingsCtx | null>(null);
@@ -121,6 +127,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     [commit],
   );
 
+  const setPortraitOfferAnswered = useCallback(
+    (portraitOfferAnswered: boolean) => commit((s) => ({ ...s, portraitOfferAnswered })),
+    [commit],
+  );
+
   const getPathEntry = useCallback(
     (gameId: string, platform: Platform): PathEntry =>
       settings.paths[pathKey(gameId, platform)] ?? BLANK_ENTRY,
@@ -128,8 +139,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo<SettingsCtx>(
-    () => ({ settings, setAutosaveMinutes, setProjectsRoot, setDefaultTarget, getPathEntry, setPathEntry, rememberProject, forgetProject }),
-    [settings, setAutosaveMinutes, setProjectsRoot, setDefaultTarget, getPathEntry, setPathEntry, rememberProject, forgetProject],
+    () => ({ settings, setAutosaveMinutes, setProjectsRoot, setDefaultTarget, getPathEntry, setPathEntry, rememberProject, forgetProject, setPortraitOfferAnswered }),
+    [settings, setAutosaveMinutes, setProjectsRoot, setDefaultTarget, getPathEntry, setPathEntry, rememberProject, forgetProject, setPortraitOfferAnswered],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -19,6 +19,7 @@ pub mod about;
 pub mod bindings;
 pub mod commands;
 pub mod frostbite;
+pub mod head_library;
 pub mod convert;
 pub mod dto;
 mod error;
@@ -36,7 +37,13 @@ pub use registry::{parse_platform, parse_role, ApplyPhase, IsoFault, Registry};
 macro_rules! command_handler {
     () => {
         ::tauri::generate_handler![
+            $crate::head_library::head_library_status,
+            $crate::head_library::head_library_search,
+            $crate::head_library::head_library_detail,
+            $crate::head_library::head_library_file,
+            $crate::head_library::head_library_export,
             $crate::frostbite::frostbite_inspect,
+            $crate::frostbite::frostbite_export_appearance,
             $crate::frostbite::frostbite_bundles,
             $crate::frostbite::frostbite_assets,
             $crate::frostbite::frostbite_export,
@@ -223,6 +230,11 @@ macro_rules! command_handler {
             $crate::commands::historical_franchise,
             $crate::commands::portrait_library_status,
             $crate::commands::portrait_library_set_root,
+            $crate::commands::portrait_install_plan,
+            $crate::commands::portrait_download_start,
+            $crate::commands::portrait_install_archive,
+            $crate::commands::portrait_install_status,
+            $crate::commands::portrait_install_cancel,
             $crate::commands::portrait_library_rescan,
             $crate::commands::historical_portrait_candidates,
             $crate::commands::portrait_library_search,
@@ -287,6 +299,7 @@ macro_rules! command_handler {
             $crate::commands::team_logo_set,
             $crate::commands::portrait_header_preview,
             $crate::commands::clone_jersey,
+            $crate::commands::reassign_jersey,
             $crate::commands::team_jersey_thumbnail,
             $crate::commands::clone_kit_textures,
             $crate::commands::team_roster_ids,

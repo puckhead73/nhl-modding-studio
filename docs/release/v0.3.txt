@@ -1,0 +1,53 @@
+NHL Modding Studio v0.3 - Windows x64 playtest
+
+Download NHL.Modding.Studio.v0.3.Windows.x64.zip, extract the entire archive
+into a new local folder, and run nhl-studio.exe. Keep its bundled folders together.
+The application version is 0.3.0. Save existing projects before switching builds.
+
+This release packages the current source, including work since v0.2:
+- Portrait database downloader and installer: onboarding offers to download
+  the portrait database (31.7 GB, about 110,000 player portraits) in the
+  background while you work, with a progress bar under the main tabs. Settings
+  > General > Portrait database starts or resumes the download later, or
+  installs the archive from a file you downloaded yourself. The download runs
+  in bounded chunks and resumes where it stopped. The library installs next to
+  the historical database, where the Studio looks for it.
+- Jersey registry growth: Add New Jersey no longer stops at a full jersey table.
+  The table grows as needed, and each team can carry up to 32 kits (the game's
+  5-bit jersey index). A "texture files only" route creates the kit's files
+  without a database row for modders who register kits in their own database.
+- First game-verified result: on NHL Legacy (Xbox 360) a database edit written
+  into the db/nhlng.db member of cacheboot.big loads in game, and a team with
+  32 kits lists all 32. The same run showed the game does not read the loose
+  db/nhlng.db, so mod-manager database installs on Xbox 360 are not yet
+  effective; writing into the archive from the mod manager is the follow-up.
+- Kits can be moved between teams (reassign_jersey), keeping their textures.
+- Name / number / patch layout editor: zones open pre-assigned (number, name,
+  right sleeve, left sleeve, captain patch), the side panel is a step-by-step
+  guide, and Undo / Redo (Ctrl+Z / Ctrl+Y) cover every layout change.
+- Historical players: Appearance tab with a portrait selector over the
+  supplementary portrait library.
+- Head library panel, head preview geometry fixes, and PS4 Frostbite
+  appearance / mesh / texture browsing and export groundwork.
+- Save Editor: the games' own save containers are reproduced byte for byte;
+  NHL 17-19 PS4 roster saves may change size.
+- Packages: title-agnostic free-agent packages, roster-slot additions carried
+  as an explicit roster-table operation; NHL 08/09 goalie-gear paint previews.
+- PS4: genuine NHL 20 anchor files (CUSA15439) and NHL 16 team-name mapping.
+
+The complete bundle includes the historical database, approved fresh-project
+baselines, game definitions, audio and PKG helpers with their source/notices,
+and a private Microsoft WebView2 runtime. Personal projects, profiles, caches,
+import ledgers, original game archives and personal saves are not included.
+
+BUILD packages staged edits as .nhlmod; Send to Mod Manager prepares activation.
+This does not provide a general repacker for arbitrary loose files into game BIG
+archives. Keep the existing extracted asset structure for loose-file workflows.
+
+This is an unsigned prerelease. Existing feature limitations and the release
+readiness items in BUILD-RECORD.json and THIRD-PARTY-NOTICES.txt remain disclosed.
+Publication is not a claim of final release readiness or all-title in-game
+validation; one narrow fact is game-verified (above), nothing else is.
+
+Report issues with v0.3, game/platform, reproduction steps, expected and actual
+results, exact error text, and screenshots where helpful.

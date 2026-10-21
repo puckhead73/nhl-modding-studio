@@ -1,0 +1,49 @@
+[
+  {
+    "game": "nhl22",
+    "layer": "Data",
+    "mode": "serializer-validation",
+    "summary": {
+      "meshes_written": 3081,
+      "textures_written": 3959,
+      "failures": [],
+      "catalog_file": "local/appearance-audit-20261019/frostbite/nhl22-native-validation\\catalog.json"
+    }
+  },
+  {
+    "game": "nhl23",
+    "layer": "Data",
+    "mode": "files-written-and-structurally-verified",
+    "summary": {
+      "meshes_written": 3279,
+      "textures_written": 4318,
+      "failures": [],
+      "catalog_file": "local/appearance-audit-20261019/frostbite/nhl23-export\\catalog.json"
+    }
+  },
+  {
+    "game": "nhl24",
+    "layer": "Data",
+    "mode": "serializer-validation",
+    "summary": {
+      "meshes_written": 3436,
+      "textures_written": 4575,
+      "failures": [],
+      "catalog_file": "local/appearance-audit-20261019/frostbite/nhl24-native-validation-v2\\catalog.json"
+    }
+  },
+  {
+    "game": "nhl24",
+    "layer": "Patch",
+    "mode": "serializer-validation",
+    "summary": {
+      "meshes_written": 3475,
+      "textures_written": 3625,
+      "failures": [],
+      "warnings": [
+        "Patch/Gen4b/ui.toc is absent; no base-layer replacement was inferred."
+      ],
+      "catalog_file": "local/appearance-audit-20261019/frostbite/nhl24-patch-validation-v3\\catalog.json"
+    }
+  }
+]

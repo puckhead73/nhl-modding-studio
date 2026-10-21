@@ -7,7 +7,10 @@
 > **Evidence reconciliation (2026-09-07, C0.3).** The matrix below now states an *evidence level*
 > per cell rather than inherited confidence from the reference app. Nothing was promoted by this
 > edit: **no cell is game-verified**, and none becomes so until a manual run on the exact
-> title/platform/build is recorded. Per-feature evidence lives in
+> title/platform/build is recorded. *(21 Oct 2026: one recorded run exists — NHL Legacy Xbox 360,
+> database edits through the `cacheboot.big` member, 32 kits on one team — see
+> [validation/legacy360-jersey-ceiling-probe-20261020.md](validation/legacy360-jersey-ceiling-probe-20261020.md);
+> it verifies that write route and that ceiling, not the target.)* Per-feature evidence lives in
 > [audits/qa-ledger.md](audits/qa-ledger.md) and the asset `capability.csv` tree, not here.
 
 ## Titles in scope
@@ -59,7 +62,7 @@ to ✅ only after a recorded manual run on that exact target.
 
 | Symbol | Meaning |
 |---|---|
-| ✅ | **game-verified** — edited output loaded, behaved and persisted on that exact title/platform/build, recorded. **No cell holds this today.** |
+| ✅ | **game-verified** — edited output loaded, behaved and persisted on that exact title/platform/build, recorded. **No matrix cell holds this today**; the one game-verified fact (NHL Legacy Xbox 360: database writes via the `cacheboot.big` member load; 32 kits per team list) is recorded in [validation/legacy360-jersey-ceiling-probe-20261020.md](validation/legacy360-jersey-ceiling-probe-20261020.md) and is narrower than a cell. |
 | 🟡 | **implemented + automated-tested for the main-database path** — the engine handles this target and executed automated cases assert the main-DB read/edit path against its anchor. Not qualification, and **not a claim about any other operation class**. |
 | 🔬 | **research-only** — an anchor exists and is studied, but the combination is not a shipping target. |
 | ⬜ | implemented, **no automated coverage yet** |

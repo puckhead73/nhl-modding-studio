@@ -137,3 +137,69 @@ export function classifyZones<Z extends { id: string }>(
 
   return { nameZoneId: widest?.z.id, numberZoneIds };
 }
+
+/** How a detected zone is rendered in the editor preview. */
+export type ZoneType = "name" | "number" | "sleeveL" | "sleeveR" | "captain" | "stanley" | "ignore";
+
+export const ZONE_TYPE_LABELS: Record<ZoneType, string> = {
+  name: "Name",
+  number: "Number (back)",
+  sleeveR: "Sleeve — right",
+  sleeveL: "Sleeve — left",
+  captain: "Captain patch (C/A)",
+  stanley: "Stanley Cup patch",
+  ignore: "Ignore",
+};
+
+/**
+ * The editor's starting assignment for every detected zone, so a stock five-marker template opens
+ * ready to use (number · name · right sleeve · left sleeve · captain patch) instead of asking the
+ * operator to set the sleeves and patch on every jersey:
+ *
+ * - name = the widest non-square marker, number = the largest square (see {@link classifyZones});
+ * - sleeves = the pair of remaining markers that sit on the same row (closest vertical centres,
+ *   widest apart on ties). The one on the LEFT of the sheet is the player's RIGHT sleeve — the
+ *   stock sheets lay the back out mirrored — and vice versa;
+ * - captain patch = the first remaining marker in reading order; anything after that is ignored.
+ *
+ * Returns the type for every zone id passed in.
+ */
+export function defaultZoneTypes<Z extends { id: string; x: number; y: number }>(
+  zones: Z[],
+  footprintOf: (z: Z) => { w: number; h: number },
+): Record<string, ZoneType> {
+  const out: Record<string, ZoneType> = {};
+  for (const z of zones) out[z.id] = "ignore";
+  const { nameZoneId, numberZoneIds } = classifyZones(zones, footprintOf);
+  if (nameZoneId) out[nameZoneId] = "name";
+  if (numberZoneIds[0]) out[numberZoneIds[0]] = "number";
+
+  const rest = zones
+    .filter((z) => out[z.id] === "ignore")
+    .map((z) => {
+      const fp = footprintOf(z);
+      return { z, cx: z.x + fp.w / 2, cy: z.y + fp.h / 2 };
+    });
+
+  if (rest.length >= 2) {
+    let best: { a: (typeof rest)[number]; b: (typeof rest)[number]; dy: number; dx: number } | null = null;
+    for (let i = 0; i < rest.length; i++) {
+      for (let j = i + 1; j < rest.length; j++) {
+        const dy = Math.abs(rest[i].cy - rest[j].cy);
+        const dx = Math.abs(rest[i].cx - rest[j].cx);
+        if (!best || dy < best.dy || (dy === best.dy && dx > best.dx)) {
+          best = { a: rest[i], b: rest[j], dy, dx };
+        }
+      }
+    }
+    if (best) {
+      const [left, right] = best.a.cx <= best.b.cx ? [best.a, best.b] : [best.b, best.a];
+      out[left.z.id] = "sleeveR";
+      out[right.z.id] = "sleeveL";
+    }
+  }
+
+  const captain = rest.find(({ z }) => out[z.id] === "ignore");
+  if (captain) out[captain.z.id] = "captain";
+  return out;
+}

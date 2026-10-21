@@ -3,9 +3,9 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, expect, it, vi } from "vitest";
-const mocks = vi.hoisted(() => ({ invoke: vi.fn(), save: vi.fn() }));
+const mocks = vi.hoisted(() => ({ invoke: vi.fn(), save: vi.fn(), open: vi.fn() }));
 vi.mock("@tauri-apps/api/core", () => ({ invoke: mocks.invoke }));
-vi.mock("@tauri-apps/plugin-dialog", () => ({ open: vi.fn(), save: mocks.save }));
+vi.mock("@tauri-apps/plugin-dialog", () => ({ open: mocks.open, save: mocks.save }));
 import { FrostbiteBrowser } from "./FrostbiteBrowser";
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
 it("opens without a database, retains layer identity and exports the selected chunk", async () => {
@@ -15,6 +15,7 @@ it("opens without a database, retains layer identity and exports the selected ch
     if (cmd === "frostbite_assets") return { name: "gen4b/kit", assets: [{ kind: "ebx", name: "jersey", size: 3, sha1: "abcd", resource_type: null }], spans: [{ cas: 1, offset: 0, size: 11 }] };
     if (cmd === "frostbite_chunks") return { matched: 1, items: [{ ordinal: 4, guid: "abcdef", span: { cas: 0x10001, offset: 50, size: 11 } }] };
     if (cmd === "frostbite_export_chunk") return 11;
+    if (cmd === "frostbite_export_appearance") return { meshes_written: 12, textures_written: 9, failures: [], warnings: [], catalog_file: "output/catalog.json" };
     throw new Error(`Unexpected ${cmd}`);
   });
   mocks.save.mockResolvedValue("output/chunk.bin");
@@ -29,5 +30,15 @@ it("opens without a database, retains layer identity and exports the selected ch
   await screen.findByText("abcdef");
   fireEvent.click(screen.getByText("Export raw"));
   await waitFor(() => expect(mocks.invoke).toHaveBeenCalledWith("frostbite_export_chunk", { root: "game", layer: "Patch", superbundle: "Gen4b/ui", chunk: 4, decoded: false, destination: "output/chunk.bin" }));
+  expect((screen.getByText("Export all heads · GLB + DDS") as HTMLButtonElement).disabled).toBe(true);
+  fireEvent.change(screen.getByLabelText("Catalog game"), { target: { value: "nhl22" } });
+  fireEvent.change(screen.getByLabelText("Oodle decoder DLL"), { target: { value: "tools/oodle.dll" } });
+  mocks.open.mockResolvedValue("output");
+  fireEvent.click(screen.getByText("Export all heads · GLB + DDS"));
+  await waitFor(() => expect(mocks.invoke).toHaveBeenCalledWith("frostbite_export_appearance", {
+    root: "game", layer: "Patch", game: "nhl22", decoder: "tools/oodle.dll",
+    destination: expect.stringMatching(/^output\/nhl22-Patch-heads-/),
+  }));
+  expect(await screen.findByText("12 GLBs · 9 DDS textures")).toBeTruthy();
   expect(mocks.invoke.mock.calls.every(([cmd]) => !String(cmd).includes("project_create"))).toBe(true);
 });

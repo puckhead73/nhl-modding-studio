@@ -33,29 +33,19 @@ import {
   type ZoneCurve,
 } from "../lib/nameplateGeometry";
 import { buildFontMap, type FontMap, type GlyphRect } from "../lib/fontAtlas";
-import { captainCellOf, classifyZones, layoutText, nameCellOf, numberCellOf } from "../lib/nameplateCompositor";
+import {
+  captainCellOf,
+  defaultZoneTypes,
+  layoutText,
+  nameCellOf,
+  numberCellOf,
+  ZONE_TYPE_LABELS,
+  type ZoneType,
+} from "../lib/nameplateCompositor";
 import { NameplateJersey3D } from "./NameplateJersey3D";
 import { useAssetRootArgs } from "../lib/project";
 import { ReviewedPlanNotes, useReviewedBytesWrite } from "./TextureReplace";
 
-/** How a detected zone is rendered in the preview. */
-type ZoneType =
-  | "name"
-  | "number"
-  | "sleeveL"
-  | "sleeveR"
-  | "captain"
-  | "stanley"
-  | "ignore";
-const ZONE_TYPE_LABELS: Record<ZoneType, string> = {
-  name: "Name",
-  number: "Number (back)",
-  sleeveR: "Sleeve — right",
-  sleeveL: "Sleeve — left",
-  captain: "Captain patch (C/A)",
-  stanley: "Stanley Cup patch",
-  ignore: "Ignore",
-};
 // Rotation of a zone's text relative to the upright back number. Canvas rotate()
 // is clockwise (y-down): sleeves sit 90° off (left = +90° CW, right = −90° CCW);
 // the captain patch is inverted 180°.
@@ -177,6 +167,9 @@ function renderTextEntry(
 
 const MAX_DISPLAY = 512;
 const ZONE_EDIT_ALPHA = 0.4;
+/** Undo history depth, and the window within which repeats of one gesture merge into one step. */
+const HISTORY_LIMIT = 100;
+const HISTORY_COALESCE_MS = 400;
 const REFERENCE_ALPHA = 0.6;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 8;
@@ -440,28 +433,54 @@ export function NameplateEditor({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [ready, setReady] = useState(0); // bumps when source/reference/stamps/atlas rebuild
 
-  // Which detected zones are the name vs the numbers (back + sleeves) — geometry.
-  const { nameZoneId, numberZoneIds } = useMemo(
-    () => classifyZones(zones, footprint),
-    [zones],
-  );
-
-  // Per-zone type — auto-classified, overridable so the operator can mark the
-  // captain patch (which geometry can't tell from a sleeve number). Reset per sheet.
+  // Per-zone type — seeded from geometry when the sheet loads (number · name · sleeves · captain
+  // patch, see `defaultZoneTypes`) and overridable per zone. Reset per sheet.
   const [zoneTypes, setZoneTypes] = useState<Record<string, ZoneType>>({});
   useEffect(() => setZoneTypes({}), [relPath]);
-  // Auto-classify: the widest marker is the name and the LARGEST square is the
-  // back number; everything else (sleeves, patches) is left to the operator to
-  // assign — left/right and captain/Stanley can't be told apart by geometry.
-  const autoType = useCallback(
-    (id: string): ZoneType =>
-      id === nameZoneId ? "name" : id === numberZoneIds[0] ? "number" : "ignore",
-    [nameZoneId, numberZoneIds],
+  const effType = useCallback((id: string): ZoneType => zoneTypes[id] ?? "ignore", [zoneTypes]);
+
+  // Undo / redo over the layout (zone geometry + per-zone types). Snapshots are taken BEFORE each
+  // change; rapid repeats of the same gesture (a held arrow key, a resize tap-tap) are coalesced
+  // into one step so undo steps back a visible amount. The stacks reset when the sheet reloads.
+  type Snapshot = { zones: NameplateZone[]; zoneTypes: Record<string, ZoneType> };
+  const undoRef = useRef<Snapshot[]>([]);
+  const redoRef = useRef<Snapshot[]>([]);
+  const lastPushRef = useRef<{ key: string; at: number } | null>(null);
+  const [historyTick, setHistoryTick] = useState(0);
+  const pushHistory = useCallback(
+    (key: string) => {
+      const now = Date.now();
+      const last = lastPushRef.current;
+      if (last && last.key === key && now - last.at < HISTORY_COALESCE_MS) {
+        lastPushRef.current = { key, at: now };
+        return;
+      }
+      undoRef.current.push({ zones, zoneTypes });
+      if (undoRef.current.length > HISTORY_LIMIT) undoRef.current.shift();
+      redoRef.current = [];
+      lastPushRef.current = { key, at: now };
+      setHistoryTick((n) => n + 1);
+    },
+    [zones, zoneTypes],
   );
-  const effType = useCallback(
-    (id: string): ZoneType => zoneTypes[id] ?? autoType(id),
-    [zoneTypes, autoType],
+  const restore = useCallback(
+    (from: React.MutableRefObject<Snapshot[]>, to: React.MutableRefObject<Snapshot[]>) => {
+      const snap = from.current.pop();
+      if (!snap) return;
+      to.current.push({ zones, zoneTypes });
+      setZones(snap.zones);
+      setZoneTypes(snap.zoneTypes);
+      setSelectedId((sel) => (sel && snap.zones.some((z) => z.id === sel) ? sel : (snap.zones[0]?.id ?? null)));
+      lastPushRef.current = null;
+      setHistoryTick((n) => n + 1);
+    },
+    [zones, zoneTypes],
   );
+  const undo = useCallback(() => restore(undoRef, redoRef), [restore]);
+  const redo = useCallback(() => restore(redoRef, undoRef), [restore]);
+  const canUndo = undoRef.current.length > 0;
+  const canRedo = redoRef.current.length > 0;
+  void historyTick; // re-render driver for canUndo / canRedo
 
   // What to render in each zone (name letters / number digits / captain C-A) and
   // at what rotation — shared by the 2D and 3D compositors. The back number is
@@ -525,7 +544,12 @@ export function NameplateEditor({
       });
       setDims({ w: c.width, h: c.height });
       setZones(seeded);
+      setZoneTypes(defaultZoneTypes(seeded, footprint));
       setSelectedId(detected[0]?.id ?? null);
+      undoRef.current = [];
+      redoRef.current = [];
+      lastPushRef.current = null;
+      setHistoryTick((n) => n + 1);
       setReady((n) => n + 1);
     });
     return () => {
@@ -743,6 +767,7 @@ export function NameplateEditor({
       // Curve control points sit on top and are the finest control — grab them first.
       const cp = hitCurve(sel, tx, ty);
       if (cp != null) {
+        pushHistory("drag");
         dragRef.current = { mode: "curve", id: sel.id, point: cp };
         e.currentTarget.setPointerCapture(e.pointerId);
         return;
@@ -750,6 +775,7 @@ export function NameplateEditor({
       // Then a resize handle (handles sit on the zone edges, above a body move).
       const handle = hitHandle(sel, tx, ty, HANDLE_HIT / scale);
       if (handle) {
+        pushHistory("drag");
         dragRef.current = { mode: "resize", id: sel.id, handle };
         e.currentTarget.setPointerCapture(e.pointerId);
         return;
@@ -759,6 +785,7 @@ export function NameplateEditor({
     const hit = hitTest(zones, tx, ty);
     if (hit) {
       setSelectedId(hit.id);
+      pushHistory("drag");
       dragRef.current = { mode: "move", id: hit.id, startTx: tx, startTy: ty, origX: hit.x, origY: hit.y };
       e.currentTarget.setPointerCapture(e.pointerId);
     }
@@ -811,17 +838,19 @@ export function NameplateEditor({
   };
 
   const mutateSelected = useCallback(
-    (fn: (el: NameplateZone) => NameplateZone) => {
+    (fn: (el: NameplateZone) => NameplateZone, historyKey = "edit") => {
       if (!dims || !selectedId) return;
+      pushHistory(historyKey);
       setZones((prev) =>
         prev.map((el) => (el.id === selectedId ? clampZone(fn(el), dims.w, dims.h) : el)),
       );
     },
-    [dims, selectedId],
+    [dims, selectedId, pushHistory],
   );
 
   const nudge = useCallback(
-    (dx: number, dy: number) => mutateSelected((el) => ({ ...el, x: el.x + dx, y: el.y + dy })),
+    (dx: number, dy: number) =>
+      mutateSelected((el) => ({ ...el, x: el.x + dx, y: el.y + dy }), "nudge"),
     [mutateSelected],
   );
   const clampScale = (v: number) => Math.max(MIN_SCALE, Math.min(MAX_SCALE, v));
@@ -829,15 +858,19 @@ export function NameplateEditor({
   // grow/shrink; per-axis reshaping is done by dragging the zone's edge handles.
   const resize = useCallback(
     (factor: number) =>
-      mutateSelected((el) => ({
-        ...el,
-        scaleX: clampScale(el.scaleX * factor),
-        scaleY: clampScale(el.scaleY * factor),
-      })),
+      mutateSelected(
+        (el) => ({
+          ...el,
+          scaleX: clampScale(el.scaleX * factor),
+          scaleY: clampScale(el.scaleY * factor),
+        }),
+        "resize",
+      ),
     [mutateSelected],
   );
   const deleteSelected = () => {
     if (!selectedId) return;
+    pushHistory("delete");
     setZones((prev) => prev.filter((e) => e.id !== selectedId));
     setSelectedId(null);
   };
@@ -857,16 +890,31 @@ export function NameplateEditor({
     mutateSelected((el) => (el.curve ? { ...el, curve: undefined } : { ...el, curve: seedCurveFor(el) }));
   const refitCurve = () => mutateSelected((el) => ({ ...el, curve: seedCurveFor(el) }));
   const bumpThickness = (delta: number) =>
-    mutateSelected((el) =>
-      el.curve
-        ? { ...el, curve: { ...el.curve, thickness: Math.max(0.05, Math.min(1, el.curve.thickness + delta)) } }
-        : el,
+    mutateSelected(
+      (el) =>
+        el.curve
+          ? { ...el, curve: { ...el.curve, thickness: Math.max(0.05, Math.min(1, el.curve.thickness + delta)) } }
+          : el,
+      "thickness",
     );
+  const setZoneType = (id: string, t: ZoneType) => {
+    pushHistory("type");
+    setZoneTypes((prev) => ({ ...prev, [id]: t }));
+  };
 
-  // Keyboard: Esc closes; arrows nudge (Shift = 10px); +/- resize.
+  // Keyboard: Esc closes; arrows nudge (Shift = 10px); +/- resize; Ctrl+Z / Ctrl+Y undo / redo.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") return onClose();
+      if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+        const k = e.key.toLowerCase();
+        if (k === "z" && e.shiftKey) redo();
+        else if (k === "z") undo();
+        else if (k === "y") redo();
+        else return;
+        e.preventDefault();
+        return;
+      }
       const step = e.shiftKey ? 10 : 1;
       switch (e.key) {
         case "ArrowLeft":
@@ -896,7 +944,7 @@ export function NameplateEditor({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [nudge, resize, onClose]);
+  }, [nudge, resize, undo, redo, onClose]);
 
   const handleSave = () => {
     if (!dims || baking || review.planning || review.writing) return;
@@ -956,10 +1004,11 @@ export function NameplateEditor({
           <div>
             <h2 className="text-base font-semibold text-slate-100">Name / number / patch locations</h2>
             <p className="mt-0.5 text-[11px] text-slate-400">
-              {label} · select a zone (click it or the list), then drag it to move or drag its edge
-              handles to reshape it (arrow keys nudge, Shift = 10px; +/− resize). Zones show at{" "}
-              {Math.round(ZONE_EDIT_ALPHA * 100)}% over the jersey body for reference. Save repaints
-              them onto a fresh sheet (keeps a <code>.bak</code>).
+              {label}
+              {dims ? ` · ${dims.w} × ${dims.h}` : ""} · zones show at {Math.round(ZONE_EDIT_ALPHA * 100)}% over
+              the jersey body for reference
+              {referenceRelPath && reference.isLoading ? " (loading…)" : ""}. Save repaints them onto a fresh
+              sheet (keeps a <code>.bak</code>).
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -1064,44 +1113,72 @@ export function NameplateEditor({
                   </option>
                 ))}
               </select>
-              <div className="mt-1 text-[10px] leading-tight text-slate-500">
-                {!fontRelPath ? (
-                  <span className="text-amber-300/70">No font map for this kit — preview shows zones only.</span>
-                ) : fontTex.isLoading ? (
-                  "Decoding font atlas…"
-                ) : fontMapRef.current ? (
-                  <>
-                    <span className="text-emerald-300">name</span> ·{" "}
-                    <span className="text-amber-300">number</span> ·{" "}
-                    <span className="text-violet-300">patch</span> zones rendered through the font map.
-                    Set each zone's type below (mark the captain patch to show{" "}
-                    {captainLetter ? `“${captainLetter}”` : "C/A"}). Drag zones to move them.
-                  </>
-                ) : (
-                  <span className="text-amber-300/70">
-                    Couldn't read the font atlas — preview shows zones only.
-                  </span>
-                )}
-              </div>
+              {(!fontRelPath || (!fontTex.isLoading && !fontMapRef.current) || !referenceRelPath) && (
+                <div className="mt-1 text-[10px] leading-tight text-amber-300/70">
+                  {!fontRelPath
+                    ? "No font map for this kit — preview shows zones only."
+                    : !fontTex.isLoading && !fontMapRef.current
+                      ? "Couldn't read the font atlas — preview shows zones only."
+                      : null}
+                  {!referenceRelPath && <div>No jersey body reference found.</div>}
+                </div>
+              )}
             </div>
 
-            <div className="text-[11px] text-slate-400">
-              {dims ? `${dims.w} × ${dims.h}` : "—"}
-              {referenceRelPath ? (
-                <div className="text-slate-500">
-                  Reference: jersey body {reference.isLoading ? "(loading…)" : reference.data ? "" : "(unavailable)"}
-                </div>
-              ) : (
-                <div className="text-amber-300/70">No jersey body reference found.</div>
-              )}
-              <div className="mt-2 rounded-md border border-amber-400/50 bg-amber-950/60 px-3 py-2 text-xs font-semibold text-amber-200">
-                Reference alignment and the scale of letters and numbers are approximate — verify in-game.
-              </div>
+            <div className="rounded-md border border-slate-800 bg-slate-950/40 px-2.5 py-2 text-[11px] text-slate-300">
+              <div className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">How to use</div>
+              <ol className="list-decimal space-y-1.5 pl-4 leading-snug">
+                <li>
+                  <strong className="text-slate-200">Identify each zone.</strong> Check the type set on every
+                  zone in the list below (<span className="text-emerald-300">Name</span>,{" "}
+                  <span className="text-amber-300">Number</span>, sleeves,{" "}
+                  <span className="text-violet-300">Captain patch</span>). They start from the stock layout —
+                  correct any that don't match this sheet before moving anything.
+                </li>
+                <li>
+                  <strong className="text-slate-200">Select a zone</strong> by clicking it on the sheet or in the
+                  list. The preview player's name and number render in it live.
+                </li>
+                <li>
+                  <strong className="text-slate-200">Move it</strong> by dragging, with the arrow buttons, or with
+                  the arrow keys (Shift = 10 px).
+                </li>
+                <li>
+                  <strong className="text-slate-200">Reshape it</strong> by dragging its edge or corner handles;
+                  Smaller / Larger (or − / +) scale it evenly. Curve baseline arches a name strip.
+                </li>
+                <li>
+                  <strong className="text-slate-200">Undo</strong> any step with the Undo button or Ctrl+Z, then{" "}
+                  <strong className="text-slate-200">Save to texture</strong>. Alignment and letter scale are
+                  approximate — verify in-game.
+                </li>
+              </ol>
+            </div>
+
+            <div className="flex gap-1">
+              <button
+                type="button"
+                onClick={undo}
+                disabled={!canUndo}
+                title="Undo the last layout change (Ctrl+Z)"
+                className="flex-1 rounded border border-slate-700 px-2 py-1 text-[11px] text-slate-200 hover:bg-slate-800 disabled:opacity-40"
+              >
+                ↶ Undo
+              </button>
+              <button
+                type="button"
+                onClick={redo}
+                disabled={!canRedo}
+                title="Redo (Ctrl+Y or Ctrl+Shift+Z)"
+                className="flex-1 rounded border border-slate-700 px-2 py-1 text-[11px] text-slate-200 hover:bg-slate-800 disabled:opacity-40"
+              >
+                ↷ Redo
+              </button>
             </div>
 
             <div className="space-y-1">
               <div className="text-[10px] uppercase tracking-wider text-slate-500">
-                Zones — set each to name / number / patch
+                Zones — step 1: set each to name / number / patch
               </div>
               {zones.map((el, i) => (
                 <div
@@ -1125,9 +1202,7 @@ export function NameplateEditor({
                   </button>
                   <select
                     value={effType(el.id)}
-                    onChange={(e) =>
-                      setZoneTypes((prev) => ({ ...prev, [el.id]: e.target.value as ZoneType }))
-                    }
+                    onChange={(e) => setZoneType(el.id, e.target.value as ZoneType)}
                     className="rounded border border-slate-700 bg-slate-950 px-1 py-0.5 text-[10px] text-slate-100 focus:border-sky-600 focus:outline-none"
                   >
                     {(Object.keys(ZONE_TYPE_LABELS) as ZoneType[]).map((t) => (

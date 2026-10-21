@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { layoutText, classifyZones, type GlyphPlacement } from "./nameplateCompositor";
+import { layoutText, classifyZones, defaultZoneTypes, type GlyphPlacement } from "./nameplateCompositor";
 import type { GlyphRect } from "./fontAtlas";
 
 // A tiny fake atlas: each letter a 10×20 cell, resolved by code point.
@@ -63,5 +63,65 @@ describe("classifyZones", () => {
 
   it("is safe with no zones", () => {
     expect(classifyZones([], () => ({ w: 0, h: 0 }))).toEqual({ numberZoneIds: [] });
+  });
+});
+
+describe("defaultZoneTypes", () => {
+  const fp = (z: { w: number; h: number }) => ({ w: z.w, h: z.h });
+
+  it("opens a stock five-marker sheet as number · name · right sleeve · left sleeve · captain", () => {
+    // Reading-order layout of a 256×256 stock sheet (the tester's screenshot): back number on
+    // top, the name strip under it, the two sleeve squares on one row, the captain patch below.
+    const zones = [
+      { id: "zone0", x: 98, y: 34, w: 60, h: 50 },
+      { id: "zone1", x: 98, y: 86, w: 76, h: 12 },
+      { id: "zone2", x: 61, y: 111, w: 20, h: 22 },
+      { id: "zone3", x: 178, y: 111, w: 20, h: 22 },
+      { id: "zone4", x: 138, y: 151, w: 14, h: 16 },
+    ];
+    expect(defaultZoneTypes(zones, fp)).toEqual({
+      zone0: "number",
+      zone1: "name",
+      zone2: "sleeveR",
+      zone3: "sleeveL",
+      zone4: "captain",
+    });
+  });
+
+  it("pairs the sleeves by row even when the patch sits between them horizontally", () => {
+    const zones = [
+      { id: "n", x: 90, y: 10, w: 60, h: 60 },
+      { id: "name", x: 60, y: 80, w: 120, h: 14 },
+      { id: "patch", x: 110, y: 100, w: 14, h: 16 }, // reading order puts it before the sleeves
+      { id: "l", x: 20, y: 120, w: 20, h: 20 },
+      { id: "r", x: 200, y: 121, w: 20, h: 20 },
+    ];
+    expect(defaultZoneTypes(zones, fp)).toMatchObject({ l: "sleeveR", r: "sleeveL", patch: "captain" });
+  });
+
+  it("leaves extra markers ignored and copes with fewer than five", () => {
+    expect(
+      defaultZoneTypes(
+        [
+          { id: "n", x: 0, y: 0, w: 50, h: 50 },
+          { id: "name", x: 0, y: 60, w: 150, h: 20 },
+          { id: "only", x: 0, y: 90, w: 10, h: 10 },
+        ],
+        fp,
+      ),
+    ).toEqual({ n: "number", name: "name", only: "captain" });
+    const six = defaultZoneTypes(
+      [
+        { id: "n", x: 0, y: 0, w: 50, h: 50 },
+        { id: "name", x: 0, y: 60, w: 150, h: 20 },
+        { id: "a", x: 0, y: 90, w: 10, h: 10 },
+        { id: "b", x: 100, y: 90, w: 10, h: 10 },
+        { id: "c", x: 40, y: 120, w: 10, h: 10 },
+        { id: "d", x: 40, y: 140, w: 10, h: 10 },
+      ],
+      fp,
+    );
+    expect(six).toMatchObject({ a: "sleeveR", b: "sleeveL", c: "captain", d: "ignore" });
+    expect(defaultZoneTypes([], fp)).toEqual({});
   });
 });
