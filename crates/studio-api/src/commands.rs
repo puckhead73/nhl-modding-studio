@@ -3393,3 +3393,48 @@ pub async fn project_delete(app: tauri::AppHandle, project_dir: String) -> CmdRe
 pub async fn team_artid_options(app: tauri::AppHandle, project_id: u32) -> CmdResult<Vec<(u64,u64,String)>> {
     off_main(app, move |registry| registry.team_artid_options(project_id).map_err(|e| e.to_string())).await
 }
+
+/// NHL 24 PS4 (01.60, shadPS4): what Studio has placed in the install's `game-mods`.
+#[tauri::command]
+pub async fn nhl24_roster_status(
+    app: tauri::AppHandle,
+    install: String,
+) -> CmdResult<crate::registry::nhl24::Nhl24Status> {
+    off_main(app, move |registry| {
+        registry
+            .nhl24_status(Path::new(&install))
+            .map_err(|e| e.to_string())
+    })
+    .await
+}
+
+/// NHL 24: open the database the game currently loads as an edit session. Saving the session
+/// writes Studio's overlay into `game-mods`; `oodle` is the user's Oodle decoder DLL.
+#[tauri::command]
+pub async fn nhl24_roster_open(
+    app: tauri::AppHandle,
+    install: String,
+    oodle: String,
+) -> CmdResult<crate::registry::nhl24::Nhl24Opened> {
+    let defs = resolve_defs(&app);
+    off_main(app, move |registry| {
+        registry
+            .nhl24_open(Path::new(&install), Path::new(&oodle), &defs.to_string_lossy())
+            .map_err(|e| e.to_string())
+    })
+    .await
+}
+
+/// NHL 24: remove Studio's overlay from `game-mods` (the stock database loads again).
+#[tauri::command]
+pub async fn nhl24_roster_restore(
+    app: tauri::AppHandle,
+    install: String,
+) -> CmdResult<crate::registry::nhl24::Nhl24Status> {
+    off_main(app, move |registry| {
+        registry
+            .nhl24_restore(Path::new(&install))
+            .map_err(|e| e.to_string())
+    })
+    .await
+}

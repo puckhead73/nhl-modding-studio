@@ -185,6 +185,8 @@ pub struct Registry {
     schema_index: Mutex<Option<Arc<studio_domain::save_identify::SchemaIndex>>>,
     /// Save Editor: the sessions opened by the standalone tool, with their file and backup.
     save_editor: Mutex<HashMap<u32, save_editor::SaveEditorFile>>,
+    /// NHL 24 PS4 sessions and the install each saves into through `game-mods`.
+    nhl24: Mutex<HashMap<u32, nhl24::Nhl24Binding>>,
 }
 
 mod copied_target;
@@ -192,6 +194,7 @@ mod iso;
 mod project;
 mod project_delete;
 mod save_editor;
+pub mod nhl24;
 mod overview;
 pub mod player_assignments;
 mod team_schedule;
@@ -1955,6 +1958,7 @@ impl Registry {
                 self.iso.lock().unwrap().forget_project(id);
                 self.forget_project_binding(id);
                 self.forget_save_editor(id);
+                self.forget_nhl24(id);
                 dto("closed", None)
             }
             None => dto("already_closed", None),
@@ -4452,6 +4456,10 @@ impl Registry {
         // A Save Editor session always saves through its backup-first path.
         if self.is_save_editor(id) {
             return self.save_editor_save(id).map(|r| u64::from(r.files_written));
+        }
+        // NHL 24 saves into the game through its `game-mods` overlay.
+        if let Some(b) = self.nhl24_binding(id) {
+            return self.nhl24_save(id, &b);
         }
         self.save_workspace_unchecked(id)
     }

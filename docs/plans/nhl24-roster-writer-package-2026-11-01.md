@@ -4,7 +4,7 @@
 - **Accepted** by the user on 1 Nov 2026. Codex is no longer involved in development.
 - **Stage A is done and game-verified:** [stage A record](../validation/nhl24-fbw1-stage-a-20261101.md).
 - **Stages B and C are done:** [stages B and C record](../validation/nhl24-fbw1-stages-bc-20261101.md).
-- **Stage D is next.**
+- **Stage D is implemented and automated-tested:** [stage D record](../validation/nhl24-fbw1-stage-d-20261101.md). Stage E (the in-app save, checked in game) passed on 1 Nov 2026.
 
 **Summary.** The user wants to change NHL 24 rosters and import portraits and headmeshes.
 Studio can read NHL 24 today but cannot write anything into its Frostbite archives, and every

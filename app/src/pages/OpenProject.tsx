@@ -324,7 +324,11 @@ export function OpenProject() {
     setStep("game");
   }
   function pickGame(g: GameDef) {
-    if (["nhl22", "nhl23", "nhl24"].includes(g.id)) {
+    if (g.id === "nhl24") {
+      navigate("/nhl24");
+      return;
+    }
+    if (["nhl22", "nhl23"].includes(g.id)) {
       navigate("/frostbite");
       return;
     }

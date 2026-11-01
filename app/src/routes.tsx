@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { AppShell } from "./AppShell";
 import { OpenProject } from "./pages/OpenProject";
 import { FrostbiteBrowser } from "./pages/FrostbiteBrowser";
+import { Nhl24Roster } from "./pages/Nhl24Roster";
 import { StartPage } from "./pages/Start";
 import { SaveEditorPage } from "./pages/SaveEditor";
 import { ModManagerPage } from "./pages/ModManager";
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
   { path: "/", element: <StartPage /> },
   { path: "/studio", element: <OpenProject /> },
   { path: "/frostbite", element: <FrostbiteBrowser /> },
+  { path: "/nhl24", element: <Nhl24Roster /> },
   { path: "/manager", element: <ModManagerPage /> },
   { path: "/save-editor", element: <SaveEditorPage /> },
   { path: "/manager/install", element: <InstallPackagePage /> },

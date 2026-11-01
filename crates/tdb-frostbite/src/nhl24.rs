@@ -99,6 +99,10 @@ impl<'a> View<'a> {
             studio,
         })
     }
+    /// Studio's files in `game-mods`, by relative path.
+    pub fn owned_files(&self) -> Vec<String> {
+        self.record.files.iter().map(|f| f.path.clone()).collect()
+    }
     fn owned(&self, rel: &str) -> bool {
         self.record.files.iter().any(|f| f.path == rel)
     }
