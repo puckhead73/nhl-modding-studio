@@ -6,7 +6,9 @@ pub mod db;
 pub mod install;
 pub mod manifest;
 pub mod mesh;
+pub mod nhl24;
 pub mod oodle;
+pub mod overlay;
 pub mod texture;
 pub mod toc;
 
