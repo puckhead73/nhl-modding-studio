@@ -373,7 +373,7 @@ pub struct PlayerAttributes {
 /// One entry in the trait checkbox menu: a dictionary trait plus whether the player currently has it.
 #[derive(Clone, Debug)]
 pub struct TraitOption {
-    /// Trait number (1..27 skater, 1..2 goalie).
+    /// Trait number (skater 1..27 classic or NHL 24's 1..37; goalie 1..2).
     pub value: i64,
     pub label: String,
     /// `"confirmed"` | `"strong"` | `"weak"` — how solid the label is.
@@ -872,13 +872,86 @@ const GOALIE_TRAITS: &[(i64, &str, &str, &str)] = &[
     (2, "Floppy?", "weak", "EBOOT debug name; assigned to value 2 by seamor3 (Fleury / Niemi / Luongo carry it)."),
 ];
 
-fn lookup_trait(is_skater: bool, value: i64) -> Option<(&'static str, &'static str, &'static str)> {
-    let table = if is_skater {
-        SKATER_TRAITS
-    } else {
-        GOALIE_TRAITS
-    };
-    table
+/// NHL 24's own skater trait table (`gamemodes/creation_zone_csv/playertraits.csv` in the 01.60
+/// legacy collector), in the game's wording, title-cased. 30..37 are signature moves. The table
+/// has no value 6 or 29; Lazy Backchecker corrects the file's "LAZY BACKCHEKER" spelling
+/// (docs/validation/nhl24-encoding-20261101.md, section 3).
+const NHL24_SKATER_TRAITS: &[(i64, &str, &str, &str)] = &[
+    (1, "Net Presence", "confirmed", NHL24_TRAIT_NOTE),
+    (2, "Net Agitator", "confirmed", NHL24_TRAIT_NOTE),
+    (3, "Setup Man Low", "confirmed", NHL24_TRAIT_NOTE),
+    (4, "Shooter Slot", "confirmed", NHL24_TRAIT_NOTE),
+    (5, "Rush Joining D", "confirmed", NHL24_TRAIT_NOTE),
+    (7, "Shoots On The Rush", "confirmed", NHL24_TRAIT_NOTE),
+    (8, "Drives The Net", "confirmed", NHL24_TRAIT_NOTE),
+    (9, "Pinching D", "confirmed", NHL24_TRAIT_NOTE),
+    (10, "Finishes Hit", "confirmed", NHL24_TRAIT_NOTE),
+    (11, "One Time Specialist", "confirmed", NHL24_TRAIT_NOTE),
+    (12, "Puck Protectors", "confirmed", NHL24_TRAIT_NOTE),
+    (13, "Offensive Opportunist", "confirmed", NHL24_TRAIT_NOTE),
+    (14, "Non Physical", "confirmed", NHL24_TRAIT_NOTE),
+    (15, "Hip Checker", "confirmed", NHL24_TRAIT_NOTE),
+    (16, "Dangler", "confirmed", NHL24_TRAIT_NOTE),
+    (17, "Hard Backchecker", "confirmed", NHL24_TRAIT_NOTE),
+    (18, "Lazy Backchecker", "confirmed", NHL24_TRAIT_NOTE),
+    (19, "Peripheral Player", "confirmed", NHL24_TRAIT_NOTE),
+    (20, "Risk Taker D Zone", "confirmed", NHL24_TRAIT_NOTE),
+    (21, "Puck Moving D", "confirmed", NHL24_TRAIT_NOTE),
+    (22, "Risk Taker O Zone", "confirmed", NHL24_TRAIT_NOTE),
+    (23, "Speedster", "confirmed", NHL24_TRAIT_NOTE),
+    (24, "Risky Dangler", "confirmed", NHL24_TRAIT_NOTE),
+    (25, "Setup Man", "confirmed", NHL24_TRAIT_NOTE),
+    (26, "Perimeter Sniper", "confirmed", NHL24_TRAIT_NOTE),
+    (27, "Big Shooter", "confirmed", NHL24_TRAIT_NOTE),
+    (28, "Responsible", "confirmed", NHL24_TRAIT_NOTE),
+    (30, "Between Legs Shot", "confirmed", NHL24_MOVE_NOTE),
+    (31, "Between Legs Pass", "confirmed", NHL24_MOVE_NOTE),
+    (32, "One Handed Deke", "confirmed", NHL24_MOVE_NOTE),
+    (33, "Datsyuk Toe Drag", "confirmed", NHL24_MOVE_NOTE),
+    (34, "Datsyuk Flip", "confirmed", NHL24_MOVE_NOTE),
+    (35, "Lacrosse Goal", "confirmed", NHL24_MOVE_NOTE),
+    (36, "Kucherov Deke", "confirmed", NHL24_MOVE_NOTE),
+    (37, "Between Legs One Timer", "confirmed", NHL24_MOVE_NOTE),
+];
+const NHL24_TRAIT_NOTE: &str = "NHL 24's own trait table (playertraits.csv).";
+const NHL24_MOVE_NOTE: &str = "Signature move, from NHL 24's own trait table (playertraits.csv).";
+
+/// Which trait dictionary labels a title's `Trait N` slots. Chosen from the project's title, so a
+/// file opened without one keeps the long-standing NHL 14-era labels.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum TraitVocabulary {
+    /// The NHL 14-era community dictionary ([`SKATER_TRAITS`]).
+    #[default]
+    Classic,
+    /// NHL 24's own skater trait table ([`NHL24_SKATER_TRAITS`]); goalies keep the classic set.
+    Nhl24,
+}
+
+impl TraitVocabulary {
+    /// The vocabulary for a studio game id.
+    pub fn for_game(game_id: Option<&str>) -> Self {
+        match game_id {
+            Some("nhl24") => TraitVocabulary::Nhl24,
+            _ => TraitVocabulary::Classic,
+        }
+    }
+
+    fn table(self, is_skater: bool) -> &'static [(i64, &'static str, &'static str, &'static str)] {
+        match (self, is_skater) {
+            (TraitVocabulary::Nhl24, true) => NHL24_SKATER_TRAITS,
+            (_, true) => SKATER_TRAITS,
+            (_, false) => GOALIE_TRAITS,
+        }
+    }
+}
+
+fn lookup_trait(
+    vocab: TraitVocabulary,
+    is_skater: bool,
+    value: i64,
+) -> Option<(&'static str, &'static str, &'static str)> {
+    vocab
+        .table(is_skater)
         .iter()
         .find(|(v, ..)| *v == value)
         .map(|(_, label, conf, note)| (*label, *conf, *note))
@@ -896,6 +969,16 @@ pub fn build_player_attributes(
     ratings: &[FieldView],
     ratings_table: &str,
     is_defenseman: bool,
+) -> PlayerAttributes {
+    build_player_attributes_with(ratings, ratings_table, is_defenseman, TraitVocabulary::Classic)
+}
+
+/// [`build_player_attributes`] with the title's trait vocabulary.
+pub fn build_player_attributes_with(
+    ratings: &[FieldView],
+    ratings_table: &str,
+    is_defenseman: bool,
+    trait_vocab: TraitVocabulary,
 ) -> PlayerAttributes {
     let is_skater = ratings_table == "dSvy";
     let is_goalie = ratings_table == "mHuy";
@@ -1042,8 +1125,8 @@ pub fn build_player_attributes(
         });
     }
 
-    let traits = build_traits(ratings, is_skater);
-    let trait_options = build_trait_options(ratings, is_skater);
+    let traits = build_traits(ratings, is_skater, trait_vocab);
+    let trait_options = build_trait_options(ratings, is_skater, trait_vocab);
 
     // Everything the tab already shows, by field id: the curated cells, the headline cells, and the
     // 32 trait slots (owned by the trait checkbox menu). The leftover drawer carries the rest, so a
@@ -1081,7 +1164,7 @@ pub fn build_player_attributes(
 
 /// Decode the 32 `Trait N` slots into active traits: skip empty (value 0) and missing slots, dedupe by
 /// value, and resolve each against the kind-correct dictionary.
-fn build_traits(ratings: &[FieldView], is_skater: bool) -> Vec<TraitView> {
+fn build_traits(ratings: &[FieldView], is_skater: bool, vocab: TraitVocabulary) -> Vec<TraitView> {
     let mut out = Vec::new();
     let mut seen = std::collections::HashSet::new();
     for (slot_index, slot_field) in TRAIT_SLOT_ORDER.iter().enumerate() {
@@ -1095,12 +1178,14 @@ fn build_traits(ratings: &[FieldView], is_skater: bool) -> Vec<TraitView> {
         if value == 0 || !seen.insert(value) {
             continue;
         }
-        let (label, confidence, note) = match lookup_trait(is_skater, value) {
+        let (label, confidence, note) = match lookup_trait(vocab, is_skater, value) {
             Some((label, conf, note)) => (label.to_string(), conf, Some(note.to_string())),
             None => (
                 format!("Trait #{value}"),
                 "unknown",
-                Some(if is_skater {
+                Some(if is_skater && vocab == TraitVocabulary::Nhl24 {
+                    "Not in NHL 24's own trait table.".to_string()
+                } else if is_skater {
                     "Value outside the documented 1..27 skater-trait range.".to_string()
                 } else {
                     "Goalie trait vocabulary is largely undocumented — only values 1–2 have proposed names.".to_string()
@@ -1135,7 +1220,11 @@ fn active_trait_values(ratings: &[FieldView]) -> std::collections::HashSet<i64> 
 
 /// The full kind-correct trait dictionary as toggleable options, each flagged active when the record
 /// currently holds it. This is the checkbox menu's data.
-fn build_trait_options(ratings: &[FieldView], is_skater: bool) -> Vec<TraitOption> {
+fn build_trait_options(
+    ratings: &[FieldView],
+    is_skater: bool,
+    vocab: TraitVocabulary,
+) -> Vec<TraitOption> {
     // No `Trait N` slots in this schema (NHL07 gen6 has no trait system) → no trait menu at all,
     // rather than a dictionary of options that can't be stored anywhere.
     if !TRAIT_SLOT_ORDER
@@ -1145,12 +1234,9 @@ fn build_trait_options(ratings: &[FieldView], is_skater: bool) -> Vec<TraitOptio
         return Vec::new();
     }
     let active = active_trait_values(ratings);
-    let dict = if is_skater {
-        SKATER_TRAITS
-    } else {
-        GOALIE_TRAITS
-    };
-    dict.iter()
+    vocab
+        .table(is_skater)
+        .iter()
         .map(|(value, label, confidence, note)| TraitOption {
             value: *value,
             label: label.to_string(),
@@ -1188,5 +1274,26 @@ pub(crate) fn plan_trait_toggle(
             .filter(|(_, v)| *v == value)
             .map(|(field, _)| (field.clone(), 0))
             .collect())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{lookup_trait, TraitVocabulary};
+
+    #[test]
+    fn nhl24_uses_its_own_skater_trait_names() {
+        let v = TraitVocabulary::for_game(Some("nhl24"));
+        assert_eq!(v, TraitVocabulary::Nhl24);
+        assert_eq!(TraitVocabulary::for_game(Some("nhl21")), TraitVocabulary::Classic);
+        assert_eq!(TraitVocabulary::for_game(None), TraitVocabulary::Classic);
+        let name = |vocab, value| lookup_trait(vocab, true, value).map(|t| t.0);
+        assert_eq!(name(v, 20), Some("Risk Taker D Zone"));
+        assert_eq!(name(TraitVocabulary::Classic, 20), Some("Shooter Slot (Defense)"));
+        assert_eq!(name(v, 33), Some("Datsyuk Toe Drag"));
+        assert_eq!(name(v, 18), Some("Lazy Backchecker"));
+        assert_eq!(name(v, 6), None, "NHL 24's table has no value 6");
+        // Goalies keep the classic set on every title.
+        assert_eq!(lookup_trait(v, false, 1).map(|t| t.0), Some("Feisty?"));
     }
 }

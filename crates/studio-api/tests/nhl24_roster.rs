@@ -126,3 +126,118 @@ fn open_edit_save_reopen_restore() {
     std::fs::remove_dir(install.join("game")).unwrap();
     std::fs::remove_dir(install.join("game-UPDATE")).unwrap();
 }
+
+/// The Edmonton Oilers as NHL 24 01.60 shows them (the user's roster-screen screenshots of
+/// 1 Nov 2026): style, cap hit and years for nine players; McDavid's header (6'1", 193 lb,
+/// age 26, shoots left). Birth dates are the players' public ones, and the in-game ages agree
+/// with them. Nationalities are public facts.
+#[test]
+#[ignore = "needs NHL24_INSTALL and NHL24_OODLE"]
+fn oilers_match_the_in_game_roster_screen() {
+    let real = env("NHL24_INSTALL");
+    let oodle = env("NHL24_OODLE");
+    let scratch = tempfile::tempdir().unwrap();
+    let install = scratch.path().join("NHL24");
+    std::fs::create_dir_all(install.join("game-mods")).unwrap();
+    junction(&install.join("game"), &real.join("game"));
+    junction(&install.join("game-UPDATE"), &real.join("game-UPDATE"));
+    let reg = Registry::default();
+    let id = reg
+        .nhl24_open(&install, &oodle, &repo("defs"))
+        .unwrap()
+        .summary
+        .project_id;
+    let oilers = reg
+        .list_teams(id)
+        .unwrap()
+        .into_iter()
+        .find(|t| t.name == "Edmonton Oilers")
+        .unwrap();
+    let players = reg.list_players(id).unwrap();
+    #[rustfmt::skip]
+    let expected = [
+        ("McDavid", "Playmaker", 12_500_000, 3, "1997-01-13", "Canada"),
+        ("Draisaitl", "Sniper", 8_500_000, 2, "1995-10-27", "Germany"),
+        ("Hyman", "Power Forward", 5_500_000, 5, "1992-06-09", "Canada"),
+        ("Ekholm", "Two-Way Defenseman", 6_000_000, 3, "1990-05-24", "Sweden"),
+        ("Nurse", "Two-Way Defenseman", 9_250_000, 7, "1995-02-04", "Canada"),
+        ("Bouchard", "Offensive Defenseman", 3_900_000, 2, "1999-10-20", "Canada"),
+        ("Nugent-Hopkins", "Two-Way Forward", 5_125_000, 6, "1993-04-12", "Canada"),
+        ("Kane", "Power Forward", 5_125_000, 3, "1991-08-02", "Canada"),
+        ("Foegele", "Power Forward", 2_750_000, 1, "1996-04-01", "Canada"),
+    ];
+    for (last, style, cap, years, born, nation) in expected {
+        let p = players
+            .iter()
+            .find(|p| p.team_id == Some(oilers.team_id) && p.last_name == last)
+            .unwrap_or_else(|| panic!("{last} on the Oilers"));
+        let v = reg.player_view(id, p.player_id).unwrap().unwrap();
+        assert_eq!(p.style_label.as_deref(), Some(style), "{last} style");
+        assert_eq!(p.cap_hit_dollars, Some(cap), "{last} cap hit");
+        assert_eq!(p.contract_years, Some(years), "{last} years");
+        assert_eq!(
+            v.header.birthdate.as_deref(),
+            Some(born),
+            "{last} birth date"
+        );
+        assert_eq!(
+            v.header.nationality_label.as_deref(),
+            Some(nation),
+            "{last} nationality"
+        );
+        if last == "McDavid" {
+            assert_eq!(v.header.height.as_deref(), Some("6'1\""));
+            assert_eq!(v.header.weight.as_deref(), Some("193 lb"));
+            assert_eq!(v.header.handedness_label.as_deref(), Some("Left"));
+            // The encoded cells are editable now that NHL 24 carries the PS4 contract.
+            let field = |name: &str| {
+                v.all_fields
+                    .iter()
+                    .chain(&v.ratings)
+                    .find(|f| f.name == name)
+                    .unwrap_or_else(|| panic!("field {name}"))
+            };
+            for name in [
+                "weight",
+                "height",
+                "year",
+                "month",
+                "day",
+                "contractdollars",
+            ] {
+                assert!(field(name).editable, "{name} editable");
+            }
+            assert!(v.ratings.iter().any(|f| f.editable), "ratings editable");
+            // Traits use NHL 24's own names (gamemodes/creation_zone_csv/playertraits.csv).
+            let traits: Vec<&str> = v
+                .attributes
+                .traits
+                .iter()
+                .map(|t| t.label.as_str())
+                .collect();
+            for name in [
+                "Setup Man Low",
+                "Shoots On The Rush",
+                "Speedster",
+                "Risky Dangler",
+                "Perimeter Sniper",
+                "Datsyuk Toe Drag",
+                "Between Legs One Timer",
+            ] {
+                assert!(traits.contains(&name), "McDavid trait {name} in {traits:?}");
+            }
+            assert!(
+                traits.iter().all(|t| !t.starts_with("Trait #")),
+                "{traits:?}"
+            );
+            assert!(v
+                .attributes
+                .trait_options
+                .iter()
+                .any(|o| o.label == "Kucherov Deke"));
+        }
+    }
+    assert!(reg.close_project(id));
+    std::fs::remove_dir(install.join("game")).unwrap();
+    std::fs::remove_dir(install.join("game-UPDATE")).unwrap();
+}

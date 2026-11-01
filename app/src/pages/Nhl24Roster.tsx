@@ -47,7 +47,7 @@ export function Nhl24Roster() {
         </span>
       </div>
       <h1 className="text-2xl font-semibold">NHL 24 rosters · PS4 01.60 (shadPS4)</h1>
-      <p className="text-sm text-slate-400">Edit the game's roster database. Saving writes Studio's own files into the install's game-mods folder; the game's own files and other mods are never changed, and Restore removes Studio's files again. Close the game before saving. Weight, ratings, birth dates and contract amounts are shown but not yet editable for NHL 24.</p>
+      <p className="text-sm text-slate-400">Edit the game's roster database. Saving writes Studio's own files into the install's game-mods folder; the game's own files and other mods are never changed, and Restore removes Studio's files again. Close the game before saving.</p>
       <form className="grid gap-2 md:grid-cols-[1fr_auto]" onSubmit={e => { e.preventDefault(); opening.mutate(); }}>
         <input aria-label="NHL 24 folder" className={control} value={paths.install} placeholder="Folder holding game, game-UPDATE and game-mods" onChange={e => setPaths(v => ({ ...v, install: e.target.value }))} />
         <button type="button" className={control} onClick={choose("install")}>Browse</button>

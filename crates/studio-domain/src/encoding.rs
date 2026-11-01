@@ -48,7 +48,7 @@ pub enum SchemaFamily {
     Gen7Nhl10,
     /// NHL 11 → NHL 15 and NHL Legacy (Xbox 360 / PS3; Legacy Recompiled by identity): `draftyear`.
     Gen7Nhl11ToLegacy,
-    /// PS4 NHL 15 → NHL 21 (little-endian `nhl_game.db`).
+    /// PS4 NHL 15 → NHL 21, and NHL 24 (little-endian `nhl_game.db`).
     Ps4,
 }
 
@@ -61,16 +61,19 @@ impl SchemaFamily {
             SchemaFamily::Gen7Nhl09 => "NHL 09",
             SchemaFamily::Gen7Nhl10 => "NHL 10",
             SchemaFamily::Gen7Nhl11ToLegacy => "NHL 11 – NHL Legacy",
-            SchemaFamily::Ps4 => "PS4 NHL 15 – 21",
+            SchemaFamily::Ps4 => "PS4 NHL 15 – 21 and NHL 24",
         }
     }
 
     /// The family a studio game id on a platform is expected to carry. `None` for an unknown id.
+    /// NHL 24 (PS4 01.60, outside the shipping targets) joined the PS4 family on 1 Nov 2026.
+    /// Its schema classifies as PS4, and the decoded values match the in-game Oilers roster
+    /// (docs/validation/nhl24-encoding-20261101.md).
     pub fn of_game(game_id: &str, platform: Platform) -> Option<SchemaFamily> {
         if platform == Platform::Ps4 {
             return matches!(
                 game_id,
-                "nhl15" | "nhl16" | "nhl17" | "nhl18" | "nhl19" | "nhl20" | "nhl21"
+                "nhl15" | "nhl16" | "nhl17" | "nhl18" | "nhl19" | "nhl20" | "nhl21" | "nhl24"
             )
             .then_some(SchemaFamily::Ps4);
         }

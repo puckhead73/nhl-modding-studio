@@ -40,8 +40,10 @@ description = "confirmed on NHL Legacy (Task #35 audit, NHLViewNG cross-referenc
 # NHL 13 (Czech Republic 79 / 81 / 82 on NHL 08-09 / 10 / 11+, Japan 108 on NHL 11 / 12, 109 from NHL 13).
 # From NHL 13 on every national team's roster matches this table, so it applies to NHL 13 → NHL 21 and NHL
 # Legacy (Recompiled by identity). Earlier titles have their own files (nationality-nhl*.toml).
+# NHL 24 (PS4 01.60) added 1 Nov 2026. The Oilers' stored codes resolve to the players' public
+# nationalities (Canada, Sweden, Germany, United States): docs/validation/nhl24-encoding-20261101.md.
 [scope]
-games = ["nhl13", "nhl14", "nhl15", "nhllegacy", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21"]
+games = ["nhl13", "nhl14", "nhl15", "nhllegacy", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21", "nhl24"]
 
 [[bindings]]
 field_name = "Nationality"

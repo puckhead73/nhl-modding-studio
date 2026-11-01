@@ -6,9 +6,10 @@
 //! ([`tdb_frostbite::nhl24`]) and only then writes the working copy, so the game is always the
 //! source of truth: a working copy that failed to save is replaced on the next open.
 //!
-//! NHL 24 is not one of the 27 shipping targets; the session carries the game id `nhl24`, which
-//! no player-row encoding contract claims, so weight, ratings, birth dates and contract dollars
-//! stay read-only until that contract is measured for NHL 24.
+//! NHL 24 is not one of the 27 shipping targets. The session carries the game id `nhl24`,
+//! which the PS4 player-row encoding contract and the player-style and nationality vocabularies
+//! claim. The basis is measurement against the in-game Oilers roster, recorded in
+//! docs/validation/nhl24-encoding-20261101.md.
 use std::path::{Path, PathBuf};
 
 use serde::Serialize;

@@ -2239,10 +2239,11 @@ pub fn player_view(
 
     let header = build_player_header(db, meta, model, &all_fields, &ratings, &memberships);
     let data = build_player_data(db, meta, model, &all_fields);
-    let attributes = crate::attributes::build_player_attributes(
+    let attributes = crate::attributes::build_player_attributes_with(
         &ratings,
         companion_table,
         player.position == tdb_relations::Position::Defense,
+        crate::attributes::TraitVocabulary::for_game(enums.scope().and_then(|(game, _)| game)),
     );
 
     // Curated per-game layout, built from the loaded bio fields (evidence-first: absent fields

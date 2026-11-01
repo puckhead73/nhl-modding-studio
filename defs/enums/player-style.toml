@@ -46,8 +46,11 @@ description = "Phase 5T unified default-style promotion (NHL Legacy default.db);
 # set; confirmed on NHL Legacy). Attaching it earlier labelled NHL 10 forwards "Two-Way Defenseman" and
 # contradicted the NHL 07 vocabulary the player page shows on NHL 08 / 09. On NHL 08 / 09 the roster cell
 # shows that NHL 07 vocabulary (Studio's synthetic set); NHL 07's roster cell and NHL 10 show numbers.
+# NHL 24 (PS4 01.60) added 1 Nov 2026. Nine Oilers' in-game styles match these labels (Playmaker,
+# Sniper, Power Forward, Two-Way Forward, Two-Way/Offensive Defenseman):
+# docs/validation/nhl24-encoding-20261101.md.
 [scope]
-games = ["nhl11", "nhl12", "nhl13", "nhl14", "nhl15", "nhllegacy", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21"]
+games = ["nhl11", "nhl12", "nhl13", "nhl14", "nhl15", "nhllegacy", "nhl16", "nhl17", "nhl18", "nhl19", "nhl20", "nhl21", "nhl24"]
 
 [[bindings]]
 # eGlu (exhibition roster table) — the Spike S4 target field; distribution
