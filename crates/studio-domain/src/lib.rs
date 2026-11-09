@@ -59,6 +59,7 @@ pub mod player_reassign;
 pub mod team_goalie_masks;
 pub mod head_catalog;
 pub mod head_census;
+mod appearance_texture;
 pub mod head_preview;
 pub mod head_submesh;
 pub mod historical;

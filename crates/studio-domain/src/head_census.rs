@@ -107,6 +107,7 @@ pub struct CensusReport {
 /// the plain single maps (`cm`/`nm`/`sm`/`am`/…) and the `c`-prefixed compound
 /// forms seen in the coach/body folders (`cam`/`ccm`/`cnm`/`csm`/`cpm`/`ctm`).
 const MAP_SUFFIXES: &[&str] = &[
+    "snm", "ssm", "ism", "ctm", "cpm",
     "cm", "nm", "sm", "am", "xm", "rm", "dm", "gm", "bm", "pm", "tm", "im", "om", "em", "lm",
     "cam", "ccm", "cnm", "csm", "cpm", "ctm", "cgm", "cdm", "crm",
     // Hair-card raster variants (`hair_{id}_0_aa.rx2`, verified `.Raster` internally):
@@ -119,6 +120,9 @@ const MAP_SUFFIXES: &[&str] = &[
 /// never a head/hair — this is the head-vs-equipment discriminator the PS4 tree
 /// needs (its `player/` folder mixes both).
 const EQUIPMENT_KEYWORDS: &[&str] = &[
+    "goalie_", "goalieskate", "jawprotector", "padding", "earguard",
+    "outdoortop", "outdoorbottom", "outdoorheadgear", "fegoalie",
+    "shirt", "player_mouthguard",
     "goaliehelmet",
     "goaliepad",
     "goaliestick",
@@ -148,6 +152,7 @@ const EQUIPMENT_KEYWORDS: &[&str] = &[
 
 /// Body/suit prefixes for staff (coach/referee/trainer) — geometry, but not a head.
 const BODY_KEYWORDS: &[&str] = &[
+    "player_common_hand", "player_glovehand", "player_slc_hand",
     "coachsuit",
     "trainersuit",
     "refereejersey",
@@ -229,13 +234,13 @@ pub fn classify(folder: &str, file: &str, platform: Platform) -> CensusEntry {
         "trainer" => Role::Trainer,
         "commissioner" => Role::Commissioner,
         "timekeeper" => Role::Timekeeper,
-        "czhead" | "czhair" => Role::Generic,
+        "czhead" | "czhair" | "player_common" | "common" => Role::Generic,
         _ => Role::Unknown,
     };
     // `generic_player_*` is a shared *player* pool head → Generic role. But
     // `generic_referee_*` / `generic_coach_*` / `generic_commissioner_*` are still
     // that staff role (just the shared variant), so only the player form remaps.
-    if stem.contains("generic_player") {
+    if role == Role::Player && is_generic {
         role = Role::Generic;
     }
 
@@ -244,11 +249,11 @@ pub fn classify(folder: &str, file: &str, platform: Platform) -> CensusEntry {
     // fallback (so a PS4 `goaliehelmet_*` in player/ is gear, not a head).
     let part = if is_texture {
         Part::Texture
-    } else if stem.starts_with("hair") {
+    } else if stem.starts_with("hair") || stem.starts_with("commonhair") {
         Part::Hair
     } else if stem.starts_with("eyel") || stem.starts_with("eyer") || stem.starts_with("eyes") {
         Part::Eye
-    } else if stem.starts_with("head") || stem.starts_with("coachhead") {
+    } else if stem.starts_with("head") || stem.starts_with("coachhead") || stem.starts_with("commonhead") {
         Part::Head
     } else if starts_with_any(stem, EQUIPMENT_KEYWORDS) {
         Part::Equipment
@@ -325,10 +330,12 @@ pub fn appearance_folders(platform: Platform) -> &'static [&'static str] {
             "referee",
             "trainer",
             "commissioner",
+            "common",
         ]
     } else {
         &[
             "player",
+            "player_common",
             "coachhead",
             "coach",
             "referee",
@@ -498,6 +505,21 @@ pub fn report_to_csv(report: &CensusReport) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn ps4_shared_player_folder_gear_is_not_a_head() {
+        for file in ["goalie_helmet_brodeur_high.mcd", "jawprotector_ims11_reflection.mcd",
+            "earguard_ccm_high.mcd", "outdoortop_1.mcd", "padding_jofa_high.mcd",
+            "shirt_goalie_turtleneck_high.mcd", "player_mouthguard_0.mcd"] {
+            assert_eq!(classify("player", file, Platform::Ps4).part, Part::Equipment, "{file}");
+        }
+        for file in ["hair_snm.rx2", "hair_ssm.rx2", "eyes_ism.rx2", "head_ctm.rx2", "head_cpm.rx2"] {
+            assert!(classify("player", file, Platform::Xbox).is_texture, "{file}");
+        }
+        assert_eq!(classify("player_common", "commonhead_0.rx2", Platform::Xbox).part, Part::Head);
+        assert_eq!(classify("player_common", "commonhair_0.rx2", Platform::Xbox).part, Part::Hair);
+        assert_eq!(classify("player", "generic_female_30100.mcd", Platform::Ps4).role, Role::Generic);
+    }
 
     #[test]
     fn texture_suffixes_are_detected() {

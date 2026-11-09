@@ -200,10 +200,10 @@ export function FileBrowserPage() {
               <Check label="Meshes → .glb" checked={meshesGlb} onChange={setMeshesGlb} />
               <Check label="Portraits → .png" checked={portraitsPng} onChange={setPortraitsPng} />
               <Check
-                label="Textures → .png"
+                label="Textures → .dds"
                 checked={textures}
                 onChange={setTextures}
-                hint="RenderWare texlibs and PS4 GNF maps decode to .png."
+                hint="RenderWare and PS4 GNF base mips export to DDS without recompressing BC textures."
               />
               <Check
                 label="Crop portraits to the subject"

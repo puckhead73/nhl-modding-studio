@@ -1676,16 +1676,16 @@ pub fn export_assets(
 /// Build the appearance catalog (every head + hair + facial hair, players and
 /// non-players) with a `catalog.json` manifest, into `out_dir`.
 #[tauri::command]
-pub fn export_head_catalog(
-    registry: State<'_, Registry>,
+pub async fn export_head_catalog(
+    app: tauri::AppHandle,
     project_id: u32,
     roots: AssetRootsArgsDto,
     out_dir: String,
     textures: bool,
 ) -> CmdResult<crate::dto::HeadCatalogSummaryDto> {
-    registry
+    off_main(app, move |registry| registry
         .export_head_catalog(project_id, &roots, &out_dir, textures)
-        .map_err(|e| e.to_string())
+        .map_err(|e| e.to_string())).await
 }
 
 /// Read a built appearance catalog's `catalog.json` back for the browser.

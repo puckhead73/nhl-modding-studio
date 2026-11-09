@@ -1,9 +1,13 @@
 //! Read-only NHL 22–24 PS4 containers. Offsets and identities remain tied to their
 //! source layer: a catalogue entry is not a claim about runtime patch precedence.
 pub mod blocks;
+pub mod appearance;
 pub mod db;
 pub mod install;
 pub mod manifest;
+pub mod mesh;
+pub mod oodle;
+pub mod texture;
 pub mod toc;
 
 use std::io;

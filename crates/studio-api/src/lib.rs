@@ -37,6 +37,7 @@ macro_rules! command_handler {
     () => {
         ::tauri::generate_handler![
             $crate::frostbite::frostbite_inspect,
+            $crate::frostbite::frostbite_export_appearance,
             $crate::frostbite::frostbite_bundles,
             $crate::frostbite::frostbite_assets,
             $crate::frostbite::frostbite_export,

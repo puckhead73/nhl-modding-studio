@@ -514,7 +514,7 @@ impl Registry {
 
     /// Build the appearance catalog: every player's own head + hair + facial hair,
     /// plus the non-player sweep (generics, referees, coaches, trainers), written
-    /// as GLB + PNG with a `catalog.json` manifest. The game token comes from the
+    /// as GLB + DDS with a `catalog.json` manifest. The game token comes from the
     /// workspace `game_id`.
     pub fn export_head_catalog(
         &self,

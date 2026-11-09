@@ -15,10 +15,10 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { PlayerContainmentCard } from "../components/PlayerContainmentCard";
+import { ProjectInputsCard } from "../components/ProjectInputsCard";
 import { useProject } from "../lib/project";
 import { EntityList, type Column } from "../components/EntityList";
 import { EmptyState, SelectPrompt } from "../components/primitives";
-import { EXTRACTION_GATE_REASON } from "../components/GateHint";
 import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 
 type Filter = "all" | "portrait" | "head" | "exportable";
@@ -81,25 +81,25 @@ export function AssetGate({
 }) {
   if (!installDir) {
     return (
-      <EmptyState
+      <div className="p-3"><EmptyState
         title="No install folder for this project"
         hint="Choose a game source folder under Project Overview → Game source folders to find player art. Your edits stay in this project."
-      />
+      /><ProjectInputsCard /></div>
     );
   }
   if (roots.data && !roots.data.complete) {
     return (
-      <EmptyState
-        title="This install's art isn't extracted yet"
+      <div className="p-3"><EmptyState
+        title="No extracted assets found at the selected source"
         hint={
           <>
             Expected <code className="text-slate-300">{roots.data.rendering}</code> and{" "}
-            <code className="text-slate-300">{roots.data.fe}</code>. Asset editing requires all of
-            this install's <code>.big</code> archives to be extracted in place. {EXTRACTION_GATE_REASON}{" "}
-            Database editing is independent of this. Note: mesh (head model) editing is only supported on Xbox 360.
+            <code className="text-slate-300">{roots.data.fe}</code>. If the assets were extracted elsewhere,
+            select that game folder below. An ISO storage folder does not contain extracted assets.
+            Otherwise, extract this game's containers in Settings → Tools.
           </>
         }
-      />
+      /><ProjectInputsCard /></div>
     );
   }
   return null;

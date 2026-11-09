@@ -1,0 +1,189 @@
+[
+  {
+    "game": "nhl07",
+    "platform": "xbox",
+    "verified": {
+      "glb": 596,
+      "dds": 2502
+    },
+    "heads": 480,
+    "hair": 116,
+    "failures": []
+  },
+  {
+    "game": "nhl08",
+    "platform": "xbox",
+    "verified": {
+      "glb": 848,
+      "dds": 1402
+    },
+    "heads": 484,
+    "hair": 364,
+    "failures": []
+  },
+  {
+    "game": "nhl09",
+    "platform": "xbox",
+    "verified": {
+      "glb": 952,
+      "dds": 1446
+    },
+    "heads": 508,
+    "hair": 444,
+    "failures": []
+  },
+  {
+    "game": "nhl10",
+    "platform": "xbox",
+    "verified": {
+      "glb": 1338,
+      "dds": 1114
+    },
+    "heads": 744,
+    "hair": 594,
+    "failures": []
+  },
+  {
+    "game": "nhl11",
+    "platform": "xbox",
+    "verified": {
+      "glb": 1491,
+      "dds": 1269
+    },
+    "heads": 823,
+    "hair": 668,
+    "failures": []
+  },
+  {
+    "game": "nhl12",
+    "platform": "xbox",
+    "verified": {
+      "glb": 1459,
+      "dds": 1221
+    },
+    "heads": 801,
+    "hair": 658,
+    "failures": []
+  },
+  {
+    "game": "nhl13",
+    "platform": "xbox",
+    "verified": {
+      "glb": 1511,
+      "dds": 1289
+    },
+    "heads": 819,
+    "hair": 692,
+    "failures": []
+  },
+  {
+    "game": "nhl14",
+    "platform": "xbox",
+    "verified": {
+      "glb": 1685,
+      "dds": 1425
+    },
+    "heads": 843,
+    "hair": 842,
+    "failures": []
+  },
+  {
+    "game": "nhl15",
+    "platform": "xbox",
+    "verified": {
+      "glb": 1725,
+      "dds": 1465
+    },
+    "heads": 863,
+    "hair": 862,
+    "failures": []
+  },
+  {
+    "game": "nhllegacy",
+    "platform": "xbox",
+    "verified": {
+      "glb": 1811,
+      "dds": 1551
+    },
+    "heads": 906,
+    "hair": 905,
+    "failures": []
+  },
+  {
+    "game": "nhl15",
+    "platform": "ps4",
+    "verified": {
+      "glb": 1086,
+      "dds": 3296
+    },
+    "heads": 544,
+    "hair": 539,
+    "failures": []
+  },
+  {
+    "game": "nhl16",
+    "platform": "ps4",
+    "verified": {
+      "glb": 1232,
+      "dds": 2480
+    },
+    "heads": 595,
+    "hair": 587,
+    "failures": []
+  },
+  {
+    "game": "nhl17",
+    "platform": "ps4",
+    "verified": {
+      "glb": 1202,
+      "dds": 2921
+    },
+    "heads": 661,
+    "hair": 481,
+    "failures": []
+  },
+  {
+    "game": "nhl18",
+    "platform": "ps4",
+    "verified": {
+      "glb": 1277,
+      "dds": 2365
+    },
+    "heads": 691,
+    "hair": 526,
+    "failures": []
+  },
+  {
+    "game": "nhl19",
+    "platform": "ps4",
+    "verified": {
+      "glb": 1490,
+      "dds": 3042
+    },
+    "heads": 756,
+    "hair": 674,
+    "failures": []
+  },
+  {
+    "game": "nhl20",
+    "platform": "ps4",
+    "verified": {
+      "glb": 2397,
+      "dds": 5676
+    },
+    "heads": 1117,
+    "hair": 1218,
+    "failures": []
+  },
+  {
+    "game": "nhl21",
+    "platform": "ps4",
+    "verified": {
+      "glb": 2451,
+      "dds": 5823
+    },
+    "heads": 1149,
+    "hair": 1240,
+    "failures": []
+  }
+]

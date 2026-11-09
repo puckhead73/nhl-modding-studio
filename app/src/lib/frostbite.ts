@@ -10,6 +10,9 @@ export type FrostbiteChunks = { matched: number; items: { ordinal: number; guid:
 export const listFrostbiteChunks = (selection: FrostbiteSelection, search: string, offset: number) => invoke<FrostbiteChunks>("frostbite_chunks", { ...selection, search, offset });
 export const exportFrostbiteChunk = (selection: FrostbiteSelection, chunk: number, decoded: boolean, destination: string) => invoke<number>("frostbite_export_chunk", { ...selection, chunk, decoded, destination });
 export const inspectFrostbite = (root: string) => invoke<FrostbiteInstall>("frostbite_inspect", { root });
+export type FrostbiteAppearanceSummary = { meshes_written: number; textures_written: number; failures: string[]; warnings: string[]; catalog_file: string };
+export const exportFrostbiteAppearance = (root: string, layer: string, game: string, destination: string, decoder: string) =>
+  invoke<FrostbiteAppearanceSummary>("frostbite_export_appearance", { root, layer, game, destination, decoder });
 export const listFrostbite = (selection: FrostbiteSelection, search: string, offset: number) => invoke<FrostbitePage>("frostbite_bundles", { ...selection, search, offset });
 export const frostbiteAssets = (selection: FrostbiteSelection, bundle: number) => invoke<FrostbiteAssets>("frostbite_assets", { ...selection, bundle });
 export const exportFrostbite = (selection: FrostbiteSelection, bundle: number, asset: number, decoded: boolean, destination: string) => invoke<number>("frostbite_export", { ...selection, bundle, asset, decoded, destination });

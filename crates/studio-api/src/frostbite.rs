@@ -3,6 +3,19 @@ use std::path::Path;
 use tdb_frostbite::install;
 
 #[tauri::command]
+pub async fn frostbite_export_appearance(
+    root: String,
+    layer: String,
+    game: String,
+    destination: String,
+    decoder: String,
+) -> Result<tdb_frostbite::appearance::Summary, String> {
+    run(move || tdb_frostbite::appearance::export(
+        Path::new(&root), &layer, &game, Path::new(&destination), Path::new(&decoder), false,
+    )).await
+}
+
+#[tauri::command]
 pub async fn frostbite_chunks(
     root: String,
     layer: String,

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { inspectFrostbite, listFrostbite, frostbiteAssets, exportFrostbite, type FrostbiteInstall } from "../lib/frostbite";
 import { listFrostbiteChunks, exportFrostbiteChunk } from "../lib/frostbite";
+import { exportFrostbiteAppearance } from "../lib/frostbite";
 
 const control = "rounded border border-slate-700 bg-slate-900 px-3 py-2 disabled:opacity-40";
 export function FrostbiteBrowser() {
@@ -16,6 +17,15 @@ export function FrostbiteBrowser() {
   const [offset, setOffset] = useState(0);
   const [bundle, setBundle] = useState<number | null>(null);
   const [showChunks, setShowChunks] = useState(false);
+  const [game, setGame] = useState("nhl24");
+  const [decoder, setDecoder] = useState("");
+  const appearance = useMutation({ mutationFn: async () => {
+    if (!install) return null;
+    const parent = await open({ directory: true, multiple: false, title: "Choose parent folder for a new head catalog" });
+    if (typeof parent !== "string") return null;
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    return exportFrostbiteAppearance(install.root, layer, game, `${parent}/${game}-${layer}-heads-${stamp}`, decoder);
+  } });
   const selection = { root: install?.root ?? "", layer, superbundle };
   function resetSelection() { setOffset(0); setBundle(null); }
   const scan = useMutation({ mutationFn: inspectFrostbite, onSuccess: result => {
@@ -30,7 +40,7 @@ export function FrostbiteBrowser() {
     if (!destination) return null;
     return showChunks ? exportFrostbiteChunk(selection, asset, decoded, destination) : exportFrostbite(selection, bundle!, asset, decoded, destination);
   } });
-  const error = scan.error ?? listing.error ?? chunks.error ?? assets.error ?? exporting.error;
+  const error = scan.error ?? listing.error ?? chunks.error ?? assets.error ?? exporting.error ?? appearance.error;
   return <main className="min-h-screen bg-slate-950 p-6 text-slate-100">
     <div className="mx-auto max-w-7xl space-y-4">
       <Link to="/studio" className="text-sky-400">← Project picker</Link>
@@ -53,6 +63,32 @@ export function FrostbiteBrowser() {
           </select>
           <span className="text-sm text-slate-400">Initfs: {install.layers.find(l => l.name === layer)?.initfs}</span>
         </div>
+        <section className="space-y-3 rounded border border-slate-800 p-4">
+          <h2 className="font-semibold">All head meshes — appearance catalog</h2>
+          <p className="text-sm text-slate-400">Export player, create-a-player, coach and referee heads, hair and beards from the selected layer across all superbundles. Includes every LOD as GLB geometry and UVs, base-mip DDS textures, and source provenance.</p>
+          <div className="flex flex-wrap gap-2">
+            <select aria-label="Catalog game" className={control} value={game} onChange={e => setGame(e.target.value)} disabled={appearance.isPending}>
+              <option value="nhl22">NHL 22</option><option value="nhl23">NHL 23</option><option value="nhl24">NHL 24</option>
+            </select>
+            <input aria-label="Oodle decoder DLL" className={`${control} flex-1`} value={decoder} onChange={e => setDecoder(e.target.value)} placeholder="Path to your installed Oodle decoder DLL" disabled={appearance.isPending} />
+            <button type="button" className={control} disabled={appearance.isPending} onClick={async () => {
+              const path = await open({ multiple: false, filters: [{ name: "Oodle decoder", extensions: ["dll"] }] });
+              if (typeof path === "string") setDecoder(path);
+            }}>Choose decoder</button>
+            <button type="button" className={control} disabled={!decoder || appearance.isPending} onClick={() => appearance.mutate()}>
+              {appearance.isPending ? "Extracting head catalog…" : "Export all heads · GLB + DDS"}
+            </button>
+          </div>
+          <p className="text-xs text-slate-500">Uses your selected native decoder DLL; Studio does not include one. Data and Patch exports remain separate. Rigging and automatic material assignment are not included.</p>
+          {appearance.isPending && <p role="status">Decoding meshes and textures. Large catalogs can take several minutes.</p>}
+          {appearance.data && <div role="status">
+            <p>{appearance.data.meshes_written.toLocaleString()} GLBs · {appearance.data.textures_written.toLocaleString()} DDS textures</p>
+            <p className="break-all text-xs">{appearance.data.catalog_file}</p>
+            {appearance.data.warnings.map((warning, i) => <p key={i} className="text-xs text-amber-300">{warning}</p>)}
+            {appearance.data.failures.length > 0 && <details className="text-amber-300"><summary>{appearance.data.failures.length} assets could not be exported</summary>
+              <ul>{appearance.data.failures.map((failure, i) => <li key={i}>{failure}</li>)}</ul></details>}
+          </div>}
+        </section>
         <form className="flex gap-2" onSubmit={e => { e.preventDefault(); setSearch(draft); resetSelection(); }}>
           <select aria-label="Entry kind" className={control} value={showChunks ? "chunks" : "bundles"} onChange={e => { setShowChunks(e.target.value === "chunks"); resetSelection(); setDraft(""); setSearch(""); }}><option value="bundles">Bundles</option><option value="chunks">TOC chunks</option></select>
           <input aria-label="Search container entries" className={`${control} flex-1`} value={draft} onChange={e => setDraft(e.target.value)} placeholder={showChunks ? "Search chunk GUIDs" : "Search decoded bundle names"} />
